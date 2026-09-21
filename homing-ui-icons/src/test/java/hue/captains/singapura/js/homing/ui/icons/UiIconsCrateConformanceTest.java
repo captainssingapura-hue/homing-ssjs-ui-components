@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.ui.menu;
+package hue.captains.singapura.js.homing.ui.icons;
 
 import hue.captains.singapura.js.homing.conformance.rules.CrateDependencyRule;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
@@ -15,22 +15,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** The crate holds every served module, imports only what it requires, keeps its lanes, and declares no class it does not import. */
-class UiMenuCrateConformanceTest {
+class UiIconsCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiMenuCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.check(UiIconsCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiMenuCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.check(UiIconsCrate.INSTANCE));
     }
 
     @Test
     void everyServedModuleKeepsItsLanesDiscipline() {
         int checked = 0;
-        for (var entry : UiMenuCrate.INSTANCE.entries()) {
+        for (var entry : UiIconsCrate.INSTANCE.entries()) {
             if (!(entry.declaredType() instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
             String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
@@ -39,15 +39,15 @@ class UiMenuCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(5, checked, "the steward, the menu, the events, the geometry and the tree");
+        assertEquals(1, checked, "the component; the table is generated and the styles are a sheet");
     }
 
     @Test
-    void theStewardAndTheMenuImportEveryClassDeclared() {
-        var imported = java.util.stream.Stream.of(ContextMenuStewardModule.INSTANCE.imports(), ContextMenuModule.INSTANCE.imports())
+    void theComponentAndTheTableImportEveryClassDeclared() {
+        var imported = java.util.stream.Stream.of(IconModule.INSTANCE.imports(), IconsModule.INSTANCE.imports())
                 .flatMap(im -> im.getAllImports().values().stream())
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
-        for (CssClass<MenuStyles> c : MenuStyles.INSTANCE.cssClasses())
+        for (CssClass<IconStyles> c : IconStyles.INSTANCE.cssClasses())
             assertTrue(imported.contains(c.getClass().getSimpleName()), c.getClass().getSimpleName() + " is declared but not imported");
     }
 }
