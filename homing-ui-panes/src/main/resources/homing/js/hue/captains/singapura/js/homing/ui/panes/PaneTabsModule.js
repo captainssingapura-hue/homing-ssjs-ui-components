@@ -49,9 +49,9 @@ class PaneTabs {
         var hi = entry.pinned ? pane._pinnedCount() : pane._tabs.length;
         if (index == null || index > hi) index = hi;
         if (index < lo) index = lo;
+        if (entry.widget.focus.in !== pane.focus) pane.focus.adopt(entry.widget.focus);   // placement follows the rendered UI; first, so a refusal changes nothing
         pane._tabs.splice(index, 0, entry);
         pane._content.appendChild(entry.panel);
-        if (entry.widget.focus.in !== pane.focus) pane.focus.adopt(entry.widget.focus);   // placement follows the rendered UI
         pane._refresh();
         return index;
     }

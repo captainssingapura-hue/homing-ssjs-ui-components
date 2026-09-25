@@ -211,6 +211,36 @@ class DeskTest extends JsModuleTestBase {
         assertEquals("moved:a@-752,0", log(), "a move that changes nothing is not reported; a move off the desk is clamped");
     }
 
+    /** A frame with no head — a float's, whose one bar is its host's strip — is moved by a handle its holder gives it, where the holder says. */
+    @Test
+    void aFrameWithNoHead_isMovedByAHandleOfItsHolders_whereTheHolderSays() {
+        eval("var f = desk.open({ id: 'h', head: false, closable: false, title: 'H' }); var bar = el('bar'), knob = el('knob'); f.body.appendChild(bar); bar.appendChild(knob);"
+           + "f.handle(bar, function (ev) { return ev.target === bar; }); log.length = 0;");
+        assertTrue(eval("f.head === null && f.root.children.length === 2 && f.root.children[0] === f.body").asBoolean(), "the body and the grip: no head");
+        assertEquals("H", eval("f.root.getAttribute('aria-label') + ''").asString(), "the title, the frame's name for a reader");
+        eval("var ic = el('i'); f.icon(ic);");
+        assertTrue(eval("f.icon() === ic").asBoolean(), "an icon is kept, and shown nowhere");
+        eval("bar.fire('pointerenter', {});");
+        assertTrue(eval("f.root.has('fp_hoverable')").asBoolean(), "over the handle, the frame lifts as over a head");
+        eval("bar.fire('pointerdown', { button: 0, pointerId: 1, clientX: 100, clientY: 100, target: knob });");
+        assertFalse(eval("f.root.has('fp_held')").asBoolean(), "a press the holder says no to moves nothing");
+        eval("bar.fire('pointerdown', { button: 0, pointerId: 1, clientX: 100, clientY: 100, target: bar });");
+        assertTrue(eval("f.root.has('fp_held')").asBoolean());
+        eval("bar.fire('pointermove', { clientX: 150, clientY: 130 }); bar.fire('pointerup', { type: 'pointerup', clientX: 150, clientY: 130 });");
+        assertEquals("moved:h@74,54", log(), "moved by the handle, reported once");
+        eval("bar.fire('pointerleave', {});");
+        assertFalse(eval("f.root.has('fp_hoverable') || f.root.has('fp_held')").asBoolean());
+    }
+
+    /** A frame that is not one tab — a float of many — is never offered: its drags are not the holder's to watch. */
+    @Test
+    void aFrameNotOffered_isNotWatchedWhileItMoves() {
+        eval("var seen = []; var d2 = new Desk(branch.createBranch('d2'), { host: el('div'), onDragMove: function (p) { seen.push('move:' + p.id); }, onDragEnd: function (p) { seen.push('end:' + p.id); } });"
+           + "d2.open({ id: 'one', title: 'One' }); d2.open({ id: 'many', title: 'Many', offered: false });"
+           + "['one', 'many'].forEach(function (id) { var h = d2.pane(id).root.children[0]; h.fire('pointerdown', { button: 0, pointerId: 2, clientX: 10, clientY: 10, target: h }); h.fire('pointermove', { clientX: 20, clientY: 20 }); h.fire('pointerup', { type: 'pointerup', clientX: 20, clientY: 20 }); });");
+        assertEquals("move:one end:one", eval("seen.join(' ')").asString());
+    }
+
     /** The bug: the pane's branch was named with the id, so an id the party will not take as a name could not float. */
     @Test
     void aPanesBranchIsTheDesks_freshAtEveryOpening_andItsIdMayBeAnyString() {

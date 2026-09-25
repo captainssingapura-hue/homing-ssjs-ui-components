@@ -4,7 +4,11 @@
 // component: the caller makes a sub-branch for it and hands it in; dispose()
 // dissolves it.
 //
-//   new MultiTabPane(branch, { host, slotId?, budget?, addable?, onEvent?, menus?, stripMenu?, focus?, focusName?, keys? })
+//   new MultiTabPane(branch, { host, slotId?, budget?, addable?, onEvent?, menus?, stripMenu?, focus?, focusName?, keys?, onEmpty?, onClose? })
+//     onEmpty(pane): its last tab has left it — closed, detached or let go — for a
+//             holder whose pane lives only while it holds something: a float
+//     onClose(): the bar's own cross at its end, for a pane that is a window's
+//             content and its strip that window's one bar: a float's
 //     branch: the pane's own, handed unactivated
 //     host:   a flex column; the pane is its item and fills it.
 //     focus:  the focus branch the pane joins — the page's root unless said,
@@ -81,6 +85,8 @@
 //       and a design says what a pane wearing it looks like
 //   pane.menuByKey() .menuByGround(at) .requestDetach() .yieldKeys()   what the
 //       keys and a right-click do, by call; the menus themselves are PaneMenus'
+//   pane.bar() .barGround(target)   the strip, and whether a target is its own ground and
+//       not a chip or a control: for a float, whose frame that ground moves
 //   pane.dispose()               → every widget disposed in order, the branches dissolved;
 //       refused while it holds a tab-pane, which is its desk's: let those go first
 //
@@ -157,6 +163,7 @@ class MultiTabPane {
         this._addEnabled = opts.addable !== false;
         this._schemes = PaneSchemes.of(opts.keys);   // _keys() is the method that writes data-keys; this is the list of schemes
         this._sink = typeof opts.onEvent === "function" ? opts.onEvent : null;
+        this._onEmpty = typeof opts.onEmpty === "function" ? opts.onEmpty : null;
         this._menus = opts.menus && typeof opts.menus.open === "function" ? opts.menus : null;
         this._stripMenu = this._menus && typeof opts.stripMenu === "string" && opts.stripMenu ? opts.stripMenu : null;
         this._tabs = [];          // entries in strip order: { id, tab, pinned, widget, chip, panel }
@@ -171,7 +178,8 @@ class MultiTabPane {
         this._strip = new TabStrip(branch.createBranch("strip"), {
             onAdd: opts.addable === false ? null : function () { if (self.canAdd()) self._fire(PaneEvents.AddRequested(self.slotId)); },
             onDrop: function (chip, dest) { var i = self._findChip(chip); if (i >= 0) self.moveTab(self._tabs[i].id, dest); },
-            onGroundMenu: this._stripMenu ? function (at) { return self.menuByGround(at); } : null
+            onGroundMenu: this._stripMenu ? function (at) { return self.menuByGround(at); } : null,
+            onClose: typeof opts.onClose === "function" ? opts.onClose : null
         });
         root.appendChild(this._strip.el);
         // the dock's branch of the focus party, held by the pane; a press anywhere in the frame claims for the pane
@@ -270,6 +278,7 @@ class MultiTabPane {
         entry.branch.dissolve();
         this._fire(PaneEvents.TabRemoved(this.slotId, entry.tab, i));
         this._activateNeighbour(i);
+        this._left();
         return entry.tab;
     }
     /** The widget disposed, and its membership left if it forgot to: a closed tab's widget is out of the tree. */
@@ -286,8 +295,11 @@ class MultiTabPane {
         entry.panel.removeChild(entry.widget.root);
         entry.branch.dissolve();
         this._activateNeighbour(i);
+        this._left();
         return entry.tab;
     }
+    /** A tab has left: the holder told when it was the last. */
+    _left() { if (this._tabs.length === 0 && this._onEmpty) this._onEmpty(this); }
     // ── The host's: tab-panes, held and never owned ──────────────────────
     canTake(tp) {
         try { this._validate(tp); } catch (e) { return false; }
@@ -304,6 +316,7 @@ class MultiTabPane {
         if (i < 0) return null;
         if (tp.closed()) this._fire(PaneEvents.TabRemoved(this.slotId, tp, i));
         this._activateNeighbour(i);
+        this._left();
         return tp;
     }
     select(tp) { if (this.has(tp.id)) this.switchTab(tp.id); }
@@ -386,6 +399,8 @@ class MultiTabPane {
     /** The strip's ground, right-clicked: the page's own kind, if it named one; PaneMenus says. */
     menuByGround(at) { return PaneMenus.onGround(this, at); }
     /** The active tab's menu, at its chip, when the page offers menus; true when the steward took it. */
+    bar() { return this._strip.el; }
+    barGround(target) { return this._strip.ground(target); }
     menuByKey() { return PaneMenus.byKey(this); }
     /** The active tab asked to detach and float: DetachRequested, for a holder with a desk. */
     requestDetach() { if (this._activeId !== null) this._fire(PaneEvents.DetachRequested(this.slotId, this._activeId)); }

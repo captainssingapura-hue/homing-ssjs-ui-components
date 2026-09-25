@@ -65,7 +65,8 @@ class TabPaneTest extends JsModuleTestBase {
         // a focus branch: members join by name and leave
         function focusBranch(name) {
             var b = { name: name, members: [] };
-            b.join = function (n, w) { var m = { name: n, in: b, leave: function () { var i = b.members.indexOf(m); if (i >= 0) b.members.splice(i, 1); m.in = null; } }; b.members.push(m); return m; };
+            b.join = function (n, w) { var m = { name: n, in: b, leave: function () { var i = m.in ? m.in.members.indexOf(m) : -1; if (i >= 0) m.in.members.splice(i, 1); m.in = null; } }; b.members.push(m); return m; };
+            b.adopt = function (m) { var i = m.in.members.indexOf(m); if (i >= 0) m.in.members.splice(i, 1); m.in = b; b.members.push(m); return m; };
             return b;
         }
         var dock = focusBranch("dock");
@@ -111,7 +112,7 @@ class TabPaneTest extends JsModuleTestBase {
         assertEquals("tabpane-u1,tabpane-u2,tabpane-u3", eval("Array.from(register.branch.kids.keys()).join(',')").asString());
         assertEquals("a:b,doc/intro.md,x y", eval("register.ids().join(',')").asString(), "any string, in the order opened");
         assertEquals("chip,icon,label,mark,close,pane", eval("names(register.get('a:b').branch)").asString(), "the tab and the pane, and nothing named after the id");
-        assertEquals("widget", eval("Array.from(register.get('a:b').branch.kids.keys()).join(',')").asString(), "the widget on a sub-branch of the tab-pane's own");
+        assertEquals("tabpane-u1", eval("Array.from(register.get('a:b').branch.kids.keys()).join(',')").asString(), "the widget on a sub-branch of the tab-pane's own, named as the tab-pane is");
         assertTrue(eval("handles.w1.branch.parent === register.get('a:b').branch").asBoolean());
         assertTrue(eval("register.get('doc/intro.md').pane.children[0] === register.get('doc/intro.md').widget.root").asBoolean(), "its root in the pane");
         assertEquals("Intro", eval("register.get('doc/intro.md').chip._label.textContent").asString());
@@ -198,6 +199,19 @@ class TabPaneTest extends JsModuleTestBase {
         assertEquals("w1:disposed", log(), "a second close is nothing");
         eval("var again = register.open({ id: 't', focus: dock, make: widget('w2') });");
         assertEquals("tabpane-u2", eval("again.branch.name").asString(), "the same id again: a new tab-pane on a new name");
+    }
+
+    /** A register with a focus branch of the desk's: a widget joins there when opened, under the tab-pane's own name, and comes back there when a host lets it go. */
+    @Test
+    void aWidgetRestsInItsDesksFocusBranch_whileNoHostHoldsIt() {
+        eval("var desk = focusBranch('desk'), dock2 = focusBranch('dock2'); var resting = new TabRegister(page.createBranch('tabs2'), { focus: desk });"
+           + "var tp = resting.open({ id: 'r', make: widget('wr') });");
+        assertTrue(eval("tp.widget.focus.in === desk").asBoolean(), "opened with no focus of its own: it joins the desk's");
+        assertEquals("tabpane-u1", eval("handles.wr.tab.name").asString(), "the name it may join under: the tab-pane's own");
+        eval("dock2.adopt(tp.widget.focus); tp._hostedBy(host('h')); tp._hostedBy(null);");
+        assertTrue(eval("tp.widget.focus.in === desk").asBoolean(), "let go: back to rest, whatever becomes of the host it left");
+        eval("tp.close();");
+        assertEquals(0, eval("desk.members.length + dock2.members.length").asInt(), "closed: gone from both");
     }
 
     @Test

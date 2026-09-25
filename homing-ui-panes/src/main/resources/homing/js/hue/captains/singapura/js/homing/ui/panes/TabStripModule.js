@@ -6,7 +6,9 @@
 // where a dragged chip landed. A branch component: the pane makes a
 // sub-branch for it and hands it in.
 //
-//   new TabStrip(branch, { onAdd?, onDrop(chip, dest), onGroundMenu? })
+//   new TabStrip(branch, { onAdd?, onDrop(chip, dest), onGroundMenu?, onClose? })
+//     onClose() — the bar's own cross, at its end, for a strip that is a window's
+//     one bar: a float's. Without it there is no cross.
 //     onGroundMenu(at) → boolean: a right-click on the strip's own ground —
 //     the room the chips leave, and the tail — asks whoever holds the pane
 //     for a menu there; true means it was taken and the browser's own menu is
@@ -39,6 +41,9 @@
 //         "lent" while what the tab holds has them — the chip down again, the
 //         colour at full, the within mark on it — or null on none
 //     strip.count(n, budget, addOn) the pill, and the add button on or off
+//     strip.ground(target)          whether an event's target is the strip's own ground — the
+//         room the chips leave, and the tail — and not a chip or a control on it: where a
+//         press may move a window whose bar the strip is
 //     strip.at(clientX, clientY)    a point on the strip: the index a tab from
 //         outside would land at, marked there; −1 when the point is not on it
 //     strip.markAt(clientX)         the mark where a tab from outside would land → index
@@ -127,6 +132,7 @@ class TabStrip {
             css.addClass(addBtn, mtp_rail_add);   // the glyph is the design's, on the word; nothing is typed in
             addBtn.setAttribute("aria-label", "Add a tab");
             addBtn.addEventListener("click", function () { if (!addBtn.disabled) opts.onAdd(); });
+            addBtn._control = true;   // a control on the bar, not its ground
             el.appendChild(addBtn);
             this._addBtn = addBtn;
         }
@@ -146,6 +152,16 @@ class TabStrip {
         this._pill = branch.createElement("pill", "span");
         css.addClass(this._pill, mtp_pill);
         this._tail.appendChild(this._pill);
+        if (opts && typeof opts.onClose === "function") {   // the window's cross, at the very end of its one bar
+            var closeBtn = branch.createElement("close", "button");
+            closeBtn.type = "button";
+            css.addClass(closeBtn, mtp_bar_close);   // the glyph is the design's, on the word
+            closeBtn.setAttribute("aria-label", "Close these tabs");
+            closeBtn.setAttribute("tabindex", "-1");
+            closeBtn.addEventListener("click", function (ev) { ev.stopPropagation(); opts.onClose(); });
+            closeBtn._control = true;
+            this._tail.appendChild(closeBtn);
+        }
         el.appendChild(this._tail);
 
         this._mark = branch.createElement("mark", "div");     // in the strip only while a drag is on
@@ -192,6 +208,11 @@ class TabStrip {
         if (this._addBtn) css.aspect(this._addBtn, this._aspect);   // a tab's height moves with the aspect, and the plus is one tab tall
         for (var j = 0; j < this._order.length; j++) css.aspect(this._order[j], this._aspect);
         this._window.fit(this._active);
+    }
+
+    ground(target) {
+        for (var x = target; x && x !== this.el; x = x.parentNode) if (x._chip || x._control) return false;
+        return x === this.el;
     }
 
     /** The chip's name, now: its label, its tooltip, and what its cross says it closes. */

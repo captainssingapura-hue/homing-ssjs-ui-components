@@ -79,7 +79,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted",
             mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted", mtp_strip_loose = "mtp_strip_loose", mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark",
             mtp_chip_seated = "mtp_chip_seated", mtp_strip_current = "mtp_strip_current",
-            mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill",
+            mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill",
             mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
             mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target";
         var console = { error: function (m, e) { log.push("error:" + m); } };
@@ -544,10 +544,10 @@ class MultiTabPaneTest extends JsModuleTestBase {
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabRegisterModule.js");
             eval("""
                 var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
-                var register = new TabRegister(branch.createBranch("tabs"));
-                var elsewhere = focusParty.root.createBranch("elsewhere", {});   // the focus branch a tab-pane's widget starts in
+                var elsewhere = focusParty.root.createBranch("elsewhere", {});   // the desk's focus branch: a tab-pane's widget rests there
+                var register = new TabRegister(branch.createBranch("tabs"), { focus: elsewhere });
                 function open(id, extra) {
-                    return register.open(Object.assign({ id: id, title: id.toUpperCase(), focus: elsewhere,
+                    return register.open(Object.assign({ id: id, title: id.toUpperCase(),
                                                          make: function (b, t) { b.activate("widget"); return widget(id, t.focus); } }, extra || {}));
                 }
                 var other = new MultiTabPane(branch.createBranch("mtp_s9"), { host: el("div"), slotId: "s9", budget: 4 });
@@ -598,6 +598,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertEquals("B", chips());
             assertTrue(eval("a.host() === null && a.chip.parentNode === null && a.pane.parentNode === null").asBoolean(), "out, as it is");
             assertTrue(eval("register.has('a') && a.chip.getAttribute('aria-selected') === 'false' && !a.chip.has('mtp_chip_lifted')").asBoolean(), "not dissolved, and its chip at rest");
+            assertTrue(eval("a.widget.focus.in === elsewhere").asBoolean(), "its widget's membership back at rest in the desk's branch");
             assertTrue(eval("pane.letGo(a) === null").asBoolean(), "not here: nothing");
         }
 
@@ -650,6 +651,47 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertEquals("A", chips(), "nothing moved");
             eval("pane.letGo(a); pane.dispose();");
             assertTrue(eval("register.has('a') && a.host() === null").asBoolean(), "the tab-pane outlives the pane that held it");
+        }
+
+        /** A pane that is a window's content: its strip the one bar, with a cross at its end; its ground told from its chips and controls. */
+        @Test
+        void aPaneThatIsAWindow_hasACrossAtTheEndOfItsBar_andKnowsItsGround() {
+            eval("var closed = 0; var win = new MultiTabPane(branch.createBranch('mtp_win'), { host: el('div'), slotId: 'win', onClose: function () { closed++; } });"
+               + "var a = open('a'); win.take(a); var bar = win.bar(), tail = bar.children[bar.children.length - 1], cross = tail.children[tail.children.length - 1];");
+            assertTrue(eval("bar === win.el.children[0] && cross.has('mtp_bar_close')").asBoolean(), "the strip is the bar; the cross is last in it");
+            assertEquals("Close these tabs|-1", eval("cross.getAttribute('aria-label') + '|' + cross.getAttribute('tabindex')").asString());
+            eval("cross.fire('click', { stopPropagation: function () {} });");
+            assertEquals(1, eval("closed").asInt());
+            assertTrue(eval("win.barGround(bar) && win.barGround(bar.children[0]) && win.barGround(tail) && win.barGround(tail.children[0])").asBoolean(), "the bar, the rail, the tail, the count: ground");
+            assertFalse(eval("win.barGround(a.chip) || win.barGround(a.chip._label) || win.barGround(cross) || win.barGround(el('elsewhere'))").asBoolean(), "a chip, a part of one, a control, and what is not on the bar: not ground");
+            assertEquals(0, eval("stripOf(pane).length === 0 ? 0 : pane.bar().children[pane.bar().children.length - 1].children.filter(function (c) { return c.has('mtp_bar_close'); }).length").asInt(), "a pane told no onClose has no cross");
+        }
+
+        @Test
+        void aPaneSaysWhenItsLastTabHasLeft_howeverItLeft() {
+            eval("var empties = 0; var win = new MultiTabPane(branch.createBranch('mtp_win2'), { host: el('div'), slotId: 'win2', onEmpty: function (p) { if (p === win) empties++; } });"
+               + "var a = open('a'), b = open('b'); win.take(a); win.take(b); win.letGo(a);");
+            assertEquals(0, eval("empties").asInt(), "one left: not empty");
+            eval("b.close();");
+            assertEquals(1, eval("empties").asInt(), "the last closed");
+            eval("win.take(a); win.letGo(a);");
+            assertEquals(2, eval("empties").asInt(), "the last let go");
+            eval("win.addTab(tab('x', { into: win.focus })); win.removeTab('x'); win.addTab(tab('y', { into: win.focus })); win.detachTab('y');");
+            assertEquals(4, eval("empties").asInt(), "and a tab of its own removed, or detached");
+        }
+
+        /** Widgets that join under their branch's name, as the stack's do, share a host; one whose member name is taken is refused before anything moves. */
+        @Test
+        void widgetsNamedByTheirBranchShareAHost_aNameAlreadyThereIsRefusedBeforeAnythingMoves() {
+            eval("function byBranch(b, t) { b.activate('w'); var w = { root: el('w'), activate: function () {} }; w.focus = t.focus.join(b.name, w); return w; }"
+               + "var a = register.open({ id: 'a', make: byBranch }), b = register.open({ id: 'b', make: byBranch }); pane.take(a); pane.take(b);");
+            assertEquals("a,b", eval("pane.tabs().join(',')").asString(), "two widgets of one kind, in one host");
+            eval("function fixed(b, t) { b.activate('w'); var w = { root: el('w'), activate: function () {} }; w.focus = t.focus.join('same', w); return w; }"
+               + "var c = register.open({ id: 'c', make: fixed }); other.take(c); var d = register.open({ id: 'd', make: fixed }); log.length = 0; var before = stripOf(other).length;");
+            assertFalse(eval("other.canTake(d)").asBoolean());
+            var ex = assertThrows(PolyglotException.class, () -> eval("other.take(d)"));
+            assertTrue(ex.getMessage().contains("member name 'same'"), ex.getMessage());
+            assertTrue(eval("other.tabs().join(',') === 'c' && stripOf(other).length === before && d.host() === null && d.widget.focus.in === elsewhere").asBoolean(), "nothing moved");
         }
 
         @Test

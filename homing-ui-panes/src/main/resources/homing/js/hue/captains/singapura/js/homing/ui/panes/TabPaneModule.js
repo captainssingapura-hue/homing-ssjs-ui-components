@@ -12,10 +12,14 @@
 //     id      the owner's name for it, any string. It is never a name on the party.
 //     focus   the focus branch the widget joins: the host's, by the law.
 //     make(branch, tab) → the widget, built on a sub-branch of the tab-pane's
-//             own and handed the tab's handle, { id, focus, title(text?), icon(el?) },
+//             own and handed the tab's handle, { id, name, focus, title(text?), icon(el?) },
 //             by which it names itself on its own tab. The widget is by the law: a
 //             member of the focus branch it was handed, as widget.focus, answering
-//             activate(), with a root, which goes in the pane once.
+//             activate(), with a root, which goes in the pane once. Its branch is
+//             named as the tab-pane is, fresh and unique on its desk, and tab.name
+//             says it again: a widget that joins under its branch's name, as the
+//             stack's do, never meets another of that name in a host — a focus
+//             branch refuses a name twice.
 //
 //   tp.id  tp.chip  tp.pane  tp.widget  tp.branch  tp.pinned  tp.closable
 //                     the parts, the same for its whole life
@@ -33,7 +37,9 @@
 //                     open is the one mint. A second close is nothing.
 //
 // THE HOST'S SIDE. A host calls tp._hostedBy(host) when it takes the tab-pane
-// in, and _hostedBy(null) when it lets it go. What the chip is asked goes to
+// in, and _hostedBy(null) when it lets it go; let go, and not closing, the
+// widget's membership goes back to rest in its register's focus branch, when
+// there is one, since the host it left may be about to go. What the chip is asked goes to
 // the host it is in: a press is host.select(tp); a right-click, the menu key
 // or Shift+F10 is host.menu(tp, at, byKey) → boolean, true when a menu
 // opened. The cross is the tab-pane's own and closes it; a close disposes
@@ -76,11 +82,12 @@ class TabPane {
     static _build(tp, s) {
         var tab = Object.freeze({
             id: tp.id,
+            name: tp.branch.name,
             focus: s.focus,
             title: function (t) { if (arguments.length) tp.title(t); return tp._title; },
             icon: function (el) { if (arguments.length) tp.icon(el); return tp._icon; }
         });
-        var made = s.make(tp.branch.createBranch("widget"), tab);   // not "widget": the name is an injected binding
+        var made = s.make(tp.branch.createBranch(tp.branch.name), tab);   // "made", not "widget": that name is an injected binding
         if (!made || typeof made !== "object" || !made.root) {
             throw new Error("[TabPane] '" + tp.id + "': make returned no widget with a root");
         }
@@ -116,7 +123,11 @@ class TabPane {
     closed() { return this._closed; }
 
     /** The host's to call: when it takes the tab-pane in, and with null when it lets it go. */
-    _hostedBy(host) { this._host = host || null; }
+    _hostedBy(host) {
+        this._host = host || null;
+        var rest = this._register ? this._register.focus : null, m = this.widget.focus;
+        if (!host && !this._closed && rest && m && m.in && m.in !== rest) rest.adopt(m);
+    }
 
     close() {
         if (this._closed) return this;

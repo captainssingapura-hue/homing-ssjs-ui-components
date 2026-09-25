@@ -7,14 +7,20 @@
 // larger, movable card in the hand: its place and its measure are its user's,
 // carried in --fp-x, --fp-y, --fp-w, --fp-h on the frame, never the design's.
 //
-//   new FloatingPane(branch, { id, title, icon?, x, y, w, h, z, closable?, onEvent?, minW?, minH?,
+//   new FloatingPane(branch, { id, title, icon?, head?, x, y, w, h, z, closable?, onEvent?, minW?, minH?,
 //                              onDragMove?(pane, clientX, clientY), onDragEnd?(pane, clientX, clientY, ok) })
 //     branch   the pane's own, handed unactivated
 //     x, y     its place within the desk, in px; w, h its measure; z its place on the stack
+//     head     false: no head at all, the body the whole frame — for a holder that gives
+//              the frame a handle of its own, as a float whose one bar is its host's strip.
+//              The title is then only the frame's name for a reader, and there is no icon
 //
 //   pane.root                the frame, appended by the desk; focusable (tabindex −1)
 //   pane.body                the bounded region a widget's root goes in
-//   pane.head                the bar; the desk listens on it and on the frame
+//   pane.head                the bar; the desk listens on it and on the frame; null when there is none
+//   pane.handle(el, accept?) el moves the frame as the head does: a press that accept(ev)
+//                            says yes to, and the drag after it. The frame's hover and
+//                            hand are the same; the head's own light is the head's
 //   pane.id
 //   pane.title(text?)        read, or set
 //   pane.icon(el?)           read, or set: the holder's element before the title, or null for none
@@ -61,34 +67,19 @@ class FloatingPane {
         this._minH = opts.minH == null ? _MIN_H : Math.max(24, opts.minH | 0);
         this._x = 0; this._y = 0; this._w = this._minW; this._h = this._minH;
         this._size = 0;
+        this._over = false; this._held = false;
+        this._label = "";
+        this._handle = null;   // an element of the holder's that moves the frame, when there is no head
 
         var frame = branch.createElement("frame", "section");
         css.addClass(frame, fp_frame);
         frame.tabIndex = -1;
         frame.setAttribute("role", "region");
 
-        var head = branch.createElement("head", "header");
-        css.addClass(head, fp_head);
-        this._icon = branch.createElement("icon", "span");   // always there, shown only with an icon
-        css.addClass(this._icon, fp_icon);
-        this._icon.setAttribute("aria-hidden", "true");
+        this._icon = null; this._title = null; this._close = null;
         this._iconEl = null;
-        head.appendChild(this._icon);
-        this._title = branch.createElement("title", "span");
-        css.addClass(this._title, fp_title);
-        head.appendChild(this._title);
-        this._close = null;
-        if (opts.closable !== false) {
-            var x = branch.createElement("close", "button");
-            x.type = "button";
-            css.addClass(x, fp_close);
-            x.textContent = "×";
-            x.setAttribute("aria-label", "Close");
-            x.addEventListener("click", function (e) { e.stopPropagation(); if (self._onClose) self._onClose(self); });
-            head.appendChild(x);
-            this._close = x;
-        }
-        frame.appendChild(head);
+        var head = opts.head === false ? null : this._mintHead(branch, opts);
+        if (head) frame.appendChild(head);
 
         var body = branch.createElement("body", "div");
         css.addClass(body, fp_body);
@@ -102,25 +93,61 @@ class FloatingPane {
         this.root = frame;
         this.head = head;
         this.body = body;
-        this._parts = [head, this._title].concat(this._close ? [this._close] : []);
+        this._parts = head ? [head, this._title].concat(this._close ? [this._close] : []) : [];
         this.title(opts.title == null ? "" : opts.title);
         this.icon(opts.icon || null);
         this.raise(opts.z == null ? 1 : opts.z);
         this._set(opts.x == null ? 0 : opts.x, opts.y == null ? 0 : opts.y, opts.w == null ? 320 : opts.w, opts.h == null ? 220 : opts.h, false);
-        this._armMove(head);
+        if (head) this._armMove(head, null);
         this._armResize(grip);
     }
 
+    /** The head: the icon's slot, always there and shown only with an icon; the title; the cross, when it can be closed. */
+    _mintHead(branch, opts) {
+        var self = this, head = branch.createElement("head", "header");
+        css.addClass(head, fp_head);
+        this._icon = branch.createElement("icon", "span");
+        css.addClass(this._icon, fp_icon);
+        this._icon.setAttribute("aria-hidden", "true");
+        head.appendChild(this._icon);
+        this._title = branch.createElement("title", "span");
+        css.addClass(this._title, fp_title);
+        head.appendChild(this._title);
+        if (opts.closable !== false) {
+            var x = branch.createElement("close", "button");
+            x.type = "button";
+            css.addClass(x, fp_close);
+            x.textContent = "×";
+            x.setAttribute("aria-label", "Close");
+            x.addEventListener("click", function (e) { e.stopPropagation(); if (self._onClose) self._onClose(self); });
+            head.appendChild(x);
+            this._close = x;
+        }
+        return head;
+    }
+
     title(text) {
-        if (text !== undefined) { this._title.textContent = String(text); this.root.setAttribute("aria-label", String(text)); }
-        return this._title.textContent;
+        if (text !== undefined) {
+            this._label = String(text);
+            if (this._title) this._title.textContent = this._label;
+            this.root.setAttribute("aria-label", this._label);
+        }
+        return this._label;
+    }
+
+    /** An element of the holder's that moves the frame as a head would: pressed where accept says, and dragged. */
+    handle(el, accept) {
+        this._handle = el;
+        this._armMove(el, typeof accept === "function" ? accept : null);
+        return this;
     }
 
     /** The icon before the title: set with an element, or null for none; read with no argument. */
     icon(el) {
         if (el !== undefined) {
-            while (this._icon.firstChild) this._icon.removeChild(this._icon.firstChild);
             this._iconEl = el || null;
+            if (!this._icon) return this._iconEl;   // no head, no slot: kept, and shown nowhere
+            while (this._icon.firstChild) this._icon.removeChild(this._icon.firstChild);
             if (this._iconEl) this._icon.appendChild(this._iconEl);
             css.toggleClass(this._icon, fp_icon_on, !!this._iconEl);
         }
@@ -202,25 +229,24 @@ class FloatingPane {
         css.toggleClass(this.root, fp_held, this._held);
         css.toggleClass(this.root, fp_hoverable, this._over && !this._held);
     }
-    _armMove(head) {
+    _armMove(el, accept) {
         var self = this;
-        this._over = false; this._held = false;
-        head.addEventListener("pointerenter", function () { self._over = true; self._lift(); });
-        head.addEventListener("pointerleave", function () { self._over = false; self._lift(); });
-        head.addEventListener("pointerdown", function (down) {
+        el.addEventListener("pointerenter", function () { self._over = true; self._lift(); });
+        el.addEventListener("pointerleave", function () { self._over = false; self._lift(); });
+        el.addEventListener("pointerdown", function (down) {
             if (down.button !== 0 || self._held) return;
             if (self._close && (down.target === self._close || (self._close.contains && self._close.contains(down.target)))) return;
-            self._beginMove(down);
+            if (accept && !accept(down)) return;
+            self._beginMove(down, el);
             if (down.preventDefault) down.preventDefault();
         });
     }
-    _beginMove(down) {
-        var self = this, head = this.head;
+    _beginMove(down, by) {
+        var self = this, head = by || this.head || this._handle, lit = head === this.head;   // the head lights as it is held; a holder's handle is its own
         var x0 = this._x, y0 = this._y, cx = down.clientX, cy = down.clientY, moved = false;
         this._held = true;
         this._lift();
-        css.addClass(head, fp_head_held);
-        css.extent(head, _HELD);
+        if (lit) { css.addClass(head, fp_head_held); css.extent(head, _HELD); }
         try { head.setPointerCapture(down.pointerId); } catch (err) {}
         function onMove(e) {
             var nx = x0 + (e.clientX - cx), ny = y0 + (e.clientY - cy);
@@ -234,8 +260,7 @@ class FloatingPane {
             head.removeEventListener("pointercancel", onEnd);
             self._held = false;
             self._lift();
-            css.removeClass(head, fp_head_held);
-            css.extent(head, null);
+            if (lit) { css.removeClass(head, fp_head_held); css.extent(head, null); }
             try { head.releasePointerCapture(down.pointerId); } catch (err) {}
             var ok = e.type === "pointerup";
             if (!ok) self._set(x0, y0, self._w, self._h, false);

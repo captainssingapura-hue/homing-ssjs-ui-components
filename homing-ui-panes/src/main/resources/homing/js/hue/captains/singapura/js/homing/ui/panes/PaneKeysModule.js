@@ -143,6 +143,10 @@ class PaneKeys {
         if (!PaneKeys.law(tab.widget))   // a member of a dock's branch, with activate()
             throw new Error("[MultiTabPane] tab '" + tab.id + "': its widget is not logically focusable - it must join the dock's focus branch (widget.focus) and answer activate()");
         if (pane.count() >= pane.budget()) throw new Error("[MultiTabPane] the budget of " + pane.budget() + " is spent in slot '" + pane.slotId + "'");
+        var m = tab.widget.focus;   // a membership adopted into the dock's branch meets its members by name there, and a branch refuses a name twice
+        if (m.in !== pane.focus) for (var i = 0; i < pane.focus.members.length; i++) {
+            if (pane.focus.members[i].name === m.name) throw new Error("[MultiTabPane] tab '" + tab.id + "': its widget's member name '" + m.name + "' is already in slot '" + pane.slotId + "'");
+        }
     }
 
     /** The law: a tab's widget is a member of a focus branch of its own and answers activate(), so the keys can be given to it and it can take them. */

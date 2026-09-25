@@ -442,6 +442,37 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
             """;
         }
     }
+    /**
+     * The bar's own cross, at its end, for a pane that is a window — a float,
+     * whose one bar is its strip: pressed, the window and every tab in it
+     * close. The plus's measure and manner, one tab tall and square, with the
+     * design's cross for a glyph in place of its plus.
+     */
+    public record mtp_bar_close() implements CssClass<PaneStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--size"), new CssVar("--aspect")); }
+        @Override public List<? extends Wearable> wears() {
+            return List.of(of(Control.Tab.class, Shape.Corner.class),
+                           of(Selectable.class, Color.Surface.class), of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class),
+                           of(Muted.class, Color.Ink.class), of(Control.class, Color.Edge.class),
+                           of(Icon.Close.class, Type.Glyph.class));
+        }
+        @Override public List<? extends Wearable> reads() { return List.of(of(Control.Tab.class, Size.Extent.class), of(Control.Tab.class, Size.Proportion.class)); }
+        @Override public String body() { return """
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            flex: none;
+            block-size: calc(var(--control-tab-size-extent-inline-size) * pow(var(--control-tab-size-extent-inline-size-ratio), var(--size, 0))
+                           / (var(--control-tab-size-proportion) * pow(var(--control-tab-size-proportion-ratio-aspect), var(--aspect, 0))));
+            aspect-ratio: 1;
+            background-color: transparent;
+            border: 0;
+            font: inherit;
+            line-height: 1;
+            """;
+        }
+    }
     public record mtp_add_off() implements CssClass<PaneStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Inert.class, Effect.Opacity.class), of(Inert.class, Affordance.Cursor.class)); }
         @Override public String body() { return ""; }
@@ -645,7 +676,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     @Override
     public List<CssClass<PaneStyles>> cssClasses() {
         return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_strip_current(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_seated(), new mtp_chip_dragging(), new mtp_chip_shifted(),
-                       new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_add(), new mtp_rail_add(), new mtp_add_off(),
+                       new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_add(), new mtp_rail_add(), new mtp_bar_close(), new mtp_add_off(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(), new mtp_dock_target(),
                        new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(), new mtp_opener_pick(),
                        new mtp_thumbs(), new mtp_thumb(), new mtp_thumb_on(), new mtp_thumb_off(), new mtp_thumb_label(), new mtp_new(), new mtp_new_pick(),

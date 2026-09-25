@@ -36,6 +36,7 @@ public record TabStripModule() implements DomModule<TabStripModule> {
                         new PaneStyles.mtp_strip_loose(),
                         new PaneStyles.mtp_strip_tail(),
                         new PaneStyles.mtp_rail_add(),
+                        new PaneStyles.mtp_bar_close(),
                         new PaneStyles.mtp_add_off(),
                         new PaneStyles.mtp_pill(),
                         new PaneStyles.mtp_drop_mark(),

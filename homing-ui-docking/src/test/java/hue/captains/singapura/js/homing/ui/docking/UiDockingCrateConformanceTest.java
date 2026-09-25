@@ -38,7 +38,7 @@ class UiDockingCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(2, checked, "the docking and the events");
+        assertEquals(3, checked, "the docking, the floater and the events");
     }
 
 }

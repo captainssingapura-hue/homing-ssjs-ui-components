@@ -39,6 +39,9 @@
 //                                the TAB that left the dock - the holder's own
 //                                object, with whatever the holder wrote on it -
 //                                carrying the name and icon the pane had last
+//   docking.float(opts?)         → a Floater on the desk: a frame around a host of its own,
+//                                its one bar the host's strip (RFC 0066 E3, appendix
+//                                "tab-panes", §7); its host's reports on this sink unless said
 //   docking.dispose()            the desk and everything on it; the docks stay
 //
 // The hand: while a floating pane is dragged, every dock under the pointer is
@@ -131,6 +134,11 @@ class Docking {
         var at = dock.attachTab(tab, index == null ? null : index);
         this._fire(DockEvents.Docked(tab.id, dock.slotId, at));
         return at;
+    }
+
+    float(opts) {
+        var self = this;
+        return new Floater(this.desk, Object.assign({ onEvent: function (ev) { self._fire(ev); } }, opts || {}));
     }
 
     dispose() {

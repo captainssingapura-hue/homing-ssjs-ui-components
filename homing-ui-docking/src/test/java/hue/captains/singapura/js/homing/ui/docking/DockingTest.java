@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,7 +77,7 @@ class DockingTest extends JsModuleTestBase {
             fp_head = "fp_head", fp_head_held = "fp_head_held", fp_icon = "fp_icon", fp_icon_on = "fp_icon_on", fp_title = "fp_title", fp_close = "fp_close", fp_body = "fp_body", fp_grip = "fp_grip";
         var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted",
             mtp_chip_seated = "mtp_chip_seated",
-            mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off",
+            mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off",
             mtp_pill = "mtp_pill", mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
             mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target";
         var console = { error: function (m, e) { log.push("error:" + m); } };
@@ -147,6 +148,7 @@ class DockingTest extends JsModuleTestBase {
         loadModule(P + "panes/PaneTabsModule.js");
         loadModule(P + "panes/MultiTabPaneModule.js");
         loadModule(P + "docking/DockEventsModule.js");
+        loadModule(P + "docking/FloaterModule.js");
         loadModule(P + "docking/DockingModule.js");
         js.eval("js", SHIM);
     }
@@ -288,4 +290,96 @@ class DockingTest extends JsModuleTestBase {
         assertTrue(eval("docking.desk.has('f')").asBoolean());
         assertFalse(eval("B.el.has('mtp_dock_target')").asBoolean(), "the offer was withdrawn when the pointer left");
     }
+
+    /**
+     * THE FLOATER (RFC 0066 E3, appendix "tab-panes", §7, the sequence's step
+     * 3): a frame on the desk around a host of its own, as a browser's window;
+     * one bar, the host's strip, whose ground moves the frame and whose cross
+     * closes it and every tab-pane in it; never offered to a dock; not closed
+     * by the desk's Escape; gone when its last tab-pane leaves; named for a
+     * reader by the tab it shows.
+     */
+    @Nested
+    class TheFloater {
+
+        @BeforeEach
+        void aRegisterAndItsTabPanes() {
+            loadModule(P + "panes/TabPaneModule.js");
+            loadModule(P + "panes/TabRegisterModule.js");
+            eval("""
+                var register = new TabRegister(page.createBranch("tabs"), { focus: afloat });   // the desk's focus branch: where a tab-pane rests
+                function open(id) { return register.open({ id: id, title: id.toUpperCase(), make: function (b, t) { b.activate("w"); return widget(id, t.focus); } }); }
+                function tailOf(f) { var bar = f.host.bar(); return bar.children[bar.children.length - 1]; }
+                function press(target, x, y, on) { (on || target).fire("pointerdown", { button: 0, pointerId: 5, clientX: x, clientY: y, target: target }); }
+                """);
+        }
+
+        @Test
+        void aFloatIsAFrameWithOneBar_theHostsStrip() {
+            eval("log.length = 0; var f = docking.float({ x: 40, y: 30, w: 300, h: 200 }); f.take(open('a'));");
+            assertEquals("opened:" + id() + " raised:" + id() + " active:" + id() + ":a", log(), "the desk's frame, then what its host shows, on the one sink");
+            assertTrue(eval("f.frame.head === null && f.frame.root.children.length === 2 && f.frame.body.children[0] === f.host.el").asBoolean(), "no head: the frame's body holds the host");
+            assertTrue(eval("f.host.el.children[0] === f.host.bar()").asBoolean(), "the host's strip is the one bar");
+            assertTrue(eval("tailOf(f).children[tailOf(f).children.length - 1].has('mtp_bar_close')").asBoolean(), "its cross at the bar's end");
+            assertEquals("A", eval("f.frame.root.getAttribute('aria-label') + ''").asString(), "named for a reader by the tab it shows");
+            eval("f.take(open('b')); f.host.switchTab('b');");
+            assertEquals("B", eval("f.frame.root.getAttribute('aria-label') + ''").asString());
+        }
+
+        @Test
+        void theBarsGroundMovesTheFloat_aPressThroughAChipDoesNot() {
+            eval("var f = docking.float({ x: 40, y: 30, w: 300, h: 200 }); var a = open('a'); f.take(a); var bar = f.host.bar(); log.length = 0;");
+            eval("press(a.chip, 60, 40, bar); bar.fire('pointermove', { clientX: 200, clientY: 200 }); bar.fire('pointerup', { type: 'pointerup', clientX: 200, clientY: 200 });");
+            assertEquals("40,30", eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "a press that came through a chip is the chip's");
+            eval("log.length = 0; press(bar, 60, 40); bar.fire('pointermove', { clientX: 160, clientY: 90 }); bar.fire('pointerup', { type: 'pointerup', clientX: 160, clientY: 90 });");
+            assertEquals("140,80", eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "a press on the ground, and the drag after it, moves the frame");
+            assertEquals("capture:div moved:" + id(), log(), "reported once, by the desk; and offered to no dock");
+        }
+
+        @Test
+        void aFloatIsNeverOfferedToADock_asOneTabWouldBe() {
+            eval("var f = docking.float({ x: 500, y: 400, w: 300, h: 200 }); f.take(open('a')); var bar = f.host.bar(); log.length = 0;"
+               + "press(bar, 520, 410); bar.fire('pointermove', { clientX: 600, clientY: 20 });");
+            assertFalse(eval("B.el.has('mtp_dock_target')").asBoolean(), "over B's strip, B is not lit: a float is not one tab");
+            eval("bar.fire('pointerup', { type: 'pointerup', clientX: 600, clientY: 20 });");
+            assertTrue(eval("docking.desk.has(f.id) && f.host.has('a') && B.tabs().join(',') === ''").asBoolean(), "still afloat, its tab in it");
+        }
+
+        @Test
+        void theCrossClosesTheFloat_andEveryTabPaneInIt() {
+            eval("var f = docking.float({ x: 40, y: 30 }); f.take(open('a')); f.take(open('b')); log.length = 0;"
+               + "var cross = tailOf(f).children[tailOf(f).children.length - 1]; cross.fire('click', {});");
+            assertEquals(0, eval("register.count()").asInt(), "every tab-pane in it closed");
+            assertTrue(eval("f.closed() && !docking.desk.has(f.id)").asBoolean(), "and the frame gone");
+            assertTrue(log().startsWith("a:disposed TabRemoved"), log());
+            assertTrue(log().contains("b:disposed TabRemoved closed:" + id()), log());
+        }
+
+        @Test
+        void aFloatWhoseLastTabPaneLeavesIsGone_closedOrMovedAway() {
+            eval("var f = docking.float({ x: 40, y: 30 }); var a = open('a'); f.take(a); f.host.letGo(a);");
+            assertTrue(eval("f.closed() && !docking.desk.has(f.id) && a.host() === null && register.has('a')").asBoolean(), "moved away: the float is gone, the tab-pane not");
+            assertTrue(eval("a.widget.focus.in === afloat").asBoolean(), "its membership at rest in the desk's branch, not gone with the float's host");
+            eval("var g = docking.float({ x: 40, y: 30 }); g.take(a); a.close();");
+            assertTrue(eval("g.closed() && !docking.desk.has(g.id) && !register.has('a')").asBoolean(), "closed: the float is gone with it");
+        }
+
+        /** The gallery's widgets join under their branch's name: two of them in one float, each on a branch named as its tab-pane is. */
+        @Test
+        void twoWidgetsOfOneKindShareAFloat() {
+            eval("function byBranch(b, t) { b.activate('w'); var w = { root: el('w'), activate: function () {} }; w.focus = t.focus.join(b.name, w); return w; }"
+               + "var f = docking.float({ x: 40, y: 30 }); f.take(register.open({ id: 'p:1', make: byBranch })); f.take(register.open({ id: 'p:2', make: byBranch }));");
+            assertEquals("p:1,p:2", eval("f.host.tabs().join(',')").asString());
+        }
+
+        @Test
+        void theDesksEscapeDoesNotCloseAFloat_sinceClosingOneClosesItsTabs() {
+            eval("var f = docking.float({ x: 40, y: 30 }); f.take(open('a'));");
+            assertFalse(eval("docking.desk.key({ key: 'Escape' })").asBoolean());
+            assertTrue(eval("docking.desk.has(f.id) && register.has('a')").asBoolean());
+        }
+
+        private String id() { return eval("f.id").asString(); }
+    }
 }
+

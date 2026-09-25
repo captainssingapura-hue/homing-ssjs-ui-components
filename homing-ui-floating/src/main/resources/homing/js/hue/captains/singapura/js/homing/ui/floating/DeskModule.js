@@ -16,7 +16,10 @@
 //            active pane if it can be closed. The widgets are built without a
 //            steward of their own. No keydown listener of its own.
 //
-//   desk.open({ id?, title, icon?, x?, y?, w?, h?, closable?, widget?, params? })  → the pane
+//   desk.open({ id?, title, icon?, head?, offered?, x?, y?, w?, h?, closable?, widget?, params? })  → the pane
+//       head: false, a frame with no head, for a holder that gives it a handle of its own;
+//       offered: false, its drags are not the desk's onDragMove/onDragEnd's to watch — a
+//       frame that is not one tab, a float of many, is never offered to a dock
 //       id defaults to "pane-N"; x, y cascade when not given. The id is the
 //       holder's name for the pane — a tab's own id, any string; the pane's
 //       branch is the desk's, "float-" and a fresh uuid at every opening, and
@@ -97,13 +100,13 @@ class Desk {
         var k = this._order.length % 8;
         var paneBranch = this.branch.createBranch(Desk._freshName());
         var pane = new FloatingPane(paneBranch, {
-            id: id, title: s.title == null ? id : s.title, icon: s.icon || null,
+            id: id, title: s.title == null ? id : s.title, icon: s.icon || null, head: s.head,
             x: s.x == null ? 24 + _CASCADE * k : s.x, y: s.y == null ? 24 + _CASCADE * k : s.y,
             w: s.w, h: s.h, z: ++this._top, closable: s.closable !== false,
             minW: this._minW, minH: this._minH,
             onEvent: function (ev) { self._fire(ev); },
             onClose: function () { self.close(id); },
-            onDragMove: this._onDragMove, onDragEnd: this._onDragEnd
+            onDragMove: s.offered === false ? null : this._onDragMove, onDragEnd: s.offered === false ? null : this._onDragEnd
         });
         this.root.appendChild(pane.root);
         var entry = { pane: pane, widget: null, closable: s.closable !== false };

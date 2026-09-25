@@ -4,9 +4,14 @@
 // close. It is the only owner of a desk's tab-panes: a host holds them and
 // never owns them (RFC 0066 E3, appendix "tab-panes", §3 and §6).
 //
-//   new TabRegister(branch)   the register's own branch, handed unactivated;
-//                             every tab-pane's branch is a sub-branch of it
-//   register.open({ id, title?, icon?, pinned?, closable?, focus, make }) → the TabPane
+//   new TabRegister(branch, { focus? })   the register's own branch, handed unactivated;
+//                             every tab-pane's branch is a sub-branch of it.
+//                             focus: the desk's focus branch, where a tab-pane's widget
+//                             RESTS while no host holds it — it joins there when it is
+//                             opened, unless open says otherwise, and comes back there
+//                             when a host lets it go — so a membership outlives any host
+//   register.open({ id, title?, icon?, pinned?, closable?, focus?, make }) → the TabPane
+//       focus: the branch its widget joins, the register's own unless said.
 //       id: any non-empty string, unique in this register. A second tab-pane
 //       under an id already open is refused before anything is made. Its
 //       branch is "tabpane-" and a fresh uuid, never the id. Whole or not at
@@ -26,10 +31,11 @@
 const _registerOwner = Object.freeze({ toString: () => "tabRegister" });
 
 class TabRegister {
-    constructor(branch) {
+    constructor(branch, opts) {
         if (!branch) throw new Error("[TabRegister] a branch of its own is required");
         branch.activate(_registerOwner);
         this.branch = branch;
+        this.focus = (opts && opts.focus) || null;
         this._tabs = new Map();        // id → TabPane, in the order opened
         this._disposed = false;
     }
@@ -42,7 +48,7 @@ class TabRegister {
         var branch = this.branch.createBranch("tabpane-" + TabRegister._uuid());
         var tp;
         try {
-            tp = new TabPane(branch, s, this);
+            tp = new TabPane(branch, s.focus || !this.focus ? s : Object.assign({}, s, { focus: this.focus }), this);
         } catch (e) {
             try { branch.dissolve(); } catch (x) {}
             throw e;
@@ -75,7 +81,7 @@ class TabRegister {
     /**
      * RFC 4122 v4: crypto.randomUUID where the page is a secure context, else
      * the same from getRandomValues. The float layer's Desk makes its own the
-     * same way, until the desk takes both in (the RFC's sequence, step 3).
+     * same way, until the desk that holds both makes the one.
      */
     static _uuid() {
         if (typeof crypto.randomUUID === "function") return crypto.randomUUID();

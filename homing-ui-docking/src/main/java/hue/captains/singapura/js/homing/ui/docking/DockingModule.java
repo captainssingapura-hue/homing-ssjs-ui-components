@@ -29,6 +29,7 @@ public record DockingModule() implements DomModule<DockingModule> {
         return ImportsFor.<DockingModule>builder()
                 .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DockEventsModule.DockEvents()), DockEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FloaterModule.Floater()), FloaterModule.INSTANCE))
                 .build();
     }
 
