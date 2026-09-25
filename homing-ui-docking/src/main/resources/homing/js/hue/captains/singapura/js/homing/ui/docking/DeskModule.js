@@ -37,7 +37,8 @@
 //   desk.float(opts?)      → a Floater: a frame around a host of its own, one bar, no plus.
 //                          While it holds ONE tab-pane it is that tab in the hand: dragged, it
 //                          is offered to the docks it passes, and let go over a strip the tab-pane
-//                          lands there and the float, empty, is gone. A float of many moves as a
+//                          lands there, the one the dock shows - the hand put it there to look at
+//                          it - and the float, empty, is gone. A float of many moves as a
 //                          window does. A float is a dock for as long as it lasts
 //   desk.dispose()         every tab-pane closed, the floats with them; the layer; the desk's
 //                          own focus branch left. The docks are the page's
@@ -131,7 +132,10 @@ class Desk {
             onDragEnd: function (frame, x, y, ok) {
                 var target = self._target, index = self._index;
                 self._clear();
-                if (ok && target && f.host.count() === 1) self.move(f.tabPanes()[0], target, index);
+                if (!ok || !target || f.host.count() !== 1) return;
+                var tp = f.tabPanes()[0];
+                self.move(tp, target, index);
+                target.switchTab(tp.id);
             },
             onGone: function () { self.removeDock(f.host); self._floaters.delete(f.host); }
         }, opts || {}));

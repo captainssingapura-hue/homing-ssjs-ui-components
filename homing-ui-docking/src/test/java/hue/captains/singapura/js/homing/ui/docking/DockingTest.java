@@ -347,14 +347,15 @@ class DockingTest extends JsModuleTestBase {
         }
 
         @Test
-        void detach_andAFloatOfOneDraggedOntoADock() {
-            eval("var a = desk.open({ title: 'A', make: mk('wa') }, B); desk.layer.root.rect = { left: 0, top: 0, right: 800, bottom: 600, width: 800, height: 600 };"
+        void detach_andAFloatOfOneDraggedOntoADock_landsShown() {
+            eval("var a = desk.open({ title: 'A', make: mk('wa') }, B); desk.open({ title: 'Z', make: mk('wz') }, A); desk.layer.root.rect = { left: 0, top: 0, right: 800, bottom: 600, width: 800, height: 600 };"
                + "desk.layer.root.clientWidth = 800; desk.layer.root.clientHeight = 600; log.length = 0; var f = desk.detach(a, { x: 500, y: 400 });");
             assertTrue(eval("f.host.has('tab-1') && !B.has('tab-1')").asBoolean());
             eval("var bar = f.host.bar(); press(bar, 520, 410); bar.fire('pointermove', { clientX: 10, clientY: 10 });");
             assertTrue(eval("A.el.has('mtp_dock_target')").asBoolean(), "A lit");
             eval("bar.fire('pointerup', { type: 'pointerup', clientX: 10, clientY: 10 });");
             assertTrue(eval("A.has('tab-1') && f.closed() && a.host() === A").asBoolean(), "landed in A; the float gone");
+            assertEquals("tab-1", eval("A.activeTab()").asString(), "the one A shows: the hand put it there to look at it");
             assertTrue(log().indexOf("TabMoved") < log().lastIndexOf("closed:"), log());
         }
 
