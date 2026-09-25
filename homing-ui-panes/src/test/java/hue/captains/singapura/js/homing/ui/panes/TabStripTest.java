@@ -41,7 +41,7 @@ class TabStripTest extends JsModuleTestBase {
                 contains: function (c) { return c === this; },
                 getBoundingClientRect: function () { return this.rect; },
                 getAnimations: function () { var self = this; return [{ cancel: function () { self.cancelled++; } }]; },
-                animate: function (frames, opts) { log.push("settle:" + this.children[0].textContent + ":" + frames[0].translate + "->" + frames[1].translate + "/" + opts.duration); },
+                animate: function (frames, opts) { log.push("settle:" + this._label.textContent + ":" + frames[0].translate + "->" + frames[1].translate + "/" + opts.duration); },
                 setPointerCapture: function () {}, releasePointerCapture: function () {},
                 fire: function (t, ev) { var e = ev || {}; e.type = t; e.stopPropagation = e.stopPropagation || function () {}; e.preventDefault = e.preventDefault || function () {}; (this.listeners[t] || []).slice().forEach(function (fn) { fn(e); }); },
                 has: function (c) { return classes.has(c); }, prop: function (k) { return props[k]; } };
@@ -52,10 +52,10 @@ class TabStripTest extends JsModuleTestBase {
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); } };
         var getComputedStyle = function () { return { transitionDuration: "0.16s, 0.16s" }; };
-        var mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_seated = "mtp_chip_seated",
+        var mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_seated = "mtp_chip_seated",
             mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted",
             mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill";
-        var strip = new TabStrip(fakeBranch("strip"), { onDrop: function (c, dest) { log.push("drop:" + c.children[0].textContent + "@" + dest); } });
+        var strip = new TabStrip(fakeBranch("strip"), { onDrop: function (c, dest) { log.push("drop:" + c._label.textContent + "@" + dest); } });
         strip.el.rect = { left: 0, top: 0, width: 400, height: 30 };
         function make(names, pinned) {
             return names.map(function (n, i) {

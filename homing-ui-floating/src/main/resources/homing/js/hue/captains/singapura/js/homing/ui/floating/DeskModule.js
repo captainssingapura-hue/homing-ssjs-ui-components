@@ -16,15 +16,15 @@
 //            active pane if it can be closed. The widgets are built without a
 //            steward of their own. No keydown listener of its own.
 //
-//   desk.open({ id?, title, x?, y?, w?, h?, closable?, widget?, params? })  → the pane
+//   desk.open({ id?, title, icon?, x?, y?, w?, h?, closable?, widget?, params? })  → the pane
 //       id defaults to "pane-N"; x, y cascade when not given. `widget` is a
 //       class by the base's contract — new widget(branch, params) → root,
 //       setActive?, dispose? — or an instance already made, a tab's, whose
 //       branch is its holder's; its root goes in the pane's body. Reports
 //       Opened, then Raised, since a new pane is the active one.
-//   desk.release(id)    → { id, title, widget, closable }: the tab leaves the desk
-//                         for a dock, widget and all, NOT disposed; the frame
-//                         goes; Released(id), and the next on the stack raised
+//   desk.release(id)    → { id, title, icon, widget, closable }: the tab leaves the desk
+//                         for a dock, widget and icon and all, NOT disposed; the
+//                         frame goes; Released(id), and the next on the stack raised
 //   desk.raise(id)      → Raised(id) when it was not already on top; the one
 //                         leaving is told setActive(false), the one coming in
 //                         setActive(true), pane and widget both
@@ -94,7 +94,7 @@ class Desk {
         var k = this._order.length % 8;
         var paneBranch = this.branch.createBranch(id);
         var pane = new FloatingPane(paneBranch, {
-            id: id, title: s.title == null ? id : s.title,
+            id: id, title: s.title == null ? id : s.title, icon: s.icon || null,
             x: s.x == null ? 24 + _CASCADE * k : s.x, y: s.y == null ? 24 + _CASCADE * k : s.y,
             w: s.w, h: s.h, z: ++this._top, closable: s.closable !== false,
             minW: this._minW, minH: this._minH,
@@ -148,8 +148,9 @@ class Desk {
     release(id) {
         var entry = this._panes.get(id);
         if (!entry) return null;
-        var tab = { id: id, title: entry.pane.title(), widget: entry.widget, closable: entry.closable };
+        var tab = { id: id, title: entry.pane.title(), icon: entry.pane.icon(), widget: entry.widget, closable: entry.closable };
         if (entry.widget && entry.widget.root.parentNode === entry.pane.body) entry.pane.body.removeChild(entry.widget.root);
+        entry.pane.icon(null);   // the icon is the holder's, and goes with the tab, not with the frame
         if (this._active === id) { entry.pane.setActive(false); this._active = null; }
         var root = entry.pane.root;
         if (root.parentNode) root.parentNode.removeChild(root);

@@ -29,7 +29,10 @@
 //   docking.dock(paneId, dock, index?)
 //                                the floating tab leaves the desk (Released) and
 //                                is attached to the dock (TabAttached), then
-//                                Docked(tabId, slotId, index)
+//                                Docked(tabId, slotId, index). What is attached is
+//                                the TAB that left the dock - the holder's own
+//                                object, with whatever the holder wrote on it -
+//                                carrying the name and icon the pane had last
 //   docking.dispose()            the desk and everything on it; the docks stay
 //
 // The hand: while a floating pane is dragged, every dock under the pointer is
@@ -52,6 +55,7 @@ class Docking {
         this.branch = branch;
         this._sink = typeof opts.onEvent === "function" ? opts.onEvent : null;
         this._docks = [];
+        this._carried = new Map();    // tabId → the tab that left a dock, while it floats
         this._target = null;
         this._index = -1;
         this.desk = new Desk(branch.createBranch("desk"), {
@@ -69,10 +73,11 @@ class Docking {
     /** A chip pulled off a dock's strip: the tab floats under the same hand. */
     undock(dock, tab, e, grab) {
         var t = dock.detachTab(tab.id);
+        this._carried.set(t.id, t);
         var r = Docking._rect(this.desk.root);
         var gx = grab && grab.x >= 0 ? grab.x : _GRIP_X, gy = grab && grab.y >= 0 ? grab.y : _GRIP_Y;
         var pane = this.desk.open({
-            id: t.id, title: t.title == null ? t.id : t.title, widget: t.widget, closable: t.closable !== false,
+            id: t.id, title: t.title == null ? t.id : t.title, icon: t.icon || null, widget: t.widget, closable: t.closable !== false,
             x: e.clientX - r.left - gx, y: e.clientY - r.top - gy, w: _FLOAT_W, h: _FLOAT_H
         });
         this._fire(DockEvents.Undocked(t.id, dock.slotId));
@@ -83,13 +88,14 @@ class Docking {
     /** A tab detached by call with no hand — a menu's pick — floating with its head at the point, kept within the desk. */
     undockAt(dock, tab, at) {
         var t = dock.detachTab(tab.id);
+        this._carried.set(t.id, t);
         var r = Docking._rect(this.desk.root);
         var x = Math.max(0, (at && at.x != null ? at.x : r.left) - r.left - _GRIP_X);
         var y = Math.max(0, (at && at.y != null ? at.y : r.top) - r.top - _GRIP_Y);
         if (r.width) x = Math.min(x, Math.max(0, r.width - _FLOAT_W));
         if (r.height) y = Math.min(y, Math.max(0, r.height - _FLOAT_H));
         var pane = this.desk.open({
-            id: t.id, title: t.title == null ? t.id : t.title, widget: t.widget, closable: t.closable !== false,
+            id: t.id, title: t.title == null ? t.id : t.title, icon: t.icon || null, widget: t.widget, closable: t.closable !== false,
             x: x, y: y, w: _FLOAT_W, h: _FLOAT_H
         });
         this._fire(DockEvents.Undocked(t.id, dock.slotId));
@@ -98,8 +104,13 @@ class Docking {
 
     /** A floating tab into a dock, at an index or the end. */
     dock(paneId, dock, index) {
-        var tab = this.desk.release(paneId);
-        if (!tab) throw new Error("[Docking] no floating pane '" + paneId + "'");
+        var released = this.desk.release(paneId);
+        if (!released) throw new Error("[Docking] no floating pane '" + paneId + "'");
+        // The tab that left, not the desk's account of it: the holder's object,
+        // with the name and icon the pane had when it came down.
+        var tab = this._carried.get(released.id) || released;
+        this._carried.delete(released.id);
+        if (tab !== released) { tab.title = released.title; tab.icon = released.icon; tab.widget = released.widget; }
         var at = dock.attachTab(tab, index == null ? null : index);
         this._fire(DockEvents.Docked(tab.id, dock.slotId, at));
         return at;
@@ -135,6 +146,7 @@ class Docking {
     }
 
     _fire(ev) {
+        if (ev && ev.kind === "Closed") this._carried.delete(ev.id);   // closed afloat: it never comes back
         if (!this._sink) return;
         try { this._sink(ev); }
         catch (e) { console.error("[Docking] onEvent threw on " + ev.kind + ":", e); }

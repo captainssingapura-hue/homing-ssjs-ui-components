@@ -213,6 +213,33 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         @Override public String body() { return "display: inline-flex;"; }
     }
 
+    /**
+     * A tab's icon, before its label: the holder's own element — a favicon,
+     * whatever it is made of — in a box one line of the chip's type high,
+     * never squeezed and never in the way of the hand. Hidden until a tab has
+     * one, as the mark is.
+     */
+    public record mtp_chip_icon() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            display: none;
+            flex: none;
+            align-items: center;
+            justify-content: center;
+            inline-size: 1.25em;
+            block-size: 1.25em;
+            line-height: 1;
+            overflow: hidden;
+            pointer-events: none;
+            user-select: none;
+            """;
+        }
+    }
+
+    /** The icon, when the tab has one. */
+    public record mtp_chip_icon_on() implements CssClass<PaneStyles> {
+        @Override public String body() { return "display: inline-flex;"; }
+    }
+
     /** The label in a chip: takes the room the cross leaves, and ellipsises. */
     public record mtp_chip_label() implements CssClass<PaneStyles> {
         @Override public String body() { return """
@@ -617,7 +644,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
 
     @Override
     public List<CssClass<PaneStyles>> cssClasses() {
-        return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_label(), new mtp_strip_current(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_seated(), new mtp_chip_dragging(), new mtp_chip_shifted(),
+        return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_strip_current(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_seated(), new mtp_chip_dragging(), new mtp_chip_shifted(),
                        new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_add(), new mtp_rail_add(), new mtp_add_off(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(), new mtp_dock_target(),
                        new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(), new mtp_opener_pick(),

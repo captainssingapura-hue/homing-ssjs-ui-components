@@ -65,8 +65,8 @@ class DockingTest extends JsModuleTestBase {
                     extent: function (e, t) { if (t == null) e.style.removeProperty("--extent"); else e.style.setProperty("--extent", String(t)); },
                     size: function (e, s) { if (s == null) e.style.removeProperty("--size"); else e.style.setProperty("--size", String(s)); } };
         var fp_desk = "fp_desk", fp_desk_layer = "fp_desk_layer", fp_frame = "fp_frame", fp_hoverable = "fp_hoverable", fp_held = "fp_held", fp_active = "fp_active",
-            fp_head = "fp_head", fp_head_held = "fp_head_held", fp_title = "fp_title", fp_close = "fp_close", fp_body = "fp_body", fp_grip = "fp_grip";
-        var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted",
+            fp_head = "fp_head", fp_head_held = "fp_head_held", fp_icon = "fp_icon", fp_icon_on = "fp_icon_on", fp_title = "fp_title", fp_close = "fp_close", fp_body = "fp_body", fp_grip = "fp_grip";
+        var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted",
             mtp_chip_seated = "mtp_chip_seated",
             mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off",
             mtp_pill = "mtp_pill", mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
@@ -109,7 +109,7 @@ class DockingTest extends JsModuleTestBase {
         log.length = 0;
         function chips(d) { return d.el.children[0].children[0].children.filter(function (c) { return c.has("mtp_chip"); }); }   // strip, rail, chips
         chips(A).forEach(function (c, i) { c.rect = { left: 40 + 80 * i, top: 0, right: 120 + 80 * i, bottom: 30, width: 80, height: 30 }; });
-        function chipOf(d, title) { return chips(d).find(function (c) { return c.children[0].textContent === title; }); }
+        function chipOf(d, title) { return chips(d).find(function (c) { return c._label.textContent === title; }); }
         """;
 
     @BeforeEach
@@ -135,6 +135,7 @@ class DockingTest extends JsModuleTestBase {
         loadModule(P + "panes/TabStripModule.js");
         loadModule(P + "panes/PaneKeysModule.js");
         loadModule(P + "panes/PaneMenusModule.js");
+        loadModule(P + "panes/PaneTabsModule.js");
         loadModule(P + "panes/MultiTabPaneModule.js");
         loadModule(P + "docking/DockEventsModule.js");
         loadModule(P + "docking/DockingModule.js");
@@ -185,6 +186,30 @@ class DockingTest extends JsModuleTestBase {
         assertEquals("100,76", eval("var b = docking.desk.pane('t2').bounds(); b.x + ',' + b.y").asString(), "its head at the point, the grip's offset in: 160-60, 90-14");
         eval("docking.undockAt(A, { id: 't1' }, { x: -50, y: -50 });");
         assertEquals("0,0", eval("var c = docking.desk.pane('t1').bounds(); c.x + ',' + c.y").asString(), "kept within the desk");
+    }
+
+    /**
+     * A tab that floats comes back as ITSELF: the holder's own object, with
+     * whatever the holder wrote on it, its icon in the floating pane's head
+     * while it is up, and the name the pane had when it came down.
+     */
+    @Test
+    void aTabThatFloatsComesBackAsItself_withItsIconAndTheNameItHadAfloat() {
+        eval("var orig = { id: 't3', title: 'Three', icon: el('i'), widget: widget('w3'), mine: 'kept' }; A.addTab(orig);");
+        eval("docking.undockAt(A, { id: 't3' }, { x: 100, y: 100 });");
+        assertTrue(eval("docking.desk.pane('t3').icon() === orig.icon").asBoolean(), "the icon rides in the floating pane's head");
+        eval("docking.desk.pane('t3').title('Three, renamed'); docking.dock('t3', B);");
+        assertTrue(eval("B._tabs.find(function (e) { return e.id === 't3'; }).tab === orig").asBoolean(), "the dock took the tab that left, not a copy of it");
+        assertEquals("kept", eval("orig.mine").asString(), "with what its holder wrote on it");
+        assertEquals("Three, renamed", eval("orig.title").asString(), "and the name it had afloat");
+        assertTrue(eval("chipOf(B, 'Three, renamed')._icon.children[0] === orig.icon").asBoolean(), "its icon back on a chip");
+        assertFalse(eval("docking._carried.has('t3')").asBoolean(), "nothing is held once it is docked");
+    }
+
+    @Test
+    void aTabClosedAfloatIsForgotten() {
+        eval("docking.undockAt(A, { id: 't2' }, { x: 100, y: 100 }); docking.desk.close('t2');");
+        assertFalse(eval("docking._carried.has('t2')").asBoolean());
     }
 
     @Test

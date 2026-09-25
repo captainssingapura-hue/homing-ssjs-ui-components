@@ -44,6 +44,8 @@ public record TabStripModule() implements DomModule<TabStripModule> {
                         new PaneStyles.mtp_strip_current(),
                         new PaneStyles.mtp_chip_mark(),
                         new PaneStyles.mtp_chip_mark_on(),
+                        new PaneStyles.mtp_chip_icon(),
+                        new PaneStyles.mtp_chip_icon_on(),
                         new PaneStyles.mtp_chip_lifted(),
                         new PaneStyles.mtp_chip_close(),
                         new PaneStyles.mtp_chip_seated(),

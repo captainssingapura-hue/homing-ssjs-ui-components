@@ -87,13 +87,13 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule> {
                 .add(new ModuleImports<>(List.of(new TabStripModule.TabStrip()), TabStripModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys(), new PaneKeysModule.PaneSchemes()), PaneKeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneMenusModule.PaneMenus()), PaneMenusModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneTabsModule.PaneTabs()), PaneTabsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneEventsModule.PaneEvents()), PaneEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_pane(),
                         new PaneStyles.mtp_content(),
-                        new PaneStyles.mtp_tab_content(),
                         new PaneStyles.mtp_tab_content_hidden(),
                         new PaneStyles.mtp_empty(),
                         new PaneStyles.mtp_dock_target()

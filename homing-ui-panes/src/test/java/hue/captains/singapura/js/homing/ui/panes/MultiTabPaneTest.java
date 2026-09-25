@@ -38,6 +38,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         function el(tag) {
             var classes = new Set(), attrs = {};
             var node = { tag: tag, children: [], parentNode: null, listeners: {},
+                get firstChild() { return this.children.length ? this.children[0] : null; },
                 // the bar measures itself to squeeze the row: a style bag and a scroll box, unread by anything else here
                 style: { props: {}, setProperty: function (k, v) { this.props[k] = v; }, removeProperty: function (k) { delete this.props[k]; } },
                 clientWidth: 0, scrollLeft: 0,
@@ -74,7 +75,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
                     extent: function (e, t) { e._extent = t == null ? null : t; },
                     hasClass: function (e, c) { return e.classList.contains(c); },
                     size: function (e, s) { e.size = s; }, aspect: function (e, a) { e.aspect = a; } };
-        var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted",
+        var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted",
             mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted", mtp_strip_loose = "mtp_strip_loose", mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark",
             mtp_chip_seated = "mtp_chip_seated", mtp_strip_current = "mtp_strip_current",
             mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill",
@@ -111,9 +112,9 @@ class MultiTabPaneTest extends JsModuleTestBase {
                     case "DetachRequested": log.push("detach?" + ev.slotId + ":" + ev.tabId); break;
                     default: log.push("?" + ev.kind);
                 } } });
-        function chips() { return pane.el.children[0].children[0].children.filter(function (c) { return c.has("mtp_chip"); }).map(function (c) { return c.children[0].textContent; }).join(","); }
+        function chips() { return pane.el.children[0].children[0].children.filter(function (c) { return c.has("mtp_chip"); }).map(function (c) { return c._label.textContent; }).join(","); }
         function panels() { return pane.el.children[1].children.filter(function (c) { return c.has("mtp_tab_content"); }).map(function (c) { return c.children[0].tag + (c.has("mtp_tab_content_hidden") ? "-" : "+"); }).join(","); }
-        function selected() { return pane.el.children[0].children[0].children.filter(function (c) { return c.getAttribute("aria-selected") === "true"; }).map(function (c) { return c.children[0].textContent; }).join(","); }
+        function selected() { return pane.el.children[0].children[0].children.filter(function (c) { return c.getAttribute("aria-selected") === "true"; }).map(function (c) { return c._label.textContent; }).join(","); }
         """;
 
     @BeforeEach
@@ -136,6 +137,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule(STRIP);
         loadModule(KEYS);
         loadModule(MENUS);
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/PaneTabsModule.js");
         loadModule(MODULE);
         js.eval("js", SHIM);
     }
@@ -155,6 +157,32 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("added:s1:a@0 active:s1:a added:s1:b@1 added:s1:c@2", log());
         assertEquals("3 / 4", eval("pane.el.children[0].children.slice(-1)[0].children.filter(function (c) { return c.has('mtp_pill'); })[0].textContent").asString());
         assertTrue(eval("pane.el.children[1].children[0].has('mtp_tab_content_hidden')").asBoolean(), "the empty line is hidden once a tab is in");
+    }
+
+    /**
+     * A tab's name is the holder's to give and the pane's to show: an icon of
+     * the holder's before the label, and both changed later by call. Neither
+     * is a change to the arrangement, so neither is reported.
+     */
+    @Test
+    void aTabIsNamedByItsHolderWithAnIconAndCanBeRenamed() {
+        eval("var fav = el('i'); fav.textContent = 'F'; pane.addTab(tab('a', { icon: fav })); pane.addTab(tab('b')); log = []");
+        eval("var ca = pane.el.children[0].children[0].children[0], cb = pane.el.children[0].children[0].children[1]");
+        assertTrue(eval("ca._icon.children[0] === fav && ca._icon.has('mtp_chip_icon_on')").asBoolean(), "the holder's icon sits in the chip, shown");
+        assertTrue(eval("cb._icon.children.length === 0 && !cb._icon.has('mtp_chip_icon_on')").asBoolean(), "a tab with no icon shows none");
+        assertEquals(0, eval("ca.children.indexOf(ca._icon)").asInt(), "the icon comes before the label");
+
+        eval("pane.retitle('a', 'Report.md')");
+        assertEquals("Report.md,B", chips());
+        assertEquals("Report.md", eval("ca.title").asString(), "the tooltip says it too");
+        assertEquals("Close Report.md", eval("ca._close.getAttribute('aria-label')").asString(), "and the cross says what it closes");
+        assertEquals("Report.md", eval("pane.getState().tabs[0].title").asString(), "the pane's state carries the new name");
+
+        eval("var fav2 = el('i'); pane.reicon('b', fav2)");
+        assertTrue(eval("cb._icon.children[0] === fav2 && cb._icon.has('mtp_chip_icon_on')").asBoolean(), "an icon given later is shown");
+        eval("pane.reicon('a', null)");
+        assertTrue(eval("ca._icon.children.length === 0 && !ca._icon.has('mtp_chip_icon_on')").asBoolean(), "and taken away");
+        assertEquals("", log(), "a name and an icon are not the arrangement: nothing is reported");
     }
 
     @Test
@@ -228,8 +256,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
     void pinnedTabsSitFirstCannotCloseAndAreNotPassed() {
         eval("pane.addTab(tab('a')); pane.addTab(tab('p', { pinned: true })); pane.addTab(tab('b')); log = []");
         assertEquals("P,A,B", chips());
-        assertEquals("2", eval("pane.el.children[0].children[0].children[0].children.length").toString(), "the label and the within mark, and no cross on the pinned chip");
-        assertEquals("3", eval("pane.el.children[0].children[0].children[1].children.length").toString(), "an unpinned chip: the label, the mark and the cross");
+        assertEquals("3", eval("pane.el.children[0].children[0].children[0].children.length").toString(), "the icon's slot, the label and the within mark, and no cross on the pinned chip");
+        assertEquals("4", eval("pane.el.children[0].children[0].children[1].children.length").toString(), "an unpinned chip: the icon's slot, the label, the mark and the cross");
         eval("pane.moveTab('b', 0)");
         assertEquals("P,B,A", chips(), "a drop never lands before the pinned");
         assertEquals("moved:s1:b@2->s1@1", log());
@@ -261,7 +289,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("active:s1:b", log(), "the press selects, before any release");
         eval("log = []; chip.fire('pointerdown', { button: 2, target: chip, clientX: 0, clientY: 0 }); chip.fire('click')");
         assertEquals("", log(), "a secondary button or a bare click is nothing");
-        eval("log = []; pane.el.children[0].children[0].children[1].children[2].fire('click')");   // label, mark, cross
+        eval("log = []; pane.el.children[0].children[0].children[1]._close.fire('click')");   // the chip's cross
         assertEquals("b:disposed removed:s1:b@1 active:s1:a", log());
     }
 
@@ -280,7 +308,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         eval("""
             var chips = pane.el.children[0].children[0];   // the rail: the chips live in the window, not on the bar
             function chip(i) { return chips.children[i]; }
-            function look(i) { var c = chip(i), m = c.children[1];
+            function look(i) { var c = chip(i), m = c._mark;
                 return (c.has('mtp_chip_lifted') ? 'lifted' : 'down') + '/' + (m.has('mtp_chip_mark_on') ? 'mark' : '-') + '/' + String(m._extent === undefined ? null : m._extent); }
             """);
         assertEquals("down/-/null", eval("look(0)").asString(), "nobody holds: a chip like any other");

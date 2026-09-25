@@ -7,7 +7,7 @@
 // larger, movable card in the hand: its place and its measure are its user's,
 // carried in --fp-x, --fp-y, --fp-w, --fp-h on the frame, never the design's.
 //
-//   new FloatingPane(branch, { id, title, x, y, w, h, z, closable?, onEvent?, minW?, minH?,
+//   new FloatingPane(branch, { id, title, icon?, x, y, w, h, z, closable?, onEvent?, minW?, minH?,
 //                              onDragMove?(pane, clientX, clientY), onDragEnd?(pane, clientX, clientY, ok) })
 //     branch   the pane's own, handed unactivated
 //     x, y     its place within the desk, in px; w, h its measure; z its place on the stack
@@ -17,6 +17,7 @@
 //   pane.head                the bar; the desk listens on it and on the frame
 //   pane.id
 //   pane.title(text?)        read, or set
+//   pane.icon(el?)           read, or set: the holder's element before the title, or null for none
 //   pane.moveTo(x, y)        clamped to the desk; reports Moved when it changed
 //   pane.resizeTo(w, h)      clamped to the least and the desk; reports Resized when it changed
 //   pane.bounds()            { x, y, w, h }
@@ -68,6 +69,11 @@ class FloatingPane {
 
         var head = branch.createElement("head", "header");
         css.addClass(head, fp_head);
+        this._icon = branch.createElement("icon", "span");   // always there, shown only with an icon
+        css.addClass(this._icon, fp_icon);
+        this._icon.setAttribute("aria-hidden", "true");
+        this._iconEl = null;
+        head.appendChild(this._icon);
         this._title = branch.createElement("title", "span");
         css.addClass(this._title, fp_title);
         head.appendChild(this._title);
@@ -98,6 +104,7 @@ class FloatingPane {
         this.body = body;
         this._parts = [head, this._title].concat(this._close ? [this._close] : []);
         this.title(opts.title == null ? "" : opts.title);
+        this.icon(opts.icon || null);
         this.raise(opts.z == null ? 1 : opts.z);
         this._set(opts.x == null ? 0 : opts.x, opts.y == null ? 0 : opts.y, opts.w == null ? 320 : opts.w, opts.h == null ? 220 : opts.h, false);
         this._armMove(head);
@@ -107,6 +114,17 @@ class FloatingPane {
     title(text) {
         if (text !== undefined) { this._title.textContent = String(text); this.root.setAttribute("aria-label", String(text)); }
         return this._title.textContent;
+    }
+
+    /** The icon before the title: set with an element, or null for none; read with no argument. */
+    icon(el) {
+        if (el !== undefined) {
+            while (this._icon.firstChild) this._icon.removeChild(this._icon.firstChild);
+            this._iconEl = el || null;
+            if (this._iconEl) this._icon.appendChild(this._iconEl);
+            css.toggleClass(this._icon, fp_icon_on, !!this._iconEl);
+        }
+        return this._iconEl;
     }
 
     bounds() { return { x: this._x, y: this._y, w: this._w, h: this._h }; }

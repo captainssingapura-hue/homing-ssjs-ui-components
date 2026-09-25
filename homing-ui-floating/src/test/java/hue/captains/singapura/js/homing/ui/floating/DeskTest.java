@@ -61,7 +61,7 @@ class DeskTest extends JsModuleTestBase {
                     extent: function (e, t) { if (t == null) e.style.removeProperty("--extent"); else e.style.setProperty("--extent", String(t)); },
                     size: function (e, s) { if (s == null) e.style.removeProperty("--size"); else e.style.setProperty("--size", String(s)); } };
         var fp_desk = "fp_desk", fp_desk_layer = "fp_desk_layer", fp_frame = "fp_frame", fp_hoverable = "fp_hoverable", fp_held = "fp_held", fp_active = "fp_active", fp_head = "fp_head", fp_head_held = "fp_head_held",
-            fp_title = "fp_title", fp_close = "fp_close", fp_body = "fp_body", fp_grip = "fp_grip";
+            fp_icon = "fp_icon", fp_icon_on = "fp_icon_on", fp_title = "fp_title", fp_close = "fp_close", fp_body = "fp_body", fp_grip = "fp_grip";
         var console = { error: function (m, e) { log.push("error:" + m); } };
         var host = el("div");
         var branch = fakeBranch("page");
@@ -164,8 +164,8 @@ class DeskTest extends JsModuleTestBase {
         eval("log.length = 0;");
         assertFalse(eval("members.desk.keyDown({ key: 'Escape' })").asBoolean(), "a pane that cannot be closed leaves Escape");
         assertEquals("", log(), "a pane that cannot be closed ignores Escape");
-        assertEquals(1, eval("headOf('a').children.length").asInt(), "no cross on a pane that cannot be closed");
-        eval("desk.open({ id: 'c', title: 'C' }); log.length = 0; headOf('c').children[1].fire('click', {});");
+        assertEquals(2, eval("headOf('a').children.length").asInt(), "the icon's slot and the title: no cross on a pane that cannot be closed");
+        eval("desk.open({ id: 'c', title: 'C' }); log.length = 0; headOf('c').children.slice(-1)[0].fire('click', {});   // the cross, last in the head");
         assertEquals("dissolved:c closed:c raised:a", log());
     }
 

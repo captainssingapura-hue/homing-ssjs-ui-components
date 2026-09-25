@@ -12,12 +12,15 @@
 //     for a menu there; true means it was taken and the browser's own menu is
 //     suppressed. A right-click on a chip is the chip's, never the ground's.
 //     strip.el
-//     strip.chip({ id, title, pinned, closable }, { onSelect, onClose, onMenu? }, branch?) → chipEl
+//     strip.chip({ id, title, icon?, pinned, closable }, { onSelect, onClose, onMenu? }, branch?) → chipEl
+//         icon: an element of the holder's — a favicon — shown before the label
 //         onMenu(at, keyboard) → boolean: a right-click on the chip, or the
 //         ContextMenu key / Shift+F10 on it, asks for the tab's menu at a point;
 //         true means it was taken and the browser's own menu is suppressed
 //                                   minted on the branch given — the tab's own,
 //                                   dissolved when the tab leaves — else the strip's
+//     strip.retitle(chip, title)    the chip's label, its tooltip and its cross's name, now
+//     strip.reicon(chip, icon?)     the chip's icon now: an element, or none
 //     strip.arrange(chips)          the chips in order, before the tail
 //     strip.remove(chip)
 //     strip.select(chips, active)   aria-selected on the active one, and that one
@@ -155,6 +158,16 @@ class TabStrip {
         c.setAttribute("aria-selected", "false");
         c.title = tab.title == null ? "" : String(tab.title);
 
+        // The icon's slot, always there and shown only when there is an icon:
+        // a name on a branch is taken until the branch goes, so a slot made
+        // and unmade with its icon could not be made twice.
+        var slot = branch.createElement("icon-" + name, "span");
+        css.addClass(slot, mtp_chip_icon);
+        slot.setAttribute("aria-hidden", "true");
+        c._icon = slot;
+        c.appendChild(slot);
+        TabStrip._iconIn(slot, tab.icon);
+
         var label = branch.createElement("label-" + name, "span");
         css.addClass(label, mtp_chip_label);
         label.textContent = tab.title == null ? tab.id : String(tab.title);
@@ -163,6 +176,7 @@ class TabStrip {
         css.addClass(mark, mtp_chip_mark);
         mark.setAttribute("aria-hidden", "true");
         c._mark = mark;
+        c._label = label;
         c.appendChild(mark);
         var closeBtn = null;
         if (tab.closable !== false && !tab.pinned) {
@@ -174,6 +188,7 @@ class TabStrip {
             closeBtn.addEventListener("click", function (ev) { ev.stopPropagation(); handlers.onClose(); });
             c.appendChild(closeBtn);
         }
+        c._close = closeBtn;
         c.addEventListener("pointerdown", function (ev) {
             if (ev.button !== 0 || (closeBtn && closeBtn.contains(ev.target))) return;
             TabStrip._letGo();
@@ -223,6 +238,28 @@ class TabStrip {
         if (this._addBtn) css.aspect(this._addBtn, this._aspect);   // a tab's height moves with the aspect, and the plus is one tab tall
         for (var j = 0; j < this._order.length; j++) css.aspect(this._order[j], this._aspect);
         this._window.fit(this._active);
+    }
+
+    /** The chip's name, now: its label, its tooltip, and what its cross says it closes. */
+    retitle(chip, title) {
+        var t = title == null ? "" : String(title);
+        chip.title = t;
+        if (chip._label) chip._label.textContent = t;
+        if (chip._close) chip._close.setAttribute("aria-label", "Close " + t);
+        return this;
+    }
+
+    /** The chip's icon, now: the holder's element, or none. */
+    reicon(chip, icon) {
+        if (chip._icon) TabStrip._iconIn(chip._icon, icon);
+        return this;
+    }
+
+    /** What the slot shows: the one icon given, or nothing and hidden. */
+    static _iconIn(slot, icon) {
+        while (slot.firstChild) slot.removeChild(slot.firstChild);
+        if (icon) slot.appendChild(icon);
+        css.toggleClass(slot, mtp_chip_icon_on, !!icon);
     }
 
     arrange(chips) {

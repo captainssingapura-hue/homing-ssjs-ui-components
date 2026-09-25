@@ -34,6 +34,8 @@ public record FloatingPaneModule() implements DomModule<FloatingPaneModule> {
                         new FloatingStyles.fp_active(),
                         new FloatingStyles.fp_head(),
                         new FloatingStyles.fp_head_held(),
+                        new FloatingStyles.fp_icon(),
+                        new FloatingStyles.fp_icon_on(),
                         new FloatingStyles.fp_title(),
                         new FloatingStyles.fp_close(),
                         new FloatingStyles.fp_body(),

@@ -52,7 +52,7 @@
 //   the tab, takes the native focus away from whatever had it, and claims the
 //   pane, so ← → work after every mouse press. No keydown listener of its own.
 //
-//   pane.addTab({ id, title, widget, pinned?, closable? })  → index; the widget
+//   pane.addTab({ id, title, icon?, widget, pinned?, closable? })  → index; the widget
 //       is an instance by the base's contract: root, focus, activate(), setActive?, dispose?.
 //       Its root is appended to the tab's panel once and never detached; a
 //       switch shows one panel and hides the rest. Reports TabAdded, then
@@ -64,6 +64,11 @@
 //   pane.detachTab(id)           → the tab, NOT disposed and not reported: it
 //       travels on, widget and all, to be attached elsewhere.
 //   pane.switchTab(id)           → TabActivated(slotId, id)
+//   pane.retitle(id, title)      the tab's name, now: its chip's label, tooltip and cross. The
+//       name is the tab's — the holder's to give — and the pane only shows it.
+//   pane.reicon(id, icon?)       the tab's icon, now: an element of the holder's — a favicon,
+//       whatever it is made of — shown before the label; none takes it away.
+//       Neither is a mutation of the arrangement, so neither is reported.
 //   pane.moveTab(id, destIndex)  → TabMoved(slotId, tab, srcIndex, slotId, destIndex),
 //       destIndex being where the tab ends up. A drag on the strip is this.
 //   pane.tabs() .activeTab() .has(id) .tabIndexOf(id) .count()
@@ -199,39 +204,11 @@ class MultiTabPane {
     }
     _validate(tab) { PaneKeys.admit(this, tab); }
 
-    // ── The chips and the panels ──────────────────────────────────────────
-    _build(tab) {
-        var self = this;
-        var own = this._branch.createBranch("tab-" + tab.id.replace(/[^A-Za-z0-9_-]/g, "_"));
-        own.activate(_paneOwner);
-        var handlers = { onSelect: function () { self.switchTab(tab.id); }, onClose: function () { self.removeTab(tab.id); } };
-        handlers.onMenu = PaneMenus.forChip(this, tab.id, MultiTabPane.MENU);
-        var chip = this._strip.chip(tab, handlers, own);
-        var panel = own.createElement("panel", "div");
-        css.addClass(panel, mtp_tab_content, mtp_tab_content_hidden);
-        panel.setAttribute("role", "tabpanel");
-        panel.appendChild(tab.widget.root);
-        return { id: tab.id, tab: tab, pinned: !!tab.pinned, widget: tab.widget, chip: chip, panel: panel, branch: own, menu: handlers.onMenu || null };
-    }
-    /** Into the state at index, clamped to the pinned block or after it; then the strip follows; the widget's membership under this dock. */
-    _place(entry, index) {
-        var lo = entry.pinned ? 0 : this._pinnedCount();
-        var hi = entry.pinned ? this._pinnedCount() : this._tabs.length;
-        if (index == null || index > hi) index = hi;
-        if (index < lo) index = lo;
-        this._tabs.splice(index, 0, entry);
-        this._content.appendChild(entry.panel);
-        if (entry.widget.focus.in !== this.focus) this.focus.adopt(entry.widget.focus);   // placement follows the rendered UI
-        this._refresh();
-        return index;
-    }
-    _chips() {
-        var out = [];
-        for (var i = 0; i < this._tabs.length; i++) out.push(this._tabs[i].chip);
-        return out;
-    }
+    // ── The chips and the panels: a tab's parts are PaneTabs' to make, place and take out ──
+    /** A tab's parts, its chip opening the pane's own kind of menu. */
+    _parts(tab) { return PaneTabs.build(this, tab, PaneMenus.forChip(this, tab.id, MultiTabPane.MENU)); }
     _refresh() {
-        this._strip.arrange(this._chips());
+        this._strip.arrange(PaneTabs.chips(this));
         this._strip.count(this._tabs.length, this._budget, this.canAdd());
         css.toggleClass(this._empty, mtp_tab_content_hidden, this._tabs.length > 0);
     }
@@ -243,17 +220,8 @@ class MultiTabPane {
             if (on) active = this._tabs[i].chip;
             css.toggleClass(this._tabs[i].panel, mtp_tab_content_hidden, !on);
         }
-        this._strip.select(this._chips(), active);
+        this._strip.select(PaneTabs.chips(this), active);
         if (this._holds || this._inside) this._keys();   // where the keys are goes with the tab that is shown
-    }
-    _takeOut(i) {
-        var entry = this._tabs[i];
-        this._tabs.splice(i, 1);
-        this._strip.remove(entry.chip);
-        this._content.removeChild(entry.panel);
-        this._refresh();
-        if (this._activeId === entry.id) this._activeId = null;
-        return entry;
     }
     /** After a tab left index i: the one now there, else the one before, becomes active. */
     _activateNeighbour(i) {
@@ -265,21 +233,21 @@ class MultiTabPane {
     // ── The surface ───────────────────────────────────────────────────────
     addTab(tab) {
         this._validate(tab);
-        var index = this._place(this._build(tab), null);
+        var index = PaneTabs.place(this, this._parts(tab), null);
         this._fire(PaneEvents.TabAdded(this.slotId, tab, index));
         if (this._activeId === null) this.switchTab(tab.id);
         return index;
     }
     attachTab(tab, index) {
         this._validate(tab);
-        var at = this._place(this._build(tab), index == null ? null : index | 0);
+        var at = PaneTabs.place(this, this._parts(tab), index == null ? null : index | 0);
         this._fire(PaneEvents.TabAttached(this.slotId, tab, at));
         if (this._activeId === null) this.switchTab(tab.id);
         return at;
     }
     removeTab(id) {
         var i = this._require(id);
-        var entry = this._takeOut(i);
+        var entry = PaneTabs.takeOut(this, i);
         MultiTabPane._disposeWidget(entry.widget);
         entry.branch.dissolve();
         this._fire(PaneEvents.TabRemoved(this.slotId, entry.tab, i));
@@ -295,7 +263,7 @@ class MultiTabPane {
     }
     detachTab(id) {
         var i = this._require(id);
-        var entry = this._takeOut(i);
+        var entry = PaneTabs.takeOut(this, i);
         entry.panel.removeChild(entry.widget.root);
         entry.branch.dissolve();
         this._activateNeighbour(i);
@@ -309,6 +277,11 @@ class MultiTabPane {
         return index;
     }
     dropClear() { this._strip.unmark(); css.removeClass(this.el, mtp_dock_target); }
+    /** The tab's name, now: the pane shows what the holder calls it. */
+    retitle(id, title) { PaneTabs.retitle(this, id, title); return this; }
+    /** The tab's icon, now: the holder's element, or none. */
+    reicon(id, icon) { PaneTabs.reicon(this, id, icon); return this; }
+
     switchTab(id) {
         this._require(id);
         if (this._activeId === id) return;

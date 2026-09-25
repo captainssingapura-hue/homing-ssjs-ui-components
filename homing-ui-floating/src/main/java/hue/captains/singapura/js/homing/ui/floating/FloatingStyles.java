@@ -150,6 +150,31 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
         @Override public String body() { return ""; }
     }
 
+    /**
+     * The pane's icon, before its title: the holder's element — a favicon,
+     * whatever it is made of — one line of the title high, never squeezed.
+     * Hidden until the pane has one.
+     */
+    public record fp_icon() implements CssClass<FloatingStyles> {
+        @Override public String body() { return """
+            display: none;
+            flex: none;
+            align-items: center;
+            justify-content: center;
+            inline-size: 1.25em;
+            block-size: 1.25em;
+            line-height: 1;
+            overflow: hidden;
+            pointer-events: none;
+            """;
+        }
+    }
+
+    /** The icon, when the pane has one. */
+    public record fp_icon_on() implements CssClass<FloatingStyles> {
+        @Override public String body() { return "display: inline-flex;"; }
+    }
+
     /** The title, one line, cut with an ellipsis. */
     public record fp_title() implements CssClass<FloatingStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Label.class, Type.Scale.class), of(Label.class, Type.Weight.class)); }
@@ -210,6 +235,6 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
 
     @Override
     public List<CssClass<FloatingStyles>> cssClasses() {
-        return List.of(new fp_desk(), new fp_desk_layer(), new fp_frame(), new fp_hoverable(), new fp_held(), new fp_active(), new fp_head(), new fp_head_held(), new fp_title(), new fp_close(), new fp_body(), new fp_grip());
+        return List.of(new fp_desk(), new fp_desk_layer(), new fp_frame(), new fp_hoverable(), new fp_held(), new fp_active(), new fp_head(), new fp_head_held(), new fp_icon(), new fp_icon_on(), new fp_title(), new fp_close(), new fp_body(), new fp_grip());
     }
 }
