@@ -38,9 +38,13 @@ class SplitGridMirrorTest extends JsModuleTestBase {
                 fire: function (t, ev) { var e = ev || {}; e.preventDefault = function () {}; e.stopPropagation = function () {}; (this.listeners[t] || []).slice().forEach(function (fn) { fn(e); }); },
                 has: function (c) { return classes.has(c); }, prop: function (k) { return props[k]; } };
         }
+        // as the party: a name, of an element or a branch, is held until the branch dissolves
         function fakeBranch(name) {
-            return { name: name, createElement: function (n, tag) { return el(tag); },
-                     createBranch: function (n) { return fakeBranch(n); }, dissolve: function () {}, activate: function () {} };
+            var elements = new Set(), branches = new Set();
+            return { name: name,
+                     createElement: function (n, tag) { if (elements.has(n)) throw new RangeError('name "' + n + '" is already in use on branch "' + name + '"'); elements.add(n); return el(tag); },
+                     createBranch: function (n) { if (branches.has(n)) throw new RangeError('a branch named "' + n + '" already exists on "' + name + '"'); branches.add(n); return fakeBranch(n); },
+                     dissolve: function () {}, activate: function () {} };
         }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
@@ -103,5 +107,11 @@ class SplitGridMirrorTest extends JsModuleTestBase {
         assertEquals("nav*@0px,0px,252px,304px demo@252px,0px,252px,304px", eval("boxes()").asString());
         eval("log.length = 0; mirror.cursor('demo'); mirror.cursor('demo');");
         assertEquals("cursor:demo/call", log(), "a call moves it once");
+    }
+
+    @Test
+    void twoIdsOfOneSafeSpellingAreTwoBoxes() {
+        eval("mirror.reflect({ kind: 'split', orientation: 'horizontal', children: [ { node: { kind: 'cell', id: 'a:b' } }, { node: { kind: 'cell', id: 'a_b' } } ] }, { w: 1007, h: 607 });");
+        assertEquals("a:b*@0px,0px,252px,304px a_b@252px,0px,252px,304px", eval("boxes()").asString());
     }
 }

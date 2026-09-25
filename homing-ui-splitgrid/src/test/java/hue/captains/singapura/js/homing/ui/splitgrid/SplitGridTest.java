@@ -17,7 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * cell — a sibling when the orientation matches, a nested split when not —
  * and remove, the room to the neighbour, a split of one giving way; the
  * tracks re-shared by a drag and by the method; every change of arrangement
- * reported once, as data.
+ * reported once, as data. The fake branch holds a name as the party does, so
+ * a cell back under a gone one's id, or under an id of the same safe spelling
+ * as another's, is a new cell and not a refused name.
  */
 class SplitGridTest extends JsModuleTestBase {
 
@@ -43,9 +45,13 @@ class SplitGridTest extends JsModuleTestBase {
                 fire: function (t, ev) { (this.listeners[t] || []).slice().forEach(function (fn) { fn(ev); }); },
                 has: function (c) { return classes.has(c); } };
         }
+        // as the party: a name, of an element or a branch, is held until the branch dissolves
         function fakeBranch(name) {
-            return { name: name, createElement: function (n, tag) { return el(tag); },
-                     createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} };
+            var elements = new Set(), branches = new Set();
+            return { name: name,
+                     createElement: function (n, tag) { if (elements.has(n)) throw new RangeError('name "' + n + '" is already in use on branch "' + name + '"'); elements.add(n); return el(tag); },
+                     createBranch: function (n) { if (branches.has(n)) throw new RangeError('a branch named "' + n + '" already exists on "' + name + '"'); branches.add(n); return fakeBranch(n); },
+                     dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} };
         }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
@@ -173,6 +179,38 @@ class SplitGridTest extends JsModuleTestBase {
         assertEquals("0.63,0.38", eval("shares(root())").asString(), "nav's quarter went to explain alone");
         assertTrue(eval("went.has('sg_cell') && went.parentNode === null").asBoolean(), "the cell's element is handed back, detached");
         assertEquals("dissolved:arrangement-5 removed:nav", log());
+    }
+
+    /** The bug: a fresh id was counted from the cells there now, so a gone cell's came back, and its element's name was still held. */
+    @Test
+    void aFreshIdIsNoneACellOfTheGridHasHad_soAGoneCellsNeverComesBack() {
+        assertEquals("cell-4", eval("grid.subdivide('demo', 'right')").asString());
+        eval("grid.remove('cell-4')");
+        assertEquals("cell-5", eval("grid.subdivide('demo', 'right')").asString(), "not cell-4 again");
+        assertEquals("row[nav | col[row[demo | cell-5] | explain]]", eval("shape(root())").asString());
+        // an id the owner gave is held too: the grid does not hand it out after
+        eval("grid.subdivide('explain', 'bottom', 'cell-6'); grid.remove('cell-6');");
+        assertEquals("cell-7", eval("grid.subdivide('nav', 'bottom')").asString());
+        assertEquals("row[col[nav | cell-7] | col[row[demo | cell-5] | explain]]", eval("shape(root())").asString());
+        assertTrue(eval("grid.cell('demo').children[0] === content").asBoolean(), "nothing was lost on the way");
+    }
+
+    @Test
+    void anOwnerMayNameACellAfterOneItRemoved_andGetsANewCell() {
+        eval("var first = grid.cell(grid.subdivide('demo', 'right', 'side')); first.appendChild(el('old')); var gone = grid.remove('side');");
+        eval("log.length = 0; grid.subdivide('demo', 'right', 'side');");
+        assertEquals("subdivided:demo+side:right", log().replaceAll("dissolved:\\S+ ", ""));
+        assertEquals("row[nav | col[row[demo | side] | explain]]", eval("shape(root())").asString());
+        assertTrue(eval("grid.cell('side') !== gone && grid.cell('side').children.length === 0").asBoolean(), "a new, empty cell, not the one handed back");
+        eval("grid.remove('explain')");
+        assertEquals("row[nav | row[demo | side]]", eval("shape(root())").asString(), "and the grid goes on re-arranging");
+    }
+
+    @Test
+    void twoIdsOfOneSafeSpellingAreTwoCells() {
+        eval("grid.subdivide('demo', 'right', 'a:b'); grid.subdivide('explain', 'right', 'a_b');");
+        assertEquals("row[nav | col[row[demo | a:b] | row[explain | a_b]]]", eval("shape(root())").asString());
+        assertTrue(eval("grid.cell('a:b') !== grid.cell('a_b')").asBoolean());
     }
 
     @Test

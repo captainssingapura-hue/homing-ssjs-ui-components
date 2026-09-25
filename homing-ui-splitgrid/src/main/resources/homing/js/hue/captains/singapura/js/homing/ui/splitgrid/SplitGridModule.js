@@ -34,7 +34,9 @@
 //                                bottom, each taking half the room; a sibling in
 //                                the same row or column when the orientation
 //                                matches, else the cell becomes a split of the
-//                                two. Reports Subdivided
+//                                two. Unnamed, the grid names it, never with an
+//                                id a cell of this grid has had. Reports
+//                                Subdivided
 //   grid.seam(on)              the lattice drawn, live: every splitter and the
 //                                grid's own edge, in one line, or none of them
 //   grid.thickness(px?)        the lines' thickness, live; read with no argument
@@ -56,7 +58,15 @@
 //
 // The cells are the grid's constant: a cell's element is minted once and kept
 // through every re-arrangement, so what the owner put in it stays put; the
-// splits, the children and the dividers are re-minted around them. Each track
+// splits, the children and the dividers are re-minted around them.
+//
+// AN ID IS THE OWNER'S NAME; A NAME ON THE BRANCH IS THE GRID'S. The owner
+// keys on a cell's id, logs by it and keeps it; the element's name on the
+// grid's branch is only the grid's, and is from a count. The branch holds a
+// name until it dissolves, so a name made from the id would refuse a cell
+// that comes back under the id of one gone, or two ids of one safe spelling.
+// And the ids the grid hands out are never ones it has handed out or been
+// given before: an owner never meets a gone cell's id meaning another. Each track
 // is a custom property on the child, --sg-ratio, read by its class; the least
 // a cell may be is --sg-min on the root. Nothing is positioned by hand.
 //
@@ -88,6 +98,9 @@ class SplitGrid {
         this._cells = new Map();         // id → the cell element, kept for the grid's life
         this._splits = new Map();        // path → { el, orientation, children: [{ el, node }] }
         this._tree = SplitGridTree.validate(opts.layout);
+        this._held = new Set(SplitGridTree.cells(this._tree));   // every id a cell of this grid has had
+        this._seq = this._held.size;     // the count a fresh id is made from
+        this._minted = 0;                // the count the cells' elements are named from
         this._n = 0;
         this._arrangement = null;        // the sub-branch the current splits, children and dividers are minted on
 
@@ -112,7 +125,7 @@ class SplitGrid {
     _cellEl(id) {
         var el = this._cells.get(id);
         if (!el) {
-            el = this._branch.createElement("cell-" + id.replace(/[^A-Za-z0-9_-]/g, "_"), "div");
+            el = this._branch.createElement("cell-" + (++this._minted), "div");
             css.addClass(el, sg_cell);
             el.setAttribute("data-cell", id);
             this._cells.set(id, el);
@@ -251,6 +264,7 @@ class SplitGrid {
     subdivide(id, side, newId) {
         var fresh = newId == null ? this._freshId() : String(newId);
         this._tree = SplitGridTree.subdivide(this._tree, id, side, fresh);
+        this._held.add(fresh);
         this._arrange();
         this._fire(SplitGridEvents.Subdivided(id, fresh, side));
         return fresh;
@@ -287,10 +301,11 @@ class SplitGrid {
         return el || null;
     }
 
+    /** An id no cell of this grid has had, whether the grid named it or the owner did. */
     _freshId() {
-        var taken = this.cells(), k = taken.length;
-        while (taken.indexOf("cell-" + (++k)) >= 0) {}
-        return "cell-" + k;
+        var id;
+        do { id = "cell-" + (++this._seq); } while (this._held.has(id));
+        return id;
     }
 
     dispose() {

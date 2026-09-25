@@ -127,9 +127,9 @@ class SplitGridMirror {
         if (!this._layout) { if (old) { try { old.dissolve(); } catch (e) {} } return; }
         this._rects = SplitGridGeometry.rects(this._layout, this._box, this._opts);
         var s = this._scale;
-        Object.keys(this._rects.cells).forEach(function (id) {
+        Object.keys(this._rects.cells).forEach(function (id, i) {
             var r = self._rects.cells[id];
-            var box = self._drawing.createElement("cell-" + id.replace(/[^A-Za-z0-9_-]/g, "_"), "div");
+            var box = self._drawing.createElement("cell-" + i, "div");   // the drawing's own name, from a count: two ids of one safe spelling are two boxes
             css.addClass(box, sgm_cell);
             css.toggleClass(box, sgm_cell_current, id === self._cursor);
             box.setAttribute("data-cell", id);
