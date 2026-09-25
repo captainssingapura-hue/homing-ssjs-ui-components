@@ -9,9 +9,9 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import java.util.List;
 
 /**
- * A tab's two parts, for the {@link MultiTabPaneModule.MultiTabPane} that holds
- * it: the chip on the strip and the panel in the content — made from the tab,
- * placed in the pane's order, taken out, and named ({@code retitle},
+ * A tab-pane's two parts, for the {@link MultiTabPaneModule.MultiTabPane} that
+ * holds it: the chip on the strip and the pane in the content, the tab-pane's
+ * own — placed in the pane's order, taken out, and named ({@code retitle},
  * {@code reicon}). Static helpers over the pane, as {@link PaneMenusModule} and
  * {@link PaneKeysModule} are; the pane keeps the order and the state.
  *
@@ -29,10 +29,6 @@ public record PaneTabsModule() implements DomModule<PaneTabsModule> {
     @Override
     public ImportsFor<PaneTabsModule> imports() {
         return ImportsFor.<PaneTabsModule>builder()
-                .add(new ModuleImports<>(List.of(
-                        new PaneStyles.mtp_tab_content(),
-                        new PaneStyles.mtp_tab_content_hidden()
-                ), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneEventsModule.PaneEvents()), PaneEventsModule.INSTANCE))
                 .build();
     }

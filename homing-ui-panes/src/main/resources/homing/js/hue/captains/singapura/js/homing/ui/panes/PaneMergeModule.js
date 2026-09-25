@@ -15,7 +15,7 @@
 //                                             for a log line or a menu's hint
 //
 // Headless, and pure: it imports nothing and touches nothing — the page does
-// the moving, one detachTab/attachTab a name, in the order given here.
+// the moving, one desk.move a name, in the order given here.
 // =============================================================================
 
 class PaneMerge {

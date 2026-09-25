@@ -11,9 +11,10 @@ import java.util.Objects;
  * a field cannot be added, dropped or reordered on one side alone.
  *
  * <p>Six kinds, from the studio pane's vocabulary: a tab added, removed,
- * moved, activated, attached, and an add requested. A move carries both
- * ends; within one pane they are the same slot. {@link Tab} is the
- * descriptor as the holder gave it — id, title, pinned — without the
+ * moved, activated, an add requested and a detach requested. A move carries
+ * both ends; within one pane they are the same slot. An arrival, and a move
+ * from host to host, is the desk's to report; the rest are the pane's.
+ * {@link Tab} is the tab as reported — id, title, pinned — without the
  * widget, which is the JS side's and does not travel.</p>
  */
 public sealed interface PaneEvent {
@@ -29,7 +30,7 @@ public sealed interface PaneEvent {
         }
     }
 
-    /** A tab was added at the end of its block via {@code addTab}. */
+    /** A tab-pane arrived in a host from none, opened there: the desk's to report. */
     record TabAdded(String slotId, Tab tab, int index) implements PaneEvent {
         public TabAdded {
             Objects.requireNonNull(slotId, "TabAdded.slotId");
@@ -63,15 +64,6 @@ public sealed interface PaneEvent {
         public TabActivated {
             Objects.requireNonNull(slotId, "TabActivated.slotId");
             Objects.requireNonNull(tabId, "TabActivated.tabId");
-        }
-    }
-
-    /** A tab was attached from outside via {@code attachTab} — a re-dock, a programmatic re-parent. */
-    record TabAttached(String slotId, Tab tab, int atIndex) implements PaneEvent {
-        public TabAttached {
-            Objects.requireNonNull(slotId, "TabAttached.slotId");
-            Objects.requireNonNull(tab, "TabAttached.tab");
-            if (atIndex < 0) throw new IllegalArgumentException("TabAttached.atIndex: must be non-negative");
         }
     }
 

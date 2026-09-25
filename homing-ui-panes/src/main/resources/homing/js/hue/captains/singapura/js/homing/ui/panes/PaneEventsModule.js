@@ -9,7 +9,6 @@
 //   PaneEvents.TabRemoved(slotId, tab, fromIndex)
 //   PaneEvents.TabMoved(srcSlotId, tab, srcIndex, destSlotId, destIndex)
 //   PaneEvents.TabActivated(slotId, tabId)
-//   PaneEvents.TabAttached(slotId, tab, atIndex)
 //   PaneEvents.AddRequested(slotId)
 //   PaneEvents.DetachRequested(slotId, tabId)
 //   PaneEvents.KINDS                       the kinds, in this order
@@ -44,9 +43,9 @@ class PaneEvents {
     }
     /** A tab's name: a record's field, or a tab-pane's own, which it answers when asked. */
     static _title(tab) { return typeof tab.title === "function" ? tab.title() : tab.title; }
-    static KINDS = Object.freeze(["TabAdded", "TabRemoved", "TabMoved", "TabActivated", "TabAttached", "AddRequested", "DetachRequested"]);
+    static KINDS = Object.freeze(["TabAdded", "TabRemoved", "TabMoved", "TabActivated", "AddRequested", "DetachRequested"]);
 
-    /** A tab was added at the end of its block via addTab. */
+    /** A tab-pane arrived in a host from none, opened there: the desk's to report. */
     static TabAdded(slotId, tab, index) {
         return Object.freeze({ kind: "TabAdded", slotId: _slot(slotId, "TabAdded.slotId"), tab: _tab(tab, "TabAdded.tab"), index: _index(index, "TabAdded.index") });
     }
@@ -62,10 +61,6 @@ class PaneEvents {
     /** The active tab changed — a chip, a key, or switchTab. */
     static TabActivated(slotId, tabId) {
         return Object.freeze({ kind: "TabActivated", slotId: _slot(slotId, "TabActivated.slotId"), tabId: _slot(tabId, "TabActivated.tabId") });
-    }
-    /** A tab was attached from outside via attachTab — a re-dock, a programmatic re-parent. */
-    static TabAttached(slotId, tab, atIndex) {
-        return Object.freeze({ kind: "TabAttached", slotId: _slot(slotId, "TabAttached.slotId"), tab: _tab(tab, "TabAttached.tab"), atIndex: _index(atIndex, "TabAttached.atIndex") });
     }
     /** The add button was pressed while a tab could be added; the holder decides what that means. */
     static AddRequested(slotId) {

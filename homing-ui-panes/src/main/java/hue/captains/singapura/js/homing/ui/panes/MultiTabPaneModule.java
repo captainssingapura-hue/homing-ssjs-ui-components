@@ -21,34 +21,31 @@ import java.util.Set;
 /**
  * {@code MultiTabPane}, one pane of tabs. {@code new MultiTabPane(branch,
  * {host, …})} builds a strip of chips over one content area on the
- * sub-branch the caller made for it, appends it to the host, and is the
- * pane: {@code addTab}, {@code attachTab}, {@code removeTab},
- * {@code detachTab}, {@code switchTab}, {@code moveTab}, the readers,
- * {@code dispose}. A branch component.
+ * sub-branch the caller made for it, appends it to the host, and is a HOST
+ * of a desk's tab-panes (RFC 0066 E3, appendix "tab-panes"): {@code take},
+ * {@code letGo}, {@code removeTab} (a close), {@code switchTab},
+ * {@code moveTab}, the readers, {@code dispose}. A branch component.
  *
- * <p>A tab holds a widget by the base's contract — an instance with
- * {@code root, focus, activate(), setActive?, dispose?} — whose root the
- * pane appends once and never detaches; a switch hides and shows panels.
- * The law: a tab's widget is logically focusable — a member of the dock's
- * branch of the focus party, exposing its membership as {@code focus}, and
- * answering {@code activate()}; what it contains natively is its own,
- * encapsulated; {@code addTab} and {@code attachTab} refuse a widget that
- * is not, and {@code attachTab} adopts a membership from another dock. The
- * pane is a member holding the dock's branch; its keys, while it holds
- * them, are the container's own — the tabs walked, reordered and
- * detached, the widget entered, the pane yielded — and a chip takes no
- * native focus. The pane disposes the widget on a real close and never on
- * a detach, and never calls {@code setActive}: that is the holder's, told
- * through {@code TabActivated}.</p>
+ * <p>A tab is a {@link TabPaneModule.TabPane}: its chip and its pane are its
+ * own, minted once under its desk, and placed here as they are — held, never
+ * owned. The law: a tab's widget is logically focusable — a member of the
+ * dock's branch of the focus party, exposing its membership as
+ * {@code focus}, and answering {@code activate()}; what it contains
+ * natively is its own, encapsulated; {@code take} refuses a tab-pane whose
+ * widget is not, and adopts its membership from wherever it was. The pane
+ * is a member holding the dock's branch; its keys, while it holds them, are
+ * the container's own — the tabs walked, reordered and detached, the widget
+ * entered, the pane yielded — and a chip takes no native focus. The pane
+ * never calls {@code setActive}: that is the holder's, told through
+ * {@code TabActivated}.</p>
  *
- * <p>Every mutation is one {@link PaneEvent} on one sink, {@code onEvent(ev)}:
- * a frozen object tagged by kind whose fields are the record's components,
- * built by {@link PaneEventsModule}. The vocabulary is the studio pane's —
- * added, removed, moved, activated, attached, add requested — and the shape
- * is data, so an event goes into a log or a checkpoint as it is. Built fresh beside
- * {@code MultiTabPaneModule}, which stays as it is; the strip, its chips and
- * the drag that reorders are {@link TabStrip}'s. The split of panes and the
- * drag between them are rounds of their own.</p>
+ * <p>Every mutation the pane makes is one {@link PaneEvent} on one sink,
+ * {@code onEvent(ev)}: a frozen object tagged by kind whose fields are the
+ * record's components, built by {@link PaneEventsModule} — removed, moved on
+ * its rail, activated, add and detach requested; an arrival and a move from
+ * host to host are the desk's. The shape is data, so an event goes into a
+ * log or a checkpoint as it is. The strip, its chips and the drag that
+ * reorders are {@link TabStrip}'s.</p>
  */
 public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule> {
 

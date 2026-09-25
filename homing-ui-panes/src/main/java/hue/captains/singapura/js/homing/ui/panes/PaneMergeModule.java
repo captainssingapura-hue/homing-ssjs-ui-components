@@ -15,8 +15,8 @@ import java.util.List;
  * whole of it is planned from the two lists of names and the receiving
  * pane's budget, and the caller either does all of it or refuses and says
  * why. Headless, and pure: it imports nothing and touches nothing; the
- * moving is the caller's, one {@code detachTab}/{@code attachTab} a name, in
- * the order the plan gives.
+ * moving is the caller's, one desk {@code move} a name, in the order the plan
+ * gives.
  */
 public record PaneMergeModule() implements EsModule<PaneMergeModule> {
 

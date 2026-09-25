@@ -14,10 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The pane against a shimmed DOM, party and css manager: tabs are added,
- * switched, moved, removed and detached, the strip follows the state, the
- * widgets are disposed on a close and not on a detach, and every mutation
- * is reported with the studio pane's names and shapes, in order.
+ * The pane against a shimmed DOM, party and css manager: tab-panes of a
+ * register are taken, switched, moved, closed and let go, the strip follows
+ * the state, a widget is disposed on a close and not on a let-go, and every
+ * mutation the pane makes is reported with the studio pane's names and
+ * shapes, in order.
  */
 class MultiTabPaneTest extends JsModuleTestBase {
 
@@ -96,7 +97,18 @@ class MultiTabPaneTest extends JsModuleTestBase {
             w.focus = (into || pane.focus).join(key, w);
             return w;
         }
-        function tab(id, extra) { var t = { id: id, title: id.toUpperCase(), widget: widget(id, extra && extra.into) }; for (var k in (extra || {})) if (k !== "into") t[k] = extra[k]; return t; }
+        // the desk's register and the branch its widgets rest in: every tab here is a tab-pane opened there
+        var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
+        var elsewhere = focusParty.root.createBranch("elsewhere", {});
+        var register = new TabRegister(branch.createBranch("tabs"), { focus: elsewhere });
+        var reg2 = new TabRegister(branch.createBranch("tabs2"), { focus: elsewhere });   // another desk's: the same ids may be open there
+        function open(id, extra, reg) {
+            return (reg || register).open(Object.assign({ id: id, title: id.toUpperCase(),
+                                                          make: function (b, t) { b.activate("widget"); return widget(id, t.focus); } }, extra || {}));
+        }
+        function put(id, extra, into) { var tp = open(id, extra); (into || pane).take(tp); return tp; }
+        // a desk for a source: its register, and a move that is the host's take
+        var desk = { register: register, move: function (tp, p, index) { return p.take(tp, index); } };
         function holder() { var h = KeyboardStewardInstance.holder(); return h ? focusParty.find(h).name : "none"; }
         var events = [];
         var paneBranch = branch.createBranch("mtp_s1");
@@ -109,7 +121,6 @@ class MultiTabPaneTest extends JsModuleTestBase {
                     case "TabRemoved":   log.push("removed:" + ev.slotId + ":" + ev.tab.id + "@" + ev.fromIndex); break;
                     case "TabMoved":     log.push("moved:" + ev.srcSlotId + ":" + ev.tab.id + "@" + ev.srcIndex + "->" + ev.destSlotId + "@" + ev.destIndex); break;
                     case "TabActivated": log.push("active:" + ev.slotId + ":" + ev.tabId); break;
-                    case "TabAttached":  log.push("attached:" + ev.slotId + ":" + ev.tab.id + "@" + ev.atIndex); break;
                     case "DetachRequested": log.push("detach?" + ev.slotId + ":" + ev.tabId); break;
                     default: log.push("?" + ev.kind);
                 } } });
@@ -141,6 +152,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule(MENUS);
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/PaneTabsModule.js");
         loadModule(MODULE);
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabPaneModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabRegisterModule.js");
         js.eval("js", SHIM);
     }
 
@@ -151,12 +164,12 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
     @Test
     void theFirstTabBecomesActiveAndTheStripFollowsTheState() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); pane.addTab(tab('c'))");
+        eval("put('a'); put('b'); put('c')");
         assertEquals("A,B,C", chips());
         assertEquals("w-a+,w-b-,w-c-", panels());
         assertEquals("A", eval("selected()").asString());
         assertEquals("a", eval("pane.activeTab()").asString());
-        assertEquals("added:s1:a@0 active:s1:a added:s1:b@1 added:s1:c@2", log());
+        assertEquals("active:s1:a", log(), "an arrival is the desk's to report: the pane says only what it shows");
         assertEquals("3 / 4", eval("pane.el.children[0].children.slice(-1)[0].children.filter(function (c) { return c.has('mtp_pill'); })[0].textContent").asString());
         assertTrue(eval("pane.el.children[1].children[0].has('mtp_tab_content_hidden')").asBoolean(), "the empty line is hidden once a tab is in");
     }
@@ -168,7 +181,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
      */
     @Test
     void aTabIsNamedByItsHolderWithAnIconAndCanBeRenamed() {
-        eval("var fav = el('i'); fav.textContent = 'F'; pane.addTab(tab('a', { icon: fav })); pane.addTab(tab('b')); log = []");
+        eval("var fav = el('i'); fav.textContent = 'F'; put('a', { icon: fav }); put('b'); log = []");
         eval("var ca = pane.el.children[0].children[0].children[0], cb = pane.el.children[0].children[0].children[1]");
         assertTrue(eval("ca._icon.children[0] === fav && ca._icon.has('mtp_chip_icon_on')").asBoolean(), "the holder's icon sits in the chip, shown");
         assertTrue(eval("cb._icon.children.length === 0 && !cb._icon.has('mtp_chip_icon_on')").asBoolean(), "a tab with no icon shows none");
@@ -189,7 +202,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
     @Test
     void aSwitchShowsOnePanelAndSaysSo() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); log = []");
+        eval("put('a'); put('b'); log = []");
         eval("pane.switchTab('b')");
         assertEquals("w-a-,w-b+", panels());
         assertEquals("B", eval("selected()").asString());
@@ -201,7 +214,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
     @Test
     void aMoveReordersTheChipsAndReportsWhereTheTabWentWithThisSlotAsBothEnds() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); pane.addTab(tab('c')); log = []");
+        eval("put('a'); put('b'); put('c'); log = []");
         assertTrue(eval("pane.moveTab('a', 2)").asBoolean());
         assertEquals("B,C,A", chips());
         assertEquals("b,c,a", eval("pane.tabs().join(',')").asString());
@@ -215,7 +228,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
     @Test
     void aCloseDisposesTheWidgetReportsThenActivatesTheNeighbour() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); pane.addTab(tab('c')); pane.switchTab('b'); log = []");
+        eval("put('a'); put('b'); put('c'); pane.switchTab('b'); log = []");
         eval("pane.removeTab('b')");
         assertEquals("A,C", chips());
         assertEquals("b:disposed removed:s1:b@1 active:s1:c", log());
@@ -229,23 +242,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
     }
 
     @Test
-    void aDetachKeepsTheWidgetAliveAndSaysNothing() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); log = []");
-        eval("var gone = pane.detachTab('a')");
-        assertEquals("B", chips());
-        assertEquals("active:s1:b", log(), "not removed, not disposed; the neighbour is activated");
-        assertEquals("w-a", eval("gone.widget.root.tag").asString());
-        assertNull(eval("gone.widget.root.parentNode").asString(), "its root is out of the panel, ready to be attached");
-        eval("log = []; pane.attachTab(gone, 0)");
-        assertEquals("A,B", chips(), "the same id back in the same pane: its chip and panel minted afresh on a branch of its own");
-        assertEquals("attached:s1:a@0", log());
-        eval("pane.removeTab('a'); log = []; pane.addTab(tab('a'))");
-        assertEquals("B,A", chips(), "and again after a close");
-    }
-
-    @Test
     void theSizeAndAspectReachEveryChip_andTheBar_nowAndLater() {
-        eval("pane.addTab(tab('a')); pane.size(0.5); pane.aspect(-2); pane.addTab(tab('b'))");
+        eval("put('a'); pane.size(0.5); pane.aspect(-2); put('b')");
         assertEquals("0.5/-1 0.5/-1", eval("pane.el.children[0].children[0].children.filter(function (c) { return c.has('mtp_chip'); }).map(function (c) { return c.size + '/' + c.aspect; }).join(' ')").asString(), "clamped to −1..1; a chip made after gets them too");
         assertEquals("0.5/-1", eval("var s = pane.el.children[0]; s.size + '/' + s.aspect").asString(),
                      "and the bar, which keeps a tab's room while it holds none: an axis does not inherit, so the bar needs its own");
@@ -256,7 +254,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
     @Test
     void pinnedTabsSitFirstCannotCloseAndAreNotPassed() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('p', { pinned: true })); pane.addTab(tab('b')); log = []");
+        eval("put('a'); put('p', { pinned: true }); put('b'); log = []");
         assertEquals("P,A,B", chips());
         assertEquals("3", eval("pane.el.children[0].children[0].children[0].children.length").toString(), "the icon's slot, the label and the within mark, and no cross on the pinned chip");
         assertEquals("4", eval("pane.el.children[0].children[0].children[1].children.length").toString(), "an unpinned chip: the icon's slot, the label, the mark and the cross");
@@ -267,14 +265,14 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
     @Test
     void theBudgetIsAPreconditionAndTheAddButtonFollowsIt() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); pane.addTab(tab('c'))");
+        eval("put('a'); put('b'); put('c')");
         assertTrue(eval("pane.canAdd()").asBoolean());
         assertFalse(eval("pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].has('mtp_add_off')").asBoolean());
-        eval("pane.addTab(tab('d'))");
+        eval("put('d')");
         assertFalse(eval("pane.canAdd()").asBoolean());
         assertTrue(eval("pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].has('mtp_add_off')").asBoolean());
         assertTrue(eval("pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].disabled").asBoolean());
-        var ex = assertThrows(PolyglotException.class, () -> eval("pane.addTab(tab('e'))"));
+        var ex = assertThrows(PolyglotException.class, () -> eval("put('e')"));
         assertTrue(ex.getMessage().contains("budget of 4"), ex.getMessage());
         eval("log = []; pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].fire('click')");
         assertEquals("", log(), "the add button does nothing when the budget is spent");
@@ -286,7 +284,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
     @Test
     void theCrossClosesAndAChipPressSwitches() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); log = []");
+        eval("put('a'); put('b'); log = []");
         eval("var chip = pane.el.children[0].children[0].children[1]; chip.fire('pointerdown', { button: 0, target: chip, clientX: 0, clientY: 0 })");
         assertEquals("active:s1:b", log(), "the press selects, before any release");
         eval("log = []; chip.fire('pointerdown', { button: 2, target: chip, clientX: 0, clientY: 0 }); chip.fire('click')");
@@ -306,7 +304,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
      */
     @Test
     void theActiveChipLiftsOnTheBar_andSitsDownWithTheColourAtFullWhenTheKeysAreInIt() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); pane.switchTab('a')");
+        eval("put('a'); put('b'); pane.switchTab('a')");
         eval("""
             var chips = pane.el.children[0].children[0];   // the rail: the chips live in the window, not on the bar
             function chip(i) { return chips.children[i]; }
@@ -348,7 +346,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
             var asked = [];
             var steward = { open: function (kind, object, at, opts) { asked.push(kind + "@" + at.x + "," + at.y + (object.pane === withGround ? ":pane" : ":?") + (object.tab ? ":tab" : "") + (opts.anchor === withGround.el ? ":anchored" : "")); return kind !== "refused"; } };
             var withGround = new MultiTabPane(branch.createBranch("mtp_s3"), { host: el("div"), slotId: "s3", menus: steward, stripMenu: "split" });
-            withGround.addTab(tab("a"));
+            withGround.take(open("a"));
             var strip = withGround.el.children[0], chip = strip.children[0].children[0];   // the rail is the strip's first child; the chip is in it
             var onGround = { target: strip, clientX: 40, clientY: 8, defaulted: false, preventDefault: function () { this.defaulted = true; } };
             strip.fire("contextmenu", onGround);
@@ -358,7 +356,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("split@40,8:pane:anchored", eval("asked.join(' ')").asString(), "the page's kind, at the point, the pane bound and the frame the anchor; a chip's event is not the ground's");
         assertTrue(eval("onGround.defaulted && !throughAChip.defaulted").asBoolean(), "the browser's menu is suppressed only where the steward took it");
         assertTrue(eval("withGround.menuByGround({ x: 1, y: 2 })").asBoolean(), "by call, as a key would");
-        eval("withGround.dispose()");
+        eval("register.get('a').close(); withGround.dispose()");
         // a pane told no kind: the ground is the browser's
         eval("""
             var plain = new MultiTabPane(branch.createBranch("mtp_s4"), { host: el("div"), slotId: "s4", menus: steward });
@@ -384,7 +382,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
             var asked = [];
             var steward = { open: function (kind, object, at, opts) { asked.push(kind + ":" + object.tab.id + "@" + at.x + "," + at.y + (opts.keyboard ? ":kb" : "") + (opts.anchor === object.anchor && object.pane === withMenus ? ":bound" : "")); return object.tab.id !== "refused"; } };
             var withMenus = new MultiTabPane(branch.createBranch("mtp_s2"), { host: el("div"), slotId: "s2", menus: steward, onEvent: function (ev) { if (ev.kind === "TabActivated") log.push("active:" + ev.tabId); } });
-            withMenus.addTab(tab("a")); withMenus.addTab(tab("refused")); log = [];
+            withMenus.take(open("a")); withMenus.take(open("refused")); log = [];
             var chipA = withMenus.el.children[0].children[0].children[0], chipR = withMenus.el.children[0].children[0].children[1];
             chipA.getBoundingClientRect = function () { return { left: 100, top: 10, right: 180, bottom: 40 }; };
             var ev1 = { clientX: 120, clientY: 30, defaulted: false, preventDefault: function () { this.defaulted = true; }, stopPropagation: function () {} };
@@ -395,11 +393,11 @@ class MultiTabPaneTest extends JsModuleTestBase {
             """);
         assertEquals("tab:a@120,30:bound tab:a@112,38:kb:bound tab:refused@1,2:bound", eval("asked.join(' ')").asString(), "the kind, the tab, the point; the keyboard at the chip; bound to the pane, the tab and the chip");
         assertEquals("active:refused", log(), "the tab under the menu is selected first; a was active already");
-        eval("withMenus.dispose()");
+        eval("register.get('a').close(); register.get('refused').close(); withMenus.dispose()");
         assertTrue(eval("ev1.defaulted && took2 && !ev3.defaulted").asBoolean(), "the browser's menu is suppressed only when the steward took it; the key taken likewise");
         assertEquals("0", eval("String((chipA.listeners.keydown || []).length)").asString(), "no keydown listener on a chip");
         assertEquals("tab", eval("MultiTabPane.MENU").asString());
-        eval("var e = { clientX: 0, clientY: 0, defaulted: false, preventDefault: function () { this.defaulted = true; } }; pane.addTab(tab('x')); pane.el.children[0].children[0].children[0].fire('contextmenu', e);");
+        eval("var e = { clientX: 0, clientY: 0, defaulted: false, preventDefault: function () { this.defaulted = true; } }; put('x'); pane.el.children[0].children[0].children[0].fire('contextmenu', e);");
         assertFalse(eval("e.defaulted").asBoolean(), "no steward: a right-click on this pane's chip is nothing");
     }
 
@@ -414,7 +412,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
      */
     @Test
     void whileThePaneHoldsTheKeys_theyAreTheContainersOwn() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b')); pane.addTab(tab('c')); log = []; kbEvents = []");
+        eval("put('a'); put('b'); put('c'); log = []; kbEvents = []");
         assertEquals("mtp_s1", eval("pane.focus.name").asString(), "the dock's branch, named after the pane's");
         assertEquals("a,b,c", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "the widgets are its members");
         eval("pane.el.fire('pointerdown', { target: pane.el })");
@@ -466,7 +464,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
     @Test
     void theWalkIsOfferedThePane_andOfItsWidgetsOnlyTheTabOnShow() {
         eval("""
-            pane.addTab(tab('a')); pane.addTab(tab('b')); pane.addTab(tab('c')); log = [];
+            put('a'); put('b'); put('c'); log = [];
+            elsewhere.owner.leave();   // the desk's resting branch, empty now, is out of this walk: it is about the pane's own
             function cand() { var c = KeyboardStewardInstance.candidate(); return c ? focusParty.find(c).name : 'none'; }
             function tabKey() { KeyboardStewardInstance._forward('KeyDown', { key: 'Tab', target: null, preventDefault: function () {}, stopPropagation: function () {} }); }
             function enter() { KeyboardStewardInstance._forward('KeyDown', { key: 'Enter', target: null, preventDefault: function () {}, stopPropagation: function () {} }); }
@@ -486,44 +485,43 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("none", eval("cand()").asString(), "and the walk is over");
     }
 
-    /** The law: a tab's widget is a member of a dock's branch with activate(), or the tab is refused; attachTab adopts a membership from elsewhere; a closed tab's widget is out of the tree. */
+    /** The law: a tab-pane's widget is a member of the dock's branch with activate(): take adopts its membership from wherever it was; a closed one's widget is out of the tree. */
     @Test
-    void theLaw_aTabsWidgetIsLogicallyFocusable() {
-        assertTrue(assertThrows(PolyglotException.class, () -> eval("pane.addTab({ id: 'n', title: 'N', widget: { root: el('w') } })")).getMessage().contains("not logically focusable"));
-        assertTrue(assertThrows(PolyglotException.class, () -> eval("var w2 = widget('m'); delete w2.activate; pane.addTab({ id: 'm', title: 'M', widget: w2 })")).getMessage().contains("not logically focusable"));
-        eval("w2.focus.leave(); var other = focusParty.root.createBranch('other', {}); pane.addTab(tab('a')); pane.attachTab(tab('e', { into: other }), 0)");
-        assertEquals("a,e", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "attached from another branch: adopted into this dock's");
+    void theLaw_aTabPanesWidgetIsAMemberOfTheDocksBranch() {
+        eval("var other = focusParty.root.createBranch('other', {}); put('a'); pane.take(open('e', { focus: other }), 0)");
+        assertEquals("a,e", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "taken from another branch: adopted into this dock's");
         assertEquals("0", eval("String(other.members.length)").asString());
         eval("log = []; pane.removeTab('e')");
         assertEquals("a", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "closed: out of the tree");
-        eval("var w3 = widget('f'); w3.dispose = null; pane.addTab({ id: 'f', title: 'F', widget: w3 }); pane.removeTab('f')");
-        assertEquals("a", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "a widget that forgot to leave is left by the pane");
-        eval("var d = pane.detachTab('a')");
-        assertEquals("a", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "detached: the membership stays until the receiver adopts it");
-        eval("d.widget.dispose(); other.owner.leave(); pane.dispose()");
+        eval("var f = open('f'); f.widget.dispose = null; pane.take(f); pane.removeTab('f')");
+        assertEquals("a", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "a widget that forgot to leave is left by its tab-pane");
+        eval("var a = register.get('a'); pane.letGo(a)");
+        assertEquals("", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "let go: its membership back at rest in the desk's branch");
+        assertTrue(eval("a.widget.focus.in === elsewhere").asBoolean());
+        eval("other.owner.leave(); pane.dispose()");
         assertTrue(eval("pane.focus.owner.in === null").asBoolean(), "disposed: the pane left the tree, its branch dissolved");
     }
 
     @Test
-    void refusesADuplicateAWidgetlessTabAndAnUnknownId() {
-        eval("pane.addTab(tab('a'))");
-        assertTrue(assertThrows(PolyglotException.class, () -> eval("pane.addTab(tab('a'))")).getMessage().contains("already"));
-        assertTrue(assertThrows(PolyglotException.class, () -> eval("pane.addTab({ id: 'x', title: 'X' })")).getMessage().contains("no widget"));
+    void refusesATabAlreadyHereAndAnUnknownId() {
+        eval("put('a')");
+        assertTrue(assertThrows(PolyglotException.class, () -> eval("pane.take(open('a', null, reg2))")).getMessage().contains("already"),
+                "another desk's tab of the same id");
         assertTrue(assertThrows(PolyglotException.class, () -> eval("pane.switchTab('nope')")).getMessage().contains("no tab 'nope'"));
         assertEquals("1", eval("pane.count()").toString());
     }
 
     @Test
-    void theStateIsTheStripAndDisposeTakesEverythingDown() {
-        eval("pane.addTab(tab('a')); pane.addTab(tab('b', { pinned: true })); pane.switchTab('a')");
+    void theStateIsTheStrip_andDisposeTakesThePaneDownOnceItsTabPanesHaveGone() {
+        eval("put('a'); put('b', { pinned: true }); pane.switchTab('a')");
         assertEquals("{\"slotId\":\"s1\",\"activeTabId\":\"a\",\"tabs\":[{\"id\":\"b\",\"title\":\"B\",\"pinned\":true},{\"id\":\"a\",\"title\":\"A\",\"pinned\":false}]}",
                 eval("JSON.stringify(pane.getState())").asString());
-        eval("log = []; pane.dispose()");
-        assertEquals("b:disposed a:disposed", log());
+        eval("register.dispose(); log = []; pane.dispose()");
+        assertEquals("", log(), "the tab-panes were the desk's, and went with it");
         assertEquals("0", eval("host.children.length").toString());
         assertEquals("mtp_s1", eval("paneBranch.dissolved[0]").asString(), "the branch it was given is dissolved");
         eval("pane.dispose()");
-        assertEquals("b:disposed a:disposed", log(), "a second dispose is nothing");
+        assertEquals("", log(), "a second dispose is nothing");
     }
 
     /**
@@ -539,17 +537,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
     class TheHost {
 
         @BeforeEach
-        void aRegisterAndItsTabPanes() {
-            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabPaneModule.js");
-            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabRegisterModule.js");
+        void anotherPane() {
             eval("""
-                var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
-                var elsewhere = focusParty.root.createBranch("elsewhere", {});   // the desk's focus branch: a tab-pane's widget rests there
-                var register = new TabRegister(branch.createBranch("tabs"), { focus: elsewhere });
-                function open(id, extra) {
-                    return register.open(Object.assign({ id: id, title: id.toUpperCase(),
-                                                         make: function (b, t) { b.activate("widget"); return widget(id, t.focus); } }, extra || {}));
-                }
                 var other = new MultiTabPane(branch.createBranch("mtp_s9"), { host: el("div"), slotId: "s9", budget: 4 });
                 function stripOf(p) { return p.el.children[0].children[0].children; }
                 """);
@@ -581,9 +570,9 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertFalse(eval("other.canTake(a)").asBoolean(), "held here");
             var ex = assertThrows(PolyglotException.class, () -> eval("other.take(a)"));
             assertTrue(ex.getMessage().contains("held by another host"), ex.getMessage());
-            eval("pane.addTab(tab('x')); var x = open('x');");
+            eval("put('x'); var x = open('x', null, reg2);");
             assertFalse(eval("pane.canTake(x)").asBoolean(), "an id already in the pane");
-            eval("pane.addTab(tab('y')); pane.addTab(tab('z')); var b = open('b');");
+            eval("put('y'); put('z'); var b = open('b');");
             assertFalse(eval("pane.canTake(b)").asBoolean(), "the budget spent");
             ex = assertThrows(PolyglotException.class, () -> eval("pane.take(b)"));
             assertTrue(ex.getMessage().contains("budget"), ex.getMessage());
@@ -642,11 +631,9 @@ class MultiTabPaneTest extends JsModuleTestBase {
         }
 
         @Test
-        void detachTabRefusesATabPane_andDisposeRefusesWhileHoldingOne() {
+        void disposeRefusesWhileHoldingATabPane() {
             eval("var a = open('a'); pane.take(a);");
-            var ex = assertThrows(PolyglotException.class, () -> eval("pane.detachTab('a')"));
-            assertTrue(ex.getMessage().contains("leaves by letGo"), ex.getMessage());
-            ex = assertThrows(PolyglotException.class, () -> eval("pane.dispose()"));
+            var ex = assertThrows(PolyglotException.class, () -> eval("pane.dispose()"));
             assertTrue(ex.getMessage().contains("still holds tab-panes"), ex.getMessage());
             assertEquals("A", chips(), "nothing moved");
             eval("pane.letGo(a); pane.dispose();");
@@ -676,8 +663,6 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertEquals(1, eval("empties").asInt(), "the last closed");
             eval("win.take(a); win.letGo(a);");
             assertEquals(2, eval("empties").asInt(), "the last let go");
-            eval("win.addTab(tab('x', { into: win.focus })); win.removeTab('x'); win.addTab(tab('y', { into: win.focus })); win.detachTab('y');");
-            assertEquals(4, eval("empties").asInt(), "and a tab of its own removed, or detached");
         }
 
         /** Widgets that join under their branch's name, as the stack's do, share a host; one whose member name is taken is refused before anything moves. */
@@ -694,29 +679,28 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertTrue(eval("other.tabs().join(',') === 'c' && stripOf(other).length === before && d.host() === null && d.widget.focus.in === elsewhere").asBoolean(), "nothing moved");
         }
 
-        /** A source with a register: every tab it makes is a tab-pane opened there and placed as the page says; the kinds' makers handed the handle. */
+        /** A source on a desk: every tab it makes is a tab-pane opened in the desk's register and put in by the desk's move; the kinds' makers handed the handle. */
         @Test
-        void aSourceWithARegister_makesTabPanes_placedAsThePageSays() {
+        void aSourceOnADesk_opensTabPanesThere_putInByTheDesksMove() {
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabSourceModule.js");
             eval("""
                 var placed = [];
                 function kindMake(b, p) { b.activate("w"); var w = { root: el("w-" + p.id), activate: function () { log.push(p.id + ":activate"); }, dispose: function () { log.push(p.id + ":disposed"); } };
                                           w.focus = p.focus.join(b.name, w); w.tabOf = p.tab; return w; }
-                var src = new TabSource(branch.createBranch("src"), { register: register, kinds: [ { id: "note", title: "Notes", make: kindMake }, { id: "books", title: "Books", make: kindMake } ],
-                                                                       place: function (tp, p, index) { placed.push(tp.id + ">" + p.slotId); return p.take(tp, index); } });
+                var moving = { register: register, move: function (tp, p, index) { placed.push(tp.id + ">" + p.slotId); return p.take(tp, index); } };
+                var src = new TabSource(branch.createBranch("src"), { desk: moving, kinds: [ { id: "note", title: "Notes", make: kindMake }, { id: "books", title: "Books", make: kindMake } ] });
                 register.open({ id: "tab-1", make: function (b, t) { b.activate("w"); var w = { root: el("x"), activate: function () {} }; w.focus = t.focus.join(b.name, w); return w; } });
                 log.length = 0;
                 """);
-            assertTrue(eval("src.registered()").asBoolean());
             eval("var a = src.add(pane, 'note', 'quiet'), b = src.add(pane, 'note', 'focus');");
             assertEquals("tab-2,tab-3", eval("a.tab.id + ',' + b.tab.id").asString(), "the register's names, never one it holds: tab-1 was taken; nothing of the kind in them");
             assertEquals("Notes|Notes 2", eval("a.tab.title() + '|' + b.tab.title()").asString(), "the kind is in the title, counted up");
             assertTrue(eval("a.tab === register.get('tab-2') && a.tab.host() === pane && a.tab.widget.tabOf.id === 'tab-2'").asBoolean(), "a tab-pane in the register, held by the pane; the maker handed its handle");
-            assertEquals("tab-2>s1,tab-3>s1", eval("placed.join(',')").asString(), "placed the way the page said");
+            assertEquals("tab-2>s1,tab-3>s1", eval("placed.join(',')").asString(), "put in by the desk's move");
             assertEquals("tab-3", eval("pane.activeTab()").asString(), "the second in front, with the keys");
             assertTrue(log().contains("tab-3:activate"), log());
-            eval("src.release('tab-2');");
-            assertTrue(eval("register.has('tab-2')").asBoolean(), "release is nothing: a tab-pane's close is its own");
+            assertThrows(PolyglotException.class, () -> eval("new TabSource(branch.createBranch('nodesk'), { kinds: [ { id: 'note', make: kindMake } ] })"),
+                    "a source opens its tabs on a desk, or makes none");
         }
 
         @Test
@@ -724,7 +708,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabSourceModule.js");
             eval("""
                 function kindMake(b, p) { b.activate("w"); var w = { root: el("w"), activate: function () {}, dispose: function () { log.push("disposed"); } }; w.focus = p.focus.join(b.name, w); return w; }
-                var src = new TabSource(branch.createBranch("src"), { register: register, kinds: [ { id: "note", make: kindMake } ], place: function () { throw new Error("no room there"); } });
+                var src = new TabSource(branch.createBranch("src"), { desk: { register: register, move: function () { throw new Error("no room there"); } }, kinds: [ { id: "note", make: kindMake } ] });
                 log.length = 0;
                 """);
             var ex = assertThrows(PolyglotException.class, () -> eval("src.add(pane, 'note')"));
@@ -740,8 +724,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
             eval("""
                 function kindMake(b, p) { b.activate("w"); var w = { root: el("w-" + p.title), activate: function () { log.push(p.title + ":activate"); }, dispose: function () { log.push(p.title + ":disposed"); } };
                                           w.focus = p.focus.join(b.name, w); return w; }
-                var src = new TabSource(branch.createBranch("src"), { register: register, kinds: [ { id: "opener", title: "Open", listed: false, make: kindMake }, { id: "books", title: "Books", make: kindMake } ] });
-                pane.addTab(tab("x"));
+                var src = new TabSource(branch.createBranch("src"), { desk: desk, kinds: [ { id: "opener", title: "Open", listed: false, make: kindMake }, { id: "books", title: "Books", make: kindMake } ] });
+                put("x");
                 var op = src.add(pane, "opener", "quiet").tab, chip = op.chip, cell = op.pane; log.length = 0;
                 """);
             assertEquals("tab-1", eval("op.id").asString(), "the opener's tab is a tab like any other: the register named it");
@@ -754,7 +738,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
         @Test
         void aHeldTabPanesNameIsItsOwn_andItMovesAlongTheRailLikeAnyTab() {
-            eval("pane.addTab(tab('x')); var a = open('a'); pane.take(a); log.length = 0; pane.retitle('a', 'Renamed');");
+            eval("put('x'); var a = open('a'); pane.take(a); log.length = 0; pane.retitle('a', 'Renamed');");
             assertTrue(eval("a.title() === 'Renamed' && a.chip._label.textContent === 'Renamed'").asBoolean(), "the pane renames the tab-pane, which names itself");
             assertEquals("Renamed", eval("pane.getState().tabs[1].title").asString(), "the state asks the tab-pane its name");
             eval("pane.moveTab('a', 0);");

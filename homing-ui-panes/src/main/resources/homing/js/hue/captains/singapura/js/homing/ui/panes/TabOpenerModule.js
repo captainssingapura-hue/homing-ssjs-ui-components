@@ -5,26 +5,23 @@
 // from it TURNS THAT TAB INTO the thing you picked. The chip you made is the
 // chip you keep, in the place you made it.
 //
-//   new TabOpener(branch, { focus, pane, source, tab?, tabId?, prompt? })
+//   new TabOpener(branch, { focus, source, tab, prompt? })
 //     focus:  the dock's branch, as any tab's widget joins it
-//     pane:   the dock it is in — it replaces itself there, so it must know
 //     source: the TabSource; its listed kinds are the choices, which is why
 //             the opener's own kind is declared listed:false and never offers
 //             itself among them
-//     tab:    its own tab-pane's handle, from a source with a register: the tab
-//             it turns, in place, into what you pick
-//     tabId:  without one, its own tab's id, so it can find its place and give it up
+//     tab:    its own tab-pane's handle: the tab it turns, in place, into what you pick
 //
-//   opener.open(kindId)   → the index the new tab ended at, or −1. What you pick
+//   opener.open(kindId)   → the index the tab is at, or −1. What you pick
 //                         takes the keys, because you were holding them here
 //
-// IT REPLACES RATHER THAN CONTAINS. A widget's root is appended to its tab's
-// panel once and never detached, so an opener that mounted the chosen thing
-// inside itself would be a tab that is always an opener, wearing somebody
-// else's name. Giving up the tab and asking the source for a fresh one costs
-// three calls and leaves nothing of the opener behind — and the source's rule
-// for minting is the same rule the standalone control uses, so a tab opened
-// here and a tab added there are the same kind of thing.
+// IT IS REPLACED RATHER THAN CONTAINS. An opener that mounted the chosen
+// thing inside itself would be a tab that is always an opener, wearing
+// somebody else's name. The source has the tab-pane swap its widget in place:
+// the opener is disposed, the kind's widget made on the same tab, chip and
+// pane — and the source's rule for making it is the same rule the standalone
+// control uses, so a tab opened here and a tab added there are the same kind
+// of thing.
 //
 // The choices are NATIVE buttons inside a logical member: the widget holds the
 // keys for the dock, the button that has the browser's focus holds them for
@@ -40,14 +37,12 @@ class TabOpener {
         if (!branch) throw new Error("[TabOpener] a branch of its own is required");
         var o = opts || {}, self = this;
         if (!o.source) throw new Error("[TabOpener] a TabSource is what it opens from");
-        if (!o.pane) throw new Error("[TabOpener] the pane it sits in: it gives its tab up to what you pick");
+        if (!o.tab) throw new Error("[TabOpener] its own tab's handle: it turns that tab into what you pick");
         if (!o.focus) throw new Error("[TabOpener] the dock's focus branch, as any tab's widget wants");
         branch.activate(_openerOwner);
         this.branch = branch;
         this._source = o.source;
-        this._pane = o.pane;
-        this._tab = o.tab || null;
-        this._tabId = o.tabId == null ? null : String(o.tabId);
+        this._tab = o.tab;
         this._picks = [];
         this._disposed = false;
 
@@ -87,26 +82,12 @@ class TabOpener {
     }
 
     /**
-     * Pick one: this tab becomes that. The opener's tab goes FIRST, because a
-     * dock at its budget has no room for a second while the first still
-     * stands — and because the id and the place it leaves behind are what the
-     * new tab is about to take. This widget is disposed inside that call; every
-     * name it still needs was taken before.
+     * Pick one: this tab becomes that, IN PLACE — nothing leaves, so nothing
+     * can vanish, and no budget is asked for a second tab. This widget is
+     * disposed inside that call. THE KEYS WERE HERE: you were standing in this
+     * tab when you picked, so what you picked takes them.
      */
-    open(kindId) {
-        var pane = this._pane, source = this._source, mine = this._tabId;
-        if (source.registered()) return source.has(kindId) && this._tab ? source.become(this._tab.id, kindId) : -1;   // in place: nothing leaves, nothing can vanish
-        if (!source.has(kindId)) return -1;
-        var at = mine != null && pane.has(mine) ? pane.tabIndexOf(mine) : -1;
-        if (at >= 0) pane.removeTab(mine);
-        var tab = source.mint(pane, kindId);
-        var landed = pane.addTab(tab);
-        if (at >= 0 && at < landed) { pane.moveTab(tab.id, at); landed = at; }
-        // THE KEYS WERE HERE. You were standing in this tab when you picked, so what you picked goes on holding
-        // them: the gesture began with the plus, which is in the strip, and ends in the room it made.
-        source.show(pane, tab, "focus");
-        return landed;
-    }
+    open(kindId) { return this._source.has(kindId) ? this._source.become(this._tab.id, kindId) : -1; }
 
     /** The law's: a press or the keys arriving make it the holder, and the first choice takes the browser's focus so the keys work at once. */
     activate() { Keys.claim(this.focus); }

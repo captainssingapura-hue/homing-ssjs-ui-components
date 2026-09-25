@@ -1,11 +1,11 @@
 // =============================================================================
 // MultiTabPane — one pane of tabs: a strip of chips over one content area,
-// each tab holding a widget constructed by the base's contract. A branch
-// component: the caller makes a sub-branch for it and hands it in; dispose()
-// dissolves it.
+// each tab a TAB-PANE of a desk's (RFC 0066 E3, appendix "tab-panes"), held
+// here and never owned. A branch component: the caller makes a sub-branch for
+// it and hands it in; dispose() dissolves it.
 //
 //   new MultiTabPane(branch, { host, slotId?, budget?, addable?, onEvent?, menus?, stripMenu?, focus?, focusName?, keys?, onEmpty?, onClose? })
-//     onEmpty(pane): its last tab has left it — closed, detached or let go — for a
+//     onEmpty(pane): its last tab has left it — closed or let go — for a
 //             holder whose pane lives only while it holds something: a float
 //     onClose(): the bar's own cross at its end, for a pane that is a window's
 //             content and its strip that window's one bar: a float's
@@ -23,7 +23,7 @@
 //             asks the steward for MultiTabPane.MENU — the kind "tab", which
 //             the pane's declaration names as its need and any site serving
 //             the pane holds — bound to { pane, tab, anchor }: this pane, the
-//             tab record, the chip. The steward says whether it took the
+//             tab-pane, its chip. The steward says whether it took the
 //             request; only then is the browser's menu suppressed. What a
 //             pick does — detach, close — is the page's handler for "tab".
 //
@@ -31,8 +31,8 @@
 //   dock's branch — it joined pane.focus, or the branch of the dock it came
 //   from, and exposes its membership as widget.focus — and it answers
 //   activate(). What it contains natively is its own affair, encapsulated:
-//   the pane never sees a native control. addTab and attachTab refuse a
-//   widget that is not; attachTab adopts a membership from another dock.
+//   the pane never sees a native control. take refuses a tab-pane whose
+//   widget is not, and adopts its membership from wherever it was.
 //
 //   THE KEYS ARE SWAPPABLE. `keys` is a scheme or a list of them, PaneKeys
 //   unless said, and pane.keys(...) swaps them live. A scheme answers two
@@ -56,20 +56,10 @@
 //   the tab, takes the native focus away from whatever had it, and claims the
 //   pane, so ← → work after every mouse press. No keydown listener of its own.
 //
-//   pane.addTab({ id, title, icon?, widget, pinned?, closable? })  → index; the widget
-//       is an instance by the base's contract: root, focus, activate(), setActive?, dispose?.
-//       Its root is appended to the tab's panel once and never detached; a
-//       switch shows one panel and hides the rest. Reports TabAdded, then
-//       TabActivated if the tab became the active one.
-//   pane.attachTab(tab, index)   → index; the same from outside (a re-dock, a
-//       programmatic re-parent), reported as TabAttached instead.
-//   pane.removeTab(id)           → the tab; the widget is disposed, then
-//       TabRemoved(slotId, tab, fromIndex); a neighbour is activated after.
-//   pane.detachTab(id)           → the tab, NOT disposed and not reported: it
-//       travels on, widget and all, to be attached elsewhere.
-//   pane.switchTab(id)           → TabActivated(slotId, id)
-//   pane.retitle(id, title)      the tab's name, now: its chip's label, tooltip and cross. The
-//       name is the tab's — the holder's to give — and the pane only shows it.
+//   pane.removeTab(id)           → the tab-pane, closed: its widget disposed, then
+//       TabRemoved(slotId, tp, fromIndex) where it was; a neighbour is activated after.
+//   pane.switchTab(id)           → TabActivated(slotId, id): one tab-pane's pane shown, the rest hidden
+//   pane.retitle(id, title)      the tab's name, now: said to the tab-pane, whose chip shows it
 //   pane.reicon(id, icon?)       the tab's icon, now: an element of the holder's — a favicon,
 //       whatever it is made of — shown before the label; none takes it away.
 //       Neither is a mutation of the arrangement, so neither is reported.
@@ -87,7 +77,7 @@
 //       keys and a right-click do, by call; the menus themselves are PaneMenus'
 //   pane.bar() .barGround(target)   the strip, and whether a target is its own ground and
 //       not a chip or a control: for a float, whose frame that ground moves
-//   pane.dispose()               → every widget disposed in order, the branches dissolved;
+//   pane.dispose()               → the pane out of its host and the tree, its branch dissolved;
 //       refused while it holds a tab-pane, which is its desk's: let those go first
 //
 //   THE HOST (RFC 0066 E3, appendix "tab-panes"). A tab-pane is held, never
@@ -109,23 +99,22 @@
 //       tab-pane is closing, TabRemoved(slotId, tp, fromIndex); a move is the
 //       desk's to report
 //   pane.select(tp) .menu(tp, at, byKey)   what its chip asks, while it is here
-//   removeTab on a tab-pane closes it; detachTab refuses one, which leaves by letGo
 //
-// The pane is a dock. A tab leaves it by call — detachTab, for a holder that
-// floats it — the strip's own drag staying on its rail for now. A tab from
-// outside is offered by dropAt(clientX, clientY):
-// over the strip — the dock's landing, not its content, since docks may tile
-// a box and a float let go over content stays afloat — it marks where the tab
-// would land and answers the index, elsewhere −1; the pane wears the drop-
-// target word while an offer stands, and dropClear() ends it. attachTab is the
-// drop.
+// The pane is a dock. A tab-pane leaves it by letGo, which its desk calls,
+// the strip's own drag staying on its rail for now. A tab-pane from outside
+// is offered by dropAt(clientX, clientY): over the strip — the dock's
+// landing, not its content, since docks may tile a box and a float let go
+// over content stays afloat — it marks where the tab would land and answers
+// the index, elsewhere −1; the pane wears the drop-target word while an offer
+// stands, and dropClear() ends it. The desk's move is the drop.
 //
-// Every mutation is one event on one sink, onEvent(ev): a frozen object from
-// PaneEvents tagged by kind — TabAdded, TabRemoved, TabMoved, TabActivated,
-// TabAttached, AddRequested — whose fields are the Java PaneEvent records'
-// components. The vocabulary is the studio pane's; the shape is data, so an
-// event goes into a log or a checkpoint as it is. slotId is the pane's own,
-// given or "main"; a move within one pane names it as both ends.
+// Every mutation the pane makes is one event on one sink, onEvent(ev): a
+// frozen object from PaneEvents tagged by kind — TabRemoved, TabMoved on its
+// rail, TabActivated, AddRequested, DetachRequested — whose fields are the
+// Java PaneEvent records' components. An arrival, and a move from host to
+// host, is the desk's to report (TabAdded, TabMoved). The shape is data, so
+// an event goes into a log or a checkpoint as it is. slotId is the pane's
+// own, given or "main"; a move within one pane names it as both ends.
 //
 // The pane never calls setActive: which tab's widget is active is the
 // holder's to decide, from TabActivated, as the studio's focus machinery
@@ -134,10 +123,9 @@
 // a pull off the strip. Pinned tabs sit first, cannot be closed and are not
 // dragged; a drop never lands before them.
 //
-// A tab's chip and panel are minted on a sub-branch of the pane's, tab-<id>,
-// dissolved when the tab is removed or detached — so a tab that leaves and
-// comes back, the same id to the same pane, is minted afresh; the widget's
-// root is its holder's and only passes through.
+// A tab-pane's chip and pane are its own, minted once on its own branch
+// under its desk: the pane places them and takes them out, and never mints
+// or dissolves one.
 //
 // The strip is TabStrip's, the keys PaneKeys'; `css` is injected with the
 // styles import; the focus party's root, `focusParty`, is the branch a pane
@@ -171,7 +159,7 @@ class MultiTabPane {
         this._onEmpty = typeof opts.onEmpty === "function" ? opts.onEmpty : null;
         this._menus = opts.menus && typeof opts.menus.open === "function" ? opts.menus : null;
         this._stripMenu = this._menus && typeof opts.stripMenu === "string" && opts.stripMenu ? opts.stripMenu : null;
-        this._tabs = [];          // entries in strip order: { id, tab, pinned, widget, chip, panel }
+        this._tabs = [];          // entries in strip order: { id, tab, tabPane, pinned, widget, chip, panel, menu }
         this._activeId = null;
         this._disposed = false;
 
@@ -234,9 +222,7 @@ class MultiTabPane {
     }
     _validate(tab) { PaneKeys.admit(this, tab); }
 
-    // ── The chips and the panels: a tab's parts are PaneTabs' to make, place and take out ──
-    /** A tab's parts, its chip opening the pane's own kind of menu. */
-    _parts(tab) { return PaneTabs.build(this, tab, PaneMenus.forChip(this, tab.id, MultiTabPane.MENU)); }
+    // ── The chips and the panels: a tab-pane's own, PaneTabs' to place and take out ──
     _refresh() {
         this._strip.arrange(PaneTabs.chips(this));
         this._strip.count(this._tabs.length, this._budget, this.canAdd());
@@ -261,48 +247,8 @@ class MultiTabPane {
     }
 
     // ── The surface ───────────────────────────────────────────────────────
-    addTab(tab) {
-        this._validate(tab);
-        var index = PaneTabs.place(this, this._parts(tab), null);
-        this._fire(PaneEvents.TabAdded(this.slotId, tab, index));
-        if (this._activeId === null) this.switchTab(tab.id);
-        return index;
-    }
-    attachTab(tab, index) {
-        this._validate(tab);
-        var at = PaneTabs.place(this, this._parts(tab), index == null ? null : index | 0);
-        this._fire(PaneEvents.TabAttached(this.slotId, tab, at));
-        if (this._activeId === null) this.switchTab(tab.id);
-        return at;
-    }
-    removeTab(id) {
-        var i = this._require(id);
-        if (this._tabs[i].tabPane) return this._tabs[i].tabPane.close();
-        var entry = PaneTabs.takeOut(this, i);
-        MultiTabPane._disposeWidget(entry.widget);
-        entry.branch.dissolve();
-        this._fire(PaneEvents.TabRemoved(this.slotId, entry.tab, i));
-        this._activateNeighbour(i);
-        this._left();
-        return entry.tab;
-    }
-    /** The widget disposed, and its membership left if it forgot to: a closed tab's widget is out of the tree. */
-    static _disposeWidget(w) {
-        if (typeof w.dispose === "function") {
-            try { w.dispose(); } catch (e) { console.error("[MultiTabPane] widget.dispose threw:", e); }
-        }
-        if (w.focus && w.focus.in) w.focus.leave();
-    }
-    detachTab(id) {
-        var i = this._require(id);
-        if (this._tabs[i].tabPane) throw new Error("[MultiTabPane] '" + id + "' is a tab-pane: it leaves by letGo, through its desk");
-        var entry = PaneTabs.takeOut(this, i);
-        entry.panel.removeChild(entry.widget.root);
-        entry.branch.dissolve();
-        this._activateNeighbour(i);
-        this._left();
-        return entry.tab;
-    }
+    /** The tab-pane's close: it disposes its widget, then lets go here, which reports it. */
+    removeTab(id) { return this._tabs[this._require(id)].tabPane.close(); }
     /** A tab has left: the holder told when it was the last. */
     _left() { if (this._tabs.length === 0 && this._onEmpty) this._onEmpty(this); }
     // ── The host's: tab-panes, held and never owned — PaneTabs does the work ──
@@ -423,12 +369,9 @@ class MultiTabPane {
 
     dispose() {
         if (this._disposed) return;
-        if (PaneTabs.holdsAny(this)) throw new Error("[MultiTabPane] slot '" + this.slotId + "' still holds tab-panes, which are its desk's: let them go first");
+        if (this._tabs.length) throw new Error("[MultiTabPane] slot '" + this.slotId + "' still holds tab-panes, which are its desk's: let them go first");
         this._disposed = true;
         if (this._offKeys) { this._offKeys(); this._offKeys = null; }
-        for (var i = 0; i < this._tabs.length; i++) MultiTabPane._disposeWidget(this._tabs[i].widget);
-        this._tabs = [];
-        this._activeId = null;
         if (this.el.parentNode) this.el.parentNode.removeChild(this.el);
         if (this.focus.owner.in) this.focus.owner.leave();   // the dock's branch dissolved with it
         this._branch.dissolve();

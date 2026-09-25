@@ -1,14 +1,10 @@
 // =============================================================================
-// PaneTabs — a tab's two parts, for the pane that holds it: the CHIP on the
-// strip and the PANEL in the content. Made from the tab on a branch of the
-// tab's own, placed where the pane's order says, taken out again, and named.
-// Static, over the pane it is handed, as PaneMenus and PaneKeys are: the pane
-// keeps the order and the state; these put a tab's parts where the state says.
+// PaneTabs — a tab-pane's two parts, for the pane that holds it: the CHIP on
+// the strip and the PANE in the content, the tab-pane's own. Placed where the
+// pane's order says, taken out again, and named. Static, over the pane it is
+// handed, as PaneMenus and PaneKeys are: the pane keeps the order and the
+// state; these put a tab-pane's parts where the state says.
 //
-//   PaneTabs.build(pane, tab, onMenu)   → the entry { id, tab, pinned, widget, chip, panel,
-//                                         branch, menu }: the chip minted on the tab's own
-//                                         branch, the widget's root in the panel. onMenu is
-//                                         the pane's opener for the chip's menu, or null
 //   PaneTabs.place(pane, entry, index)  → the index it took: clamped to the pinned block or
 //                                         after it; its panel in the content, the widget's
 //                                         membership under the pane; the strip follows
@@ -21,33 +17,17 @@
 //   PaneTabs.admits(pane, tp)           → whether the pane would take it, were it let go where
 //                                         it is: the law, the budget, the id, the member's name
 //   PaneTabs.menu(pane, tp, at, byKey)  → its chip's menu, while it is here; true when one opened
-//   PaneTabs.holdsAny(pane)             → whether the pane holds a tab-pane
 //   PaneTabs.chips(pane)                → the chips, in the pane's order
-//   PaneTabs.retitle(pane, id, title)   the tab's name, on the tab and on its chip
-//   PaneTabs.reicon(pane, id, icon?)    the tab's icon — the holder's element — on the tab
-//                                       and on its chip; none takes it away
+//   PaneTabs.retitle(pane, id, title)   the tab's name, said to the tab-pane, whose chip shows it
+//   PaneTabs.reicon(pane, id, icon?)    the tab's icon — the holder's element — likewise; none
+//                                       takes it away
 //
-// A tab's name and icon are its HOLDER'S to give and the pane's to show: the
-// pane never makes one up, and a holder changes them by call, whenever it
-// likes. Neither is the arrangement, so neither is reported.
+// A tab's name and icon are the tab-pane's, its HOLDER'S to give and the
+// pane's to show: the pane never makes one up, and a holder changes them by
+// call, whenever it likes. Neither is the arrangement, so neither is reported.
 // =============================================================================
 
-const _tabsOwner = Object.freeze({ toString: () => "multiTabPane" });
-
 class PaneTabs {
-
-    static build(pane, tab, onMenu) {
-        var own = pane._branch.createBranch("tab-" + tab.id.replace(/[^A-Za-z0-9_-]/g, "_"));
-        own.activate(_tabsOwner);
-        var handlers = { onSelect: function () { pane.switchTab(tab.id); }, onClose: function () { pane.removeTab(tab.id); } };
-        handlers.onMenu = onMenu || null;
-        var chip = pane._strip.chip(tab, handlers, own);
-        var panel = own.createElement("panel", "div");
-        css.addClass(panel, mtp_tab_content, mtp_tab_content_hidden);
-        panel.setAttribute("role", "tabpanel");
-        panel.appendChild(tab.widget.root);
-        return { id: tab.id, tab: tab, pinned: !!tab.pinned, widget: tab.widget, chip: chip, panel: panel, branch: own, menu: handlers.onMenu || null };
-    }
 
     static place(pane, entry, index) {
         var lo = entry.pinned ? 0 : pane._pinnedCount();
@@ -93,11 +73,6 @@ class PaneTabs {
         return i >= 0 && pane._tabs[i].menu ? pane._tabs[i].menu(at, byKey) : false;
     }
 
-    static holdsAny(pane) {
-        for (var i = 0; i < pane._tabs.length; i++) if (pane._tabs[i].tabPane) return true;
-        return false;
-    }
-
     static takeOut(pane, i) {
         var entry = pane._tabs[i];
         pane._tabs.splice(i, 1);
@@ -114,17 +89,7 @@ class PaneTabs {
         return out;
     }
 
-    static retitle(pane, id, title) {
-        var entry = pane._tabs[pane._require(id)];
-        if (entry.tabPane) { entry.tabPane.title(title); return; }   // a tab-pane's name is its own
-        entry.tab.title = title;
-        pane._strip.retitle(entry.chip, title);
-    }
+    static retitle(pane, id, title) { pane._tabs[pane._require(id)].tabPane.title(title); }
 
-    static reicon(pane, id, icon) {
-        var entry = pane._tabs[pane._require(id)];
-        if (entry.tabPane) { entry.tabPane.icon(icon || null); return; }
-        entry.tab.icon = icon || null;
-        pane._strip.reicon(entry.chip, entry.tab.icon);
-    }
+    static reicon(pane, id, icon) { pane._tabs[pane._require(id)].tabPane.icon(icon || null); }
 }

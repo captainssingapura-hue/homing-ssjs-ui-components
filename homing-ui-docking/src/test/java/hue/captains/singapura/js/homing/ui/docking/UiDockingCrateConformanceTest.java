@@ -25,7 +25,7 @@ class UiDockingCrateConformanceTest {
         assertEquals(List.of(), CrateDependencyRule.check(UiDockingCrate.INSTANCE));
     }
 
-    /** Each served JS module under the lane its crate entry declares: the primitives' DOM-owner discipline, the events' no-DOM one, the line limit for all. */
+    /** Each served JS module under the lane its crate entry declares: the primitives' DOM-owner discipline, the line limit for both. */
     @Test
     void everyServedModuleKeepsItsLanesDiscipline() {
         int checked = 0;
@@ -38,7 +38,7 @@ class UiDockingCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(4, checked, "the desk, the docking, the floater and the events");
+        assertEquals(2, checked, "the desk and the floater");
     }
 
 }
