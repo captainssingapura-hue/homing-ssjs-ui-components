@@ -28,32 +28,32 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-core</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-core-js</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-component-base</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-design-core</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-rigid-tree</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-tree-views</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-rules</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

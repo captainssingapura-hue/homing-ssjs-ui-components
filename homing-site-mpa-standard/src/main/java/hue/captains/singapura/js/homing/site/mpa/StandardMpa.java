@@ -20,10 +20,6 @@ import hue.captains.singapura.js.homing.site.SiteHost;
 import hue.captains.singapura.tao.http.action.ActionRegistry;
 import hue.captains.singapura.tao.http.action.GetAction;
 import hue.captains.singapura.tao.http.action.PostAction;
-import hue.captains.singapura.tao.http.config.HostConfig;
-import hue.captains.singapura.tao.http.vertx.VertxActionHost;
-import io.vertx.core.Future;
-import io.vertx.core.http.HttpServer;
 import io.vertx.ext.web.RoutingContext;
 
 import java.util.ArrayList;
@@ -44,8 +40,13 @@ import java.util.Optional;
  * <p>This is the one declaration a themed site makes. It knows nothing of
  * how the site routes: a page made here is a {@link hue.captains.singapura.js.homing.site.Placed}
  * navigable, and whatever router hands it out may tell it where it is.</p>
+ *
+ * <p>The standard IMPLEMENTATION of core's {@link Mpa}: the page it makes
+ * wears the chrome, and the chrome's button opens the preferences - which is
+ * why it lives here, beside the dialog and the preferences it is built of,
+ * and core keeps only the definition.</p>
  */
-public final class StandardMpa {
+public final class StandardMpa implements Mpa {
 
     private final Brand brand;
     private final ThemeRegistry themes;
@@ -106,19 +107,15 @@ public final class StandardMpa {
         return new StandardMpa(brand, themes, preferences, List.of(crates));
     }
 
-    public Brand brand() { return brand; }
+    @Override public Brand brand() { return brand; }
 
-    public ThemeRegistry themes() { return themes; }
+    @Override public ThemeRegistry themes() { return themes; }
 
     /** The preferences the bar's button opens: the site's, or the default. */
     public PreferencesRegistry preferences() { return preferences; }
 
-    /** The registry's default — first listed — when it lists any. */
-    public Optional<String> defaultTheme() {
-        return themes.themes().isEmpty() ? Optional.empty() : Optional.of(themes.themes().get(0).slug());
-    }
-
     /** The address a served module is imported from, without the theme. */
+    @Override
     public String moduleUrl(EsModule<?> module) {
         return names.resolve(module).basePath();
     }
@@ -126,11 +123,13 @@ public final class StandardMpa {
     // ── Pages ─────────────────────────────────────────────────────────────────
 
     /** {@code app} bound to {@code params}, as a page under the chrome. */
+    @Override
     public <P extends AppModule._Param, M extends AppModule<P, M>> AppPage<P, M> page(M app, P params) {
         return new AppPage<>(app, params, this);
     }
 
     /** A paramless app as a page under the chrome. */
+    @Override
     public <M extends AppModule<AppModule._None, M>> AppPage<AppModule._None, M> page(M app) {
         return new AppPage<>(app, AppModule._None.INSTANCE, this);
     }
@@ -142,6 +141,7 @@ public final class StandardMpa {
      * the order the host mounts them, and {@code /*} must come last or it
      * would answer for {@code /module} too.
      */
+    @Override
     public ActionRegistry<RoutingContext> registry(Site site) {
         var siteActions = SiteHost.registry(site).getActions();
         var gets = new LinkedHashMap<String, GetAction<RoutingContext, ?, ?, ?>>();
@@ -154,15 +154,5 @@ public final class StandardMpa {
             @Override public Map<String, GetAction<RoutingContext, ?, ?, ?>> getActions() { return gets; }
             @Override public Map<String, PostAction<RoutingContext, ?, ?, ?>> postActions() { return posts; }
         };
-    }
-
-    /** Hosts the site with its MPA over plain HTTP on {@code port}. */
-    public Future<HttpServer> start(Site site, int port) {
-        var host = new VertxActionHost(registry(site), HostConfig.http(port));
-        return host.start()
-                .onSuccess(server -> System.out.println(
-                        site.name() + " listening on http://localhost:" + server.actualPort() + "/"))
-                .onFailure(err -> System.err.println(
-                        site.name() + " failed to start: " + err.getMessage()));
     }
 }

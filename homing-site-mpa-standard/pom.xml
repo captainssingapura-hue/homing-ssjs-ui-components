@@ -3,50 +3,63 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-        <artifactId>homing-site</artifactId>
+        <artifactId>homing-components</artifactId>
         <version>LOCAL-SNAPSHOT</version>
     </parent>
-    <artifactId>homing-site-mpa</artifactId>
+
+    <artifactId>homing-site-mpa-standard</artifactId>
+
     <description>
-        The standard MPA: a JS app served as a page under the site's chrome,
-        with the user's preferences - the theme first - kept by the steward
-        and switched live. AppPage is the Navigable (Placed, so a router that
-        knows the position can hand it the trail); StandardMpa is the site's
-        one declaration of brand, themes and crates, and mounts the module,
-        CSS and themes routes beside the site's own. Independent of the
-        catalogue: depends on homing-site-base, homing-server, homing-core-js
-        and homing-design-core, and knows nothing of trees.
+        The standard MPA - the IMPLEMENTATION of core's Mpa: a JS app served
+        as a page under the site's chrome, with the user's preferences - the
+        theme first - kept by the steward and switched live. AppPage is the
+        Navigable (Placed, so a router that knows the position can hand it the
+        trail); StandardMpa is the site's one declaration of brand, themes and
+        crates, and mounts the module, CSS and themes routes beside the site's
+        own. It lives here, not in core, because the chrome is built of the
+        dialog and the preferences components; core's homing-site-mpa keeps
+        the definitions (Mpa, Brand, the /themes route). Same Java package as
+        those, so a site's code does not change. Independent of the catalogue.
     </description>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
+        <!-- The definitions this implements. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-site-base</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-server</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-core-js</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-design-core</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <!-- The preferences dialog on the bar: the dialog, and the preferences component
-             whose view it holds; the theme widget lives here because /themes does. -->
+             whose view it holds; the theme widget lives here because /themes is read here. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-dialog</artifactId>

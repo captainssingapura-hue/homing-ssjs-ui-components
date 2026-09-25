@@ -33,13 +33,13 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-studio</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <!-- The seven designs the components are held to. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-studio-themes</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${homing.core.version}</version>
         </dependency>
         <!-- The top level: every fresh crate. -->
         <dependency>
@@ -100,6 +100,12 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-site-mpa</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- The MPA's implementation, whose crate (the chrome, its preferences) is gated with the components. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-site-mpa-standard</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

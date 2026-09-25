@@ -27,7 +27,7 @@ public final class MpaCrate implements Crate, ComponentVehicle {
 
     private MpaCrate() {}
 
-    @Override public String name() { return "homing-site-mpa"; }
+    @Override public String name() { return "homing-site-mpa-standard"; }
 
     @Override public List<Crate> requires() {
         return List.of(CoreJsCrate.INSTANCE, ServerCrate.INSTANCE, DesignCrate.INSTANCE,
