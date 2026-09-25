@@ -431,6 +431,15 @@ class DockingTest extends JsModuleTestBase {
             assertEquals("p:1,p:2", eval("f.host.tabs().join(',')").asString());
         }
 
+        /** A float holds what came to it: no plus on its bar unless asked for. */
+        @Test
+        void aFloatHasNoPlus_unlessAskedFor() {
+            eval("var f = docking.float({ x: 40, y: 30 }); f.take(open('a')); var g = docking.float({ x: 40, y: 30, addable: true }); g.take(open('b'));"
+               + "function plus(fl) { return fl.host.bar().children.filter(function (c) { return c.has('mtp_rail_add'); }).length; }");
+            assertEquals(0, eval("plus(f)").asInt(), "a float: no plus");
+            assertEquals(1, eval("plus(g)").asInt(), "asked for: one");
+        }
+
         @Test
         void theDesksEscapeDoesNotCloseAFloat_sinceClosingOneClosesItsTabs() {
             eval("var f = docking.float({ x: 40, y: 30 }); f.take(open('a'));");

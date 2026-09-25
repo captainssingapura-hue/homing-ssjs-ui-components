@@ -10,9 +10,11 @@
 //                             RESTS while no host holds it — it joins there when it is
 //                             opened, unless open says otherwise, and comes back there
 //                             when a host lets it go — so a membership outlives any host
-//   register.open({ id, title?, icon?, pinned?, closable?, focus?, make }) → the TabPane
+//   register.open({ id?, title?, icon?, pinned?, closable?, focus?, make }) → the TabPane
 //       focus: the branch its widget joins, the register's own unless said.
-//       id: any non-empty string, unique in this register. A second tab-pane
+//       id: any non-empty string, unique in this register; none, and the
+//       register names it, "tab-1", "tab-2" and on, never one it holds — an
+//       id says WHICH tab, not what it holds nor how it was opened. A second tab-pane
 //       under an id already open is refused before anything is made. Its
 //       branch is "tabpane-" and a fresh uuid, never the id. Whole or not at
 //       all: a make that throws, or a widget not by the law, leaves nothing
@@ -37,12 +39,14 @@ class TabRegister {
         this.branch = branch;
         this.focus = (opts && opts.focus) || null;
         this._tabs = new Map();        // id → TabPane, in the order opened
+        this._named = 0;               // the ids it names itself count up from here
         this._disposed = false;
     }
 
     open(spec) {
         var s = spec || {};
         if (this._disposed) throw new Error("[TabRegister] disposed: nothing more is opened");
+        if (s.id == null) s = Object.assign({}, s, { id: this._name() });
         if (typeof s.id !== "string" || !s.id) throw new Error("[TabRegister] a tab-pane's id is a non-empty string");
         if (this._tabs.has(s.id)) throw new Error("[TabRegister] a tab-pane is already open as '" + s.id + "'");
         var branch = this.branch.createBranch("tabpane-" + TabRegister._uuid());
@@ -66,6 +70,13 @@ class TabRegister {
         var b = String(base);
         if (!this._tabs.has(b)) return b;
         for (var n = 2; ; n++) if (!this._tabs.has(b + "-" + n)) return b + "-" + n;
+    }
+
+    /** An id of the register's own: counted up, never one it holds, never one it named before. */
+    _name() {
+        var id;
+        do { id = "tab-" + (++this._named); } while (this._tabs.has(id));
+        return id;
     }
 
     /** The tab-pane's own close calls this: it is gone from the register, and its id is free. */

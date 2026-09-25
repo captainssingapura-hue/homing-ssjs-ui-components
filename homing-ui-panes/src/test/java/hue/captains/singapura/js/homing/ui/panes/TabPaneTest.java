@@ -238,6 +238,15 @@ class TabPaneTest extends JsModuleTestBase {
         assertTrue(eval("p.chip._close === null && k.chip._close === null && !p.closable && !k.closable && p.pinned").asBoolean());
     }
 
+    /** Asked for none, the register names a tab: "tab-1" and on, never one it holds. An id says which tab, not what it holds. */
+    @Test
+    void theRegisterNamesATabWhenNobodyElseDoes() {
+        eval("register.open({ id: 'tab-2', focus: dock, make: widget('w1') }); var a = register.open({ focus: dock, make: widget('w2') }), b = register.open({ focus: dock, make: widget('w3') });");
+        assertEquals("tab-1,tab-3", eval("a.id + ',' + b.id").asString(), "counted up, skipping the one it holds");
+        eval("a.close(); var c = register.open({ focus: dock, make: widget('w4') });");
+        assertEquals("tab-4", eval("c.id").asString(), "never one it named before");
+    }
+
     @Test
     void freeIdIsTheFirstNoTabPaneHolds() {
         eval("register.open({ id: 'note', focus: dock, make: widget('w1') }); register.open({ id: 'note-2', focus: dock, make: widget('w2') });");

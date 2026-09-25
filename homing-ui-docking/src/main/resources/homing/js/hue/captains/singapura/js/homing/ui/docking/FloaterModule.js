@@ -14,7 +14,7 @@
 //              not closed by the desk's Escape, since closing a float closes
 //              its tabs. Its id is the desk's own.
 //     budget, addable, focus, menus, keys   its host's, as a multi-tab pane takes them:
-//              a float has the strip's plus, as a browser's window does, unless addable is false
+//              a float has no plus unless addable is true: it holds what came to it
 //     onEvent  its host's reports: TabActivated, a reorder, a close
 //     onDragMove(frame, x, y), onDragEnd(frame, x, y, ok)   its holder's, while the
 //              frame is dragged: without them it is never offered to anything
@@ -50,7 +50,7 @@ class Floater {
         var own = this.frame.branch.createBranch("floater");
         own.activate(_floaterOwner);
         this.host = new MultiTabPane(own.createBranch("host"), {
-            host: this.frame.body, slotId: this.id, budget: o.budget, addable: o.addable, focus: o.focus, menus: o.menus, keys: o.keys,
+            host: this.frame.body, slotId: this.id, budget: o.budget, addable: o.addable === true, focus: o.focus, menus: o.menus, keys: o.keys,
             focusName: this.frame.branch.name,   // the frame's own name, unique on the page: every float's host is on a branch called "host", and a focus branch refuses a name twice
             onEvent: function (ev) {
                 if (ev.kind === "TabActivated") self._named(ev.tabId);

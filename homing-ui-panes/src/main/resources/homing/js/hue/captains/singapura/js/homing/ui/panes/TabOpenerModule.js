@@ -5,13 +5,15 @@
 // from it TURNS THAT TAB INTO the thing you picked. The chip you made is the
 // chip you keep, in the place you made it.
 //
-//   new TabOpener(branch, { focus, pane, source, tabId, prompt? })
+//   new TabOpener(branch, { focus, pane, source, tab?, tabId?, prompt? })
 //     focus:  the dock's branch, as any tab's widget joins it
 //     pane:   the dock it is in — it replaces itself there, so it must know
 //     source: the TabSource; its listed kinds are the choices, which is why
 //             the opener's own kind is declared listed:false and never offers
 //             itself among them
-//     tabId:  its own tab's id, so it can find its place and give it up
+//     tab:    its own tab-pane's handle, from a source with a register: the tab
+//             it turns, in place, into what you pick
+//     tabId:  without one, its own tab's id, so it can find its place and give it up
 //
 //   opener.open(kindId)   → the index the new tab ended at, or −1. What you pick
 //                         takes the keys, because you were holding them here
@@ -44,6 +46,7 @@ class TabOpener {
         this.branch = branch;
         this._source = o.source;
         this._pane = o.pane;
+        this._tab = o.tab || null;
         this._tabId = o.tabId == null ? null : String(o.tabId);
         this._picks = [];
         this._disposed = false;
@@ -92,7 +95,7 @@ class TabOpener {
      */
     open(kindId) {
         var pane = this._pane, source = this._source, mine = this._tabId;
-        if (source.registered()) return source.has(kindId) ? source.become(pane, mine, kindId) : -1;   // in place: nothing leaves, nothing can vanish
+        if (source.registered()) return source.has(kindId) && this._tab ? source.become(this._tab.id, kindId) : -1;   // in place: nothing leaves, nothing can vanish
         if (!source.has(kindId)) return -1;
         var at = mine != null && pane.has(mine) ? pane.tabIndexOf(mine) : -1;
         if (at >= 0) pane.removeTab(mine);

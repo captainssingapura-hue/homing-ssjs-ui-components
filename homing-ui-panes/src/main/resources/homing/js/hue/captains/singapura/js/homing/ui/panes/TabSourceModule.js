@@ -21,9 +21,11 @@
 //             of things to open, and it must not offer itself.
 //     register: a desk's TabRegister (RFC 0066 E3, appendix "tab-panes"). Given,
 //             every tab the source makes is a TAB-PANE opened there — the
-//             register names its branch and owns it — and make is handed
-//             params.tab, the tab-pane's own handle, beside the rest; an id is
-//             the kind's, counted up, never one the desk holds
+//             register names it and its branch, and owns it — and make is
+//             handed params.tab, the tab-pane's own handle, beside the rest.
+//             The id is the register's, "tab-3": it says which tab, and never
+//             what it holds or how it was opened, since a tab may become
+//             something else. The kind is in the title, "Books 2"
 //     place(tp, pane, index?) → the index: how a new tab-pane is put in a pane,
 //             when the desk should say it arrived — its move, which reports a
 //             TabAdded; pane.take unless said
@@ -53,10 +55,11 @@
 //   source.release(tabId)       the tab is gone for good: its branch dissolves, which is
 //                               the only way its name comes free again. With a register,
 //                               nothing: a tab-pane's close is its own
-//   source.become(pane, tabId, kindId) → the index: with a register, the tab-pane under
-//                               that id becomes one of that kind IN PLACE — the same chip
-//                               and pane, a new widget, the kind's name — and is shown with
-//                               the keys: what an opener does with what you pick
+//   source.become(tabId, kindId) → the index in the host it is in: with a register, the
+//                               tab-pane under that id becomes one of that kind IN PLACE —
+//                               the same tab, chip and pane, a new widget, the kind's name —
+//                               and is shown with the keys: what an opener does with what
+//                               you pick, finding its own tab by the handle it was built with
 //   source.dispose()
 //
 // THE SOURCE DECIDES NOTHING ABOUT WHERE. Which pane is the caller's; a
@@ -223,16 +226,15 @@ class TabSource {
     /** Whether the tabs it makes are tab-panes in a desk's register. */
     registered() { return !!this._register; }
 
-    /** The next id and title of a kind: counted up, never back, and with a register never an id the desk holds. */
+    /** The next of a kind, counted up and never back: its title, and without a register its id. */
     _next(kind) {
-        var n, id;
-        do { n = ++this._made[kind.id]; id = n === 1 ? kind.id : kind.id + "-" + n; } while (this._register && this._register.has(id));
-        return { id: id, title: n === 1 ? kind.title : kind.title + " " + n };
+        var n = ++this._made[kind.id];
+        return { id: n === 1 ? kind.id : kind.id + "-" + n, title: n === 1 ? kind.title : kind.title + " " + n };
     }
 
     /** A tab-pane of that kind, opened in the register; its widget made by the kind's own make, handed the tab-pane's handle. */
     _open(pane, kind, next) {
-        return this._register.open({ id: next.id, title: next.title,
+        return this._register.open({ title: next.title,   // no id: the register's own names it
                                      make: function (b, t) { return kind.make(b, { focus: t.focus, id: t.id, title: next.title, pane: pane, tab: t }); } });
     }
 
@@ -249,13 +251,13 @@ class TabSource {
         return { tab: tab, index: at };
     }
 
-    become(pane, tabId, kindId) {
+    become(tabId, kindId) {
         var kind = this._by[kindId], tp = this._register ? this._register.get(tabId) : null;
         if (!kind) throw new Error("[TabSource] no kind '" + kindId + "'");
         if (!tp) throw new Error("[TabSource] become wants a register holding '" + tabId + "'");
-        var host = tp.host() || pane, next = this._next(kind);
+        var host = tp.host(), next = this._next(kind);
         tp.replace(function (b, t) { return kind.make(b, { focus: t.focus, id: t.id, title: next.title, pane: host, tab: t }); }, next.title);
-        if (host && host.has(tabId)) this.show(host, tp, "focus");
+        if (host) this.show(host, tp, "focus");
         return host ? host.tabIndexOf(tabId) : -1;
     }
 

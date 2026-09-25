@@ -704,19 +704,19 @@ class MultiTabPaneTest extends JsModuleTestBase {
                                           w.focus = p.focus.join(b.name, w); w.tabOf = p.tab; return w; }
                 var src = new TabSource(branch.createBranch("src"), { register: register, kinds: [ { id: "note", title: "Notes", make: kindMake }, { id: "books", title: "Books", make: kindMake } ],
                                                                        place: function (tp, p, index) { placed.push(tp.id + ">" + p.slotId); return p.take(tp, index); } });
-                register.open({ id: "note-2", make: function (b, t) { b.activate("w"); var w = { root: el("x"), activate: function () {} }; w.focus = t.focus.join(b.name, w); return w; } });
+                register.open({ id: "tab-1", make: function (b, t) { b.activate("w"); var w = { root: el("x"), activate: function () {} }; w.focus = t.focus.join(b.name, w); return w; } });
                 log.length = 0;
                 """);
             assertTrue(eval("src.registered()").asBoolean());
             eval("var a = src.add(pane, 'note', 'quiet'), b = src.add(pane, 'note', 'focus');");
-            assertEquals("note,note-3", eval("a.tab.id + ',' + b.tab.id").asString(), "counted up, never an id the desk holds: note-2 was taken");
-            assertEquals("Notes|Notes 3", eval("a.tab.title() + '|' + b.tab.title()").asString());
-            assertTrue(eval("a.tab === register.get('note') && a.tab.host() === pane && a.tab.widget.tabOf.id === 'note'").asBoolean(), "a tab-pane in the register, held by the pane; the maker handed its handle");
-            assertEquals("note>s1,note-3>s1", eval("placed.join(',')").asString(), "placed the way the page said");
-            assertEquals("note-3", eval("pane.activeTab()").asString(), "the second in front, with the keys");
-            assertTrue(log().contains("note-3:activate"), log());
-            eval("src.release('note');");
-            assertTrue(eval("register.has('note')").asBoolean(), "release is nothing: a tab-pane's close is its own");
+            assertEquals("tab-2,tab-3", eval("a.tab.id + ',' + b.tab.id").asString(), "the register's names, never one it holds: tab-1 was taken; nothing of the kind in them");
+            assertEquals("Notes|Notes 2", eval("a.tab.title() + '|' + b.tab.title()").asString(), "the kind is in the title, counted up");
+            assertTrue(eval("a.tab === register.get('tab-2') && a.tab.host() === pane && a.tab.widget.tabOf.id === 'tab-2'").asBoolean(), "a tab-pane in the register, held by the pane; the maker handed its handle");
+            assertEquals("tab-2>s1,tab-3>s1", eval("placed.join(',')").asString(), "placed the way the page said");
+            assertEquals("tab-3", eval("pane.activeTab()").asString(), "the second in front, with the keys");
+            assertTrue(log().contains("tab-3:activate"), log());
+            eval("src.release('tab-2');");
+            assertTrue(eval("register.has('tab-2')").asBoolean(), "release is nothing: a tab-pane's close is its own");
         }
 
         @Test
@@ -744,11 +744,12 @@ class MultiTabPaneTest extends JsModuleTestBase {
                 pane.addTab(tab("x"));
                 var op = src.add(pane, "opener", "quiet").tab, chip = op.chip, cell = op.pane; log.length = 0;
                 """);
-            assertEquals(1, eval("src.become(pane, op.id, 'books')").asInt(), "where it was");
-            assertTrue(eval("register.get('opener') === op && op.chip === chip && op.pane === cell && pane.tabs().join(',') === 'x,opener'").asBoolean(), "the same tab-pane, in the same place");
+            assertEquals("tab-1", eval("op.id").asString(), "the opener's tab is a tab like any other: the register named it");
+            assertEquals(1, eval("src.become(op.id, 'books')").asInt(), "where it was");
+            assertTrue(eval("register.get(op.id) === op && op.chip === chip && op.pane === cell && pane.tabs().join(',') === 'x,' + op.id").asBoolean(), "the same tab-pane, in the same place");
             assertEquals("Books", eval("op.title()").asString());
-            assertEquals("Open:disposed Books:activate", log().replaceAll("active:s1:opener ", ""), "the opener gone, the books in front with the keys");
-            assertTrue(eval("pane.widgetOf('opener') === op.widget").asBoolean(), "the pane reads the new widget at once");
+            assertEquals("Open:disposed Books:activate", log().replaceAll("active:s1:tab-1 ", ""), "the opener gone, the books in front with the keys");
+            assertTrue(eval("pane.widgetOf(op.id) === op.widget").asBoolean(), "the pane reads the new widget at once");
         }
 
         @Test
