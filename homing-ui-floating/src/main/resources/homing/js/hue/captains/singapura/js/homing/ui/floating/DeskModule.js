@@ -19,7 +19,9 @@
 //   desk.open({ id?, title, icon?, head?, offered?, x?, y?, w?, h?, closable?, widget?, params? })  → the pane
 //       head: false, a frame with no head, for a holder that gives it a handle of its own;
 //       offered: false, its drags are not the desk's onDragMove/onDragEnd's to watch — a
-//       frame that is not one tab, a float of many, is never offered to a dock
+//       frame that is not one tab, a float of many, is never offered to a dock;
+//       onDragMove, onDragEnd: its own, in place of the desk's, for a holder that decides
+//       while it moves whether it is offered at all
 //       id defaults to "pane-N"; x, y cascade when not given. The id is the
 //       holder's name for the pane — a tab's own id, any string; the pane's
 //       branch is the desk's, "float-" and a fresh uuid at every opening, and
@@ -106,7 +108,8 @@ class Desk {
             minW: this._minW, minH: this._minH,
             onEvent: function (ev) { self._fire(ev); },
             onClose: function () { self.close(id); },
-            onDragMove: s.offered === false ? null : this._onDragMove, onDragEnd: s.offered === false ? null : this._onDragEnd
+            onDragMove: s.offered === false ? null : (s.onDragMove || this._onDragMove),
+            onDragEnd: s.offered === false ? null : (s.onDragEnd || this._onDragEnd)
         });
         this.root.appendChild(pane.root);
         var entry = { pane: pane, widget: null, closable: s.closable !== false };

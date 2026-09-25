@@ -95,6 +95,9 @@
 //   here as they are, never minted or dissolved here.
 //   pane.canTake(tp)             → whether take would: by the law, under the budget,
 //       the id not here, and the tab-pane in no other host
+//   pane.admits(tp)              → whether it would, were the tab-pane let go where it
+//       is: what a mover asks before anything leaves
+//   pane.tabPaneOf(id)           → the tab-pane held under that id, or null
 //   pane.take(tp, index?)        → the index it took: its chip in the strip at this
 //       strip's size, armed for the rail, its pane hidden in the content, its
 //       widget's membership adopted under this pane's branch; shown if nothing was.
@@ -305,6 +308,10 @@ class MultiTabPane {
         try { this._validate(tp); } catch (e) { return false; }
         return !!tp.chip && !tp.host();
     }
+    admits(tp) {
+        try { this._validate(tp); } catch (e) { return false; }
+        return !!tp.chip && tp.host() !== this;
+    }
     take(tp, index) {
         this._validate(tp);
         var at = PaneTabs.take(this, tp, index == null ? null : index | 0, PaneMenus.forChip(this, tp.id, MultiTabPane.MENU));
@@ -370,6 +377,7 @@ class MultiTabPane {
     chipOf(i) { return i < 0 || i >= this._tabs.length ? null : this._tabs[i].chip; }
     contentElOf(id) { var i = this._find(id); return i < 0 ? null : this._tabs[i].panel; }
     widgetOf(id) { var i = this._find(id); return i < 0 ? null : this._tabs[i].widget; }
+    tabPaneOf(id) { var i = this._find(id); return i < 0 ? null : (this._tabs[i].tabPane || null); }
     getState() { return PaneEvents.state(this); }
     // ── The member: the keys while the pane holds them ────────────────────
     /**

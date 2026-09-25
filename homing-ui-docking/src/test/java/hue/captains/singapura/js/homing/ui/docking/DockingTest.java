@@ -337,12 +337,71 @@ class DockingTest extends JsModuleTestBase {
         }
 
         @Test
-        void aFloatIsNeverOfferedToADock_asOneTabWouldBe() {
-            eval("var f = docking.float({ x: 500, y: 400, w: 300, h: 200 }); f.take(open('a')); var bar = f.host.bar(); log.length = 0;"
+        void aFloatOfManyIsNeverOfferedToADock_itMovesAsAWindowDoes() {
+            eval("var f = docking.float({ x: 500, y: 400, w: 300, h: 200 }); f.take(open('a')); f.take(open('b')); var bar = f.host.bar(); log.length = 0;"
                + "press(bar, 520, 410); bar.fire('pointermove', { clientX: 600, clientY: 20 });");
-            assertFalse(eval("B.el.has('mtp_dock_target')").asBoolean(), "over B's strip, B is not lit: a float is not one tab");
+            assertFalse(eval("B.el.has('mtp_dock_target')").asBoolean(), "over B's strip, B is not lit: a float of two is not one tab");
             eval("bar.fire('pointerup', { type: 'pointerup', clientX: 600, clientY: 20 });");
-            assertTrue(eval("docking.desk.has(f.id) && f.host.has('a') && B.tabs().join(',') === ''").asBoolean(), "still afloat, its tab in it");
+            assertTrue(eval("docking.desk.has(f.id) && f.host.tabs().join(',') === 'a,b' && B.tabs().join(',') === ''").asBoolean(), "still afloat, its tabs in it");
+        }
+
+        /** DETACH: a tab-pane off its dock into a float of its own, as it is — the same chip, the same pane — reported as one move. */
+        @Test
+        void detachFloatsATabPaneAsItIs_inAFloatOfItsOwn_reportedAsAMove() {
+            eval("var a = open('a'); A.take(a); var chip = a.chip, pane = a.pane; log.length = 0; var f = docking.detach(a, { x: 160, y: 90 });");
+            assertTrue(eval("f.host.has('a') && !A.has('a') && a.host() === f.host && a.chip === chip && a.pane === pane").asBoolean(), "the same tab-pane, in a float of its own");
+            assertTrue(eval("f.host.bar().children[0].children.indexOf(chip) >= 0").asBoolean(), "its own chip on the float's one bar");
+            assertEquals("100,76", eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "its bar at the point, the grip's offset in");
+            assertTrue(log().contains("TabMoved"), log());
+            assertTrue(eval("docking.docks().indexOf(f.host) >= 0").asBoolean(), "a float is a dock for as long as it lasts");
+        }
+
+        @Test
+        void aMoveIsRefusedBeforeAnythingLeaves() {
+            eval("var a = open('a'); A.take(a); B.addTab({ id: 'b1', title: 'B1', widget: widget('wb1', B.focus) }); log.length = 0;"
+               + "var full = new MultiTabPane(page.createBranch('full'), { host: el('div'), slotId: 'full', budget: 1 }); full.addTab({ id: 'x', title: 'X', widget: widget('wx', full.focus) });");
+            var ex = assertThrows(PolyglotException.class, () -> eval("docking.move(a, full)"));
+            assertTrue(ex.getMessage().contains("would not take"), ex.getMessage());
+            assertTrue(eval("A.has('a') && a.host() === A && !full.has('a')").asBoolean(), "nothing left");
+            assertEquals("", log(), "and nothing was said");
+        }
+
+        /** DRAG TO MOVE: a float of one is that tab in the hand — offered to the docks it passes, and let go over a strip, the tab-pane lands there and the float is gone. */
+        @Test
+        void aFloatOfOneDraggedOverADocksStrip_landsItsTabThere_andIsGone() {
+            eval("var a = open('a'); A.take(a); var f = docking.detach(a, { x: 500, y: 400 }); var bar = f.host.bar(); log.length = 0;"
+               + "press(bar, 520, 410); bar.fire('pointermove', { clientX: 600, clientY: 20 });");
+            assertTrue(eval("B.el.has('mtp_dock_target')").asBoolean(), "B lit while the tab is offered");
+            eval("bar.fire('pointermove', { clientX: 600, clientY: 200 });");
+            assertFalse(eval("B.el.has('mtp_dock_target')").asBoolean(), "content is not a landing");
+            eval("bar.fire('pointermove', { clientX: 600, clientY: 20 }); bar.fire('pointerup', { type: 'pointerup', clientX: 600, clientY: 20 });");
+            assertTrue(eval("B.has('a') && a.host() === B && f.closed() && !docking.desk.has(f.id)").asBoolean(), "landed in B, and the float is gone");
+            assertTrue(log().contains("TabMoved"), log());
+            assertTrue(log().indexOf("TabMoved") < log().indexOf("closed:"), "the move said first, then the float it left empty gone: " + log());
+            assertFalse(eval("B.el.has('mtp_dock_target') || docking.docks().indexOf(f.host) >= 0").asBoolean(), "the offer is over, and the float no dock");
+            assertTrue(eval("B.contentElOf('a') === a.pane && a.widget.focus.in === B.focus").asBoolean(), "its own pane in B's content, its membership adopted there");
+        }
+
+        /** The float in the hand has its own bar under the hand the whole way: it is never offered to itself. */
+        @Test
+        void aFloatIsNeverOfferedToItself() {
+            eval("var a = open('a'); A.take(a); var f = docking.detach(a, { x: 500, y: 400 });"
+               + "f.host.el.rect = { left: 440, top: 386, right: 760, bottom: 606, width: 320, height: 220 }; f.host.bar().rect = { left: 440, top: 386, right: 760, bottom: 416, width: 320, height: 30 };"
+               + "var bar = f.host.bar(); press(bar, 520, 400); bar.fire('pointermove', { clientX: 530, clientY: 400 });");
+            assertFalse(eval("f.host.el.has('mtp_dock_target')").asBoolean(), "its own strip, under the hand, is not a landing");
+            eval("bar.fire('pointerup', { type: 'pointerup', clientX: 530, clientY: 400 });");
+            assertTrue(eval("f.host.has('a') && !f.closed()").asBoolean(), "let go there: it only moved");
+        }
+
+        @Test
+        void aFloatOfOneLetGoOverAnotherFloatsStrip_joinsIt() {
+            eval("var a = open('a'), b = open('b'); A.take(a); A.take(b); var g = docking.detach(b, { x: 100, y: 300 }), f = docking.detach(a, { x: 500, y: 400 });"
+               + "g.host.el.rect = { left: 40, top: 286, right: 360, bottom: 506, width: 320, height: 220 }; g.host.bar().rect = { left: 40, top: 286, right: 360, bottom: 316, width: 320, height: 30 };"
+               + "var bar = f.host.bar(); press(bar, 520, 410); bar.fire('pointermove', { clientX: 300, clientY: 300 });");
+            assertTrue(eval("g.host.el.has('mtp_dock_target')").asBoolean(), "the other float is offered it");
+            assertFalse(eval("f.host.el.has('mtp_dock_target')").asBoolean(), "never its own");
+            eval("bar.fire('pointerup', { type: 'pointerup', clientX: 300, clientY: 300 });");
+            assertTrue(eval("g.host.tabs().join(',') === 'b,a' && f.closed() && !g.closed()").asBoolean(), "joined it; the empty one gone");
         }
 
         @Test

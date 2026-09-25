@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.panes.PaneEventsModule;
 import hue.captains.singapura.js.homing.ui.floating.DeskModule;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public record DockingModule() implements DomModule<DockingModule> {
                 .add(new ModuleImports<>(List.of(new DeskModule.Desk()), DeskModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DockEventsModule.DockEvents()), DockEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloaterModule.Floater()), FloaterModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneEventsModule.PaneEvents()), PaneEventsModule.INSTANCE))
                 .build();
     }
 
