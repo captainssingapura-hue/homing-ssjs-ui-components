@@ -84,7 +84,7 @@ class Docking {
         this._floats = 0;             // its floats are float-1, float-2 and on: never a name another float of this desk had
         this._target = null;
         this._index = -1;
-        this.desk = new Desk(branch.createBranch("desk"), {
+        this.desk = new FloatLayer(branch.createBranch("desk"), {
             host: opts.host, layer: true, minW: opts.minW, minH: opts.minH, keyboard: opts.keyboard, keyboardId: opts.keyboardId,
             onEvent: function (ev) { self._fire(ev); },
             onDragMove: function (pane, x, y) { self._offer(x, y); },

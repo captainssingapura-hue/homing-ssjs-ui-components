@@ -1,10 +1,12 @@
 // =============================================================================
-// Desk — the floor the panes float on. A branch component: the caller makes a
+// FloatLayer — the floor the panes float on: what was the Desk, before the desk
+// became the whole — the register, the docks, this layer and the moves between
+// them (RFC 0066 E3, appendix "tab-panes"). A branch component: the caller makes a
 // sub-branch for it and hands it in; the desk mints its floor on the host and
 // a sub-branch per pane. It owns the stack: z-order, the active one, the host
 // they float in. The workspace's substrate.
 //
-//   new Desk(branch, { host, layer?, onEvent?, minW?, minH?, onDragMove?, onDragEnd?, keyboard?, keyboardId? })
+//   new FloatLayer(branch, { host, layer?, onEvent?, minW?, minH?, onDragMove?, onDragEnd?, keyboard?, keyboardId? })
 //     host   a flex box; the desk is its item and fills it — or, with layer,
 //            a positioned box the desk lies over, the hand passing through it
 //            except on a pane: a desk over docks.
@@ -16,7 +18,7 @@
 //            active pane if it can be closed. The widgets are built without a
 //            steward of their own. No keydown listener of its own.
 //
-//   desk.open({ id?, title, icon?, head?, offered?, x?, y?, w?, h?, closable?, widget?, params? })  → the pane
+//   layer.open({ id?, title, icon?, head?, offered?, x?, y?, w?, h?, closable?, widget?, params? })  → the pane
 //       head: false, a frame with no head, for a holder that gives it a handle of its own;
 //       offered: false, its drags are not the desk's onDragMove/onDragEnd's to watch — a
 //       frame that is not one tab, a float of many, is never offered to a dock;
@@ -30,19 +32,19 @@
 //       setActive?, dispose? — or an instance already made, a tab's, whose
 //       branch is its holder's; its root goes in the pane's body. Reports
 //       Opened, then Raised, since a new pane is the active one.
-//   desk.release(id)    → { id, title, icon, widget, closable }: the tab leaves the desk
+//   layer.release(id)    → { id, title, icon, widget, closable }: the tab leaves the desk
 //                         for a dock, widget and icon and all, NOT disposed; the
 //                         frame goes; Released(id), and the next on the stack raised
-//   desk.raise(id)      → Raised(id) when it was not already on top; the one
+//   layer.raise(id)      → Raised(id) when it was not already on top; the one
 //                         leaving is told setActive(false), the one coming in
 //                         setActive(true), pane and widget both
-//   desk.close(id)      → the widget disposed, the pane dissolved, Closed(id);
+//   layer.close(id)      → the widget disposed, the pane dissolved, Closed(id);
 //                         the next on the stack raised after
-//   desk.pane(id) .panes() (ids, bottom to top) .active() .has(id)
-//   desk.root           the floor
-//   desk.key(ev)        a keydown from whoever holds the keys for the desk: the active pane's
+//   layer.pane(id) .panes() (ids, bottom to top) .active() .has(id)
+//   layer.root           the floor
+//   layer.key(ev)        a keydown from whoever holds the keys for the desk: the active pane's
 //                       widget first, then Escape; true when taken
-//   desk.dispose()      every pane closed in order, the floor removed, the branch dissolved
+//   layer.dispose()      every pane closed in order, the floor removed, the branch dissolved
 //
 // The hand: a press anywhere on a pane raises it; focus into it raises it;
 // Escape, through the party, closes the active one if it can be closed; the cross closes
@@ -55,10 +57,10 @@
 const _deskOwner = Object.freeze({ toString: () => "desk" });
 var _CASCADE = 28;
 
-class Desk {
+class FloatLayer {
     constructor(branch, opts) {
-        if (!branch) throw new Error("[Desk] a branch of its own is required");
-        if (!opts || !opts.host) throw new Error("[Desk] opts.host is required");
+        if (!branch) throw new Error("[FloatLayer] a branch of its own is required");
+        if (!opts || !opts.host) throw new Error("[FloatLayer] opts.host is required");
         branch.activate(_deskOwner);
         this.branch = branch;
         this._sink = typeof opts.onEvent === "function" ? opts.onEvent : null;
@@ -98,9 +100,9 @@ class Desk {
         var self = this;
         var s = spec || {};
         var id = s.id == null ? "pane-" + (++this._n) : String(s.id);
-        if (this._panes.has(id)) throw new Error("[Desk] a pane is already open as '" + id + "'");
+        if (this._panes.has(id)) throw new Error("[FloatLayer] a pane is already open as '" + id + "'");
         var k = this._order.length % 8;
-        var paneBranch = this.branch.createBranch(Desk._freshName());
+        var paneBranch = this.branch.createBranch(FloatLayer._freshName());
         var pane = new FloatingPane(paneBranch, {
             id: id, title: s.title == null ? id : s.title, icon: s.icon || null, head: s.head,
             x: s.x == null ? 24 + _CASCADE * k : s.x, y: s.y == null ? 24 + _CASCADE * k : s.y,
@@ -128,7 +130,7 @@ class Desk {
 
     raise(id) {
         var entry = this._panes.get(id);
-        if (!entry) throw new Error("[Desk] no pane '" + id + "'");
+        if (!entry) throw new Error("[FloatLayer] no pane '" + id + "'");
         if (this._active === id) return this;
         var i = this._order.indexOf(id);
         if (i >= 0) { this._order.splice(i, 1); this._order.push(id); }
@@ -141,7 +143,7 @@ class Desk {
         var entry = this._panes.get(id);
         if (!entry) return null;
         if (this._active === id) { this._tell(entry, false); this._active = null; }
-        if (entry.widget && typeof entry.widget.dispose === "function") { try { entry.widget.dispose(); } catch (e) { console.error("[Desk] widget dispose failed", e); } }
+        if (entry.widget && typeof entry.widget.dispose === "function") { try { entry.widget.dispose(); } catch (e) { console.error("[FloatLayer] widget dispose failed", e); } }
         var root = entry.pane.root;
         if (root.parentNode) root.parentNode.removeChild(root);
         entry.pane.dispose();
@@ -177,7 +179,7 @@ class Desk {
      * holder's id — a tab's, which may be any string — is ever asked to be a
      * name on the DOM party, and no name is ever used twice.
      */
-    static _freshName() { return "float-" + Desk._uuid(); }
+    static _freshName() { return "float-" + FloatLayer._uuid(); }
 
     /** RFC 4122 v4: crypto.randomUUID where the page is a secure context, else the same from getRandomValues. */
     static _uuid() {
@@ -214,7 +216,7 @@ class Desk {
 
     _tell(entry, on) {
         entry.pane.setActive(on);
-        if (entry.widget && typeof entry.widget.setActive === "function") { try { entry.widget.setActive(on); } catch (e) { console.error("[Desk] widget setActive failed", e); } }
+        if (entry.widget && typeof entry.widget.setActive === "function") { try { entry.widget.setActive(on); } catch (e) { console.error("[FloatLayer] widget setActive failed", e); } }
     }
 
     _fire(ev) { if (this._sink) this._sink(ev); }

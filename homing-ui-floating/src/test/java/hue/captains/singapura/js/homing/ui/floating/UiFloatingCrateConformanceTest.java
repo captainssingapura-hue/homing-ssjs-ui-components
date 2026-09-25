@@ -58,7 +58,7 @@ class UiFloatingCrateConformanceTest {
 
     @Test
     void thePaneAndTheDeskImportEveryClassDeclared() {
-        var imported = java.util.stream.Stream.of(FloatingPaneModule.INSTANCE.imports(), DeskModule.INSTANCE.imports())
+        var imported = java.util.stream.Stream.of(FloatingPaneModule.INSTANCE.imports(), FloatLayerModule.INSTANCE.imports())
                 .flatMap(im -> im.getAllImports().values().stream())
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
         for (CssClass<FloatingStyles> c : FloatingStyles.INSTANCE.cssClasses())

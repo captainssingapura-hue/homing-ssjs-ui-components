@@ -135,7 +135,7 @@ class DockingTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         loadModule(P + "floating/FloatEventsModule.js");
         loadModule(P + "floating/FloatingPaneModule.js");
-        loadModule(P + "floating/DeskModule.js");
+        loadModule(P + "floating/FloatLayerModule.js");
         loadModule(P + "panes/PaneEventsModule.js");
         loadModule(P + "panes/TabDragModule.js");
         loadModule(P + "panes/TabFitModule.js");

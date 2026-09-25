@@ -12,26 +12,26 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import java.util.List;
 
 /**
- * {@code Desk}: the floor the panes float on. It owns the stack — z-order,
+ * {@code FloatLayer}: the floor the panes float on — the Desk it was, before the desk became the whole. It owns the stack — z-order,
  * the active one, the host they float in — opens a pane holding a widget by
  * the base's contract, raises the one pressed or focused, closes on the
  * cross or Escape, and reports every mutation as one {@code FloatEvents}
  * object on one sink. The workspace's substrate.
  */
-public record DeskModule() implements DomModule<DeskModule> {
+public record FloatLayerModule() implements DomModule<FloatLayerModule> {
 
-    /** The class: {@code new Desk(branch, {host, onEvent?, minW?, minH?})}; {@code open(spec)}, {@code raise(id)}, {@code close(id)}, {@code dispose()}. */
-    public record Desk() implements BranchComponent<DeskModule>, NeedKeyboard {
+    /** The class: {@code new FloatLayer(branch, {host, onEvent?, minW?, minH?})}; {@code open(spec)}, {@code raise(id)}, {@code close(id)}, {@code dispose()}. */
+    public record FloatLayer() implements BranchComponent<FloatLayerModule>, NeedKeyboard {
         @Override public String summary() { return "The layer floating panes live on: a stack, the frontmost active."; }
         /** The desk holds the keys for its panes: the active pane's widget's first, whatever they are, then Escape. */
         @Override public List<KeyBinding> keys() { return List.of(KeyBinding.of(Key.ESCAPE, "the active pane closed, when it can be closed; after its widget")); }
     }
 
-    public static final DeskModule INSTANCE = new DeskModule();
+    public static final FloatLayerModule INSTANCE = new FloatLayerModule();
 
     @Override
-    public ImportsFor<DeskModule> imports() {
-        return ImportsFor.<DeskModule>builder()
+    public ImportsFor<FloatLayerModule> imports() {
+        return ImportsFor.<FloatLayerModule>builder()
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatEventsModule.FloatEvents()), FloatEventsModule.INSTANCE))
@@ -40,7 +40,7 @@ public record DeskModule() implements DomModule<DeskModule> {
     }
 
     @Override
-    public ExportsOf<DeskModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Desk()));
+    public ExportsOf<FloatLayerModule> exports() {
+        return new ExportsOf<>(INSTANCE, List.of(new FloatLayer()));
     }
 }

@@ -19,11 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * named fresh at every opening; its id, the holder's, may be any string. The
  * fake party holds the real one's rule for a name.
  */
-class DeskTest extends JsModuleTestBase {
+class FloatLayerTest extends JsModuleTestBase {
 
     private static final String EVENTS = "/homing/js/hue/captains/singapura/js/homing/ui/floating/FloatEventsModule.js";
     private static final String PANE   = "/homing/js/hue/captains/singapura/js/homing/ui/floating/FloatingPaneModule.js";
-    private static final String DESK   = "/homing/js/hue/captains/singapura/js/homing/ui/floating/DeskModule.js";
+    private static final String DESK   = "/homing/js/hue/captains/singapura/js/homing/ui/floating/FloatLayerModule.js";
 
     // Elements that know their children, classes, attributes and inline
     // properties; a desk 800 by 600; a party branch; a css manager over
@@ -80,7 +80,7 @@ class DeskTest extends JsModuleTestBase {
         var events = [];
         var members = {}, kbLog = [];
         var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; kbLog.push("leave:" + id); }, claim: function (id) { kbLog.push("claim:" + id); }, release: function () {} };
-        var desk = new Desk(branch.createBranch("desk"), { host: host, keyboard: kb, onEvent: function (ev) {
+        var desk = new FloatLayer(branch.createBranch("desk"), { host: host, keyboard: kb, onEvent: function (ev) {
             events.push(ev);
             switch (ev.kind) {
                 case "Opened":  log.push("opened:" + ev.id + "@" + ev.x + "," + ev.y + ":" + ev.w + "x" + ev.h); break;
@@ -235,7 +235,7 @@ class DeskTest extends JsModuleTestBase {
     /** A frame that is not one tab — a float of many — is never offered: its drags are not the holder's to watch. */
     @Test
     void aFrameNotOffered_isNotWatchedWhileItMoves() {
-        eval("var seen = []; var d2 = new Desk(branch.createBranch('d2'), { host: el('div'), onDragMove: function (p) { seen.push('move:' + p.id); }, onDragEnd: function (p) { seen.push('end:' + p.id); } });"
+        eval("var seen = []; var d2 = new FloatLayer(branch.createBranch('d2'), { host: el('div'), onDragMove: function (p) { seen.push('move:' + p.id); }, onDragEnd: function (p) { seen.push('end:' + p.id); } });"
            + "d2.open({ id: 'one', title: 'One' }); d2.open({ id: 'many', title: 'Many', offered: false });"
            + "['one', 'many'].forEach(function (id) { var h = d2.pane(id).root.children[0]; h.fire('pointerdown', { button: 0, pointerId: 2, clientX: 10, clientY: 10, target: h }); h.fire('pointermove', { clientX: 20, clientY: 20 }); h.fire('pointerup', { type: 'pointerup', clientX: 20, clientY: 20 }); });");
         assertEquals("move:one end:one", eval("seen.join(' ')").asString());
@@ -256,7 +256,7 @@ class DeskTest extends JsModuleTestBase {
     @Test
     void outsideASecureContextTheUuidIsMadeFromRandomValues() {
         String u = eval("var kept = crypto; crypto = { getRandomValues: function (a) { for (var i = 0; i < a.length; i++) a[i] = (i * 37 + 11) & 255; return a; } };"
-                + "var u = Desk._uuid(); crypto = kept; u").asString();
+                + "var u = FloatLayer._uuid(); crypto = kept; u").asString();
         assertTrue(u.matches("[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"), u);
     }
 

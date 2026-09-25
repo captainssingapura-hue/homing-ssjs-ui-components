@@ -15,7 +15,7 @@ public record UiFloatingComponents() implements C0_Components<UiFloatingComponen
 
     @Override public List<ComponentEntry<UiFloatingComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new DeskModule.Desk()),
+                ComponentEntry.of(this, new FloatLayerModule.FloatLayer()),
                 ComponentEntry.of(this, new FloatingPaneModule.FloatingPane()));
     }
 }

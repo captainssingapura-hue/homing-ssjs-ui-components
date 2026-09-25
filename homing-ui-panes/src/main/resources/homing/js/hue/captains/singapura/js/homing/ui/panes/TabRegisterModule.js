@@ -91,8 +91,8 @@ class TabRegister {
 
     /**
      * RFC 4122 v4: crypto.randomUUID where the page is a secure context, else
-     * the same from getRandomValues. The float layer's Desk makes its own the
-     * same way, until the desk that holds both makes the one.
+     * the same from getRandomValues. The float layer makes its own the same way,
+     * until the desk that holds both makes the one.
      */
     static _uuid() {
         if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
