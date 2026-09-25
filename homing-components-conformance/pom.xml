@@ -29,16 +29,38 @@
     </properties>
 
     <dependencies>
-        <!-- The framework's studio, verbatim: widgets, GetActions, report codec, engine, rules. -->
+        <!-- THE CHECK - UI-agnostic, and held so by CheckIsUiAgnosticTest: the
+             rules, the engine that grades a run, and the export that writes the
+             report. Headless, and declared here so the check never reaches them
+             through the viewer's studio. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-conformance-rules</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-conformance-engine</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-conformance-export</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- The designs the components are held to: the framework's, nothing legacy. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-designs</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- THE VIEWER only (ComponentsConformanceStudioServer, port 8097): the
+             framework's conformance studio, which is a studio. Nothing in the
+             check imports it; splitting the viewer into a module of its own is
+             for later. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-studio</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
-        <!-- The seven designs the components are held to. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-studio-themes</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <!-- The top level: every fresh crate. -->

@@ -11,7 +11,7 @@ import hue.captains.singapura.js.homing.core.PaletteProvision;
 import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
-import hue.captains.singapura.js.homing.studio.themes.StudioThemeRegistry;
+import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
@@ -80,14 +80,18 @@ public final class ComponentsConformance {
     /** Documented, intentional exceptions: none. */
     public static final List<Allowance> ALLOWANCES = List.of();
 
-    /** Every theme the studio offers — the seven designs, each in the palettes that fit it; each must bind every pair a class wears. */
+    /** Every look the framework's designs offer — each design in each palette that fits it; each must bind every pair a class wears. */
     public static List<Design> designs() {
-        return StudioThemeRegistry.INSTANCE.themes().stream().map(t -> (Design) t).toList();
+        return HomingDesigns.REGISTRY.themes().stream().map(t -> (Design) t).toList();
     }
 
-    /** The provisions the CSS graph laws derive their priors from: the studio's palettes. */
+    /**
+     * The provisions the CSS graph laws derive their priors from: the
+     * registry's global-palette provisions — none, since the framework's
+     * designs carry no legacy palette and no component here reads one.
+     */
     public static List<PaletteProvision<?, ?>> provisions() {
-        return StudioThemeRegistry.INSTANCE.palettes();
+        return HomingDesigns.REGISTRY.palettes();
     }
 
     /** The top level and everything it requires, transitively. */
