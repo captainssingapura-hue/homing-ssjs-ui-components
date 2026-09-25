@@ -39,9 +39,11 @@ class PaneEvents {
     /** The dock as data, for a holder that keeps its arrangement: the slot, what is active, and the tabs in their order. */
     static state(pane) {
         var list = [];
-        for (var i = 0; i < pane._tabs.length; i++) list.push({ id: pane._tabs[i].id, title: pane._tabs[i].tab.title, pinned: pane._tabs[i].pinned });
+        for (var i = 0; i < pane._tabs.length; i++) list.push({ id: pane._tabs[i].id, title: PaneEvents._title(pane._tabs[i].tab), pinned: pane._tabs[i].pinned });
         return { slotId: pane.slotId, activeTabId: pane.activeTab(), tabs: list };
     }
+    /** A tab's name: a record's field, or a tab-pane's own, which it answers when asked. */
+    static _title(tab) { return typeof tab.title === "function" ? tab.title() : tab.title; }
     static KINDS = Object.freeze(["TabAdded", "TabRemoved", "TabMoved", "TabActivated", "TabAttached", "AddRequested", "DetachRequested"]);
 
     /** A tab was added at the end of its block via addTab. */

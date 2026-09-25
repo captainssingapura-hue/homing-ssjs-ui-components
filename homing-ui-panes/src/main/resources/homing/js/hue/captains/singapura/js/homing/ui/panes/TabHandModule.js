@@ -8,6 +8,7 @@
 //
 //   new TabHand(strip)
 //     hand.arm(chip, closeBtn?)   the chip answers the hand from now on
+//     hand.disarm(chip)           and no longer: a tab-pane's chip, leaving for another strip
 //     hand.held()                 → the chip in the hand, or null
 //
 // The row is a rail. The chip goes where the hand goes along it, at the
@@ -33,12 +34,19 @@ class TabHand {
     constructor(strip) {
         this._strip = strip;
         this._held = null;
+        this._armed = new Map();   // chip → its press listener, so a chip that leaves can be disarmed
     }
     held() { return this._held; }
 
+    disarm(c) {
+        var press = this._armed.get(c);
+        if (press) { c.removeEventListener("pointerdown", press); this._armed.delete(c); }
+    }
+
     arm(c, closeBtn) {
         var self = this, strip = this._strip;
-        c.addEventListener("pointerdown", function (down) {
+        if (this._armed.has(c)) return;
+        var press = function (down) {
             if (down.button !== 0 || self._held) return;
             if (closeBtn && closeBtn.contains(down.target)) return;
             var startX = down.clientX, dragging = false;
@@ -98,7 +106,9 @@ class TabHand {
             c.addEventListener("pointercancel", onEnd);
             c.addEventListener("lostpointercapture", onEnd);
             if (win) { win.addEventListener("pointerup", onEnd); win.addEventListener("pointercancel", onEnd); win.addEventListener("blur", onEnd); }
-        });
+        };
+        this._armed.set(c, press);
+        c.addEventListener("pointerdown", press);
     }
 
     /** From where the hand left it onto its slot, eased as the design eases the chip: the last leg, drawn once the row is arranged. */

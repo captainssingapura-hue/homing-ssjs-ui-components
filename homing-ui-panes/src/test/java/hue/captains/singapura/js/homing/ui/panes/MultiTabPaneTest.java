@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -524,4 +525,142 @@ class MultiTabPaneTest extends JsModuleTestBase {
         eval("pane.dispose()");
         assertEquals("b:disposed a:disposed", log(), "a second dispose is nothing");
     }
+
+    /**
+     * THE HOST (RFC 0066 E3, appendix "tab-panes", the sequence's step 2). A
+     * tab-pane is held here and never owned: its own chip and pane placed as
+     * they are, nothing minted and nothing dissolved; taken under the law and
+     * the budget, in one host at a time; let go as it is, a neighbour shown;
+     * its chip, travelling, armed only by the strip it is in, at that strip's
+     * size; what its chip asks going to the pane it is in; a close reported
+     * where it was, and a move not at all, since moves are the desk's.
+     */
+    @Nested
+    class TheHost {
+
+        @BeforeEach
+        void aRegisterAndItsTabPanes() {
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabPaneModule.js");
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabRegisterModule.js");
+            eval("""
+                var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
+                var register = new TabRegister(branch.createBranch("tabs"));
+                var elsewhere = focusParty.root.createBranch("elsewhere", {});   // the focus branch a tab-pane's widget starts in
+                function open(id, extra) {
+                    return register.open(Object.assign({ id: id, title: id.toUpperCase(), focus: elsewhere,
+                                                         make: function (b, t) { b.activate("widget"); return widget(id, t.focus); } }, extra || {}));
+                }
+                var other = new MultiTabPane(branch.createBranch("mtp_s9"), { host: el("div"), slotId: "s9", budget: 4 });
+                function stripOf(p) { return p.el.children[0].children[0].children; }
+                """);
+        }
+
+        @Test
+        void aTabPaneIsTakenAsItIs_nothingMintedHere_itsMembershipAdopted_andShownIfNothingWas() {
+            eval("pane.size(0.5); var a = open('a'); var minted = []; var ce = paneBranch.createElement, cb = paneBranch.createBranch;"
+               + "paneBranch.createElement = function (n, t) { minted.push(n); return ce.call(this, n, t); };"
+               + "paneBranch.createBranch = function (n) { minted.push(n); return cb.call(this, n); }; log.length = 0;");
+            assertEquals(0, eval("pane.take(a)").asInt());
+            assertEquals("", eval("minted.join(',')").asString(), "nothing minted on the pane's branch");
+            assertTrue(eval("stripOf(pane).indexOf(a.chip) >= 0 && a.pane.parentNode === pane.el.children[1]").asBoolean(), "its own chip in the strip, its own pane in the content");
+            assertEquals("A", chips());
+            assertEquals("w-a+", panels(), "shown, since nothing was");
+            assertEquals("active:s1:a", log(), "an arrival is the desk's to report: the pane says only what it shows");
+            assertTrue(eval("a.host() === pane && a.widget.focus.in === pane.focus").asBoolean(), "its host set, its widget's membership adopted under the pane's branch");
+            assertEquals(0.5, eval("a.chip.size").asDouble(), "the strip's size on the chip");
+            eval("var b = open('b'); pane.take(b);");
+            assertEquals("w-a+,w-b-", panels(), "a second arrives hidden");
+            eval("var c = open('c'); other.take(c); pane.letGo(a); other.take(a);");
+            assertTrue(eval("a.pane.has('mtp_tab_content_hidden') && !c.pane.has('mtp_tab_content_hidden')").asBoolean(),
+                    "one that was shown where it was, arriving where another is shown, arrives hidden");
+        }
+
+        @Test
+        void takeHoldsTheLawAndTheBudget_andATabPaneIsInOneHostAtATime() {
+            eval("var a = open('a'); pane.take(a);");
+            assertFalse(eval("other.canTake(a)").asBoolean(), "held here");
+            var ex = assertThrows(PolyglotException.class, () -> eval("other.take(a)"));
+            assertTrue(ex.getMessage().contains("held by another host"), ex.getMessage());
+            eval("pane.addTab(tab('x')); var x = open('x');");
+            assertFalse(eval("pane.canTake(x)").asBoolean(), "an id already in the pane");
+            eval("pane.addTab(tab('y')); pane.addTab(tab('z')); var b = open('b');");
+            assertFalse(eval("pane.canTake(b)").asBoolean(), "the budget spent");
+            ex = assertThrows(PolyglotException.class, () -> eval("pane.take(b)"));
+            assertTrue(ex.getMessage().contains("budget"), ex.getMessage());
+            assertTrue(eval("other.canTake(b) && b.host() === null").asBoolean());
+        }
+
+        @Test
+        void letGoTakesItOutAsItIs_nothingDissolved_aNeighbourShown_andAMoveIsNotReported() {
+            eval("var a = open('a'), b = open('b'); pane.take(a); pane.take(b); log.length = 0;");
+            assertTrue(eval("pane.letGo(a) === a").asBoolean());
+            assertEquals("active:s1:b", log(), "a neighbour shown; the move itself is the desk's to report");
+            assertEquals("B", chips());
+            assertTrue(eval("a.host() === null && a.chip.parentNode === null && a.pane.parentNode === null").asBoolean(), "out, as it is");
+            assertTrue(eval("register.has('a') && a.chip.getAttribute('aria-selected') === 'false' && !a.chip.has('mtp_chip_lifted')").asBoolean(), "not dissolved, and its chip at rest");
+            assertTrue(eval("pane.letGo(a) === null").asBoolean(), "not here: nothing");
+        }
+
+        @Test
+        void aChipThatTravelsIsArmedOnlyByTheStripItIsIn_atThatStripsSize() {
+            eval("pane.size(0.5); var a = open('a'); var own = a.chip.listeners.pointerdown.length; pane.take(a);");
+            assertEquals(eval("own + 1").asInt(), eval("a.chip.listeners.pointerdown.length").asInt(), "armed for this strip's rail");
+            eval("pane.letGo(a); other.take(a);");
+            assertEquals(eval("own + 1").asInt(), eval("a.chip.listeners.pointerdown.length").asInt(), "disarmed by the strip it left, armed by the one it is in");
+            assertTrue(eval("a.chip.size == null && stripOf(other).indexOf(a.chip) >= 0").asBoolean(), "at that strip's size, which is none");
+            eval("var p = open('p', { pinned: true }); var pinnedOwn = p.chip.listeners.pointerdown.length; other.take(p);");
+            assertEquals(eval("pinnedOwn").asInt(), eval("p.chip.listeners.pointerdown.length").asInt(), "a pinned chip is not dragged");
+            assertEquals("p,a", eval("other.tabs().join(',')").asString(), "and sits first");
+        }
+
+        @Test
+        void whatItsChipAsksGoesToThePaneItIsIn() {
+            eval("var a = open('a'), b = open('b'); pane.take(a); pane.take(b); log.length = 0; b.chip.fire('pointerdown', { button: 0, target: b.chip });");
+            assertEquals("b", eval("pane.activeTab()").asString());
+            assertEquals("active:s1:b", log());
+            eval("""
+                var asked = [];
+                var steward = { open: function (kind, object, at, opts) { asked.push(kind + ":" + object.tab.id + (object.tab === c ? ":the-tab-pane" : "") + (object.pane === withMenus ? ":bound" : "")); return true; } };
+                var withMenus = new MultiTabPane(branch.createBranch("mtp_s7"), { host: el("div"), slotId: "s7", menus: steward });
+                var c = open('c'); withMenus.take(c);
+                var ev = { clientX: 3, clientY: 4, defaulted: false, preventDefault: function () { this.defaulted = true; }, stopPropagation: function () {} };
+                c.chip.fire("contextmenu", ev);
+                """);
+            assertEquals("tab:c:the-tab-pane:bound", eval("asked.join(' ')").asString(), "the pane's kind of menu, bound to the pane and the tab-pane itself");
+            assertTrue(eval("ev.defaulted").asBoolean());
+        }
+
+        @Test
+        void aTabPaneClosedWhileHeld_isReportedRemovedWhereItWas() {
+            eval("var a = open('a'), b = open('b'); pane.take(a); pane.take(b); log.length = 0; a.close();");
+            assertEquals("a:disposed removed:s1:a@0 active:s1:b", log(), "its widget disposed, then reported gone from here, as a closed tab always was");
+            assertFalse(eval("register.has('a')").asBoolean());
+            eval("log.length = 0; pane.removeTab('b');");
+            assertEquals("b:disposed removed:s1:b@0", log(), "removeTab on a tab-pane is its close");
+            assertEquals(0, eval("register.count()").asInt());
+        }
+
+        @Test
+        void detachTabRefusesATabPane_andDisposeRefusesWhileHoldingOne() {
+            eval("var a = open('a'); pane.take(a);");
+            var ex = assertThrows(PolyglotException.class, () -> eval("pane.detachTab('a')"));
+            assertTrue(ex.getMessage().contains("leaves by letGo"), ex.getMessage());
+            ex = assertThrows(PolyglotException.class, () -> eval("pane.dispose()"));
+            assertTrue(ex.getMessage().contains("still holds tab-panes"), ex.getMessage());
+            assertEquals("A", chips(), "nothing moved");
+            eval("pane.letGo(a); pane.dispose();");
+            assertTrue(eval("register.has('a') && a.host() === null").asBoolean(), "the tab-pane outlives the pane that held it");
+        }
+
+        @Test
+        void aHeldTabPanesNameIsItsOwn_andItMovesAlongTheRailLikeAnyTab() {
+            eval("pane.addTab(tab('x')); var a = open('a'); pane.take(a); log.length = 0; pane.retitle('a', 'Renamed');");
+            assertTrue(eval("a.title() === 'Renamed' && a.chip._label.textContent === 'Renamed'").asBoolean(), "the pane renames the tab-pane, which names itself");
+            assertEquals("Renamed", eval("pane.getState().tabs[1].title").asString(), "the state asks the tab-pane its name");
+            eval("pane.moveTab('a', 0);");
+            assertEquals("moved:s1:a@1->s1@0", log());
+            assertEquals("Renamed,X", chips());
+        }
+    }
 }
+

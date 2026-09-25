@@ -81,7 +81,24 @@
 //       and a design says what a pane wearing it looks like
 //   pane.menuByKey() .menuByGround(at) .requestDetach() .yieldKeys()   what the
 //       keys and a right-click do, by call; the menus themselves are PaneMenus'
-//   pane.dispose()               → every widget disposed in order, the branches dissolved
+//   pane.dispose()               → every widget disposed in order, the branches dissolved;
+//       refused while it holds a tab-pane, which is its desk's: let those go first
+//
+//   THE HOST (RFC 0066 E3, appendix "tab-panes"). A tab-pane is held, never
+//   owned: its chip and its pane are its own, minted once, and they are placed
+//   here as they are, never minted or dissolved here.
+//   pane.canTake(tp)             → whether take would: by the law, under the budget,
+//       the id not here, and the tab-pane in no other host
+//   pane.take(tp, index?)        → the index it took: its chip in the strip at this
+//       strip's size, armed for the rail, its pane hidden in the content, its
+//       widget's membership adopted under this pane's branch; shown if nothing was.
+//       Arrivals are the desk's to report; the pane says only TabActivated
+//   pane.letGo(tp)               → the tab-pane, or null when it is not here: its
+//       chip and pane out, nothing dissolved, a neighbour activated. When the
+//       tab-pane is closing, TabRemoved(slotId, tp, fromIndex); a move is the
+//       desk's to report
+//   pane.select(tp) .menu(tp, at, byKey)   what its chip asks, while it is here
+//   removeTab on a tab-pane closes it; detachTab refuses one, which leaves by letGo
 //
 // The pane is a dock. A tab leaves it by call — detachTab, for a holder that
 // floats it — the strip's own drag staying on its rail for now. A tab from
@@ -247,6 +264,7 @@ class MultiTabPane {
     }
     removeTab(id) {
         var i = this._require(id);
+        if (this._tabs[i].tabPane) return this._tabs[i].tabPane.close();
         var entry = PaneTabs.takeOut(this, i);
         MultiTabPane._disposeWidget(entry.widget);
         entry.branch.dissolve();
@@ -263,12 +281,37 @@ class MultiTabPane {
     }
     detachTab(id) {
         var i = this._require(id);
+        if (this._tabs[i].tabPane) throw new Error("[MultiTabPane] '" + id + "' is a tab-pane: it leaves by letGo, through its desk");
         var entry = PaneTabs.takeOut(this, i);
         entry.panel.removeChild(entry.widget.root);
         entry.branch.dissolve();
         this._activateNeighbour(i);
         return entry.tab;
     }
+    // ── The host's: tab-panes, held and never owned ──────────────────────
+    canTake(tp) {
+        try { this._validate(tp); } catch (e) { return false; }
+        return !!tp.chip && !tp.host();
+    }
+    take(tp, index) {
+        this._validate(tp);
+        var at = PaneTabs.take(this, tp, index == null ? null : index | 0, PaneMenus.forChip(this, tp.id, MultiTabPane.MENU));
+        if (this._activeId === null) this.switchTab(tp.id);
+        return at;
+    }
+    letGo(tp) {
+        var i = PaneTabs.letGo(this, tp);
+        if (i < 0) return null;
+        if (tp.closed()) this._fire(PaneEvents.TabRemoved(this.slotId, tp, i));
+        this._activateNeighbour(i);
+        return tp;
+    }
+    select(tp) { if (this.has(tp.id)) this.switchTab(tp.id); }
+    menu(tp, at, byKey) {
+        var i = this._find(tp.id);
+        return i >= 0 && this._tabs[i].menu ? this._tabs[i].menu(at, byKey) : false;
+    }
+
     /** A tab from outside, offered at a point: the index it would take on the strip, or −1 when the point is not on the strip. */
     dropAt(x, y) {
         var index = this._strip.at(x, y);
@@ -375,6 +418,9 @@ class MultiTabPane {
 
     dispose() {
         if (this._disposed) return;
+        for (var t = 0; t < this._tabs.length; t++) {
+            if (this._tabs[t].tabPane) throw new Error("[MultiTabPane] slot '" + this.slotId + "' still holds tab-panes, which are its desk's: let them go first");
+        }
         this._disposed = true;
         if (this._offKeys) { this._offKeys(); this._offKeys = null; }
         for (var i = 0; i < this._tabs.length; i++) MultiTabPane._disposeWidget(this._tabs[i].widget);

@@ -13,6 +13,10 @@
 //                                         after it; its panel in the content, the widget's
 //                                         membership under the pane; the strip follows
 //   PaneTabs.takeOut(pane, i)           → the entry: its chip and panel out; the strip follows
+//   PaneTabs.take(pane, tp, index, menu) → the index: a tab-pane's own chip and pane placed as they
+//                                         are, hidden until shown, its host set; nothing minted
+//   PaneTabs.letGo(pane, tp)            → the index it left, or −1 when it was not here; its
+//                                         host unset; nothing dissolved
 //   PaneTabs.chips(pane)                → the chips, in the pane's order
 //   PaneTabs.retitle(pane, id, title)   the tab's name, on the tab and on its chip
 //   PaneTabs.reicon(pane, id, icon?)    the tab's icon — the holder's element — on the tab
@@ -52,6 +56,23 @@ class PaneTabs {
         return index;
     }
 
+    static take(pane, tp, index, menu) {
+        if (tp.host()) throw new Error("[MultiTabPane] tab-pane '" + tp.id + "' is held by another host: it is let go there first");
+        tp.shown(false);
+        pane._strip.adopt(tp.chip, tp.pinned);
+        var at = PaneTabs.place(pane, { id: tp.id, tab: tp, tabPane: tp, pinned: tp.pinned, widget: tp.widget, chip: tp.chip, panel: tp.pane, branch: null, menu: menu }, index);
+        tp._hostedBy(pane);
+        return at;
+    }
+
+    static letGo(pane, tp) {
+        var i = pane._find(tp.id);
+        if (i < 0 || pane._tabs[i].tabPane !== tp) return -1;
+        PaneTabs.takeOut(pane, i);
+        tp._hostedBy(null);
+        return i;
+    }
+
     static takeOut(pane, i) {
         var entry = pane._tabs[i];
         pane._tabs.splice(i, 1);
@@ -70,12 +91,14 @@ class PaneTabs {
 
     static retitle(pane, id, title) {
         var entry = pane._tabs[pane._require(id)];
+        if (entry.tabPane) { entry.tabPane.title(title); return; }   // a tab-pane's name is its own
         entry.tab.title = title;
         pane._strip.retitle(entry.chip, title);
     }
 
     static reicon(pane, id, icon) {
         var entry = pane._tabs[pane._require(id)];
+        if (entry.tabPane) { entry.tabPane.icon(icon || null); return; }
         entry.tab.icon = icon || null;
         pane._strip.reicon(entry.chip, entry.tab.icon);
     }

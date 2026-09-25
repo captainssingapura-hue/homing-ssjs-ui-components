@@ -20,10 +20,14 @@
 //                                   minted by TabChip on the branch given — the tab's own,
 //                                   dissolved when the tab leaves — else the strip's; the
 //                                   strip gives it its size and aspect and arms it for the rail
+//     strip.adopt(chip, pinned)     a chip minted elsewhere taken in — a tab-pane's, which
+//                                   travels: this strip's size and aspect, armed for the rail
+//                                   unless pinned. strip.chip is TabChip.mint and then this
 //     strip.retitle(chip, title)    the chip's label, its tooltip and its cross's name, now
 //     strip.reicon(chip, icon?)     the chip's icon now: an element, or none
 //     strip.arrange(chips)          the chips in order, before the tail
-//     strip.remove(chip)
+//     strip.remove(chip)            out of the row, disarmed, and left as a chip at rest:
+//                                   unselected, down, unmarked, for whatever strip is next
 //     strip.select(chips, active)   aria-selected on the active one, and that one
 //         brought into view: a bar wider than its room scrolls, and a tab you
 //         cannot see is a tab you cannot tell you are on
@@ -151,10 +155,13 @@ class TabStrip {
 
     chip(tab, handlers, on) {
         // on a branch of the tab's own the suffix is only care; on the strip's, several chips share it
-        var c = TabChip.mint(on || this._branch, tab, handlers, "-" + tab.id.replace(/[^A-Za-z0-9_-]/g, "_"));
-        if (this._size != null) css.size(c, this._size);
-        if (this._aspect != null) css.aspect(c, this._aspect);
-        if (tab.pinned) this._pinned.add(c);
+        return this.adopt(TabChip.mint(on || this._branch, tab, handlers, "-" + tab.id.replace(/[^A-Za-z0-9_-]/g, "_")), !!tab.pinned);
+    }
+
+    adopt(c, pinned) {
+        css.size(c, this._size);       // this strip's, or none: a chip from another strip does not keep that one's
+        css.aspect(c, this._aspect);
+        if (pinned) this._pinned.add(c);
         else this._hand.arm(c, c._close);
         return c;
     }
@@ -202,6 +209,10 @@ class TabStrip {
         if (this._active === c) this._active = null;
         this._window.forget(c);
         this._pinned.delete(c);
+        this._hand.disarm(c);
+        c.setAttribute("aria-selected", "false");
+        css.toggleClass(c, mtp_chip_lifted, false);
+        if (c._mark) { css.toggleClass(c._mark, mtp_chip_mark_on, false); css.extent(c._mark, null); }
         if (c.parentNode === this._rail) this._rail.removeChild(c);
     }
     /**

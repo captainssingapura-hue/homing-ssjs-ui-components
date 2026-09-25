@@ -50,7 +50,10 @@ class TabStripTest extends JsModuleTestBase {
         function fakeBranch(name) { return { name: name, createElement: function (n, tag) { return el(tag); }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () {}, activate: function () {} }; }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
-                    toggleClass: function (e, c, f) { e.classList.toggle(c, f); } };
+                    toggleClass: function (e, c, f) { e.classList.toggle(c, f); },
+                    size: function (e, s) { if (s == null) e.style.removeProperty("--size"); else e.style.setProperty("--size", String(s)); },
+                    aspect: function (e, a) { if (a == null) e.style.removeProperty("--aspect"); else e.style.setProperty("--aspect", String(a)); },
+                    extent: function (e, t) { if (t == null) e.style.removeProperty("--extent"); else e.style.setProperty("--extent", String(t)); } };
         var getComputedStyle = function () { return { transitionDuration: "0.16s, 0.16s" }; };
         var mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_seated = "mtp_chip_seated",
             mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted",

@@ -180,7 +180,7 @@ class TabPaneTest extends JsModuleTestBase {
         assertTrue(eval("tp.chip.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "the host opened a menu: the browser's is suppressed");
         assertEquals("h:select:t h:menu:t", log());
         eval("log.length = 0; tp.chip._close.fire('click', {});");
-        assertEquals("h:letGo:t w1:disposed", log(), "the cross closes the tab-pane, its host told first");
+        assertEquals("w1:disposed h:letGo:t", log(), "the cross closes the tab-pane: the widget disposed, then its host told");
         assertFalse(eval("register.has('t')").asBoolean());
     }
 

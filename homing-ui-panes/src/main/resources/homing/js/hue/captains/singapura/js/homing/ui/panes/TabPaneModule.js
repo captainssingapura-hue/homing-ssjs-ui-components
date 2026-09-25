@@ -25,6 +25,8 @@
 //                     Read back with no argument.
 //   tp.shown(on)      the pane shown or hidden: its host says which one shows
 //   tp.host()         the host it is in, or null
+//   tp.closed()       true from the moment its close begins: the host letting it
+//                     go then knows it is a close, not a move
 //   tp.close()        the widget disposed and its membership left, its host
 //                     told to let it go, its register's entry gone, its branch
 //                     dissolved: the one dissolve in its life, as the register's
@@ -34,8 +36,8 @@
 // in, and _hostedBy(null) when it lets it go. What the chip is asked goes to
 // the host it is in: a press is host.select(tp); a right-click, the menu key
 // or Shift+F10 is host.menu(tp, at, byKey) → boolean, true when a menu
-// opened. The cross is the tab-pane's own and closes it, and a close tells
-// the host first, host.letGo(tp). With no host, a press and a menu do
+// opened. The cross is the tab-pane's own and closes it; a close disposes
+// the widget and then tells the host, host.letGo(tp), with closed() true. With no host, a press and a menu do
 // nothing. `css` is injected with the styles import.
 // =============================================================================
 
@@ -111,16 +113,17 @@ class TabPane {
 
     host() { return this._host; }
 
+    closed() { return this._closed; }
+
     /** The host's to call: when it takes the tab-pane in, and with null when it lets it go. */
     _hostedBy(host) { this._host = host || null; }
 
     close() {
         if (this._closed) return this;
         this._closed = true;
-        var host = this._host;
+        TabPane._dispose(this.widget);   // first, as a close always was: the host reports it gone with its widget already disposed
+        if (this._host) this._host.letGo(this);
         this._host = null;
-        if (host) host.letGo(this);
-        TabPane._dispose(this.widget);
         if (this._register) this._register._forget(this);
         this.branch.dissolve();
         return this;
