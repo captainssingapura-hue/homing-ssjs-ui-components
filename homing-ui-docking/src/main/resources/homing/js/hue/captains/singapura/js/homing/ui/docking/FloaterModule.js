@@ -7,7 +7,8 @@
 // the frame's grip sizes it. There is no head and no title over the strip:
 // the tabs are what it shows.
 //
-//   new Floater(desk, { x?, y?, w?, h?, budget?, addable?, focus?, menus?, keys?, onEvent?, onDragMove?, onDragEnd?, onGone? })
+//   new Floater(desk, { id?, x?, y?, w?, h?, budget?, addable?, focus?, menus?, keys?, onEvent?, onDragMove?, onDragEnd?, onGone? })
+//     id       its name on the desk, and its host's slot: the desk's own "pane-N" unless said
 //     desk     the floating layer it lies on. The frame is the desk's, opened
 //              with no head, never offered to a dock as one tab would be, and
 //              not closed by the desk's Escape, since closing a float closes
@@ -43,7 +44,7 @@ class Floater {
         this._closed = false;
         this._holding = false;
         this._onGone = typeof o.onGone === "function" ? o.onGone : null;
-        this.frame = desk.open({ head: false, closable: false, title: "", x: o.x, y: o.y, w: o.w, h: o.h,
+        this.frame = desk.open({ id: o.id, head: false, closable: false, title: "", x: o.x, y: o.y, w: o.w, h: o.h,
                                  offered: typeof o.onDragMove === "function", onDragMove: o.onDragMove, onDragEnd: o.onDragEnd });
         this.id = this.frame.id;
         var own = this.frame.branch.createBranch("floater");

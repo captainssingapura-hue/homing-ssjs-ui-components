@@ -3,7 +3,9 @@
 // caller makes a sub-branch for it and hands it in; it owns the desk, as a
 // layer over the docks' host, and a dock is a multi-tab pane given to it.
 //
-//   new Docking(branch, { host, onEvent?, minW?, minH?, keyboard?, keyboardId? })
+//   new Docking(branch, { host, onEvent?, minW?, minH?, keyboard?, keyboardId?, menus? })
+//     menus  the page's ContextMenuSteward, handed to every float it opens, so a chip afloat
+//               asks for its menu as a chip in a dock does
 //     keyboard  the page's KeyboardSteward, handed on to the desk, which joins as
 //               keyboardId (the desk's branch's name, unless said)
 //     host   a positioned box holding the docks; the desk lies over it, the
@@ -78,6 +80,8 @@ class Docking {
         this._docks = [];
         this._carried = new Map();    // tabId → the tab that left a dock, while it floats
         this._floaters = new Map();   // a float's host → the float, while it lasts
+        this._menus = opts.menus || null;
+        this._floats = 0;             // its floats are float-1, float-2 and on: never a name another float of this desk had
         this._target = null;
         this._index = -1;
         this.desk = new Desk(branch.createBranch("desk"), {
@@ -157,6 +161,8 @@ class Docking {
     float(opts) {
         var self = this, f = null;
         f = new Floater(this.desk, Object.assign({
+            id: "float-" + (++this._floats),
+            menus: this._menus,
             onEvent: function (ev) { self._fire(ev); },
             onDragMove: function (frame, x, y) { if (f.host.count() === 1) self._offer(x, y, f.host); else self._clear(); },
             onDragEnd: function (frame, x, y, ok) {

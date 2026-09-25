@@ -134,12 +134,10 @@ class AddTab {
     add() {
         var pane = this.picked();
         if (!pane || !this._source.canAdd(pane)) return -1;
-        var tab = this._source.mint(pane, this._pick.value);
-        var at = pane.addTab(tab);
-        this._source.show(pane, tab, this.mode());
+        var made = this._source.add(pane, this._pick.value, this.mode());
         this.refresh();
-        if (this._onAdded) this._onAdded(pane, tab, at);
-        return at;
+        if (this._onAdded && made.tab) this._onAdded(pane, made.tab, made.index);
+        return made.index;
     }
 
     /**

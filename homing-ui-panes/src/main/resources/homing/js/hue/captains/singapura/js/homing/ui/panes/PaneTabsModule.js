@@ -60,7 +60,8 @@ class PaneTabs {
         if (tp.host()) throw new Error("[MultiTabPane] tab-pane '" + tp.id + "' is held by another host: it is let go there first");
         tp.shown(false);
         pane._strip.adopt(tp.chip, tp.pinned);
-        var at = PaneTabs.place(pane, { id: tp.id, tab: tp, tabPane: tp, pinned: tp.pinned, widget: tp.widget, chip: tp.chip, panel: tp.pane, branch: null, menu: menu }, index);
+        var at = PaneTabs.place(pane, { id: tp.id, tab: tp, tabPane: tp, pinned: tp.pinned, get widget() { return tp.widget; },   // live: a replace is seen at once
+                                        chip: tp.chip, panel: tp.pane, branch: null, menu: menu }, index);
         tp._hostedBy(pane);
         return at;
     }

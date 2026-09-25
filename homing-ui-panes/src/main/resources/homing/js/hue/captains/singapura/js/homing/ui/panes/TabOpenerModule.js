@@ -92,6 +92,7 @@ class TabOpener {
      */
     open(kindId) {
         var pane = this._pane, source = this._source, mine = this._tabId;
+        if (source.registered()) return source.has(kindId) ? source.become(pane, mine, kindId) : -1;   // in place: nothing leaves, nothing can vanish
         if (!source.has(kindId)) return -1;
         var at = mine != null && pane.has(mine) ? pane.tabIndexOf(mine) : -1;
         if (at >= 0) pane.removeTab(mine);

@@ -214,6 +214,24 @@ class TabPaneTest extends JsModuleTestBase {
         assertEquals(0, eval("desk.members.length + dock2.members.length").asInt(), "closed: gone from both");
     }
 
+    /** "This tab becomes that": the widget swapped in place — the same chip and pane, the old widget gone, a new one on a branch of the same name. */
+    @Test
+    void replaceSwapsTheWidgetInPlace_theChipAndPaneTheSame() {
+        eval("var tp = register.open({ id: 't', title: 'Open', focus: dock, make: widget('w1') }); var chip = tp.chip, pane = tp.pane, old = tp.widget; log.length = 0;"
+           + "tp.replace(widget('w2'), 'Books');");
+        assertEquals("w1:disposed", log(), "the old widget disposed");
+        assertTrue(eval("tp.chip === chip && tp.pane === pane && tp.widget !== old").asBoolean(), "the same chip and pane, a new widget");
+        assertTrue(eval("pane.children.length === 1 && pane.children[0] === tp.widget.root && old.root.parentNode === null").asBoolean(), "the new root in the pane, the old one out");
+        assertEquals("Books", eval("chip._label.textContent").asString(), "renamed");
+        assertEquals("tabpane-u1", eval("handles.w2.branch.name").asString(), "on a branch of the same name, freed by the old one's dissolve");
+        assertEquals("w2", eval("dock.members.map(function (m) { return m.name; }).join(',')").asString(), "one member, the new one");
+        eval("var h = host('h'); h.focus = focusBranch('hostBranch'); tp._hostedBy(h); tp.replace(widget('w3'));");
+        assertTrue(eval("tp.widget.focus.in === h.focus").asBoolean(), "held: the new widget joins the host's branch, by the law");
+        eval("tp.close(); tp._hostedBy(null);");
+        var ex = assertThrows(PolyglotException.class, () -> eval("tp.replace(widget('w4'))"));
+        assertTrue(ex.getMessage().contains("closed"), ex.getMessage());
+    }
+
     @Test
     void aPinnedTab_orOneThatCannotBeClosed_hasNoCross() {
         eval("var p = register.open({ id: 'p', pinned: true, focus: dock, make: widget('w1') }); var k = register.open({ id: 'k', closable: false, focus: dock, make: widget('w2') });");

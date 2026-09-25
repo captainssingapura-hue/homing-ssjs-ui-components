@@ -28,6 +28,12 @@
 //   tp.icon(el?)      the holder's element before the label; null for none.
 //                     Read back with no argument.
 //   tp.shown(on)      the pane shown or hidden: its host says which one shows
+//   tp.replace(make, title?)   the widget swapped IN PLACE: the old one disposed and its
+//                     branch dissolved, a new one made by make(branch, tab) on a branch of
+//                     the same name, joining the focus branch of the host it is in (or
+//                     where it rests), its root in the same pane; the chip the same chip,
+//                     renamed when a title is given. "This tab becomes that", with
+//                     nothing leaving — what an opener does with what you pick
 //   tp.host()         the host it is in, or null
 //   tp.closed()       true from the moment its close begins: the host letting it
 //                     go then knows it is a close, not a move
@@ -74,20 +80,22 @@ class TabPane {
         this.pane = branch.createElement("pane", "div");
         css.addClass(this.pane, mtp_tab_content, mtp_tab_content_hidden);
         this.pane.setAttribute("role", "tabpanel");
-        this.widget = TabPane._build(this, s);
+        this._home = s.focus;        // where its widget first joined
+        this.widget = TabPane._build(this, s.make, s.focus);
         this.pane.appendChild(this.widget.root);
     }
 
     /** The widget, made on a sub-branch of the tab-pane's own, and held to the law before anything is shown. */
-    static _build(tp, s) {
+    static _build(tp, make, focus) {
         var tab = Object.freeze({
             id: tp.id,
             name: tp.branch.name,
-            focus: s.focus,
+            focus: focus,
             title: function (t) { if (arguments.length) tp.title(t); return tp._title; },
             icon: function (el) { if (arguments.length) tp.icon(el); return tp._icon; }
         });
-        var made = s.make(tp.branch.createBranch(tp.branch.name), tab);   // "made", not "widget": that name is an injected binding
+        tp._widgetBranch = tp.branch.createBranch(tp.branch.name);
+        var made = make(tp._widgetBranch, tab);   // "made", not "widget": that name is an injected binding
         if (!made || typeof made !== "object" || !made.root) {
             throw new Error("[TabPane] '" + tp.id + "': make returned no widget with a root");
         }
@@ -97,6 +105,19 @@ class TabPane {
                           + "it was handed (tab.focus), expose it as widget.focus, and answer activate()");
         }
         return made;
+    }
+
+    replace(make, title) {
+        if (this._closed) throw new Error("[TabPane] '" + this.id + "' is closed");
+        if (typeof make !== "function") throw new Error("[TabPane] replace wants make(branch, tab)");
+        var rest = this._register ? this._register.focus : null;
+        var focus = this._host ? this._host.focus : (rest || this._home);
+        TabPane._dispose(this.widget);
+        this._widgetBranch.dissolve();   // its elements out of the pane, and its name free for the next
+        this.widget = TabPane._build(this, make, focus);
+        this.pane.appendChild(this.widget.root);
+        if (title != null) this.title(title);
+        return this;
     }
 
     title(text) {

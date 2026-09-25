@@ -6,7 +6,7 @@
 // every way of asking for a tab — a control, the strip's own button, a menu,
 // a restore from a checkpoint — asks for it the same way.
 //
-//   new TabSource(branch, { kinds })
+//   new TabSource(branch, { kinds, register?, place? })
 //     branch: the source's own; every tab it mints gets a sub-branch of it, so
 //             the tabs outlive the pane they started in and travel as they must
 //     kinds:  [ { id, label, title?, listed?, make(branch, params) } ]
@@ -19,13 +19,23 @@
 //             listed:false keeps a kind out of kinds() while mint still knows
 //             it: the opener is asked for by the plus, not chosen from a list
 //             of things to open, and it must not offer itself.
+//     register: a desk's TabRegister (RFC 0066 E3, appendix "tab-panes"). Given,
+//             every tab the source makes is a TAB-PANE opened there — the
+//             register names its branch and owns it — and make is handed
+//             params.tab, the tab-pane's own handle, beside the rest; an id is
+//             the kind's, counted up, never one the desk holds
+//     place(tp, pane, index?) → the index: how a new tab-pane is put in a pane,
+//             when the desk should say it arrived — its move, which reports a
+//             TabAdded; pane.take unless said
 //
 //   source.kinds()              → [ { id, label, title } ], frozen: a dropdown's rows.
 //                               The listed ones only; mint takes any of them
 //   source.has(kindId)
 //   source.canAdd(pane)         → room in its budget, asked before anything is made. NOT
 //                               the pane's own canAdd(), which is about the strip's plus
-//   source.mint(pane, kindId)   → { id, title, widget }, for a caller that places it itself
+//   source.mint(pane, kindId)   → { id, title, widget }, for a caller that places it itself;
+//                               with a register, the TabPane, opened and not yet placed
+//   source.add(pane, kindId, how?) → { tab, index }: addTo, with the tab it made
 //   source.addTo(pane, kindId, how?)  → the index it landed at, or −1 when the pane
 //                               would not take it. HOW a tab arrives is the third thing
 //                               a caller must say, beside which pane and which kind:
@@ -41,7 +51,12 @@
 //   source.modes()              → [ { id, label, says } ]: the three, worded, for a control
 //                               that would let its user pick one
 //   source.release(tabId)       the tab is gone for good: its branch dissolves, which is
-//                               the only way its name comes free again
+//                               the only way its name comes free again. With a register,
+//                               nothing: a tab-pane's close is its own
+//   source.become(pane, tabId, kindId) → the index: with a register, the tab-pane under
+//                               that id becomes one of that kind IN PLACE — the same chip
+//                               and pane, a new widget, the kind's name — and is shown with
+//                               the keys: what an opener does with what you pick
 //   source.dispose()
 //
 // THE SOURCE DECIDES NOTHING ABOUT WHERE. Which pane is the caller's; a
@@ -83,6 +98,8 @@ class TabSource {
         this._by = {};
         this._made = {};      // per kind, how many have been minted: ids and titles count up and never come back
         this._disposed = false;
+        this._register = o.register || null;
+        this._place = typeof o.place === "function" ? o.place : function (tp, pane, index) { return pane.take(tp, index); };
         (o.kinds || []).forEach(this._declare, this);
         if (this._kinds.length === 0) throw new Error("[TabSource] a source with no kinds can make nothing");
     }
@@ -149,9 +166,8 @@ class TabSource {
         var kind = this._by[kindId];
         if (!kind) throw new Error("[TabSource] no kind '" + kindId + "'");
         if (!pane || !pane.focus) throw new Error("[TabSource] mint wants the pane the tab is going into: its focus branch is the widget's");
-        var n = ++this._made[kind.id];
-        var id = n === 1 ? kind.id : kind.id + "-" + n;
-        var title = n === 1 ? kind.title : kind.title + " " + n;
+        var next = this._next(kind), id = next.id, title = next.title;
+        if (this._register) return this._open(pane, kind, next);   // a tab-pane: the register names and owns it, and the law is its to hold
         var own = this.branch.createBranch("tab-" + id);
         var widget;
         try {
@@ -176,14 +192,7 @@ class TabSource {
      * caller that names one wrongly is told so rather than leaving a tab
      * behind in a state nobody asked for.
      */
-    addTo(pane, kindId, how) {
-        var mode = this._how(how);
-        if (!this.canAdd(pane)) return -1;
-        var tab = this.mint(pane, kindId);
-        var at = pane.addTab(tab);
-        this.show(pane, tab, mode);
-        return at;
-    }
+    addTo(pane, kindId, how) { return this.add(pane, kindId, how).index; }
 
     /**
      * The ending on its own, for a caller that placed the tab itself — the
@@ -207,9 +216,48 @@ class TabSource {
      * only thing that frees the name for the party; a tab that merely left one
      * dock for another is NOT released, because it is still that tab.
      */
-    release(tabId) { this._drop(tabId); return this; }
+    release(tabId) { if (!this._register) this._drop(tabId); return this; }
 
     _drop(tabId) { try { this.branch.dissolveBranch("tab-" + tabId); } catch (e) {} }
+
+    /** Whether the tabs it makes are tab-panes in a desk's register. */
+    registered() { return !!this._register; }
+
+    /** The next id and title of a kind: counted up, never back, and with a register never an id the desk holds. */
+    _next(kind) {
+        var n, id;
+        do { n = ++this._made[kind.id]; id = n === 1 ? kind.id : kind.id + "-" + n; } while (this._register && this._register.has(id));
+        return { id: id, title: n === 1 ? kind.title : kind.title + " " + n };
+    }
+
+    /** A tab-pane of that kind, opened in the register; its widget made by the kind's own make, handed the tab-pane's handle. */
+    _open(pane, kind, next) {
+        return this._register.open({ id: next.id, title: next.title,
+                                     make: function (b, t) { return kind.make(b, { focus: t.focus, id: t.id, title: next.title, pane: pane, tab: t }); } });
+    }
+
+    add(pane, kindId, how) {
+        var mode = this._how(how);
+        if (!this.canAdd(pane)) return { tab: null, index: -1 };
+        var tab = this.mint(pane, kindId), at;
+        if (!this._register) at = pane.addTab(tab);
+        else {
+            try { at = this._place(tab, pane); }
+            catch (e) { tab.close(); throw e; }   // refused where it was going: nothing left behind
+        }
+        this.show(pane, tab, mode);
+        return { tab: tab, index: at };
+    }
+
+    become(pane, tabId, kindId) {
+        var kind = this._by[kindId], tp = this._register ? this._register.get(tabId) : null;
+        if (!kind) throw new Error("[TabSource] no kind '" + kindId + "'");
+        if (!tp) throw new Error("[TabSource] become wants a register holding '" + tabId + "'");
+        var host = tp.host() || pane, next = this._next(kind);
+        tp.replace(function (b, t) { return kind.make(b, { focus: t.focus, id: t.id, title: next.title, pane: host, tab: t }); }, next.title);
+        if (host && host.has(tabId)) this.show(host, tp, "focus");
+        return host ? host.tabIndexOf(tabId) : -1;
+    }
 
     /** The source and every branch under it. The panes dispose their widgets first; this is what is left. */
     dispose() {

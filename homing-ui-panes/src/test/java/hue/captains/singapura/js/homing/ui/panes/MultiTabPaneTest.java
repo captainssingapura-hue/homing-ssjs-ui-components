@@ -694,6 +694,63 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertTrue(eval("other.tabs().join(',') === 'c' && stripOf(other).length === before && d.host() === null && d.widget.focus.in === elsewhere").asBoolean(), "nothing moved");
         }
 
+        /** A source with a register: every tab it makes is a tab-pane opened there and placed as the page says; the kinds' makers handed the handle. */
+        @Test
+        void aSourceWithARegister_makesTabPanes_placedAsThePageSays() {
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabSourceModule.js");
+            eval("""
+                var placed = [];
+                function kindMake(b, p) { b.activate("w"); var w = { root: el("w-" + p.id), activate: function () { log.push(p.id + ":activate"); }, dispose: function () { log.push(p.id + ":disposed"); } };
+                                          w.focus = p.focus.join(b.name, w); w.tabOf = p.tab; return w; }
+                var src = new TabSource(branch.createBranch("src"), { register: register, kinds: [ { id: "note", title: "Notes", make: kindMake }, { id: "books", title: "Books", make: kindMake } ],
+                                                                       place: function (tp, p, index) { placed.push(tp.id + ">" + p.slotId); return p.take(tp, index); } });
+                register.open({ id: "note-2", make: function (b, t) { b.activate("w"); var w = { root: el("x"), activate: function () {} }; w.focus = t.focus.join(b.name, w); return w; } });
+                log.length = 0;
+                """);
+            assertTrue(eval("src.registered()").asBoolean());
+            eval("var a = src.add(pane, 'note', 'quiet'), b = src.add(pane, 'note', 'focus');");
+            assertEquals("note,note-3", eval("a.tab.id + ',' + b.tab.id").asString(), "counted up, never an id the desk holds: note-2 was taken");
+            assertEquals("Notes|Notes 3", eval("a.tab.title() + '|' + b.tab.title()").asString());
+            assertTrue(eval("a.tab === register.get('note') && a.tab.host() === pane && a.tab.widget.tabOf.id === 'note'").asBoolean(), "a tab-pane in the register, held by the pane; the maker handed its handle");
+            assertEquals("note>s1,note-3>s1", eval("placed.join(',')").asString(), "placed the way the page said");
+            assertEquals("note-3", eval("pane.activeTab()").asString(), "the second in front, with the keys");
+            assertTrue(log().contains("note-3:activate"), log());
+            eval("src.release('note');");
+            assertTrue(eval("register.has('note')").asBoolean(), "release is nothing: a tab-pane's close is its own");
+        }
+
+        @Test
+        void aPlaceThatRefuses_leavesNothingBehind() {
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabSourceModule.js");
+            eval("""
+                function kindMake(b, p) { b.activate("w"); var w = { root: el("w"), activate: function () {}, dispose: function () { log.push("disposed"); } }; w.focus = p.focus.join(b.name, w); return w; }
+                var src = new TabSource(branch.createBranch("src"), { register: register, kinds: [ { id: "note", make: kindMake } ], place: function () { throw new Error("no room there"); } });
+                log.length = 0;
+                """);
+            var ex = assertThrows(PolyglotException.class, () -> eval("src.add(pane, 'note')"));
+            assertTrue(ex.getMessage().contains("no room there"), ex.getMessage());
+            assertEquals(0, eval("register.count()").asInt(), "the tab-pane it opened is closed again");
+            assertEquals("disposed", log());
+        }
+
+        /** An opener's tab becomes the kind picked IN PLACE: the same tab-pane, chip and pane; a new widget, the kind's name, shown with the keys. */
+        @Test
+        void becomeTurnsATabPaneIntoTheKindPicked_inPlace() {
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabSourceModule.js");
+            eval("""
+                function kindMake(b, p) { b.activate("w"); var w = { root: el("w-" + p.title), activate: function () { log.push(p.title + ":activate"); }, dispose: function () { log.push(p.title + ":disposed"); } };
+                                          w.focus = p.focus.join(b.name, w); return w; }
+                var src = new TabSource(branch.createBranch("src"), { register: register, kinds: [ { id: "opener", title: "Open", listed: false, make: kindMake }, { id: "books", title: "Books", make: kindMake } ] });
+                pane.addTab(tab("x"));
+                var op = src.add(pane, "opener", "quiet").tab, chip = op.chip, cell = op.pane; log.length = 0;
+                """);
+            assertEquals(1, eval("src.become(pane, op.id, 'books')").asInt(), "where it was");
+            assertTrue(eval("register.get('opener') === op && op.chip === chip && op.pane === cell && pane.tabs().join(',') === 'x,opener'").asBoolean(), "the same tab-pane, in the same place");
+            assertEquals("Books", eval("op.title()").asString());
+            assertEquals("Open:disposed Books:activate", log().replaceAll("active:s1:opener ", ""), "the opener gone, the books in front with the keys");
+            assertTrue(eval("pane.widgetOf('opener') === op.widget").asBoolean(), "the pane reads the new widget at once");
+        }
+
         @Test
         void aHeldTabPanesNameIsItsOwn_andItMovesAlongTheRailLikeAnyTab() {
             eval("pane.addTab(tab('x')); var a = open('a'); pane.take(a); log.length = 0; pane.retitle('a', 'Renamed');");
