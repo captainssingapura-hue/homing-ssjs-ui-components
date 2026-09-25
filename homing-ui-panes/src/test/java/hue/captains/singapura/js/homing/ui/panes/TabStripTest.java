@@ -80,6 +80,7 @@ class TabStripTest extends JsModuleTestBase {
         loadModule(P + "TabFitModule.js");
         loadModule(P + "TabWindowModule.js");
         loadModule(P + "TabHandModule.js");
+        loadModule(P + "TabChipModule.js");
         loadModule(P + "TabStripModule.js");
         js.eval("js", SHIM);
     }

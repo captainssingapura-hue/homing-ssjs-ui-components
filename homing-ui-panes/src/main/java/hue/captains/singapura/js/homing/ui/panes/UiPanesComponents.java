@@ -17,6 +17,7 @@ public record UiPanesComponents() implements C0_Components<UiPanesComponents> {
         return List.of(
                 ComponentEntry.of(this, new MultiTabPaneModule.MultiTabPane()),
                 ComponentEntry.of(this, new TabStripModule.TabStrip()),
+                ComponentEntry.of(this, new TabPaneModule.TabPane()),
                 ComponentEntry.of(this, new PaneThumbsModule.PaneThumbs()),
                 ComponentEntry.of(this, new AddTabModule.AddTab()),
                 ComponentEntry.of(this, new TabOpenerModule.TabOpener()));

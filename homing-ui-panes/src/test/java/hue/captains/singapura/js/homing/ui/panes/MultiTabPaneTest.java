@@ -134,6 +134,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule(FIT);
         loadModule(WINDOW);
         loadModule(HAND);
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabChipModule.js");
         loadModule(STRIP);
         loadModule(KEYS);
         loadModule(MENUS);

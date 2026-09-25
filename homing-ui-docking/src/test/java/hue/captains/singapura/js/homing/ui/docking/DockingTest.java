@@ -139,6 +139,7 @@ class DockingTest extends JsModuleTestBase {
         loadModule(P + "panes/TabFitModule.js");
         loadModule(P + "panes/TabWindowModule.js");
         loadModule(P + "panes/TabHandModule.js");
+        loadModule(P + "panes/TabChipModule.js");
         loadModule(P + "panes/TabStripModule.js");
         loadModule(P + "panes/PaneKeysModule.js");
         loadModule(P + "panes/PaneMenusModule.js");
