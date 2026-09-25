@@ -1,12 +1,14 @@
 package hue.captains.singapura.js.homing.ui.docking;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -14,7 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * floats under the same hand, widget and all, and the dock has lost it; a
  * floating pane dragged over a dock is offered — the dock lit, the mark
  * where the tab would land — and dropped there becomes its tab; released
- * elsewhere it stays afloat. Every step is data on one sink, in order.
+ * elsewhere it stays afloat. Every step is data on one sink, in order. A tab
+ * of any id floats, and a float is whole or not at all: refused, the tab is
+ * where it was. The fake party holds the real one's rule for a name.
  */
 class DockingTest extends JsModuleTestBase {
 
@@ -51,13 +55,16 @@ class DockingTest extends JsModuleTestBase {
                 prop: function (k) { return props[k]; } };
             return node;
         }
+        // the party's rule: a name of letters, digits, _ and -, free on its branch until dissolved
+        var VALID = /^[A-Za-z0-9_-]+$/;
         function fakeBranch(name) {
-            return { name: name,
-                createElement: function (n, tag) { return el(tag); },
-                createBranch: function (n) { return fakeBranch(n); },
-                dissolve: function () {},
+            return { name: name, kids: new Map(), names: new Set(),
+                createElement: function (n, tag) { if (!VALID.test(n) || this.names.has(n)) throw new RangeError('createElement: "' + n + '" is not a free, valid name'); this.names.add(n); return el(tag); },
+                createBranch: function (n) { if (!VALID.test(n) || this.kids.has(n)) throw new RangeError('createBranch: "' + n + '" is not a free, valid name'); var b = fakeBranch(n); b.parent = this; this.kids.set(n, b); return b; },
+                dissolve: function () { if (this.parent) this.parent.kids.delete(name); },
                 activate: function (owner) { this.owner = String(owner); } };
         }
+        var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); },
@@ -204,6 +211,40 @@ class DockingTest extends JsModuleTestBase {
         assertEquals("Three, renamed", eval("orig.title").asString(), "and the name it had afloat");
         assertTrue(eval("chipOf(B, 'Three, renamed')._icon.children[0] === orig.icon").asBoolean(), "its icon back on a chip");
         assertFalse(eval("docking._carried.has('t3')").asBoolean(), "nothing is held once it is docked");
+    }
+
+    /** The bug: a tab whose id the party would not take as a name was taken off its dock, and then refused by the desk. */
+    @Test
+    void aTabOfAnyIdFloats_andComesBack() {
+        eval("A.addTab({ id: 'picker:3', title: 'Picker', widget: widget('wp') }); log.length = 0;");
+        eval("docking.undockAt(A, { id: 'picker:3' }, { x: 100, y: 100 });");
+        assertEquals("opened:picker:3 raised:picker:3 undocked:picker:3<a", log());
+        assertEquals("t1,t2", eval("A.tabs().join(',')").asString());
+        eval("log.length = 0; docking.dock('picker:3', B);");
+        assertTrue(log().contains("docked:picker:3@b#0"), log());
+        assertEquals("picker:3", eval("B.tabs().join(',')").asString());
+    }
+
+    @Test
+    void aFloatTheDeskRefusesLeavesTheTabWhereItWas_activeAsItWas() {
+        eval("A.switchTab('t2'); var open = docking.desk.open; docking.desk.open = function () { throw new Error('refused'); }; log.length = 0;");
+        var ex = assertThrows(PolyglotException.class, () -> eval("docking.undockAt(A, { id: 't2' }, { x: 100, y: 100 })"));
+        assertTrue(ex.getMessage().contains("refused"), ex.getMessage());
+        eval("docking.desk.open = open;");
+        assertEquals("t1,t2", eval("A.tabs().join(',')").asString(), "back at its index");
+        assertEquals("t2", eval("A.activeTab()").asString(), "and the one shown, as it was");
+        assertTrue(eval("A.contentElOf('t2').children[0] === A.widgetOf('t2').root").asBoolean(), "its widget in its panel");
+        assertFalse(eval("docking._carried.has('t2')").asBoolean(), "nothing carried");
+        assertFalse(log().contains("undocked"), "nothing said undocked: " + log());
+    }
+
+    @Test
+    void aTabAlreadyAfloatUnderTheIdIsRefused_beforeAnythingMoves() {
+        eval("docking.undockAt(A, { id: 't1' }, { x: 100, y: 100 }); B.addTab({ id: 't1', title: 'Other one', widget: widget('wx', B.focus) }); log.length = 0;");
+        var ex = assertThrows(PolyglotException.class, () -> eval("docking.undockAt(B, { id: 't1' }, { x: 100, y: 100 })"));
+        assertTrue(ex.getMessage().contains("already afloat"), ex.getMessage());
+        assertEquals("t1", eval("B.tabs().join(',')").asString());
+        assertEquals("", log(), "not a thing moved, not a thing said");
     }
 
     @Test

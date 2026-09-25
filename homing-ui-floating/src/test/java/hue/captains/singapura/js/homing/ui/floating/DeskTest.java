@@ -15,7 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The desk over a fake DOM: panes open on a cascade and on top, raise on a
  * press or on focus, close on the cross, on Escape and by the method, hold
  * a widget by the base's contract, and report every mutation as data —
- * once, when it happened, never per pixel.
+ * once, when it happened, never per pixel. A pane's branch is the desk's,
+ * named fresh at every opening; its id, the holder's, may be any string. The
+ * fake party holds the real one's rule for a name.
  */
 class DeskTest extends JsModuleTestBase {
 
@@ -47,13 +49,16 @@ class DeskTest extends JsModuleTestBase {
                 prop: function (k) { return props[k]; } };
             return node;
         }
+        // the party's rule: a name of letters, digits, _ and -, free on its branch until dissolved
+        var VALID = /^[A-Za-z0-9_-]+$/;
         function fakeBranch(name) {
-            return { name: name, dissolved: [],
-                createElement: function (n, tag) { return el(tag); },
-                createBranch: function (n) { var b = fakeBranch(n); b.parent = this; return b; },
-                dissolve: function () { this.dissolved.push(name); log.push("dissolved:" + name); },
+            return { name: name, dissolved: [], kids: new Map(), names: new Set(),
+                createElement: function (n, tag) { if (!VALID.test(n) || this.names.has(n)) throw new RangeError('createElement: "' + n + '" is not a free, valid name'); this.names.add(n); return el(tag); },
+                createBranch: function (n) { if (!VALID.test(n) || this.kids.has(n)) throw new RangeError('createBranch: "' + n + '" is not a free, valid name'); var b = fakeBranch(n); b.parent = this; this.kids.set(n, b); return b; },
+                dissolve: function () { this.dissolved.push(name); log.push("dissolved:" + name); if (this.parent) this.parent.kids.delete(name); },
                 activate: function (owner) { this.owner = String(owner); } };
         }
+        var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };   // in order, so a test can name them
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); },
@@ -133,7 +138,7 @@ class DeskTest extends JsModuleTestBase {
         assertEquals("opened:a@24,24:320x220 wa:on raised:a opened:b@52,52:320x220 wa:off wb:on raised:b", log());
         assertEquals("w-wa", eval("desk.pane('a').body.children[0].tag").asString());
         eval("log.length = 0; desk.close('b');");
-        assertEquals("wb:off wb:disposed dissolved:b closed:b wa:on raised:a", log());
+        assertEquals("wb:off wb:disposed dissolved:float-u2 closed:b wa:on raised:a", log());
         assertEquals("A*@z1", eval("frames()").asString());
         assertFalse(eval("desk.has('b')").asBoolean());
     }
@@ -149,7 +154,7 @@ class DeskTest extends JsModuleTestBase {
         assertTrue(eval("members.desk.keyDown({ key: 'ArrowUp' })").asBoolean(), "the active pane's widget took it");
         assertFalse(eval("members.desk.keyDown({ key: 'Enter' })").asBoolean(), "left by the widget, not the desk's");
         assertTrue(eval("members.desk.keyDown({ key: 'Escape' })").asBoolean(), "left by the widget: the desk closes the pane");
-        assertEquals("w:ArrowUp w:Enter w:Escape dissolved:k closed:k raised:n", log());
+        assertEquals("w:ArrowUp w:Enter w:Escape dissolved:float-u1 closed:k raised:n", log());
         eval("kbLog = []; desk.dispose()");
         assertEquals("leave:desk", eval("kbLog.join(' ')").asString());
     }
@@ -160,13 +165,13 @@ class DeskTest extends JsModuleTestBase {
         assertEquals("join:desk", eval("kbLog.join(' ')").asString(), "the desk joined the party as its branch's name; the convention on its floor");
         assertEquals("0", eval("String((desk.pane('b').root.listeners.keydown || []).length)").asString(), "no keydown listener on a pane: the keys come through the party");
         assertTrue(eval("members.desk.keyDown({ key: 'Escape' })").asBoolean(), "Escape, from the steward: the active pane closes");
-        assertEquals("dissolved:b closed:b raised:a", log());
+        assertEquals("dissolved:float-u2 closed:b raised:a", log());
         eval("log.length = 0;");
         assertFalse(eval("members.desk.keyDown({ key: 'Escape' })").asBoolean(), "a pane that cannot be closed leaves Escape");
         assertEquals("", log(), "a pane that cannot be closed ignores Escape");
         assertEquals(2, eval("headOf('a').children.length").asInt(), "the icon's slot and the title: no cross on a pane that cannot be closed");
         eval("desk.open({ id: 'c', title: 'C' }); log.length = 0; headOf('c').children.slice(-1)[0].fire('click', {});   // the cross, last in the head");
-        assertEquals("dissolved:c closed:c raised:a", log());
+        assertEquals("dissolved:float-u3 closed:c raised:a", log());
     }
 
     @Test
@@ -206,13 +211,32 @@ class DeskTest extends JsModuleTestBase {
         assertEquals("moved:a@-752,0", log(), "a move that changes nothing is not reported; a move off the desk is clamped");
     }
 
+    /** The bug: the pane's branch was named with the id, so an id the party will not take as a name could not float. */
+    @Test
+    void aPanesBranchIsTheDesks_freshAtEveryOpening_andItsIdMayBeAnyString() {
+        eval("desk.open({ id: 'picker:3', title: 'P' }); desk.open({ id: 'a b/c.d', title: 'Q' });");
+        assertEquals("picker:3,a b/c.d", eval("desk.panes().join(',')").asString());
+        assertEquals("float-u1,float-u2", eval("Array.from(desk.branch.kids.keys()).join(',')").asString());
+        eval("desk.close('picker:3'); desk.open({ id: 'picker:3', title: 'P' }); desk.release('a b/c.d'); desk.open({ id: 'a b/c.d', title: 'Q' });");
+        assertEquals("float-u3,float-u4", eval("Array.from(desk.branch.kids.keys()).join(',')").asString(), "the same ids again, each opening under a new name");
+        assertEquals("picker:3,a b/c.d", eval("desk.panes().join(',')").asString());
+    }
+
+    /** Where randomUUID is missing — a page served over plain http, not localhost — the uuid is made from getRandomValues. */
+    @Test
+    void outsideASecureContextTheUuidIsMadeFromRandomValues() {
+        String u = eval("var kept = crypto; crypto = { getRandomValues: function (a) { for (var i = 0; i < a.length; i++) a[i] = (i * 37 + 11) & 255; return a; } };"
+                + "var u = Desk._uuid(); crypto = kept; u").asString();
+        assertTrue(u.matches("[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}"), u);
+    }
+
     @Test
     void theDeskRefusesADuplicate_andDisposeClosesEverything() {
         eval("desk.open({ id: 'a', title: 'A', widget: widget('wa') }); desk.open({ id: 'b', title: 'B' });");
         var ex = assertThrows(PolyglotException.class, () -> eval("desk.open({ id: 'a', title: 'again' })"));
         assertTrue(ex.getMessage().contains("already open"), ex.getMessage());
         eval("log.length = 0; desk.dispose();");
-        assertEquals("wa:disposed dissolved:a closed:a dissolved:b closed:b dissolved:desk", log());
+        assertEquals("wa:disposed dissolved:float-u1 closed:a dissolved:float-u2 closed:b dissolved:desk", log());
         assertEquals(0, eval("host.children.length").asInt());
     }
 }

@@ -25,7 +25,13 @@
 //                                by call, with no hand — a menu's pick: the tab
 //                                leaves the dock, NOT disposed, and floats with
 //                                its head at the point, within the desk; nothing
-//                                is grabbed. Undocked(tabId, slotId), after Opened
+//                                is grabbed. Undocked(tabId, slotId), after Opened.
+//                                Either way the float is whole or not at all: a
+//                                tab already afloat under the id is refused before
+//                                anything moves, and a tab the desk refuses anyway
+//                                goes back to its place on the dock — TabAttached
+//                                there, active again if it was — and the error is
+//                                thrown on. Nothing is carried, nothing said.
 //   docking.dock(paneId, dock, index?)
 //                                the floating tab leaves the desk (Released) and
 //                                is attached to the dock (TabAttached), then
@@ -72,32 +78,43 @@ class Docking {
 
     /** A chip pulled off a dock's strip: the tab floats under the same hand. */
     undock(dock, tab, e, grab) {
-        var t = dock.detachTab(tab.id);
-        this._carried.set(t.id, t);
         var r = Docking._rect(this.desk.root);
         var gx = grab && grab.x >= 0 ? grab.x : _GRIP_X, gy = grab && grab.y >= 0 ? grab.y : _GRIP_Y;
-        var pane = this.desk.open({
-            id: t.id, title: t.title == null ? t.id : t.title, icon: t.icon || null, widget: t.widget, closable: t.closable !== false,
-            x: e.clientX - r.left - gx, y: e.clientY - r.top - gy, w: _FLOAT_W, h: _FLOAT_H
-        });
-        this._fire(DockEvents.Undocked(t.id, dock.slotId));
+        var pane = this._float(dock, tab, e.clientX - r.left - gx, e.clientY - r.top - gy);
         pane.grab(e.pointerId, e.clientX, e.clientY);
         return pane;
     }
 
     /** A tab detached by call with no hand — a menu's pick — floating with its head at the point, kept within the desk. */
     undockAt(dock, tab, at) {
-        var t = dock.detachTab(tab.id);
-        this._carried.set(t.id, t);
         var r = Docking._rect(this.desk.root);
         var x = Math.max(0, (at && at.x != null ? at.x : r.left) - r.left - _GRIP_X);
         var y = Math.max(0, (at && at.y != null ? at.y : r.top) - r.top - _GRIP_Y);
         if (r.width) x = Math.min(x, Math.max(0, r.width - _FLOAT_W));
         if (r.height) y = Math.min(y, Math.max(0, r.height - _FLOAT_H));
-        var pane = this.desk.open({
-            id: t.id, title: t.title == null ? t.id : t.title, icon: t.icon || null, widget: t.widget, closable: t.closable !== false,
-            x: x, y: y, w: _FLOAT_W, h: _FLOAT_H
-        });
+        return this._float(dock, tab, x, y);
+    }
+
+    /**
+     * The tab off its dock and onto the desk, or left where it was. The widget's
+     * root can only go to the pane by leaving the dock, so the tab is detached
+     * first; a desk that refuses it then has it put back, at its index.
+     */
+    _float(dock, tab, x, y) {
+        if (this.desk.has(tab.id)) throw new Error("[Docking] a tab is already afloat as '" + tab.id + "'");
+        var index = dock.tabIndexOf(tab.id), wasActive = dock.activeTab() === tab.id;
+        var t = dock.detachTab(tab.id), pane;
+        try {
+            pane = this.desk.open({
+                id: t.id, title: t.title == null ? t.id : t.title, icon: t.icon || null, widget: t.widget, closable: t.closable !== false,
+                x: x, y: y, w: _FLOAT_W, h: _FLOAT_H
+            });
+        } catch (err) {
+            dock.attachTab(t, index);
+            if (wasActive) dock.switchTab(t.id);
+            throw err;
+        }
+        this._carried.set(t.id, t);
         this._fire(DockEvents.Undocked(t.id, dock.slotId));
         return pane;
     }

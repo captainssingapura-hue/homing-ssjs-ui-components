@@ -17,7 +17,10 @@
 //            steward of their own. No keydown listener of its own.
 //
 //   desk.open({ id?, title, icon?, x?, y?, w?, h?, closable?, widget?, params? })  → the pane
-//       id defaults to "pane-N"; x, y cascade when not given. `widget` is a
+//       id defaults to "pane-N"; x, y cascade when not given. The id is the
+//       holder's name for the pane — a tab's own id, any string; the pane's
+//       branch is the desk's, "float-" and a fresh uuid at every opening, and
+//       is never made from the id. `widget` is a
 //       class by the base's contract — new widget(branch, params) → root,
 //       setActive?, dispose? — or an instance already made, a tab's, whose
 //       branch is its holder's; its root goes in the pane's body. Reports
@@ -92,7 +95,7 @@ class Desk {
         var id = s.id == null ? "pane-" + (++this._n) : String(s.id);
         if (this._panes.has(id)) throw new Error("[Desk] a pane is already open as '" + id + "'");
         var k = this._order.length % 8;
-        var paneBranch = this.branch.createBranch(id);
+        var paneBranch = this.branch.createBranch(Desk._freshName());
         var pane = new FloatingPane(paneBranch, {
             id: id, title: s.title == null ? id : s.title, icon: s.icon || null,
             x: s.x == null ? 24 + _CASCADE * k : s.x, y: s.y == null ? 24 + _CASCADE * k : s.y,
@@ -161,6 +164,23 @@ class Desk {
         this._fire(FloatEvents.Released(id));
         if (this._active === null && this._order.length) this._activate(this._order[this._order.length - 1], true);
         return tab;
+    }
+
+    /**
+     * A pane's branch's name: the desk's own, fresh at every opening, so no
+     * holder's id — a tab's, which may be any string — is ever asked to be a
+     * name on the DOM party, and no name is ever used twice.
+     */
+    static _freshName() { return "float-" + Desk._uuid(); }
+
+    /** RFC 4122 v4: crypto.randomUUID where the page is a secure context, else the same from getRandomValues. */
+    static _uuid() {
+        if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+        var b = crypto.getRandomValues(new Uint8Array(16)), h = "";
+        b[6] = (b[6] & 0x0f) | 0x40;
+        b[8] = (b[8] & 0x3f) | 0x80;
+        for (var i = 0; i < 16; i++) h += (b[i] + 0x100).toString(16).slice(1);
+        return h.slice(0, 8) + "-" + h.slice(8, 12) + "-" + h.slice(12, 16) + "-" + h.slice(16, 20) + "-" + h.slice(20);
     }
 
     pane(id) { var e = this._panes.get(id); return e ? e.pane : null; }
