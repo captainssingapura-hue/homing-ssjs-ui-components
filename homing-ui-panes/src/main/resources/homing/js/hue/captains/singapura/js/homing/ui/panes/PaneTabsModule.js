@@ -16,7 +16,12 @@
 //   PaneTabs.take(pane, tp, index, menu) → the index: a tab-pane's own chip and pane placed as they
 //                                         are, hidden until shown, its host set; nothing minted
 //   PaneTabs.letGo(pane, tp)            → the index it left, or −1 when it was not here; its
-//                                         host unset; nothing dissolved
+//                                         host unset; nothing dissolved; a close reported
+//                                         (TabRemoved), a neighbour shown, an emptied pane told
+//   PaneTabs.admits(pane, tp)           → whether the pane would take it, were it let go where
+//                                         it is: the law, the budget, the id, the member's name
+//   PaneTabs.menu(pane, tp, at, byKey)  → its chip's menu, while it is here; true when one opened
+//   PaneTabs.holdsAny(pane)             → whether the pane holds a tab-pane
 //   PaneTabs.chips(pane)                → the chips, in the pane's order
 //   PaneTabs.retitle(pane, id, title)   the tab's name, on the tab and on its chip
 //   PaneTabs.reicon(pane, id, icon?)    the tab's icon — the holder's element — on the tab
@@ -57,6 +62,7 @@ class PaneTabs {
     }
 
     static take(pane, tp, index, menu) {
+        pane._validate(tp);
         if (tp.host()) throw new Error("[MultiTabPane] tab-pane '" + tp.id + "' is held by another host: it is let go there first");
         tp.shown(false);
         pane._strip.adopt(tp.chip, tp.pinned);
@@ -71,7 +77,25 @@ class PaneTabs {
         if (i < 0 || pane._tabs[i].tabPane !== tp) return -1;
         PaneTabs.takeOut(pane, i);
         tp._hostedBy(null);
+        if (tp.closed()) pane._fire(PaneEvents.TabRemoved(pane.slotId, tp, i));   // a close is said where it was; a move is the desk's
+        pane._activateNeighbour(i);
+        pane._left();
         return i;
+    }
+
+    static admits(pane, tp) {
+        try { pane._validate(tp); } catch (e) { return false; }
+        return !!tp.chip && tp.host() !== pane;
+    }
+
+    static menu(pane, tp, at, byKey) {
+        var i = pane._find(tp.id);
+        return i >= 0 && pane._tabs[i].menu ? pane._tabs[i].menu(at, byKey) : false;
+    }
+
+    static holdsAny(pane) {
+        for (var i = 0; i < pane._tabs.length; i++) if (pane._tabs[i].tabPane) return true;
+        return false;
     }
 
     static takeOut(pane, i) {

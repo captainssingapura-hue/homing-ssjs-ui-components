@@ -33,6 +33,7 @@ public record PaneTabsModule() implements DomModule<PaneTabsModule> {
                         new PaneStyles.mtp_tab_content(),
                         new PaneStyles.mtp_tab_content_hidden()
                 ), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneEventsModule.PaneEvents()), PaneEventsModule.INSTANCE))
                 .build();
     }
 

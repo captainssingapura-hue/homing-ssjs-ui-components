@@ -98,10 +98,12 @@
 //   pane.admits(tp)              → whether it would, were the tab-pane let go where it
 //       is: what a mover asks before anything leaves
 //   pane.tabPaneOf(id)           → the tab-pane held under that id, or null
-//   pane.take(tp, index?)        → the index it took: its chip in the strip at this
+//   pane.take(tp, index?, later?) → the index it took: its chip in the strip at this
 //       strip's size, armed for the rail, its pane hidden in the content, its
-//       widget's membership adopted under this pane's branch; shown if nothing was.
-//       Arrivals are the desk's to report; the pane says only TabActivated
+//       widget's membership adopted under this pane's branch; shown if nothing was —
+//       or, later, when settle(id) is called: a desk says the arrival first, then
+//       the pane shows it. Arrivals are the desk's to report; the pane says TabActivated
+//   pane.settle(id)              shown, if nothing is
 //   pane.letGo(tp)               → the tab-pane, or null when it is not here: its
 //       chip and pane out, nothing dissolved, a neighbour activated. When the
 //       tab-pane is closing, TabRemoved(slotId, tp, fromIndex); a move is the
@@ -303,34 +305,14 @@ class MultiTabPane {
     }
     /** A tab has left: the holder told when it was the last. */
     _left() { if (this._tabs.length === 0 && this._onEmpty) this._onEmpty(this); }
-    // ── The host's: tab-panes, held and never owned ──────────────────────
-    canTake(tp) {
-        try { this._validate(tp); } catch (e) { return false; }
-        return !!tp.chip && !tp.host();
-    }
-    admits(tp) {
-        try { this._validate(tp); } catch (e) { return false; }
-        return !!tp.chip && tp.host() !== this;
-    }
-    take(tp, index) {
-        this._validate(tp);
-        var at = PaneTabs.take(this, tp, index == null ? null : index | 0, PaneMenus.forChip(this, tp.id, MultiTabPane.MENU));
-        if (this._activeId === null) this.switchTab(tp.id);
-        return at;
-    }
-    letGo(tp) {
-        var i = PaneTabs.letGo(this, tp);
-        if (i < 0) return null;
-        if (tp.closed()) this._fire(PaneEvents.TabRemoved(this.slotId, tp, i));
-        this._activateNeighbour(i);
-        this._left();
-        return tp;
-    }
+    // ── The host's: tab-panes, held and never owned — PaneTabs does the work ──
+    canTake(tp) { return PaneTabs.admits(this, tp) && !tp.host(); }
+    admits(tp) { return PaneTabs.admits(this, tp); }
+    take(tp, index, later) { var at = PaneTabs.take(this, tp, index == null ? null : index | 0, PaneMenus.forChip(this, tp.id, MultiTabPane.MENU)); if (!later) this.settle(tp.id); return at; }
+    settle(id) { if (this._activeId === null && this.has(id)) this.switchTab(id); }
+    letGo(tp) { return PaneTabs.letGo(this, tp) < 0 ? null : tp; }
     select(tp) { if (this.has(tp.id)) this.switchTab(tp.id); }
-    menu(tp, at, byKey) {
-        var i = this._find(tp.id);
-        return i >= 0 && this._tabs[i].menu ? this._tabs[i].menu(at, byKey) : false;
-    }
+    menu(tp, at, byKey) { return PaneTabs.menu(this, tp, at, byKey); }
 
     /** A tab from outside, offered at a point: the index it would take on the strip, or −1 when the point is not on the strip. */
     dropAt(x, y) {
@@ -441,9 +423,7 @@ class MultiTabPane {
 
     dispose() {
         if (this._disposed) return;
-        for (var t = 0; t < this._tabs.length; t++) {
-            if (this._tabs[t].tabPane) throw new Error("[MultiTabPane] slot '" + this.slotId + "' still holds tab-panes, which are its desk's: let them go first");
-        }
+        if (PaneTabs.holdsAny(this)) throw new Error("[MultiTabPane] slot '" + this.slotId + "' still holds tab-panes, which are its desk's: let them go first");
         this._disposed = true;
         if (this._offKeys) { this._offKeys(); this._offKeys = null; }
         for (var i = 0; i < this._tabs.length; i++) MultiTabPane._disposeWidget(this._tabs[i].widget);

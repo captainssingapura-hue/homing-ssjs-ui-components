@@ -104,8 +104,9 @@ class Desk {
         var self = this, src = from ? from.tabIndexOf(tp.id) : -1, srcSlot = from ? from.slotId : null;
         function go() {
             if (from) from.letGo(tp);
-            var at = to.take(tp, index == null ? null : index);
+            var at = to.take(tp, index == null ? null : index, true);   // placed, not yet shown: the arrival is said first
             self._fire(srcSlot === null ? PaneEvents.TabAdded(to.slotId, tp, at) : PaneEvents.TabMoved(srcSlot, tp, src, to.slotId, at));
+            to.settle(tp.id);
             return at;
         }
         var fl = from ? this._floaters.get(from) : null;   // a float it leaves empty goes AFTER the move is said

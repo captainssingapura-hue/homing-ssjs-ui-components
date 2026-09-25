@@ -323,6 +323,7 @@ class DockingTest extends JsModuleTestBase {
             assertEquals("tab-1", eval("a.id").asString(), "named by the desk's register");
             assertTrue(eval("B.has('tab-1') && a.host() === B && a.widget.focus.in === B.focus && desk.register.get('tab-1') === a").asBoolean());
             assertTrue(log().contains("added:b:tab-1"), log());
+            assertTrue(log().indexOf("added:b:tab-1") < log().indexOf("active:b:tab-1"), "the arrival said first, then the pane shows it: " + log());
             eval("var b = desk.open({ title: 'B', make: mk('wb') }, B, null, 'front'); var c = desk.open({ title: 'C', make: mk('wc') }, B, null, 'focus');");
             assertEquals("tab-3", eval("B.activeTab()").asString(), "in front");
             assertTrue(log().contains("wc:activate"), "and with the keys: " + log());
