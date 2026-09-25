@@ -149,6 +149,9 @@ class DockingTest extends JsModuleTestBase {
         loadModule(P + "panes/MultiTabPaneModule.js");
         loadModule(P + "docking/DockEventsModule.js");
         loadModule(P + "docking/FloaterModule.js");
+        loadModule(P + "panes/TabPaneModule.js");
+        loadModule(P + "panes/TabRegisterModule.js");
+        loadModule(P + "docking/DeskModule.js");
         loadModule(P + "docking/DockingModule.js");
         js.eval("js", SHIM);
     }
@@ -292,6 +295,94 @@ class DockingTest extends JsModuleTestBase {
     }
 
     /**
+     * THE DESK, the whole (RFC 0066 E3, appendix "tab-panes", §3): a register of
+     * its own and a focus branch of its own where widgets rest; tab-panes opened
+     * into a host and said to have arrived, shown as asked; the float layer made
+     * only when a float is wanted, so a lone pane is a desk with one host;
+     * detach, and a float of one dragged onto a dock; an open the host refuses
+     * leaves nothing; dispose closes every tab-pane and folds the floats.
+     */
+    @Nested
+    class TheDesk {
+
+        @BeforeEach
+        void aDeskOverTheDocks() {
+            eval("""
+                var desk = new Desk(page.createBranch("thedesk"), { host: host, onEvent: sink });
+                desk.addDock(A); desk.addDock(B);
+                var made = 0;
+                function mk(key) { return function (b, t) { b.activate("w"); return widget(key, t.focus); }; }
+                function press(target, x, y, on) { (on || target).fire("pointerdown", { button: 0, pointerId: 6, clientX: x, clientY: y, target: target }); }
+                log.length = 0;
+                """);
+        }
+
+        @Test
+        void aTabPaneOpenedIntoAHost_isSaidToHaveArrived_andShownAsAsked() {
+            eval("var a = desk.open({ title: 'A', make: mk('wa') }, B);");
+            assertEquals("tab-1", eval("a.id").asString(), "named by the desk's register");
+            assertTrue(eval("B.has('tab-1') && a.host() === B && a.widget.focus.in === B.focus && desk.register.get('tab-1') === a").asBoolean());
+            assertTrue(log().contains("added:b:tab-1"), log());
+            eval("var b = desk.open({ title: 'B', make: mk('wb') }, B, null, 'front'); var c = desk.open({ title: 'C', make: mk('wc') }, B, null, 'focus');");
+            assertEquals("tab-3", eval("B.activeTab()").asString(), "in front");
+            assertTrue(log().contains("wc:activate"), "and with the keys: " + log());
+            assertThrows(PolyglotException.class, () -> eval("desk.open({ make: mk('wd') }, B, null, 'sideways')"));
+        }
+
+        @Test
+        void aLoneDeskMakesNoFloatLayer_untilAFloatIsWanted() {
+            eval("desk.open({ title: 'A', make: mk('wa') }, B);");
+            assertTrue(eval("desk._layer === null").asBoolean(), "a desk with docks and no float: no layer");
+            eval("desk.float({ x: 10, y: 10 });");
+            assertTrue(eval("desk._layer !== null && desk.layer.root.parentNode === host").asBoolean(), "the first float makes it, over the host");
+        }
+
+        @Test
+        void aWidgetRestsInTheDesksOwnFocusBranch_whileNoHostHoldsIt() {
+            eval("var a = desk.open({ title: 'A', make: mk('wa') }, B); B.letGo(a);");
+            assertTrue(eval("desk.focus.name === 'thedesk' && a.widget.focus.in === desk.focus").asBoolean(), "a branch of its own, named for the desk");
+            eval("desk.dispose();");
+            assertFalse(eval("!!desk.focus.owner.in").asBoolean(), "left when the desk goes");
+        }
+
+        @Test
+        void detach_andAFloatOfOneDraggedOntoADock() {
+            eval("var a = desk.open({ title: 'A', make: mk('wa') }, B); desk.layer.root.rect = { left: 0, top: 0, right: 800, bottom: 600, width: 800, height: 600 };"
+               + "desk.layer.root.clientWidth = 800; desk.layer.root.clientHeight = 600; log.length = 0; var f = desk.detach(a, { x: 500, y: 400 });");
+            assertTrue(eval("f.host.has('tab-1') && !B.has('tab-1')").asBoolean());
+            eval("var bar = f.host.bar(); press(bar, 520, 410); bar.fire('pointermove', { clientX: 10, clientY: 10 });");
+            assertTrue(eval("A.el.has('mtp_dock_target')").asBoolean(), "A lit");
+            eval("bar.fire('pointerup', { type: 'pointerup', clientX: 10, clientY: 10 });");
+            assertTrue(eval("A.has('tab-1') && f.closed() && a.host() === A").asBoolean(), "landed in A; the float gone");
+            assertTrue(log().indexOf("TabMoved") < log().lastIndexOf("closed:"), log());
+        }
+
+        @Test
+        void anOpenTheHostRefuses_leavesNothingBehind() {
+            eval("var full = new MultiTabPane(page.createBranch('full'), { host: el('div'), slotId: 'full', budget: 1 }); desk.open({ title: 'X', make: mk('wx') }, full); log.length = 0;");
+            var ex = assertThrows(PolyglotException.class, () -> eval("desk.open({ title: 'Y', make: mk('wy') }, full)"));
+            assertTrue(ex.getMessage().contains("would not take"), ex.getMessage());
+            assertEquals(1, eval("desk.register.count()").asInt(), "the one it opened for the refusal is closed again");
+            assertEquals("wy:disposed", log());
+        }
+
+        @Test
+        void disposeClosesEveryTabPane_andTheFloatsFoldWithThem() {
+            eval("desk.open({ title: 'A', make: mk('wa') }, B); var f = desk.float({ x: 10, y: 10 }); desk.open({ title: 'F', make: mk('wf') }, f.host); desk.dispose();");
+            assertTrue(eval("desk.register.count() === 0 && !B.has('tab-1') && f.closed()").asBoolean());
+        }
+
+        @Test
+        void aSourceHandedTheDesk_opensThereAndThePlaceIsTheDesks() {
+            loadModule(P + "panes/TabSourceModule.js");
+            eval("var src = new TabSource(page.createBranch('src'), { desk: desk, kinds: [ { id: 'note', title: 'Notes', make: function (b, p) { b.activate('w'); return widget('wn' + (++made), p.focus); } } ] });"
+               + "log.length = 0; var r = src.add(B, 'note', 'quiet');");
+            assertTrue(eval("desk.register.get(r.tab.id) === r.tab && B.has(r.tab.id)").asBoolean());
+            assertTrue(log().contains("added:b:" + eval("r.tab.id").asString()), "the desk said it arrived: " + log());
+        }
+    }
+
+    /**
      * THE FLOATER (RFC 0066 E3, appendix "tab-panes", §7, the sequence's step
      * 3): a frame on the desk around a host of its own, as a browser's window;
      * one bar, the host's strip, whose ground moves the frame and whose cross
@@ -304,8 +395,6 @@ class DockingTest extends JsModuleTestBase {
 
         @BeforeEach
         void aRegisterAndItsTabPanes() {
-            loadModule(P + "panes/TabPaneModule.js");
-            loadModule(P + "panes/TabRegisterModule.js");
             eval("""
                 var register = new TabRegister(page.createBranch("tabs"), { focus: afloat });   // the desk's focus branch: where a tab-pane rests
                 function open(id) { return register.open({ id: id, title: id.toUpperCase(), make: function (b, t) { b.activate("w"); return widget(id, t.focus); } }); }

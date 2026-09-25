@@ -54,14 +54,14 @@
 // FloatEvents object on one sink, onEvent(ev).
 // =============================================================================
 
-const _deskOwner = Object.freeze({ toString: () => "desk" });
+const _layerOwner = Object.freeze({ toString: () => "floatLayer" });
 var _CASCADE = 28;
 
 class FloatLayer {
     constructor(branch, opts) {
         if (!branch) throw new Error("[FloatLayer] a branch of its own is required");
         if (!opts || !opts.host) throw new Error("[FloatLayer] opts.host is required");
-        branch.activate(_deskOwner);
+        branch.activate(_layerOwner);
         this.branch = branch;
         this._sink = typeof opts.onEvent === "function" ? opts.onEvent : null;
         this._minW = opts.minW;

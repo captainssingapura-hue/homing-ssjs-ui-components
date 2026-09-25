@@ -6,7 +6,8 @@
 // every way of asking for a tab — a control, the strip's own button, a menu,
 // a restore from a checkpoint — asks for it the same way.
 //
-//   new TabSource(branch, { kinds, register?, place? })
+//   new TabSource(branch, { kinds, desk?, register?, place? })
+//     desk:   a Desk: its register, and its move for place — the one to hand in
 //     branch: the source's own; every tab it mints gets a sub-branch of it, so
 //             the tabs outlive the pane they started in and travel as they must
 //     kinds:  [ { id, label, title?, listed?, make(branch, params) } ]
@@ -101,8 +102,10 @@ class TabSource {
         this._by = {};
         this._made = {};      // per kind, how many have been minted: ids and titles count up and never come back
         this._disposed = false;
-        this._register = o.register || null;
-        this._place = typeof o.place === "function" ? o.place : function (tp, pane, index) { return pane.take(tp, index); };
+        var desk = o.desk || null;
+        this._register = desk ? desk.register : (o.register || null);
+        this._place = desk ? function (tp, pane, index) { return desk.move(tp, pane, index); }
+                    : typeof o.place === "function" ? o.place : function (tp, pane, index) { return pane.take(tp, index); };
         (o.kinds || []).forEach(this._declare, this);
         if (this._kinds.length === 0) throw new Error("[TabSource] a source with no kinds can make nothing");
     }
