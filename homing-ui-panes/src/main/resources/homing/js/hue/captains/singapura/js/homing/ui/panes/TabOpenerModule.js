@@ -25,9 +25,9 @@
 //
 // The choices are NATIVE buttons inside a logical member: the widget holds the
 // keys for the dock, the button that has the browser's focus holds them for
-// the widget — said as `lent`, which is what a design answers — and an Escape
-// the button did not want comes back to the widget rather than out of the
-// room. That is the §14 seam, wired here once so a page need not wire it.
+// the widget. Where the focus is, and the mark that says it — `lent` — is the
+// steward's, and so is an Escape the button did not want: it comes back to
+// the widget rather than out of the room (RFC 0066 E3, keyboard §17.5).
 // =============================================================================
 
 const _openerOwner = Object.freeze({ toString: () => "tabOpener" });
@@ -66,16 +66,6 @@ class TabOpener {
         });
         this.root = root;
 
-        // the seam: an Escape the button let through blurs it, and the widget — the member since the press — has the keys again
-        root.addEventListener("keydown", function (ev) {
-            if (ev.key !== "Escape" || ev.target === root || !root.contains(ev.target)) return;
-            ev.target.blur();
-            ev.preventDefault();
-            ev.stopPropagation();
-            self._mark();
-        });
-        root.addEventListener("focusin", function () { if (self.root.getAttribute("data-keys")) self._mark(); });
-        root.addEventListener("focusout", function () { setTimeout(function () { if (!self._disposed && self.root.getAttribute("data-keys")) self._mark(); }, 0); });
 
         this.focus = o.focus.join(branch.name, this);
         this._off = Keys.claimOn(root, this.focus);
@@ -89,21 +79,12 @@ class TabOpener {
      */
     open(kindId) { return this._source.has(kindId) ? this._source.become(this._tab.id, kindId) : -1; }
 
-    /** The law's: a press or the keys arriving make it the holder, and the first choice takes the browser's focus so the keys work at once. */
+    /** The law's: a press or the keys arriving make it the holder, and the first choice takes the browser's focus so the keys work at once — unless the focus arriving on a choice is what made it the holder. */
     activate() { Keys.claim(this.focus); }
-    granted() { var first = this._picks[0]; if (first) { try { first.focus(); } catch (e) {} } this._mark(); }
-    taken() { this.root.removeAttribute("data-keys"); }
-    offered() { if (this.root.getAttribute("data-keys") === null) this.root.setAttribute("data-keys", "candidate"); }
-    withdrawn() { if (this.root.getAttribute("data-keys") === "candidate") this.root.removeAttribute("data-keys"); }
+    granted(by) { var first = this._picks[0]; if (first && by !== "native") { try { first.focus(); } catch (e) {} } }
 
     /** Nothing of its own is natively focused and the keys are the widget's: Escape gives them back to the dock. */
     keyDown(ev) { if (ev.key === "Escape") { Keys.yield(this.focus); return true; } return false; }
-
-    /** Held, or lent while a choice has the browser's focus: one attribute, which the design answers. */
-    _mark() {
-        var a = typeof document === "undefined" ? null : document.activeElement;
-        this.root.setAttribute("data-keys", a && a !== document.body && this.root.contains(a) ? "lent" : "held");
-    }
 
     dispose() {
         if (this._disposed) return;

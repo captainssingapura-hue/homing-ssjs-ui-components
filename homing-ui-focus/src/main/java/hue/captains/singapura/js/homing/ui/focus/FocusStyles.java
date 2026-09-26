@@ -12,6 +12,8 @@ import static hue.captains.singapura.js.homing.design.DesignClass.of;
 import static hue.captains.singapura.js.homing.design.Box.Inline;
 import static hue.captains.singapura.js.homing.design.Box.Control;
 import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
+import static hue.captains.singapura.js.homing.design.Feedback.Danger;
+import static hue.captains.singapura.js.homing.design.Pairing.OnDanger;
 import static hue.captains.singapura.js.homing.design.Interaction.Current;
 import static hue.captains.singapura.js.homing.design.Interaction.Focus;
 import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
@@ -90,14 +92,20 @@ public record FocusStyles() implements CssGroup<FocusStyles> {
         @Override public String body() { return "padding: 4px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"; }
     }
 
-    /** The lamp while the steward is dormant: the muted ink, the rule gone, so the eye sees the keys are elsewhere. */
+    /** The lamp while the steward is away: the muted ink, the rule gone, so the eye sees the keys are elsewhere. */
     public record sm_lamp_dormant() implements CssClass<FocusStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return "font-style: italic; border-color: transparent;"; }
     }
 
+    /** The lamp while an invariant of the steward's is broken: the danger surface, so it cannot be missed. */
+    public record sm_lamp_broken() implements CssClass<FocusStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Danger.class, Color.Surface.class), of(OnDanger.class, Color.Ink.class), of(Danger.class, Color.Edge.class)); }
+        @Override public String body() { return ""; }
+    }
+
     @Override
     public List<CssClass<FocusStyles>> cssClasses() {
-        return List.of(new fm_tree(), new fm_row(), new fm_row_holder(), new fm_kind(), new fm_name(), new fm_component(), new fm_outside(), new sm_lamp(), new sm_lamp_dormant());
+        return List.of(new fm_tree(), new fm_row(), new fm_row_holder(), new fm_kind(), new fm_name(), new fm_component(), new fm_outside(), new sm_lamp(), new sm_lamp_dormant(), new sm_lamp_broken());
     }
 }

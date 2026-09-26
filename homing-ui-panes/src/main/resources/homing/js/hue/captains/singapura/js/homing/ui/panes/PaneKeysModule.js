@@ -46,9 +46,9 @@
 //     does, in both places, because that is its whole character.
 //   A chord with Ctrl, Alt or Meta is left; so is anything not above.
 //
-//   PaneKeys.keysState(pane) → which of the four the keys are in: "held" on
-//     the bar, "lent" while they are within a tab, "candidate" while the walk
-//     rests on the pane, or null
+//   PaneKeys.keysState(pane) → where the keys are, for the active chip: "held"
+//     on the bar, "lent" while they are within a tab, or null. The frame's own
+//     mark is the steward's (RFC 0066 E3, keyboard §17.5)
 //   PaneKeys.wouldOffer(pane, m) → whether the walk is offered a member of
 //     the dock's branch: only the tab on show, the rest being behind it
 //   PaneKeys.law(widget) → whether a tab's widget is logically focusable:
@@ -118,14 +118,13 @@ class PaneKeys {
     }
 
     /**
-     * Which of the four the keys are in, for the pane to say on its frame and
-     * its active chip. The order is the truth of it: the pane HOLDS them — the
-     * bar is where the work is, and the arrows walk the tabs; they are WITHIN
-     * it, in the tab's own widget, which the chip says as lent and marks; the
-     * walk has OFFERED them; or none of those, and nothing is said.
+     * Where the keys are, for the pane to say on its active chip. The order is
+     * the truth of it: the pane HOLDS them — the bar is where the work is, and
+     * the arrows walk the tabs; they are WITHIN it, in the tab's own widget,
+     * which the chip says as lent and marks; or neither, and nothing is said.
      */
     static keysState(pane) {
-        return pane._holds ? "held" : pane._inside ? "lent" : pane._offered ? "candidate" : null;
+        return pane._holds ? "held" : pane._inside ? "lent" : null;
     }
 
     /**

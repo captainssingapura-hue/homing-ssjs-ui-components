@@ -121,6 +121,18 @@ class Desk {
 
     /** Asked by the keyboard walk: the desk is no stop, and nothing in it is — it moves between its panes its own way. */
     inWalk() { return false; }
+    /**
+     * Told by the steward that the focus is inside the desk, and where (RFC 0066 E3, keyboard §17.5): the float
+     * holding it comes to the front — any float on the desk's layer, the desk's own or one the page opened there.
+     */
+    within(on, at) {
+        if (!on || !at || at.state === "away" || !at.root || !this._layer) return;
+        var layer = this._layer, ids = layer.panes();
+        for (var i = 0; i < ids.length; i++) {
+            var p = layer.pane(ids[i]);
+            if (p && p.root.contains(at.root)) { layer.raise(ids[i]); return; }
+        }
+    }
 
     /** The register's count changed: every dock's plus says whether a new tab would fit. */
     _roomed() {

@@ -139,6 +139,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardWalkModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardShortcutsModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardChordsModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardMarkModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardStewardModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         loadModule(EVENTS);
@@ -315,7 +316,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("down/-/null", eval("look(1)").asString(), "and on no other chip");
         eval("pane.taken(); pane.within(true)");
         assertEquals("down/mark/1", eval("look(0)").asString(), "the keys are in the tab: put down, the colour at full");
-        assertEquals("lent", eval("String(pane.el.getAttribute('data-keys'))").asString(), "the frame says lent: the keys are in the dock, lent to what the tab holds");
+        assertEquals("null", eval("String(pane.el.getAttribute('data-keys'))").asString(), "the frame wears nothing of the pane's: its mark is the steward's, and a pane the focus is inside wears none");
         eval("pane.switchTab('b')");
         assertEquals("down/-/null", eval("look(0)").asString(), "what is shown carries it");
         assertEquals("down/mark/1", eval("look(1)").asString());
@@ -324,11 +325,22 @@ class MultiTabPaneTest extends JsModuleTestBase {
         eval("pane.taken()");
         assertEquals("down/-/null", eval("look(0)").asString());
         assertEquals("down/-/null", eval("look(1)").asString(), "and gone");
-        // the walk's offer is the frame's alone: a chip is not offered anything
-        eval("pane.offered()");
-        assertEquals("candidate", eval("String(pane.el.getAttribute('data-keys'))").asString());
-        assertEquals("down/-/null", eval("look(0)").asString(), "the offer is the pane's, not a tab's");
-        eval("pane.withdrawn()");
+    }
+
+    /**
+     * Told the focus is inside it, and where (RFC 0066 E3, keyboard §17.5): the
+     * tab it is in is shown — whoever put it there — and a focus away from the
+     * page shows nothing new.
+     */
+    @Test
+    void toldTheFocusIsInsideIt_thePaneShowsTheTabItIsIn() {
+        eval("put('a'); put('b'); pane.switchTab('a'); log = []");
+        eval("var deep = { parentNode: null }; pane.contentElOf('b').contains = function (x) { return x === deep; }");
+        eval("pane.within(true, { id: 'x', state: 'away', root: deep })");
+        assertEquals("a", eval("pane.activeTab()").asString(), "away: nothing moves");
+        eval("pane.within(true, { id: 'x', state: 'lent', root: deep })");
+        assertEquals("b", eval("pane.activeTab()").asString(), "the tab the focus is in");
+        assertEquals("active:s1:b", log());
     }
 
     /**
@@ -415,7 +427,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("a,b,c", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "the widgets are its members");
         eval("pane.el.fire('pointerdown', { target: pane.el })");
         assertEquals("mtp_s1", eval("holder()").asString(), "a press on the frame: the pane holds");
-        assertEquals("held", eval("String(pane.el.getAttribute('data-keys'))").asString(), "and says so, once, on the frame: the design answers it on the pane's own word");
+        assertEquals("held", eval("String(pane.el.getAttribute('data-keys'))").asString(), "and the steward says so, once, on the root it enrolled: the design answers it on the pane's own word");
         assertTrue(eval("pane.keyDown({ key: 'ArrowRight' })").asBoolean());
         assertEquals("b", eval("pane.activeTab()").asString());
         eval("pane.keyDown({ key: 'ArrowRight' }); pane.keyDown({ key: 'ArrowRight' })");
@@ -437,7 +449,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertTrue(eval("pane.keyDown({ key: 'Enter' })").asBoolean());
         assertEquals("detach?s1:b b:activate", log(), "Enter: the widget activates itself");
         assertEquals("b", eval("holder()").asString(), "and holds - a claim of its own, not the pane's");
-        assertEquals("lent", eval("String(pane.el.getAttribute('data-keys'))").asString(), "the pane does not hold them, and the steward told it they are within it: lent");
+        assertEquals("null", eval("String(pane.el.getAttribute('data-keys'))").asString(), "the pane does not hold them: its frame says nothing — its chip and its bar say they are within it");
         eval("log = []; KeyboardStewardInstance._forward('KeyDown', { key: 'ArrowUp', target: null, preventDefault: function () {}, stopPropagation: function () {} })");
         assertEquals("b:key:ArrowUp", log(), "the keys are the widget's now, through the steward");
         eval("log = []; KeyboardStewardInstance.yield(pane.widgetOf('b').focus)");

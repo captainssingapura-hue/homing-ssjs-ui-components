@@ -115,8 +115,8 @@ class PaneKeysTest extends JsModuleTestBase {
     }
 
     @Test
-    void theKeysAreInOneOfFour_inThatOrder() {
-        assertEquals("held,lent,candidate,null", eval("[{ _holds: true, _inside: true, _offered: true }, { _inside: true, _offered: true }, { _offered: true }, {}].map(function (p) { return String(PaneKeys.keysState(p)); }).join(',')").asString());
+    void theChipSaysOneOfThree_inThatOrder() {
+        assertEquals("held,lent,null", eval("[{ _holds: true, _inside: true }, { _inside: true }, {}].map(function (p) { return String(PaneKeys.keysState(p)); }).join(',')").asString());
     }
 
     @Test

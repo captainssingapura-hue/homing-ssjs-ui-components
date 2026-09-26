@@ -75,7 +75,7 @@ class FocusMonitor {
                 c.textContent = component;
                 el.appendChild(c);
             }
-            if (id !== null && id === holder) { css.addClass(el, fm_row_holder); el.setAttribute("aria-selected", "true"); el.setAttribute("data-keys", KeyboardSteward.focused() ? "lent" : "held"); self._holderRow = el; seen = true; }
+            if (id !== null && id === holder) { css.addClass(el, fm_row_holder); el.setAttribute("aria-selected", "true"); el.setAttribute("data-keys", (KeyboardStewardInstance.marker() || {}).state === "lent" ? "lent" : "held"); self._holderRow = el; seen = true; }
             else if (id !== null && id === cand) { el.setAttribute("data-keys", "candidate"); self._candidateRow = el; }
             self.root.appendChild(el);
         }

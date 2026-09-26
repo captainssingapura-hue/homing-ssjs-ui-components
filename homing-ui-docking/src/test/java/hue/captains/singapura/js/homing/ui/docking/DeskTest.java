@@ -47,7 +47,7 @@ class DeskTest extends JsModuleTestBase {
                 removeAttribute: function (k) { delete attrs[k]; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 removeEventListener: function (t, fn) { var l = this.listeners[t] || []; var i = l.indexOf(fn); if (i >= 0) l.splice(i, 1); },
-                contains: function (c) { return c === this; },
+                contains: function (c) { for (var n = c; n; n = n.parentNode) if (n === this) return true; return false; },
                 getBoundingClientRect: function () { return this.rect; },
                 setPointerCapture: function () { log.push("capture:" + this.tag); }, releasePointerCapture: function () {},
                 fire: function (t, ev) { var e = ev || {}; e.type = t; e.stopPropagation = e.stopPropagation || function () {}; e.preventDefault = e.preventDefault || function () {}; (this.listeners[t] || []).slice().forEach(function (fn) { fn(e); }); },
@@ -126,6 +126,7 @@ class DeskTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardWalkModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardShortcutsModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardChordsModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardMarkModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardStewardModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         loadModule(P + "floating/FloatEventsModule.js");
@@ -433,6 +434,21 @@ class DeskTest extends JsModuleTestBase {
             assertTrue(log().contains("raised:" + id()), "in a float under another: its frame raised - " + log());
             assertFalse(log().contains(":activate"), "and no widget handed the keys");
             assertTrue(eval("desk.show(open('loose')) === null && desk.show(null) === null").asBoolean(), "in no host: nothing to show");
+        }
+
+        /**
+         * TOLD WHERE THE FOCUS IS (RFC 0066 E3, keyboard §17.5): the float on the desk's layer holding the marker
+         * comes to the front, whoever put the focus there; away, or in a dock, nothing is raised.
+         */
+        @Test
+        void toldTheFocusIsInAFloatUnderAnother_theDeskRaisesIt() {
+            eval("var f = desk.float({ x: 10, y: 10 }); f.take(open('c')); var g = desk.float({ x: 20, y: 20 }); g.take(open('d')); log.length = 0;");
+            eval("desk.within(true, { id: 'x', state: 'away', root: f.host.el })");
+            assertFalse(log().contains("raised"), "away: nothing raised - " + log());
+            eval("desk.within(true, { id: 'x', state: 'lent', root: A.el })");
+            assertFalse(log().contains("raised"), "in a dock: no frame to raise - " + log());
+            eval("desk.within(true, { id: 'x', state: 'lent', root: f.host.el })");
+            assertEquals("raised:" + eval("f.id").asString(), eval("log.filter(function (l) { return l.indexOf('raised') === 0; }).join()").asString(), "the float holding it");
         }
 
         @Test

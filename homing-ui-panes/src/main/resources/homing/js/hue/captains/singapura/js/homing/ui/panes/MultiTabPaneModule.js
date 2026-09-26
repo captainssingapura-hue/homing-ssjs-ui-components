@@ -71,10 +71,11 @@
 //       the limit is the desk's, which says setRoom(false) while it is spent
 //   pane.size(s?) .aspect(a?)    the chips' size and aspect, −1..1, null the design's
 //   pane.contentElOf(id) .widgetOf(id) .getState() .el .slotId .focus
-//   pane.keyDown(ev) .wouldHold() .wouldOffer(m) .granted(by) .taken(by) .within(on) .offered() .withdrawn()
-//       the member's, called by the steward; they write data-keys — held while the
-//       pane has the keys, candidate while the walk rests on it — on the frame,
-//       and a design says what a pane wearing it looks like
+//   pane.keyDown(ev) .wouldHold() .wouldOffer(m) .granted(by) .taken(by) .within(on, at)
+//       the member's, called by the steward. The frame's mark — held, candidate —
+//       is the steward's to write, on the root it enrolled (RFC 0066 E3, keyboard
+//       §17.5); the pane marks its active chip and lights its bar, and when told
+//       the focus is inside it, shows the tab it is in
 //   pane.menuByKey() .menuByGround(at) .requestDetach() .yieldKeys()   what the
 //       keys and a right-click do, by call; the menus themselves are PaneMenus'
 //   pane.bar() .barGround(target)   the strip, and whether a target is its own ground and
@@ -155,7 +156,7 @@ class MultiTabPane {
         this.slotId = opts.slotId == null ? "main" : String(opts.slotId);
         this._addEnabled = opts.addable !== false;
         this._room = true;   // its desk's word: whether a new tab would fit anywhere
-        this._schemes = PaneSchemes.of(opts.keys);   // _keys() is the method that writes data-keys; this is the list of schemes
+        this._schemes = PaneSchemes.of(opts.keys);   // the list of schemes; _keys() is the method that marks the chip and the bar
         this._sink = typeof opts.onEvent === "function" ? opts.onEvent : null;
         this._onEmpty = typeof opts.onEmpty === "function" ? opts.onEmpty : null;
         this._menus = opts.menus && typeof opts.menus.open === "function" ? opts.menus : null;
@@ -347,20 +348,24 @@ class MultiTabPane {
     wouldHold() { return PaneSchemes.keeps(this._schemes, this); }
     /** Asked by the walk about a member of the dock's branch: PaneKeys says which. */
     wouldOffer(m) { return PaneKeys.wouldOffer(this, m); }
-    /** Where the keys are, said on the frame and on the active chip; PaneKeys works out which of the four it is. */
-    granted() { this._holds = true; this._keys(); if (!PaneSchemes.keeps(this._schemes, this) && this._activeId !== null) this.land(this._activeId); }
+    /** Where the keys are, said on the active chip and the bar; the frame's mark is the steward's. */
+    granted(by) { this._holds = true; this._keys(); if (by !== "native" && !PaneSchemes.keeps(this._schemes, this) && this._activeId !== null) this.land(this._activeId); }
     taken() { this._holds = false; this._keys(); }
-    /** Landed IN a tab: whatever was natively focused in this pane lets go, and the widget now showing takes the keys. A scheme that is a road rather than a place asks for this. */
-    land(id) { var a = typeof document === "undefined" ? null : document.activeElement; if (a && a !== document.body && a.blur && this.el.contains(a)) a.blur(); var w = this.widgetOf(id); if (w && w.activate) w.activate(); }
+    /** Landed IN a tab: the widget now showing takes the keys — and the steward, whatever else had the browser's focus. A scheme that is a road rather than a place asks for this. */
+    land(id) { var w = this.widgetOf(id); if (w && w.activate) w.activate(); }
 
-    /** Told by the steward that the keys are inside the pane — in a tab's widget: the bar is not where the work is. */
-    within(on) { this._inside = !!on; this._keys(); }
-    offered() { this._offered = true; this._keys(); }
-    withdrawn() { this._offered = false; this._keys(); }
+    /**
+     * Told by the steward that the focus is inside the pane — in a tab's widget: the bar is not where the work is —
+     * and where: the tab it is in is shown, whoever put it there, a press or a script.
+     */
+    within(on, at) {
+        this._inside = !!on;
+        if (on && at && at.state !== "away" && at.root) for (var i = 0; i < this._tabs.length; i++) if (this._tabs[i].panel.contains(at.root)) { this.switchTab(this._tabs[i].id); break; }
+        this._keys();
+    }
     _keys() {
         var v = PaneKeys.keysState(this);
-        if (v) this.el.setAttribute("data-keys", v); else this.el.removeAttribute("data-keys");
-        this._strip.keys(this.chipOf(this._activeId === null ? -1 : this._find(this._activeId)), v === "candidate" ? null : v);
+        this._strip.keys(this.chipOf(this._activeId === null ? -1 : this._find(this._activeId)), v);
         // THE BAR IS LIT WHILE THE WORK IS IN HERE — the pane holding the keys, or a widget in one of its tabs
         // holding them. The pane is the one that knows: the steward tells it both, and it is already writing where
         // the keys are on its own word and marking the active chip. This is the same fact wearing a third face, so

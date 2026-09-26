@@ -15,7 +15,9 @@
 //              the frame a handle of its own, as a float whose one bar is its host's strip.
 //              The title is then only the frame's name for a reader, and there is no icon
 //
-//   pane.root                the frame, appended by the desk; focusable (tabindex −1)
+//   pane.root                the frame, appended by the desk; never natively focused — a
+//                            container, focused logically through what it holds (RFC 0066 E3,
+//                            keyboard §17.1), so it has no tabindex
 //   pane.body                the bounded region a widget's root goes in
 //   pane.head                the bar; the desk listens on it and on the frame; null when there is none
 //   pane.handle(el, accept?) el moves the frame as the head does: a press that accept(ev)
@@ -73,7 +75,6 @@ class FloatingPane {
 
         var frame = branch.createElement("frame", "section");
         css.addClass(frame, fp_frame);
-        frame.tabIndex = -1;
         frame.setAttribute("role", "region");
 
         this._icon = null; this._title = null; this._close = null;
