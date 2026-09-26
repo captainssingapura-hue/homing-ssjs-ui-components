@@ -363,6 +363,31 @@ class DeskTest extends JsModuleTestBase {
             assertEquals("0,0", eval("var r = g.frame.bounds(); r.x + ',' + r.y").asString(), "kept within the layer");
         }
 
+        /**
+         * THE TAB MENU is the desk's to answer when it is handed the steward: Detach floats the tab under its
+         * own chip, Close closes it, and a pinned tab is offered neither. And a detach with no point is the
+         * same: under the chip.
+         */
+        @Test
+        void theTabMenuIsAnsweredByTheDesk_andADetachWithNoPointGoesUnderTheChip() {
+            eval("""
+                var menus = { h: {}, handle: function (k, h) { this.h[k] = h; return this; } };
+                var d2 = new Desk(page.createBranch("desk2"), { host: host, onEvent: sink, menus: menus });
+                var C = new MultiTabPane(page.createBranch("c"), { host: el("div"), slotId: "c", onEvent: sink }); d2.addDock(C);
+                var lr = d2.layer.root; lr.rect = { left: 0, top: 0, right: 800, bottom: 600, width: 800, height: 600 }; lr.clientWidth = 800; lr.clientHeight = 600;
+                var x = d2.register.open({ id: "x", title: "X", make: mk("x") }); C.take(x);
+                x.chip.rect = { left: 200, top: 40, right: 260, bottom: 70, width: 60, height: 30 };
+                """);
+            assertEquals("function", eval("typeof menus.h[MultiTabPane.MENU].pick").asString(), "the pane's own kind, answered by the desk");
+            eval("menus.h.tab.pick('detach', { tab: x, pane: C, anchor: x.chip })");
+            assertTrue(eval("x.host() !== C && !C.has('x')").asBoolean(), "floated");
+            assertEquals("200,70", eval("var fl = d2.docks().filter(function (h) { return h !== C; })[0]; var b = d2._floaters.get(fl).frame.bounds(); b.x + ',' + b.y").asString(), "the float's corner at the chip's: under it");
+            eval("var y = d2.register.open({ id: 'y', title: 'Y', make: mk('y') }); C.take(y); menus.h.tab.pick('close', { tab: y, pane: C })");
+            assertFalse(eval("C.has('y')").asBoolean(), "closed");
+            assertTrue(eval("menus.h.tab.state('detach', { tab: { pinned: true } }).disabled && !menus.h.tab.state('close', { tab: {} }).disabled").asBoolean(), "a pinned tab is offered neither");
+            eval("d2.dispose()");
+        }
+
         @Test
         void aMoveIsRefusedBeforeAnythingLeaves() {
             eval("var a = open('a'); A.take(a);"

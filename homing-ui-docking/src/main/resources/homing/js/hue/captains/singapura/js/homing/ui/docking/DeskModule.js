@@ -19,7 +19,10 @@
 //              the docks, whose names are the page's. One of its own under the
 //              page's root unless said, named focusName, the branch's name unless said
 //     menus    the page's ContextMenuSteward, handed to its floats, so a chip
-//              afloat asks for its menu as a chip in a dock does
+//              afloat asks for its menu as a chip in a dock does; and the TAB MENU
+//              is answered here, the pane's own kind on any chip of the desk's -
+//              Detach floats the tab under its chip, Close closes it. A steward
+//              holds one answer a kind: one desk to a steward
 //     onEvent  its reports: a tab-pane's arrival (TabAdded) and every move
 //              between hosts (TabMoved), a float's host's reports, the layer's
 //
@@ -43,7 +46,8 @@
 //                          here: that is the caller's, and only ever at the user's asking
 //                          (RFC 0066 E3, keyboard §17.2)
 //   desk.detach(tp, at?)   → the float: the tab-pane into a float of its own, its bar at the
-//                          point, within the desk — a menu's Detach, Shift+↓
+//                          point - under its own chip unless said - within the desk: the
+//                          tab menu's Detach, a dock's Shift+↓
 //   desk.float(opts?)      → a Floater: a frame around a host of its own, one bar, no plus.
 //                          While it holds ONE tab-pane it is that tab in the hand: dragged, it
 //                          is offered to the docks it passes, and let go over a strip the tab-pane
@@ -88,6 +92,19 @@ class Desk {
         this._target = null;
         this._index = -1;
         this._disposed = false;
+        if (this._menus) this._answerTabMenu(this._menus);
+    }
+
+    /** The tab menu, the pane's own kind, on any chip of the desk's hosts: Detach floats the tab under its chip, Close closes it; a pinned tab, or one that will not close, is offered neither. */
+    _answerTabMenu(menus) {
+        var self = this;
+        menus.handle(MultiTabPane.MENU, {
+            pick: function (id, o) {
+                if (id === "detach") self.detach(o.tab);
+                else if (id === "close") o.pane.removeTab(o.tab.id);
+            },
+            state: function (id, o) { return { disabled: !!o.tab.pinned || o.tab.closable === false }; }
+        });
     }
 
     get layer() {
@@ -187,7 +204,7 @@ class Desk {
     }
 
     detach(tp, at) {
-        var r = Desk._rect(this.layer.root), p = Desk._placed(at, r);
+        var r = Desk._rect(this.layer.root), p = Desk._placed(at || Desk._underChip(tp), r);
         var f = this.float({ x: p.x, y: p.y, w: _FLOAT_W, h: _FLOAT_H });
         try { this.move(tp, f.host); }
         catch (e) { f.close(); throw e; }
@@ -258,6 +275,12 @@ class Desk {
         if (r.width) x = Math.min(x, Math.max(0, r.width - _FLOAT_W));
         if (r.height) y = Math.min(y, Math.max(0, r.height - _FLOAT_H));
         return { x: x, y: y };
+    }
+
+    /** The point a float's bar sits under when a tab is detached where it is: the float's corner at its chip's. */
+    static _underChip(tp) {
+        var c = Desk._rect(tp && tp.chip);
+        return { x: c.left + _GRIP_X, y: (c.bottom != null ? c.bottom : c.top + (c.height || 0)) + _GRIP_Y };
     }
 
     static _rect(el) {

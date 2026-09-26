@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.floating.FloatLayerModule;
+import hue.captains.singapura.js.homing.ui.panes.MultiTabPaneModule;
 import hue.captains.singapura.js.homing.ui.panes.PaneEventsModule;
 import hue.captains.singapura.js.homing.ui.panes.TabRegisterModule;
 
@@ -36,6 +37,7 @@ public record DeskModule() implements DomModule<DeskModule> {
                 .add(new ModuleImports<>(List.of(new FloatLayerModule.FloatLayer()), FloatLayerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloaterModule.Floater()), FloaterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneEventsModule.PaneEvents()), PaneEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .build();
     }
