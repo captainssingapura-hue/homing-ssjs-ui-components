@@ -67,6 +67,15 @@ public sealed interface PaneEvent {
         }
     }
 
+    /** A tab was renamed where it is - by its widget, by its holder, by the pane; said by the host it is in. */
+    record TabRenamed(String slotId, String tabId, String title) implements PaneEvent {
+        public TabRenamed {
+            Objects.requireNonNull(slotId, "TabRenamed.slotId");
+            Objects.requireNonNull(tabId, "TabRenamed.tabId");
+            Objects.requireNonNull(title, "TabRenamed.title");
+        }
+    }
+
     /** The add button was pressed while a tab could be added; the holder decides what that means. */
     record AddRequested(String slotId) implements PaneEvent {
         public AddRequested {

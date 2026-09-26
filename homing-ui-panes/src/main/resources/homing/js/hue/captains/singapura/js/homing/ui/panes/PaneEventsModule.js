@@ -9,6 +9,7 @@
 //   PaneEvents.TabRemoved(slotId, tab, fromIndex)
 //   PaneEvents.TabMoved(srcSlotId, tab, srcIndex, destSlotId, destIndex)
 //   PaneEvents.TabActivated(slotId, tabId)
+//   PaneEvents.TabRenamed(slotId, tabId, title)
 //   PaneEvents.AddRequested(slotId)
 //   PaneEvents.DetachRequested(slotId, tabId)
 //   PaneEvents.KINDS                       the kinds, in this order
@@ -28,6 +29,10 @@ function _tab(v, what) {
     if (!v || typeof v !== "object" || typeof v.id !== "string" || !v.id) throw new Error("[PaneEvents] " + what + " must be a tab with an id");
     return v;
 }
+function _text(v, what) {
+    if (typeof v !== "string") throw new Error("[PaneEvents] " + what + " must be a string");
+    return v;
+}
 function _index(v, what) {
     if (typeof v !== "number" || v !== (v | 0) || v < 0) throw new Error("[PaneEvents] " + what + " must be a non-negative integer");
     return v;
@@ -43,7 +48,7 @@ class PaneEvents {
     }
     /** A tab's name: a record's field, or a tab-pane's own, which it answers when asked. */
     static _title(tab) { return typeof tab.title === "function" ? tab.title() : tab.title; }
-    static KINDS = Object.freeze(["TabAdded", "TabRemoved", "TabMoved", "TabActivated", "AddRequested", "DetachRequested"]);
+    static KINDS = Object.freeze(["TabAdded", "TabRemoved", "TabMoved", "TabActivated", "TabRenamed", "AddRequested", "DetachRequested"]);
 
     /** A tab-pane arrived in a host from none, opened there: the desk's to report. */
     static TabAdded(slotId, tab, index) {
@@ -61,6 +66,10 @@ class PaneEvents {
     /** The active tab changed — a chip, a key, or switchTab. */
     static TabActivated(slotId, tabId) {
         return Object.freeze({ kind: "TabActivated", slotId: _slot(slotId, "TabActivated.slotId"), tabId: _slot(tabId, "TabActivated.tabId") });
+    }
+    /** A tab was renamed where it is: said by the host it is in. */
+    static TabRenamed(slotId, tabId, title) {
+        return Object.freeze({ kind: "TabRenamed", slotId: _slot(slotId, "TabRenamed.slotId"), tabId: _slot(tabId, "TabRenamed.tabId"), title: _text(title, "TabRenamed.title") });
     }
     /** The add button was pressed while a tab could be added; the holder decides what that means. */
     static AddRequested(slotId) {

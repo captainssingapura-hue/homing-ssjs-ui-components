@@ -59,7 +59,8 @@
 //   pane.removeTab(id)           → the tab-pane, closed: its widget disposed, then
 //       TabRemoved(slotId, tp, fromIndex) where it was; a neighbour is activated after.
 //   pane.switchTab(id)           → TabActivated(slotId, id): one tab-pane's pane shown, the rest hidden
-//   pane.retitle(id, title)      the tab's name, now: said to the tab-pane, whose chip shows it
+//   pane.retitle(id, title)      the tab's name, now: said to the tab-pane, whose chip shows it;
+//                                any rename of a tab it holds → TabRenamed(slotId, tabId, title)
 //   pane.reicon(id, icon?)       the tab's icon, now: an element of the holder's — a favicon,
 //       whatever it is made of — shown before the label; none takes it away.
 //       Neither is a mutation of the arrangement, so neither is reported.
@@ -272,6 +273,8 @@ class MultiTabPane {
     dropClear() { this._strip.unmark(); css.removeClass(this.el, mtp_dock_target); }
     /** The tab's name, now: the pane shows what the holder calls it. */
     retitle(id, title) { PaneTabs.retitle(this, id, title); return this; }
+    /** A tab-pane it holds was renamed: said here, where it is. */
+    renamed(tp) { if (this.has(tp.id)) this._fire(PaneEvents.TabRenamed(this.slotId, tp.id, tp.title())); }
     /** The tab's icon, now: the holder's element, or none. */
     reicon(id, icon) { PaneTabs.reicon(this, id, icon); return this; }
 

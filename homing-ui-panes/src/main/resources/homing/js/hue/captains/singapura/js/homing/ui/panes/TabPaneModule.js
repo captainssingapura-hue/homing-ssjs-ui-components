@@ -24,7 +24,9 @@
 //   tp.id  tp.chip  tp.pane  tp.widget  tp.branch  tp.pinned  tp.closable
 //                     the parts, the same for its whole life
 //   tp.title(text?)   the name on its chip: the label, the tooltip, what the
-//                     cross says it closes. Read back with no argument.
+//                     cross says it closes. Read back with no argument. A new
+//                     name is told to the host it is in, host.renamed(tp),
+//                     which says so; a replace's name is the become's, not a rename
 //   tp.icon(el?)      the holder's element before the label; null for none.
 //                     Read back with no argument.
 //   tp.shown(on)      the pane shown or hidden: its host says which one shows
@@ -116,15 +118,21 @@ class TabPane {
         this._widgetBranch.dissolve();   // its elements out of the pane, and its name free for the next
         this.widget = TabPane._build(this, make, focus);
         this.pane.appendChild(this.widget.root);
-        if (title != null) this.title(title);
+        if (title != null) this._name(title);
         return this;
     }
 
     title(text) {
         if (arguments.length === 0) return this._title;
+        var was = this._title;
+        this._name(text);
+        if (this._title !== was && this._host && typeof this._host.renamed === "function") this._host.renamed(this);
+        return this;
+    }
+
+    _name(text) {
         this._title = text == null ? "" : String(text);
         TabChip.retitle(this.chip, this._title);
-        return this;
     }
 
     icon(el) {

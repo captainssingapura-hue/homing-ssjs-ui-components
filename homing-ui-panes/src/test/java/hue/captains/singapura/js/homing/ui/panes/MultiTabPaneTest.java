@@ -121,6 +121,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
                     case "TabRemoved":   log.push("removed:" + ev.slotId + ":" + ev.tab.id + "@" + ev.fromIndex); break;
                     case "TabMoved":     log.push("moved:" + ev.srcSlotId + ":" + ev.tab.id + "@" + ev.srcIndex + "->" + ev.destSlotId + "@" + ev.destIndex); break;
                     case "TabActivated": log.push("active:" + ev.slotId + ":" + ev.tabId); break;
+                    case "TabRenamed":   log.push("renamed:" + ev.slotId + ":" + ev.tabId + "=" + ev.title); break;
                     case "DetachRequested": log.push("detach?" + ev.slotId + ":" + ev.tabId); break;
                     default: log.push("?" + ev.kind);
                 } } });
@@ -177,8 +178,9 @@ class MultiTabPaneTest extends JsModuleTestBase {
 
     /**
      * A tab's name is the holder's to give and the pane's to show: an icon of
-     * the holder's before the label, and both changed later by call. Neither
-     * is a change to the arrangement, so neither is reported.
+     * the holder's before the label, and both changed later by call. A new name
+     * is reported, where the tab is - a workspace keeps it; an icon is the
+     * holder's drawing and is not.
      */
     @Test
     void aTabIsNamedByItsHolderWithAnIconAndCanBeRenamed() {
@@ -193,12 +195,14 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("Report.md", eval("ca.title").asString(), "the tooltip says it too");
         assertEquals("Close Report.md", eval("ca._close.getAttribute('aria-label')").asString(), "and the cross says what it closes");
         assertEquals("Report.md", eval("pane.getState().tabs[0].title").asString(), "the pane's state carries the new name");
+        assertEquals("renamed:s1:a=Report.md", log(), "a rename is reported, by the host it is in");
+        eval("log.length = 0");
 
         eval("var fav2 = el('i'); pane.reicon('b', fav2)");
         assertTrue(eval("cb._icon.children[0] === fav2 && cb._icon.has('mtp_chip_icon_on')").asBoolean(), "an icon given later is shown");
         eval("pane.reicon('a', null)");
         assertTrue(eval("ca._icon.children.length === 0 && !ca._icon.has('mtp_chip_icon_on')").asBoolean(), "and taken away");
-        assertEquals("", log(), "a name and an icon are not the arrangement: nothing is reported");
+        assertEquals("", log(), "an icon is the holder's drawing: nothing is reported");
     }
 
     @Test
@@ -765,6 +769,12 @@ class MultiTabPaneTest extends JsModuleTestBase {
         @Test
         void aHeldTabPanesNameIsItsOwn_andItMovesAlongTheRailLikeAnyTab() {
             eval("put('x'); var a = open('a'); pane.take(a); log.length = 0; pane.retitle('a', 'Renamed');");
+            assertEquals("renamed:s1:a=Renamed", log(), "a rename is said by the host it is in");
+            eval("log.length = 0; a.title('Renamed');");
+            assertEquals("", log(), "the same name again is no rename");
+            eval("a.title('By its widget'); a.title('Renamed');");
+            assertEquals("renamed:s1:a=By its widget renamed:s1:a=Renamed", log(), "the tab-pane's own title(t) - what its widget's handle calls - is a rename too");
+            eval("log.length = 0;");
             assertTrue(eval("a.title() === 'Renamed' && a.chip._label.textContent === 'Renamed'").asBoolean(), "the pane renames the tab-pane, which names itself");
             assertEquals("Renamed", eval("pane.getState().tabs[1].title").asString(), "the state asks the tab-pane its name");
             eval("pane.moveTab('a', 0);");

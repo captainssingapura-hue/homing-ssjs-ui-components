@@ -67,7 +67,7 @@ class PaneEventsTest extends JsModuleTestBase {
     void theKindsAreThePermittedSubclassesInOrder() {
         var java = records().stream().map(Class::getSimpleName).toList();
         assertEquals(java.toString(), eval("'[' + PaneEvents.KINDS.join(', ') + ']'").asString());
-        assertEquals(6, java.size());
+        assertEquals(7, java.size());
     }
 
     @Test
@@ -81,7 +81,7 @@ class PaneEventsTest extends JsModuleTestBase {
     void bothSidesRefuseTheSameBadArguments() {
         for (String bad : List.of("PaneEvents.TabAdded('', tab, 0)", "PaneEvents.TabAdded('s', null, 0)", "PaneEvents.TabAdded('s', {}, 0)",
                                   "PaneEvents.TabAdded('s', tab, -1)", "PaneEvents.TabAdded('s', tab, 1.5)", "PaneEvents.TabActivated('s', '')",
-                                  "PaneEvents.TabMoved('s', tab, 0, '', 0)", "PaneEvents.AddRequested(undefined)")) {
+                                  "PaneEvents.TabMoved('s', tab, 0, '', 0)", "PaneEvents.AddRequested(undefined)", "PaneEvents.TabRenamed('s', 't', 7)")) {
             var ex = assertThrows(PolyglotException.class, () -> eval(bad), bad);
             assertTrue(ex.getMessage().startsWith("Error: [PaneEvents] "), bad + " → " + ex.getMessage());
         }
