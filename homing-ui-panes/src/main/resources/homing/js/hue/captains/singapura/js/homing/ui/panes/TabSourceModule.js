@@ -6,7 +6,7 @@
 // asking for a tab — a control, the strip's own button, a menu, a restore
 // from a checkpoint — asks for it the same way.
 //
-//   new TabSource(branch, { kinds, desk })
+//   new TabSource(branch, { kinds, desk, onBecame? })
 //     branch: the source's own
 //     desk:   the Desk its tabs are TAB-PANES of (RFC 0066 E3, appendix
 //             "tab-panes"): each opened in desk.register — which names it and
@@ -25,6 +25,9 @@
 //             listed:false keeps a kind out of kinds() while add still knows
 //             it: the opener is asked for by the plus, not chosen from a list
 //             of things to open, and it must not offer itself.
+//     onBecame(tp, kindId): told when a tab became another kind, after its new
+//             widget is in and before it is shown - so a holder that keeps a
+//             record hears of the change before anything the showing says
 //
 //   source.kinds()              → [ { id, label, title } ], frozen: a dropdown's rows.
 //                               The listed ones only; add takes any of them
@@ -47,6 +50,7 @@
 //   source.show(pane, tab, how) the same three endings, for a caller that placed the tab itself
 //   source.modes()              → [ { id, label, says } ]: the three, worded, for a control
 //                               that would let its user pick one
+//   source.kindOf(tabId)        → the kind of a tab this source made, as it is now, or null
 //   source.become(tabId, kindId) → the index in the host it is in: the
 //                               tab-pane under that id becomes one of that kind IN PLACE —
 //                               the same tab, chip and pane, a new widget, the kind's name —
@@ -95,6 +99,8 @@ class TabSource {
         this._made = {};      // per kind, how many have been made: titles count up and never come back
         this._disposed = false;
         this._desk = o.desk;
+        this._kindOf = {};    // tab id to the kind it holds: known before the desk says the tab arrived
+        this._onBecame = typeof o.onBecame === "function" ? o.onBecame : null;
         (o.kinds || []).forEach(this._declare, this);
         if (this._kinds.length === 0) throw new Error("[TabSource] a source with no kinds can make nothing");
     }
@@ -117,6 +123,9 @@ class TabSource {
     }
 
     has(kindId) { return !!this._by[kindId]; }
+
+    /** The kind a tab this source made holds now, or null: set before the desk hears of the tab, changed by become. */
+    kindOf(tabId) { return Object.prototype.hasOwnProperty.call(this._kindOf, tabId) ? this._kindOf[tabId] : null; }
 
     /** The three ways a tab may arrive, for anyone who would rather name them than spell them. */
     static get MODES() { return Object.freeze(_MODES.map(function (x) { return x.id; })); }
@@ -187,8 +196,9 @@ class TabSource {
         var title = this._title(kind), at;
         var tab = this._desk.register.open({ title: title,   // no id: the register's own names it; the law is the tab-pane's to hold
                                              make: function (b, t) { return kind.make(b, { focus: t.focus, id: t.id, title: title, pane: pane, tab: t }); } });
+        this._kindOf[tab.id] = kind.id;
         try { at = this._desk.move(tab, pane); }
-        catch (e) { tab.close(); throw e; }   // refused where it was going: nothing left behind
+        catch (e) { delete this._kindOf[tab.id]; tab.close(); throw e; }   // refused where it was going: nothing left behind
         this.show(pane, tab, mode);
         return { tab: tab, index: at };
     }
@@ -199,6 +209,8 @@ class TabSource {
         if (!tp) throw new Error("[TabSource] no tab-pane '" + tabId + "' on the desk");
         var host = tp.host(), title = this._title(kind);
         tp.replace(function (b, t) { return kind.make(b, { focus: t.focus, id: t.id, title: title, pane: host, tab: t }); }, title);
+        this._kindOf[tabId] = kind.id;
+        if (this._onBecame) this._onBecame(tp, kind.id);
         if (host) this.show(host, tp, "focus");
         return host ? host.tabIndexOf(tabId) : -1;
     }

@@ -742,6 +742,26 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertTrue(eval("pane.widgetOf(op.id) === op.widget").asBoolean(), "the pane reads the new widget at once");
         }
 
+        /** The source knows what each of its tabs holds, before the desk says the tab arrived, and tells a holder when one becomes another kind, before it is shown. */
+        @Test
+        void theSourceKnowsEachTabsKind_andSaysWhenOneBecomesAnother() {
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabSourceModule.js");
+            eval("""
+                function kindMake(b, p) { b.activate("w"); var w = { root: el("w-" + p.title), activate: function () { log.push(p.title + ":activate"); }, dispose: function () {} };
+                                          w.focus = p.focus.join(b.name, w); return w; }
+                var heard = [];
+                var src = new TabSource(branch.createBranch("src"), { desk: desk, kinds: [ { id: "opener", title: "Open", listed: false, make: kindMake }, { id: "books", title: "Books", make: kindMake } ],
+                                                                     onBecame: function (tp, kindId) { heard.push(tp.id + "=" + kindId + ":" + tp.title()); log.push("became"); } });
+                var op = src.add(pane, "opener", "quiet").tab; log.length = 0;
+                """);
+            assertEquals("opener", eval("src.kindOf(op.id)").asString());
+            assertTrue(eval("src.kindOf('tab-99') === null").asBoolean(), "a tab it did not make");
+            eval("src.become(op.id, 'books')");
+            assertEquals("books", eval("src.kindOf(op.id)").asString());
+            assertEquals("tab-1=books:Books", eval("heard.join(' ')").asString());
+            assertTrue(log().startsWith("became"), "told before it is shown: " + log());
+        }
+
         @Test
         void aHeldTabPanesNameIsItsOwn_andItMovesAlongTheRailLikeAnyTab() {
             eval("put('x'); var a = open('a'); pane.take(a); log.length = 0; pane.retitle('a', 'Renamed');");
