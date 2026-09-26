@@ -11,9 +11,10 @@
 //     branch   the desk's own, handed unactivated
 //     host     the positioned box its docks sit in; the float layer lies over
 //              it, the hand passing through except on a frame
-//     focus    the desk's focus branch, where a tab-pane's widget RESTS while no
-//              host holds it; one of its own under the page's root unless said,
-//              named focusName, the branch's name unless said
+//     focus    the desk's focus branch: its docks under it, and `resting`, desk.rest,
+//              where a tab-pane's widget RESTS while no host holds it — apart from
+//              the docks, whose names are the page's. One of its own under the
+//              page's root unless said, named focusName, the branch's name unless said
 //     menus    the page's ContextMenuSteward, handed to its floats, so a chip
 //              afloat asks for its menu as a chip in a dock does
 //     onEvent  its reports: a tab-pane's arrival (TabAdded) and every move
@@ -23,7 +24,9 @@
 //   desk.layer             the FloatLayer, made when first wanted
 //   desk.addDock(pane) .removeDock(pane) .docks()
 //                          a multi-tab pane becomes a host of the desk: a tab-pane dragged over
-//                          its strip is offered to it. docks() are the docks and the floats
+//                          its strip is offered to it, and its focus branch goes under the desk's,
+//                          so the desk holds its panes in the focus tree too; removed, it goes back
+//                          where it was. docks() are the docks and the floats
 //   desk.open({ id?, title?, icon?, pinned?, closable?, make }, host, index?, how?) → the TabPane:
 //                          opened in the register — its widget made by make(branch, tab) — and
 //                          put in the host, which says it arrived (TabAdded). how: "quiet", the
@@ -40,8 +43,14 @@
 //                          lands there, the one the dock shows - the hand put it there to look at
 //                          it - and the float, empty, is gone. A float of many moves as a
 //                          window does. A float is a dock for as long as it lasts
-//   desk.dispose()         every tab-pane closed, the floats with them; the layer; the desk's
-//                          own focus branch left. The docks are the page's
+//   desk.dispose()         every tab-pane closed, the floats with them; the layer; the docks'
+//                          focus branches back where they were, for the docks are the page's;
+//                          the desk's own focus branch left
+//
+// THE KEYBOARD WALK PASSES THE DESK BY (inWalk() false): the desk is no Tab stop, and
+// nothing in it is — not a pane, not what a pane shows, not what rests in the desk.
+// Between its panes the desk will move a way of its own, a mode it is put in; until
+// then a press selects.
 // =============================================================================
 
 const _deskOwner = Object.freeze({ toString: () => "desk" });
@@ -61,9 +70,11 @@ class Desk {
         this._menus = opts.menus || null;
         this._ownFocus = !opts.focus;
         this.focus = opts.focus || focusParty.root.createBranch(opts.focusName != null ? String(opts.focusName) : branch.name, this);
-        this.register = new TabRegister(branch.createBranch("tabs"), { focus: this.focus });
+        this.rest = this.focus.createBranch("resting", this);
+        this.register = new TabRegister(branch.createBranch("tabs"), { focus: this.rest });
         this._layer = null;
         this._docks = [];
+        this._homes = new Map();      // a dock → the focus branch it was in before the desk took it under its own
         this._floaters = new Map();   // a float's host → the float, while it lasts
         this._floats = 0;             // float-1, float-2 and on: never a name another float of this desk had
         this._target = null;
@@ -82,9 +93,33 @@ class Desk {
         return this._layer;
     }
 
-    addDock(pane) { if (this._docks.indexOf(pane) < 0) this._docks.push(pane); return this; }
-    removeDock(pane) { var i = this._docks.indexOf(pane); if (i >= 0) this._docks.splice(i, 1); return this; }
+    addDock(pane) {
+        if (this._docks.indexOf(pane) >= 0) return this;
+        var m = pane.focus ? pane.focus.owner : null;
+        if (m && m.in && m.in !== this.focus) { this._homes.set(pane, m.in); this.focus.adopt(m); }
+        this._docks.push(pane);
+        return this;
+    }
+    removeDock(pane) {
+        var i = this._docks.indexOf(pane);
+        if (i < 0) return this;
+        this._docks.splice(i, 1);
+        this._home(pane);
+        return this;
+    }
     docks() { return this._docks.slice(); }
+
+    /** Asked by the keyboard walk: the desk is no stop, and nothing in it is — it moves between its panes its own way. */
+    inWalk() { return false; }
+
+    /** A dock's focus branch back where it was before the desk took it — or the root, if that is gone. */
+    _home(pane) {
+        var home = this._homes.get(pane), m = pane.focus ? pane.focus.owner : null;
+        this._homes.delete(pane);
+        if (!home || !m || m.in !== this.focus) return;
+        var alive = home === focusParty.root || (home.owner && home.owner.in);
+        (alive ? home : focusParty.root).adopt(m);
+    }
 
     open(spec, host, index, how) {
         var mode = how == null ? "quiet" : String(how);
@@ -149,7 +184,9 @@ class Desk {
         this._disposed = true;
         this.register.dispose();   // every tab-pane closed: the docks empty, the floats folded
         if (this._layer) this._layer.dispose();
+        this._docks.forEach(function (pane) { this._home(pane); }, this);   // the docks are the page's: back where they were
         this._docks = [];
+        if (this.rest.owner.in) this.rest.owner.leave();
         if (this._ownFocus && this.focus.owner && this.focus.owner.in) this.focus.owner.leave();
         try { this.branch.dissolve(); } catch (e) {}
     }

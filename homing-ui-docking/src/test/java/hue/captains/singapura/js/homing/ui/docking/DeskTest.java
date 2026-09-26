@@ -209,12 +209,33 @@ class DeskTest extends JsModuleTestBase {
             assertTrue(eval("desk._layer !== null && desk.layer.root.parentNode === host").asBoolean(), "the first float makes it, over the host");
         }
 
+        /**
+         * THE KEYBOARD WALK PASSES THE DESK BY: its docks and floats under it in the focus tree,
+         * and none of it offered — not the desk, not a pane, not what a pane shows, not what rests
+         * in it. A dock removed goes back where it was, and every dock when the desk goes.
+         */
+        @Test
+        void theKeyboardWalkPassesTheDeskBy_withItsDocksUnderIt() {
+            eval("desk.open({ title: 'A', make: mk('wa') }, B); var f = desk.float({ x: 10, y: 10 }); desk.open({ title: 'F', make: mk('wf') }, f.host);"
+               + "desk.register.open({ title: 'Z', make: mk('wz') }); var other = focusParty.root.join('other', {});"
+               + "function offered() { return focusParty.walk().filter(KeyboardWalk.offerable).map(function (m) { return m.name; }).join(','); }");
+            assertTrue(eval("A.focus.owner.in === desk.focus && B.focus.owner.in === desk.focus && f.host.focus.owner.in === desk.focus").asBoolean(),
+                    "the docks and the float, under the desk");
+            assertEquals("other", eval("offered()").asString(), "of everything on the page, only what is not the desk's");
+            eval("desk.removeDock(A);");
+            assertTrue(eval("A.focus.owner.in === focusParty.root").asBoolean(), "a dock removed goes back where it was");
+            assertEquals("other,a", eval("offered()").asString(), "and is in the walk again");
+            eval("desk.dispose();");
+            assertTrue(eval("B.focus.owner.in === focusParty.root && !!B.focus.owner.in").asBoolean(), "the desk gone, its docks back where they were");
+        }
+
         @Test
         void aWidgetRestsInTheDesksOwnFocusBranch_whileNoHostHoldsIt() {
             eval("var a = desk.open({ title: 'A', make: mk('wa') }, B); B.letGo(a);");
-            assertTrue(eval("desk.focus.name === 'thedesk' && a.widget.focus.in === desk.focus").asBoolean(), "a branch of its own, named for the desk");
+            assertTrue(eval("desk.focus.name === 'thedesk' && a.widget.focus.in === desk.rest && desk.rest.owner.in === desk.focus").asBoolean(),
+                    "a branch of the desk's own, named for it, apart from its docks");
             eval("desk.dispose();");
-            assertFalse(eval("!!desk.focus.owner.in").asBoolean(), "left when the desk goes");
+            assertFalse(eval("!!desk.focus.owner.in || !!desk.rest.owner.in").asBoolean(), "left when the desk goes");
         }
 
         @Test
@@ -391,7 +412,7 @@ class DeskTest extends JsModuleTestBase {
         void aFloatWhoseLastTabPaneLeavesIsGone_closedOrMovedAway() {
             eval("var f = desk.float({ x: 40, y: 30 }); var a = open('a'); f.take(a); f.host.letGo(a);");
             assertTrue(eval("f.closed() && !desk.layer.has(f.id) && a.host() === null && desk.register.has('a')").asBoolean(), "moved away: the float is gone, the tab-pane not");
-            assertTrue(eval("a.widget.focus.in === desk.focus").asBoolean(), "its membership at rest in the desk's branch, not gone with the float's host");
+            assertTrue(eval("a.widget.focus.in === desk.rest").asBoolean(), "its membership at rest in the desk's branch, not gone with the float's host");
             eval("var g = desk.float({ x: 40, y: 30 }); g.take(a); a.close();");
             assertTrue(eval("g.closed() && !desk.layer.has(g.id) && !desk.register.has('a')").asBoolean(), "closed: the float is gone with it");
         }

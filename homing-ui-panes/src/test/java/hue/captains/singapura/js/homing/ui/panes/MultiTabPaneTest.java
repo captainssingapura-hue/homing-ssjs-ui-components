@@ -99,7 +99,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         }
         // the desk's register and the branch its widgets rest in: every tab here is a tab-pane opened there
         var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
-        var elsewhere = focusParty.root.createBranch("elsewhere", {});
+        var elsewhere = focusParty.root.createBranch("elsewhere", { inWalk: function () { return false; } });   // a desk's: out of the keyboard walk
         var register = new TabRegister(branch.createBranch("tabs"), { focus: elsewhere });
         var reg2 = new TabRegister(branch.createBranch("tabs2"), { focus: elsewhere });   // another desk's: the same ids may be open there
         function open(id, extra, reg) {
@@ -465,7 +465,6 @@ class MultiTabPaneTest extends JsModuleTestBase {
     void theWalkIsOfferedThePane_andOfItsWidgetsOnlyTheTabOnShow() {
         eval("""
             put('a'); put('b'); put('c'); log = [];
-            elsewhere.owner.leave();   // the desk's resting branch, empty now, is out of this walk: it is about the pane's own
             function cand() { var c = KeyboardStewardInstance.candidate(); return c ? focusParty.find(c).name : 'none'; }
             function tabKey() { KeyboardStewardInstance._forward('KeyDown', { key: 'Tab', target: null, preventDefault: function () {}, stopPropagation: function () {} }); }
             function enter() { KeyboardStewardInstance._forward('KeyDown', { key: 'Enter', target: null, preventDefault: function () {}, stopPropagation: function () {} }); }
