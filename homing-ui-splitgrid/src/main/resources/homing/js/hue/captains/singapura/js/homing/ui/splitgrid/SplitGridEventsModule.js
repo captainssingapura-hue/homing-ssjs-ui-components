@@ -7,7 +7,7 @@
 //
 //   SplitGridEvents.TracksChanged(path, ratios)      a split re-shared; the ratios sum to one
 //   SplitGridEvents.Subdivided(cellId, newCellId, side)   a new, empty cell beside one
-//   SplitGridEvents.Removed(cellId)                  a cell gone, its room to its neighbour
+//   SplitGridEvents.Removed(cellId, toward)          a cell gone, its room toward the cell named (null: none was)
 //   SplitGridEvents.CursorMoved(cellId, by)          a mirror's cursor at a cell: by an arrow
 //                                                    (left, right, up, down), a pointer, or a call
 //   SplitGridEvents.KINDS                            the kinds, in this order
@@ -61,8 +61,8 @@ class SplitGridEvents {
         return Object.freeze({ kind: "Subdivided", cellId: _id(cellId, "Subdivided.cellId"), newCellId: _id(newCellId, "Subdivided.newCellId"), side: _side(side, "Subdivided.side") });
     }
     /** A cell was removed: its room went to its neighbour, and a split left with one child gave way to it. */
-    static Removed(cellId) {
-        return Object.freeze({ kind: "Removed", cellId: _id(cellId, "Removed.cellId") });
+    static Removed(cellId, toward) {
+        return Object.freeze({ kind: "Removed", cellId: _id(cellId, "Removed.cellId"), toward: toward == null ? null : _id(toward, "Removed.toward") });
     }
     /** A mirror's cursor is at a cell: moved there by an arrow, a pointer, or a call. */
     static CursorMoved(cellId, by) {

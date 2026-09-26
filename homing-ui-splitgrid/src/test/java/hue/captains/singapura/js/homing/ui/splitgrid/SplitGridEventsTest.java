@@ -69,12 +69,14 @@ class SplitGridEventsTest extends JsModuleTestBase {
         assertThrows(IllegalArgumentException.class, () -> new SplitGridEvent.TracksChanged("", List.of(0.5, 0.6)));
         assertThrows(IllegalArgumentException.class, () -> new SplitGridEvent.TracksChanged("", List.of(0.0, 1.0)));
         assertEquals("TracksChanged", new SplitGridEvent.TracksChanged("0/1", List.of(0.25, 0.75)).kind());
-        for (String bad : List.of("SplitGridEvents.Subdivided('', 'b', 'left')", "SplitGridEvents.Subdivided('a', 'b', 'up')", "SplitGridEvents.Removed(undefined)")) {
+        for (String bad : List.of("SplitGridEvents.Subdivided('', 'b', 'left')", "SplitGridEvents.Subdivided('a', 'b', 'up')", "SplitGridEvents.Removed(undefined)", "SplitGridEvents.Removed('a', '')")) {
             var ex = assertThrows(PolyglotException.class, () -> eval(bad), bad);
             assertTrue(ex.getMessage().startsWith("Error: [SplitGridEvents] "), bad + " → " + ex.getMessage());
         }
         assertThrows(IllegalArgumentException.class, () -> new SplitGridEvent.Subdivided("a", "b", "up"));
-        assertThrows(IllegalArgumentException.class, () -> new SplitGridEvent.Removed(""));
+        assertThrows(IllegalArgumentException.class, () -> new SplitGridEvent.Removed("", null));
+        assertThrows(IllegalArgumentException.class, () -> new SplitGridEvent.Removed("a", ""));
+        assertEquals(null, new SplitGridEvent.Removed("a", null).toward());
         assertThrows(IllegalArgumentException.class, () -> new SplitGridEvent.CursorMoved("a", "sideways"));
         assertEquals("a|pointer", eval("var m = SplitGridEvents.CursorMoved('a', 'pointer'); [m.cellId, m.by].join('|')").asString());
         assertTrue(assertThrows(PolyglotException.class, () -> eval("SplitGridEvents.CursorMoved('a', 'sideways')")).getMessage().startsWith("Error: [SplitGridEvents] "));

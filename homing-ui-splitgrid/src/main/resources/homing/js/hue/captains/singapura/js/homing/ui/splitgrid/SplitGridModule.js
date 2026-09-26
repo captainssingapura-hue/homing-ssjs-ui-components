@@ -53,7 +53,7 @@
 //                                is: the whole of it to that cell when they
 //                                share a splitter, else to the neighbour
 //                                holding it; unnamed, to the one beside it.
-//                                Reports Removed
+//                                Reports Removed, with the toward it was given
 //   grid.dispose()
 //
 // The cells are the grid's constant: a cell's element is minted once and kept
@@ -297,7 +297,7 @@ class SplitGrid {
         this._cells.delete(id);
         this._arrange();
         if (el && el.parentNode) el.parentNode.removeChild(el);
-        this._fire(SplitGridEvents.Removed(id));
+        this._fire(SplitGridEvents.Removed(id, toward == null ? null : String(toward)));
         return el || null;
     }
 

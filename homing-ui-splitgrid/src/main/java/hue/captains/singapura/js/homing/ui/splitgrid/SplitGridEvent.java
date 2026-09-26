@@ -53,9 +53,17 @@ public sealed interface SplitGridEvent {
         }
     }
 
-    /** A cell was removed: its room went to its neighbour, and a split left with one child gave way to it. */
-    record Removed(String cellId) implements SplitGridEvent {
-        public Removed { requireId(cellId, "Removed.cellId"); }
+    /**
+     * A cell was removed: its room went toward the cell named, as the grid was told
+     * - null when none was - and a split left with one child gave way to it. The
+     * grid's arrangement after is the old one less the cell, by the tree's algebra
+     * with that {@code toward}: a holder that keeps the arrangement can replay it.
+     */
+    record Removed(String cellId, String toward) implements SplitGridEvent {
+        public Removed {
+            requireId(cellId, "Removed.cellId");
+            if (toward != null) requireId(toward, "Removed.toward");
+        }
     }
 
     /** A mirror's cursor is at a cell: moved there by an arrow — left, right, up, down — a pointer, or a call. */
