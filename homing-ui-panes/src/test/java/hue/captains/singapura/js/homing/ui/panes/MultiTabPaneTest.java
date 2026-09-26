@@ -746,6 +746,24 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertTrue(eval("pane.widgetOf(op.id) === op.widget").asBoolean(), "the pane reads the new widget at once");
         }
 
+        /** A tab comes back as it was - its id, its title - and the kind's count goes on past the title, never giving out one the page already shows. */
+        @Test
+        void aTabComesBackUnderItsIdAndTitle_andTheCountGoesOnPastIt() {
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabSourceModule.js");
+            eval("""
+                function kindMake(b, p) { b.activate("w"); var w = { root: el("w-" + p.title), activate: function () {}, dispose: function () {} };
+                                          w.focus = p.focus.join(b.name, w); return w; }
+                var src = new TabSource(branch.createBranch("src"), { desk: desk, kinds: [ { id: "books", title: "Books", make: kindMake } ] });
+                var back = src.add(pane, "books", "quiet", { id: "tab-7", title: "Books 3" }).tab;
+                var mine = src.add(pane, "books", "quiet", { id: "tab-9", title: "Mine" }).tab;
+                var next = src.add(pane, "books", "quiet").tab;
+                """);
+            assertEquals("tab-7|Books 3|books", eval("[back.id, back.title(), src.kindOf(back.id)].join('|')").asString());
+            assertEquals("tab-9|Mine", eval("[mine.id, mine.title()].join('|')").asString(), "a renamed title comes back as it is, and counts for nothing");
+            assertEquals("Books 4", eval("next.title()").asString(), "the count goes on past the title that came back");
+            assertEquals("tab-7,tab-9," + eval("next.id").asString(), eval("pane.tabs().join(',')").asString());
+        }
+
         /** The source knows what each of its tabs holds, before the desk says the tab arrived, and tells a holder when one becomes another kind, before it is shown. */
         @Test
         void theSourceKnowsEachTabsKind_andSaysWhenOneBecomesAnother() {

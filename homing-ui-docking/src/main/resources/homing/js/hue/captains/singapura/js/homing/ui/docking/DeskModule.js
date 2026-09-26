@@ -49,11 +49,14 @@
 //                          point - under its own chip unless said - within the desk: the
 //                          tab menu's Detach, a dock's Shift+↓
 //   desk.float(opts?)      → a Floater: a frame around a host of its own, one bar, no plus.
+//                          Named opts.id, else "float-N": a name no float on the desk has - a float
+//                          brought back under its old name keeps it, and the next is named past it.
 //                          While it holds ONE tab-pane it is that tab in the hand: dragged, it
 //                          is offered to the docks it passes, and let go over a strip the tab-pane
 //                          lands there, the one the dock shows - the hand put it there to look at
 //                          it - and the float, empty, is gone. A float of many moves as a
 //                          window does. A float is a dock for as long as it lasts
+//   desk.floats()          → the floats, bottom of the stack first: none while the layer is not made
 //   desk.dispose()         every tab-pane closed, the floats with them; the layer; the docks'
 //                          focus branches back where they were, for the docks are the page's;
 //                          the desk's own focus branch left
@@ -212,9 +215,9 @@ class Desk {
     }
 
     float(opts) {
-        var self = this, f = null;
+        var self = this, f = null, id = opts && opts.id != null ? String(opts.id) : this._floatId();
         f = new Floater(this.layer, Object.assign({
-            id: "float-" + (++this._floats),
+            id: id,
             menus: this._menus,
             onEvent: function (ev) { self._fire(ev); },
             onDragMove: function (frame, x, y) { if (f.host.count() === 1) self._offer(x, y, f.host); else self._clear(); },
@@ -231,6 +234,21 @@ class Desk {
         this.addDock(f.host);
         this._floaters.set(f.host, f);
         return f;
+    }
+
+    /** A float's name no float on the desk has: float-1, float-2 and on. */
+    _floatId() {
+        var id;
+        do { id = "float-" + (++this._floats); } while (this._layer && this._layer.has(id));
+        return id;
+    }
+
+    /** The floats, bottom of the stack first. */
+    floats() {
+        if (!this._layer) return [];
+        var byId = new Map();
+        this._floaters.forEach(function (f) { byId.set(f.id, f); });
+        return this._layer.panes().map(function (id) { return byId.get(id); }).filter(function (f) { return !!f; });
     }
 
     dispose() {

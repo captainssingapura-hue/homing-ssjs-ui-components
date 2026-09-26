@@ -319,6 +319,20 @@ class DeskTest extends JsModuleTestBase {
                 """);
         }
 
+        /** A float brought back under its old name keeps it; the next float is named past every name on the desk; the floats read bottom first. */
+        @Test
+        void aFloatKeepsTheNameItComesBackUnder_andTheNextIsNamedPastIt() {
+            assertEquals(0, eval("desk.floats().length").asInt(), "no layer yet: no floats, and none made by asking");
+            eval("var back = desk.float({ id: 'float-2', x: 40, y: 30, w: 300, h: 200 }); back.take(open('a'));"
+               + "var one = desk.float({ x: 60, y: 50 }); one.take(open('b'));"
+               + "var two = desk.float({ x: 80, y: 70 }); two.take(open('c'));");
+            assertEquals("float-2 float-1 float-3", eval("back.id + ' ' + one.id + ' ' + two.id").asString());
+            assertEquals("float-2,float-1,float-3", eval("desk.floats().map(function (f) { return f.id; }).join(',')").asString(), "bottom first");
+            eval("desk.layer.raise('float-2');");
+            assertEquals("float-1,float-3,float-2", eval("desk.floats().map(function (f) { return f.id; }).join(',')").asString());
+            assertEquals("40,30,300,200", eval("var b = back.frame.bounds(); [b.x, b.y, b.w, b.h].join(',')").asString());
+        }
+
         @Test
         void aFloatIsAFrameWithOneBar_theHostsStrip() {
             eval("var f = desk.float({ x: 40, y: 30, w: 300, h: 200 }); f.take(open('a'));");

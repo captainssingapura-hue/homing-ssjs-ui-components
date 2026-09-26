@@ -35,7 +35,9 @@
 //   source.canAdd(pane)         → room on the desk — its budget, the only limit there is —
 //                               asked before anything is made. NOT the pane's own canAdd(),
 //                               which is about the strip's plus
-//   source.add(pane, kindId, how?) → { tab, index }: addTo, with the tab-pane it made
+//   source.add(pane, kindId, how?, restore?) → { tab, index }: addTo, with the tab-pane it made.
+//                               restore { id, title }: a tab coming back as it was - under its
+//                               id, with its title, the kind's count going on past that title
 //   source.addTo(pane, kindId, how?)  → the index it landed at, or −1 when the pane
 //                               would not take it. HOW a tab arrives is the third thing
 //                               a caller must say, beside which pane and which kind:
@@ -189,12 +191,19 @@ class TabSource {
         return n === 1 ? kind.title : kind.title + " " + n;
     }
 
-    add(pane, kindId, how) {
-        var mode = this._how(how), kind = this._by[kindId];
+    /** A title a tab comes back with: the count goes on past it when it is one of the kind's own - "Books", "Books 3". */
+    _counted(kind, title) {
+        var n = title === kind.title ? 1 : title.indexOf(kind.title + " ") === 0 && /^[1-9][0-9]*$/.test(title.slice(kind.title.length + 1)) ? +title.slice(kind.title.length + 1) : 0;
+        if (n > this._made[kind.id]) this._made[kind.id] = n;
+        return title;
+    }
+
+    add(pane, kindId, how, restore) {
+        var mode = this._how(how), kind = this._by[kindId], back = restore || {};
         if (!kind) throw new Error("[TabSource] no kind '" + kindId + "'");
         if (!this.canAdd(pane)) return { tab: null, index: -1 };
-        var title = this._title(kind), at;
-        var tab = this._desk.register.open({ title: title,   // no id: the register's own names it; the law is the tab-pane's to hold
+        var title = back.title != null ? this._counted(kind, String(back.title)) : this._title(kind), at;
+        var tab = this._desk.register.open({ id: back.id, title: title,   // no id unless one comes back: the register's own names it
                                              make: function (b, t) { return kind.make(b, { focus: t.focus, id: t.id, title: title, pane: pane, tab: t }); } });
         this._kindOf[tab.id] = kind.id;
         try { at = this._desk.move(tab, pane); }
