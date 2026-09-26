@@ -38,6 +38,10 @@
 //   desk.move(tp, to, index?) → the index it took: from the host it is in to another, whole or
 //                          not at all — refused before anything leaves when that host would not
 //                          take it. One TabMoved; a tab-pane in no host arrives, one TabAdded
+//   desk.show(tp)          → its host, or null when none holds it: the tab-pane shown where it is —
+//                          its host shows it, a float holding it raised. The keys are not given
+//                          here: that is the caller's, and only ever at the user's asking
+//                          (RFC 0066 E3, keyboard §17.2)
 //   desk.detach(tp, at?)   → the float: the tab-pane into a float of its own, its bar at the
 //                          point, within the desk — a menu's Detach, Shift+↓
 //   desk.float(opts?)      → a Floater: a frame around a host of its own, one bar, no plus.
@@ -159,6 +163,15 @@ class Desk {
         }
         var fl = from ? this._floaters.get(from) : null;   // a float it leaves empty goes AFTER the move is said
         return fl ? fl.hold(go) : go();
+    }
+
+    show(tp) {
+        var host = tp ? tp.host() : null;
+        if (!host) return null;
+        host.switchTab(tp.id);
+        var f = this._floaters.get(host);
+        if (f && this._layer) this._layer.raise(f.id);
+        return host;
     }
 
     detach(tp, at) {

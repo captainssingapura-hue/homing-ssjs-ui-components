@@ -422,6 +422,19 @@ class DeskTest extends JsModuleTestBase {
             assertTrue(eval("g.host.tabs().join(',') === 'b,a' && f.closed() && !g.closed()").asBoolean(), "joined it; the empty one gone");
         }
 
+        /** SHOW: a tab-pane brought to the front where it is — its host shows it, a float holding it raised — and nothing else: no keys given. */
+        @Test
+        void showBringsATabPaneToTheFrontWhereItIs() {
+            eval("var a = open('a'), b = open('b'); A.take(a); A.take(b); A.switchTab('a');"
+               + "var f = desk.float({ x: 10, y: 10 }); f.take(open('c')); var g = desk.float({ x: 20, y: 20 }); g.take(open('d')); log.length = 0;");
+            assertTrue(eval("desk.show(b) === A && A.activeTab() === 'b'").asBoolean(), "in a dock: shown there, the host answered");
+            assertFalse(log().contains("raised"), "a dock has no frame to raise: " + log());
+            eval("log.length = 0; desk.show(desk.register.get('c'));");
+            assertTrue(log().contains("raised:" + id()), "in a float under another: its frame raised - " + log());
+            assertFalse(log().contains(":activate"), "and no widget handed the keys");
+            assertTrue(eval("desk.show(open('loose')) === null && desk.show(null) === null").asBoolean(), "in no host: nothing to show");
+        }
+
         @Test
         void theCrossClosesTheFloat_andEveryTabPaneInIt() {
             eval("var f = desk.float({ x: 40, y: 30 }); f.take(open('a')); f.take(open('b')); log.length = 0;"
