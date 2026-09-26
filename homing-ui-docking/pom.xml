@@ -56,6 +56,17 @@
             <artifactId>homing-ui-panes</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- DockGrid: its regions are the split grid's cells, its menu a kind of the menu's tree -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-splitgrid</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-menu</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
