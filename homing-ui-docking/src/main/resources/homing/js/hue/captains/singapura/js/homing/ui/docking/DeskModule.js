@@ -7,8 +7,11 @@
 // host holds it and never owns it. A lone multi-tab pane is a desk with one
 // host: the float layer is made only when a float is first wanted.
 //
-//   new Desk(branch, { host, onEvent?, focus?, focusName?, menus?, keyboard?, keyboardId?, minW?, minH? })
+//   new Desk(branch, { host, budget?, onEvent?, focus?, focusName?, menus?, keyboard?, keyboardId?, minW?, minH? })
 //     branch   the desk's own, handed unactivated
+//     budget   the most tabs the desk holds at once — THE limit: a pane has none of its own,
+//              its bar scrolls. Spent, an open is refused and every dock's plus is greyed;
+//              none, and there is no limit
 //     host     the positioned box its docks sit in; the float layer lies over
 //              it, the hand passing through except on a frame
 //     focus    the desk's focus branch: its docks under it, and `resting`, desk.rest,
@@ -71,7 +74,8 @@ class Desk {
         this._ownFocus = !opts.focus;
         this.focus = opts.focus || focusParty.root.createBranch(opts.focusName != null ? String(opts.focusName) : branch.name, this);
         this.rest = this.focus.createBranch("resting", this);
-        this.register = new TabRegister(branch.createBranch("tabs"), { focus: this.rest });
+        var self = this;
+        this.register = new TabRegister(branch.createBranch("tabs"), { focus: this.rest, budget: opts.budget, onCount: function () { self._roomed(); } });
         this._layer = null;
         this._docks = [];
         this._homes = new Map();      // a dock → the focus branch it was in before the desk took it under its own
@@ -98,6 +102,7 @@ class Desk {
         var m = pane.focus ? pane.focus.owner : null;
         if (m && m.in && m.in !== this.focus) { this._homes.set(pane, m.in); this.focus.adopt(m); }
         this._docks.push(pane);
+        if (typeof pane.setRoom === "function") pane.setRoom(this.register.room() > 0);
         return this;
     }
     removeDock(pane) {
@@ -105,12 +110,19 @@ class Desk {
         if (i < 0) return this;
         this._docks.splice(i, 1);
         this._home(pane);
+        if (typeof pane.setRoom === "function") pane.setRoom(true);   // no longer this desk's to say
         return this;
     }
     docks() { return this._docks.slice(); }
 
     /** Asked by the keyboard walk: the desk is no stop, and nothing in it is — it moves between its panes its own way. */
     inWalk() { return false; }
+
+    /** The register's count changed: every dock's plus says whether a new tab would fit. */
+    _roomed() {
+        var room = this.register.room() > 0;
+        for (var i = 0; i < this._docks.length; i++) if (typeof this._docks[i].setRoom === "function") this._docks[i].setRoom(room);
+    }
 
     /** A dock's focus branch back where it was before the desk took it — or the root, if that is gone. */
     _home(pane) {

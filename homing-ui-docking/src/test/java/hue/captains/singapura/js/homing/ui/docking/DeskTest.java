@@ -252,11 +252,34 @@ class DeskTest extends JsModuleTestBase {
 
         @Test
         void anOpenTheHostRefuses_leavesNothingBehind() {
-            eval("var full = new MultiTabPane(page.createBranch('full'), { host: el('div'), slotId: 'full', budget: 1 }); desk.open({ title: 'X', make: mk('wx') }, full); log.length = 0;");
-            var ex = assertThrows(PolyglotException.class, () -> eval("desk.open({ title: 'Y', make: mk('wy') }, full)"));
+            eval("var full = new MultiTabPane(page.createBranch('full'), { host: el('div'), slotId: 'full' }); desk.open({ title: 'X', make: mk('same') }, full); log.length = 0;");
+            var ex = assertThrows(PolyglotException.class, () -> eval("desk.open({ title: 'Y', make: mk('same') }, full)"));
             assertTrue(ex.getMessage().contains("would not take"), ex.getMessage());
             assertEquals(1, eval("desk.register.count()").asInt(), "the one it opened for the refusal is closed again");
-            assertEquals("wy:disposed", log());
+            assertEquals("same:disposed", log(), "its widget's member name is taken there: refused, and nothing left behind");
+        }
+
+        /** THE LIMIT IS THE DESK'S: spent, an open beyond it is refused and every dock's plus greyed — a dock added while full too; a close gives the room back. */
+        @Test
+        void theDesksBudget_greysEveryPlus_andAnOpenBeyondItIsRefused() {
+            loadModule(P + "panes/TabSourceModule.js");
+            eval("var small = new Desk(page.createBranch('small'), { host: host, budget: 2, focusName: 'small' });"
+               + "var C = dock('c', { left: 0, top: 300, right: 400, bottom: 600 }), D = dock('d', { left: 400, top: 300, right: 800, bottom: 600 });"
+               + "small.addDock(C); small.addDock(D);"
+               + "var src = new TabSource(page.createBranch('src'), { desk: small, kinds: [ { id: 'note', make: function (b, p) { b.activate('w'); return widget('wn', p.focus); } } ] });"
+               + "var one = small.open({ title: '1', make: mk('s1') }, C);");
+            assertTrue(eval("C.canAdd() && D.canAdd() && src.canAdd(C)").asBoolean(), "room for one more");
+            eval("small.open({ title: '2', make: mk('s2') }, D);");
+            assertTrue(eval("!C.canAdd() && !D.canAdd() && !src.canAdd(C)").asBoolean(), "full: every plus greyed, and the source says so");
+            var ex = assertThrows(PolyglotException.class, () -> eval("small.open({ title: '3', make: mk('s3') }, C)"));
+            assertTrue(ex.getMessage().contains("budget of 2"), ex.getMessage());
+            eval("var E = dock('e', { left: 0, top: 600, right: 400, bottom: 700 }); small.addDock(E);");
+            assertFalse(eval("E.canAdd()").asBoolean(), "a dock that joins a full desk is greyed at once");
+            eval("one.close();");
+            assertTrue(eval("C.canAdd() && D.canAdd() && E.canAdd()").asBoolean(), "a close gives the room back");
+            eval("small.open({ title: '3', make: mk('s3') }, C); small.removeDock(E);");
+            assertTrue(eval("!C.canAdd() && E.canAdd()").asBoolean(), "a dock the desk let go is no longer the desk's to grey");
+            assertEquals("Infinity", eval("String(desk.register.budget())").asString(), "a desk told no budget has no limit");
         }
 
         @Test
@@ -342,7 +365,8 @@ class DeskTest extends JsModuleTestBase {
         @Test
         void aMoveIsRefusedBeforeAnythingLeaves() {
             eval("var a = open('a'); A.take(a);"
-               + "var full = new MultiTabPane(page.createBranch('full'), { host: el('div'), slotId: 'full', budget: 1 }); full.take(open('x')); log.length = 0;");
+               + "var full = new MultiTabPane(page.createBranch('full'), { host: el('div'), slotId: 'full' });"
+               + "full.take(desk.register.open({ id: 'x', title: 'X', make: mk('a') })); log.length = 0;");   // its widget joined as 'a': a's name is taken there
             var ex = assertThrows(PolyglotException.class, () -> eval("desk.move(a, full)"));
             assertTrue(ex.getMessage().contains("would not take"), ex.getMessage());
             assertTrue(eval("A.has('a') && a.host() === A && !full.has('a')").asBoolean(), "nothing left");

@@ -178,7 +178,7 @@ class AddTab {
         this._go.disabled = !can;
         this._go.setAttribute("title", !pane ? "pick a pane first"
                                   : can ? "a new tab in " + pane.slotId
-                                        : pane.slotId + " is full: " + pane.count() + " of " + pane.budget());
+                                        : "no room for another tab on this desk");
     }
 
     dispose() {

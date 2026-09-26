@@ -254,6 +254,20 @@ class TabPaneTest extends JsModuleTestBase {
         assertEquals("plate", eval("register.freeId('plate')").asString());
     }
 
+    /** THE DESK'S LIMIT IS THE REGISTER'S: spent, an open is refused before anything is made; a close makes room; every count is told. */
+    @Test
+    void theBudgetIsTheRegisters_anOpenBeyondItRefusedBeforeAnythingIsMade() {
+        eval("var counts = []; var small = new TabRegister(page.createBranch('small'), { budget: 2, onCount: function (n) { counts.push(n); } });"
+           + "small.open({ id: 'a', focus: dock, make: widget('sa') }); var b = small.open({ id: 'b', focus: dock, make: widget('sb') });");
+        assertEquals("2|0", eval("small.budget() + '|' + small.room()").asString());
+        var ex = assertThrows(PolyglotException.class, () -> eval("small.open({ id: 'c', focus: dock, make: widget('sc') })"));
+        assertTrue(ex.getMessage().contains("the budget of 2 tabs is spent"), ex.getMessage());
+        assertTrue(eval("!handles.sc && !small.has('c')").asBoolean(), "nothing made, nothing held");
+        eval("b.close()");
+        assertEquals("1|1,2,1", eval("small.room() + '|' + counts.join(',')").asString(), "a close makes room, and is told");
+        assertEquals("Infinity", eval("String(register.budget())").asString(), "no budget: no limit");
+    }
+
     @Test
     void disposeClosesEveryTabPane_inTheOrderOpened() {
         eval("register.open({ id: 'a', focus: dock, make: widget('wa') }); register.open({ id: 'b', focus: dock, make: widget('wb') }); register.dispose();");

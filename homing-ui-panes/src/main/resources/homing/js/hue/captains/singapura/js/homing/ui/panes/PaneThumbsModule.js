@@ -160,7 +160,7 @@ class PaneThumbs {
         at.el.style.setProperty("--thumb-w", pc(r.width / u.w));
         at.el.style.setProperty("--thumb-h", pc(r.height / u.h));
         at.label.textContent = String(this._labelOf(pane));
-        at.el.setAttribute("title", this._labelOf(pane) + " — " + pane.count() + " of " + pane.budget());
+        at.el.setAttribute("title", this._labelOf(pane) + " — " + pane.count() + (pane.count() === 1 ? " tab" : " tabs"));
     }
 
     /**

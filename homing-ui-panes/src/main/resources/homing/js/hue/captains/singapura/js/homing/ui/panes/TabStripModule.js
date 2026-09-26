@@ -40,7 +40,7 @@
 //         while the bar has them — the chip lifted, the colour part of the way —
 //         "lent" while what the tab holds has them — the chip down again, the
 //         colour at full, the within mark on it — or null on none
-//     strip.count(n, budget, addOn) the pill, and the add button on or off
+//     strip.count(n, addOn)         the pill, and the add button on or off
 //     strip.ground(target)          whether an event's target is the strip's own ground — the
 //         room the chips leave, and the tail — and not a chip or a control on it: where a
 //         press may move a window whose bar the strip is
@@ -263,9 +263,9 @@ class TabStrip {
         this._active = active || null;
         this._window.reveal(this._active);
     }
-    count(n, budget, addOn) {
-        this._pill.textContent = n + " / " + budget;
-        this._pill.title = "Tabs in this pane: " + n + " of " + budget;
+    count(n, addOn) {
+        this._pill.textContent = String(n);
+        this._pill.title = "Tabs in this pane: " + n;
         if (this._addBtn) {
             this._addBtn.disabled = !addOn;
             css.toggleClass(this._addBtn, mtp_add_off, !addOn);

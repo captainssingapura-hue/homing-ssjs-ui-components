@@ -4,7 +4,7 @@
 // here and never owned. A branch component: the caller makes a sub-branch for
 // it and hands it in; dispose() dissolves it.
 //
-//   new MultiTabPane(branch, { host, slotId?, budget?, addable?, onEvent?, menus?, stripMenu?, focus?, focusName?, keys?, onEmpty?, onClose? })
+//   new MultiTabPane(branch, { host, slotId?, addable?, onEvent?, menus?, stripMenu?, focus?, focusName?, keys?, onEmpty?, onClose? })
 //     onEmpty(pane): its last tab has left it — closed or let go — for a
 //             holder whose pane lives only while it holds something: a float
 //     onClose(): the bar's own cross at its end, for a pane that is a window's
@@ -66,7 +66,9 @@
 //   pane.moveTab(id, destIndex)  → TabMoved(slotId, tab, srcIndex, slotId, destIndex),
 //       destIndex being where the tab ends up. A drag on the strip is this.
 //   pane.tabs() .activeTab() .has(id) .tabIndexOf(id) .count()
-//   pane.budget() .canAdd() .setAddEnabled(b)
+//   pane.canAdd() .setAddEnabled(b) .setRoom(b)   the plus is on while the holder has it on
+//       and its desk has room: a pane has no limit of its own — its bar scrolls — and
+//       the limit is the desk's, which says setRoom(false) while it is spent
 //   pane.size(s?) .aspect(a?)    the chips' size and aspect, −1..1, null the design's
 //   pane.contentElOf(id) .widgetOf(id) .getState() .el .slotId .focus
 //   pane.keyDown(ev) .wouldHold() .wouldOffer(m) .granted(by) .taken(by) .within(on) .offered() .withdrawn()
@@ -83,8 +85,8 @@
 //   THE HOST (RFC 0066 E3, appendix "tab-panes"). A tab-pane is held, never
 //   owned: its chip and its pane are its own, minted once, and they are placed
 //   here as they are, never minted or dissolved here.
-//   pane.canTake(tp)             → whether take would: by the law, under the budget,
-//       the id not here, and the tab-pane in no other host
+//   pane.canTake(tp)             → whether take would: by the law, the id not here,
+//       and the tab-pane in no other host
 //   pane.admits(tp)              → whether it would, were the tab-pane let go where it
 //       is: what a mover asks before anything leaves
 //   pane.tabPaneOf(id)           → the tab-pane held under that id, or null
@@ -132,7 +134,6 @@
 // joins unless told.
 // =============================================================================
 
-var _DEFAULT_BUDGET = 16;
 const _paneOwner = Object.freeze({ toString: () => "multiTabPane" });
 
 class MultiTabPane {
@@ -152,8 +153,8 @@ class MultiTabPane {
         branch.activate(_paneOwner);
         this._branch = branch;
         this.slotId = opts.slotId == null ? "main" : String(opts.slotId);
-        this._budget = opts.budget == null ? _DEFAULT_BUDGET : Math.max(1, opts.budget | 0);
         this._addEnabled = opts.addable !== false;
+        this._room = true;   // its desk's word: whether a new tab would fit anywhere
         this._schemes = PaneSchemes.of(opts.keys);   // _keys() is the method that writes data-keys; this is the list of schemes
         this._sink = typeof opts.onEvent === "function" ? opts.onEvent : null;
         this._onEmpty = typeof opts.onEmpty === "function" ? opts.onEmpty : null;
@@ -225,7 +226,7 @@ class MultiTabPane {
     // ── The chips and the panels: a tab-pane's own, PaneTabs' to place and take out ──
     _refresh() {
         this._strip.arrange(PaneTabs.chips(this));
-        this._strip.count(this._tabs.length, this._budget, this.canAdd());
+        this._strip.count(this._tabs.length, this.canAdd());
         css.toggleClass(this._empty, mtp_tab_content_hidden, this._tabs.length > 0);
     }
     _show(id) {
@@ -297,9 +298,9 @@ class MultiTabPane {
     has(id) { return this._find(id) >= 0; }
     tabIndexOf(id) { return this._find(id); }
     count() { return this._tabs.length; }
-    budget() { return this._budget; }
-    canAdd() { return this._addEnabled && this._tabs.length < this._budget; }
+    canAdd() { return this._addEnabled && this._room; }
     setAddEnabled(on) { this._addEnabled = !!on; this._refresh(); }
+    setRoom(on) { this._room = !!on; this._refresh(); }
     size(s) { this._strip.size(s); }
     aspect(a) { this._strip.aspect(a); }
     chipOf(i) { return i < 0 || i >= this._tabs.length ? null : this._tabs[i].chip; }

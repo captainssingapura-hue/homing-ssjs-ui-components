@@ -29,8 +29,9 @@
 //   source.kinds()              → [ { id, label, title } ], frozen: a dropdown's rows.
 //                               The listed ones only; add takes any of them
 //   source.has(kindId)
-//   source.canAdd(pane)         → room in its budget, asked before anything is made. NOT
-//                               the pane's own canAdd(), which is about the strip's plus
+//   source.canAdd(pane)         → room on the desk — its budget, the only limit there is —
+//                               asked before anything is made. NOT the pane's own canAdd(),
+//                               which is about the strip's plus
 //   source.add(pane, kindId, how?) → { tab, index }: addTo, with the tab-pane it made
 //   source.addTo(pane, kindId, how?)  → the index it landed at, or −1 when the pane
 //                               would not take it. HOW a tab arrives is the third thing
@@ -135,9 +136,9 @@ class TabSource {
     }
 
     /**
-     * Whether the pane has ROOM for another — its budget, and nothing else.
-     * Asked before a widget is made, so a refusal costs nothing and leaves
-     * nothing behind.
+     * Whether there is ROOM for another — the desk's budget, since a pane has
+     * none of its own. Asked before a widget is made, so a refusal costs
+     * nothing and leaves nothing behind.
      *
      * NOT the pane's own canAdd(), which answers a different question: whether
      * the STRIP shows a plus. A dock built with addable:false has no button of
@@ -146,7 +147,7 @@ class TabSource {
      * offer one way of adding without offering the other. A page that wants a
      * particular dock left alone keeps it out of the list it hands the control.
      */
-    canAdd(pane) { return !!pane && typeof pane.count === "function" && typeof pane.budget === "function" && pane.count() < pane.budget(); }
+    canAdd(pane) { return !!pane && this._desk.register.room() > 0; }
 
     /**
      * The whole gesture: ask the pane, make the tab, put it in, and end it the

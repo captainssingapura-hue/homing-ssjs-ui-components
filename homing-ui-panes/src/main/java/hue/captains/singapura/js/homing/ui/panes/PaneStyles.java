@@ -388,7 +388,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** The add button when the budget is spent: inert, and says so. Toggled beside {@code disabled}. */
+    /** The add button when it would add nothing — the desk full, or the holder turned it off: inert, and says so. Toggled beside {@code disabled}. */
     /**
       * The plus ON THE RAIL, where a browser keeps it: after the last chip,
       * moving along as tabs come and go, because it is about THE END OF THE
@@ -478,7 +478,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         @Override public String body() { return ""; }
     }
 
-    /** The count: tabs used of the budget, as a kicker. */
+    /** The count: the tabs in the pane, as a kicker. */
     public record mtp_pill() implements CssClass<PaneStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return "white-space: nowrap;"; }

@@ -112,7 +112,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         function holder() { var h = KeyboardStewardInstance.holder(); return h ? focusParty.find(h).name : "none"; }
         var events = [];
         var paneBranch = branch.createBranch("mtp_s1");
-        var pane = new MultiTabPane(paneBranch, { host: host, slotId: "s1", budget: 4,
+        var pane = new MultiTabPane(paneBranch, { host: host, slotId: "s1",
             onEvent: function (ev) {
                 events.push(ev);
                 switch (ev.kind) {
@@ -170,7 +170,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("A", eval("selected()").asString());
         assertEquals("a", eval("pane.activeTab()").asString());
         assertEquals("active:s1:a", log(), "an arrival is the desk's to report: the pane says only what it shows");
-        assertEquals("3 / 4", eval("pane.el.children[0].children.slice(-1)[0].children.filter(function (c) { return c.has('mtp_pill'); })[0].textContent").asString());
+        assertEquals("3", eval("pane.el.children[0].children.slice(-1)[0].children.filter(function (c) { return c.has('mtp_pill'); })[0].textContent").asString());
         assertTrue(eval("pane.el.children[1].children[0].has('mtp_tab_content_hidden')").asBoolean(), "the empty line is hidden once a tab is in");
     }
 
@@ -263,23 +263,21 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("moved:s1:b@2->s1@1", log());
     }
 
+    /** A pane has no limit of its own — its bar scrolls; the plus is on while the holder has it on and the desk says there is room. */
     @Test
-    void theBudgetIsAPreconditionAndTheAddButtonFollowsIt() {
-        eval("put('a'); put('b'); put('c')");
-        assertTrue(eval("pane.canAdd()").asBoolean());
-        assertFalse(eval("pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].has('mtp_add_off')").asBoolean());
-        eval("put('d')");
-        assertFalse(eval("pane.canAdd()").asBoolean());
-        assertTrue(eval("pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].has('mtp_add_off')").asBoolean());
-        assertTrue(eval("pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].disabled").asBoolean());
-        var ex = assertThrows(PolyglotException.class, () -> eval("put('e')"));
-        assertTrue(ex.getMessage().contains("budget of 4"), ex.getMessage());
-        eval("log = []; pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].fire('click')");
-        assertEquals("", log(), "the add button does nothing when the budget is spent");
-        eval("pane.removeTab('d'); log = []; pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0].fire('click')");
-        assertEquals("add?s1", log());
-        eval("pane.setAddEnabled(false)");
-        assertFalse(eval("pane.canAdd()").asBoolean());
+    void aPaneHasNoLimitOfItsOwn_andThePlusFollowsTheHolderAndTheDesksRoom() {
+        eval("function plus() { return pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0]; }"
+           + "'abcdefghijklmnopqr'.split('').forEach(function (id) { put(id); })");
+        assertEquals(18, eval("pane.count()").asInt(), "eighteen, past the sixteen a pane used to stop at");
+        assertTrue(eval("pane.canAdd() && !plus().has('mtp_add_off')").asBoolean());
+        eval("pane.setRoom(false)");
+        assertTrue(eval("!pane.canAdd() && plus().has('mtp_add_off') && plus().disabled").asBoolean(), "the desk is full: the plus greyed");
+        eval("log = []; plus().fire('click')");
+        assertEquals("", log(), "and it asks for nothing");
+        eval("pane.setRoom(true); log = []; plus().fire('click')");
+        assertEquals("add?s1", log(), "room again");
+        eval("pane.setAddEnabled(false); pane.setRoom(true)");
+        assertFalse(eval("pane.canAdd()").asBoolean(), "the holder's off stays off, whatever the desk says");
     }
 
     @Test
@@ -526,8 +524,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
     /**
      * THE HOST (RFC 0066 E3, appendix "tab-panes", the sequence's step 2). A
      * tab-pane is held here and never owned: its own chip and pane placed as
-     * they are, nothing minted and nothing dissolved; taken under the law and
-     * the budget, in one host at a time; let go as it is, a neighbour shown;
+     * they are, nothing minted and nothing dissolved; taken under the law, in
+     * one host at a time, with no limit of the pane's own; let go as it is, a neighbour shown;
      * its chip, travelling, armed only by the strip it is in, at that strip's
      * size; what its chip asks going to the pane it is in; a close reported
      * where it was, and a move not at all, since moves are the desk's.
@@ -538,7 +536,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         @BeforeEach
         void anotherPane() {
             eval("""
-                var other = new MultiTabPane(branch.createBranch("mtp_s9"), { host: el("div"), slotId: "s9", budget: 4 });
+                var other = new MultiTabPane(branch.createBranch("mtp_s9"), { host: el("div"), slotId: "s9" });
                 function stripOf(p) { return p.el.children[0].children[0].children; }
                 """);
         }
@@ -564,7 +562,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         }
 
         @Test
-        void takeHoldsTheLawAndTheBudget_andATabPaneIsInOneHostAtATime() {
+        void takeHoldsTheLaw_andATabPaneIsInOneHostAtATime() {
             eval("var a = open('a'); pane.take(a);");
             assertFalse(eval("other.canTake(a)").asBoolean(), "held here");
             var ex = assertThrows(PolyglotException.class, () -> eval("other.take(a)"));
@@ -572,10 +570,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
             eval("put('x'); var x = open('x', null, reg2);");
             assertFalse(eval("pane.canTake(x)").asBoolean(), "an id already in the pane");
             eval("put('y'); put('z'); var b = open('b');");
-            assertFalse(eval("pane.canTake(b)").asBoolean(), "the budget spent");
-            ex = assertThrows(PolyglotException.class, () -> eval("pane.take(b)"));
-            assertTrue(ex.getMessage().contains("budget"), ex.getMessage());
-            assertTrue(eval("other.canTake(b) && b.host() === null").asBoolean());
+            assertTrue(eval("pane.canTake(b) && other.canTake(b)").asBoolean(), "no limit of a pane's own: the desk's is the only one");
         }
 
         @Test

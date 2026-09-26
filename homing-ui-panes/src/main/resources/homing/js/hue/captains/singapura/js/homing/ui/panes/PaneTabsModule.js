@@ -15,7 +15,7 @@
 //                                         host unset; nothing dissolved; a close reported
 //                                         (TabRemoved), a neighbour shown, an emptied pane told
 //   PaneTabs.admits(pane, tp)           → whether the pane would take it, were it let go where
-//                                         it is: the law, the budget, the id, the member's name
+//                                         it is: the law, the id, the member's name
 //   PaneTabs.menu(pane, tp, at, byKey)  → its chip's menu, while it is here; true when one opened
 //   PaneTabs.chips(pane)                → the chips, in the pane's order
 //   PaneTabs.retitle(pane, id, title)   the tab's name, said to the tab-pane, whose chip shows it

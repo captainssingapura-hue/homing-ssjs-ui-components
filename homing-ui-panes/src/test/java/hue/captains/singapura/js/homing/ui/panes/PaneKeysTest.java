@@ -28,10 +28,10 @@ class PaneKeysTest extends JsModuleTestBase {
         function widget(name) { var w = { root: {}, activate: function () { calls.push("activate:" + name); } }; w.focus = member(name); return w; }
         var widgets = { a: widget("a"), b: widget("b"), c: widget("c") };
         function pane(ids, active) {
-            return { slotId: "s", _ids: ids.slice(), _active: active === undefined ? (ids[0] || null) : active, _budget: 4,
+            return { slotId: "s", _ids: ids.slice(), _active: active === undefined ? (ids[0] || null) : active,
                 focus: { members: [] },
                 tabs: function () { return this._ids.slice(); }, activeTab: function () { return this._active; },
-                has: function (id) { return this._ids.indexOf(id) >= 0; }, count: function () { return this._ids.length; }, budget: function () { return this._budget; },
+                has: function (id) { return this._ids.indexOf(id) >= 0; }, count: function () { return this._ids.length; },
                 switchTab: function (id) { calls.push("switch:" + id); this._active = id; },
                 moveTab: function (id, to) { calls.push("move:" + id + ">" + to); },
                 requestDetach: function () { calls.push("detach"); },
@@ -135,7 +135,6 @@ class PaneKeysTest extends JsModuleTestBase {
         assertTrue(refusal("PaneKeys.admit(p, t('a'))").contains("already in slot 's'"));
         assertTrue(refusal("PaneKeys.admit(p, t('x', { activate: function () {} }))").contains("has no widget with a root"));
         assertTrue(refusal("var w = widget('x'); delete w.activate; PaneKeys.admit(p, t('x', w))").contains("not logically focusable"));
-        assertTrue(refusal("var full = pane(['a','b','c','d'], 'a'); PaneKeys.admit(full, t('x'))").contains("budget of 4"));
         assertTrue(refusal("p.focus.members = [{ name: 'same' }]; var w = widget('same'); PaneKeys.admit(p, t('x', w))").contains("member name 'same'"));
         eval("p.focus.members = []; PaneKeys.admit(p, t('x'))");   // by the law, with room: no refusal
         eval("var mine = widget('same'); mine.focus.in = p.focus; p.focus.members = [mine.focus]; PaneKeys.admit(p, t('y', mine))");   // already in this dock's branch: its own name is no clash
