@@ -110,6 +110,18 @@ class FocusMonitorTest extends JsModuleTestBase {
         eval("w.leave(); c.leave()");
     }
 
+    /** A grafted party: its proxy a graft row naming the party, its members under it; detached, gone. */
+    @Test
+    void aGraftedPartyIsARowOfItsOwn_itsMembersUnderIt() {
+        eval("var p = focusParties.mobile('widget-1'); var m = p.root.join('grid', new Widget()); focusParty.root.graft('widget', p)");
+        assertEquals("0:root no one holds the keys | 1:graft widget party widget-1 | 2:leaf grid Widget", rows(), "redrawn on the graft");
+        eval("KeyboardStewardInstance.claim(m)");
+        assertEquals("0:root | 1:graft widget party widget-1 | 2:leaf grid Widget*", rows(), "a member of a grafted party holds, and its row is lit");
+        eval("focusParty.root.detach('widget')");
+        assertEquals("0:root no one holds the keys", rows(), "detached: the party a stray again, and not on the page's tree");
+        eval("p.dissolve()");
+    }
+
     @Test
     void aHolderOutsideTheTreeIsNamedBelowIt() {
         eval("KeyboardStewardInstance.join('legacy/slider', {}); KeyboardStewardInstance.claim('legacy/slider')");

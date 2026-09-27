@@ -1,8 +1,9 @@
 // =============================================================================
 // FocusMonitor — the page's logical-focus tree as a tree view, the holder of
 // the keys marked. One row per node: the root, every branch (its holder), every
-// leaf — the kind, the name, the component's class — indented by depth; the
-// row of the member that holds the keys is lit, and the row a walk rests on
+// leaf — the kind, the name, the component's class — indented by depth; a
+// grafted party a "graft" row, its proxy's name and the party's, its members
+// under it; the row of the member that holds the keys is lit, and the row a walk rests on
 // is marked as offered. Redrawn on every notice of
 // the focus party and every event of the steward, so it says at every moment
 // exactly which component is in focus and under whom. A holder that is not
@@ -83,7 +84,8 @@ class FocusMonitor {
         (function draw(branch, depth) {
             for (var i = 0; i < branch.members.length; i++) {
                 var m = branch.members[i];
-                row(depth, m.kind === "holder" ? "branch" : "leaf", m.name, m.component, m.id);
+                if (m.kind === "proxy") row(depth, "graft", m.name, "party " + m.mobile, m.id);
+                else row(depth, m.kind === "holder" ? "branch" : "leaf", m.name, m.component, m.id);
                 if (m.branch) draw(m.branch, depth + 1);
             }
         })(focusParty.inspect(), 1);
