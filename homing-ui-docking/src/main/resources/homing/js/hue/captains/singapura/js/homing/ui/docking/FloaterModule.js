@@ -22,7 +22,8 @@
 //
 //   floater.id  floater.frame  floater.host
 //   floater.take(tp, index?)  → the index: the host takes the tab-pane in
-//   floater.close()           every tab-pane in it closed, then the frame
+//   floater.close()           every tab-pane in it asked to close - closed, when no owner takes the
+//                             asking (TabPane.requestClose) - then the frame, once it is empty
 //   floater.closed()
 //   floater.tabPanes()        → the tab-panes in it, in order
 //   floater.hold(fn)          → what fn returns: fn run with the float kept open though
@@ -67,8 +68,9 @@ class Floater {
     close() {
         var self = this;
         if (this._closed) return this;
-        this.host.tabs().forEach(function (id) { if (self.host.has(id)) self.host.removeTab(id); });
-        this._fold();   // the last close folded it already; an empty one folds here
+        // each ASKED to close, as its cross asks: a tab-pane whose owner closes it in its own order is left to it
+        this.tabPanes().forEach(function (tp) { if (self.host.has(tp.id) && !tp.requestClose()) self.host.removeTab(tp.id); });
+        if (this.host.count() === 0) this._fold();   // the last close folded it already; an empty one folds here; one its owners kept stays
         return this;
     }
 

@@ -529,6 +529,25 @@ class DeskTest extends JsModuleTestBase {
             assertTrue(log().contains("b:disposed TabRemoved closed:" + id()), log());
         }
 
+        /**
+         * The cross ASKS each tab-pane to close, as a chip's cross does: one whose owner closes it in its own
+         * order is left to it - here, one owner that closes by unmounting then closing, one that keeps its tab.
+         * The float goes once it is empty, and not before.
+         */
+        @Test
+        void theCrossAsksEachTabPane_andTheFloatGoesOnlyOnceEmpty() {
+            eval("var asked = [];"
+               + "function owned(id, keeps) { return desk.register.open({ id: id, title: id.toUpperCase(), make: mk(id), onCloseRequested: function (tp) {"
+               + "  asked.push(tp.id); if (!keeps) { desk.unmount(tp); tp.close(); } } }); }"
+               + "var f = desk.float({ x: 40, y: 30 }); f.take(owned('a', false)); f.take(owned('b', true)); f.take(open('c')); log.length = 0;"
+               + "var cross = tailOf(f).children[tailOf(f).children.length - 1]; cross.fire('click', {});");
+            assertEquals("a,b", eval("asked.join(',')").asString(), "the owned ones asked");
+            assertEquals("b", eval("f.host.tabs().join(',')").asString(), "the one with no owner closed; the one kept, kept");
+            assertFalse(eval("f.closed()").asBoolean(), "the float stays while it holds one");
+            eval("desk.unmount(desk.register.get('b'));");
+            assertTrue(eval("f.closed() && !desk.layer.has(f.id)").asBoolean(), "and goes once empty");
+        }
+
         @Test
         void aFloatWhoseLastTabPaneLeavesIsGone_closedOrMovedAway() {
             eval("var f = desk.float({ x: 40, y: 30 }); var a = open('a'); f.take(a); f.host.letGo(a);");
