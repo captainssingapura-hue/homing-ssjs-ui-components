@@ -8,7 +8,7 @@
 // host that shows it (RFC 0066 E3, appendix "tab-panes").
 //
 // Made by TabRegister.open, never by hand:
-//   new TabPane(branch, { id, title?, icon?, pinned?, closable?, focus, make }, register)
+//   new TabPane(branch, { id, title?, icon?, pinned?, closable?, focus, make, onCloseRequested? }, register)
 //     id      the owner's name for it, any string. It is never a name on the party.
 //     focus   the focus branch the widget joins: the host's, by the law.
 //     make(branch, tab) → the widget, built on a sub-branch of the tab-pane's
@@ -20,6 +20,9 @@
 //             says it again: a widget that joins under its branch's name, as the
 //             stack's do, never meets another of that name in a host — a focus
 //             branch refuses a name twice.
+//     onCloseRequested(tp)  a close ASKED for — the cross, the tab menu — goes here and
+//             not to close(): for an owner whose close is its own, done in its own
+//             order (a workspace's core: unmount, then close). None, and it is a close.
 //
 //   tp.id  tp.chip  tp.pane  tp.widget  tp.branch  tp.pinned  tp.closable
 //                     the parts, the same for its whole life
@@ -43,6 +46,9 @@
 //                     told to let it go, its register's entry gone, its branch
 //                     dissolved: the one dissolve in its life, as the register's
 //                     open is the one mint. A second close is nothing.
+//   tp.requestClose() → true when its owner's onCloseRequested took the asking, which
+//                     closes it when it will; false when there is none, and the asker
+//                     closes it: what the cross and the tab menu do
 //
 // THE HOST'S SIDE. A host calls tp._hostedBy(host) when it takes the tab-pane
 // in, and _hostedBy(null) when it lets it go; let go, and not closing, the
@@ -70,13 +76,14 @@ class TabPane {
         this.pinned = !!s.pinned;
         this.closable = s.closable !== false && !this.pinned;
         this._register = register || null;
+        this._onCloseRequested = typeof s.onCloseRequested === "function" ? s.onCloseRequested : null;
         this._host = null;
         this._closed = false;
         this._title = s.title == null ? s.id : String(s.title);
         this._icon = s.icon || null;
         this.chip = TabChip.mint(branch, { id: s.id, title: this._title, icon: this._icon, pinned: this.pinned, closable: this.closable }, {
             onSelect: function () { if (self._host) self._host.select(self); },
-            onClose: function () { self.close(); },
+            onClose: function () { if (!self.requestClose()) self.close(); },
             onMenu: function (at, byKey) { return self._host ? !!self._host.menu(self, at, byKey) : false; }
         });
         this.pane = branch.createElement("pane", "div");
@@ -156,6 +163,13 @@ class TabPane {
         this._host = host || null;
         var rest = this._register ? this._register.focus : null, m = this.widget.focus;
         if (!host && !this._closed && rest && m && m.in && m.in !== rest) rest.adopt(m);
+    }
+
+    requestClose() {
+        if (this._closed || !this._onCloseRequested) return false;
+        try { this._onCloseRequested(this); }
+        catch (e) { console.error("[TabPane] '" + this.id + "': onCloseRequested threw:", e); }
+        return true;
     }
 
     close() {

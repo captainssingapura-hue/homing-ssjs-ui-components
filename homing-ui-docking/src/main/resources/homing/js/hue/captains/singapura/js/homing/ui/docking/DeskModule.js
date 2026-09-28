@@ -41,6 +41,10 @@
 //   desk.move(tp, to, index?) → the index it took: from the host it is in to another, whole or
 //                          not at all — refused before anything leaves when that host would not
 //                          take it. One TabMoved; a tab-pane in no host arrives, one TabAdded
+//   desk.unmount(tp)       → the host it left, or null when none held it: the tab-pane in no host,
+//                          open still in the register, its widget resting in the desk. Nothing is
+//                          reported: an unmount is its owner's, who says it - the host did not
+//                          start it. A float it leaves empty goes, as after any last tab
 //   desk.show(tp)          → its host, or null when none holds it: the tab-pane shown where it is —
 //                          its host shows it, a float holding it raised. The keys are not given
 //                          here: that is the caller's, and only ever at the user's asking
@@ -104,7 +108,7 @@ class Desk {
         menus.handle(MultiTabPane.MENU, {
             pick: function (id, o) {
                 if (id === "detach") self.detach(o.tab);
-                else if (id === "close") o.pane.removeTab(o.tab.id);
+                else if (id === "close" && !o.tab.requestClose()) o.pane.removeTab(o.tab.id);
             },
             state: function (id, o) { return { disabled: !!o.tab.pinned || o.tab.closable === false }; }
         });
@@ -195,6 +199,13 @@ class Desk {
         }
         var fl = from ? this._floaters.get(from) : null;   // a float it leaves empty goes AFTER the move is said
         return fl ? fl.hold(go) : go();
+    }
+
+    unmount(tp) {
+        var from = tp ? tp.host() : null;
+        if (!from) return null;
+        from.letGo(tp);   // not closing, so the host says nothing; a float left empty goes
+        return from;
     }
 
     show(tp) {

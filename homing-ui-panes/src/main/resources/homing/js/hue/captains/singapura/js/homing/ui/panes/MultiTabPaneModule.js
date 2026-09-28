@@ -56,6 +56,10 @@
 //   the tab, takes the native focus away from whatever had it, and claims the
 //   pane, so ← → work after every mouse press. No keydown listener of its own.
 //
+//   pane.pick(kinds, onPick)     a PICKER, the transient pane the pane owns (TabPicker): shown
+//       in place of the tab it shows, [{ id, label }] a button each and Cancel. A pick is
+//       onPick(kind) - it asks, the holder opens - and the picker goes; so it goes on Cancel,
+//       unpick(), and when any tab is shown. No tab, nothing reported. .picking()
 //   pane.removeTab(id)           → the tab-pane, closed: its widget disposed, then
 //       TabRemoved(slotId, tp, fromIndex) where it was; a neighbour is activated after.
 //   pane.switchTab(id)           → TabActivated(slotId, id): one tab-pane's pane shown, the rest hidden
@@ -165,6 +169,8 @@ class MultiTabPane {
         this._tabs = [];          // entries in strip order: { id, tab, tabPane, pinned, widget, chip, panel, menu }
         this._activeId = null;
         this._disposed = false;
+        this._picker = null;      // { branch, root } while a picker is shown
+        this._picks = 0;
 
         // ── The frame ─────────────────────────────────────────────────────
         var root = branch.createElement("pane", "div");
@@ -229,9 +235,10 @@ class MultiTabPane {
     _refresh() {
         this._strip.arrange(PaneTabs.chips(this));
         this._strip.count(this._tabs.length, this.canAdd());
-        css.toggleClass(this._empty, mtp_tab_content_hidden, this._tabs.length > 0);
+        css.toggleClass(this._empty, mtp_tab_content_hidden, this._tabs.length > 0 || !!this._picker);
     }
     _show(id) {
+        this._dropPicker();
         this._activeId = id;
         var active = null;
         for (var i = 0; i < this._tabs.length; i++) {
@@ -248,6 +255,24 @@ class MultiTabPane {
         var next = this._tabs[i] || this._tabs[i - 1];
         if (next) this.switchTab(next.id);
     }
+
+    // ── The picker: a transient pane the pane owns, shown in place of the tab it shows ──
+    pick(kinds, onPick) {
+        if (typeof onPick !== "function") throw new Error("[MultiTabPane] pick wants onPick(kind): the picker asks, and opens nothing");
+        this._dropPicker();
+        var self = this, b = this._branch.createBranch("picker-" + (++this._picks));
+        var view = new TabPicker(b, { kinds: kinds, onPick: function (k) { self.unpick(); onPick(k); }, onCancel: function () { self.unpick(); } });
+        this._picker = { branch: b, root: view.root };
+        for (var i = 0; i < this._tabs.length; i++) css.addClass(this._tabs[i].panel, mtp_tab_content_hidden);
+        css.addClass(this._empty, mtp_tab_content_hidden);
+        this._content.appendChild(view.root);
+        view.focus();
+        return this;
+    }
+    picking() { return !!this._picker; }
+    /** The picker called off: the tab it stood in for shown again. Nothing reported: the pane showed nothing new. */
+    unpick() { if (this._dropPicker()) { this._show(this._activeId); this._refresh(); } }
+    _dropPicker() { var p = this._picker; if (!p) return false; this._picker = null; if (p.root.parentNode) p.root.parentNode.removeChild(p.root); p.branch.dissolve(); return true; }
 
     // ── The surface ───────────────────────────────────────────────────────
     /** The tab-pane's close: it disposes its widget, then lets go here, which reports it. */
@@ -380,6 +405,7 @@ class MultiTabPane {
         if (this._disposed) return;
         if (this._tabs.length) throw new Error("[MultiTabPane] slot '" + this.slotId + "' still holds tab-panes, which are its desk's: let them go first");
         this._disposed = true;
+        this._dropPicker();
         if (this._offKeys) { this._offKeys(); this._offKeys = null; }
         if (this.el.parentNode) this.el.parentNode.removeChild(this.el);
         if (this.focus.owner.in) this.focus.owner.leave();   // the dock's branch dissolved with it

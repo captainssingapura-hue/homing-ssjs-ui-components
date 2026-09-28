@@ -20,6 +20,7 @@ public record UiPanesComponents() implements C0_Components<UiPanesComponents> {
                 ComponentEntry.of(this, new TabPaneModule.TabPane()),
                 ComponentEntry.of(this, new PaneThumbsModule.PaneThumbs()),
                 ComponentEntry.of(this, new AddTabModule.AddTab()),
-                ComponentEntry.of(this, new TabOpenerModule.TabOpener()));
+                ComponentEntry.of(this, new TabOpenerModule.TabOpener()),
+                ComponentEntry.of(this, new TabPickerModule.TabPicker()));
     }
 }

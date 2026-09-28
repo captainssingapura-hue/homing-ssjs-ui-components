@@ -82,7 +82,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
             mtp_chip_seated = "mtp_chip_seated", mtp_strip_current = "mtp_strip_current",
             mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill",
             mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
-            mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target";
+            mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target",
+            mtp_opener = "mtp_opener", mtp_opener_note = "mtp_opener_note", mtp_opener_grid = "mtp_opener_grid", mtp_opener_pick = "mtp_opener_pick";
         var console = { error: function (m, e) { log.push("error:" + m); } };
         var host = el("div");
         var branch = fakeBranch("page");
@@ -153,6 +154,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule(KEYS);
         loadModule(MENUS);
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/PaneTabsModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabPickerModule.js");
         loadModule(MODULE);
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabPaneModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabRegisterModule.js");
@@ -294,6 +296,50 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("", log(), "a secondary button or a bare click is nothing");
         eval("log = []; pane.el.children[0].children[0].children[1]._close.fire('click')");   // the chip's cross
         assertEquals("b:disposed removed:s1:b@1 active:s1:a", log());
+    }
+
+    /** A close ASKED for goes to the tab-pane's owner when it has a hook, and nothing closes here: the owner closes it in its own order. */
+    @Test
+    void aCloseAskedFor_goesToItsOwnersHook_andNothingClosesHere() {
+        eval("var a = put('a', { onCloseRequested: function (tp) { log.push('asked:' + tp.id); } }); var b = put('b'); log = []");
+        eval("pane.el.children[0].children[0].children[0]._close.fire('click')");
+        assertEquals("asked:a", log(), "the cross asks, and that is all");
+        assertTrue(eval("pane.has('a') && !a.closed()").asBoolean(), "still here, open");
+        assertTrue(eval("a.requestClose()").asBoolean(), "the hook took it");
+        assertFalse(eval("b.requestClose()").asBoolean(), "no hook: the asker closes it");
+        eval("log = []; a.close()");
+        assertEquals("a:disposed removed:s1:a@0 active:s1:b", log(), "the owner's close is a close as ever");
+        assertFalse(eval("a.requestClose()").asBoolean(), "a closed tab-pane is asked nothing");
+    }
+
+    /**
+     * A PICKER, the transient pane the pane owns: shown in place of the tab it shows, a button a kind and
+     * Cancel. A pick asks - the holder opens - and the picker goes; so it does on Cancel and when any tab is
+     * shown. No tab is made and nothing is reported.
+     */
+    @Test
+    void aPickerStandsInForTheShownTab_asksAndGoes() {
+        eval("function picker() { return pane.el.children[1].children.filter(function (c) { return c.has('mtp_opener'); })[0] || null; }"
+           + "function kinds() { return [{ id: 'k1', label: 'One' }, { id: 'k2' }]; }"
+           + "function pick() { pane.pick(kinds(), function (k) { log.push('picked:' + k); }); return picker(); }");
+        eval("pick()");
+        assertTrue(eval("pane.el.children[1].children[0].has('mtp_tab_content_hidden')").asBoolean(), "in an empty pane, the empty line gives way to it");
+        eval("picker().children[2].fire('click')");
+        assertTrue(eval("picker() === null && !pane.picking() && !pane.el.children[1].children[0].has('mtp_tab_content_hidden')").asBoolean(), "called off: gone, the empty line back");
+        eval("put('a'); put('b'); log = []; var p = pick()");
+        assertEquals("w-a-,w-b-", panels(), "every panel hidden while it stands in");
+        assertEquals("One,k2", eval("p.children[1].children.map(function (b) { return b.textContent; }).join(',') ").asString(), "a button a kind, its label or its id");
+        assertEquals("Cancel", eval("p.children[2].textContent").asString());
+        eval("p.children[1].children[1].fire('click')");
+        assertEquals("picked:k2", log(), "a pick asks, and nothing else is said");
+        assertTrue(eval("picker() === null && pane.count() === 2").asBoolean(), "gone, and no tab made");
+        assertEquals("w-a+,w-b-", panels(), "the tab it stood in for, shown again");
+        eval("pick(); pick()");
+        assertEquals(1, eval("pane.el.children[1].children.filter(function (c) { return c.has('mtp_opener'); }).length").asInt(), "one picker at a time");
+        eval("log = []; pane.switchTab('b')");
+        assertTrue(eval("picker() === null").asBoolean(), "any tab shown, and it goes");
+        assertEquals("active:s1:b", log());
+        assertEquals("w-a-,w-b+", panels());
     }
 
     /**

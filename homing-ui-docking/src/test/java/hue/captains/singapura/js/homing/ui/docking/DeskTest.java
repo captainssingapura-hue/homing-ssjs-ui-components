@@ -402,6 +402,35 @@ class DeskTest extends JsModuleTestBase {
             eval("d2.dispose()");
         }
 
+        /** A close asked for from the tab menu goes to the tab-pane's owner, when it has a hook: the desk closes nothing then. */
+        @Test
+        void theTabMenusClose_goesToTheOwnersHook_whenItHasOne() {
+            eval("""
+                var menus = { h: {}, handle: function (k, h) { this.h[k] = h; return this; } };
+                var d2 = new Desk(page.createBranch("desk2"), { host: host, onEvent: sink, menus: menus });
+                var C = new MultiTabPane(page.createBranch("c"), { host: el("div"), slotId: "c", onEvent: sink }); d2.addDock(C);
+                var y = d2.register.open({ id: "y", title: "Y", make: mk("y"), onCloseRequested: function (tp) { log.push("asked:" + tp.id); } }); C.take(y);
+                log.length = 0; menus.h.tab.pick('close', { tab: y, pane: C });
+                """);
+            assertEquals("asked:y", log());
+            assertTrue(eval("C.has('y') && !y.closed()").asBoolean(), "still open, where it was");
+            eval("d2.dispose()");
+        }
+
+        /** An UNMOUNT is its owner's: the tab-pane out of its host, open in the register, resting in the desk - and the host says nothing. */
+        @Test
+        void unmountTakesATabPaneOutOfItsHost_andNothingIsSaid() {
+            eval("var a = open('a'), b = open('b'); desk.move(a, A); desk.move(b, A); log.length = 0;");
+            assertTrue(eval("desk.unmount(a) === A").asBoolean(), "the host it left");
+            assertTrue(eval("!A.has('a') && a.host() === null && !a.closed() && desk.register.has('a') && a.widget.focus.in === desk.rest").asBoolean(),
+                    "in no host, open, its widget at rest in the desk");
+            assertEquals("active:a:b", log(), "the neighbour shown, and no TabRemoved, no TabMoved");
+            assertTrue(eval("desk.unmount(a) === null").asBoolean(), "in no host: nothing to do");
+            eval("var f = desk.float({ x: 40, y: 30 }); desk.move(b, f.host); log.length = 0; desk.unmount(b);");
+            assertTrue(eval("f.closed() && b.host() === null && desk.register.has('b')").asBoolean(), "a float it leaves empty goes; the tab-pane stays open");
+            assertFalse(log().contains("TabRemoved") || log().contains("TabMoved"), log());
+        }
+
         @Test
         void aMoveIsRefusedBeforeAnythingLeaves() {
             eval("var a = open('a'); A.take(a);"
