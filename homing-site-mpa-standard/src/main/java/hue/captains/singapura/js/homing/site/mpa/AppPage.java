@@ -79,8 +79,9 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
                         const { MpaChrome } = await import(themed(%s));
                         const page = new MpaChrome(domOpsParty.createBranch("mpaChrome"), document.getElementById("app"), chrome);
                         const { appMain } = await import(themed(%s));
-                        // The page adds to the app's params what is the page's: the keyboard steward, one per document.
-                        appMain(page.main, Object.freeze(Object.assign({}, %s, { keyboard: page.keyboard })));
+                        // The page adds to the app's params what is the page's: the keyboard steward, one per
+                        // document, and the trail - the app's to carry on past where the server's knowledge ends.
+                        appMain(page.main, Object.freeze(Object.assign({}, %s, { keyboard: page.keyboard, trail: page.trail })));
                     </script>
                 </body>
                 </html>
