@@ -96,7 +96,7 @@ class ComponentsConformanceTest {
         var groups = new ArrayList<CssGroup<?>>();
         for (Crate c : ComponentsConformance.TOP_LEVEL)
             for (var e : c.entries()) if (e.module() instanceof CssGroup<?> g) groups.add(g);
-        assertEquals(11, groups.size(), "one style group per crate that has styles; docking has none");
+        assertEquals(12, groups.size(), "one style group per crate that has styles; docking has none");
         var worn = Deployment.wornBy(groups);
         var scaled = Deployment.scaledBy(groups);
         var grown = Deployment.grownBy(groups);
@@ -128,10 +128,10 @@ class ComponentsConformanceTest {
         assertEquals(List.of(), ComponentTrees.validate(ComponentsConformance.TOP_LEVEL));
         var composed = ComponentTrees.compose("components", ComponentsConformance.TOP_LEVEL);
         var vehicles = composed.root().children().stream().map(n -> n.segment().value()).toList();
-        assertEquals(List.of("ui-elements", "server", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split", "ui-panes", "ui-docking", "ui-split-grid", "ui-focus", "ui-menu", "mpa"), vehicles, "one vehicle per crate that ships components, in closure order — the elements require the base (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate; docking catalogues its dock grid, the desk and the floater being statics");
+        assertEquals(List.of("ui-elements", "server", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split", "ui-pan-zoom", "ui-panes", "ui-docking", "ui-split-grid", "ui-focus", "ui-menu", "mpa"), vehicles, "one vehicle per crate that ships components, in closure order — the elements require the base (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate; docking catalogues its dock grid, the desk and the floater being statics");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
-        assertEquals(13, root.vehicleCount());
-        assertEquals(35, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 5 elements (the panel among them), 1 icon, 1 dialog, 7 preferences, 1 split, 7 panes (the tab-pane, the thumbs, the new-tab control, the opener and the picker among them), 2 floating, 1 docking (the dock grid), 2 split grid, 2 focus monitors, 2 menus, 3 chrome");
+        assertEquals(14, root.vehicleCount());
+        assertEquals(37, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 5 elements (the panel among them), 1 icon, 1 dialog, 7 preferences, 1 split, 2 pan-zoom (the view and its bar), 7 panes (the tab-pane, the thumbs, the new-tab control, the opener and the picker among them), 2 floating, 1 docking (the dock grid), 2 split grid, 2 focus monitors, 2 menus, 3 chrome");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
         assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.TOP_LEVEL));
@@ -148,9 +148,9 @@ class ComponentsConformanceTest {
     void keysComeThroughTheParty_andTheMigrationListOnlyShrinks() {
         assertEquals(List.of(), KeyboardRegistry.validate(ComponentsConformance.TOP_LEVEL));
         var map = KeyboardRegistry.requiredBy(ComponentsConformance.TOP_LEVEL);
-        assertEquals(List.of("Card", "ContextMenuSteward", "Dialog", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup", "SplitGridMirror", "TabOpener"),
+        assertEquals(List.of("Card", "ContextMenuSteward", "Dialog", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup", "SplitGridMirror", "SvgPanZoom", "TabOpener"),
                 map.byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList(), "the components that take keys: leaves, and the holders that hand keys on to what is inside them");
-        assertEquals(6, map.takersOf("ArrowUp").size(), "the slider and its group, the mirror, the list master and the view over it, the menu");
+        assertEquals(7, map.takersOf("ArrowUp").size(), "the slider and its group, the mirror, the list master and the view over it, the menu, the pan-zoom view");
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(ComponentsConformance.TOP_LEVEL), "the ledger is empty: every key comes through the party");
     }
 }
