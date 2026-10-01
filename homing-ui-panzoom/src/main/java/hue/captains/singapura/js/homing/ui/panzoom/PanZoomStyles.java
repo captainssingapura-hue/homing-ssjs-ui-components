@@ -30,12 +30,16 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
 
     public static final PanZoomStyles INSTANCE = new PanZoomStyles();
 
-    /** The viewport: it scrolls what overflows it, natively; a control to the keys, so it wears a control's rule and ring. */
+    /**
+     * The viewport: a column the canvas stands in - stretched across while the drawing lays out as it is,
+     * centred both ways once sized - scrolling what overflows it, natively; a control to the keys, so it
+     * wears a control's rule and ring.
+     */
     public record pz_view() implements CssClass<PanZoomStyles> {
         @Override public List<? extends Wearable> wears() {
             return List.of(of(Control.class, Shape.Rule.class), of(Control.class, Color.Edge.class), of(Hairline.class, Color.Edge.class));
         }
-        @Override public String body() { return "overflow: auto;\nmin-width: 0;\n"; }
+        @Override public String body() { return "display: flex;\nflex-direction: column;\noverflow: auto;\nmin-width: 0;\n"; }
     }
 
     /** Zoomed in place: the viewport held at the height it fitted at, so the drawing scrolls rather than the page growing. */
@@ -49,10 +53,10 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
         @Override public String body() { return "position: relative;\n"; }
     }
 
-    /** Zoomed: the canvas as large as the drawing is drawn, centred while it is narrower than the viewport. */
+    /** Sized: the canvas as large as the drawing is drawn - centred on an axis where it is the smaller, from the start where it overflows. */
     public record pz_zoomed() implements CssClass<PanZoomStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pz-w"), new CssVar("--pz-h")); }
-        @Override public String body() { return "width: var(--pz-w);\nheight: var(--pz-h);\nmargin: 0 auto;\n"; }
+        @Override public String body() { return "flex: none;\nwidth: var(--pz-w);\nheight: var(--pz-h);\nmargin: auto;\n"; }
     }
 
     /** The drawing: laid out no wider than the viewport, its height its own, centred - the size it fits at. */
