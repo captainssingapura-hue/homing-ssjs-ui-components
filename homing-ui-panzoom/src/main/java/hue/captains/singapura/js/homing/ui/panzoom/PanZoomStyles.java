@@ -21,39 +21,57 @@ import static hue.captains.singapura.js.homing.design.Text.Caption;
 
 /**
  * The sheet of a pan-zoom view, in the design's words and nothing of its own but layout: the
- * viewport - framed by a hairline, a control's rule, and its ring when it has the focus - clipping
- * the canvas the content moves on by three variables; the hand that grabs once there is somewhere
- * to pan; the bar and its readout.
+ * viewport - framed by a hairline, a control's rule, and its ring when it has the focus - that
+ * scrolls natively over the canvas, held at its fitted height while zoomed in place; the canvas as
+ * large as the drawing is drawn, and the drawing scaled from its corner, by the view's variables;
+ * the hand that grabs once there is somewhere to pan; the bar and its readout.
  */
 public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
 
     public static final PanZoomStyles INSTANCE = new PanZoomStyles();
 
-    /** The viewport: what is outside it clipped; a control to the keys, so it wears a control's rule and ring. */
+    /** The viewport: it scrolls what overflows it, natively; a control to the keys, so it wears a control's rule and ring. */
     public record pz_view() implements CssClass<PanZoomStyles> {
         @Override public List<? extends Wearable> wears() {
             return List.of(of(Control.class, Shape.Rule.class), of(Control.class, Color.Edge.class), of(Hairline.class, Color.Edge.class));
         }
-        @Override public String body() { return "position: relative;\noverflow: hidden;\nmin-width: 0;\n"; }
+        @Override public String body() { return "overflow: auto;\nmin-width: 0;\n"; }
     }
 
-    /** The canvas the content moves on: placed and scaled from its corner by the view's variables. */
+    /** Zoomed in place: the viewport held at the height it fitted at, so the drawing scrolls rather than the page growing. */
+    public record pz_pinned() implements CssClass<PanZoomStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pz-vh")); }
+        @Override public String body() { return "box-sizing: border-box;\nheight: var(--pz-vh);\n"; }
+    }
+
+    /** The canvas the drawing is on: what the viewport scrolls over. */
     public record pz_canvas() implements CssClass<PanZoomStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pz-x"), new CssVar("--pz-y"), new CssVar("--pz-scale")); }
+        @Override public String body() { return "position: relative;\n"; }
+    }
+
+    /** Zoomed: the canvas as large as the drawing is drawn, centred while it is narrower than the viewport. */
+    public record pz_zoomed() implements CssClass<PanZoomStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pz-w"), new CssVar("--pz-h")); }
+        @Override public String body() { return "width: var(--pz-w);\nheight: var(--pz-h);\nmargin: 0 auto;\n"; }
+    }
+
+    /** The drawing: laid out no wider than the viewport, its height its own, centred - the size it fits at. */
+    public record pz_svg() implements CssClass<PanZoomStyles> {
+        @Override public String body() { return "display: block;\nmax-width: 100%;\nheight: auto;\nmargin: 0 auto;\n"; }
+    }
+
+    /** Zoomed: the drawing kept at the width it fitted at, in the canvas's corner, and scaled from there. */
+    public record pz_scaled() implements CssClass<PanZoomStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pz-sw"), new CssVar("--pz-scale")); }
         @Override public String body() {
-            return "transform-origin: 0 0;\ntransform: translate(var(--pz-x, 0px), var(--pz-y, 0px)) scale(var(--pz-scale, 1));\n";
+            return "position: absolute;\nleft: 0;\ntop: 0;\nwidth: var(--pz-sw);\ntransform-origin: 0 0;\ntransform: scale(var(--pz-scale));\n";
         }
     }
 
-    /** The drawing: laid out no wider than the viewport, its height its own - the size it fits at. */
-    public record pz_svg() implements CssClass<PanZoomStyles> {
-        @Override public String body() { return "display: block;\nmax-width: 100%;\nheight: auto;\n"; }
-    }
-
-    /** Zoomed in, with somewhere to pan: the hand grabs, and a touch pans the drawing rather than the page. */
+    /** Zoomed in, with somewhere to pan: the hand grabs. */
     public record pz_pannable() implements CssClass<PanZoomStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(Dragging.class, Affordance.Cursor.class)); }
-        @Override public String body() { return "touch-action: none;\n"; }
+        @Override public String body() { return ""; }
     }
 
     /** The bar: out, the readout, in, fit, side by side. */
@@ -69,6 +87,6 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
 
     @Override
     public List<CssClass<PanZoomStyles>> cssClasses() {
-        return List.of(new pz_view(), new pz_canvas(), new pz_svg(), new pz_pannable(), new pz_bar(), new pz_readout());
+        return List.of(new pz_view(), new pz_pinned(), new pz_canvas(), new pz_zoomed(), new pz_svg(), new pz_scaled(), new pz_pannable(), new pz_bar(), new pz_readout());
     }
 }

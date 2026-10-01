@@ -70,6 +70,17 @@ class PanZoomTest extends JsModuleTestBase {
     }
 
     @Test
+    void contentShownAtItsOwnSize_fitsAtOneWhenSaidSo_andAnOffsetIsMovedTo_clamped() {
+        eval("var pz = new PanZoom(); ''");
+        assertEquals("1 200 100 1 fitted", view("pz.measure({ w: 800, h: 300 }, { w: 400, h: 100 }, 1)"),
+                "fit said to be its own size: it does not grow; it is centred both ways");
+        assertEquals("2 0 50 2", view("pz.zoomTo(2) && pz.moveTo(-50, 0)"), "twice its size still fits the viewport: centred, wherever it is moved");
+        eval("pz.measure({ w: 300, h: 60 }, { w: 400, h: 100 }, 1); ''");
+        assertEquals("2 -120 -40 2 pannable", view("pz.moveTo(-120, -40)"), "scrolled to an offset inside the edges: kept");
+        assertEquals("2 -500 -140 2 pannable", view("pz.moveTo(-9999, -9999)"), "past them: held at the far edges");
+    }
+
+    @Test
     void unmeasured_isFitAtOne() {
         assertEquals("1 0 0 1 fitted", view("new PanZoom().view()"));
         assertEquals("1 0 0 1 fitted", view("new PanZoom().measure({ w: 0, h: 0 }, { w: 300, h: 100 })"), "a hidden viewport measures nothing");

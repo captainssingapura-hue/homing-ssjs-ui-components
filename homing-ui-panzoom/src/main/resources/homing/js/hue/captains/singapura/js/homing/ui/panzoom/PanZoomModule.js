@@ -7,11 +7,13 @@
 // no further. Knows no DOM: its host measures, applies and listens.
 //
 //   var pz = new PanZoom({ most: 8 })
-//   pz.measure(viewport, content)   { w, h } each: re-measured on a resize, the zoom kept, the offset re-clamped
+//   pz.measure(viewport, content, fit?)   { w, h } each: re-measured on a resize, the zoom kept, the offset
+//                                   re-clamped. Fit is the scale that makes the content whole in the
+//                                   viewport, unless said: content shown at its own size fits at 1
 //   pz.fit()                        the content whole, centred
 //   pz.zoomBy(factor, at?)          about a point of the viewport { x, y }; its centre unless said
 //   pz.zoomTo(zoom, at?)            to a zoom: a multiple of fit
-//   pz.panBy(dx, dy)
+//   pz.panBy(dx, dy)   pz.moveTo(x, y)   by, or to, an offset: clamped
 //   each → pz.view(): { scale, x, y, zoom, fitted, most, pannable }
 //     scale, x, y: the content's scale and its offset in the viewport; zoom: scale ÷ fit;
 //     fitted: at fit; most: at the most; pannable: larger than the viewport on an axis
@@ -27,13 +29,13 @@ class PanZoom {
         this._x = 0; this._y = 0;
     }
 
-    measure(viewport, content) {
+    measure(viewport, content, fit) {
         var zoom = this._s / this._fit;
         this._vw = PanZoom._size(viewport && viewport.w);
         this._vh = PanZoom._size(viewport && viewport.h);
         this._cw = PanZoom._size(content && content.w);
         this._ch = PanZoom._size(content && content.h);
-        this._fit = this._vw && this._vh && this._cw && this._ch ? Math.min(this._vw / this._cw, this._vh / this._ch) : 1;
+        this._fit = PanZoom._size(fit) || (this._vw && this._vh && this._cw && this._ch ? Math.min(this._vw / this._cw, this._vh / this._ch) : 1);
         this._s = this._fit * zoom;
         return this._clamp();
     }
@@ -58,6 +60,12 @@ class PanZoom {
     panBy(dx, dy) {
         this._x += Number(dx) || 0;
         this._y += Number(dy) || 0;
+        return this._clamp();
+    }
+
+    moveTo(x, y) {
+        this._x = Number(x) || 0;
+        this._y = Number(y) || 0;
         return this._clamp();
     }
 

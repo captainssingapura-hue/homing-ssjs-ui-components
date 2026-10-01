@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * An SVG in a viewport that zooms and pans, wherever it is placed: the wheel about the pointer
  * (with Ctrl or Cmd in the flow of a page), a drag once zoomed in, a double press; and its own
- * keys while it has the focus.
+ * keys while it has the focus. Zoomed, the viewport scrolls natively - its bars, a trackpad, a touch.
  */
 public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule> {
 
@@ -36,7 +36,8 @@ public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule> {
     public ImportsFor<SvgPanZoomModule> imports() {
         return ImportsFor.<SvgPanZoomModule>builder()
                 .add(new ModuleImports<>(List.of(new PanZoomModule.PanZoom()), PanZoomModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PanZoomStyles.pz_view(), new PanZoomStyles.pz_canvas(), new PanZoomStyles.pz_svg(),
+                .add(new ModuleImports<>(List.of(new PanZoomStyles.pz_view(), new PanZoomStyles.pz_pinned(), new PanZoomStyles.pz_canvas(),
+                        new PanZoomStyles.pz_zoomed(), new PanZoomStyles.pz_svg(), new PanZoomStyles.pz_scaled(),
                         new PanZoomStyles.pz_pannable()), PanZoomStyles.INSTANCE))
                 .build();
     }
