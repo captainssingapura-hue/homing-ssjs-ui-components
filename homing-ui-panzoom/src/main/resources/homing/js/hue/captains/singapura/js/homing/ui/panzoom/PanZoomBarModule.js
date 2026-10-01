@@ -2,8 +2,8 @@
 // PanZoomBar — the controls of a pan-zoom view, as a BRANCH component: zoom
 // out, the zoom said as a readout, zoom in, and back to fit - the elements'
 // buttons, small and plain. It drives the view it is given and follows it: the
-// readout says the zoom as a share of fit; out and fit are off at fit, in is
-// off at the most. A view is anything with zoomIn(), zoomOut(), fit(), view()
+// readout says the zoom as a share of fit; out is off at the least, fit at fit,
+// in at the most. A view is anything with zoomIn(), zoomOut(), fit(), view()
 // and onChange(fn) → off - an SvgPanZoom, or a view of another kind of content.
 //
 //   var bar = new PanZoomBar(branch.createBranch("zoomBar"), view)
@@ -52,7 +52,7 @@ class PanZoomBar {
 
     _follow(v) {
         this._readout.textContent = Math.round(v.zoom * 100) + "%";
-        this._out.setOn(!v.fitted);
+        this._out.setOn(!v.least);
         this._fit.setOn(!v.fitted);
         this._in.setOn(!v.most);
     }

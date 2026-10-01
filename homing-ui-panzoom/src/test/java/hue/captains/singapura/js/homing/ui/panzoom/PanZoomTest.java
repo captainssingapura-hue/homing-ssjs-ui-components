@@ -23,10 +23,10 @@ class PanZoomTest extends JsModuleTestBase {
 
     private String eval(String src) { return js.eval("js", src).asString(); }
 
-    /** A view as one line: scale, x, y, zoom, and which of fitted, most, pannable hold. */
+    /** A view as one line: scale, x, y, zoom, and which of fitted, least, most, pannable hold. */
     private String view(String expr) {
         return eval("(function (v) { return [v.scale, v.x, v.y, v.zoom].map(function (n) { return Math.round(n * 1000) / 1000; }).join(' ')"
-                + " + (v.fitted ? ' fitted' : '') + (v.most ? ' most' : '') + (v.pannable ? ' pannable' : ''); })(" + expr + ")");
+                + " + (v.fitted ? ' fitted' : '') + (v.least ? ' least' : '') + (v.most ? ' most' : '') + (v.pannable ? ' pannable' : ''); })(" + expr + ")");
     }
 
     @Test
@@ -46,12 +46,15 @@ class PanZoomTest extends JsModuleTestBase {
     }
 
     @Test
-    void theScaleStays_betweenFitAndTheMost() {
-        eval("var pz = new PanZoom({ most: 4 }); pz.measure({ w: 200, h: 100 }, { w: 200, h: 100 }); ''");
-        assertEquals("1 0 0 1 fitted", view("pz.zoomBy(0.5)"), "never smaller than fit");
-        assertEquals("4 -300 -150 4 most pannable", view("pz.zoomBy(100)"), "never past the most - about the centre when no point is said");
+    void theScaleStays_betweenTheLeastAndTheMost() {
+        eval("var pz = new PanZoom({ least: 0.25, most: 4 }); pz.measure({ w: 200, h: 100 }, { w: 200, h: 100 }); ''");
+        assertEquals("0.5 50 25 0.5", view("pz.zoomBy(0.5)"), "smaller than whole: centred both ways");
+        assertEquals("0.25 75 37.5 0.25 least", view("pz.zoomBy(0.1)"), "never smaller than the least");
         assertEquals("1 0 0 1 fitted", view("pz.fit()"));
-        assertEquals("2.5 -150 -75 2.5 pannable", view("pz.zoomTo(2.5)"));
+        assertEquals("4 -300 -150 4 most pannable", view("pz.zoomBy(100)"), "never past the most - about the centre when no point is said");
+        assertEquals("2.5 -150 -75 2.5 pannable", view("pz.fit() && pz.zoomTo(2.5)"));
+        assertEquals("0.25 0 0 1 fitted", view("new PanZoom({ least: 7 }).measure({ w: 100, h: 100 }, { w: 400, h: 400 })"),
+                "a least that is not below whole is ignored; content larger than its viewport fits below its own size");
     }
 
     @Test

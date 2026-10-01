@@ -21,7 +21,7 @@
 // arithmetic is PanZoom's. The viewport is the caller's to dress - a plate, a
 // frame - and it wears a control's ring when focused.
 //
-//   var z = new SvgPanZoom(branch.createBranch("zoom"), { svg, label?, wheel?: "modified" | "plain", most? })
+//   var z = new SvgPanZoom(branch.createBranch("zoom"), { svg, label?, wheel?: "modified" | "plain", least?, most? })
 //   z.root                the viewport: what the caller appends
 //   z.view()              PanZoom's view;  z.onChange(fn(view)) → off()
 //   z.zoomIn()  z.zoomOut()  z.fit()   z.key(ev) → taken
@@ -41,7 +41,7 @@ class SvgPanZoom {
         branch.activate(_panZoomOwner);
         this.branch = branch;
         this._plain = o.wheel === "plain";
-        this._math = new PanZoom({ most: o.most });
+        this._math = new PanZoom({ least: o.least, most: o.most });
         this._natural = { w: 0, h: 0, vh: 0, flow: true };
         this._stale = true;       // its own size, and its box, to be read again
         this._dressed = false;    // laid out as zoomed: sized, scaled, pinned when in the flow
@@ -92,7 +92,7 @@ class SvgPanZoom {
         var v = this._size();
         switch (ev.key) {
             case "+": case "=": if (v.most) return false; this.zoomIn(); return true;
-            case "-": case "_": if (v.fitted) return false; this.zoomOut(); return true;
+            case "-": case "_": if (v.least) return false; this.zoomOut(); return true;
             case "0": if (v.fitted) return false; this.fit(); return true;
             case "ArrowLeft": return this._pan(_PAN_STEP, 0);
             case "ArrowRight": return this._pan(-_PAN_STEP, 0);

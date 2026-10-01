@@ -1,12 +1,13 @@
 // =============================================================================
 // PanZoom — where content sits in its viewport, as numbers: a scale and an
 // offset, kept so the content is never lost. Fit is the scale at which the
-// content is whole in the viewport; the scale stays between fit and `most`
-// times fit. On an axis where the content is smaller than the viewport it is
-// centred; where it is larger it pans until its edge meets the viewport's, and
-// no further. Knows no DOM: its host measures, applies and listens.
+// content is whole in the viewport; the scale stays between `least` and `most`
+// times fit - smaller than whole, or larger. On an axis where the content is
+// smaller than the viewport it is centred; where it is larger it pans until
+// its edge meets the viewport's, and no further. Knows no DOM: its host
+// measures, applies and listens.
 //
-//   var pz = new PanZoom({ most: 8 })
+//   var pz = new PanZoom({ least: 0.25, most: 8 })
 //   pz.measure(viewport, content, fit?)   { w, h } each: re-measured on a resize, the zoom kept, the offset
 //                                   re-clamped. Fit is the scale that makes the content whole in the
 //                                   viewport, unless said: content shown at its own size fits at 1
@@ -14,15 +15,16 @@
 //   pz.zoomBy(factor, at?)          about a point of the viewport { x, y }; its centre unless said
 //   pz.zoomTo(zoom, at?)            to a zoom: a multiple of fit
 //   pz.panBy(dx, dy)   pz.moveTo(x, y)   by, or to, an offset: clamped
-//   each → pz.view(): { scale, x, y, zoom, fitted, most, pannable }
+//   each → pz.view(): { scale, x, y, zoom, fitted, least, most, pannable }
 //     scale, x, y: the content's scale and its offset in the viewport; zoom: scale ÷ fit;
-//     fitted: at fit; most: at the most; pannable: larger than the viewport on an axis
+//     fitted: at fit; least, most: at either end; pannable: larger than the viewport on an axis
 // =============================================================================
 
 class PanZoom {
     constructor(opts) {
         var o = opts || {};
         this._most = Number(o.most) > 1 ? Number(o.most) : 8;
+        this._least = Number(o.least) > 0 && Number(o.least) <= 1 ? Number(o.least) : 0.25;
         this._vw = 0; this._vh = 0;
         this._cw = 0; this._ch = 0;
         this._fit = 1; this._s = 1;
@@ -49,7 +51,7 @@ class PanZoom {
 
     zoomTo(zoom, at) {
         var p = at || { x: this._vw / 2, y: this._vh / 2 };
-        var s = this._fit * Math.min(this._most, Math.max(1, Number(zoom) || 1));
+        var s = this._fit * Math.min(this._most, Math.max(this._least, Number(zoom) || 1));
         var r = s / this._s;
         this._x = p.x - (p.x - this._x) * r;
         this._y = p.y - (p.y - this._y) * r;
@@ -73,7 +75,8 @@ class PanZoom {
         var zoom = this._s / this._fit;
         return Object.freeze({
             scale: this._s, x: this._x, y: this._y, zoom: zoom,
-            fitted: zoom <= 1 + 1e-6,
+            fitted: Math.abs(zoom - 1) <= 1e-6,
+            least: zoom <= this._least + 1e-6,
             most: zoom >= this._most - 1e-6,
             pannable: this._measured() && (this._cw * this._s > this._vw + 0.5 || this._ch * this._s > this._vh + 0.5)
         });
