@@ -39,8 +39,8 @@ import java.util.stream.Collectors;
 /**
  * The components' conformance configuration, in one place so the gate
  * ({@code ComponentsConformanceTest}), the export ({@link
- * ComponentsConformanceExport}) and the served studio ({@link
- * ComponentsConformanceStudioServer}) grade identically. A downstream of the
+ * ComponentsConformanceExport}) and the studio downstream that browses these
+ * crates grade identically. A downstream of the
  * framework's {@code HomingConformance}, as the demo's is: the framework's
  * default policy, its strict grader, and a baseline that is empty on
  * purpose — these modules were cut on the substrate and carry no debt, so
