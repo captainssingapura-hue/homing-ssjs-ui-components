@@ -53,7 +53,7 @@ class UiPanesCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(20, checked, "the pane, the single-tab pane, its tabs' parts, the strip, the chip, the tab-pane, the register, the hand, the window, the thumbs, the add control, the opener and the picker, the events, the drag, the fit, the keys, the menus, the merge and the source");
+        assertEquals(21, checked, "the pane, the single-tab pane, its tabs' parts, the strip, the chip, the tab-pane, the register, the hand, the window, the thumbs, the add control, the opener and the picker, the events, the drag, the tear, the fit, the keys, the menus, the merge and the source");
     }
 
     @Test
