@@ -85,6 +85,11 @@
 //       keys and a right-click do, by call; the menus themselves are PaneMenus'
 //   pane.bar() .barGround(target)   the strip, and whether a target is its own ground and
 //       not a chip or a control: for a float, whose frame that ground moves
+//   pane.hand(h?)                a desk's hand, or none: a press on a chip is then h.press(tp, ev, pane) —
+//       the desk's gesture, which may carry the chip off to a float and onto another dock — and
+//       the slide along the rail is the hand's to drive: pane.slide(tp, x, grabX?) → { place(x),
+//       end(commit) }; pane.indexAt(x) where a tab from outside would land. Without, the strip's own
+//       hand slides a chip along its rail and nowhere else
 //   pane.dispose()               → the pane out of its host and the tree, its branch dissolved;
 //       refused while it holds a tab-pane, which is its desk's: let those go first
 //
@@ -366,6 +371,13 @@ class MultiTabPane {
     menuByGround(at) { return PaneMenus.onGround(this, at); }
     /** The active tab's menu, at its chip, when the page offers menus; true when the steward took it. */
     bar() { return this._strip.el; }
+    hand(h) {
+        var self = this;
+        this._strip.takeover(h ? function (chip, ev) { var i = self._findChip(chip); return i >= 0 && !!self._tabs[i].tabPane && h.press(self._tabs[i].tabPane, ev, self) === true; } : null);
+        return this;
+    }
+    slide(tp, x, grabX) { return this._strip.slide(tp.chip, x, grabX); }
+    indexAt(x) { return this._strip.indexAt(x); }
     barGround(target) { return this._strip.ground(target); }
     menuByKey() { return PaneMenus.byKey(this); }
     /** The active tab asked to detach and float: DetachRequested, for a holder with a desk. */

@@ -29,12 +29,16 @@
 //
 //   desk.register          the TabRegister: every tab-pane of this desk is opened there
 //   desk.layer             the FloatLayer, made when first wanted
+//   desk.hand              the DeskHand: a press on any chip of the desk's is its gesture, the chip
+//                          carried as a chip — along a dock's rail, torn off into a float of its own
+//                          past the escape, captured onto any dock's rail when its centre comes within
+//                          the capture — as a naked chip goes. opts.tear sets TabTear's options
 //   desk.addDock(pane) .removeDock(pane) .docks()
-//                          a multi-tab pane becomes a host of the desk: a tab-pane dragged over
-//                          its strip is offered to it, and its focus branch goes under the desk's,
+//                          a multi-tab pane becomes a host of the desk: its chips the hand's, its strip
+//                          a rail a chip may be captured onto, and its focus branch under the desk's,
 //                          so the desk holds its panes in the focus tree too; removed, it goes back
-//                          where it was. docks() are the docks and the floats' hosts; only
-//                          the docks are ever offered a tab
+//                          where it was. docks() are the docks and the floats' hosts; only the docks
+//                          are ever landed on
 //   desk.open({ id?, title?, icon?, pinned?, closable?, make }, host, index?, how?) → the TabPane:
 //                          opened in the register — its widget made by make(branch, tab) — and
 //                          put in the host, which says it arrived (TabAdded). how: "quiet", the
@@ -59,10 +63,10 @@
 //                          has - a float brought back under its old name keeps it, and the next is
 //                          named past it. A FLOAT IS ONE TAB IN TRANSIT, the desk's temporary vehicle
 //                          and never a second dock: it is never offered a tab - a move into a float
-//                          that carries one is refused - and its tab is the tab in the hand: dragged
-//                          by its bar, it is offered to the docks it passes, and let go over a strip
-//                          the tab-pane lands there, the one the dock shows - the hand put it there
-//                          to look at it - and the float, empty, is gone
+//                          that carries one is refused. DOCKING IS BY THE CHIP ALONE: dragged by its
+//                          chip, the float is the chip in the hand, captured onto a dock's rail the
+//                          moment the chip's centre comes near one, the float gone; dragged by its
+//                          bar's own ground, it moves as a window and lands nowhere
 //   desk.floats()          → the floats, bottom of the stack first: none while the layer is not made
 //   desk.dispose()         every tab-pane closed, the floats with them; the layer; the docks'
 //                          focus branches back where they were, for the docks are the page's;
@@ -99,8 +103,7 @@ class Desk {
         this._homes = new Map();      // a dock → the focus branch it was in before the desk took it under its own
         this._floaters = new Map();   // a float's host → the float, while it lasts
         this._floats = 0;             // float-1, float-2 and on: never a name another float of this desk had
-        this._target = null;
-        this._index = -1;
+        this.hand = new DeskHand(this, { tear: opts.tear });
         this._disposed = false;
         if (this._menus) this._answerTabMenu(this._menus);
     }
@@ -137,6 +140,7 @@ class Desk {
         if (m && m.in && m.in !== this.focus) { this._homes.set(pane, m.in); this.focus.adopt(m); }
         this._docks.push(pane);
         if (typeof pane.setRoom === "function") pane.setRoom(this.register.room() > 0);
+        if (typeof pane.hand === "function") pane.hand(this.hand);   // its chips the hand's
         return this;
     }
     removeDock(pane) {
@@ -145,6 +149,7 @@ class Desk {
         this._docks.splice(i, 1);
         this._home(pane);
         if (typeof pane.setRoom === "function") pane.setRoom(true);   // no longer this desk's to say
+        if (typeof pane.hand === "function") pane.hand(null);
         return this;
     }
     docks() { return this._docks.slice(); }
@@ -237,15 +242,6 @@ class Desk {
             id: id,
             menus: this._menus,
             onEvent: function (ev) { self._fire(ev); },
-            onDragMove: function (frame, x, y) { if (f.host.count()) self._offer(x, y); else self._clear(); },
-            onDragEnd: function (frame, x, y, ok) {
-                var target = self._target, index = self._index;
-                self._clear();
-                if (!ok || !target || !f.host.count()) return;
-                var tp = f.tabPanes()[0];
-                self.move(tp, target, index);
-                target.switchTab(tp.id);
-            },
             onGone: function () { self.removeDock(f.host); self._floaters.delete(f.host); }
         }, opts || {}));
         this.addDock(f.host);
@@ -284,25 +280,6 @@ class Desk {
         if (!this._sink) return;
         try { this._sink(ev); }
         catch (e) { console.error("[Desk] onEvent threw on " + ev.kind + ":", e); }
-    }
-
-    // ── the offer under the hand: a float's tab, over the docks it passes — never a float, which is no landing ──
-    _offer(x, y) {
-        var target = null, index = -1;
-        for (var i = 0; i < this._docks.length; i++) {
-            var d = this._docks[i];
-            if (this._floaters.has(d)) continue;
-            var at = target ? -1 : d.dropAt(x, y);
-            if (at >= 0) { target = d; index = at; }
-            else d.dropClear();
-        }
-        this._target = target;
-        this._index = index;
-    }
-    _clear() {
-        for (var i = 0; i < this._docks.length; i++) if (!this._floaters.has(this._docks[i])) this._docks[i].dropClear();
-        this._target = null;
-        this._index = -1;
     }
 
     /** Where a float with no hand goes: its bar at the point, the grip's offset in, kept within the desk. */

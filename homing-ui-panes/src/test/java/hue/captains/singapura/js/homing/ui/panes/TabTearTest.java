@@ -163,4 +163,17 @@ class TabTearTest extends JsModuleTestBase {
         assertEquals("flight@100,55", eval("at(g.move(100, 55, 110))").asString());
         assertEquals("rail", eval("at(g.move(100, 54, 120))").asString(), "40 would capture at 70; the escape's 24 is the most a capture can be");
     }
+
+    /** A host with many strips says where a torn centre lands: the band it names is the rail from then on, and the escape is measured from it. */
+    @Test
+    void aHostWithManyStrips_saysWhereACentreLands_andThatStripIsTheRailFromThen() {
+        eval("var other = { top: 200, bottom: 230, left: 0, right: 300, name: 'other' };"
+           + "function land(cx, cy, d) { return cx >= other.left && cx <= other.right && cy >= other.top - d && cy <= other.bottom + d ? other : null; }"
+           + "var g = new TabTear(); g.press(100, 15, 0, band, { land: land }); for (var t = 10; t <= 100; t += 10) g.move(100, 15 + t, t);");
+        assertEquals("flight@100,55", eval("at(g.move(100, 38, 110))").asString(), "its own strip takes it back only when the host says so");
+        assertEquals("flight@100,55", eval("at(g.move(400, 210, 120))").asString(), "beside the other strip: not over it");
+        assertEquals("rail other", eval("var s = g.move(100, 195, 130); s.phase + ' ' + s.captured.band.name").asString(), "over it, within 8: captured onto it");
+        assertEquals("rail", eval("at(g.move(100, 254, 140))").asString(), "its escape is the other strip's now: 230 + 24");
+        assertEquals("flight@100,255", eval("at(g.move(100, 255, 150))").asString());
+    }
 }

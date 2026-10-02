@@ -42,6 +42,11 @@
 //       centre  { dx, dy }: the chip's centre from the hand at the press; the hand's own unless said
 //       afloat  the chip is a window already, dragged by its bar: the gesture starts settled
 //               (why "afloat"), and a capture puts it on the rail
+//       land    (cx, cy, d) → a band, or null: where a torn chip's centre would be captured, for a
+//               host with more than one strip — the band of the strip that takes a centre at
+//               (cx, cy) within d of it, sideways too, as { top, bottom, ... } with whatever else
+//               the host needs back. The captured band is the rail from then on, and its escape
+//               is measured from it. Without it, the press's band alone captures, by height only
 //   tear.move(x, y, t)     → step     the hand moved
 //   tear.tick(t)           → step     a frame: a hand that stops sends no moves, so this is
 //                                     what ends a flight then — once it has been quiet for idle
@@ -53,7 +58,7 @@
 //     speed   px/ms now; ratio the departure from the breach's (null before it)
 //     breach  { x, y, t, vx, vy, speed } or null;  settle { x, y, t, why } or null,
 //             why "change", "slow", "release" or "afloat"; both cleared by a capture
-//     captured  { x, y, t }, the hand at the last capture, or null
+//     captured  { x, y, t, band }, the hand at the last capture and the band it was captured into, or null
 //   tear.phase() .breach() .settle() .torn() .inBand(y) .step()
 //
 // Times are milliseconds on one clock — an event's timeStamp and an animation
@@ -83,6 +88,7 @@ class TabTear {
         var c = at && at.centre ? at.centre : null;
         this._band = { top: Number(band.top), bottom: Number(band.bottom) };
         this._centre = { dx: c ? Number(c.dx) || 0 : 0, dy: c ? Number(c.dy) || 0 : 0 };
+        this._lands = at && typeof at.land === "function" ? at.land : null;
         this._samples = [{ x: x, y: y, t: t }];
         this._moved = t;
         this._v = { x: 0, y: 0 };
@@ -103,9 +109,9 @@ class TabTear {
         this._changed = false;
         this._sample(x, y, t);
         this._moved = this._hand().t;
-        var cy = y + this._centre.dy;
+        var cy = y + this._centre.dy, into;
         if (this._phase === "rail") { if (!this._within(cy, this._o.escape)) this._tear(t); }
-        else if (this._within(cy, Math.min(this._o.capture, this._o.escape))) this._capture(t);
+        else if ((into = this._landing(x + this._centre.dx, cy))) this._capture(t, into);
         else this._read(t);
         return this.step();
     }
@@ -148,6 +154,12 @@ class TabTear {
     _need() { if (this._phase === "idle" || this._phase === "done") throw new Error("[TabTear] no gesture: press first"); }
     _hand() { return this._samples[this._samples.length - 1]; }
     _within(cy, d) { return cy >= this._band.top - d && cy <= this._band.bottom + d; }
+    /** The band a torn centre would be captured into: the host's word when it has more than one strip, else the press's own. */
+    _landing(cx, cy) {
+        var d = Math.min(this._o.capture, this._o.escape);
+        if (this._lands) return this._lands(cx, cy, d) || null;
+        return this._within(cy, d) ? this._band : null;
+    }
     _sample(x, y, t) {
         var s = this._samples;
         if (t < s[s.length - 1].t) t = s[s.length - 1].t;   // one clock, never backwards
@@ -183,9 +195,10 @@ class TabTear {
     }
 
     /** Back within the capture: on the rail again, as if never torn — a later escape tears it anew. */
-    _capture(t) {
+    _capture(t, band) {
         var h = this._hand();
-        this._captured = { x: h.x, y: h.y, t: t };
+        this._band = band;
+        this._captured = { x: h.x, y: h.y, t: t, band: band };
         this._breach = null;
         this._settle = null;
         this._since = null;
