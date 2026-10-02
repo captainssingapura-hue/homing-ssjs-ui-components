@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tearing a tab off its strip, headless, on a strip 0..30 high with the
- * default margin of 24, so the band ends at 54 below. The hand is sampled
+ * default escape of 24 and capture of 8, so the bands end at 54 and 38 below. The hand is sampled
  * every 10ms. On the rail inside the band; torn at the breach, the window
  * waiting there while the flight keeps the breach's velocity; settled at the
  * hand once a material change has held, or at once for a slow tear, or where
@@ -40,7 +40,7 @@ class TabTearTest extends JsModuleTestBase {
     void withinTheBand_theChipStaysOnItsRail_howeverFarTheHandGoesSideways() {
         eval("var g = new TabTear(); g.press(100, 15, 0, band);");
         assertEquals("rail", eval("at(g.move(900, 54, 10))").asString(), "54 is the band's edge: still the rail");
-        assertEquals("rail", eval("at(g.move(-400, -24, 20))").asString(), "and above it, the margin's worth");
+        assertEquals("rail", eval("at(g.move(-400, -24, 20))").asString(), "and above it, the escape's worth");
         assertEquals("done", eval("at(g.release(-400, -24, 30))").asString(), "let go on the rail: not torn, no anchor");
         assertTrue(eval("!g.torn() && g.breach() === null && g.settle() === null").asBoolean());
     }
@@ -113,10 +113,54 @@ class TabTearTest extends JsModuleTestBase {
 
     @Test
     void theOptionsAreLive_andAGestureNeedsAPressAndABand() {
-        eval("var g = new TabTear().set({ margin: 0 }); g.press(100, 15, 0, band);");
-        assertEquals("flight@100,31", eval("at(g.move(100, 31, 10))").asString(), "no margin: out the moment it leaves the strip");
-        assertEquals("0 0.5", eval("g.options().margin + ' ' + g.options().change").asString());
+        eval("var g = new TabTear().set({ escape: 0 }); g.press(100, 15, 0, band);");
+        assertEquals("flight@100,31", eval("at(g.move(100, 31, 10))").asString(), "no escape: out the moment the centre leaves the strip");
+        assertEquals("0 8 0.5", eval("g.options().escape + ' ' + g.options().capture + ' ' + g.options().change").asString());
         assertThrows(PolyglotException.class, () -> eval("new TabTear().move(1, 1, 1)"));
         assertThrows(PolyglotException.class, () -> eval("new TabTear().press(1, 1, 0)"));
+    }
+
+    /**
+     * CAPTURED: torn, the chip goes back on its rail the moment its centre is within the capture - 8 beyond the
+     * strip, so 38 below - at once, mid-drag, and as if it had never been torn; between the capture and the escape it
+     * stays as it is, so a chip on the line does not tear and land by turns; out past the escape again, it is torn anew.
+     */
+    @Test
+    void tornAndBroughtBack_itIsCapturedOntoTheRail_atOnce_andAGapKeepsItFromFlickering() {
+        eval("var g = flung(), seen = []; [[45, 110], [39, 120], [38, 130], [20, 140], [50, 150]].forEach(function (m) { var s = g.move(100, m[0], m[1]); seen.push(m[0] + ':' + at(s) + (s.changed ? '*' : '')); });");
+        assertEquals("45:flight@100,55 39:flight@100,55 38:rail* 20:rail 50:rail", eval("seen.join(' ')").asString(),
+                "39 is past the capture: still in flight; 38 is within it: captured; 50 is within the escape: still the rail");
+        assertTrue(eval("!g.torn() && g.breach() === null && g.settle() === null").asBoolean(), "as if never torn");
+        assertEquals("100,38,130", eval("var c = g.step().captured; [c.x, c.y, c.t].join(',')").asString());
+        assertEquals("flight@100,55", eval("at(g.move(100, 55, 160))").asString(), "past the escape again: torn anew");
+        assertEquals("55", eval("String(g.breach().y)").asString());
+        assertEquals("done", eval("var h = flung(); h.move(100, 30, 110); at(h.release(100, 30, 120))").asString(),
+                "let go after a capture: on the rail, nothing torn, no anchor");
+    }
+
+    /** Both bands measure the chip's CENTRE: taken low on the chip, the hand must go further for the centre to escape. */
+    @Test
+    void theBandsMeasureTheCentre_notTheHand() {
+        eval("var g = new TabTear(); g.press(100, 15, 0, band, { centre: { dx: 0, dy: -12 } });");
+        assertEquals("rail", eval("at(g.move(100, 66, 10))").asString(), "the hand at 66, the centre at 54: the escape's edge");
+        assertEquals("flight@100,67", eval("at(g.move(100, 67, 20))").asString(), "the centre at 55: torn, the breach where the hand is");
+        assertEquals("rail", eval("at(g.move(100, 50, 30))").asString(), "the centre at 38: captured");
+    }
+
+    /** A window dragged by its bar starts afloat, at the hand, and the same capture puts it on the rail. */
+    @Test
+    void aWindowAlreadyAfloat_isCapturedTheSameWay() {
+        eval("var g = new TabTear(), s0 = g.press(300, 200, 0, band, { afloat: true });");
+        assertEquals("follow@300,200 afloat", eval("at(s0) + ' ' + s0.settle.why").asString());
+        assertEquals("follow@300,50", eval("at(g.move(300, 50, 10))").asString(), "within the escape but not the capture: still afloat");
+        assertEquals("rail", eval("at(g.move(300, 38, 20))").asString(), "within the capture: on the rail");
+        assertEquals("done false", eval("at(g.release(300, 38, 30)) + ' ' + g.torn()").asString());
+    }
+
+    @Test
+    void aCaptureWiderThanTheEscape_isReadAsTheEscape() {
+        eval("var g = flung({ capture: 40 });");
+        assertEquals("flight@100,55", eval("at(g.move(100, 55, 110))").asString());
+        assertEquals("rail", eval("at(g.move(100, 54, 120))").asString(), "40 would capture at 70; the escape's 24 is the most a capture can be");
     }
 }
