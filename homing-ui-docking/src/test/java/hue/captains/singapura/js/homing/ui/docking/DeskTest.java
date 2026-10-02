@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * "tab-panes"): two docks side by side, and one desk over them whose register
  * owns every tab-pane. A drag along a strip stays on its rail; a tab-pane
  * opened into a host is said to have arrived; detached, it floats in a frame
- * of its own, the same chip and the same pane; a float of one dragged over a
- * dock is offered, and let go over a strip lands there, shown, the float
- * gone. Every step is data on one sink, in order. The fake party holds the
+ * of its own, the same chip and the same pane, one tab in transit; dragged
+ * over a dock it is offered, and let go over a strip lands there, shown, the
+ * float gone. Every step is data on one sink, in order. The fake party holds the
  * real one's rule for a name.
  */
 class DeskTest extends JsModuleTestBase {
@@ -78,7 +78,7 @@ class DeskTest extends JsModuleTestBase {
             mtp_chip_seated = "mtp_chip_seated",
             mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off",
             mtp_pill = "mtp_pill", mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
-            mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target";
+            mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target", mtp_strip_current = "mtp_strip_current";
         var console = { error: function (m, e) { log.push("error:" + m); } };
         var page = fakeBranch("page");
         var host = el("div");
@@ -143,6 +143,7 @@ class DeskTest extends JsModuleTestBase {
         loadModule(P + "panes/PaneMenusModule.js");
         loadModule(P + "panes/PaneTabsModule.js");
         loadModule(P + "panes/MultiTabPaneModule.js");
+        loadModule(P + "panes/SingleTabPaneModule.js");
         loadModule(P + "docking/FloaterModule.js");
         loadModule(P + "panes/TabPaneModule.js");
         loadModule(P + "panes/TabRegisterModule.js");
@@ -300,21 +301,20 @@ class DeskTest extends JsModuleTestBase {
     }
 
     /**
-     * THE FLOATER (RFC 0066 E3, appendix "tab-panes", §7, the sequence's step
-     * 3): a frame on the desk around a host of its own, as a browser's window;
-     * one bar, the host's strip, whose ground moves the frame and whose cross
-     * closes it and every tab-pane in it; offered to a dock while it holds one
-     * tab-pane, never while it holds more; not closed by the layer's Escape;
-     * gone when its last tab-pane leaves; named for a reader by the tab it shows.
-     */
-    @Nested
+     * THE FLOATER (RFC 0066 E3, appendix "tab-panes", §7): a frame on the desk
+     * around ONE tab in transit — a single-tab pane, never a second dock. One
+     * bar, the tab's chip, and the whole of it, chip and all, moves the frame
+     * but for the chip's cross, which closes the tab and the float with it; a
+     * second tab refused, by a take or a move; never offered a tab by a drag;
+     * a press in it lands in the tab; not closed by the layer's Escape; gone
+     * when its tab-pane leaves; named for a reader by its tab.
+     */    @Nested
     class TheFloater {
 
         @BeforeEach
         void aMeasuredLayer() {
             eval("""
                 layered();
-                function tailOf(f) { var bar = f.host.bar(); return bar.children[bar.children.length - 1]; }
                 log.length = 0;
                 """);
         }
@@ -334,45 +334,65 @@ class DeskTest extends JsModuleTestBase {
         }
 
         @Test
-        void aFloatIsAFrameWithOneBar_theHostsStrip() {
-            eval("var f = desk.float({ x: 40, y: 30, w: 300, h: 200 }); f.take(open('a'));");
+        void aFloatIsAFrameWithOneBar_itsTabsChip() {
+            eval("var f = desk.float({ x: 40, y: 30, w: 300, h: 200, addable: true }); var a = open('a'); f.take(a);");
             assertEquals("opened:" + id() + " raised:" + id() + " active:" + id() + ":a", log(), "the layer's frame, then what its host shows, on the one sink");
             assertTrue(eval("f.frame.head === null && f.frame.root.children.length === 2 && f.frame.body.children[0] === f.host.el").asBoolean(), "no head: the frame's body holds the host");
-            assertTrue(eval("f.host.el.children[0] === f.host.bar()").asBoolean(), "the host's strip is the one bar");
-            assertTrue(eval("tailOf(f).children[tailOf(f).children.length - 1].has('mtp_bar_close')").asBoolean(), "its cross at the bar's end");
-            assertEquals("A", eval("f.frame.root.getAttribute('aria-label') + ''").asString(), "named for a reader by the tab it shows");
-            eval("f.take(open('b')); f.host.switchTab('b');");
-            assertEquals("B", eval("f.frame.root.getAttribute('aria-label') + ''").asString());
+            assertTrue(eval("f.host.el.children[0] === f.host.bar() && f.host.bar().has('mtp_strip')").asBoolean(), "one bar, on the dock's strip");
+            assertTrue(eval("f.host.bar().children.length === 1 && f.host.bar().children[0] === a.chip").asBoolean(), "the chip alone on it: no rail, no plus - even asked for - no count, no cross of its own");
+            assertEquals("true", eval("a.chip.getAttribute('aria-selected')").asString());
+            assertEquals("100%", eval("f.host.bar().prop('--chip-fit')").asString(), "the chip never wider than its window");
+            assertEquals("A", eval("f.frame.root.getAttribute('aria-label') + ''").asString(), "named for a reader by its tab");
+            eval("a.title('Alpha');");
+            assertEquals("Alpha", eval("f.frame.root.getAttribute('aria-label') + ''").asString(), "and renamed with it");
         }
 
+        /** ONE TAB IN TRANSIT: a second is refused by a take and by a move, before anything leaves. */
         @Test
-        void theBarsGroundMovesTheFloat_aPressThroughAChipDoesNot() {
-            eval("var f = desk.float({ x: 40, y: 30, w: 300, h: 200 }); var a = open('a'); f.take(a); f.take(open('b')); var bar = f.host.bar(); log.length = 0;");
+        void aFloatCarriesOneTab_aSecondIsRefused_byATakeOrAMove() {
+            eval("var f = desk.float({ x: 40, y: 30 }); f.take(open('a')); var b = open('b'); A.take(b); log.length = 0;");
+            var ex = assertThrows(PolyglotException.class, () -> eval("f.take(open('c'))"));
+            assertTrue(ex.getMessage().contains("carries its one tab"), ex.getMessage());
+            assertFalse(eval("f.host.admits(b) || f.host.canTake(b)").asBoolean(), "it admits nothing while it carries one");
+            ex = assertThrows(PolyglotException.class, () -> eval("desk.move(b, f.host)"));
+            assertTrue(ex.getMessage().contains("would not take"), ex.getMessage());
+            assertTrue(eval("A.has('b') && b.host() === A && f.host.tabs().join(',') === 'a'").asBoolean(), "nothing left, nothing joined");
+        }
+
+        /** THE WHOLE BAR IS THE HANDLE: a press on the chip and a drag moves the frame; a press on the chip's cross does not. */
+        @Test
+        void theWholeBarMovesTheFloat_theChipToo_butNotItsCross() {
+            eval("var f = desk.float({ x: 40, y: 30, w: 300, h: 200 }); var a = open('a'); f.take(a); var bar = f.host.bar(); log.length = 0;");
             eval("press(a.chip, 60, 40, bar); bar.fire('pointermove', { clientX: 200, clientY: 200 }); bar.fire('pointerup', { type: 'pointerup', clientX: 200, clientY: 200 });");
-            assertEquals("40,30", eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "a press that came through a chip is the chip's");
-            eval("log.length = 0; press(bar, 60, 40); bar.fire('pointermove', { clientX: 160, clientY: 90 }); bar.fire('pointerup', { type: 'pointerup', clientX: 160, clientY: 90 });");
-            assertEquals("140,80", eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "a press on the ground, and the drag after it, moves the frame");
+            assertEquals("180,190", eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "a press through the chip, and the drag after it, moves the frame");
             assertEquals("capture:div moved:" + id(), log(), "reported once, by the layer; and offered to no dock");
+            eval("log.length = 0; press(a.chip._close, 200, 200, bar); bar.fire('pointermove', { clientX: 260, clientY: 260 }); bar.fire('pointerup', { type: 'pointerup', clientX: 260, clientY: 260 });");
+            assertEquals("180,190", eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "a press on the cross is the cross's");
+            assertEquals("", log());
         }
 
+        /** THE KEYS GO TO THE TAB: the pane is a road, never a place — granted, it lands in the tab; it holds nothing a widget yields; the chip and the bar say when the keys are inside. */
         @Test
-        void aFloatOfManyIsNeverOfferedToADock_itMovesAsAWindowDoes() {
-            eval("var f = desk.float({ x: 500, y: 400, w: 300, h: 200 }); f.take(open('a')); f.take(open('b')); var bar = f.host.bar(); log.length = 0;"
-               + "press(bar, 520, 410); bar.fire('pointermove', { clientX: 600, clientY: 20 });");
-            assertFalse(eval("B.el.has('mtp_dock_target')").asBoolean(), "over B's strip, B is not lit: a float of two is not one tab");
-            eval("bar.fire('pointerup', { type: 'pointerup', clientX: 600, clientY: 20 });");
-            assertTrue(eval("desk.layer.has(f.id) && f.host.tabs().join(',') === 'a,b' && B.tabs().join(',') === ''").asBoolean(), "still afloat, its tabs in it");
+        void aPressInAFloatLandsInItsTab_thePaneHoldsNothing() {
+            eval("var f = desk.float({ x: 40, y: 30 }); var a = open('a'); f.take(a); log.length = 0; f.host.granted('claim');");
+            assertEquals("a:activate", log(), "granted, it lands in the tab at once");
+            eval("log.length = 0; f.host.granted('native');");
+            assertEquals("", log(), "the browser's own focus arriving is left where it is");
+            assertFalse(eval("f.host.wouldHold()").asBoolean(), "a yield from the tab passes it by: there is no bar to come back to");
+            eval("f.host.within(true);");
+            assertTrue(eval("a.chip._mark.has('mtp_chip_mark_on') && f.host.bar().has('mtp_strip_current') && !a.chip.has('mtp_chip_lifted')").asBoolean(), "the keys inside: the chip marked, the bar lit, nothing lifted");
+            eval("f.host.within(false);");
+            assertFalse(eval("a.chip._mark.has('mtp_chip_mark_on') || f.host.bar().has('mtp_strip_current')").asBoolean());
         }
-
         /** DETACH: a tab-pane off its dock into a float of its own, as it is — the same chip, the same pane — reported as one move; its bar at the point, kept within the layer. */
         @Test
         void detachFloatsATabPaneAsItIs_inAFloatOfItsOwn_reportedAsAMove() {
             eval("var a = open('a'); A.take(a); var chip = a.chip, pane = a.pane; log.length = 0; var f = desk.detach(a, { x: 160, y: 90 });");
             assertTrue(eval("f.host.has('a') && !A.has('a') && a.host() === f.host && a.chip === chip && a.pane === pane").asBoolean(), "the same tab-pane, in a float of its own");
-            assertTrue(eval("f.host.bar().children[0].children.indexOf(chip) >= 0").asBoolean(), "its own chip on the float's one bar");
+            assertTrue(eval("f.host.bar().children.indexOf(chip) >= 0").asBoolean(), "its own chip, the float's one bar");
             assertEquals("100,76", eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "its bar at the point, the grip's offset in: 160-60, 90-14");
             assertTrue(log().contains("TabMoved"), log());
-            assertTrue(eval("desk.docks().indexOf(f.host) >= 0").asBoolean(), "a float is a dock for as long as it lasts");
+            assertTrue(eval("desk.docks().indexOf(f.host) >= 0").asBoolean(), "a float's host is listed with the docks while it lasts");
             eval("var b = open('b'); A.take(b); var g = desk.detach(b, { x: -50, y: -50 });");
             assertEquals("0,0", eval("var r = g.frame.bounds(); r.x + ',' + r.y").asString(), "kept within the layer");
         }
@@ -396,6 +416,9 @@ class DeskTest extends JsModuleTestBase {
             eval("menus.h.tab.pick('detach', { tab: x, pane: C, anchor: x.chip })");
             assertTrue(eval("x.host() !== C && !C.has('x')").asBoolean(), "floated");
             assertEquals("200,70", eval("var fl = d2.docks().filter(function (h) { return h !== C; })[0]; var b = d2._floaters.get(fl).frame.bounds(); b.x + ',' + b.y").asString(), "the float's corner at the chip's: under it");
+            assertTrue(eval("menus.h.tab.state('detach', { tab: x, pane: fl }).disabled && !menus.h.tab.state('close', { tab: x, pane: fl }).disabled").asBoolean(), "afloat: Detach off, Close on");
+            eval("menus.h.tab.pick('detach', { tab: x, pane: fl, anchor: x.chip })");
+            assertTrue(eval("x.host() === fl && d2.floats().length === 1").asBoolean(), "a Detach asked for afloat anyway does nothing");
             eval("var y = d2.register.open({ id: 'y', title: 'Y', make: mk('y') }); C.take(y); menus.h.tab.pick('close', { tab: y, pane: C })");
             assertFalse(eval("C.has('y')").asBoolean(), "closed");
             assertTrue(eval("menus.h.tab.state('detach', { tab: { pinned: true } }).disabled && !menus.h.tab.state('close', { tab: {} }).disabled").asBoolean(), "a pinned tab is offered neither");
@@ -475,22 +498,22 @@ class DeskTest extends JsModuleTestBase {
             eval("var a = open('a'); A.take(a); var f = desk.detach(a, { x: 500, y: 400 });"
                + "f.host.el.rect = { left: 440, top: 386, right: 760, bottom: 606, width: 320, height: 220 }; f.host.bar().rect = { left: 440, top: 386, right: 760, bottom: 416, width: 320, height: 30 };"
                + "var bar = f.host.bar(); press(bar, 520, 400); bar.fire('pointermove', { clientX: 530, clientY: 400 });");
-            assertFalse(eval("f.host.el.has('mtp_dock_target')").asBoolean(), "its own strip, under the hand, is not a landing");
+            assertFalse(eval("f.host.el.has('mtp_dock_target')").asBoolean(), "its own bar, under the hand, is not a landing");
             eval("bar.fire('pointerup', { type: 'pointerup', clientX: 530, clientY: 400 });");
             assertTrue(eval("f.host.has('a') && !f.closed()").asBoolean(), "let go there: it only moved");
         }
 
+        /** A FLOAT IS NO LANDING: let go over another float's bar, it is not offered there and stays afloat; each keeps its one tab. */
         @Test
-        void aFloatOfOneLetGoOverAnotherFloatsStrip_joinsIt() {
+        void aFloatLetGoOverAnotherFloat_staysAfloat_neitherIsALanding() {
             eval("var a = open('a'), b = open('b'); A.take(a); A.take(b); var g = desk.detach(b, { x: 100, y: 300 }), f = desk.detach(a, { x: 500, y: 400 });"
                + "g.host.el.rect = { left: 40, top: 286, right: 360, bottom: 506, width: 320, height: 220 }; g.host.bar().rect = { left: 40, top: 286, right: 360, bottom: 316, width: 320, height: 30 };"
-               + "var bar = f.host.bar(); press(bar, 520, 410); bar.fire('pointermove', { clientX: 300, clientY: 300 });");
-            assertTrue(eval("g.host.el.has('mtp_dock_target')").asBoolean(), "the other float is offered it");
-            assertFalse(eval("f.host.el.has('mtp_dock_target')").asBoolean(), "never its own");
+               + "var bar = f.host.bar(); log.length = 0; press(bar, 520, 410); bar.fire('pointermove', { clientX: 300, clientY: 300 });");
+            assertFalse(eval("g.host.el.has('mtp_dock_target') || f.host.el.has('mtp_dock_target')").asBoolean(), "neither float is offered it");
             eval("bar.fire('pointerup', { type: 'pointerup', clientX: 300, clientY: 300 });");
-            assertTrue(eval("g.host.tabs().join(',') === 'b,a' && f.closed() && !g.closed()").asBoolean(), "joined it; the empty one gone");
+            assertTrue(eval("g.host.tabs().join(',') === 'b' && f.host.tabs().join(',') === 'a' && !f.closed() && !g.closed()").asBoolean(), "both afloat, one tab each");
+            assertFalse(log().contains("TabMoved"), log());
         }
-
         /** SHOW: a tab-pane brought to the front where it is — its host shows it, a float holding it raised — and nothing else: no keys given. */
         @Test
         void showBringsATabPaneToTheFrontWhereItIs() {
@@ -519,35 +542,32 @@ class DeskTest extends JsModuleTestBase {
             assertEquals("raised:" + eval("f.id").asString(), eval("log.filter(function (l) { return l.indexOf('raised') === 0; }).join()").asString(), "the float holding it");
         }
 
+        /** THE CHIP'S CROSS closes its tab, as on a dock, and the float, empty, goes with it. */
         @Test
-        void theCrossClosesTheFloat_andEveryTabPaneInIt() {
-            eval("var f = desk.float({ x: 40, y: 30 }); f.take(open('a')); f.take(open('b')); log.length = 0;"
-               + "var cross = tailOf(f).children[tailOf(f).children.length - 1]; cross.fire('click', {});");
-            assertEquals(0, eval("desk.register.count()").asInt(), "every tab-pane in it closed");
+        void theChipsCrossClosesItsTab_andTheFloatWithIt() {
+            eval("var f = desk.float({ x: 40, y: 30 }); var a = open('a'); f.take(a); log.length = 0; a.chip._close.fire('click', {});");
+            assertEquals(0, eval("desk.register.count()").asInt(), "the tab-pane closed");
             assertTrue(eval("f.closed() && !desk.layer.has(f.id)").asBoolean(), "and the frame gone");
-            assertTrue(log().startsWith("a:disposed TabRemoved"), log());
-            assertTrue(log().contains("b:disposed TabRemoved closed:" + id()), log());
+            assertEquals("a:disposed TabRemoved closed:" + id(), log());
         }
 
         /**
-         * The cross ASKS each tab-pane to close, as a chip's cross does: one whose owner closes it in its own
-         * order is left to it - here, one owner that closes by unmounting then closing, one that keeps its tab.
-         * The float goes once it is empty, and not before.
+         * A CLOSE BY CALL asks the tab-pane, as a chip's cross does: one whose owner closes it in its own order is
+         * left to it - here, one owner that keeps its tab. The float goes once it is empty, and not before.
          */
         @Test
-        void theCrossAsksEachTabPane_andTheFloatGoesOnlyOnceEmpty() {
+        void closeAsksItsTabPane_andTheFloatGoesOnlyOnceEmpty() {
             eval("var asked = [];"
                + "function owned(id, keeps) { return desk.register.open({ id: id, title: id.toUpperCase(), make: mk(id), onCloseRequested: function (tp) {"
                + "  asked.push(tp.id); if (!keeps) { desk.unmount(tp); tp.close(); } } }); }"
-               + "var f = desk.float({ x: 40, y: 30 }); f.take(owned('a', false)); f.take(owned('b', true)); f.take(open('c')); log.length = 0;"
-               + "var cross = tailOf(f).children[tailOf(f).children.length - 1]; cross.fire('click', {});");
-            assertEquals("a,b", eval("asked.join(',')").asString(), "the owned ones asked");
-            assertEquals("b", eval("f.host.tabs().join(',')").asString(), "the one with no owner closed; the one kept, kept");
-            assertFalse(eval("f.closed()").asBoolean(), "the float stays while it holds one");
+               + "var f = desk.float({ x: 40, y: 30 }); f.take(owned('a', false)); var g = desk.float({ x: 60, y: 50 }); g.take(owned('b', true)); log.length = 0;"
+               + "f.close(); g.close();");
+            assertEquals("a,b", eval("asked.join(',')").asString(), "each owner asked");
+            assertTrue(eval("f.closed() && !desk.register.has('a')").asBoolean(), "the one its owner closed: gone, and its float");
+            assertTrue(eval("!g.closed() && g.host.tabs().join(',') === 'b'").asBoolean(), "the one kept: kept, and the float stays while it carries it");
             eval("desk.unmount(desk.register.get('b'));");
-            assertTrue(eval("f.closed() && !desk.layer.has(f.id)").asBoolean(), "and goes once empty");
+            assertTrue(eval("g.closed() && !desk.layer.has(g.id)").asBoolean(), "and goes once empty");
         }
-
         @Test
         void aFloatWhoseLastTabPaneLeavesIsGone_closedOrMovedAway() {
             eval("var f = desk.float({ x: 40, y: 30 }); var a = open('a'); f.take(a); f.host.letGo(a);");
@@ -557,21 +577,12 @@ class DeskTest extends JsModuleTestBase {
             assertTrue(eval("g.closed() && !desk.layer.has(g.id) && !desk.register.has('a')").asBoolean(), "closed: the float is gone with it");
         }
 
-        /** The gallery's widgets join under their branch's name: two of them in one float, each on a branch named as its tab-pane is; an id is any string. */
+        /** The gallery's widgets join under their branch's name: two of one kind, each in a float of its own; an id is any string. */
         @Test
-        void twoWidgetsOfOneKindShareAFloat() {
+        void twoWidgetsOfOneKind_eachInAFloatOfItsOwn() {
             eval("function byBranch(b, t) { b.activate('w'); var w = { root: el('w'), activate: function () {} }; w.focus = t.focus.join(b.name, w); return w; }"
-               + "var f = desk.float({ x: 40, y: 30 }); f.take(desk.register.open({ id: 'p:1', make: byBranch })); f.take(desk.register.open({ id: 'p:2', make: byBranch }));");
-            assertEquals("p:1,p:2", eval("f.host.tabs().join(',')").asString());
-        }
-
-        /** A float holds what came to it: no plus on its bar unless asked for. */
-        @Test
-        void aFloatHasNoPlus_unlessAskedFor() {
-            eval("var f = desk.float({ x: 40, y: 30 }); f.take(open('a')); var g = desk.float({ x: 40, y: 30, addable: true }); g.take(open('b'));"
-               + "function plus(fl) { return fl.host.bar().children.filter(function (c) { return c.has('mtp_rail_add'); }).length; }");
-            assertEquals(0, eval("plus(f)").asInt(), "a float: no plus");
-            assertEquals(1, eval("plus(g)").asInt(), "asked for: one");
+               + "var f = desk.float({ x: 40, y: 30 }); f.take(desk.register.open({ id: 'p:1', make: byBranch })); var g = desk.float({ x: 60, y: 50 }); g.take(desk.register.open({ id: 'p:2', make: byBranch }));");
+            assertEquals("p:1 p:2", eval("f.host.tabs().join(',') + ' ' + g.host.tabs().join(',')").asString());
         }
 
         @Test

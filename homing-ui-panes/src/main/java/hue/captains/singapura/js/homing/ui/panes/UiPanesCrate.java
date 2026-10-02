@@ -34,6 +34,7 @@ public final class UiPanesCrate implements Crate, ComponentVehicle {
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(MultiTabPaneModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(SingleTabPaneModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(TabStripModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(TabChipModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(TabPaneModule.INSTANCE, StandardJsModuleType.PRIMITIVE),

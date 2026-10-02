@@ -1,38 +1,35 @@
 // =============================================================================
-// Floater — a float: a frame on the desk around a host of its own, as a
-// browser's window is a frame around its tabs (RFC 0066 E3, appendix
-// "tab-panes", §7). It has ONE BAR, and the bar is its host's strip. The
-// strip's own ground is the handle that moves the frame, with every tab-pane
-// in it; the cross at the bar's end closes the float and every tab-pane in it;
-// the frame's grip sizes it. There is no head and no title over the strip:
-// the tabs are what it shows.
+// Floater — a float: a frame on the desk around ONE tab in transit (RFC 0066
+// E3, appendix "tab-panes", §7). A float is the desk's temporary vehicle and
+// never a second dock, so its host is a SingleTabPane and takes one tab and
+// no more: it is never offered a tab, by a drag or a move. It has ONE BAR,
+// and the bar is the tab's chip: the whole bar, the chip with it, is the
+// handle that moves the frame; the chip's cross closes the tab, and the float
+// with it; the frame's grip sizes it. There is no head and no title over it.
 //
-//   new Floater(desk, { id?, x?, y?, w?, h?, addable?, focus?, menus?, keys?, onEvent?, onDragMove?, onDragEnd?, onGone? })
+//   new Floater(desk, { id?, x?, y?, w?, h?, focus?, menus?, onEvent?, onDragMove?, onDragEnd?, onGone? })
 //     id       its name on the desk, and its host's slot: the desk's own "pane-N" unless said
 //     desk     the floating layer it lies on. The frame is the desk's, opened
-//              with no head, never offered to a dock as one tab would be, and
-//              not closed by the desk's Escape, since closing a float closes
-//              its tabs. Its id is the desk's own.
-//     addable, focus, menus, keys   its host's, as a multi-tab pane takes them:
-//              a float has no plus unless addable is true: it holds what came to it
-//     onEvent  its host's reports: TabActivated, a reorder, a close
+//              with no head, and not closed by the desk's Escape, since closing
+//              a float closes its tab. Its id is the desk's own.
+//     focus, menus   its host's, as a single-tab pane takes them
+//     onEvent  its host's reports: TabActivated, TabRenamed, a close
 //     onDragMove(frame, x, y), onDragEnd(frame, x, y, ok)   its holder's, while the
 //              frame is dragged: without them it is never offered to anything
 //     onGone(floater)   it has closed, however it came to
 //
 //   floater.id  floater.frame  floater.host
-//   floater.take(tp, index?)  → the index: the host takes the tab-pane in
-//   floater.close()           every tab-pane in it asked to close - closed, when no owner takes the
+//   floater.take(tp)          → the index: the host takes the tab-pane in, when it carries none
+//   floater.close()           its tab-pane asked to close - closed, when no owner takes the
 //                             asking (TabPane.requestClose) - then the frame, once it is empty
 //   floater.closed()
-//   floater.tabPanes()        → the tab-panes in it, in order
+//   floater.tabPanes()        → the tab-pane in it, as a list of one, or none
 //   floater.hold(fn)          → what fn returns: fn run with the float kept open though
 //                             it empties, and folded after if it is still empty — so a
 //                             move out of it is said before the float is gone
 //
-// It closes by itself when its last tab-pane leaves it, closed or moved away:
-// an empty float is nothing, as an empty browser window is closed. The
-// frame's name, for a reader, is the name of the tab it shows.
+// It closes by itself when its tab-pane leaves it, closed or moved away: an
+// empty float is nothing. The frame's name, for a reader, is its tab's.
 // =============================================================================
 
 const _floaterOwner = Object.freeze({ toString: () => "floater" });
@@ -50,20 +47,19 @@ class Floater {
         this.id = this.frame.id;
         var own = this.frame.branch.createBranch("floater");
         own.activate(_floaterOwner);
-        this.host = new MultiTabPane(own.createBranch("host"), {
-            host: this.frame.body, slotId: this.id, addable: o.addable === true, focus: o.focus, menus: o.menus, keys: o.keys,
+        this.host = new SingleTabPane(own.createBranch("host"), {
+            host: this.frame.body, slotId: this.id, focus: o.focus, menus: o.menus,
             focusName: this.frame.branch.name,   // the frame's own name, unique on the page: every float's host is on a branch called "host", and a focus branch refuses a name twice
             onEvent: function (ev) {
-                if (ev.kind === "TabActivated") self._named(ev.tabId);
+                if (ev.kind === "TabActivated" || ev.kind === "TabRenamed") self._named(ev.tabId);
                 if (typeof o.onEvent === "function") o.onEvent(ev);
             },
-            onEmpty: function () { if (!self._holding) self._fold(); },
-            onClose: function () { self.close(); }
+            onEmpty: function () { if (!self._holding) self._fold(); }
         });
         this.frame.handle(this.host.bar(), function (ev) { return self.host.barGround(ev.target); });
     }
 
-    take(tp, index) { return this.host.take(tp, index); }
+    take(tp) { return this.host.take(tp); }
 
     close() {
         var self = this;
