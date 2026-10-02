@@ -33,13 +33,14 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
     /**
      * The viewport: a column the canvas stands in - stretched across while the drawing lays out as it is,
      * centred both ways once sized - scrolling what overflows it, natively; a control to the keys, so it
-     * wears a control's rule and ring.
+     * wears a control's rule and ring. Nothing in it is selected: a drag here pans, and a drag that also
+     * selected the drawing's words would paint them over as it went.
      */
     public record pz_view() implements CssClass<PanZoomStyles> {
         @Override public List<? extends Wearable> wears() {
             return List.of(of(Control.class, Shape.Rule.class), of(Control.class, Color.Edge.class), of(Hairline.class, Color.Edge.class));
         }
-        @Override public String body() { return "display: flex;\nflex-direction: column;\noverflow: auto;\nmin-width: 0;\n"; }
+        @Override public String body() { return "display: flex;\nflex-direction: column;\noverflow: auto;\nmin-width: 0;\n-webkit-user-select: none;\nuser-select: none;\n"; }
     }
 
     /** Zoomed in place: the viewport held at the height it fitted at, so the drawing scrolls rather than the page growing. */
