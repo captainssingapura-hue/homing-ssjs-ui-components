@@ -21,8 +21,9 @@
 //     menus    the page's ContextMenuSteward, handed to its floats, so a chip
 //              afloat asks for its menu as a chip in a dock does; and the TAB MENU
 //              is answered here, the pane's own kind on any chip of the desk's -
-//              Detach floats the tab under its chip, Close closes it. A steward
-//              holds one answer a kind: one desk to a steward
+//              Detach floats the tab under its chip, Close closes it; a tab afloat
+//              is detached already, so Detach is off there. A steward holds one
+//              answer a kind: one desk to a steward
 //     onEvent  its reports: a tab-pane's arrival (TabAdded) and every move
 //              between hosts (TabMoved), a float's host's reports, the layer's
 //
@@ -32,7 +33,8 @@
 //                          a multi-tab pane becomes a host of the desk: a tab-pane dragged over
 //                          its strip is offered to it, and its focus branch goes under the desk's,
 //                          so the desk holds its panes in the focus tree too; removed, it goes back
-//                          where it was. docks() are the docks and the floats
+//                          where it was. docks() are the docks and the floats' hosts; only
+//                          the docks are ever offered a tab
 //   desk.open({ id?, title?, icon?, pinned?, closable?, make }, host, index?, how?) → the TabPane:
 //                          opened in the register — its widget made by make(branch, tab) — and
 //                          put in the host, which says it arrived (TabAdded). how: "quiet", the
@@ -52,14 +54,15 @@
 //   desk.detach(tp, at?)   → the float: the tab-pane into a float of its own, its bar at the
 //                          point - under its own chip unless said - within the desk: the
 //                          tab menu's Detach, a dock's Shift+↓
-//   desk.float(opts?)      → a Floater: a frame around a host of its own, one bar, no plus.
-//                          Named opts.id, else "float-N": a name no float on the desk has - a float
-//                          brought back under its old name keeps it, and the next is named past it.
-//                          While it holds ONE tab-pane it is that tab in the hand: dragged, it
-//                          is offered to the docks it passes, and let go over a strip the tab-pane
-//                          lands there, the one the dock shows - the hand put it there to look at
-//                          it - and the float, empty, is gone. A float of many moves as a
-//                          window does. A float is a dock for as long as it lasts
+//   desk.float(opts?)      → a Floater: a frame around a single-tab pane of its own, its one bar
+//                          the tab's chip. Named opts.id, else "float-N": a name no float on the desk
+//                          has - a float brought back under its old name keeps it, and the next is
+//                          named past it. A FLOAT IS ONE TAB IN TRANSIT, the desk's temporary vehicle
+//                          and never a second dock: it is never offered a tab - a move into a float
+//                          that carries one is refused - and its tab is the tab in the hand: dragged
+//                          by its bar, it is offered to the docks it passes, and let go over a strip
+//                          the tab-pane lands there, the one the dock shows - the hand put it there
+//                          to look at it - and the float, empty, is gone
 //   desk.floats()          → the floats, bottom of the stack first: none while the layer is not made
 //   desk.dispose()         every tab-pane closed, the floats with them; the layer; the docks'
 //                          focus branches back where they were, for the docks are the page's;
@@ -102,15 +105,18 @@ class Desk {
         if (this._menus) this._answerTabMenu(this._menus);
     }
 
-    /** The tab menu, the pane's own kind, on any chip of the desk's hosts: Detach floats the tab under its chip, Close closes it; a pinned tab, or one that will not close, is offered neither. */
+    /**
+     * The tab menu, the pane's own kind, on any chip of the desk's hosts: Detach floats the tab under its chip, Close
+     * closes it; a pinned tab, or one that will not close, is offered neither, and a tab afloat is not offered Detach.
+     */
     _answerTabMenu(menus) {
         var self = this;
         menus.handle(MultiTabPane.MENU, {
             pick: function (id, o) {
-                if (id === "detach") self.detach(o.tab);
+                if (id === "detach" && !self._floaters.has(o.pane)) self.detach(o.tab);
                 else if (id === "close" && !o.tab.requestClose()) o.pane.removeTab(o.tab.id);
             },
-            state: function (id, o) { return { disabled: !!o.tab.pinned || o.tab.closable === false }; }
+            state: function (id, o) { return { disabled: !!o.tab.pinned || o.tab.closable === false || (id === "detach" && self._floaters.has(o.pane)) }; }
         });
     }
 
@@ -231,11 +237,11 @@ class Desk {
             id: id,
             menus: this._menus,
             onEvent: function (ev) { self._fire(ev); },
-            onDragMove: function (frame, x, y) { if (f.host.count() === 1) self._offer(x, y, f.host); else self._clear(); },
+            onDragMove: function (frame, x, y) { if (f.host.count()) self._offer(x, y); else self._clear(); },
             onDragEnd: function (frame, x, y, ok) {
                 var target = self._target, index = self._index;
                 self._clear();
-                if (!ok || !target || f.host.count() !== 1) return;
+                if (!ok || !target || !f.host.count()) return;
                 var tp = f.tabPanes()[0];
                 self.move(tp, target, index);
                 target.switchTab(tp.id);
@@ -280,19 +286,21 @@ class Desk {
         catch (e) { console.error("[Desk] onEvent threw on " + ev.kind + ":", e); }
     }
 
-    // ── the offer under the hand: a float of one, over the docks it passes ──
-    _offer(x, y, except) {
+    // ── the offer under the hand: a float's tab, over the docks it passes — never a float, which is no landing ──
+    _offer(x, y) {
         var target = null, index = -1;
         for (var i = 0; i < this._docks.length; i++) {
-            var at = target || this._docks[i] === except ? -1 : this._docks[i].dropAt(x, y);
-            if (at >= 0) { target = this._docks[i]; index = at; }
-            else this._docks[i].dropClear();
+            var d = this._docks[i];
+            if (this._floaters.has(d)) continue;
+            var at = target ? -1 : d.dropAt(x, y);
+            if (at >= 0) { target = d; index = at; }
+            else d.dropClear();
         }
         this._target = target;
         this._index = index;
     }
     _clear() {
-        for (var i = 0; i < this._docks.length; i++) this._docks[i].dropClear();
+        for (var i = 0; i < this._docks.length; i++) if (!this._floaters.has(this._docks[i])) this._docks[i].dropClear();
         this._target = null;
         this._index = -1;
     }

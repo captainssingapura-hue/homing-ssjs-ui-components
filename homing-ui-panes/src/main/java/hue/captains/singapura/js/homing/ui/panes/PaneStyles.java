@@ -68,7 +68,11 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** The strip: raised, a divider under it, scrolling sideways when the chips overflow. The chips sit on its bottom edge, with room above for a lift. */
+    /**
+     * The strip: raised, a divider under it, scrolling sideways when the chips overflow. The chips sit on its
+     * bottom edge; the room above them for a lift is the rail's, since the rail is what clips. One tab tall and
+     * that room, whether or not it holds a tab, so a bar does not grow when its first tab comes.
+     */
     public record mtp_strip() implements CssClass<PaneStyles> {
         /** The axes are set here and the chips inherit them, so the bar can measure a tab by the same numbers they do. */
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--size"), new CssVar("--aspect")); }
@@ -86,9 +90,9 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
             align-items: flex-end;
             flex-shrink: 0;
             overflow: hidden;
-            padding-block: 4px 0;
             min-block-size: calc(var(--control-tab-size-extent-inline-size) * pow(var(--control-tab-size-extent-inline-size-ratio), var(--size, 0))
-                               / (var(--control-tab-size-proportion) * pow(var(--control-tab-size-proportion-ratio-aspect), var(--aspect, 0))));
+                               / (var(--control-tab-size-proportion) * pow(var(--control-tab-size-proportion-ratio-aspect), var(--aspect, 0)))
+                               + 8px);
             user-select: none;
             """;
         }
@@ -350,6 +354,11 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
       * moved by the strip, in whole tabs, and a scrollbar would offer a
       * second way of moving it that lands between two. Hidden still scrolls
       * when {@code scrollLeft} is set — that is the whole mechanism.</p>
+      *
+      * <p>Hidden clips both ways, so the ROOM FOR A LIFT is inside it: a chip
+      * lifted off the row (4px) and moved by the design as well — up to 4px
+      * pressed, 3px selected — rises within the rail's own box and keeps its
+      * whole height. The strip is that room taller than a tab, to match.</p>
       */
     public record mtp_rail() implements CssClass<PaneStyles> {
         /** The width the row is squeezed to, read by every chip in it; none until there are too many. */
@@ -360,6 +369,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
             flex: 0 1 auto;
             min-inline-size: 0;
             overflow: hidden;
+            padding-block-start: 8px;
             """;
         }
     }
