@@ -24,6 +24,7 @@ import static hue.captains.singapura.js.homing.design.Interaction.Focus;
 import static hue.captains.singapura.js.homing.design.Interaction.Inert;
 import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
 import static hue.captains.singapura.js.homing.design.Layer.Base;
+import static hue.captains.singapura.js.homing.design.Layer.Overlay;
 import static hue.captains.singapura.js.homing.design.Layer.Raised;
 import static hue.captains.singapura.js.homing.design.Layer.Recessed;
 import static hue.captains.singapura.js.homing.design.Structure.Detent;
@@ -843,6 +844,51 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         @Override public String body() { return "overflow: auto;"; }
     }
 
+    // ── Edge strip ────────────────────────────────────────────────────────────
+
+    /**
+     * The strip: a bar of controls lying over the foot of its host, above what
+     * the host holds. It has a panel head's air and gap — a bar that holds what
+     * acts on a room — the raised face, and the overlay's shadow, since it lies
+     * on the room rather than in it. Its controls keep their labels on one
+     * line, and wrap whole to a second row when the host is narrow.
+     */
+    public record el_strip() implements CssClass<ElementStyles> {
+        @Override public List<? extends Wearable> wears() {
+            return List.of(of(Container.Panel.Head.class, Size.Inset.class), of(Container.Panel.Head.class, Size.Gap.class),
+                           of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Body.class, Type.Face.class),
+                           of(Overlay.class, Shape.Shadow.class));
+        }
+        @Override public String body() { return """
+            position: absolute;
+            inset-inline: 0;
+            bottom: 0;
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            box-sizing: border-box;
+            min-width: 0;
+            white-space: nowrap;
+            """;
+        }
+    }
+
+    /** The strip while it is not asked for: not there to the eye or the hand. */
+    public record el_strip_hidden() implements CssClass<ElementStyles> {
+        @Override public String body() { return "visibility: hidden;"; }
+    }
+
+    /** The lip: the thin band at the host's foot the hand comes to, in the strip's own face — the strip's edge, showing. */
+    public record el_strip_lip() implements CssClass<ElementStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class)); }
+        @Override public String body() { return """
+            flex: none;
+            block-size: 6px;
+            """;
+        }
+    }
+
     @Override
     public List<CssClass<ElementStyles>> cssClasses() {
         return List.of(new el_button(), new el_button_primary(), new el_button_secondary(), new el_button_danger(), new el_button_warning(), new el_button_success(),
@@ -854,6 +900,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_off(),
                        new el_slider_group(), new el_slider_group_held(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
                        new el_card(), new el_card_action(), new el_card_head(), new el_card_title(), new el_badge(), new el_card_body(), new el_card_text(), new el_card_foot(), new el_card_link(),
-                       new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(), new el_panel_current(), new el_panel_framed());
+                       new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(), new el_panel_current(), new el_panel_framed(),
+                       new el_strip(), new el_strip_hidden(), new el_strip_lip());
     }
 }

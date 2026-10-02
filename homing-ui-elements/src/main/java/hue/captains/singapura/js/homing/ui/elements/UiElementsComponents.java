@@ -11,7 +11,7 @@ public record UiElementsComponents() implements C0_Components<UiElementsComponen
     public static final UiElementsComponents INSTANCE = new UiElementsComponents();
 
     @Override public String name() { return "Elements"; }
-    @Override public String summary() { return "The smallest things: a button, a card, a slider and a panel, each made through its builder."; }
+    @Override public String summary() { return "The smallest things: a button, a card, a slider, a panel and an edge strip, each made through its builder."; }
 
     @Override public List<ComponentEntry<UiElementsComponents>> leaves() {
         return List.of(
@@ -19,6 +19,7 @@ public record UiElementsComponents() implements C0_Components<UiElementsComponen
                 ComponentEntry.of(this, new Elements.Card()),
                 ComponentEntry.of(this, new SliderModule.Slider()),
                 ComponentEntry.of(this, new SliderGroupModule.SliderGroup()),
-                ComponentEntry.of(this, new PanelModule.Panel()));
+                ComponentEntry.of(this, new PanelModule.Panel()),
+                ComponentEntry.of(this, new EdgeStripModule.EdgeStrip()));
     }
 }
