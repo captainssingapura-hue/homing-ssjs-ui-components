@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- The ui-components of homing.js, in a repo of their own: RFC 0066
+         Episode 3, layer 2. MOVED, NOT COPIED, from homing-ssjs-core, with
+         their history (git subtree split): core keeps nothing of them, so
+         there is one of each and no confusion over which a fix belongs to.
+         The coordinates are unchanged - same groupId, same artifactIds - so
+         a consumer's pom does not move; only the build order does: core,
+         then this repo, then whatever uses both.
+         Beside the components, the MPA's implementation: the standard page
+         chrome and the preferences it opens. Core keeps the MPA's
+         definitions (homing-site-mpa); the chrome needs the dialog and the
+         preferences, so it lives where they do - for now. -->
+    <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+    <artifactId>homing-components</artifactId>
+    <version>LOCAL-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <description>
+        RFC 0066 Episode 3, layer 2 - the DOM-level components, one module
+        each, every one on layer 1 alone: core, core-js, the component base
+        and the design core. A component here owns its elements through a
+        branch it is handed, wears words and paints nothing, and has a crate.
+        Built fresh beside what the studio has, not cut from it; a demo
+        switches to a component here when it is good enough, and the studio's
+        own retires only then. The first is the elements: a button and a card.
+    </description>
+    <modules>
+        <module>homing-ui-elements</module>
+        <module>homing-ui-dialog</module>
+        <module>homing-preferences</module>
+        <module>homing-ui-split</module>
+        <module>homing-ui-panzoom</module>
+        <module>homing-ui-floating</module>
+        <module>homing-ui-docking</module>
+        <module>homing-ui-splitgrid</module>
+        <module>homing-ui-icons</module>
+        <module>homing-ui-focus</module>
+        <module>homing-ui-menu</module>
+        <module>homing-ui-panes</module>
+        <!-- The MPA's implementation: StandardMpa, its chrome, its preferences. -->
+        <module>homing-site-mpa-standard</module>
+        <module>homing-components-conformance</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- The substrate, from the core repo. Its own version, not ours:
+             this repo releases on its own clock. -->
+        <homing.core.version>LOCAL-SNAPSHOT</homing.core.version>
+        <junit.version>5.11.3</junit.version>
+        <jacoco.version>0.8.14</jacoco.version>
+        <graalvm.version>24.1.1</graalvm.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
