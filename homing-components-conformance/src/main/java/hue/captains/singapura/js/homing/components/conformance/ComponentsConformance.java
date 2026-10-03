@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
 import hue.captains.singapura.js.homing.core.Crate;
-import hue.captains.singapura.js.homing.core.PaletteProvision;
 import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
@@ -85,15 +84,6 @@ public final class ComponentsConformance {
     /** Every look the framework's designs offer — each design in each palette that fits it; each must bind every pair a class wears. */
     public static List<Design> designs() {
         return HomingDesigns.REGISTRY.themes().stream().map(t -> (Design) t).toList();
-    }
-
-    /**
-     * The provisions the CSS graph laws derive their priors from: the
-     * registry's global-palette provisions — none, since the framework's
-     * designs carry no legacy palette and no component here reads one.
-     */
-    public static List<PaletteProvision<?, ?>> provisions() {
-        return HomingDesigns.REGISTRY.palettes();
     }
 
     /** The top level and everything it requires, transitively. */

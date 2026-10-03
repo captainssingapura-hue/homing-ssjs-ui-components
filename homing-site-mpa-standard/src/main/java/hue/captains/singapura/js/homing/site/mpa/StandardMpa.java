@@ -2,8 +2,6 @@ package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.Crate;
-import hue.captains.singapura.js.homing.core.CrateEntry;
-import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.SimpleAppResolver;
@@ -27,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * The standard MPA for one site: its brand, the themes it offers, the crates
@@ -62,7 +59,6 @@ public final class StandardMpa implements Mpa {
         this.preferences = preferences == null ? DefaultPreferences.INSTANCE : preferences;
         var all = new ArrayList<Crate>(crates);
         if (all.stream().noneMatch(c -> c == MpaCrate.INSTANCE)) all.add(MpaCrate.INSTANCE);
-        priorsCrate(this.themes, ServedModules.of(all)).ifPresent(all::add);
         this.crates = List.copyOf(all);
         this.names  = new QueryParamResolver("/module");
         var apps = new ArrayList<AppModule<?, ?>>();
@@ -72,25 +68,6 @@ public final class StandardMpa implements Mpa {
         this.framework = new HomingActionRegistry(names, new SimpleAppResolver(apps), ResourceReader.INSTANCE,
                                                   this.themes, new AppMeta(brand.label()), this.crates);
         this.themesAction = new ThemesGetAction(this.themes);
-    }
-
-    /**
-     * The registry's priors — the palette groups every page leans on without
-     * declaring them — must be served too, and a site should not have to know
-     * which crate holds them. When any are not already among the served
-     * modules, they are served from a crate of their own.
-     */
-    private static Optional<Crate> priorsCrate(ThemeRegistry themes, ServedModules served) {
-        var missing = new ArrayList<CrateEntry>();
-        for (CssGroup<?> prior : themes.priors()) {
-            if (served.find(prior.getClass().getCanonicalName()).isEmpty()) missing.add(CrateEntry.of(prior));
-        }
-        if (missing.isEmpty()) return Optional.empty();
-        var entries = List.copyOf(missing);
-        return Optional.of(new Crate() {
-            @Override public String name() { return "theme-priors"; }
-            @Override public List<CrateEntry> entries() { return entries; }
-        });
     }
 
     /** A site's MPA: the brand on the bar, the themes it offers, the crates whose modules it serves; the default preferences. */
