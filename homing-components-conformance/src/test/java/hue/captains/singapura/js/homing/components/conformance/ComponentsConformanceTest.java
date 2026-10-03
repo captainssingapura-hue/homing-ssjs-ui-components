@@ -83,7 +83,7 @@ class ComponentsConformanceTest {
     @Test
     void theCssGraphKeepsItsLaws() {
         Set<String> own = ComponentsConformance.ownModules();
-        List<Finding> raw = CssConformance.check(ComponentsConformance.closure(), ComponentsConformance.provisions())
+        List<Finding> raw = CssConformance.check(ComponentsConformance.closure())
                 .stream().filter(f -> own.contains(f.moduleClass())).toList();
         List<GradedFinding> errors = ComponentsConformance.grader(ALLOW_PRE_EXISTING).grade(raw)
                 .stream().filter(GradedFinding::isError).toList();
