@@ -47,6 +47,10 @@
 //     strip.at(clientX, clientY)    a point on the strip: the index a tab from
 //         outside would land at, marked there; −1 when the point is not on it
 //     strip.markAt(clientX)         the mark where a tab from outside would land → index
+//     strip.indexAt(clientX)        where a tab from outside would land, unmarked → index
+//     strip.takeover(fn?)           fn(chip, pressEvent) → true when a holder takes the press: a
+//                                   desk whose hand carries a chip across strips and floats; none, the hand's
+//     strip.slide(chip, x, grabX?)  → the hand's slide begun by call: { place(x), end(commit) }
 //     strip.unmark()
 //     strip.current(on)             the bar lit: this is the dock being worked in
 //     strip.size(s?)                the chips' size, −1..1, 0 the design's; every chip, now and later
@@ -319,6 +323,9 @@ class TabStrip {
         return this.markAt(x);
     }
     markAt(x) { var dest = this._destAt(null, x); this._markAt(null, dest); return dest; }
+    indexAt(x) { return this._destAt(null, x); }
+    takeover(fn) { this._takeover = typeof fn === "function" ? fn : null; return this; }
+    slide(c, x, grabX) { return this._hand.slide(c, x, grabX); }
     unmark() { if (this._mark.parentNode) this._mark.parentNode.removeChild(this._mark); }
     /** Where the chip would land: the count of the other chips whose middle is left of x, never before the pinned. */
     _destAt(c, x) {

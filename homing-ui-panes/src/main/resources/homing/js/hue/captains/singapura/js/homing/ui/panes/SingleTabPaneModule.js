@@ -24,7 +24,11 @@
 //   chip says "lent", and the bar is lit, while the keys are inside.
 //
 //   pane.bar() .barGround(target)   the bar, and whether a press there moves the window it
-//       is the bar of: anywhere on it, the chip included, but the chip's cross
+//       is the bar of: anywhere on it, the chip included, but the chip's cross — and but the chip
+//       itself once a desk's hand is given
+//   pane.hand(h?)                a desk's hand, or none: a press on the chip is then h.press(tp, ev, pane),
+//       the chip carried as a chip — onto a dock's rail when it comes near one — and only the bar's
+//       own ground moves the window; without, the whole bar moves it
 //   pane.take(tp, index?, later?) .settle(id) .letGo(tp) .canTake(tp) .admits(tp)
 //   pane.select(tp) .menu(tp, at, byKey) .renamed(tp)   the host's, as MultiTabPane's
 //   pane.removeTab(id) .switchTab(id) .retitle(id, title) .reicon(id, icon?)
@@ -67,6 +71,8 @@ class SingleTabPane {
         bar.setAttribute("role", "tablist");
         bar.style.setProperty("--chip-fit", "100%");   // the chip never wider than its window: the label ellipsises, the cross stays
         bar.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
+        var self = this;
+        bar.addEventListener("pointerdown", function (ev) { if (self._onChip(ev.target) && ev.button === 0) self._handOf.press(self._tabs[0].tabPane, ev, self); });
         root.appendChild(bar);
         this._bar = bar;
         // what PaneTabs asks of a strip: the chip in, at the design's size, and out again at rest
@@ -158,7 +164,14 @@ class SingleTabPane {
     barGround(target) {
         var e = this._tabs[0];
         if (e && e.chip._close && e.chip._close.contains(target)) return false;
+        if (this._onChip(target)) return false;   // the chip is the hand's, carried as a chip
         return this._bar.contains(target);
+    }
+    hand(h) { this._handOf = h || null; return this; }
+    /** A press on the chip — not its cross — while a desk's hand is given. */
+    _onChip(target) {
+        var e = this._tabs[0];
+        return !!this._handOf && !!e && !!e.tabPane && e.chip.contains(target) && !(e.chip._close && e.chip._close.contains(target));
     }
 
     // ── The member: a road to the tab, never a place ──────────────────────

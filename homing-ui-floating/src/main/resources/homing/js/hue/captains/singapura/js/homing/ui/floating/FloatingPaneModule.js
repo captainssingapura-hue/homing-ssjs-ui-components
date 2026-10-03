@@ -27,6 +27,9 @@
 //   pane.title(text?)        read, or set
 //   pane.icon(el?)           read, or set: the holder's element before the title, or null for none
 //   pane.moveTo(x, y)        clamped to the desk; reports Moved when it changed
+//   pane.place(x, y)         clamped to the desk, and NOT reported: for a holder carrying the pane by a
+//                            gesture of its own, frame by frame
+//   pane.movedFrom(x, y)     Moved, said once, when the pane is elsewhere than (x, y): that gesture over
 //   pane.resizeTo(w, h)      clamped to the least and the desk; reports Resized when it changed
 //   pane.bounds()            { x, y, w, h }
 //   pane.raise(z)            its place on the stack; the desk's to call
@@ -161,6 +164,13 @@ class FloatingPane {
         var before = this._x + "," + this._y;
         this._set(x, y, this._w, this._h, true);
         if (this._x + "," + this._y !== before) this._fire(FloatEvents.Moved(this.id, this._x, this._y));
+        return this;
+    }
+
+    place(x, y) { this._set(x, y, this._w, this._h, true); return this; }
+
+    movedFrom(x, y) {
+        if (this._x !== Math.round(Number(x) || 0) || this._y !== Math.round(Number(y) || 0)) this._fire(FloatEvents.Moved(this.id, this._x, this._y));
         return this;
     }
 

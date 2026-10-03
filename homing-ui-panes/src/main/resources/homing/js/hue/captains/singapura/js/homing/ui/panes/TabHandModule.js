@@ -10,6 +10,15 @@
 //     hand.arm(chip, closeBtn?)   the chip answers the hand from now on
 //     hand.disarm(chip)           and no longer: a tab-pane's chip, leaving for another strip
 //     hand.held()                 → the chip in the hand, or null
+//     hand.slide(chip, x, grabX?) → a slide along the rail begun by call, the hand at x and
+//         grabX into the chip (where x is over it, unless said): { place(x), end(commit, leaving?) }.
+//         end(true) settles the chip where it is nearest and tells the strip it landed;
+//         end(false) eases it back where it was, said nowhere; end(false, true) puts it back
+//         at once — a chip about to leave the strip, which nothing should be seen easing.
+//         What a desk's hand drives, whose gesture began elsewhere
+//
+// A press the strip's takeover(chip, ev) answers true for is not the hand's:
+// a desk holds the gesture then, and drives the slide by call.
 //
 // The row is a rail. The chip goes where the hand goes along it, at the
 // press's offset within the chip, kept within the slots — never before a
@@ -49,57 +58,28 @@ class TabHand {
         var press = function (down) {
             if (down.button !== 0 || self._held) return;
             if (closeBtn && closeBtn.contains(down.target)) return;
-            var startX = down.clientX, dragging = false;
-            var slots = null, origin = null, grabX = 0, lo = 0, from = -1, dest = -1, left = 0;
+            if (strip._takeover && strip._takeover(c, down)) return;   // a desk's gesture: it drives the slide by call
+            var startX = down.clientX, run = null;
             var win = typeof window !== "undefined" ? window : null;
             try { c.setPointerCapture(down.pointerId); } catch (err) {}
-            function begin() {
-                dragging = true;
-                self._held = c;
-                var seated = strip._seated();
-                slots = seated.map(TabHand._rect);
-                from = seated.indexOf(c);
-                origin = slots[from];
-                left = origin.left;
-                grabX = startX - origin.left;
-                lo = strip._pinned.size;
-                dest = from;
-                strip._grip(c);
-            }
-            /** Under the hand at the remembered offset, along the rail and within it; the others stepping aside. */
-            function place(x) {
-                left = TabDrag.clamp(x - grabX, slots, lo);
-                c.style.setProperty("--mtp-drag-x", (left - origin.left) + "px");
-                var d = TabDrag.dest(left, slots, lo);
-                if (d !== dest) { dest = d; strip._stepAside(from, dest, TabDrag.pitch(slots)); }
-            }
             function letGo() {
                 c.removeEventListener("pointermove", onMove);
                 c.removeEventListener("pointerup", onEnd);
                 c.removeEventListener("pointercancel", onEnd);
                 c.removeEventListener("lostpointercapture", onEnd);
                 if (win) { win.removeEventListener("pointerup", onEnd); win.removeEventListener("pointercancel", onEnd); win.removeEventListener("blur", onEnd); }
-                if (!dragging) return;
-                self._held = null;
-                c.style.removeProperty("--mtp-drag-x");
-                strip._stepAside(from, from, 0);
-                strip._release(c);
-                try { c.releasePointerCapture(down.pointerId); } catch (err) {}
+                if (run) try { c.releasePointerCapture(down.pointerId); } catch (err) {}
             }
             function onMove(e) {
-                if (!dragging) {
+                if (!run) {
                     if (Math.abs(e.clientX - startX) < _DRAG_THRESHOLD) return;
-                    begin();
+                    run = self.slide(c, startX);
                 }
-                place(e.clientX);
+                run.place(e.clientX);
             }
             function onEnd(e) {
-                var landed = dragging && e.type === "pointerup" && dest !== from;
-                var slotLeft = dragging ? slots[landed ? dest : from].left : 0, fromLeft = left;
                 letGo();
-                if (!dragging) return;
-                if (landed && strip._onDrop) strip._onDrop(c, dest);
-                TabHand._settle(c, fromLeft - slotLeft);
+                if (run) run.end(e.type === "pointerup");
             }
             c.addEventListener("pointermove", onMove);
             c.addEventListener("pointerup", onEnd);
@@ -109,6 +89,39 @@ class TabHand {
         };
         this._armed.set(c, press);
         c.addEventListener("pointerdown", press);
+    }
+
+    /** A slide along the rail, by call: the chip lifted where it lies, under the hand at x, held grabX into it; the others stepping aside. */
+    slide(c, x, grabX) {
+        var self = this, strip = this._strip;
+        var seated = strip._seated(), slots = seated.map(TabHand._rect), from = seated.indexOf(c);
+        if (from < 0) throw new Error("[TabHand] the chip is not on this strip's rail");
+        var origin = slots[from], lo = strip._pinned.size, dest = from, left = origin.left, done = false;
+        var grab = grabX == null ? x - origin.left : grabX;
+        this._held = c;
+        strip._grip(c);
+        function place(x) {
+            left = TabDrag.clamp(x - grab, slots, lo);
+            c.style.setProperty("--mtp-drag-x", (left - origin.left) + "px");
+            var d = TabDrag.dest(left, slots, lo);
+            if (d !== dest) { dest = d; strip._stepAside(from, dest, TabDrag.pitch(slots)); }
+        }
+        place(x);
+        return {
+            place: place,
+            end: function (commit, leaving) {
+                if (done) return dest;
+                done = true;
+                var landed = commit && dest !== from, slotLeft = slots[landed ? dest : from].left;
+                self._held = null;
+                c.style.removeProperty("--mtp-drag-x");
+                strip._stepAside(from, from, 0);
+                strip._release(c);
+                if (landed && strip._onDrop) strip._onDrop(c, dest);
+                if (!leaving) TabHand._settle(c, left - slotLeft);
+                return landed ? dest : from;
+            }
+        };
     }
 
     /** From where the hand left it onto its slot, eased as the design eases the chip: the last leg, drawn once the row is arranged. */

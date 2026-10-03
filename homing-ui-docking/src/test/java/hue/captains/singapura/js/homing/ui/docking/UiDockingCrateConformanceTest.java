@@ -38,7 +38,7 @@ class UiDockingCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(3, checked, "the desk, the floater and the dock grid");
+        assertEquals(4, checked, "the desk, its hand, the floater and the dock grid");
     }
 
 }

@@ -39,6 +39,7 @@ public final class UiDockingCrate implements Crate, ComponentVehicle {
         return List.of(
                 CrateEntry.of(DeskModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(FloaterModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(DeskHandModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(DockGridModule.INSTANCE, StandardJsModuleType.PRIMITIVE));
     }
 }
