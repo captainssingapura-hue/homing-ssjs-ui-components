@@ -30,7 +30,9 @@ class TabTearTest extends JsModuleTestBase {
             var band = { top: 0, bottom: 30 };
             function at(s) { return s.phase + (s.anchor ? '@' + Math.round(s.anchor.x) + ',' + Math.round(s.anchor.y) : ''); }
             // pressed in the strip, then straight down at 1 px/ms: out of the band at t=40, y=55
-            function flung(opts) { var g = new TabTear(opts); g.press(100, 15, 0, band); for (var t = 10; t <= 100; t += 10) g.move(100, 15 + t, t); return g; }
+            // the flight is asked for here: most of these are its tests
+            function T(opts) { return new TabTear(Object.assign({ flight: true }, opts || {})); }
+            function flung(opts) { var g = T(opts); g.press(100, 15, 0, band); for (var t = 10; t <= 100; t += 10) g.move(100, 15 + t, t); return g; }
             """);
     }
 
@@ -38,7 +40,7 @@ class TabTearTest extends JsModuleTestBase {
 
     @Test
     void withinTheBand_theChipStaysOnItsRail_howeverFarTheHandGoesSideways() {
-        eval("var g = new TabTear(); g.press(100, 15, 0, band);");
+        eval("var g = T(); g.press(100, 15, 0, band);");
         assertEquals("rail", eval("at(g.move(900, 54, 10))").asString(), "54 is the band's edge: still the rail");
         assertEquals("rail", eval("at(g.move(-400, -24, 20))").asString(), "and above it, the escape's worth");
         assertEquals("done", eval("at(g.release(-400, -24, 30))").asString(), "let go on the rail: not torn, no anchor");
@@ -47,7 +49,7 @@ class TabTearTest extends JsModuleTestBase {
 
     @Test
     void outOfTheBand_itIsTorn_andTheWindowWaitsAtTheBreach_whileTheFlightKeepsItsVelocity() {
-        eval("var g = new TabTear(); g.press(100, 15, 0, band); var s; for (var t = 10; t <= 40; t += 10) s = g.move(100, 15 + t, t);");
+        eval("var g = T(); g.press(100, 15, 0, band); var s; for (var t = 10; t <= 40; t += 10) s = g.move(100, 15 + t, t);");
         assertEquals("flight@100,55", eval("at(s)").asString(), "breached at 55: the window made there");
         assertTrue(eval("s.changed && Math.abs(g.breach().speed - 1) < 1e-9 && g.breach().vy === 1").asBoolean(), "the breach's velocity: 1 px/ms down");
         eval("for (t = 50; t <= 100; t += 10) s = g.move(100, 15 + t, t);");
@@ -69,20 +71,20 @@ class TabTearTest extends JsModuleTestBase {
     /** A browser sends a hand's moves about once a frame: a frame between two of them is not a hand at rest. */
     @Test
     void framesBetweenTheMoves_ofASteadyHand_neverSettleIt() {
-        eval("var g = new TabTear(), s; g.press(100, 15, 0, band); for (var t = 16; t <= 480; t += 16) { g.move(100, 15 + t, t); s = g.tick(t + 5); }");
+        eval("var g = T(), s; g.press(100, 15, 0, band); for (var t = 16; t <= 480; t += 16) { g.move(100, 15 + t, t); s = g.tick(t + 5); }");
         assertEquals("flight 0.00", eval("s.phase + ' ' + s.ratio.toFixed(2)").asString());
     }
 
     @Test
     void aSlowTear_hasNoFlight_itSettlesWhereItBreaches() {
-        eval("var g = new TabTear(), s; g.press(100, 15, 0, band); for (var t = 100; t <= 800; t += 100) s = g.move(100, 15 + t * 0.05, t);");
+        eval("var g = T(), s; g.press(100, 15, 0, band); for (var t = 100; t <= 800; t += 100) s = g.move(100, 15 + t * 0.05, t);");
         assertEquals("follow@100,55", eval("at(s)").asString(), "0.05 px/ms is under the floor");
         assertEquals("slow", eval("g.settle().why").asString());
     }
 
     @Test
     void letGoInFlight_settlesWhereTheHandLetGo() {
-        eval("var g = new TabTear(); g.press(100, 15, 0, band); for (var t = 10; t <= 80; t += 10) g.move(100, 15 + t, t); var s = g.release(100, 100, 90);");
+        eval("var g = T(); g.press(100, 15, 0, band); for (var t = 10; t <= 80; t += 10) g.move(100, 15 + t, t); var s = g.release(100, 100, 90);");
         assertEquals("done@100,100", eval("at(s)").asString());
         assertEquals("release", eval("g.settle().why").asString());
         assertTrue(eval("g.torn() && !g.inBand(100)").asBoolean(), "torn, and let go out of the band");
@@ -98,9 +100,9 @@ class TabTearTest extends JsModuleTestBase {
     @Test
     void theMeasure_saysWhatCountsAsAChange() {
         eval("""
-            function faster(m) { var g = new TabTear({ measure: m }), y = 15, s; g.press(100, y, 0, band);
+            function faster(m) { var g = T({ measure: m }), y = 15, s; g.press(100, y, 0, band);
                 for (var t = 10; t <= 60; t += 10) { y += 10; g.move(100, y, t); } for (t = 70; t <= 200; t += 10) { y += 20; s = g.move(100, y, t); } return s.phase; }
-            function turned(m) { var g = new TabTear({ measure: m }), x = 100, y = 15, s; g.press(x, y, 0, band);
+            function turned(m) { var g = T({ measure: m }), x = 100, y = 15, s; g.press(x, y, 0, band);
                 for (var t = 10; t <= 60; t += 10) { y += 10; g.move(x, y, t); } for (t = 70; t <= 200; t += 10) { x += 10; s = g.move(x, y, t); } return s.phase; }
             """);
         assertEquals("follow flight follow", eval("['speed', 'slowdown', 'velocity'].map(faster).join(' ')").asString(),
@@ -113,7 +115,7 @@ class TabTearTest extends JsModuleTestBase {
 
     @Test
     void theOptionsAreLive_andAGestureNeedsAPressAndABand() {
-        eval("var g = new TabTear().set({ escape: 0 }); g.press(100, 15, 0, band);");
+        eval("var g = T().set({ escape: 0 }); g.press(100, 15, 0, band);");
         assertEquals("flight@100,31", eval("at(g.move(100, 31, 10))").asString(), "no escape: out the moment the centre leaves the strip");
         assertEquals("0 8 0.5", eval("g.options().escape + ' ' + g.options().capture + ' ' + g.options().change").asString());
         assertThrows(PolyglotException.class, () -> eval("new TabTear().move(1, 1, 1)"));
@@ -141,7 +143,7 @@ class TabTearTest extends JsModuleTestBase {
     /** Both bands measure the chip's CENTRE: taken low on the chip, the hand must go further for the centre to escape. */
     @Test
     void theBandsMeasureTheCentre_notTheHand() {
-        eval("var g = new TabTear(); g.press(100, 15, 0, band, { centre: { dx: 0, dy: -12 } });");
+        eval("var g = T(); g.press(100, 15, 0, band, { centre: { dx: 0, dy: -12 } });");
         assertEquals("rail", eval("at(g.move(100, 66, 10))").asString(), "the hand at 66, the centre at 54: the escape's edge");
         assertEquals("flight@100,67", eval("at(g.move(100, 67, 20))").asString(), "the centre at 55: torn, the breach where the hand is");
         assertEquals("rail", eval("at(g.move(100, 50, 30))").asString(), "the centre at 38: captured");
@@ -150,7 +152,7 @@ class TabTearTest extends JsModuleTestBase {
     /** A window dragged by its bar starts afloat, at the hand, and the same capture puts it on the rail. */
     @Test
     void aWindowAlreadyAfloat_isCapturedTheSameWay() {
-        eval("var g = new TabTear(), s0 = g.press(300, 200, 0, band, { afloat: true });");
+        eval("var g = T(), s0 = g.press(300, 200, 0, band, { afloat: true });");
         assertEquals("follow@300,200 afloat", eval("at(s0) + ' ' + s0.settle.why").asString());
         assertEquals("follow@300,50", eval("at(g.move(300, 50, 10))").asString(), "within the escape but not the capture: still afloat");
         assertEquals("rail", eval("at(g.move(300, 38, 20))").asString(), "within the capture: on the rail");
@@ -169,11 +171,21 @@ class TabTearTest extends JsModuleTestBase {
     void aHostWithManyStrips_saysWhereACentreLands_andThatStripIsTheRailFromThen() {
         eval("var other = { top: 200, bottom: 230, left: 0, right: 300, name: 'other' };"
            + "function land(cx, cy, d) { return cx >= other.left && cx <= other.right && cy >= other.top - d && cy <= other.bottom + d ? other : null; }"
-           + "var g = new TabTear(); g.press(100, 15, 0, band, { land: land }); for (var t = 10; t <= 100; t += 10) g.move(100, 15 + t, t);");
+           + "var g = T(); g.press(100, 15, 0, band, { land: land }); for (var t = 10; t <= 100; t += 10) g.move(100, 15 + t, t);");
         assertEquals("flight@100,55", eval("at(g.move(100, 38, 110))").asString(), "its own strip takes it back only when the host says so");
         assertEquals("flight@100,55", eval("at(g.move(400, 210, 120))").asString(), "beside the other strip: not over it");
         assertEquals("rail other", eval("var s = g.move(100, 195, 130); s.phase + ' ' + s.captured.band.name").asString(), "over it, within 8: captured onto it");
         assertEquals("rail", eval("at(g.move(100, 254, 140))").asString(), "its escape is the other strip's now: 230 + 24");
         assertEquals("flight@100,255", eval("at(g.move(100, 255, 150))").asString());
+    }
+
+    /** BY DEFAULT THERE IS NO FLIGHT: torn, the window follows the hand from the breach, as a browser's does. */
+    @Test
+    void byDefault_theWindowFollowsTheHandFromTheBreach() {
+        eval("var g = new TabTear(), seen = []; g.press(100, 15, 0, band); for (var t = 10; t <= 60; t += 10) seen.push(at(g.move(100, 15 + 2 * t, t)));");
+        assertEquals("rail follow@100,55 follow@100,75 follow@100,95 follow@100,115 follow@100,135", eval("seen.join(' ')").asString(),
+                "out at 55: settled there at once, and at the hand from then on");
+        assertEquals("breach 55", eval("g.settle().why + ' ' + g.settle().y").asString());
+        assertEquals("false", eval("String(new TabTear().options().flight)").asString());
     }
 }

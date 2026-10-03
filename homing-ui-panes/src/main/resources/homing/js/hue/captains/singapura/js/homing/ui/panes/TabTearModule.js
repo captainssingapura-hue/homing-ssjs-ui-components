@@ -3,11 +3,14 @@
 // sight: a browser's model. Pressed and dragged, a chip stays on its RAIL —
 // it moves along the row and nowhere else — while its centre is within a band
 // around the strip, however far the hand wanders sideways. Past the band, the
-// tab is TORN: a window is made for it there, at the BREACH. Torn, the chip is
+// tab is TORN: a window is made for it there, at the BREACH, and by default it
+// follows the hand from that moment, as a browser's does. Torn, the chip is
 // CAPTURED the moment its centre comes back within a narrower band: on the
 // rail again at once, mid-drag. The gap between the two bands is what keeps a
-// chip on the line from tearing and landing by turns. The hand is usually
-// moving fast at that moment, so the window does not chase it: the velocity
+// chip on the line from tearing and landing by turns.
+//
+// THE FLIGHT, asked for (flight: true), is the other model. The hand is usually
+// moving fast at the breach, so the window does not chase it: the velocity
 // at the breach is taken as the flight's own, and while the hand keeps it the
 // window waits where it was made. A MATERIAL CHANGE in the velocity, held for
 // a moment — the hand slowing to aim, stopping, turning — ends the flight:
@@ -31,6 +34,9 @@
 //     idle     ms with no move before a frame says the hand is still: a browser sends a
 //              hand's moves about once a frame, so a frame between two of them says
 //              nothing about it — only a hand gone quiet for this long is at rest
+//     flight   false: the window follows the hand from the breach (why "breach"). true: it waits
+//              there through a flight, settled by the change below — the rest of these are the
+//              flight's, and say nothing without it
 //     floor    px/ms: a breach slower than this is a slow tear, settled at once
 //     measure  how the departure is read:
 //              "speed"     the speed either way, |v| against |v0|
@@ -57,7 +63,7 @@
 //     anchor  where the window's grip is: null on the rail, the breach in flight, the hand after
 //     speed   px/ms now; ratio the departure from the breach's (null before it)
 //     breach  { x, y, t, vx, vy, speed } or null;  settle { x, y, t, why } or null,
-//             why "change", "slow", "release" or "afloat"; both cleared by a capture
+//             why "breach", "change", "slow", "release" or "afloat"; both cleared by a capture
 //     captured  { x, y, t, band }, the hand at the last capture and the band it was captured into, or null
 //   tear.phase() .breach() .settle() .torn() .inBand(y) .step()
 //
@@ -66,7 +72,7 @@
 // =============================================================================
 
 class TabTear {
-    static DEFAULTS = Object.freeze({ escape: 24, capture: 8, change: 0.5, hold: 40, span: 60, idle: 50, floor: 0.1, measure: "speed" });
+    static DEFAULTS = Object.freeze({ escape: 24, capture: 8, flight: false, change: 0.5, hold: 40, span: 60, idle: 50, floor: 0.1, measure: "speed" });
     static MEASURES = Object.freeze(["speed", "slowdown", "velocity"]);
 
     constructor(opts) {
@@ -77,7 +83,7 @@ class TabTear {
 
     set(opts) {
         var o = opts || {};
-        for (var k in TabTear.DEFAULTS) if (o[k] != null) this._o[k] = k === "measure" ? String(o[k]) : Number(o[k]);
+        for (var k in TabTear.DEFAULTS) if (o[k] != null) this._o[k] = k === "measure" ? String(o[k]) : k === "flight" ? o[k] === true : Number(o[k]);
         if (TabTear.MEASURES.indexOf(this._o.measure) < 0) throw new Error("[TabTear] measure is one of " + TabTear.MEASURES.join(", ") + ": " + this._o.measure);
         return this;
     }
@@ -181,7 +187,8 @@ class TabTear {
         this._torn = true;
         this._changed = true;
         this._ratio = 0;
-        if (this._breach.speed < this._o.floor) this._land("slow", t);
+        if (!this._o.flight) this._land("breach", t);   // the window follows the hand from here
+        else if (this._breach.speed < this._o.floor) this._land("slow", t);
     }
 
     /** The departure read whenever there is a breach to read it against; acted on only in flight. */

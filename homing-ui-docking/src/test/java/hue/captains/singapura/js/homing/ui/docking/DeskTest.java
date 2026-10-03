@@ -265,9 +265,9 @@ class DeskTest extends JsModuleTestBase {
 
         /**
          * TORN BY A DRAG: past the escape a docked chip is torn off into a float of its own at the breach - one
-         * TabMoved - which waits there while the hand flies on, and goes to the hand once the flight settles.
-         * Brought over another dock's strip, its centre within the capture, it is CAPTURED: moved into that dock
-         * where its centre is along the strip, the float gone, and the slide going on there; let go, it lands.
+         * TabMoved - which follows the hand from that moment. Brought over another dock's strip, its centre within
+         * the capture, it is CAPTURED: moved into that dock where its centre is along the strip, the float gone,
+         * and the slide going on there; let go, it lands.
          */
         @Test
         void aDockedChipPulledOut_isTornIntoAFloat_andCapturedOntoAnotherDock() {
@@ -277,10 +277,8 @@ class DeskTest extends JsModuleTestBase {
             assertTrue(eval("!B.has('a') && desk.floats().length === 1 && desk.floats()[0].host.has('a')").asBoolean(), "torn: in a float of its own");
             assertTrue(log().contains("TabMoved"), log());
             eval("var f = desk.floats()[0], at = f.frame.bounds(); for (t = 60; t <= 100; t += 10) along(440, 15 + 2 * t, t);");
-            assertEquals(eval("at.x + ',' + at.y").asString(), eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "in flight: the float waits at the breach");
-            eval("for (t = 110; t <= 220; t += 10) desk.hand.tick(t);");
-            assertEquals("follow", eval("desk.hand.tear.phase()").asString(), "the hand at rest: the flight settled");
-            assertEquals(160, eval("f.frame.bounds().y - at.y").asInt(), "and the float gone to the hand, resting 160 px on from the breach");
+            assertEquals("follow breach", eval("desk.hand.tear.phase() + ' ' + desk.hand.tear.settle().why").asString(), "no flight: settled at the breach");
+            assertEquals(100, eval("f.frame.bounds().y - at.y").asInt(), "and the float with the hand from then on: 100 px on with it");
             eval("log.length = 0; along(300, 200, 230); along(60, 20, 240);");
             assertTrue(eval("A.has('a') && f.closed() && a.host() === A && a.widget.focus.in === A.focus").asBoolean(), "captured onto A, the float gone");
             assertEquals("z,a", eval("A.tabs().join(',')").asString(), "where its centre is along A's strip: past Z's middle");
@@ -288,6 +286,20 @@ class DeskTest extends JsModuleTestBase {
             assertEquals("rail", eval("desk.hand.tear.phase()").asString(), "and on A's rail, still in the hand");
             eval("up(60, 20, 250);");
             assertTrue(eval("desk.hand.held() === null && A.activeTab() === 'a'").asBoolean(), "let go: landed, the one A shows");
+        }
+
+        /** WITH A FLIGHT asked for, the other model: the float waits at the breach while the hand flies on, and goes to it once the hand rests. */
+        @Test
+        void withAFlight_theFloatWaitsAtTheBreach_untilTheHandSettles() {
+            eval("desk.hand.tear.set({ flight: true }); var a = desk.open({ id: 'a', title: 'A', make: mk('wa') }, B); layered(); rects(B, [420]);"
+               + "press(a.chip, 440, 15); for (var t = 10; t <= 50; t += 10) along(440, 15 + 2 * t, t);"
+               + "var f = desk.floats()[0], at = f.frame.bounds(); for (t = 60; t <= 100; t += 10) along(440, 15 + 2 * t, t);");
+            assertEquals(eval("at.x + ',' + at.y").asString(), eval("var b = f.frame.bounds(); b.x + ',' + b.y").asString(), "in flight: the float waits at the breach");
+            eval("for (t = 110; t <= 220; t += 10) desk.hand.tick(t);");
+            assertEquals("follow change", eval("desk.hand.tear.phase() + ' ' + desk.hand.tear.settle().why").asString(), "the hand at rest: the flight settled");
+            assertEquals(160, eval("f.frame.bounds().y - at.y").asInt(), "and the float gone to the hand, resting 160 px on from the breach");
+            eval("up(440, 215, 230);");
+            assertTrue(eval("f.host.has('a') && !f.closed() && desk.hand.held() === null").asBoolean());
         }
 
         @Test
