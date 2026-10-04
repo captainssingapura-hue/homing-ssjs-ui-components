@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PreferencesRegistryTest {
 
     static final ModuleNameResolver RESOLVER = (EsModule<?> m) ->
-            new PartialModulePath("/module?class=" + m.getClass().getCanonicalName(), true);
+            new PartialModulePath("/module?class=" + m.getClass().getCanonicalName());
 
     static PreferenceTree tree() {
         return PreferenceTree.of(PreferenceNode.of("preferences", "Preferences", "All of them",

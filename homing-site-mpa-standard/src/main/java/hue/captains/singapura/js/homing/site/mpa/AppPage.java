@@ -31,9 +31,10 @@ import java.util.Objects;
  *
  * <p>Params: the binding's win, the query fills in the rest, and the app's
  * own codec decides what the page receives — so the page gets the app's
- * params and nothing else that happened to be in the address. The theme on
- * the module URLs is only the registry's default; the client resolves the
- * one it wears through the steward.</p>
+ * params and nothing else that happened to be in the address. The module URLs
+ * carry no theme: a module's URL is its class alone, so every import of it is
+ * the same instance; the client resolves the theme it wears through the
+ * steward, and the sheets carry it.</p>
  *
  * @param <P> the app's params type
  * @param <M> the app
@@ -54,7 +55,6 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
         String crumbs  = stampCrumbs(trail);
         String brand   = "Object.freeze({label:" + StampedParams.jsString(mpa.brand().label())
                        + ",home:" + StampedParams.jsString(mpa.brand().home()) + "})";
-        String theme   = mpa.defaultTheme().map(StampedParams::jsString).orElse("null");
         String prefs   = "Object.freeze({module:" + StampedParams.jsString(mpa.moduleUrl(mpa.preferences())) + "})";
 
         return new HtmlPageContent("""
@@ -69,16 +69,15 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
                 <body>
                     <div id="app"></div>
                     <script type="module">
-                        // The registry's default rides on the module URLs; the theme the page
-                        // wears is the client's to resolve (address, then store, then this).
-                        const theme = %s;
-                        const themed = u => theme ? u + "&theme=" + encodeURIComponent(theme) : u;
+                        // A module's URL is its class alone: the theme the page wears is the
+                        // client's to resolve (address, then store, then the default), and it
+                        // rides on the sheets, never on the modules.
                         const chrome = Object.freeze({ brand: %s, crumbs: %s, preferences: %s });
                         %s
-                        const { domOpsParty } = await import(themed(%s));
-                        const { MpaChrome } = await import(themed(%s));
+                        const { domOpsParty } = await import(%s);
+                        const { MpaChrome } = await import(%s);
                         const page = new MpaChrome(domOpsParty.createBranch("mpaChrome"), document.getElementById("app"), chrome);
-                        const { appMain } = await import(themed(%s));
+                        const { appMain } = await import(%s);
                         // The page adds to the app's params what is the page's: the keyboard steward, one per
                         // document, and the trail - the app's to carry on past where the server's knowledge ends.
                         appMain(page.main, Object.freeze(Object.assign({}, %s, { keyboard: page.keyboard, trail: page.trail })));
@@ -87,7 +86,7 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
                 </html>
                 """.formatted(
                         Html.escape(title + " · " + mpa.brand().label()),
-                        theme, brand, crumbs, prefs,
+                        brand, crumbs, prefs,
                         stamped == null ? "" : "const params = " + stamped + ";",
                         StampedParams.jsString(mpa.moduleUrl(DomOpsPartyModule.INSTANCE)),
                         StampedParams.jsString(mpa.moduleUrl(MpaChromeModule.INSTANCE)),

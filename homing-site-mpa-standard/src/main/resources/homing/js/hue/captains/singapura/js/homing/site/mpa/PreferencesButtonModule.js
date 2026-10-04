@@ -10,8 +10,8 @@
 //     .open()  what the button does
 //
 // chrome.preferences names the site's registry module: { module }. On the
-// first open it is imported through the serving context — so it joins the
-// page's chain — and its PREFERENCES constant is handed to the view, which
+// first open it is imported — a module's URL is its class alone, so this is
+// the page's own instance — and its PREFERENCES constant is handed to the view, which
 // loads each node's widget as the node is chosen. The dialog's content is
 // the view; closing the dialog disposes the view first, then the dialog's
 // branch, and the next open builds it again from what the registry says.
@@ -27,7 +27,7 @@ var _registry = null;   // Promise<PREFERENCES>, once per page
 
 function _loadRegistry(entry) {
     if (!_registry) {
-        _registry = import(withServingContext(entry.module)).then(function (m) {
+        _registry = import(entry.module).then(function (m) {
             if (!m.PREFERENCES) throw new Error("[preferences] " + entry.module + " exports no PREFERENCES");
             return m.PREFERENCES;
         });
