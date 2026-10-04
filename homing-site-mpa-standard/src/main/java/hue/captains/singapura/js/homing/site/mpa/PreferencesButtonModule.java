@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.core.js.ServingContextModule;
 import hue.captains.singapura.js.homing.preferences.PreferencesViewModule;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
 
@@ -37,7 +36,6 @@ public record PreferencesButtonModule() implements DomModule<PreferencesButtonMo
         return ImportsFor.<PreferencesButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesViewModule.PreferencesView()), PreferencesViewModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ServingContextModule.withServingContext()), ServingContextModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new MpaStyles.mpa_prefs(),
                         new MpaStyles.mpa_prefs_btn(),

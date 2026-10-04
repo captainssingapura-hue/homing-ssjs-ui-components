@@ -8,7 +8,6 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.core.js.ServingContextModule;
 
 import java.util.List;
 
@@ -42,7 +41,6 @@ public record PreferencesViewModule() implements DomModule<PreferencesViewModule
     public ImportsFor<PreferencesViewModule> imports() {
         return ImportsFor.<PreferencesViewModule>builder()
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ServingContextModule.withServingContext()), ServingContextModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_root(),
                         new PreferencesStyles.pv_master(),

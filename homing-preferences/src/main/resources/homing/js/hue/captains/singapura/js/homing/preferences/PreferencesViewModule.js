@@ -20,8 +20,8 @@
 //
 // Both slots are WidgetSlots: a widget is constructed the first time its node
 // is chosen and kept until dispose(); the shown one is in the DOM, the rest
-// are not. A widget's module is imported only then, through the serving
-// context, so it joins the page's chain rather than forking a second party.
+// are not. A widget's module is imported only then; its URL is its class
+// alone, so the import is the page's own instance, never a second party.
 //
 // The master is a widget too, constructed from registry.master with the tree
 // in its params, and the view drives it through the surface a tree widget
@@ -35,11 +35,10 @@ const _viewOwner = Object.freeze({ toString: () => "preferencesView" });
 var _loaded = new Map();   // module url → Promise<module>; one import per address per page
 
 function _load(entry) {
-    var url = withServingContext(entry.module);
-    var p = _loaded.get(url);
+    var p = _loaded.get(entry.module);
     if (!p) {
-        p = import(url);
-        _loaded.set(url, p);
+        p = import(entry.module);
+        _loaded.set(entry.module, p);
     }
     return p.then(function (m) {
         var Widget = m[entry.export];
