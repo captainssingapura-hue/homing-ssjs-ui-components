@@ -28,6 +28,8 @@
         own retires only then. The first is the elements: a button and a card.
     </description>
     <modules>
+        <!-- RFC 0067: the house's taxonomy of components - declarations only, on core's taxonomy. -->
+        <module>homing-ui-taxonomy</module>
         <module>homing-ui-elements</module>
         <module>homing-ui-dialog</module>
         <module>homing-preferences</module>
