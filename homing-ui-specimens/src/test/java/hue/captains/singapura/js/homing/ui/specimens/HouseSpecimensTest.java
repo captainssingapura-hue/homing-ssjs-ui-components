@@ -34,9 +34,9 @@ class HouseSpecimensTest {
     }
 
     @Test
-    void theFirstRound_theElements() {
-        assertEquals(12, HOUSE.specimens().size());
-        assertEquals(32, HOUSE.pending().size());
+    void twoRounds_theElements_thenTheOverlaysAndSplits() {
+        assertEquals(20, HOUSE.specimens().size(), "twelve elements, eight overlays, menus and splits");
+        assertEquals(24, HOUSE.pending().size());
         assertEquals(41, HOUSE.unrealized().size());
         assertEquals(List.of("ButtonSpecimen"), HOUSE.specimens().stream().filter(s -> s.leaf() == HouseControls.DangerButton.INSTANCE)
                 .map(Specimen::className).toList(), "the six buttons are one button");
@@ -47,8 +47,9 @@ class HouseSpecimensTest {
         String js = String.join("\n", HouseSpecimensModule.INSTANCE.selfContent(null));
         assertTrue(js.contains("\"danger-button\": ButtonSpecimen"), js);
         assertTrue(js.contains("\"summary-card\": SummaryCardSpecimen"), js);
-        assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([\"dialog\""), js);
+        assertTrue(js.contains("\"dialog\": DialogSpecimen"), js);
+        assertTrue(js.contains("const HOUSE_PENDING = Object.freeze([\"dock-grid\""), js);
         assertTrue(js.contains("\"heading\""), "an unrealized leaf: " + js);
-        assertEquals(7, HouseSpecimensModule.INSTANCE.imports().getAllImports().size(), "each specimen's module imported once, whatever it shows");
+        assertEquals(15, HouseSpecimensModule.INSTANCE.imports().getAllImports().size(), "each specimen's module imported once, whatever it shows");
     }
 }

@@ -44,8 +44,18 @@ public record SpecimenStyles() implements CssGroup<SpecimenStyles> {
         @Override public String body() { return "margin: 0;\npadding: 8px 12px;\n"; }
     }
 
+    /** A layer over the page, for what a specimen shows at a point: fixed, the hand passing through it except on what it shows. */
+    public record sp_layer() implements CssClass<SpecimenStyles> {
+        @Override public String body() { return "position: fixed;\ninset: 0;\nz-index: 10021;\npointer-events: none;\n"; }
+    }
+
+    /** Frames side by side, from the first, wrapping when the room runs out: a menu shown still. */
+    public record sp_frames() implements CssClass<SpecimenStyles> {
+        @Override public String body() { return "display: flex;\nflex-wrap: wrap;\nalign-items: flex-start;\ngap: 24px;\n"; }
+    }
+
     @Override
     public List<CssClass<SpecimenStyles>> cssClasses() {
-        return List.of(new sp_stage(), new sp_row(), new sp_host(), new sp_text());
+        return List.of(new sp_stage(), new sp_row(), new sp_host(), new sp_text(), new sp_layer(), new sp_frames());
     }
 }

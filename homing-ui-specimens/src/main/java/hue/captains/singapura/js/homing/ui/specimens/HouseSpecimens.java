@@ -45,16 +45,29 @@ public record HouseSpecimens() implements StatelessFunctionalObject {
                 new Specimen(HouseContainers.Panel.INSTANCE,
                         new ModuleImports<>(List.of(new PanelSpecimenModule.PanelSpecimen()), PanelSpecimenModule.INSTANCE)),
                 new Specimen(HouseContainers.EdgeStrip.INSTANCE,
-                        new ModuleImports<>(List.of(new EdgeStripSpecimenModule.EdgeStripSpecimen()), EdgeStripSpecimenModule.INSTANCE)));
+                        new ModuleImports<>(List.of(new EdgeStripSpecimenModule.EdgeStripSpecimen()), EdgeStripSpecimenModule.INSTANCE)),
+                // overlays, menus and splits
+                new Specimen(HouseContainers.Dialog.INSTANCE,
+                        new ModuleImports<>(List.of(new DialogSpecimenModule.DialogSpecimen()), DialogSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.ContextMenu.INSTANCE,
+                        new ModuleImports<>(List.of(new ContextMenuSpecimenModule.ContextMenuSpecimen()), ContextMenuSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.ContextMenuSteward.INSTANCE,
+                        new ModuleImports<>(List.of(new ContextMenuStewardSpecimenModule.ContextMenuStewardSpecimen()), ContextMenuStewardSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.FloatingPane.INSTANCE,
+                        new ModuleImports<>(List.of(new FloatingPaneSpecimenModule.FloatingPaneSpecimen()), FloatingPaneSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.FloatLayer.INSTANCE,
+                        new ModuleImports<>(List.of(new FloatLayerSpecimenModule.FloatLayerSpecimen()), FloatLayerSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.SplitPane.INSTANCE,
+                        new ModuleImports<>(List.of(new SplitPaneSpecimenModule.SplitPaneSpecimen()), SplitPaneSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.SplitGrid.INSTANCE,
+                        new ModuleImports<>(List.of(new SplitGridSpecimenModule.SplitGridSpecimen()), SplitGridSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.SplitGridMirror.INSTANCE,
+                        new ModuleImports<>(List.of(new SplitGridMirrorSpecimenModule.SplitGridMirrorSpecimen()), SplitGridMirrorSpecimenModule.INSTANCE)));
     }
 
     /** Realized - a class of the house's, or core's, builds each - and their specimens still to come. */
     public List<Component<?>> pending() {
         return List.of(
-                // overlays, menus and splits
-                HouseContainers.Dialog.INSTANCE, HouseContainers.ContextMenu.INSTANCE, HouseContainers.ContextMenuSteward.INSTANCE,
-                HouseContainers.FloatingPane.INSTANCE, HouseContainers.FloatLayer.INSTANCE, HouseContainers.SplitPane.INSTANCE,
-                HouseContainers.SplitGrid.INSTANCE, HouseContainers.SplitGridMirror.INSTANCE,
                 // panes and docking
                 HouseContainers.DockGrid.INSTANCE, HouseContainers.MultiTabPane.INSTANCE, HouseContainers.SingleTabPane.INSTANCE,
                 HouseContainers.TabPane.INSTANCE, HouseContainers.TabStrip.INSTANCE, HouseContainers.TabPicker.INSTANCE,

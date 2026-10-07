@@ -21,6 +21,14 @@ public record UiSpecimensComponents() implements C0_Components<UiSpecimensCompon
                 ComponentEntry.of(this, new SliderSpecimenModule.SliderSpecimen()),
                 ComponentEntry.of(this, new SliderGroupSpecimenModule.SliderGroupSpecimen()),
                 ComponentEntry.of(this, new PanelSpecimenModule.PanelSpecimen()),
-                ComponentEntry.of(this, new EdgeStripSpecimenModule.EdgeStripSpecimen()));
+                ComponentEntry.of(this, new EdgeStripSpecimenModule.EdgeStripSpecimen()),
+                ComponentEntry.of(this, new DialogSpecimenModule.DialogSpecimen()),
+                ComponentEntry.of(this, new ContextMenuSpecimenModule.ContextMenuSpecimen()),
+                ComponentEntry.of(this, new ContextMenuStewardSpecimenModule.ContextMenuStewardSpecimen()),
+                ComponentEntry.of(this, new FloatingPaneSpecimenModule.FloatingPaneSpecimen()),
+                ComponentEntry.of(this, new FloatLayerSpecimenModule.FloatLayerSpecimen()),
+                ComponentEntry.of(this, new SplitPaneSpecimenModule.SplitPaneSpecimen()),
+                ComponentEntry.of(this, new SplitGridSpecimenModule.SplitGridSpecimen()),
+                ComponentEntry.of(this, new SplitGridMirrorSpecimenModule.SplitGridMirrorSpecimen()));
     }
 }
