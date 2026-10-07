@@ -18,6 +18,7 @@ import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import hue.captains.singapura.js.homing.ui.focus.UiFocusCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
+import hue.captains.singapura.js.homing.ui.specimens.UiSpecimensCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
 import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomCrate;
@@ -68,7 +69,8 @@ public final class ComponentsConformance {
             UiIconsCrate.INSTANCE,
             UiFocusCrate.INSTANCE,
             UiMenuCrate.INSTANCE,
-            MpaCrate.INSTANCE);
+            MpaCrate.INSTANCE,
+            UiSpecimensCrate.INSTANCE);
 
     /** One class per Maven module, for the coverage check: nothing served from these modules may be uncrated. */
     public static final List<Class<?>> ANCHORS = List.of(
