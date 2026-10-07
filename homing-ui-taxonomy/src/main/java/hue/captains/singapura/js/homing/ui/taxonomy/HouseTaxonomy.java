@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * The house's taxonomy: every component the house declares, read into one levelled tree, with the
  * house's role catalogue beside it. The branches need no listing - they are reached through the
- * components' parents. Every component is listed, those that will play a role in another and those
- * that stand alone; their parts are to be declared as slots over the {@link HouseRoleCatalogue}.
+ * components' parents. Every component is listed, those that play a role in another and those that
+ * stand alone; each declares its parts as slots over the {@link HouseRoleCatalogue}.
  */
 public record HouseTaxonomy() implements StatelessFunctionalObject {
 
@@ -27,11 +27,11 @@ public record HouseTaxonomy() implements StatelessFunctionalObject {
                 HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE,
                 HouseControls.Link.INSTANCE, HouseControls.Crumb.INSTANCE, HouseControls.Tab.INSTANCE, HouseControls.Range.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE, HouseControls.Brand.INSTANCE,
-                HouseControls.PreferencesButton.INSTANCE, HouseControls.Slider.INSTANCE,
+                HouseControls.PreferencesButton.INSTANCE, HouseControls.Slider.INSTANCE, HouseControls.Select.INSTANCE,
                 // items
-                HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE,
+                HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE, HouseItems.SettingRow.INSTANCE,
                 // containers
-                HouseContainers.Card.INSTANCE, HouseContainers.SliderGroup.INSTANCE, HouseContainers.Panel.INSTANCE,
+                HouseContainers.PlainCard.INSTANCE, HouseContainers.SummaryCard.INSTANCE, HouseContainers.SliderGroup.INSTANCE, HouseContainers.Panel.INSTANCE,
                 HouseContainers.Dialog.INSTANCE, HouseContainers.PaneThumbs.INSTANCE, HouseContainers.AddTab.INSTANCE,
                 HouseContainers.TabOpener.INSTANCE, HouseContainers.TabPicker.INSTANCE, HouseContainers.MpaChrome.INSTANCE,
                 HouseContainers.FloatingPane.INSTANCE, HouseContainers.MultiTabPane.INSTANCE, HouseContainers.SingleTabPane.INSTANCE,
@@ -45,7 +45,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject {
                 HouseContainers.SvgPanZoom.INSTANCE, HouseContainers.PreferencesView.INSTANCE, HouseContainers.FocusMonitor.INSTANCE,
                 HouseContainers.StewardMonitor.INSTANCE,
                 // regions
-                HouseRegions.Section.INSTANCE, HouseRegions.GridCell.INSTANCE,
+                HouseRegions.Section.INSTANCE, HouseRegions.GridCell.INSTANCE, HouseRegions.WidgetSlot.INSTANCE,
                 // text
                 HouseText.Label.INSTANCE, HouseText.Heading.INSTANCE, HouseText.Kicker.INSTANCE, HouseText.Caption.INSTANCE,
                 HouseText.Lede.INSTANCE, HouseText.Readout.INSTANCE, HouseText.Badge.INSTANCE, HouseText.Pill.INSTANCE,

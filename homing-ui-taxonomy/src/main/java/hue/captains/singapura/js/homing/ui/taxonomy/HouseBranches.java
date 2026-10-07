@@ -43,6 +43,12 @@ public final class HouseBranches {
         @Override public Root parent() { return Root.INSTANCE; }
     }
 
+    /** A raised box of its own measure: the plain one a caller fills, and the cases built on it. */
+    public record Card() implements L2_ComponentBranch<Container> {
+        public static final Card INSTANCE = new Card();
+        @Override public Container parent() { return Container.INSTANCE; }
+    }
+
     /** A container with a frame of its own, holding content. */
     public record Pane() implements L2_ComponentBranch<Container> {
         public static final Pane INSTANCE = new Pane();

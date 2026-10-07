@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The house's role catalogue, read on its own and constructed - so its names are each its own, and
@@ -80,10 +79,9 @@ class HouseRoleCatalogueTest {
     }
 
     @Test
-    void readWithTheHouse_noRoleIsNamedYet() {
+    void readWithTheHouse_everyRoleNamedButOne() {
         var findings = HouseTaxonomy.INSTANCE.read().findings();
-        assertEquals(67, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
-                "every role reported unnamed, until the components declare their slots");
-        assertTrue(findings.stream().allMatch(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED), findings.toString());
+        assertEquals(1, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
+                "only Host, a floater's - and the floater is not in the first cut");
     }
 }

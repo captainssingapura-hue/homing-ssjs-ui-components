@@ -4,9 +4,9 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Region;
 
 /**
- * The house's regions: stretches of a container's room with no frame of their own - a card's
- * head, body and foot are each played by a {@link Section}, a split grid's cells by a
- * {@link GridCell}.
+ * The house's regions: stretches of a container's room with no frame of their own - a panel's
+ * head is played by a {@link Section}, a split grid mirror's cells by a {@link GridCell}, the
+ * preferences' index and detail each by a {@link WidgetSlot}.
  */
 public final class HouseRegions {
 
@@ -21,6 +21,12 @@ public final class HouseRegions {
     /** One cell of a grid. */
     public record GridCell() implements Component<Region> {
         public static final GridCell INSTANCE = new GridCell();
+        @Override public Region parent() { return Region.INSTANCE; }
+    }
+
+    /** A stretch of a view a widget is held in. */
+    public record WidgetSlot() implements Component<Region> {
+        public static final WidgetSlot INSTANCE = new WidgetSlot();
         @Override public Region parent() { return Region.INSTANCE; }
     }
 }
