@@ -1,13 +1,17 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.L1_ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.L2_ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 
+import java.util.List;
+
 /**
  * The house's branches: how its components are classified, levelled from the root down - level 1
  * under the root, level 2 under those. Abstract, every one - never realized, never worn on its own;
- * the components are the leaves under them.
+ * the components are the leaves under them. What each means is in {@code meanings/.../HouseBranches.md};
+ * the axes a branch declares, every leaf under it varies along.
  */
 public final class HouseBranches {
 
@@ -23,6 +27,7 @@ public final class HouseBranches {
     public record Button() implements L2_ComponentBranch<Control> {
         public static final Button INSTANCE = new Button();
         @Override public Control parent() { return Control.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** A control that is grabbed and moved: a knob, a grip, a divider. */
@@ -47,6 +52,7 @@ public final class HouseBranches {
     public record Card() implements L2_ComponentBranch<Container> {
         public static final Card INSTANCE = new Card();
         @Override public Container parent() { return Container.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
     }
 
     /** A container with a frame of its own, holding content. */

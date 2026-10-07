@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Button;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Control;
@@ -10,8 +11,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Handle;
 import java.util.List;
 
 /**
- * The house's controls: what a user operates. A button's look fixed by construction is a button
- * of its own - plain, primary, danger and the rest. Each declares its parts as slots over the
+ * The house's controls: what a user operates. A button's colour fixed by construction is a button
+ * of its own - plain, primary, danger and the rest - and how much of it is worn is its extent. Each declares its parts as slots over the
  * house's role catalogue ({@link HouseRoleCatalogue}); a part a control draws for itself alone is
  * its own, and no slot.
  */
@@ -31,30 +32,35 @@ public final class HouseControls {
     public record PrimaryButton() implements Component<Button> {
         public static final PrimaryButton INSTANCE = new PrimaryButton();
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
 
     /** An action beside the primary one. */
     public record SecondaryButton() implements Component<Button> {
         public static final SecondaryButton INSTANCE = new SecondaryButton();
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
 
     /** An action that destroys or cannot be undone. */
     public record DangerButton() implements Component<Button> {
         public static final DangerButton INSTANCE = new DangerButton();
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
 
     /** An action that needs a second thought. */
     public record WarningButton() implements Component<Button> {
         public static final WarningButton INSTANCE = new WarningButton();
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
 
     /** An action that confirms what went well. */
     public record SuccessButton() implements Component<Button> {
         public static final SuccessButton INSTANCE = new SuccessButton();
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
 
     /** A button that is on or off. */
@@ -118,6 +124,7 @@ public final class HouseControls {
         public static final Tab INSTANCE = new Tab();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Control parent() { return Control.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Keys.INSTANCE).one(),
                            DSL.part(CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());

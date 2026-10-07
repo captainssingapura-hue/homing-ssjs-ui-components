@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
+import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
@@ -20,7 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The house's taxonomy is read whole, with its role catalogue, and refused nothing - jOntology
  * holding every node stateless; everything reached is declared; every branch has a component under
  * it; and every component the house ships today has its leaf. Its components declare their parts
- * as slots over the catalogue, and the catalogue's every role is named but one.
+ * as slots over the catalogue, and the catalogue's every role is named but one. Every node of both
+ * trees means something, and the axes a branch declares are every leaf's under it.
  */
 class HouseTaxonomyTest {
 
@@ -93,6 +95,31 @@ class HouseTaxonomyTest {
         assertEquals(List.of("ROLE_UNNAMED: Host is named by no component"),
                 HOUSE.findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).map(Object::toString).toList(),
                 "a floater's host: the floater is not in the first cut");
+    }
+
+    @Test
+    void everyNode_meansSomething_bothTrees() {
+        var nodes = new java.util.ArrayList<String>();
+        HOUSE.branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
+        HOUSE.components().forEach(c -> nodes.add(HOUSE.meaning(c).markdown()));
+        HOUSE.roleBranches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
+        HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
+        assertEquals(17 + 85 + 21 + 67, nodes.size());
+        assertTrue(nodes.stream().noneMatch(String::isBlank));
+        assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
+        assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
+    }
+
+    @Test
+    void theAxes_aBranchsAreEveryLeafsUnderIt_aPartTakesItsOwnComponents() {
+        assertEquals(List.of(ExtentAxis.SIZE), HOUSE.extents(HouseControls.PlainButton.INSTANCE), "every button has a size");
+        assertEquals(List.of(ExtentAxis.SIZE, ExtentAxis.COLOUR), HOUSE.extents(HouseControls.DangerButton.INSTANCE),
+                "a coloured button a colour too");
+        assertEquals(List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT), HOUSE.extents(HouseContainers.PlainCard.INSTANCE), "every card a size and an aspect");
+        var chip = HOUSE.partsOf(HouseContainers.TabPane.INSTANCE).get(0);
+        assertEquals(List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT), HOUSE.extents(chip), "a tab-pane's chip is a tab, and has a tab's");
+        var open = HOUSE.partsOf(HouseContainers.SummaryCard.INSTANCE).get(3);
+        assertEquals(List.of(), HOUSE.extents(open), "a card's link has none of its card's: a part follows its own component");
     }
 
     /** A component's parts, each said as its token, how many, and what plays it. */
