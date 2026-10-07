@@ -8,10 +8,10 @@ import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 import java.util.List;
 
 /**
- * The house's taxonomy: every component the house declares, read into one tree. The kinds need
- * no listing - they are reached through the components' parents - and the parts none either -
- * they are the roles the components name. Every component is listed, those that play a role in
- * another and those that stand alone.
+ * The house's taxonomy: every component the house declares, read into one levelled tree, with the
+ * house's role catalogue beside it. The branches need no listing - they are reached through the
+ * components' parents. Every component is listed, those that will play a role in another and those
+ * that stand alone; their parts are to be declared as slots over the {@link HouseRoleCatalogue}.
  */
 public record HouseTaxonomy() implements StatelessFunctionalObject {
 
@@ -56,6 +56,6 @@ public record HouseTaxonomy() implements StatelessFunctionalObject {
                 HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
     }
 
-    /** The house's taxonomy, read - or refused with every problem in it. */
-    public Taxonomy read() { return new ReadTaxonomy().read(components()); }
+    /** The house's taxonomy and its role catalogue, read - or refused with every problem in them. */
+    public Taxonomy read() { return new ReadTaxonomy().read(components(), HouseRoleCatalogue.INSTANCE.roles()); }
 }

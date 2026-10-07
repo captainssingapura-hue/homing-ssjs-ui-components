@@ -1,8 +1,8 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseKinds.Mark;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseKinds.Track;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Mark;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Track;
 
 /**
  * The house's small signs and the lines things move along: independent components, each a role's

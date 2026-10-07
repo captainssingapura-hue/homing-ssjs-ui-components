@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseKinds.Region;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Region;
 
 /**
  * The house's regions: stretches of a container's room with no frame of their own - a card's

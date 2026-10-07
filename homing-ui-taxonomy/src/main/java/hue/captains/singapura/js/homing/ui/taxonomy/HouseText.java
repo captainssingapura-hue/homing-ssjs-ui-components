@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseKinds.Text;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Text;
 
 /**
  * The house's text: independent components of words, each a role's base wherever a component
