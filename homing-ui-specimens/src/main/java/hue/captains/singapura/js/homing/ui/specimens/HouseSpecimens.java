@@ -14,10 +14,12 @@ import java.util.List;
 
 /**
  * Which of the house's leaves can be seen in action, and how. Every leaf of the house's taxonomy
- * is in exactly one of three lists: a {@link #specimens() specimen} that builds it live; realized,
- * its specimen {@link #pending() still to come}; or {@link #unrealized() realized by nothing} yet,
- * so its meaning is all there is to show. Held against the house's taxonomy by its test, so a leaf
- * added to the house is placed here before anything ships.
+ * is in exactly one of four lists: a {@link #specimens() specimen} that builds it live; {@link
+ * #aroundIt() shown by the page around} the specimens - the workspace they stand in, the page's
+ * chrome, the preferences it opens; realized, its specimen {@link #pending() still to come}; or
+ * {@link #unrealized() realized by nothing} yet, so its meaning is all there is to show. Held
+ * against the house's taxonomy by its test, so a leaf added to the house is placed here before
+ * anything ships.
  */
 public record HouseSpecimens() implements StatelessFunctionalObject {
 
@@ -27,7 +29,7 @@ public record HouseSpecimens() implements StatelessFunctionalObject {
     public List<Specimen> specimens() {
         var button = new ModuleImports<>(List.of(new ButtonSpecimenModule.ButtonSpecimen()), ButtonSpecimenModule.INSTANCE);
         return List.of(
-                // the six buttons: one button, each in its own colour
+                // the elements: the six buttons are one button, each in its own colour
                 new Specimen(HouseControls.PlainButton.INSTANCE, button),
                 new Specimen(HouseControls.PrimaryButton.INSTANCE, button),
                 new Specimen(HouseControls.SecondaryButton.INSTANCE, button),
@@ -62,27 +64,52 @@ public record HouseSpecimens() implements StatelessFunctionalObject {
                 new Specimen(HouseContainers.SplitGrid.INSTANCE,
                         new ModuleImports<>(List.of(new SplitGridSpecimenModule.SplitGridSpecimen()), SplitGridSpecimenModule.INSTANCE)),
                 new Specimen(HouseContainers.SplitGridMirror.INSTANCE,
-                        new ModuleImports<>(List.of(new SplitGridMirrorSpecimenModule.SplitGridMirrorSpecimen()), SplitGridMirrorSpecimenModule.INSTANCE)));
+                        new ModuleImports<>(List.of(new SplitGridMirrorSpecimenModule.SplitGridMirrorSpecimen()), SplitGridMirrorSpecimenModule.INSTANCE)),
+                // what the page around them does not show: the tab controls, the list master, the pictures, the monitors
+                new Specimen(HouseContainers.TabOpener.INSTANCE,
+                        new ModuleImports<>(List.of(new TabOpenerSpecimenModule.TabOpenerSpecimen()), TabOpenerSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.AddTab.INSTANCE,
+                        new ModuleImports<>(List.of(new AddTabSpecimenModule.AddTabSpecimen()), AddTabSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.PaneThumbs.INSTANCE,
+                        new ModuleImports<>(List.of(new PaneThumbsSpecimenModule.PaneThumbsSpecimen()), PaneThumbsSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.ListMasterWidget.INSTANCE,
+                        new ModuleImports<>(List.of(new ListMasterWidgetSpecimenModule.ListMasterWidgetSpecimen()), ListMasterWidgetSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.SvgPanZoom.INSTANCE,
+                        new ModuleImports<>(List.of(new SvgPanZoomSpecimenModule.SvgPanZoomSpecimen()), SvgPanZoomSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.PanZoomBar.INSTANCE,
+                        new ModuleImports<>(List.of(new PanZoomBarSpecimenModule.PanZoomBarSpecimen()), PanZoomBarSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.FocusMonitor.INSTANCE,
+                        new ModuleImports<>(List.of(new FocusMonitorSpecimenModule.FocusMonitorSpecimen()), FocusMonitorSpecimenModule.INSTANCE)),
+                new Specimen(HouseContainers.StewardMonitor.INSTANCE,
+                        new ModuleImports<>(List.of(new StewardMonitorSpecimenModule.StewardMonitorSpecimen()), StewardMonitorSpecimenModule.INSTANCE)));
     }
 
-    /** Realized - a class of the house's, or core's, builds each - and their specimens still to come. */
-    public List<Component<?>> pending() {
+    /** Shown by the page around the specimens - the workspace they stand in, the page's chrome, the preferences it opens - and where. */
+    public List<ShownAround> aroundIt() {
         return List.of(
-                // panes and docking
-                HouseContainers.DockGrid.INSTANCE, HouseContainers.MultiTabPane.INSTANCE, HouseContainers.SingleTabPane.INSTANCE,
-                HouseContainers.TabPane.INSTANCE, HouseContainers.TabStrip.INSTANCE, HouseContainers.TabPicker.INSTANCE,
-                HouseContainers.TabOpener.INSTANCE, HouseContainers.AddTab.INSTANCE, HouseContainers.PaneThumbs.INSTANCE,
-                // pictures and monitors
-                HouseContainers.PanZoomBar.INSTANCE, HouseContainers.SvgPanZoom.INSTANCE, HouseContainers.FocusMonitor.INSTANCE,
-                HouseContainers.StewardMonitor.INSTANCE,
-                // preferences and the page's chrome
-                HouseContainers.MpaChrome.INSTANCE, HouseControls.PreferencesButton.INSTANCE, HouseContainers.PreferencesView.INSTANCE,
-                HouseContainers.PreferenceField.INSTANCE, HouseContainers.ChoiceWidget.INSTANCE, HouseContainers.ThemeWidget.INSTANCE,
-                HouseContainers.ScaleWidget.INSTANCE, HouseContainers.ToggleWidget.INSTANCE, HouseContainers.ListMasterWidget.INSTANCE,
-                HouseContainers.OverviewWidget.INSTANCE,
-                // core's
-                HouseRegions.WidgetSlot.INSTANCE);
+                // the workspace
+                new ShownAround(HouseContainers.DockGrid.INSTANCE, "the workspace itself: its regions, each a dock, the lines between them dragged to re-share"),
+                new ShownAround(HouseContainers.MultiTabPane.INSTANCE, "each region of the workspace: its tabs, one in front"),
+                new ShownAround(HouseContainers.TabStrip.INSTANCE, "the bar of tabs atop each region: its chips, its plus, the count of those out of sight"),
+                new ShownAround(HouseContainers.TabPane.INSTANCE, "every tab of the workspace: its chip and what it holds, which travel together"),
+                new ShownAround(HouseContainers.TabPicker.INSTANCE, "a region with no tab left: what it offers to open"),
+                new ShownAround(HouseContainers.SingleTabPane.INSTANCE, "a tab torn off its bar: the float that carries it"),
+                // the page's chrome
+                new ShownAround(HouseContainers.MpaChrome.INSTANCE, "the bar at the top of the page: the site's name, the trail, the preferences"),
+                new ShownAround(HouseControls.PreferencesButton.INSTANCE, "the preferences button at the end of the bar at the top of the page"),
+                // the preferences it opens
+                new ShownAround(HouseContainers.PreferencesView.INSTANCE, "the preferences, opened from the bar: the settings listed, the one chosen beside them"),
+                new ShownAround(HouseRegions.WidgetSlot.INSTANCE, "the preferences' list and the setting beside it: each a slot a widget is loaded into"),
+                new ShownAround(HouseContainers.PreferenceField.INSTANCE, "every setting in the preferences: where it belongs, its title, a note, the way back to its default"),
+                new ShownAround(HouseContainers.OverviewWidget.INSTANCE, "a group of settings in the preferences: each setting listed with its value"),
+                new ShownAround(HouseContainers.ThemeWidget.INSTANCE, "the theme in the preferences: a style, and a palette to wear it in"),
+                new ShownAround(HouseContainers.ChoiceWidget.INSTANCE, "a setting in the preferences chosen from a few options"),
+                new ShownAround(HouseContainers.ScaleWidget.INSTANCE, "a setting in the preferences set along a scale"),
+                new ShownAround(HouseContainers.ToggleWidget.INSTANCE, "a setting in the preferences that is on or off"));
     }
+
+    /** Realized, and their specimens still to come: none now. */
+    public List<Component<?>> pending() { return List.of(); }
 
     /** Realized by nothing yet: an owner mints them, or nothing does. What they mean is all there is to show. */
     public List<Component<?>> unrealized() {

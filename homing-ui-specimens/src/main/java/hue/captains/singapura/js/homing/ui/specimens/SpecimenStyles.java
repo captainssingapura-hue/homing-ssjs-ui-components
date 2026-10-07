@@ -54,8 +54,19 @@ public record SpecimenStyles() implements CssGroup<SpecimenStyles> {
         @Override public String body() { return "display: flex;\nflex-wrap: wrap;\nalign-items: flex-start;\ngap: 24px;\n"; }
     }
 
+    /** A framed box of its own height that scrolls what it holds: a tree too long for it. */
+    public record sp_scroll() implements CssClass<SpecimenStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Raised.class, Shape.Corner.class)); }
+        @Override public String body() { return "height: 220px;\noverflow: auto;\npadding: 8px 12px;\n"; }
+    }
+
+    /** What fills the box it is in: a viewport its host sizes. */
+    public record sp_fill() implements CssClass<SpecimenStyles> {
+        @Override public String body() { return "flex: 1;\nmin-height: 0;\nmin-width: 0;\n"; }
+    }
+
     @Override
     public List<CssClass<SpecimenStyles>> cssClasses() {
-        return List.of(new sp_stage(), new sp_row(), new sp_host(), new sp_text(), new sp_layer(), new sp_frames());
+        return List.of(new sp_stage(), new sp_row(), new sp_host(), new sp_text(), new sp_layer(), new sp_frames(), new sp_scroll(), new sp_fill());
     }
 }

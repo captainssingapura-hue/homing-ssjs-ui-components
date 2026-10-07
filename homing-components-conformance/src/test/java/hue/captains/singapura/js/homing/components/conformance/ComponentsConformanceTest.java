@@ -131,7 +131,7 @@ class ComponentsConformanceTest {
         assertEquals(List.of("ui-elements", "server", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split", "ui-pan-zoom", "ui-panes", "ui-docking", "ui-split-grid", "ui-focus", "ui-menu", "mpa", "ui-specimens"), vehicles, "one vehicle per crate that ships components, in closure order — the elements require the base (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate; docking catalogues its dock grid, the desk and the floater being statics; the specimens, the house's components in action, come last");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
         assertEquals(15, root.vehicleCount());
-        assertEquals(54, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 6 elements (the panel and the edge strip among them), 1 icon, 1 dialog, 7 preferences, 1 split, 2 pan-zoom (the view and its bar), 8 panes (the tab-pane, the single-tab pane a float carries, the thumbs, the new-tab control, the opener and the picker among them), 2 floating, 1 docking (the dock grid), 2 split grid, 2 focus monitors, 2 menus, 3 chrome, 15 specimens");
+        assertEquals(63, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 6 elements (the panel and the edge strip among them), 1 icon, 1 dialog, 7 preferences, 1 split, 2 pan-zoom (the view and its bar), 8 panes (the tab-pane, the single-tab pane a float carries, the thumbs, the new-tab control, the opener and the picker among them), 2 floating, 1 docking (the dock grid), 2 split grid, 2 focus monitors, 2 menus, 3 chrome, 23 specimens and the room the tab controls are shown in");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
         assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.TOP_LEVEL));
@@ -148,10 +148,10 @@ class ComponentsConformanceTest {
     void keysComeThroughTheParty_andTheMigrationListOnlyShrinks() {
         assertEquals(List.of(), KeyboardRegistry.validate(ComponentsConformance.TOP_LEVEL));
         var map = KeyboardRegistry.requiredBy(ComponentsConformance.TOP_LEVEL);
-        assertEquals(List.of("Card", "ContextMenuSpecimen", "ContextMenuSteward", "Dialog", "FloatLayer", "FloatLayerSpecimen", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup", "SliderGroupSpecimen", "SliderSpecimen", "SplitGridMirror",
-                        "SplitGridMirrorSpecimen", "SummaryCardSpecimen", "SvgPanZoom", "TabOpener"),
+        assertEquals(List.of("Card", "ContextMenuSpecimen", "ContextMenuSteward", "Dialog", "FloatLayer", "FloatLayerSpecimen", "ListMasterWidget", "ListMasterWidgetSpecimen", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup", "SliderGroupSpecimen",
+                        "SliderSpecimen", "SplitGridMirror", "SplitGridMirrorSpecimen", "SummaryCardSpecimen", "SvgPanZoom", "SvgPanZoomSpecimen", "TabOpener"),
                 map.byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList(), "the components that take keys: leaves, and the holders that hand keys on to what is inside them");
-        assertEquals(11, map.takersOf("ArrowUp").size(), "the slider and its group, the mirror, the list master and the view over it, the menu, the pan-zoom view; and the specimens of the slider, the group, the mirror and the menu, which hand the keys on to them");
+        assertEquals(13, map.takersOf("ArrowUp").size(), "the slider and its group, the mirror, the list master and the view over it, the menu, the pan-zoom view; and the specimens of the slider, the group, the mirror, the menu, the list master and the pan-zoom view, which hand the keys on to them");
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(ComponentsConformance.TOP_LEVEL), "the ledger is empty: every key comes through the party");
     }
 }

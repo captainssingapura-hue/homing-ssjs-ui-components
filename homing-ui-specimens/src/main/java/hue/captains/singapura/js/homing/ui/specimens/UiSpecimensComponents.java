@@ -29,6 +29,15 @@ public record UiSpecimensComponents() implements C0_Components<UiSpecimensCompon
                 ComponentEntry.of(this, new FloatLayerSpecimenModule.FloatLayerSpecimen()),
                 ComponentEntry.of(this, new SplitPaneSpecimenModule.SplitPaneSpecimen()),
                 ComponentEntry.of(this, new SplitGridSpecimenModule.SplitGridSpecimen()),
-                ComponentEntry.of(this, new SplitGridMirrorSpecimenModule.SplitGridMirrorSpecimen()));
+                ComponentEntry.of(this, new SplitGridMirrorSpecimenModule.SplitGridMirrorSpecimen()),
+                ComponentEntry.of(this, new SpecimenDocksModule.SpecimenDocks()),
+                ComponentEntry.of(this, new TabOpenerSpecimenModule.TabOpenerSpecimen()),
+                ComponentEntry.of(this, new AddTabSpecimenModule.AddTabSpecimen()),
+                ComponentEntry.of(this, new PaneThumbsSpecimenModule.PaneThumbsSpecimen()),
+                ComponentEntry.of(this, new ListMasterWidgetSpecimenModule.ListMasterWidgetSpecimen()),
+                ComponentEntry.of(this, new SvgPanZoomSpecimenModule.SvgPanZoomSpecimen()),
+                ComponentEntry.of(this, new PanZoomBarSpecimenModule.PanZoomBarSpecimen()),
+                ComponentEntry.of(this, new FocusMonitorSpecimenModule.FocusMonitorSpecimen()),
+                ComponentEntry.of(this, new StewardMonitorSpecimenModule.StewardMonitorSpecimen()));
     }
 }
