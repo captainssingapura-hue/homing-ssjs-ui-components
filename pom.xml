@@ -46,7 +46,6 @@
         <!-- The MPA's implementation: StandardMpa, its chrome, its preferences. -->
         <module>homing-site-mpa-standard</module>
         <module>homing-ui-control-panel</module>
-        <module>homing-ui-specimens</module>
         <module>homing-components-conformance</module>
     </modules>
 
