@@ -55,7 +55,7 @@ class PreferenceField {
         var actions = branch.createElement("actions", "div");
         css.addClass(actions, pv_actions);
         this._reset = new PlainButton(branch.createElement("reset", PlainButton.TAG), { label: "Use the site's default",
-                onClick: function () { PreferenceStewardInstance.forget(self._name); } });
+                onClick: function () { PreferenceStewardInstance.forget(self._name); } }, ROLE.RESET);
         actions.appendChild(this._reset.el);
         root.appendChild(actions);
         this.root = root;
@@ -76,7 +76,7 @@ class PreferenceField {
         this._note.textContent = pinned ? "Pinned by this page's address: " + pinned + ". A pick here is kept, but this page shows the address's."
                                : stored ? "Chosen: " + stored + "."
                                : "The site's default" + (this._fallback === null ? "." : ": " + this._fallback + ".");
-        this._reset.setOn(!!stored);
+        this._reset.enabled = !!stored;
         if (this._onValue) this._onValue(v);
     }
 

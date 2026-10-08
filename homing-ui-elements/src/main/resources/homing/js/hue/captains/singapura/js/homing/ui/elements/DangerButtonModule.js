@@ -1,16 +1,16 @@
 // =============================================================================
-// DangerButton — the danger button: an ELEMENT component, the button's base in the
-// danger look. The caller mints the element with its tag on its own branch:
+// DangerButton — the danger button: a Button (a simple component) in the danger look,
+// which also has an extent - how much of its word it wears.
 //
-//   var b = new DangerButton(branch.createElement("go", DangerButton.TAG), { label: "Go", onClick: fn });
-//     label, size, onClick     as every button has them; an extent of its word, −1 … 1 (1 unless said): the word as the design binds it at 1,
-//   the design's neutral at 0, the meaning turned the other way at −1
-//
-// Everything else is the base's: .el, .extent(t), .size(s), .label(text?), .setOn(on).
+//   var b = new DangerButton(branch.createElement("go", DangerButton.TAG), { label: "Go", onClick: fn }, ROLE.STANDALONE);
+//   b.enabled  b.size  b.label  b.extent
 // =============================================================================
 
 class DangerButton extends Button {
-    constructor(el, props) {
-        super(el, props, { cls: el_button_danger, scales: true });
-    }
+    static LEAF = "danger-button";
+    static LOOK = Object.freeze([el_button, el_button_danger]);
+    static DEGREES = Object.freeze(["size", "extent"]);
+
+    get extent() { return this._degrees.extent; }
+    set extent(t) { this._degree("extent", t); }
 }

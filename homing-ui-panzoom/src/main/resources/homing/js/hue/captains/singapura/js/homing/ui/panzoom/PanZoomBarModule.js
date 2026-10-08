@@ -25,13 +25,13 @@ class PanZoomBar {
         css.addClass(root, pz_bar);
         root.setAttribute("role", "group");
         root.setAttribute("aria-label", "Zoom");
-        this._out = this._button(root, "out", "−", "Zoom out", function () { view.zoomOut(); });
+        this._out = this._button(root, "out", "−", "Zoom out", ROLE.ZOOM_OUT, function () { view.zoomOut(); });
         this._readout = branch.createElement("readout", "span");
         css.addClass(this._readout, pz_readout);
         this._readout.setAttribute("aria-live", "polite");
         root.appendChild(this._readout);
-        this._in = this._button(root, "in", "+", "Zoom in", function () { view.zoomIn(); });
-        this._fit = this._button(root, "fit", "Fit", "Fit the whole", function () { view.fit(); });
+        this._in = this._button(root, "in", "+", "Zoom in", ROLE.ZOOM_IN, function () { view.zoomIn(); });
+        this._fit = this._button(root, "fit", "Fit", "Fit the whole", ROLE.FIT, function () { view.fit(); });
         this.root = root;
         this._off = view.onChange(function (v) { self._follow(v); });
         this._follow(view.view());
@@ -42,8 +42,8 @@ class PanZoomBar {
         this.branch.dissolve();
     }
 
-    _button(root, name, label, said, onClick) {
-        var button = new PlainButton(this.branch.createElement(name, PlainButton.TAG), { label: label, size: -1, onClick: onClick });
+    _button(root, name, label, said, role, onClick) {
+        var button = new PlainButton(this.branch.createElement(name, PlainButton.TAG), { label: label, size: -1, onClick: onClick }, role);
         button.el.setAttribute("aria-label", said);
         root.appendChild(button.el);
         return button;
@@ -51,8 +51,8 @@ class PanZoomBar {
 
     _follow(v) {
         this._readout.textContent = Math.round(v.zoom * 100) + "%";
-        this._out.setOn(!v.least);
-        this._fit.setOn(!v.fitted);
-        this._in.setOn(!v.most);
+        this._out.enabled = !v.least;
+        this._fit.enabled = !v.fitted;
+        this._in.enabled = !v.most;
     }
 }

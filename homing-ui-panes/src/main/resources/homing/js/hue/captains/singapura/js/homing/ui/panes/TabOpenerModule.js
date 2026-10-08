@@ -57,7 +57,7 @@ class TabOpener {
         root.appendChild(grid);
         this._source.kinds().forEach(function (k) {
             var pick = new PlainButton(branch.createElement("open-" + k.id, PlainButton.TAG), { label: k.label,
-                    onClick: function () { self.open(k.id); } }).el;
+                    onClick: function () { self.open(k.id); } }, ROLE.CHOICE).el;
             grid.appendChild(pick);
             self._picks.push(pick);
         });

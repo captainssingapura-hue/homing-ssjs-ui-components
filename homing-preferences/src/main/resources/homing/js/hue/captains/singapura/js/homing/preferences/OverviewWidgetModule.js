@@ -50,7 +50,7 @@ class OverviewWidget {
         css.addClass(actions, pv_actions);
         this._reset = new PlainButton(branch.createElement("reset", PlainButton.TAG), { label: "Use the site's defaults for all of these", onClick: function () {
             settings.forEach(function (s) { PreferenceStewardInstance.forget(s.name); });
-        } });
+        } }, ROLE.RESET);
         actions.appendChild(this._reset.el);
         root.appendChild(actions);
         this.root = root;
@@ -66,7 +66,7 @@ class OverviewWidget {
             v.el.textContent = pinned ? pinned + " (pinned)" : stored ? stored : "default";
             if (stored) any = true;
         });
-        this._reset.setOn(any);
+        this._reset.enabled = any;
     }
 
     dispose() { this._stop(); }

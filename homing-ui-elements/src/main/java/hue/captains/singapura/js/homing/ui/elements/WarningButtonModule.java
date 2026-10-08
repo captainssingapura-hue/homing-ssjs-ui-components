@@ -13,7 +13,7 @@ import java.util.List;
 /** The warning button: the button's base, in the warning look. */
 public record WarningButtonModule() implements DomModule<WarningButtonModule>, ImplFor<HouseControls.WarningButton> {
 
-    /** An element component: {@code new WarningButton(el, { label, extent, size, onClick })} on an element minted with {@code WarningButton.TAG}; extent, size, label, setOn. */
+    /** An element component: {@code new WarningButton(el, { label, extent, size, onClick }, role)} on an element minted with {@code WarningButton.TAG}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
     public record WarningButton() implements ElementComponent<WarningButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "A button that deserves a second thought, though it can be undone."; }
@@ -25,7 +25,7 @@ public record WarningButtonModule() implements DomModule<WarningButtonModule>, I
     public ImportsFor<WarningButtonModule> imports() {
         return ImportsFor.<WarningButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_button_warning()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ElementStyles.el_button(), new ElementStyles.el_button_warning()), ElementStyles.INSTANCE))
                 .build();
     }
 

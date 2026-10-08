@@ -9,6 +9,7 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.server.PreferenceSteward;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public record PreferenceFieldModule() implements DomModule<PreferenceFieldModule
                         new PreferenceSteward.PreferenceViewInstance()
                 ), PreferenceSteward.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_kicker(),
                         new PreferencesStyles.pv_title(),

@@ -13,7 +13,7 @@ import java.util.List;
 /** The secondary button: the button's base, in the secondary look. */
 public record SecondaryButtonModule() implements DomModule<SecondaryButtonModule>, ImplFor<HouseControls.SecondaryButton> {
 
-    /** An element component: {@code new SecondaryButton(el, { label, extent, size, onClick })} on an element minted with {@code SecondaryButton.TAG}; extent, size, label, setOn. */
+    /** An element component: {@code new SecondaryButton(el, { label, extent, size, onClick }, role)} on an element minted with {@code SecondaryButton.TAG}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
     public record SecondaryButton() implements ElementComponent<SecondaryButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "A button beside the primary one: offered, not urged."; }
@@ -25,7 +25,7 @@ public record SecondaryButtonModule() implements DomModule<SecondaryButtonModule
     public ImportsFor<SecondaryButtonModule> imports() {
         return ImportsFor.<SecondaryButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_button_secondary()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ElementStyles.el_button(), new ElementStyles.el_button_secondary()), ElementStyles.INSTANCE))
                 .build();
     }
 

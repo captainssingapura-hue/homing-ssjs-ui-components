@@ -11,14 +11,13 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import java.util.List;
 
 /**
- * The button's base: what every button leaf is - an element dressed as a button, labelled, at an
- * extent and a size, on or off. Each leaf's own module extends it and binds its look alone: the
- * plain button, the primary, the secondary, the danger, the warning and the success. Never made on
- * its own, and imported only by the modules of the leaves under the button branch.
+ * What the six button leaves share, as declarations: a simple component on a {@code <button>},
+ * on the axis {@code enabled}, with a size and a label, and the behaviour that is theirs. Never
+ * made on its own: each leaf's own module binds its look to it.
  */
 public record ButtonModule() implements DomModule<ButtonModule>, ImplForBranch<HouseBranches.Button> {
 
-    /** The base class: {@code class XButton extends Button}, its constructor handed the leaf's look. */
+    /** The base: {@code class XButton extends Button}; {@code enabled}, {@code size}, {@code label}. */
     public record Button() implements Exportable._Class<ButtonModule> {}
 
     public static final ButtonModule INSTANCE = new ButtonModule();
@@ -26,11 +25,9 @@ public record ButtonModule() implements DomModule<ButtonModule>, ImplForBranch<H
     @Override
     public ImportsFor<ButtonModule> imports() {
         return ImportsFor.<ButtonModule>builder()
-                .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_button(),
-                        new ElementStyles.el_button_on(),
-                        new ElementStyles.el_button_off()
-                ), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ButtonBehaviorModule.ButtonBehavior()), ButtonBehaviorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ElementStyles.el_button_on(), new ElementStyles.el_button_off()), ElementStyles.INSTANCE))
                 .build();
     }
 

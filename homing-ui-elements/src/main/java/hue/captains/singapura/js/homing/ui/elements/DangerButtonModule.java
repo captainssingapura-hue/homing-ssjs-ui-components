@@ -13,7 +13,7 @@ import java.util.List;
 /** The danger button: the button's base, in the danger look. */
 public record DangerButtonModule() implements DomModule<DangerButtonModule>, ImplFor<HouseControls.DangerButton> {
 
-    /** An element component: {@code new DangerButton(el, { label, extent, size, onClick })} on an element minted with {@code DangerButton.TAG}; extent, size, label, setOn. */
+    /** An element component: {@code new DangerButton(el, { label, extent, size, onClick }, role)} on an element minted with {@code DangerButton.TAG}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
     public record DangerButton() implements ElementComponent<DangerButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "A button that destroys, or cannot be undone."; }
@@ -25,7 +25,7 @@ public record DangerButtonModule() implements DomModule<DangerButtonModule>, Imp
     public ImportsFor<DangerButtonModule> imports() {
         return ImportsFor.<DangerButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_button_danger()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ElementStyles.el_button(), new ElementStyles.el_button_danger()), ElementStyles.INSTANCE))
                 .build();
     }
 

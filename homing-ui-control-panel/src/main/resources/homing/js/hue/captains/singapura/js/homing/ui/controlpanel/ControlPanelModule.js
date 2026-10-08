@@ -75,7 +75,7 @@ class ControlPanel {
             var o = Controls.option(n), s = { on: !!o.rest, button: null };
             s.button = new PlainButton(self.branch.createElement("switch-" + n, PlainButton.TAG), { label: ControlPanel._said(o, s.on), onClick: function () {
                 s.on = !s.on;
-                s.button.label(ControlPanel._said(o, s.on));
+                s.button.label = ControlPanel._said(o, s.on);
                 self._onSet(n, s.on, true);
             } });
             row.appendChild(s.button.el);
@@ -108,7 +108,7 @@ class ControlPanel {
         if (o.means === "switch" && this._switches[name]) {
             var s = this._switches[name];
             s.on = !!value;
-            s.button.label(ControlPanel._said(o, s.on));
+            s.button.label = ControlPanel._said(o, s.on);
             return true;
         }
         return false;

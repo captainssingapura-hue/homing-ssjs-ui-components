@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.component.C0_Components;
 import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
+import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
@@ -31,6 +32,10 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
+                CrateEntry.of(CastingsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                CrateEntry.of(ComponentUiModule.INSTANCE),
+                CrateEntry.of(SimpleComponentModule.INSTANCE),
+                CrateEntry.of(ButtonBehaviorModule.INSTANCE),
                 CrateEntry.of(ButtonModule.INSTANCE),
                 CrateEntry.of(PlainButtonModule.INSTANCE),
                 CrateEntry.of(PrimaryButtonModule.INSTANCE),

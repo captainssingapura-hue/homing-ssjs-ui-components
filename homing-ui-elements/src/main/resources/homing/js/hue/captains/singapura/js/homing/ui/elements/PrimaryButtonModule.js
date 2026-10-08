@@ -1,16 +1,16 @@
 // =============================================================================
-// PrimaryButton — the primary button: an ELEMENT component, the button's base in the
-// primary look. The caller mints the element with its tag on its own branch:
+// PrimaryButton — the primary button: a Button (a simple component) in the primary look,
+// which also has an extent - how much of its word it wears.
 //
-//   var b = new PrimaryButton(branch.createElement("go", PrimaryButton.TAG), { label: "Go", onClick: fn });
-//     label, size, onClick     as every button has them; an extent of its word, −1 … 1 (1 unless said): the word as the design binds it at 1,
-//   the design's neutral at 0, the meaning turned the other way at −1
-//
-// Everything else is the base's: .el, .extent(t), .size(s), .label(text?), .setOn(on).
+//   var b = new PrimaryButton(branch.createElement("go", PrimaryButton.TAG), { label: "Go", onClick: fn }, ROLE.STANDALONE);
+//   b.enabled  b.size  b.label  b.extent
 // =============================================================================
 
 class PrimaryButton extends Button {
-    constructor(el, props) {
-        super(el, props, { cls: el_button_primary, scales: true });
-    }
+    static LEAF = "primary-button";
+    static LOOK = Object.freeze([el_button, el_button_primary]);
+    static DEGREES = Object.freeze(["size", "extent"]);
+
+    get extent() { return this._degrees.extent; }
+    set extent(t) { this._degree("extent", t); }
 }

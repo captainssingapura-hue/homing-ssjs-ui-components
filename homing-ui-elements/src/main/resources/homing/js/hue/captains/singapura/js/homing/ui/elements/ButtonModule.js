@@ -1,85 +1,45 @@
 // =============================================================================
-// Button — the base every button leaf extends: an element dressed as a
-// button, labelled, at an extent and a size, on or off. A leaf binds its look
-// alone, and is the one a caller makes:
+// Button — what the six button leaves share, as declarations: the element they
+// take, the axis they are on, the degree and the words they have, and the
+// behaviour that is theirs (ButtonBehavior). A simple component
+// (SimpleComponent); never made on its own - a button is one of its leaves,
+// each binding its own look:
 //
-//   class DangerButton extends Button {
-//       constructor(el, props) { super(el, props, { cls: el_button_danger, scales: true }); }
-//   }
-//   var b = new DangerButton(branch.createElement("delete", DangerButton.TAG), { label: "Delete", extent: 0.6, onClick: fn });
-//
-//   props:
-//     label                         the text
-//     extent                        −1 … 1, default 1: the number that scales the
-//                                   leaf's word — 1 the word as the design binds it,
-//                                   0 the design's neutral, −1 the meaning turned the
-//                                   other way (safety for danger, calm for warning,
-//                                   failure for success); a leaf whose look does not
-//                                   scale (plain) takes none
-//     size                          −1 the smallest, 0 regular (the default), 1 the
-//                                   biggest — every length the design gives the
-//                                   button grows by its own ratio to the power of it
-//     onClick
-//
-//   the instance, adjusted live:
-//     .el                           the element
-//     .extent(t)  .size(s)          as above
-//     .label(text?)                 read, or set
-//     .setOn(on)                    on lifts and presses as the design has it; off is inert and says so
+//   var b = new DangerButton(branch.createElement("delete", DangerButton.TAG),
+//                            { label: "Delete", extent: 0.6, onClick: fn }, ROLE.STANDALONE);
+//   b.enabled = false    off: inert, and it says so - the element disabled, the look
+//                        of a button at rest swapped for the look of one that is off
+//   b.size = -1          −1 the smallest … 1 the biggest; 0 regular, the rest
+//   b.label = "Delete"   the words on it
+//   b.extent = 0.6       a coloured leaf's: how much of its word it wears, −1 the
+//                        meaning turned the other way; the plain button has none
+//   onClick              in the props: the behaviour's, called on a press while enabled
 //
 // A look is a semantic surface, complete: its surface, the ink on it and its
-// edge move together with the extent, each along the anchors the design
-// gives that target. The element's type is "button" unless the caller says
-// otherwise afterwards, so a button inside a form does not submit it by
-// accident. Never made on its own: a button is one of its leaves. `css` is
-// injected with the styles import.
+// edge move together with the extent, each along the anchors the design gives
+// that target. `css` is injected with the styles import.
 // =============================================================================
 
-class Button {
+class Button extends SimpleComponent {
     static TAG = "button";
+    static AXES = Object.freeze({
+        enabled: Object.freeze({
+            values: Object.freeze([true, false]),
+            rest: true,
+            looks: Object.freeze({ "true": Object.freeze([el_button_on]), "false": Object.freeze([el_button_off]) }),
+            reflect: function (el, on) { el.disabled = !on; }
+        })
+    });
+    static DEGREES = Object.freeze(["size"]);
+    static WORDS = Object.freeze(["label"]);
+    static BEHAVIOR = ButtonBehavior;
 
-    /** The leaf's: the element minted with the tag, the caller's properties, and the leaf's look - { cls, scales }. */
-    constructor(el, props, look) {
-        if (new.target === Button || !look) throw new Error("[Button] a button is one of its leaves: PlainButton, PrimaryButton, SecondaryButton, DangerButton, WarningButton, SuccessButton");
-        if (!el || String(el.tagName).toLowerCase() !== Button.TAG) throw new Error("[" + new.target.name + "] wants the element minted with its tag, <" + Button.TAG + ">");
-        var p = props || {};
-        this.el = el;
-        this._scales = !!look.scales;
-        this._extent = 1;
-        this._size = 0;
-        el.type = "button";
-        css.addClass(el, el_button);
-        css.addClass(el, el_button_on);
-        css.addClass(el, look.cls);
-        this.label(p.label == null ? "" : p.label);
-        this.extent(p.extent == null ? 1 : p.extent);
-        this.size(p.size == null ? 0 : p.size);
-        if (typeof p.onClick === "function") el.addEventListener("click", p.onClick);
-    }
+    get enabled() { return this._get("enabled"); }
+    set enabled(on) { this._set("enabled", !!on); }
 
-    extent(t) {
-        var n = Math.max(-1, Math.min(1, Number(t)));
-        this._extent = Number.isFinite(n) ? n : 1;
-        css.extent(this.el, this._scales ? this._extent : null);
-        return this;
-    }
+    get size() { return this._degrees.size; }
+    set size(s) { this._degree("size", s); }
 
-    size(s) {
-        var n = Math.max(-1, Math.min(1, Number(s)));
-        this._size = Number.isFinite(n) ? n : 0;
-        css.size(this.el, this._size === 0 ? null : this._size);
-        return this;
-    }
-
-    label(text) {
-        if (text !== undefined) this.el.textContent = String(text);
-        return this.el.textContent;
-    }
-
-    setOn(on) {
-        this.el.disabled = !on;
-        css.toggleClass(this.el, el_button_on, on);
-        css.toggleClass(this.el, el_button_off, !on);
-        return this;
-    }
+    get label() { return this.el.textContent; }
+    set label(words) { this._ui.text(words == null ? "" : String(words)); }
 }

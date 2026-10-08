@@ -151,9 +151,11 @@ class Dialog {
 
     _action(row, a) {
         var self = this;
-        var Kind = a.primary ? PrimaryButton : PlainButton;   // the default action leads; the rest are plain
+        // the action bar's, drawn inline: the default action leads as Go, the rest are plain Actions;
+        // a press reaches its action only while the button is enabled
+        var Kind = a.primary ? PrimaryButton : PlainButton;
         var btn = new Kind(this.branch.createElement("act_" + a.id, Kind.TAG), { label: a.label,
-                onClick: function () { if (!btn.el.disabled) a.onClick(self); } });
+                onClick: function () { a.onClick(self); } }, a.primary ? ROLE.GO : ROLE.ACTION);
         if (a.primary) this._primary = a;
         row.appendChild(btn.el);
         this._buttons[a.id] = btn;
@@ -194,7 +196,7 @@ class Dialog {
     setAction(id, state) {
         var b = this._buttons[id];
         if (!b || !state) return;
-        if (state.enabled != null) b.setOn(!!state.enabled);
-        if (state.label != null) b.label(state.label);
+        if (state.enabled != null) b.enabled = !!state.enabled;
+        if (state.label != null) b.label = state.label;
     }
 }

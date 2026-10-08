@@ -103,7 +103,7 @@ class AddTab {
         }
 
         this._goButton = new PlainButton(branch.createElement("go", PlainButton.TAG), { label: o.verb == null ? "Add" : String(o.verb),
-                onClick: function () { self.add(); } });
+                onClick: function () { self.add(); } }, ROLE.GO);
         root.appendChild(this._goButton.el);
         this._go = this._goButton.el;
 
@@ -171,7 +171,7 @@ class AddTab {
     /** Whether the button would do anything, said on the button: the source's answer about the chosen pane, and nothing of its own. */
     _dress() {
         var pane = this._thumbs.picked(), can = !!pane && this._source.canAdd(pane);
-        this._goButton.setOn(can);
+        this._goButton.enabled = can;
         this._go.setAttribute("title", !pane ? "pick a pane first"
                                   : can ? "a new tab in " + pane.slotId
                                         : "no room for another tab on this desk");

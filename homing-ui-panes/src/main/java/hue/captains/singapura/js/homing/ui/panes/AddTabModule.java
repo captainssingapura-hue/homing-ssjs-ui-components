@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 
 import java.util.List;
@@ -48,6 +49,7 @@ public record AddTabModule() implements DomModule<AddTabModule>, ImplFor<HouseCo
                 ), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneThumbsModule.PaneThumbs()), PaneThumbsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();
     }
 

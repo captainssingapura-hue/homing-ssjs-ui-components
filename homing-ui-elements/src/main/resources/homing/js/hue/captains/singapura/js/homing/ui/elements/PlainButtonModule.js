@@ -1,15 +1,12 @@
 // =============================================================================
-// PlainButton — the plain button: an ELEMENT component, the button's base in the
-// plain look. The caller mints the element with its tag on its own branch:
+// PlainButton — the plain button: a Button (a simple component) in the plain look.
+// Plain is not a semantic word, so it has no extent.
 //
-//   var b = new PlainButton(branch.createElement("go", PlainButton.TAG), { label: "Go", onClick: fn });
-//     label, size, onClick     as every button has them; no extent: plain is not a semantic word, and does not scale
-//
-// Everything else is the base's: .el, .extent(t), .size(s), .label(text?), .setOn(on).
+//   var b = new PlainButton(branch.createElement("go", PlainButton.TAG), { label: "Go", onClick: fn }, ROLE.STANDALONE);
+//   b.enabled  b.size  b.label
 // =============================================================================
 
 class PlainButton extends Button {
-    constructor(el, props) {
-        super(el, props, { cls: el_button_plain, scales: false });
-    }
+    static LEAF = "plain-button";
+    static LOOK = Object.freeze([el_button, el_button_plain]);
 }

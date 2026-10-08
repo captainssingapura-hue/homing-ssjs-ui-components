@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.PrimaryButtonModule;
 import hue.captains.singapura.js.homing.ui.floating.FloatingPaneModule;
@@ -51,6 +52,7 @@ public record DialogModule() implements DomModule<DialogModule>, ImplFor<HouseCo
                 .add(new ModuleImports<>(List.of(new ModalityModule.Modality()), ModalityModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PrimaryButtonModule.PrimaryButton()), PrimaryButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new DialogStyles.dl_scrim(),
