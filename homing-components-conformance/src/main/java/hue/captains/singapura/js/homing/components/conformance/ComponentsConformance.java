@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
 import hue.captains.singapura.js.homing.designs.HomingDesigns;
+import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
@@ -70,12 +71,14 @@ public final class ComponentsConformance {
             UiFocusCrate.INSTANCE,
             UiMenuCrate.INSTANCE,
             MpaCrate.INSTANCE,
+            UiControlPanelCrate.INSTANCE,
             UiSpecimensCrate.INSTANCE);
 
     /** One class per Maven module, for the coverage check: nothing served from these modules may be uncrated. */
     public static final List<Class<?>> ANCHORS = List.of(
             UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
-            UiSplitCrate.class, UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiFocusCrate.class, UiMenuCrate.class, MpaCrate.class);
+            UiSplitCrate.class, UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiFocusCrate.class, UiMenuCrate.class, MpaCrate.class,
+            UiControlPanelCrate.class);
 
     /** The framework's policy, unextended: the components declare no types of their own. */
     public static final JsRulePolicy POLICY = DefaultJsRulePolicy.INSTANCE;

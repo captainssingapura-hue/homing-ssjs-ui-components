@@ -30,6 +30,7 @@
     <modules>
         <!-- RFC 0067: the house's taxonomy of components - declarations only, on core's taxonomy. -->
         <module>homing-ui-taxonomy</module>
+        <module>homing-ui-controllability</module>
         <module>homing-ui-elements</module>
         <module>homing-ui-dialog</module>
         <module>homing-preferences</module>
@@ -44,6 +45,7 @@
         <module>homing-ui-panes</module>
         <!-- The MPA's implementation: StandardMpa, its chrome, its preferences. -->
         <module>homing-site-mpa-standard</module>
+        <module>homing-ui-control-panel</module>
         <module>homing-ui-specimens</module>
         <module>homing-components-conformance</module>
     </modules>
