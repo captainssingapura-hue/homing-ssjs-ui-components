@@ -43,8 +43,7 @@ class PanZoomBar {
     }
 
     _button(root, name, label, said, onClick) {
-        var b = new ButtonBuilder().label(label).plain().size(-1).onClick(onClick);
-        var button = b.build(this.branch.createElement(name, b.tag));
+        var button = new PlainButton(this.branch.createElement(name, PlainButton.TAG), { label: label, size: -1, onClick: onClick });
         button.el.setAttribute("aria-label", said);
         root.appendChild(button.el);
         return button;

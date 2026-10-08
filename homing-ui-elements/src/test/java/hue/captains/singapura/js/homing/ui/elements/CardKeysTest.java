@@ -45,16 +45,16 @@ class CardKeysTest extends JsModuleTestBase {
         var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; kbLog.push("leave:" + id); },
                    claim: function (id) { kbLog.push("claim:" + id); }, release: function (id) { kbLog.push("release:" + id); } };
         var page = fakeBranch("page");
-        var card = new CardBuilder().title("Act").onClick(function () { log.push("clicked"); }).keyboard(kb).build(page.createBranch("act"));
-        var inner = new CardBuilder().title("In a pane").onClick(function () { log.push("inner"); }).build(page.createBranch("inner"));
-        var plain = new CardBuilder().title("Plain").build(page.createBranch("plain"));
+        var card = new SummaryCard(page.createBranch("act"), { title: "Act", onClick: function () { log.push("clicked"); }, keyboard: kb });
+        var inner = new SummaryCard(page.createBranch("inner"), { title: "In a pane", onClick: function () { log.push("inner"); } });
+        var plain = new SummaryCard(page.createBranch("plain"), { title: "Plain" });
         """;
 
     @BeforeEach
     void load() {
         js = buildContext();
         loadModule(DIR + "component/keyboard/KeysModule.js");
-        loadModule(DIR + "ui/elements/Elements.js");
+        loadModule(DIR + "ui/elements/SummaryCardModule.js");
         js.eval("js", SHIM);
     }
 

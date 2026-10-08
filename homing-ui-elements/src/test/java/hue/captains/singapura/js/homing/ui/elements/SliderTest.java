@@ -51,8 +51,8 @@ class SliderTest extends JsModuleTestBase {
             el_slider_fill_vertical = "el_slider_fill_vertical", el_slider_detent_vertical = "el_slider_detent_vertical", el_slider_cap = "el_slider_cap", el_slider_cap_face = "el_slider_cap_face", el_slider_cap_mark = "el_slider_cap_mark",
             el_slider_tick = "el_slider_tick", el_slider_tick_vertical = "el_slider_tick_vertical", el_slider_tick_line = "el_slider_tick_line", el_slider_tick_line_vertical = "el_slider_tick_line_vertical", el_slider_tick_label = "el_slider_tick_label";
         var page = fakeBranch("page");
-        var s = new SliderBuilder().label("The tabs' size").axis().format(function (v) { return v.toFixed(1); })
-                    .onInput(function (v) { log.push("in:" + v); }).onChange(function (v) { log.push("change:" + v); }).build(page.createBranch("size"));
+        var s = new Slider(page.createBranch("size"), { label: "The tabs' size", axis: true, format: function (v) { return v.toFixed(1); },
+                    onInput: function (v) { log.push("in:" + v); }, onChange: function (v) { log.push("change:" + v); } });
         var rail = s.root.children[1], knob = rail.children[rail.children.length - 1], face = knob.children[0], mark = knob.children[1], detent = rail.children[1], readout = s.root.children[2];
         """;
 
@@ -86,7 +86,7 @@ class SliderTest extends JsModuleTestBase {
         assertTrue(eval("mark.has('ic_size') && !mark.has('ic_grip')").asBoolean());
         eval("s.icon(null);");
         assertTrue(eval("s.icon() === null && !mark.has('ic_size')").asBoolean(), "a bare knob");
-        assertEquals("aspect", eval("new SliderBuilder().axis().icon('aspect').build(page.createBranch('a')).icon()").asString());
+        assertEquals("aspect", eval("new Slider(page.createBranch('a'), { axis: true, icon: 'aspect' }).icon()").asString());
         eval("s.value(-0.7);");
         assertEquals("15.000%,35.000%", eval("rail.prop('--sl-from') + ',' + rail.prop('--sl-span')").asString(), "a value below the detent fills leftwards from it");
         assertEquals("-0.7", eval("String(s.value())").asString());
@@ -141,8 +141,8 @@ class SliderTest extends JsModuleTestBase {
             var members = {}, kbLog = [];
             var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; kbLog.push("leave:" + id); },
                        claim: function (id) { kbLog.push("claim:" + id); }, release: function (id) { kbLog.push("release:" + id); } };
-            var k = new SliderBuilder().axis().onChange(function (v) { log.push("k:" + v); }).keyboard(kb).build(page.createBranch("keyed"));
-            var k2 = new SliderBuilder().axis().keyboard(kb, "other").build(page.createBranch("keyed2"));
+            var k = new Slider(page.createBranch("keyed"), { axis: true, onChange: function (v) { log.push("k:" + v); }, keyboard: kb });
+            var k2 = new Slider(page.createBranch("keyed2"), { axis: true, keyboard: kb, keyboardId: "other" });
             """);
         assertEquals("join:keyed join:other", eval("kbLog.join(' ')").asString(), "joined as the branch's name, or as said");
         assertEquals("1,0,0", eval("[k.root.listening('pointerdown'), k.root.listening('focusin'), k.root.listening('focusout')].join()").asString(), "the convention on the root: one press");
@@ -163,9 +163,9 @@ class SliderTest extends JsModuleTestBase {
     @Test
     void stoodUp_theValueRisesFromTheBottom_theKnobIsTheCap_theTicksAtTheirHeights() {
         eval("""
-            var f = new SliderBuilder().label("vocals").vertical().range(-60, 10, 1).detent(0).value(0).icon("level")
-                        .ticks([{ at: 10, label: "+10" }, { at: 0, label: "0" }, { at: -20, label: "-20" }, { at: -60, label: "-inf" }, { at: 99, label: "off the scale" }])
-                        .format(function (v) { return v + " dB"; }).onInput(function (v) { log.push("in:" + v); }).build(page.createBranch("vocals"));
+            var f = new Slider(page.createBranch("vocals"), { label: "vocals", vertical: true, min: -60, max: 10, step: 1, detents: [0], value: 0, icon: "level",
+                        ticks: [{ at: 10, label: "+10" }, { at: 0, label: "0" }, { at: -20, label: "-20" }, { at: -60, label: "-inf" }, { at: 99, label: "off the scale" }],
+                        format: function (v) { return v + " dB"; }, onInput: function (v) { log.push("in:" + v); } });
             var vr = f.root.children[1]; vr.rect = { left: 100, top: 0, width: 24, height: 200, right: 124, bottom: 200 };
             var vk = vr.children[vr.children.length - 1];
             var vticks = vr.children.filter(function (c) { return c.has("el_slider_tick"); });
@@ -205,11 +205,11 @@ class SliderTest extends JsModuleTestBase {
         assertTrue(eval("s.root.children[0].prop('--sl-label') === undefined").asBoolean());
         eval("s.dispose();");
         assertEquals("dissolved:size", log());
-        var plain = eval("new SliderBuilder().label('Volume').range(0, 100, 5).value(42).build(page.createBranch('vol'))");
-        assertEquals("40", eval("String(new SliderBuilder().range(0, 100, 5).value(42).build(page.createBranch('v2')).value())").asString(), "on the step");
-        assertTrue(eval("new SliderBuilder().range(0, 100, 5).value(42).build(page.createBranch('v3')).root.children[1].children.length === 2").asBoolean(), "no detent on a plain range: track and knob only");
-        var ex = assertThrows(PolyglotException.class, () -> eval("new SliderBuilder().range(5, 5).build(page.createBranch('bad'))"));
+        var plain = eval("new Slider(page.createBranch('vol'), { label: 'Volume', min: 0, max: 100, step: 5, value: 42 })");
+        assertEquals("40", eval("String(new Slider(page.createBranch('v2'), { min: 0, max: 100, step: 5, value: 42 }).value())").asString(), "on the step");
+        assertTrue(eval("new Slider(page.createBranch('v3'), { min: 0, max: 100, step: 5, value: 42 }).root.children[1].children.length === 2").asBoolean(), "no detent on a plain range: track and knob only");
+        var ex = assertThrows(PolyglotException.class, () -> eval("new Slider(page.createBranch('bad'), { min: 5, max: 5 })"));
         assertTrue(ex.getMessage().contains("max must be above min"), ex.getMessage());
-        assertThrows(PolyglotException.class, () -> eval("new SliderBuilder().build(null)"));
+        assertThrows(PolyglotException.class, () -> eval("new Slider(null, {})"));
     }
 }

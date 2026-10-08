@@ -387,17 +387,6 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** The add button: a control that is interactive; Control carries its focus ring. */
-    public record mtp_add() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Raised.class, Color.Edge.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Interactive.class, Affordance.Cursor.class), of(Interactive.class, Motion.Ease.class), of(Control.class, Color.Edge.class)); }
-        @Override public String body() { return """
-            font: inherit;
-            line-height: 1;
-            padding: 3px 8px;
-            """;
-        }
-    }
-
     /** The add button when it would add nothing — the desk full, or the holder turned it off: inert, and says so. Toggled beside {@code disabled}. */
     /**
       * The plus ON THE RAIL, where a browser keeps it: after the last chip,
@@ -558,18 +547,6 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** One thing that could be opened. It wears what the strip's plus wears, since it is the same gesture at its full size. */
-    public record mtp_opener_pick() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Raised.class, Color.Edge.class),
-                                                                          of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Interactive.class, Affordance.Cursor.class),
-                                                                          of(Interactive.class, Motion.Ease.class), of(Control.class, Color.Edge.class)); }
-        @Override public String body() { return """
-            font: inherit;
-            padding: 9px 16px;
-            """;
-        }
-    }
-
     // ── the little picture of the panes, and the control that adds by it ──
 
     /**
@@ -686,9 +663,9 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     @Override
     public List<CssClass<PaneStyles>> cssClasses() {
         return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_strip_current(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_seated(), new mtp_chip_dragging(), new mtp_chip_shifted(),
-                       new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_add(), new mtp_rail_add(), new mtp_bar_close(), new mtp_add_off(),
+                       new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(), new mtp_add_off(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(), new mtp_dock_target(),
-                       new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(), new mtp_opener_pick(),
+                       new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(),
                        new mtp_thumbs(), new mtp_thumb(), new mtp_thumb_on(), new mtp_thumb_off(), new mtp_thumb_label(), new mtp_new(), new mtp_new_pick(),
                        new mtp_tab_content_hidden());   // last, so hidden wins over what a panel or the empty note says of its display
     }

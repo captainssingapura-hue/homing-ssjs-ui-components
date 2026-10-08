@@ -1,10 +1,14 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 
 import java.util.List;
 
@@ -26,7 +30,7 @@ import java.util.List;
  * nothing here joins the keyboard party, which is what a small control should
  * be and what leaves the party to the containers that need it.</p>
  */
-public record AddTabModule() implements DomModule<AddTabModule> {
+public record AddTabModule() implements DomModule<AddTabModule>, ImplFor<HouseContainers.AddTab> {
 
     /** The class. */
     public record AddTab() implements BranchComponent<AddTabModule> {
@@ -40,11 +44,10 @@ public record AddTabModule() implements DomModule<AddTabModule> {
         return ImportsFor.<AddTabModule>builder()
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_new(),
-                        new PaneStyles.mtp_new_pick(),
-                        new PaneStyles.mtp_add(),
-                        new PaneStyles.mtp_add_off()
+                        new PaneStyles.mtp_new_pick()
                 ), PaneStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneThumbsModule.PaneThumbs()), PaneThumbsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .build();
     }
 

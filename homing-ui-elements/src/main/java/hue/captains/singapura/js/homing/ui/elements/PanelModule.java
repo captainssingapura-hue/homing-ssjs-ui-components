@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
@@ -10,7 +13,7 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import java.util.List;
 
 /**
- * The panel and its builder: a named region with a head, a body and whatever
+ * The panel: a named region with a head, a body and whatever
  * is mounted in it — the workspace's unit of work. It measures nothing: what
  * holds it decides how big it is, and it fills that. {@code Container.Panel}
  * to the design, so the air of its head, the air of its body and the line
@@ -24,15 +27,13 @@ import java.util.List;
  * panel, and the same dock mounted on a flat surface neither knows nor needs
  * one.</p>
  */
-public record PanelModule() implements DomModule<PanelModule> {
+public record PanelModule() implements DomModule<PanelModule>, ImplFor<HouseContainers.Panel> {
 
-    /** A branch component, made through its builder: a head with a name and a slot for what acts on it, and a body the caller mounts into. */
+    /** A branch component, on a sub-branch the caller made, with its properties: a head with a name and a slot for what acts on it, and a body the caller mounts into. */
     public record Panel() implements BranchComponent<PanelModule> {
         @Override public String summary() { return "A named region that fills what holds it: a head, a slot for what acts on it, and a body whatever is mounted in it fills."; }
     }
 
-    /** The builder: {@code new PanelBuilder()}; title, fills, size and host set progressively; {@code build(branch)} on a sub-branch of the caller's. */
-    public record PanelBuilder() implements Exportable._Constant<PanelModule> {}
 
     public static final PanelModule INSTANCE = new PanelModule();
 
@@ -54,6 +55,6 @@ public record PanelModule() implements DomModule<PanelModule> {
 
     @Override
     public ExportsOf<PanelModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Panel(), new PanelBuilder()));
+        return new ExportsOf<>(INSTANCE, List.of(new Panel()));
     }
 }

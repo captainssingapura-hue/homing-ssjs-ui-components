@@ -32,6 +32,12 @@
     </properties>
 
     <dependencies>
+        <!-- The taxonomy its components are anchored at: each module ImplFor its leaf. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- The definitions this implements. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
@@ -60,6 +66,12 @@
         </dependency>
         <!-- The preferences dialog on the bar: the dialog, and the preferences component
              whose view it holds; the theme widget lives here because /themes is read here. -->
+        <!-- The icon: the preferences button's symbol. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-icons</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-dialog</artifactId>

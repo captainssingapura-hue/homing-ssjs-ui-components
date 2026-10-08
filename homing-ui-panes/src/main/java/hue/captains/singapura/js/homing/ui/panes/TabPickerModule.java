@@ -1,10 +1,14 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 
 import java.util.List;
 
@@ -19,7 +23,7 @@ import java.util.List;
  * <p>Its choices are native buttons: the browser's own keys walk and press
  * them, and the first takes the focus when the picker is shown.</p>
  */
-public record TabPickerModule() implements DomModule<TabPickerModule> {
+public record TabPickerModule() implements DomModule<TabPickerModule>, ImplFor<HouseContainers.TabPicker> {
 
     /** The class. */
     public record TabPicker() implements BranchComponent<TabPickerModule> {
@@ -34,9 +38,9 @@ public record TabPickerModule() implements DomModule<TabPickerModule> {
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),
                         new PaneStyles.mtp_opener_note(),
-                        new PaneStyles.mtp_opener_grid(),
-                        new PaneStyles.mtp_opener_pick()
+                        new PaneStyles.mtp_opener_grid()
                 ), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .build();
     }
 

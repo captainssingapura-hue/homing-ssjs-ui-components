@@ -39,7 +39,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         var log = [];
         function el(tag) {
             var classes = new Set(), attrs = {};
-            var node = { tag: tag, children: [], parentNode: null, listeners: {},
+            var node = { tag: tag, tagName: String(tag).toUpperCase(), children: [], parentNode: null, listeners: {},
                 get firstChild() { return this.children.length ? this.children[0] : null; },
                 // the bar measures itself to squeeze the row: a style bag and a scroll box, unread by anything else here
                 style: { props: {}, setProperty: function (k, v) { this.props[k] = v; }, removeProperty: function (k) { delete this.props[k]; } },
@@ -80,10 +80,11 @@ class MultiTabPaneTest extends JsModuleTestBase {
         var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted",
             mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted", mtp_strip_loose = "mtp_strip_loose", mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark",
             mtp_chip_seated = "mtp_chip_seated", mtp_strip_current = "mtp_strip_current",
-            mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill",
+            mtp_strip_tail = "mtp_strip_tail", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill",
             mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
             mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target",
-            mtp_opener = "mtp_opener", mtp_opener_note = "mtp_opener_note", mtp_opener_grid = "mtp_opener_grid", mtp_opener_pick = "mtp_opener_pick";
+            mtp_opener = "mtp_opener", mtp_opener_note = "mtp_opener_note", mtp_opener_grid = "mtp_opener_grid";
+        var el_button = "el_button", el_button_on = "el_button_on", el_button_off = "el_button_off", el_button_plain = "el_button_plain";
         var console = { error: function (m, e) { log.push("error:" + m); } };
         var host = el("div");
         var branch = fakeBranch("page");
@@ -145,6 +146,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardHomeModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardStewardModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/ButtonModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/PlainButtonModule.js");
         loadModule(EVENTS);
         loadModule(DRAG);
         loadModule(FIT);

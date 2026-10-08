@@ -48,7 +48,7 @@ class EdgeStripTest extends JsModuleTestBase {
         var page = fakeBranch("page");
         var host = el("div");
         var button = el("button");
-        var strip = new EdgeStripBuilder().label("Workspace").host(host).build(page.createBranch("strip"));
+        var strip = new EdgeStrip(page.createBranch("strip"), { label: "Workspace", host: host });
         strip.root.appendChild(button);
         function hidden() { return strip.root.classList.contains("el_strip_hidden"); }
         """;

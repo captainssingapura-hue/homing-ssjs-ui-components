@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -25,7 +28,7 @@ import java.util.List;
  * <p>A pane that cannot be chosen is shown all the same, dimmed: where it is
  * belongs to the picture, and a gap would be a lie about the room.</p>
  */
-public record PaneThumbsModule() implements DomModule<PaneThumbsModule> {
+public record PaneThumbsModule() implements DomModule<PaneThumbsModule>, ImplFor<HouseContainers.PaneThumbs> {
 
     /** The class. */
     public record PaneThumbs() implements BranchComponent<PaneThumbsModule> {

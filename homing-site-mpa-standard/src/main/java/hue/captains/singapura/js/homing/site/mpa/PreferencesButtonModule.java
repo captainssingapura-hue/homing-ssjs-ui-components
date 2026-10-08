@@ -1,10 +1,14 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.icons.IconModule;
 import hue.captains.singapura.js.homing.preferences.PreferencesViewModule;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
 
@@ -22,7 +26,7 @@ import java.util.List;
  * writes through the steward, and the page follows the store as it always
  * has, so a theme picked in the dialog is worn behind it as it is picked.</p>
  */
-public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule> {
+public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule>, ImplFor<HouseControls.PreferencesButton> {
 
     /** The class. */
     public record PreferencesButton() implements BranchComponent<PreferencesButtonModule> {
@@ -36,6 +40,7 @@ public record PreferencesButtonModule() implements DomModule<PreferencesButtonMo
         return ImportsFor.<PreferencesButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesViewModule.PreferencesView()), PreferencesViewModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new MpaStyles.mpa_prefs(),
                         new MpaStyles.mpa_prefs_btn(),

@@ -4,19 +4,18 @@
 // pane's tab, a page — and brings nothing else. It measures nothing: what
 // holds it decides how big it is, and it fills that.
 //
-//   PanelBuilder — the properties, set progressively, each returning the builder:
-//     .title(text)          the name in the head; without one there is no head
-//     .bare(on)             no frame and no corner: for a panel whose CONTAINER
+//   new Panel(branch, { title, bare, fills, size, host }) — on a sub-branch the caller made:
+//     title                 the name in the head; without one there is no head
+//     bare: true            no frame and no corner: for a panel whose CONTAINER
 //                           draws the lines — a cell of a grid that already
 //                           draws its seams and marks the room being worked in.
 //                           A sheet draws its own edge; a room's floor does not.
-//     .fills(on)            what is mounted fills the body: no air, and no
+//     fills: true           what is mounted fills the body: no air, and no
 //                           scroll of its own (a dock, a grid). Off, the body
 //                           has the design's air and scrolls — for content.
-//     .size(s)              -1 to 1: every length the design gives the panel
+//     size                  -1 to 1: every length the design gives the panel
 //                           grown by its own ratio to the power of it
-//     .host(el)             appended there on build
-//     .build(branch)        the Panel, on a sub-branch the caller made
+//     host                  appended there once made
 //
 //   Panel — the instance:
 //     .root                 the element, appended to the host when one was given
@@ -49,7 +48,7 @@
 const _panelOwner = Object.freeze({ toString: () => "panel" });
 
 class Panel {
-    /** The builder's; a caller makes a panel through PanelBuilder. */
+    /** On a sub-branch the caller made, with its properties. */
     constructor(branch, props) {
         if (!branch) throw new Error("[Panel] a branch of its own is required");
         var p = props || {};
@@ -211,18 +210,5 @@ class Panel {
         this.unwatch();
         if (this.root.parentNode) this.root.parentNode.removeChild(this.root);
         try { this.branch.dissolve(); } catch (e) {}
-    }
-}
-
-class PanelBuilder {
-    constructor() { this._props = {}; }
-    title(text)  { this._props.title = text; return this; }
-    fills(on)    { this._props.fills = on === undefined ? true : !!on; return this; }
-    bare(on)     { this._props.bare  = on === undefined ? true : !!on; return this; }
-    size(s)      { this._props.size = s; return this; }
-    host(el)     { this._props.host = el; return this; }
-    build(branch) {
-        if (!branch) throw new Error("[PanelBuilder] build wants the sub-branch the caller made for the panel");
-        return new Panel(branch, this._props);
     }
 }

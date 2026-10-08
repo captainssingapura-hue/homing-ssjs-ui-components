@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.focus;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.focusParty;
@@ -18,7 +21,7 @@ import java.util.List;
  * invariants broken, in the danger colour. Redrawn on every event of the
  * steward and every move of the native focus. It takes no keys.
  */
-public record StewardMonitorModule() implements DomModule<StewardMonitorModule> {
+public record StewardMonitorModule() implements DomModule<StewardMonitorModule>, ImplFor<HouseContainers.StewardMonitor> {
 
     /** A branch component: {@code new StewardMonitor(branch, { host })}; {@code lamp()}, {@code broken()}, {@code refresh()}, {@code dispose()}. */
     public record StewardMonitor() implements BranchComponent<StewardMonitorModule> {

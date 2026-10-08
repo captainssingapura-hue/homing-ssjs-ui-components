@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -21,7 +24,7 @@ import java.util.List;
  * under this chrome. {@code chrome} is what the server stamped: the brand
  * and the crumbs, both frozen data.</p>
  */
-public record MpaChromeModule() implements DomModule<MpaChromeModule> {
+public record MpaChromeModule() implements DomModule<MpaChromeModule>, ImplFor<HouseContainers.MpaChrome> {
 
     /** The class. */
     public record MpaChrome() implements BranchComponent<MpaChromeModule> {

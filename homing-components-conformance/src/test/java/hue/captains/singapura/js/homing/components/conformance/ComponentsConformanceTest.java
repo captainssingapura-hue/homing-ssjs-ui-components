@@ -9,12 +9,14 @@ import hue.captains.singapura.js.homing.conformance.rules.Finding;
 import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.component.ComponentDetails;
 import hue.captains.singapura.js.homing.component.ComponentTrees;
+import hue.captains.singapura.js.homing.component.Implementations;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardRegistry;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.design.Deployment;
 import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.tree.TreeLevel;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import org.junit.jupiter.api.Test;
 
@@ -128,10 +130,10 @@ class ComponentsConformanceTest {
         assertEquals(List.of(), ComponentTrees.validate(ComponentsConformance.TOP_LEVEL));
         var composed = ComponentTrees.compose("components", ComponentsConformance.TOP_LEVEL);
         var vehicles = composed.root().children().stream().map(n -> n.segment().value()).toList();
-        assertEquals(List.of("ui-elements", "server", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split", "ui-pan-zoom", "ui-panes", "ui-docking", "ui-split-grid", "ui-focus", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the elements require the base (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate; docking catalogues its dock grid, the desk and the floater being statics; the control panel, controllability on a page, comes last");
+        assertEquals(List.of("ui-elements", "server", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split", "ui-pan-zoom", "ui-panes", "ui-docking", "ui-split-grid", "ui-focus", "ui-menu", "mpa"), vehicles, "one vehicle per crate that ships components, in closure order — the elements require the base (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate; docking catalogues its dock grid, the desk and the floater being statics; the control panel ships none, a widget's body");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
-        assertEquals(15, root.vehicleCount());
-        assertEquals(40, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 6 elements (the panel and the edge strip among them), 1 icon, 1 dialog, 7 preferences, 1 split, 2 pan-zoom (the view and its bar), 8 panes (the tab-pane, the single-tab pane a float carries, the thumbs, the new-tab control, the opener and the picker among them), 2 floating, 1 docking (the dock grid), 2 split grid, 2 focus monitors, 2 menus, 3 chrome and 1 control panel");
+        assertEquals(14, root.vehicleCount());
+        assertEquals(44, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 11 elements (six buttons, the summary card, the slider and its group, the panel and the edge strip), 1 icon, 1 dialog, 7 preferences, 1 split, 2 pan-zoom (the view and its bar), 8 panes (the tab-pane, the single-tab pane a float carries, the thumbs, the new-tab control, the opener and the picker among them), 2 floating, 1 docking (the dock grid), 2 split grid, 2 focus monitors, 2 menus and 3 chrome");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
         assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.TOP_LEVEL));
@@ -148,10 +150,32 @@ class ComponentsConformanceTest {
     void keysComeThroughTheParty_andTheMigrationListOnlyShrinks() {
         assertEquals(List.of(), KeyboardRegistry.validate(ComponentsConformance.TOP_LEVEL));
         var map = KeyboardRegistry.requiredBy(ComponentsConformance.TOP_LEVEL);
-        assertEquals(List.of("Card", "ContextMenuSteward", "Dialog", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup",
-                        "SplitGridMirror", "SvgPanZoom", "TabOpener"),
+        assertEquals(List.of("ContextMenuSteward", "Dialog", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup",
+                        "SplitGridMirror", "SummaryCard", "SvgPanZoom", "TabOpener"),
                 map.byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList(), "the components that take keys: leaves, and the holders that hand keys on to what is inside them");
         assertEquals(7, map.takersOf("ArrowUp").size(), "the slider and its group, the mirror, the list master and the view over it, the menu, the pan-zoom view");
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(ComponentsConformance.TOP_LEVEL), "the ledger is empty: every key comes through the party");
     }
+
+    /**
+     * Every implementation anchored at the house's taxonomy: a component's
+     * module implements its leaf, one leaf one module one class, a shared base
+     * only under its branch; and what a leaf's module imports of other
+     * components is what its parts declare - read through a part nothing
+     * implements, whose own parts its owner realizes inline. The leaves not yet
+     * composed as declared are held in the ledger, so the list only shrinks:
+     * each is a question for the design - the declaration or the code is wrong.
+     */
+    @Test
+    void everyImplementationIsAnchored_andComposedAsItsLeafDeclares() {
+        List<String> problems = Implementations.INSTANCE.validate(HouseTaxonomy.INSTANCE.read(), ComponentsConformance.TOP_LEVEL);
+        assertEquals(COMPOSITION_LEDGER, problems, () -> "implementations against the taxonomy (" + problems.size() + "):\n" + String.join("\n", problems));
+    }
+
+    /** Drawn without the component the leaf declares: the toggle's knob bare, the chip's keys and the brand's mark the design's own, the float's bar its own strip. */
+    private static final List<String> COMPOSITION_LEDGER = List.of(
+            "ToggleWidgetModule (ToggleWidget) never imports Icon, which its part toggle (an unrealized Switch) → thumb (an unrealized Knob) → symbol calls for",
+            "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
+            "TabPaneModule (TabPane) never imports Icon, which its part chip (an unrealized Tab) → keys calls for",
+            "MpaChromeModule (MpaChrome) never imports Icon, which its part home (an unrealized Brand) → symbol calls for");
 }

@@ -45,11 +45,6 @@ class TabPicker {
     focus() { try { this._first.focus(); } catch (e) {} }
 
     static _button(branch, name, text, onClick) {
-        var b = branch.createElement(name, "button");
-        css.addClass(b, mtp_opener_pick);
-        b.setAttribute("type", "button");
-        b.textContent = String(text);
-        b.addEventListener("click", onClick);
-        return b;
+        return new PlainButton(branch.createElement(name, PlainButton.TAG), { label: String(text), onClick: onClick }).el;
     }
 }

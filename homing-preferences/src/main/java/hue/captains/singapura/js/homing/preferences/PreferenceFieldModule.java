@@ -1,12 +1,15 @@
 package hue.captains.singapura.js.homing.preferences;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.server.PreferenceSteward;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ import java.util.List;
  * writes a pick, forgets on reset, and follows the store so a change made
  * anywhere is drawn here.
  */
-public record PreferenceFieldModule() implements DomModule<PreferenceFieldModule> {
+public record PreferenceFieldModule() implements DomModule<PreferenceFieldModule>, ImplFor<HouseContainers.PreferenceField> {
 
     /** The class. */
     public record PreferenceField() implements BranchComponent<PreferenceFieldModule> {
@@ -34,7 +37,7 @@ public record PreferenceFieldModule() implements DomModule<PreferenceFieldModule
                         new PreferenceSteward.PreferenceStewardInstance(),
                         new PreferenceSteward.PreferenceViewInstance()
                 ), PreferenceSteward.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_kicker(),
                         new PreferencesStyles.pv_title(),

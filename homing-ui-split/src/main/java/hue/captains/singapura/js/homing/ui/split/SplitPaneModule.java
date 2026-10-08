@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.split;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -24,7 +27,7 @@ import java.util.List;
  * multi-tab pane that needs them. Built fresh beside the studio's
  * {@code SplitPaneModule}, which stays as it is.</p>
  */
-public record SplitPaneModule() implements DomModule<SplitPaneModule> {
+public record SplitPaneModule() implements DomModule<SplitPaneModule>, ImplFor<HouseContainers.SplitPane> {
 
     /** The class. */
     public record SplitPane() implements BranchComponent<SplitPaneModule> {

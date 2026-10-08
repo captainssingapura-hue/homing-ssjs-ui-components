@@ -151,9 +151,9 @@ class Dialog {
 
     _action(row, a) {
         var self = this;
-        var b = new ButtonBuilder().label(a.label).colour(a.primary ? "primary" : "plain")
-                .onClick(function () { if (!btn.el.disabled) a.onClick(self); });
-        var btn = b.build(this.branch.createElement("act_" + a.id, b.tag));
+        var Kind = a.primary ? PrimaryButton : PlainButton;   // the default action leads; the rest are plain
+        var btn = new Kind(this.branch.createElement("act_" + a.id, Kind.TAG), { label: a.label,
+                onClick: function () { if (!btn.el.disabled) a.onClick(self); } });
         if (a.primary) this._primary = a;
         row.appendChild(btn.el);
         this._buttons[a.id] = btn;

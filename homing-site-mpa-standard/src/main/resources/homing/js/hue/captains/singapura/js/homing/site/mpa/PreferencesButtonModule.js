@@ -51,10 +51,11 @@ class PreferencesButton {
         btn.type = "button";
         css.addClass(btn, mpa_prefs_btn);
         btn.setAttribute("aria-haspopup", "dialog");
-        var mark = branch.createElement("prefsBtnMark", "span");
+        var mark = branch.createElement("prefsBtnMark", "span");   // the bar's muted ink, which the symbol inside takes
         css.addClass(mark, mpa_prefs_btn_label);
-        mark.textContent = "⚙";
         mark.setAttribute("aria-hidden", "true");
+        this._symbol = new Icon(branch.createElement("prefsBtnSymbol", Icon.TAG), { name: "settings" });
+        mark.appendChild(this._symbol.el);
         var word = branch.createElement("prefsBtnWord", "span");
         word.textContent = "Preferences";
         btn.appendChild(mark);

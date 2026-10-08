@@ -31,6 +31,12 @@
     </properties>
 
     <dependencies>
+        <!-- The taxonomy the implementations are read against. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- THE CHECK - UI-agnostic, and held so by CheckIsUiAgnosticTest: the
              rules, the engine that grades a run, and the export that writes the
              report. Headless, and declared here so the check never reaches them

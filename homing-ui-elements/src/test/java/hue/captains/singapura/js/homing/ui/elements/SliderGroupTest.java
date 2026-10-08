@@ -59,10 +59,10 @@ class SliderGroupTest extends JsModuleTestBase {
         var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; kbLog.push("leave:" + id); },
                    claim: function (id) { kbLog.push("claim:" + id); }, release: function (id) { kbLog.push("release:" + id); } };
         var page = fakeBranch("page");
-        var g = new SliderGroupBuilder().title("Mixer").keyboard(kb).across().build(page.createBranch("mixer"));
-        var a = g.add("a", new SliderBuilder().label("A").axis().onChange(function (v) { log.push("a:" + v); }));
-        var b = g.add("b", new SliderBuilder().label("B").axis().onChange(function (v) { log.push("b:" + v); }));
-        var c = g.add("c", new SliderBuilder().label("C").axis().onChange(function (v) { log.push("c:" + v); }));
+        var g = new SliderGroup(page.createBranch("mixer"), { title: "Mixer", keyboard: kb, across: true });
+        var a = g.add("a", { label: "A", axis: true, onChange: function (v) { log.push("a:" + v); } });
+        var b = g.add("b", { label: "B", axis: true, onChange: function (v) { log.push("b:" + v); } });
+        var c = g.add("c", { label: "C", axis: true, onChange: function (v) { log.push("c:" + v); } });
         function knobOf(s) { var rail = s.root.children[1]; return rail.children[rail.children.length - 1]; }
         var header = g.root.children[0], body = g.root.children[1];
         """;
@@ -162,8 +162,8 @@ class SliderGroupTest extends JsModuleTestBase {
         assertEquals("C", currentLabel());
         eval("g.current(1)");
         assertEquals("B", currentLabel());
-        assertThrows(PolyglotException.class, () -> eval("g.current(new SliderBuilder().axis().build(page.createBranch('x')))"));
-        assertThrows(PolyglotException.class, () -> eval("g.add('d', {})"), "add wants a builder");
+        assertThrows(PolyglotException.class, () -> eval("g.current(new Slider(page.createBranch('x'), { axis: true }))"));
+        assertThrows(PolyglotException.class, () -> eval("g.add('d', 'loose words')"), "add wants a slider's properties");
     }
 
     @Test

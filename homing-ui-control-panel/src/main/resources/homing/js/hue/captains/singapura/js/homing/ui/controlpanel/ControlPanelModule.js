@@ -55,14 +55,14 @@ class ControlPanel {
     _degrees(names) {
         if (!names.length) return;
         var self = this;
-        this._group = new SliderGroupBuilder().title("Varies by degree").build(this.branch.createBranch("degrees"));
+        this._group = new SliderGroup(this.branch.createBranch("degrees"), { title: "Varies by degree" });
         names.forEach(function (n) {
             var o = Controls.option(n);
-            self._sliders[n] = self._group.add(n, new SliderBuilder().label(o.label).icon(n === "colour" ? "extent" : n)
-                .range(-1, 1, 0.05).detent(o.rest).value(o.rest)
-                .format(function (x) { return x.toFixed(2) + (x === o.rest ? "  at rest" : ""); })
-                .onInput(function (x) { self._onSet(n, x, false); })
-                .onChange(function (x) { self._onSet(n, x, true); }));
+            self._sliders[n] = self._group.add(n, { label: o.label, icon: n === "colour" ? "extent" : n,
+                min: -1, max: 1, step: 0.05, detents: [o.rest], value: o.rest,
+                format: function (x) { return x.toFixed(2) + (x === o.rest ? "  at rest" : ""); },
+                onInput: function (x) { self._onSet(n, x, false); },
+                onChange: function (x) { self._onSet(n, x, true); } });
         });
         this.root.appendChild(this._group.root);
     }
@@ -73,12 +73,11 @@ class ControlPanel {
         var self = this, row = this._row("switches");
         names.forEach(function (n) {
             var o = Controls.option(n), s = { on: !!o.rest, button: null };
-            var b = new ButtonBuilder().label(ControlPanel._said(o, s.on)).plain().onClick(function () {
+            s.button = new PlainButton(self.branch.createElement("switch-" + n, PlainButton.TAG), { label: ControlPanel._said(o, s.on), onClick: function () {
                 s.on = !s.on;
                 s.button.label(ControlPanel._said(o, s.on));
                 self._onSet(n, s.on, true);
-            });
-            s.button = b.build(self.branch.createElement("switch-" + n, b.tag));
+            } });
             row.appendChild(s.button.el);
             self._switches[n] = s;
         });
@@ -89,8 +88,7 @@ class ControlPanel {
         if (!names.length) return;
         var self = this, row = this._row("acts");
         names.forEach(function (n) {
-            var b = new ButtonBuilder().label(Controls.option(n).label).plain().onClick(function () { self._onInvoke(n); });
-            row.appendChild(b.build(self.branch.createElement("act-" + n, b.tag)).el);
+            row.appendChild(new PlainButton(self.branch.createElement("act-" + n, PlainButton.TAG), { label: Controls.option(n).label, onClick: function () { self._onInvoke(n); } }).el);
         });
     }
 

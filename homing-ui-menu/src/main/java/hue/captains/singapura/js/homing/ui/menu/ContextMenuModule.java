@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.menu;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -16,7 +19,7 @@ import java.util.List;
  * geometry; a submenu beside its row. The steward makes one per kind at the
  * kind's first open. A primitive, owning the DOM on its branch.
  */
-public record ContextMenuModule() implements DomModule<ContextMenuModule> {
+public record ContextMenuModule() implements DomModule<ContextMenuModule>, ImplFor<HouseContainers.ContextMenu> {
 
     /** The class. */
     public record ContextMenu() implements BranchComponent<ContextMenuModule> {

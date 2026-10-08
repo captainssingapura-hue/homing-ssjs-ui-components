@@ -1,0 +1,36 @@
+package hue.captains.singapura.js.homing.ui.elements;
+
+import hue.captains.singapura.js.homing.component.ElementComponent;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.core.DomModule;
+import hue.captains.singapura.js.homing.core.ExportsOf;
+import hue.captains.singapura.js.homing.core.ImportsFor;
+import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
+import java.util.List;
+
+/** The primary button: the button's base, in the primary look. */
+public record PrimaryButtonModule() implements DomModule<PrimaryButtonModule>, ImplFor<HouseControls.PrimaryButton> {
+
+    /** An element component: {@code new PrimaryButton(el, { label, extent, size, onClick })} on an element minted with {@code PrimaryButton.TAG}; extent, size, label, setOn. */
+    public record PrimaryButton() implements ElementComponent<PrimaryButtonModule> {
+        @Override public String tag() { return "button"; }
+        @Override public String summary() { return "The button a view leads with: the action most users came for."; }
+    }
+
+    public static final PrimaryButtonModule INSTANCE = new PrimaryButtonModule();
+
+    @Override
+    public ImportsFor<PrimaryButtonModule> imports() {
+        return ImportsFor.<PrimaryButtonModule>builder()
+                .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ElementStyles.el_button_primary()), ElementStyles.INSTANCE))
+                .build();
+    }
+
+    @Override
+    public ExportsOf<PrimaryButtonModule> exports() {
+        return new ExportsOf<>(INSTANCE, List.of(new PrimaryButton()));
+    }
+}

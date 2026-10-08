@@ -1,11 +1,14 @@
 package hue.captains.singapura.js.homing.preferences;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.server.PreferenceSteward;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ import java.util.List;
  * {@code label, summary?, settings: [{name, label}]} — the settings below
  * the group, flattened by the site when it declares the tree.
  */
-public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule> {
+public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule>, ImplFor<HouseContainers.OverviewWidget> {
 
     /** The class. */
     public record OverviewWidget() implements Widget._Class<Widget._None, OverviewWidgetModule> {}
@@ -31,7 +34,7 @@ public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWid
                         new PreferenceSteward.PreferenceStewardInstance(),
                         new PreferenceSteward.PreferenceViewInstance()
                 ), PreferenceSteward.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_kicker(),
                         new PreferencesStyles.pv_title(),

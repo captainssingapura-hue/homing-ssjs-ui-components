@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -16,15 +19,15 @@ import hue.captains.singapura.js.homing.ui.icons.IconModule;
 import java.util.List;
 
 /**
- * The slider and its builder: a number set by a knob on a track, every part
+ * The slider: a number set by a knob on a track, every part
  * a real element wearing a design word — the track sunk, the fill from the
  * detent to the value, the knob raised and focusable, with a mark on it: a
  * grip, or the word for what the slider sets — so a design draws the whole
  * of it and the browser's own slider is nowhere in it.
  */
-public record SliderModule() implements DomModule<SliderModule> {
+public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseControls.Slider> {
 
-    /** A branch component, made through its builder: a label, the rail with its detent, a readout; value, setOn, size, label, dispose. */
+    /** A branch component, on a sub-branch the caller made, with its properties: a label, the rail with its detent, a readout; value, setOn, size, label, dispose. */
     public record Slider() implements BranchComponent<SliderModule>, NeedKeyboard {
         @Override public String summary() { return "A number set by a knob on a track: a label, the rail with its detent, a readout; the hand and the keys alike."; }
 
@@ -38,8 +41,6 @@ public record SliderModule() implements DomModule<SliderModule> {
                 KeyBinding.of(Key.HOME, "the minimum"), KeyBinding.of(Key.END, "the maximum"));
         @Override public List<KeyBinding> keys() { return KEYS; }
     }
-    /** The builder: {@code new SliderBuilder()}; label, range or axis, value, detent, format, onInput, onChange, size set progressively; {@code build(branch)} on a sub-branch of the caller's. */
-    public record SliderBuilder() implements Exportable._Constant<SliderModule> {}
 
     public static final SliderModule INSTANCE = new SliderModule();
 
@@ -83,6 +84,6 @@ public record SliderModule() implements DomModule<SliderModule> {
 
     @Override
     public ExportsOf<SliderModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Slider(), new SliderBuilder()));
+        return new ExportsOf<>(INSTANCE, List.of(new Slider()));
     }
 }

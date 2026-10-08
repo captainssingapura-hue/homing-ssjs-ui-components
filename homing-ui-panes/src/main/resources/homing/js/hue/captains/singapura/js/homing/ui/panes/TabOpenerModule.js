@@ -56,11 +56,8 @@ class TabOpener {
         css.addClass(grid, mtp_opener_grid);
         root.appendChild(grid);
         this._source.kinds().forEach(function (k) {
-            var pick = branch.createElement("open-" + k.id, "button");
-            css.addClass(pick, mtp_opener_pick);
-            pick.setAttribute("type", "button");
-            pick.textContent = k.label;
-            pick.addEventListener("click", function () { self.open(k.id); });
+            var pick = new PlainButton(branch.createElement("open-" + k.id, PlainButton.TAG), { label: k.label,
+                    onClick: function () { self.open(k.id); } }).el;
             grid.appendChild(pick);
             self._picks.push(pick);
         });

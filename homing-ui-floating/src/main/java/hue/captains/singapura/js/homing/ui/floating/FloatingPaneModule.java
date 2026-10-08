@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.floating;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -14,7 +17,7 @@ import java.util.List;
  * stack; a pane alone knows its place and its measure and reports a move or
  * a resize to whoever gave it a sink.
  */
-public record FloatingPaneModule() implements DomModule<FloatingPaneModule> {
+public record FloatingPaneModule() implements DomModule<FloatingPaneModule>, ImplFor<HouseContainers.FloatingPane> {
 
     /** The class: {@code new FloatingPane(branch, {id, title, x, y, w, h, z, closable?, onEvent?})}. */
     public record FloatingPane() implements BranchComponent<FloatingPaneModule> {

@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -16,14 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The slider group and its builder: sliders that share the keys, one
+ * The slider group: sliders that share the keys, one
  * member of the keyboard party for all of them and one of them current.
  * The sliders are built inside it and have no keys of their own; the group
  * holds the keys and hands them to the current slider, and Tab walks them.
  */
-public record SliderGroupModule() implements DomModule<SliderGroupModule> {
+public record SliderGroupModule() implements DomModule<SliderGroupModule>, ImplFor<HouseContainers.SliderGroup> {
 
-    /** A branch component, made through its builder: a header with the title, then the sliders; add, sliders, current, key, dispose. */
+    /** A branch component, on a sub-branch the caller made, with its properties: a header with the title, then the sliders; add, sliders, current, key, dispose. */
     public record SliderGroup() implements BranchComponent<SliderGroupModule>, NeedKeyboard {
         @Override public String summary() { return "Sliders that share the keys: one holder for all of them, one of them current; Tab walks them, the rest is the current one's."; }
 
@@ -39,8 +42,6 @@ public record SliderGroupModule() implements DomModule<SliderGroupModule> {
         }
         @Override public List<KeyBinding> keys() { return KEYS; }
     }
-    /** The builder: {@code new SliderGroupBuilder()}; title, keyboard, across; {@code build(branch)} on a sub-branch of the caller's. */
-    public record SliderGroupBuilder() implements Exportable._Constant<SliderGroupModule> {}
 
     public static final SliderGroupModule INSTANCE = new SliderGroupModule();
 
@@ -56,11 +57,12 @@ public record SliderGroupModule() implements DomModule<SliderGroupModule> {
                         new ElementStyles.el_slider_group_body_across()
                 ), ElementStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<SliderGroupModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new SliderGroup(), new SliderGroupBuilder()));
+        return new ExportsOf<>(INSTANCE, List.of(new SliderGroup()));
     }
 }

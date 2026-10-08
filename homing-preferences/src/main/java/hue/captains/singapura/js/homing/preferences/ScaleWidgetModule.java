@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.preferences;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -11,7 +14,7 @@ import java.util.List;
  * A preference that is a number in a range: a slider with a readout.
  * Params: {@code name, label, summary?, default?, min, max, step?, unit?}.
  */
-public record ScaleWidgetModule() implements Widget<Widget._None, ScaleWidgetModule> {
+public record ScaleWidgetModule() implements Widget<Widget._None, ScaleWidgetModule>, ImplFor<HouseContainers.ScaleWidget> {
 
     /** The class. */
     public record ScaleWidget() implements Widget._Class<Widget._None, ScaleWidgetModule> {}

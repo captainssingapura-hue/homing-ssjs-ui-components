@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.icons;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
+
 import hue.captains.singapura.js.homing.component.ElementComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -15,7 +18,7 @@ import java.util.List;
  * leaves the mark blank at its width, {@code name()} says which it wears.
  * A name not in {@code ICONS} is refused. The picture is the design's.
  */
-public record IconModule() implements DomModule<IconModule> {
+public record IconModule() implements DomModule<IconModule>, ImplFor<HouseMarks.Icon> {
 
     /** The class. */
     public record Icon() implements ElementComponent<IconModule> {

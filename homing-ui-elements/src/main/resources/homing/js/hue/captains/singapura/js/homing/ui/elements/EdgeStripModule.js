@@ -5,11 +5,10 @@
 // the bottom of the host, and the hand off both hides it again. Nothing the
 // host holds is covered until it is asked for.
 //
-//   EdgeStripBuilder — the properties, set progressively, each returning the builder:
-//     .label(text)          what the strip is called, for whoever cannot see it
-//     .host(el)             appended there on build: a POSITIONED box, whose foot
+//   new EdgeStrip(branch, { label, host }) — on a sub-branch the caller made:
+//     label                 what the strip is called, for whoever cannot see it
+//     host                  appended there once made: a POSITIONED box, whose foot
 //                           the lip takes and over whose foot the strip lies
-//     .build(branch)        the EdgeStrip, on a sub-branch the caller made
 //
 //   EdgeStrip — the instance:
 //     .root                 the strip: the caller appends its controls to it
@@ -35,7 +34,7 @@ const _stripOwner = Object.freeze({ toString: () => "edgeStrip" });
 var _EDGE_STRIP_GRACE = 250;
 
 class EdgeStrip {
-    /** The builder's; a caller makes a strip through EdgeStripBuilder. */
+    /** On a sub-branch the caller made, with its properties. */
     constructor(branch, props) {
         if (!branch) throw new Error("[EdgeStrip] a branch of its own is required");
         var p = props || {}, self = this;
@@ -103,11 +102,4 @@ class EdgeStrip {
         this._cancel();
         this.branch.dissolve();
     }
-}
-
-class EdgeStripBuilder {
-    constructor() { this._props = {}; }
-    label(text)    { this._props.label = text; return this; }
-    host(el)       { this._props.host = el; return this; }
-    build(branch)  { return new EdgeStrip(branch, this._props); }
 }

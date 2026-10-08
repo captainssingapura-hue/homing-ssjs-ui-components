@@ -11,7 +11,7 @@ import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
 import java.util.List;
 
 /**
- * The elements' crate: the builders and their styles, on the runtime
+ * The elements' crate: the components and their styles, on the runtime
  * ({@code ServerCrate} — the component base's crate, under its old name
  * until the old structure retires) and the design substrate's targets.
  */
@@ -31,7 +31,14 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(Elements.INSTANCE),
+                CrateEntry.of(ButtonModule.INSTANCE),
+                CrateEntry.of(PlainButtonModule.INSTANCE),
+                CrateEntry.of(PrimaryButtonModule.INSTANCE),
+                CrateEntry.of(SecondaryButtonModule.INSTANCE),
+                CrateEntry.of(DangerButtonModule.INSTANCE),
+                CrateEntry.of(WarningButtonModule.INSTANCE),
+                CrateEntry.of(SuccessButtonModule.INSTANCE),
+                CrateEntry.of(SummaryCardModule.INSTANCE),
                 CrateEntry.of(SliderModule.INSTANCE),
                 CrateEntry.of(SliderGroupModule.INSTANCE),
                 CrateEntry.of(PanelModule.INSTANCE),

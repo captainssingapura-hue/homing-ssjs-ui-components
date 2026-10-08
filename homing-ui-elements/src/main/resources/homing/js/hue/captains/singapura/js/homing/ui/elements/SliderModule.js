@@ -1,6 +1,6 @@
 // =============================================================================
-// Slider — a number set by a knob on a track, as a BRANCH component made
-// through its builder: the caller makes a sub-branch for it and hands it in.
+// Slider — a number set by a knob on a track, as a BRANCH component: the
+// caller makes a sub-branch for it and hands it in, with its properties.
 // A label before the rail, a readout after; the track is sunk, the fill runs
 // from the detent to the value, the knob is raised and takes the focus, and
 // carries a mark — an Icon: a grip, or the word for what the slider sets.
@@ -10,26 +10,28 @@
 // Every part is a real element wearing a design word, so a design draws the
 // whole of it: no vendor pseudo-element, nothing of the browser's own slider.
 //
-//   var s = new SliderBuilder().label("The tabs' size").axis()          // −1…1 by 0.1, the detent at 0
-//               .format(function (v) { return v.toFixed(1); })
-//               .onInput(function (v) { dock.size(v); })                 // live
-//               .onChange(function (v) { store.set(v); })                // on release, or a key
-//               .build(branch.createBranch("size"));
-//     .range(min, max, step)   any range; .axis() is range(−1, 1, 0.1) with a detent at 0
-//     .value(v)  .detent(v…)   where the knob rests: the fill runs from the first detent, else from min
-//     .icon(name)              the mark on the knob: an Icon word — "size", "aspect", "extent", "level" —
+//   var s = new Slider(branch.createBranch("size"), {
+//               label: "The tabs' size", axis: true,                     // −1…1 by 0.1, the detent at 0
+//               format: function (v) { return v.toFixed(1); },
+//               onInput: function (v) { dock.size(v); },                 // live
+//               onChange: function (v) { store.set(v); } });             // on release, or a key
+//     min, max, step           any range: 0, 100, 1 unless said; axis: true is −1, 1, 0.1 with a
+//                              detent at 0 and the value at 0, each kept where it is said
+//     value, detents: [v…]     where the knob rests: the fill runs from the first detent, else from min
+//     icon                     the mark on the knob: an Icon word — "size", "aspect", "extent", "level" —
 //                              for what the slider sets; "grip" unless said; null for a bare knob
-//     .vertical()              stood up, as a fader: the value rises upward, the knob is the
+//     vertical: true           stood up, as a fader: the value rises upward, the knob is the
 //                              design's cap — wide across the track, low along it — the
 //                              label above, the readout below
-//     .ticks([{ at, label }…]) a scale beside the track: a tick at each value, its caption
-//     .size(s)                 −1 … 1: every length the design gives the slider grows by its ratio
-//     .labelWidth(css)         one width for the labels of sliders that stack, so their rails align
-//     .keyboard(steward, id?)  the page's KeyboardSteward: the slider joins the keyboard party as
-//                              `id` (its branch's name, unless said) and takes its keys through it,
-//                              claiming on a press or the focus arriving in it; without, it has no
+//     ticks: [{ at, label }…]  a scale beside the track: a tick at each value, its caption
+//     size                     −1 … 1: every length the design gives the slider grows by its ratio
+//     labelWidth               one width for the labels of sliders that stack, so their rails align
+//     keyboard, keyboardId     the page's KeyboardSteward: the slider joins the keyboard party as
+//                              keyboardId (its branch's name, unless said) and takes its keys through
+//                              it, claiming on a press or the focus arriving in it; without, it has no
 //                              keys of its own — a slider in a group is built so, and the group
 //                              hands it the keys it holds
+//     format, onInput, onChange  the readout's words for a value; live; on release, or a key
 //   Slider:
 //     .root                    the row: label, rail, readout
 //     .value(v?)               read, or set — clamped, on the step, snapped to a detent within its bite
@@ -55,11 +57,17 @@ const _sliderOwner = Object.freeze({ toString: () => "slider" });
 var _BITE = 0.6;   // of a step, either side of a detent
 
 class Slider {
-    /** The builder's; a caller makes a slider through SliderBuilder. */
     constructor(branch, props) {
         if (!branch) throw new Error("[Slider] a branch of its own is required");
         var self = this;
-        var p = props || {};
+        var p = Object.assign({}, props || {});
+        if (p.axis) {   // −1 … 1 by a tenth, resting at nought: the design's axes — size, aspect, extent
+            if (p.min == null) p.min = -1;
+            if (p.max == null) p.max = 1;
+            if (p.step == null) p.step = 0.1;
+            if (p.detents == null) p.detents = [0];
+            if (p.value == null) p.value = 0;
+        }
         branch.activate(_sliderOwner);
         this.branch = branch;
         this._min = p.min == null ? 0 : Number(p.min);
@@ -294,28 +302,5 @@ class Slider {
         if (this._offKeys) { this._offKeys(); this._offKeys = null; }
         if (this._kb) { this._kb.leave(this._kbId); this._kb = null; }
         this.branch.dissolve();
-    }
-}
-
-class SliderBuilder {
-    constructor() { this._props = { min: 0, max: 100, step: 1, detents: [], size: 0 }; }
-    label(text)           { this._props.label = text; return this; }
-    range(min, max, step) { this._props.min = min; this._props.max = max; if (step != null) this._props.step = step; return this; }
-    /** −1 … 1 by a tenth, resting at nought: the design's axes — size, aspect, extent. */
-    axis()                { this._props.min = -1; this._props.max = 1; this._props.step = 0.1; this._props.detents = [0]; if (this._props.value == null) this._props.value = 0; return this; }
-    value(v)              { this._props.value = v; return this; }
-    detent()              { for (var i = 0; i < arguments.length; i++) this._props.detents.push(arguments[i]); return this; }
-    format(fn)            { this._props.format = fn; return this; }
-    onInput(fn)           { this._props.onInput = fn; return this; }
-    onChange(fn)          { this._props.onChange = fn; return this; }
-    size(s)               { this._props.size = s; return this; }
-    labelWidth(w)         { this._props.labelWidth = w; return this; }
-    icon(name)            { this._props.icon = name; return this; }
-    vertical()            { this._props.vertical = true; return this; }
-    ticks(list)           { this._props.ticks = list; return this; }
-    keyboard(steward, id) { this._props.keyboard = steward; this._props.keyboardId = id; return this; }
-    build(branch) {
-        if (!branch) throw new Error("[SliderBuilder] build wants the sub-branch the caller made for the slider");
-        return new Slider(branch, this._props);
     }
 }

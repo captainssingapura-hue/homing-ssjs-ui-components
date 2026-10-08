@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.floating;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -18,7 +21,7 @@ import java.util.List;
  * cross or Escape, and reports every mutation as one {@code FloatEvents}
  * object on one sink. The workspace's substrate.
  */
-public record FloatLayerModule() implements DomModule<FloatLayerModule> {
+public record FloatLayerModule() implements DomModule<FloatLayerModule>, ImplFor<HouseContainers.FloatLayer> {
 
     /** The class: {@code new FloatLayer(branch, {host, onEvent?, minW?, minH?})}; {@code open(spec)}, {@code raise(id)}, {@code close(id)}, {@code dispose()}. */
     public record FloatLayer() implements BranchComponent<FloatLayerModule>, NeedKeyboard {

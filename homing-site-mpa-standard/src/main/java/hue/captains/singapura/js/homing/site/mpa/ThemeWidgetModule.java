@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -16,7 +19,7 @@ import java.util.List;
  * follows the store as it always has. Built on the generic field, so the
  * header, the note and the reset are the same as every other setting's.
  */
-public record ThemeWidgetModule() implements Widget<Widget._None, ThemeWidgetModule> {
+public record ThemeWidgetModule() implements Widget<Widget._None, ThemeWidgetModule>, ImplFor<HouseContainers.ThemeWidget> {
 
     /** The class. */
     public record ThemeWidget() implements Widget._Class<Widget._None, ThemeWidgetModule> {}

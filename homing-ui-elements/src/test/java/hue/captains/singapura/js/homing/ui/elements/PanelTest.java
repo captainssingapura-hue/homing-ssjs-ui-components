@@ -51,9 +51,9 @@ class PanelTest extends JsModuleTestBase {
         function unkeys(el) { el.removeAttribute("data-keys"); for (var x = el; x; x = x.parentNode) if (x._observer) { x._observer.saw(el); return; } }
         var page = fakeBranch("page");
         var host = el("div");
-        var panel = new PanelBuilder().title("Dock A").fills().host(host).build(page.createBranch("dock-a"));
-        var reading = new PanelBuilder().title("Notes").build(page.createBranch("notes"));
-        var bare = new PanelBuilder().build(page.createBranch("bare"));
+        var panel = new Panel(page.createBranch("dock-a"), { title: "Dock A", fills: true, host: host });
+        var reading = new Panel(page.createBranch("notes"), { title: "Notes" });
+        var bare = new Panel(page.createBranch("bare"), {});
         """;
 
     @BeforeEach

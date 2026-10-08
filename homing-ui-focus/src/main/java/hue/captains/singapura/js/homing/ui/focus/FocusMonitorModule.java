@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.focus;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.focusParty;
@@ -19,7 +22,7 @@ import java.util.List;
  * by id, is named below it. It takes no keys; the steward's own state is the
  * {@link StewardMonitorModule.StewardMonitor}'s.
  */
-public record FocusMonitorModule() implements DomModule<FocusMonitorModule> {
+public record FocusMonitorModule() implements DomModule<FocusMonitorModule>, ImplFor<HouseContainers.FocusMonitor> {
 
     /** A branch component: {@code new FocusMonitor(branch, { host })}; {@code refresh()}, {@code dispose()}. */
     public record FocusMonitor() implements BranchComponent<FocusMonitorModule> {
