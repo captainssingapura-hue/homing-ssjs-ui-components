@@ -8,8 +8,9 @@
 //                                  means: "extent" | "switch" | "action" | "question"
 //   Controls.typeOf(leaf)          a leaf's control type, by its token; null for one the house lacks
 //   Controls.optionsOf(type)       the options a type takes, in order
-//   Controls.forLeaf(leaf, axes)   what a leaf is controlled by: a degree for each axis it varies
-//                                  along - in the catalogue's order - then its type's options
+//   Controls.forLeaf(leaf)         what a leaf is controlled by: a degree for each axis it varies
+//                                  along - in the catalogue's order - then its type's options;
+//                                  none for a token the house lacks
 //   Controls.apply(target, name, value)
 //                                  the option applied by the method it names: target[method](v) for a
 //                                  degree, (on) for a switch, () for an action or a question. A
@@ -31,10 +32,8 @@ class Controls {
         return Object.prototype.hasOwnProperty.call(CONTROL_TYPES, type) ? CONTROL_TYPES[type].slice() : [];
     }
 
-    static forLeaf(leaf, axes) {
-        var varies = axes || [];
-        var degrees = Object.keys(CONTROL_OPTIONS).filter(function (n) { return CONTROL_OPTIONS[n].means === "extent" && varies.indexOf(n) >= 0; });
-        return degrees.concat(Controls.optionsOf(Controls.typeOf(leaf)));
+    static forLeaf(leaf) {
+        return Object.prototype.hasOwnProperty.call(CONTROL_OPTIONS_OF, leaf) ? CONTROL_OPTIONS_OF[leaf].slice() : [];
     }
 
     static apply(target, name, value) {

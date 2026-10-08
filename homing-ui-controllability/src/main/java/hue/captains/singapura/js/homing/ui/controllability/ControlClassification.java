@@ -44,6 +44,19 @@ public record ControlClassification(List<ControlTypeAt> declared, ControlType ot
         return otherwise;
     }
 
+    /**
+     * What a leaf is controlled by: a degree for each axis it varies along - the catalogue's, in the
+     * catalogue's order - then its type's options. The whole of it, so what is controlled answers
+     * these and a panel shows these, and neither asks the taxonomy again.
+     */
+    public List<ControlOption<?>> optionsFor(Taxonomy taxonomy, ControlCatalogue catalogue, Taxon leaf) {
+        var axes = taxonomy.extents(leaf);
+        var out = new ArrayList<ControlOption<?>>();
+        for (ControlOption<?> o : catalogue.options()) if (o instanceof WithExtent<?> e && axes.contains(e.axis())) out.add(o);
+        out.addAll(findControlType(taxonomy, leaf).options());
+        return List.copyOf(out);
+    }
+
     /** Every type it names, the default first, each once. */
     public List<ControlType> types() {
         var out = new ArrayList<ControlType>();

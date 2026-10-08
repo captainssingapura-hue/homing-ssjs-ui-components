@@ -23,7 +23,7 @@ public record ControlsModule() implements EsModule<ControlsModule> {
     public ImportsFor<ControlsModule> imports() {
         return ImportsFor.<ControlsModule>builder()
                 .add(new ModuleImports<>(List.of(new ControlCatalogueModule.CONTROL_OPTIONS(), new ControlCatalogueModule.CONTROL_TYPES(),
-                        new ControlCatalogueModule.CONTROL_TYPE_OF()), ControlCatalogueModule.INSTANCE))
+                        new ControlCatalogueModule.CONTROL_TYPE_OF(), new ControlCatalogueModule.CONTROL_OPTIONS_OF()), ControlCatalogueModule.INSTANCE))
                 .build();
     }
 

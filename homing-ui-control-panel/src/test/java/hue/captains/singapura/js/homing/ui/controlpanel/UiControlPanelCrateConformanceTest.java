@@ -68,5 +68,6 @@ class UiControlPanelCrateConformanceTest {
         assertTrue(js.contains("\"dialog\": \"modal-overlay\""), js);
         assertTrue(js.contains("\"danger-button\": \"switchable\""), js);
         assertTrue(js.contains("\"heading\": \"plain\""), js);
+        assertTrue(js.contains("\"danger-button\": Object.freeze([\"colour\", \"size\", \"enabled\"])"), js);
     }
 }

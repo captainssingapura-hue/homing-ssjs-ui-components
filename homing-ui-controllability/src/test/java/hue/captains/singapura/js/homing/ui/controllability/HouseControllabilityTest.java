@@ -109,6 +109,18 @@ class HouseControllabilityTest {
             assertTrue(HouseControllability.INSTANCE.findControlType(TAXONOMY, leaf) != null, leaf + " has a type");
     }
 
+    @Test
+    void aLeafIsControlledBy_itsAxesDegrees_thenItsTypesOptions() {
+        assertEquals(List.of("colour", "size", "enabled"), optionsOf("danger-button"));
+        assertEquals(List.of("size", "aspect"), optionsOf("summary-card"));
+        assertEquals(List.of("open-modal", "open", "close"), optionsOf("dialog").subList(optionsOf("dialog").size() - 3, optionsOf("dialog").size()));
+    }
+
+    private static List<String> optionsOf(String token) {
+        Component<?> leaf = TAXONOMY.components().stream().filter(c -> c.token().equals(token)).findFirst().orElseThrow();
+        return HouseControllability.INSTANCE.optionsFor(TAXONOMY, leaf).stream().map(o -> o.name().value()).toList();
+    }
+
     // ── what is refused ───────────────────────────────────────────────────
 
     /** An option controlled by two means at once. */

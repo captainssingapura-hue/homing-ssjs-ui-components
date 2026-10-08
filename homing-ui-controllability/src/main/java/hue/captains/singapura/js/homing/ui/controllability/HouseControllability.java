@@ -107,4 +107,7 @@ public record HouseControllability() implements StatelessFunctionalObject {
 
     /** {@code controlType = findControlType(component)}, in the house's taxonomy as read. */
     public ControlType findControlType(Taxonomy taxonomy, Taxon component) { return classification().findControlType(taxonomy, component); }
+
+    /** What a leaf is controlled by: its axes' degrees, then its type's options. */
+    public List<ControlOption<?>> optionsFor(Taxonomy taxonomy, Taxon component) { return classification().optionsFor(taxonomy, catalogue(), component); }
 }
