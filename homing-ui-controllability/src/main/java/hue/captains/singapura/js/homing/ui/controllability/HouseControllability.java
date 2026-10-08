@@ -18,6 +18,7 @@ import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.N
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Open;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.OpenModal;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Raised;
+import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Remove;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.ResetLayout;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Resize;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Ring;
@@ -58,10 +59,10 @@ public record HouseControllability() implements StatelessFunctionalObject {
     public static final ControlType OVERLAY = new ControlType("overlay", List.of(Open.INSTANCE, Close.INSTANCE));
     /** Zoomed in and out, and fitted. */
     public static final ControlType ZOOMABLE = new ControlType("zoomable", List.of(ZoomIn.INSTANCE, ZoomOut.INSTANCE, Fit.INSTANCE));
-    /** Its room split, evened out, and put back as it was. */
-    public static final ControlType ARRANGEABLE = new ControlType("arrangeable", List.of(Split.INSTANCE, EvenOut.INSTANCE, ResetLayout.INSTANCE));
-    /** Moved, sized and ringed by call. */
-    public static final ControlType PLACEABLE = new ControlType("placeable", List.of(Move.INSTANCE, Resize.INSTANCE, Ring.INSTANCE));
+    /** Its room split, a room removed, the rooms evened out, and put back as they were. */
+    public static final ControlType ARRANGEABLE = new ControlType("arrangeable", List.of(Split.INSTANCE, Remove.INSTANCE, EvenOut.INSTANCE, ResetLayout.INSTANCE));
+    /** Moved, sized and ringed by call; opened again once closed. */
+    public static final ControlType PLACEABLE = new ControlType("placeable", List.of(Move.INSTANCE, Resize.INSTANCE, Ring.INSTANCE, Open.INSTANCE));
     /** What it shows changed: the next, none, one it lacks. */
     public static final ControlType CONTENT = new ControlType("content", List.of(Next.INSTANCE, Clear.INSTANCE, Missing.INSTANCE));
     /** Asked what it shows now. */
@@ -74,7 +75,7 @@ public record HouseControllability() implements StatelessFunctionalObject {
                 Enabled.INSTANCE, Current.INSTANCE, Raised.INSTANCE, Held.INSTANCE,
                 OpenModal.INSTANCE, Open.INSTANCE, Close.INSTANCE,
                 ZoomIn.INSTANCE, ZoomOut.INSTANCE, Fit.INSTANCE,
-                Split.INSTANCE, EvenOut.INSTANCE, ResetLayout.INSTANCE,
+                Split.INSTANCE, Remove.INSTANCE, EvenOut.INSTANCE, ResetLayout.INSTANCE,
                 Move.INSTANCE, Resize.INSTANCE, Ring.INSTANCE,
                 Next.INSTANCE, Clear.INSTANCE, Missing.INSTANCE,
                 Ask.INSTANCE);

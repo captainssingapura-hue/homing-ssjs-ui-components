@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The house's controllability, read and constructed - so the catalogue holds together - files its
- * twenty-three options in eight categories; its degrees are the core's axes; every option is
+ * twenty-four options in eight categories; its degrees are the core's axes; every option is
  * applied by a method of its own; every type takes options of the catalogue and never a degree;
  * and every leaf of the house's taxonomy has a type, found up its lineage.
  */
@@ -28,13 +28,13 @@ class HouseControllabilityTest {
     private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read();
 
     @Test
-    void eightCategories_twentyThreeOptions_eachInItsCategory() {
+    void eightCategories_twentyFourOptions_eachInItsCategory() {
         var expected = new LinkedHashMap<String, List<String>>();
         expected.put("degrees", List.of("colour", "size", "aspect"));
         expected.put("states", List.of("enabled", "current", "raised", "held"));
         expected.put("showing", List.of("open-modal", "open", "close"));
         expected.put("viewing", List.of("zoom-in", "zoom-out", "fit"));
-        expected.put("arranging", List.of("split", "even-out", "reset-layout"));
+        expected.put("arranging", List.of("split", "remove", "even-out", "reset-layout"));
         expected.put("placing", List.of("move", "resize", "ring"));
         expected.put("content", List.of("next", "clear", "missing"));
         expected.put("asking", List.of("ask"));
@@ -42,7 +42,7 @@ class HouseControllabilityTest {
         for (ControlNode b : CATALOGUE.children(ControlRoot.INSTANCE))
             actual.put(b.name().value(), CATALOGUE.children((ControlBranch) b).stream().map(n -> n.name().value()).toList());
         assertEquals(expected, actual);
-        assertEquals(23, CATALOGUE.options().size());
+        assertEquals(24, CATALOGUE.options().size());
     }
 
     @Test
@@ -60,7 +60,7 @@ class HouseControllabilityTest {
         var means = new LinkedHashMap<String, String>();
         var methods = new LinkedHashMap<String, String>();
         for (ControlOption<?> o : CATALOGUE.options()) { means.put(o.name().value(), o.means()); methods.put(o.name().value(), o.method()); }
-        assertEquals(Map.of("extent", 3L, "switch", 4L, "action", 15L, "question", 1L),
+        assertEquals(Map.of("extent", 3L, "switch", 4L, "action", 16L, "question", 1L),
                 means.values().stream().collect(java.util.stream.Collectors.groupingBy(m -> m, java.util.stream.Collectors.counting())));
         // where the house's components already answer by a method, the option names it
         assertEquals("extent", methods.get("colour"));

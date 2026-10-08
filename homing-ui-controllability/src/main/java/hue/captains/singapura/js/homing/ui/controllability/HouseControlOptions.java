@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 /**
  * The house's control options, filed by what each does to a component: set it by degree, change
  * its state, show it, view it, arrange it, place it, change what it shows, ask it. Eight categories
- * and twenty-three options. Each names the method on what is controlled that applies it, the
+ * and twenty-four options. Each names the method on what is controlled that applies it, the
  * method the house's components already answer by where they have one - a button is switched by
  * {@code setOn}, a panel made current by {@code highlight}, a strip held shown by {@code hold}.
  */
@@ -154,6 +154,13 @@ public final class HouseControlOptions {
     public record EvenOut() implements WithAction<Arranging> {
         public static final EvenOut INSTANCE = new EvenOut();
         @Override public Arranging parent() { return Arranging.INSTANCE; }
+    }
+
+    /** A room taken away, its room given to the one beside it - the last never. */
+    public record Remove() implements WithAction<Arranging> {
+        public static final Remove INSTANCE = new Remove();
+        @Override public Arranging parent() { return Arranging.INSTANCE; }
+        @Override public String label() { return "Remove one"; }
     }
 
     /** The rooms as they were at the start. */
