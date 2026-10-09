@@ -15,7 +15,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.FACE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
+import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
@@ -33,14 +35,18 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
+    /** The press: pushed down, and tipped the other way. Ink casts no shadow. */
+    private static final String PRESS_MOVE = "transform: translateY(1px) rotate(0.4deg);";
+
     private static final List<Implementation<?>> ANSWERS = answers(
             List.of(rest(BUTTON, CORNER, "border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;"),
                     rest(BUTTON, BORDER, "border-width: 2px; border-style: solid;"),
                     rest(BUTTON, FACE, "font-family: \"Cabin Sketch\", \"Segoe Print\", \"Bradley Hand\", \"Chalkboard SE\", cursive;"),
                     rest(BUTTON, EASE, "transition: transform 120ms ease-out, background-color 120ms ease-out, border-color 120ms ease-out;"),
-                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-1px) rotate(-0.6deg);",
-                                                   State.ACTIVE, "transform: translateY(1px) rotate(0.4deg);")),
-                    rings("2px dashed -3px", "2px dashed 5px", "2px dotted 3px", "3px solid 3px")),
+                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-1px) rotate(-0.6deg);", State.ACTIVE, PRESS_MOVE)),
+                    rings("2px dashed -3px", "2px dashed 5px", "2px dotted 3px", "3px solid 3px"),
+                    closeMark("✖")),
+            held(null, PRESS_MOVE),
             measure("8px", "16px", "8px", "56px", "1.35"),
             disabled(".5", "not-allowed"));
 }

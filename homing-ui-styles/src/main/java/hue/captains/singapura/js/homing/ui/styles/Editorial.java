@@ -16,7 +16,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
+import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
@@ -31,6 +33,10 @@ public record Editorial() implements DesignStyle, Derives<Base> {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
+    /** The press: set down, its shadow drawn in. */
+    private static final String PRESS_SHADOW = "box-shadow: 0 1px 2px color-mix(in srgb, var(--box-shadow-cast) 8%, transparent);";
+    private static final String PRESS_MOVE = "transform: translateY(0);";
+
     private static final List<Implementation<?>> ANSWERS = answers(
             List.of(rest(BUTTON, CORNER, "border-radius: 3px;"),
                     rest(BUTTON, BORDER, "border-width: 1.5px; border-style: solid;"),
@@ -39,9 +45,11 @@ public record Editorial() implements DesignStyle, Derives<Base> {
                     when(BUTTON, SHADOW, Map.of(
                             State.REST, "box-shadow: 0 1px 3px color-mix(in srgb, var(--box-shadow-cast) 4%, transparent);",
                             State.HOVER, "box-shadow: 0 6px 16px color-mix(in srgb, var(--box-shadow-cast) 12%, transparent);",
-                            State.ACTIVE, "box-shadow: 0 1px 2px color-mix(in srgb, var(--box-shadow-cast) 8%, transparent);")),
-                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-2px);", State.ACTIVE, "transform: translateY(0);")),
-                    rings("2px solid -2px", "1px dashed 3px", "1px solid -2px", "2px solid -2px")),
+                            State.ACTIVE, PRESS_SHADOW)),
+                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-2px);", State.ACTIVE, PRESS_MOVE)),
+                    rings("2px solid -2px", "1px dashed 3px", "1px solid -2px", "2px solid -2px"),
+                    closeMark("✕")),
+            held(PRESS_SHADOW, PRESS_MOVE),
             measure("8px", "18px", "8px", "56px", "1.3"),
             disabled(".45", "default"));
 }

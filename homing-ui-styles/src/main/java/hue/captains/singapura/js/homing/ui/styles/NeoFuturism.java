@@ -16,7 +16,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
+import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
@@ -31,6 +33,11 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
+    /** The press: drawn in, the rim still lit. */
+    private static final String PRESS_SHADOW = "box-shadow: 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 60%, transparent),"
+            + " 0 0 10px color-mix(in srgb, var(--box-shadow-glow) 25%, transparent);";
+    private static final String PRESS_MOVE = "transform: scale(0.985);";
+
     private static final List<Implementation<?>> ANSWERS = answers(
             List.of(rest(BUTTON, CORNER, "border-radius: 2px;"),
                     rest(BUTTON, BORDER, "border-width: 1px; border-style: solid;"),
@@ -41,9 +48,11 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
                             State.REST, "box-shadow: 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 14%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent);",
                             State.HOVER, "box-shadow: 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 60%, transparent), 0 0 28px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent),"
                                     + " 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent);",
-                            State.ACTIVE, "box-shadow: 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 60%, transparent), 0 0 10px color-mix(in srgb, var(--box-shadow-glow) 25%, transparent);")),
-                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-1px) scale(1.01);", State.ACTIVE, "transform: scale(0.985);")),
-                    rings("1px solid -1px", "1px dashed 5px", "1px solid 3px", "1px solid 3px")),
+                            State.ACTIVE, PRESS_SHADOW)),
+                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-1px) scale(1.01);", State.ACTIVE, PRESS_MOVE)),
+                    rings("1px solid -1px", "1px dashed 5px", "1px solid 3px", "1px solid 3px"),
+                    closeMark("⨯")),
+            held(PRESS_SHADOW, PRESS_MOVE),
             measure("7px", "16px", "8px", "56px", "1.25"),
             disabled(".4", "not-allowed"));
 }

@@ -11,7 +11,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import java.util.List;
 
 /**
- * What the six button leaves share, as declarations: a simple component on a {@code <button>},
+ * What the button leaves share, as declarations: a simple component on a {@code <button>},
  * on the axis {@code enabled}, with a size and a label, and the behaviour that is theirs. Never
  * made on its own: each leaf's own module binds its look to it.
  */

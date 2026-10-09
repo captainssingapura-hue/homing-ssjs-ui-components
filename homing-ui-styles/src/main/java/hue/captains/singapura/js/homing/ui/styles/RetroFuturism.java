@@ -16,7 +16,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
+import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
@@ -33,6 +35,10 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
 
     private static final String RING = "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent)";
 
+    /** The press: the neon dimmed, the button a step down. */
+    private static final String PRESS_SHADOW = "box-shadow: " + RING + ", 0 0 6px color-mix(in srgb, var(--box-shadow-glow) 40%, transparent);";
+    private static final String PRESS_MOVE = "transform: translateY(1px);";
+
     private static final List<Implementation<?>> ANSWERS = answers(
             List.of(rest(BUTTON, CORNER, "border-radius: 3px;"),
                     rest(BUTTON, BORDER, "border-width: 1px; border-style: solid;"),
@@ -42,9 +48,11 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
                     when(BUTTON, SHADOW, Map.of(
                             State.REST, "box-shadow: " + RING + ", 0 0 10px color-mix(in srgb, var(--box-shadow-glow) 25%, transparent);",
                             State.HOVER, "box-shadow: " + RING + ", 0 0 24px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent);",
-                            State.ACTIVE, "box-shadow: " + RING + ", 0 0 6px color-mix(in srgb, var(--box-shadow-glow) 40%, transparent);")),
-                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-2px);", State.ACTIVE, "transform: translateY(1px);")),
-                    rings("1px solid -1px", "1px dashed 4px", "1px solid 2px", "2px solid 2px")),
+                            State.ACTIVE, PRESS_SHADOW)),
+                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-2px);", State.ACTIVE, PRESS_MOVE)),
+                    rings("1px solid -1px", "1px dashed 4px", "1px solid 2px", "2px solid 2px"),
+                    closeMark("✘")),
+            held(PRESS_SHADOW, PRESS_MOVE),
             measure("8px", "18px", "8px", "56px", "1.3"),
             disabled(".4", "not-allowed"));
 }

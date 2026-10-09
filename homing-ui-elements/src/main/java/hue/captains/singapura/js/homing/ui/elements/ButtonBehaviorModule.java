@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import java.util.List;
 
 /**
- * What a button does: a press acts while it is enabled. Shared by the six button leaves; it reads
+ * What a button does: a press acts while it is enabled. Shared by the button leaves - the toggle's press its own; it reads
  * the state through the button, keeps none of its own, and imports no style - it never touches the
  * look.
  */

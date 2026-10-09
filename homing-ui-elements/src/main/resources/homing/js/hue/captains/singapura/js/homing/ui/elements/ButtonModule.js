@@ -1,5 +1,5 @@
 // =============================================================================
-// Button — what the six button leaves share, as declarations: the element they
+// Button — what the button leaves share, as declarations: the element they
 // take, the axis they are on, the degree and the words they have, and the
 // behaviour that is theirs (ButtonBehavior). A simple component
 // (SimpleComponent); never made on its own - a button is one of its leaves,

@@ -1,6 +1,6 @@
 // =============================================================================
 // ButtonBehavior — what a button does: a press acts while it is enabled. Shared
-// by the six button leaves. It reads the state through the button, keeps none
+// by the button leaves, the toggle's press its own. It reads the state through the button, keeps none
 // of its own, and never touches the look.
 //
 //   new ButtonBehavior(el, button, { onClick })

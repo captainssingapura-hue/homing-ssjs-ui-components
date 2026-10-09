@@ -18,8 +18,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * The house rule: a palette written from its {@link Seeds}, so every house palette says the same
  * semantic colours in the same places and differs only in what they are. Every semantic colour at
  * the root, each said whole; a box's shadow cast in the inverted layer, lit in the raised one,
- * glowing in the title colour; the ring of attention in the accent; each button's rank - its
- * background, its ink, its border. A coloured button's background and ink move with its extent:
+ * glowing in the title colour; the ring of attention in the accent; a button's face - raised, in
+ * the text's ink, a hairline round it - a toggle that is on tinted with the accent; and each
+ * coloured button's rank - its background, its ink, its border. A coloured button's background and ink move with its extent:
  * the word at 1, the neutral at 0, the meaning turned the other way at -1. Danger, warning and
  * success are the same in every house palette; only the ink they fall back to is the palette's.
  */
@@ -63,10 +64,15 @@ final class HouseRule {
                         State.CANDIDATE, "outline-color: color-mix(in srgb, " + s.accent() + " 45%, transparent);",
                         State.LENT, "outline-color: color-mix(in srgb, " + s.accent() + " 25%, transparent);",
                         State.HELD, "outline-color: " + s.accent() + ";")),
-                // ── each button's rank ──
+                // ── a button's face: raised, in the text's ink, a hairline round it - every button's but a coloured one's ──
+                rest(BUTTON, BACKGROUND, ground(s.raised())),
+                rest(BUTTON, INK, "color: " + s.text() + ";"),
                 rest(BUTTON, BORDER, "border-color: " + s.border() + ";"),
-                rest(HouseControls.PlainButton.INSTANCE, BACKGROUND, ground(s.raised())),
-                rest(HouseControls.PlainButton.INSTANCE, INK, "color: " + s.text() + ";"),
+                // ── a toggle that is on: tinted with the accent, edged with it ──
+                when(HouseControls.ToggleButton.INSTANCE, BACKGROUND,
+                        Map.of(State.PRESSED, ground("color-mix(in srgb, " + s.accent() + " 22%, " + s.raised() + ")"))),
+                when(HouseControls.ToggleButton.INSTANCE, BORDER, Map.of(State.PRESSED, "border-color: " + s.accentEdge() + ";")),
+                // ── each coloured button's rank ──
                 rest(HouseControls.PrimaryButton.INSTANCE, BACKGROUND, ground(extent(s.title(), toBorder))),
                 rest(HouseControls.PrimaryButton.INSTANCE, INK,
                         "color: color-mix(in srgb, " + s.onInverted() + " calc(clamp(0, var(--extent), 1) * 100%), " + s.text() + ");"),

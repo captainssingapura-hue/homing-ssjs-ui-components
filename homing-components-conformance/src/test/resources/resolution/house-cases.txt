@@ -16,8 +16,8 @@ plain-button         rest      type-scale         => button__type-scale from bas
 plain-button         rest      affordance-cursor  => control__affordance-cursor from base
 # Go on the primary button, as the action bar casts it: nothing says more of it than of the button
 primary-button_go    rest      type-weight        => root__type-weight from base
-# the plain button in the picker's roles: nothing is said of the roles, so the button's own look
-plain-button_choice  rest      color-background   => plain-button__color-background from harbour
+# the plain button in the picker's roles: nothing is said of the roles, or of the plain button - a button's face
+plain-button_choice  rest      color-background   => button__color-background from harbour
 plain-button_cancel  rest      shape-corner       => button__shape-corner from editorial
 # treatments, common to every role: the ring, the lift, how it is when it cannot be used
 plain-button_cancel  disabled  effect-opacity     => control__effect-opacity--disabled from editorial
@@ -28,6 +28,11 @@ danger-button        focus     color-outline      => control__color-outline--foc
 danger-button        focus     shape-shadow       => none
 # a functional role is set aside: the dialog's window looks as the floating pane on its own
 floating-pane_window rest      shape-corner       => root__shape-corner from base
+# a toggle that is on is held pressed, tinted with the accent; the close button draws the style's own cross
+toggle-button        pressed   shape-shadow       => toggle-button__shape-shadow--pressed from editorial
+toggle-button        pressed   color-background   => toggle-button__color-background--pressed from harbour
+toggle-button        hover     shape-shadow       => button__shape-shadow--hover from editorial
+close-button         rest      type-glyph         => close-button__type-glyph from editorial
 
 theme sketchy
 
@@ -36,6 +41,7 @@ danger-button        rest      shape-shadow       => root__shape-shadow from bas
 danger-button        hover     shape-shadow       => none
 danger-button        disabled  shape-shadow       => control__shape-shadow--disabled from base
 danger-button        rest      shape-corner       => button__shape-corner from sketchy
+toggle-button        pressed   shape-shadow       => none
 
 theme neumorphism
 

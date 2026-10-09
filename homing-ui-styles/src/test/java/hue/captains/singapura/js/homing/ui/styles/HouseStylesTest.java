@@ -35,7 +35,8 @@ class HouseStylesTest {
     private static final Set<String> BUTTON_BRANCH = Set.of(
             "button shape-corner", "button shape-border", "button size-inset", "button size-gap", "button size-extent",
             "button type-face", "button motion-ease", "button shape-shadow", "button motion-transform",
-            "control shape-outline", "control effect-opacity", "control affordance-cursor");
+            "control shape-outline", "control effect-opacity", "control affordance-cursor",
+            "toggle-button shape-shadow", "toggle-button motion-transform", "close-button type-glyph");
 
     @Test
     void theStyles_areSeven_eachOverBase_andBaseOverNothing() {
@@ -58,9 +59,9 @@ class HouseStylesTest {
             left.put(s.token(), missing);
         }
         assertEquals(Map.of("editorial", Set.of(), "neo-brutalism", Set.of(), "neo-futurism", Set.of(),
-                        "neumorphism", Set.of("button shape-border"), "glassmorphism", Set.of(), "retro-futurism", Set.of(),
-                        "sketchy", Set.of("button shape-shadow")), left,
-                "neumorphism draws no border and sketchy casts no shadow: each leaves it to Base, whose root says none");
+                        "neumorphism", Set.of("button shape-border", "toggle-button motion-transform"), "glassmorphism", Set.of(), "retro-futurism", Set.of(),
+                        "sketchy", Set.of("button shape-shadow", "toggle-button shape-shadow")), left,
+                "neumorphism draws no border and its press does not move; sketchy casts no shadow: each leaves it to Base, whose root says none");
     }
 
     @Test
@@ -100,7 +101,9 @@ class HouseStylesTest {
             assertEquals(List.of(), theme.check(HOUSE), theme.toString());
             var flat = FlattenSheet.INSTANCE.flatten(HOUSE, theme, theme.toString());
             assertEquals(List.of(), flat.unanswered(), () -> theme + ": every target answered at the root");
-            assertEquals(HOUSE.castings().size() * 32, flat.looks(), () -> theme + ": every casting on every CSS target the semantic classes answer but the glyph, a silence");
+            long marked = HOUSE.castings().stream().filter(c -> c.component() == hue.captains.singapura.js.homing.ui.taxonomy.HouseControls.CloseButton.INSTANCE).count();
+            assertEquals(HOUSE.castings().size() * 32 + marked, flat.looks(),
+                    () -> theme + ": every casting on every CSS target the semantic classes answer; the glyph a silence but the close button's mark");
         }
         String sketchy = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("sketchy"), "sketchy").css();
         assertTrue(sketchy.contains("/* from base: root__shape-shadow */\n.danger-button__shape-shadow {\n    box-shadow: none;\n}\n"), "ink casts no shadow");

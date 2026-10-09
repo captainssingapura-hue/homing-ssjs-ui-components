@@ -26,7 +26,8 @@ class ButtonTest extends JsModuleTestBase {
         var log = [], ops = [];
         function el(tag) {
             var classes = new Set(), listeners = {};
-            return { tagName: tag.toUpperCase(), type: "", disabled: false, textContent: "",
+            return { tagName: tag.toUpperCase(), type: "", disabled: false, textContent: "", attrs: {},
+                setAttribute: function (k, v) { this.attrs[k] = String(v); }, getAttribute: function (k) { return k in this.attrs ? this.attrs[k] : null; },
                 classList: { add: function (c) { classes.add(c); }, remove: function (c) { classes.delete(c); }, contains: function (c) { return classes.has(c); } },
                 classes: function () { return Array.from(classes); },
                 addEventListener: function (t, fn) { (listeners[t] = listeners[t] || []).push(fn); },
@@ -48,7 +49,8 @@ class ButtonTest extends JsModuleTestBase {
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js",
-                                      "PlainButtonModule.js", "PrimaryButtonModule.js", "DangerButtonModule.js"})
+                                      "PlainButtonModule.js", "PrimaryButtonModule.js", "DangerButtonModule.js",
+                                      "ToggleButtonBehaviorModule.js", "ToggleButtonModule.js"})
             loadModule(DIR + m);
         js.eval("js", SHIM);
     }
@@ -133,6 +135,23 @@ class ButtonTest extends JsModuleTestBase {
         assertThrows(PolyglotException.class, () -> eval("new PlainButton(el('button'), {}, 'go')"), "a role is one of ROLE");
         assertEquals("plain-button", str("new Look(PlainButton, { token: 'window', functional: true }).casting"),
                 "a functional role only places its part: the leaf on its own");
+    }
+
+    /** A toggle: a press turns it over while enabled and says so; on, it wears the press its style holds. */
+    @Test
+    void aToggle_isTurnedOverByAPress_saysSo_andWearsItsPressedTreatments() {
+        eval("var said = []; var t = new ToggleButton(el('button'), { label: 'Bold', onToggle: function (on) { said.push(on); } });");
+        assertEquals("false", str("t.el.getAttribute('aria-pressed')"), "off at rest, and it says so");
+        eval("t.el.click();");
+        assertEquals("true", str("t.on"));
+        assertEquals("true", str("t.el.getAttribute('aria-pressed')"), "the reflection the pressed treatments are shown by");
+        eval("t.enabled = false; t.el.click(); t.enabled = true; t.on = false;");
+        assertEquals("true", str("said"), "a press while off does nothing; a value set in code is not a press");
+        assertEquals("false", str("t.el.getAttribute('aria-pressed')"));
+        assertTrue(has("t", "toggle-button__shape-shadow--pressed"), "the style's press, held while on");
+        assertTrue(has("t", "toggle-button__color-background--pressed"), "the palette's tint");
+        assertTrue(has("t", "toggle-button__shape-shadow--hover"), "and every button's treatments besides");
+        assertThrows(PolyglotException.class, () -> eval("new ToggleButton(el('button'), { on: 'yes' })"), "on is true or false");
     }
 
     @Test

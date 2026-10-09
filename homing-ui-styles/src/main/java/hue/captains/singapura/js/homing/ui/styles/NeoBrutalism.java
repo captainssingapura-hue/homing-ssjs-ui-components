@@ -16,7 +16,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
+import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
@@ -31,6 +33,10 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
+    /** The press: pushed into its own shadow. */
+    private static final String PRESS_SHADOW = "box-shadow: 0 0 0 var(--box-shadow-cast);";
+    private static final String PRESS_MOVE = "transform: translate(5px, 5px);";
+
     private static final List<Implementation<?>> ANSWERS = answers(
             List.of(rest(BUTTON, CORNER, "border-radius: 0;"),
                     rest(BUTTON, BORDER, "border-width: 3px; border-style: solid;"),
@@ -39,9 +45,11 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
                     when(BUTTON, SHADOW, Map.of(
                             State.REST, "box-shadow: 4px 4px 0 var(--box-shadow-cast);",
                             State.HOVER, "box-shadow: 8px 8px 0 var(--box-shadow-cast);",
-                            State.ACTIVE, "box-shadow: 0 0 0 var(--box-shadow-cast);")),
-                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translate(-2px, -2px);", State.ACTIVE, "transform: translate(5px, 5px);")),
-                    rings("3px solid -3px", "4px dashed 4px", "4px dotted 4px", "4px solid 4px")),
+                            State.ACTIVE, PRESS_SHADOW)),
+                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translate(-2px, -2px);", State.ACTIVE, PRESS_MOVE)),
+                    rings("3px solid -3px", "4px dashed 4px", "4px dotted 4px", "4px solid 4px"),
+                    closeMark("╳")),
+            held(PRESS_SHADOW, PRESS_MOVE),
             measure("10px", "20px", "10px", "64px", "1.5"),
             disabled(".4", "not-allowed"));
 }

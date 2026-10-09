@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.Answer;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,24 @@ final class Say {
                 when(CONTROL, OPACITY, Map.of(State.DISABLED, "opacity: " + opacity + ";")),
                 when(CONTROL, CURSOR, Map.of(State.DISABLED, "cursor: " + cursor + ";")));
     }
+
+    static final Taxon TOGGLE = HouseControls.ToggleButton.INSTANCE;
+    static final Taxon CLOSE = HouseControls.CloseButton.INSTANCE;
+    static final Target.Type.Glyph GLYPH = Target.Type.Glyph.INSTANCE;
+
+    /**
+     * A toggle that is on is held pressed: the style's press, kept while it is on - its shadow and
+     * its move, either null where the style's press has none.
+     */
+    static List<Implementation<?>> held(String shadow, String move) {
+        var out = new ArrayList<Implementation<?>>();
+        if (shadow != null) out.add(when(TOGGLE, SHADOW, Map.of(State.PRESSED, shadow)));
+        if (move != null) out.add(when(TOGGLE, TRANSFORM, Map.of(State.PRESSED, move)));
+        return List.copyOf(out);
+    }
+
+    /** The close button's mark - the style's own cross - drawn on its {@code ::before}. */
+    static Implementation<?> closeMark(String glyph) { return rest(CLOSE, GLYPH, "content: \"" + glyph + "\";"); }
 
     /** Every answer of the groups, in order. */
     @SafeVarargs
