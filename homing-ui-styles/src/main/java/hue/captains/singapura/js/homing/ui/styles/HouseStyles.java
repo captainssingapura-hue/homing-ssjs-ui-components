@@ -4,14 +4,17 @@ import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Dressed;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * The house's styles and palettes as a site wears them: the seven styles, each written over
- * {@link Base}, Editorial first and so the default; each worn in {@link Harbour}, the one palette so
- * far.
+ * {@link Base}, Editorial first and so the default; the palettes, Harbour first - every style's own
+ * until a style is bound to one of its own - and any style worn in any palette. A theme's slug is
+ * the style's token, and the palette's after an underscore when it is not the style's own:
+ * {@code sketchy}, {@code sketchy_forest}.
  */
 public record HouseStyles() {
 
@@ -22,27 +25,35 @@ public record HouseStyles() {
             Editorial.INSTANCE, NeoBrutalism.INSTANCE, NeoFuturism.INSTANCE, Neumorphism.INSTANCE,
             Glassmorphism.INSTANCE, RetroFuturism.INSTANCE, Sketchy.INSTANCE);
 
-    /** The one palette so far: every style is worn in it. */
-    public static final ColorPalette PALETTE = Harbour.INSTANCE;
+    /** The palettes, every style's own first. */
+    public static final List<ColorPalette> PALETTES = List.of(Harbour.INSTANCE, Forest.INSTANCE);
 
-    /** Every style dressed in the palette, by the style's token, the default first. */
+    /** Every style in every palette, by its slug, the default first. */
     public static final Map<String, Dressed> THEMES = themes();
 
     private static Map<String, Dressed> themes() {
         var out = new LinkedHashMap<String, Dressed>();
-        for (DesignStyle s : STYLES) out.put(s.token(), new Dressed(s, PALETTE));
-        return java.util.Collections.unmodifiableMap(out);
+        for (ColorPalette p : PALETTES)
+            for (DesignStyle s : STYLES) out.put(slug(s, p), new Dressed(s, p));
+        return Collections.unmodifiableMap(out);
     }
 
+    private static String slug(DesignStyle s, ColorPalette p) {
+        return p == PALETTES.get(0) ? s.token() : s.token() + "_" + p.token();
+    }
+
+    /** A theme's slug: {@code sketchy}, {@code sketchy_forest}. */
+    public String slug(Dressed theme) { return slug(theme.style(), theme.palette()); }
+
     /**
-     * The theme a page is worn in, from its slug: the style its first word names - {@code sketchy}
-     * and {@code sketchy_forest} alike - and the default for a slug that names none.
+     * The theme a page is worn in, from its slug: the style its first word names, in the palette
+     * its second names - {@code sketchy}, {@code sketchy_forest}. A style the house has not is the
+     * default style; a palette it has not, the style's own.
      */
     public Dressed dressed(String themeSlug) {
-        String style = themeSlug == null ? "" : themeSlug.strip();
-        int cut = style.indexOf('_');
-        if (cut >= 0) style = style.substring(0, cut);
-        Dressed found = THEMES.get(style);
-        return found != null ? found : THEMES.get(STYLES.get(0).token());
+        String[] words = (themeSlug == null ? "" : themeSlug.strip()).split("_", 2);
+        String style = THEMES.containsKey(words[0]) ? words[0] : STYLES.get(0).token();
+        Dressed found = words.length == 2 ? THEMES.get(style + "_" + words[1]) : null;
+        return found != null ? found : THEMES.get(style);
     }
 }

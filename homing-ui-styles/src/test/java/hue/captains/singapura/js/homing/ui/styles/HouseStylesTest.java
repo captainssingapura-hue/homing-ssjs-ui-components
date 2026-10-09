@@ -108,12 +108,35 @@ class HouseStylesTest {
     }
 
     @Test
-    void aPageIsWornInTheStyleItsSlugNames_theDefaultOtherwise() {
+    void aPageIsWornInTheStyleAndPaletteItsSlugNames_theDefaultsOtherwise() {
         var styles = HouseStyles.INSTANCE;
         assertEquals("sketchy in harbour", styles.dressed("sketchy").toString());
-        assertEquals("sketchy in harbour", styles.dressed("sketchy_forest").toString(), "the palette the old slug names is not the house's yet");
+        assertEquals("sketchy in forest", styles.dressed("sketchy_forest").toString());
+        assertEquals("sketchy in harbour", styles.dressed("sketchy_sunset").toString(), "a palette the house has not yet: the style's own");
         assertEquals("editorial in harbour", styles.dressed("flat-morphism").toString(), "retired: the default");
+        assertEquals("editorial in forest", styles.dressed("flat-morphism_forest").toString(), "the default style, in the palette named");
         assertEquals("editorial in harbour", styles.dressed(null).toString());
+        assertEquals("neumorphism_forest", styles.slug(styles.dressed("neumorphism_forest")));
+        assertEquals(14, HouseStyles.THEMES.size(), "seven styles, each in two palettes");
+    }
+
+    /**
+     * The palettes are written by one rule, so they answer the same semantic colours in the same
+     * places and differ only in what the colours are; and a style casts its shadow in whatever
+     * palette it is worn in - its own sheet unchanged, only the colours the shadow reads.
+     */
+    @Test
+    void theHousePalettes_answerAlike_andAStyleCastsInWhicheverItIsWornIn() {
+        assertEquals(classes(Harbour.INSTANCE.implementations()), classes(Forest.INSTANCE.implementations()), "one rule, two sets of seeds");
+        String harbour = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("editorial"), "editorial").css();
+        String forest = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("editorial_forest"), "editorial_forest").css();
+        String shadow = "/* from editorial: button__shape-shadow--hover */\n.primary-button__shape-shadow--hover {\n";
+        assertTrue(harbour.contains(shadow) && forest.contains(shadow), "the style's shadow, the same in both");
+        assertTrue(harbour.contains("--box-shadow-cast: #111936; --box-shadow-lit: #FFFFFF; --box-shadow-glow: #1E2761;"), "cast in the harbour's navy");
+        assertTrue(forest.contains("/* from forest: root__color-box-shadow */\n.primary-button__color-box-shadow {\n"
+                + "    --box-shadow-cast: #1A3829; --box-shadow-lit: #FFFFFF; --box-shadow-glow: #2D5F3F;\n}\n"), "cast in the forest's pine");
+        assertTrue(forest.contains("/* from forest: control__color-outline--focus */"), "the ring, the forest's honey");
+        assertTrue(forest.contains("outline-color: color-mix(in srgb, #D4A04C 55%, #D4DFCC);"));
     }
 
     private static Set<String> classes(List<? extends Implementation<?>> implementations) {

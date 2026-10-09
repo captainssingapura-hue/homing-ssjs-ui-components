@@ -48,3 +48,10 @@ theme neo-brutalism
 
 # pressed into its own shadow
 plain-button         active    motion-transform   => button__motion-transform--active from neo-brutalism
+
+theme editorial_forest
+
+# the same style in another palette: its shadow and frame its own, every colour the forest's
+danger-button        hover     shape-shadow       => button__shape-shadow--hover from editorial
+danger-button        rest      color-box-shadow   => root__color-box-shadow from forest
+primary-button       rest      color-background   => primary-button__color-background from forest

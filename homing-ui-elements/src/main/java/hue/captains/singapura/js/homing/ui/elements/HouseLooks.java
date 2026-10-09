@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The house's looks in every house style ({@link HouseStyles}), each flattened once: the sheet
+ * The house's looks in every house style and palette ({@link HouseStyles}), each flattened once: the sheet
  * {@link HouseLookSheet} serves for a theme, and what {@link LookManifestModule} tells the page of
  * them all.
  */
@@ -30,18 +30,13 @@ final class HouseLooks {
 
     static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read();
 
-    /** Each style's sheet, flattened, by the style's token. */
-    static final Map<String, FlattenSheet.Flattened> SHEETS = sheets();
+    /** Each theme's sheet, flattened the first time it is asked for, by the theme's slug. */
+    private static final Map<String, FlattenSheet.Flattened> SHEETS = new java.util.concurrent.ConcurrentHashMap<>();
 
-    private static Map<String, FlattenSheet.Flattened> sheets() {
-        var out = new LinkedHashMap<String, FlattenSheet.Flattened>();
-        HouseStyles.THEMES.forEach((token, theme) -> out.put(token, FlattenSheet.INSTANCE.flatten(TAXONOMY, theme, theme.toString())));
-        return java.util.Collections.unmodifiableMap(out);
-    }
-
-    /** The sheet for the theme a page is worn in, by its slug. */
+    /** The sheet for the theme a page is worn in, by its slug: a house style in a house palette. */
     static FlattenSheet.Flattened sheet(String themeSlug) {
-        return SHEETS.get(HouseStyles.INSTANCE.dressed(themeSlug).style().token());
+        Dressed theme = HouseStyles.INSTANCE.dressed(themeSlug);
+        return SHEETS.computeIfAbsent(HouseStyles.INSTANCE.slug(theme), s -> FlattenSheet.INSTANCE.flatten(TAXONOMY, theme, theme.toString()));
     }
 
     /** Every CSS target the semantic classes answer, in the tree's order: a look is worn on each. */

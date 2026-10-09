@@ -31,7 +31,7 @@ class HouseResolutionTest {
     void theHousesCases_resolveAsWritten() {
         var cases = ResolutionCases.INSTANCE;
         var report = cases.run(lines("house-cases.txt"), cases.java(HOUSE, HouseResolutionTest::theme));
-        assertEquals(26, report.cases(), "every case read");
+        assertEquals(29, report.cases(), "every case read");
         assertEquals(List.of(), report.failures(), () -> String.join("\n", report.failures()));
     }
 
