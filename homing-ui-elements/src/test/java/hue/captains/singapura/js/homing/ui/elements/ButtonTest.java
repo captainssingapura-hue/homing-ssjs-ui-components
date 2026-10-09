@@ -59,16 +59,16 @@ class ButtonTest extends JsModuleTestBase {
 
     @Test
     void wornAtOnce_itsCastingsLookOnEveryTarget_andItsComponentsTreatments() {
-        assertTrue(has("go", "primary-button_go__color-surface"), "the casting's look: the primary button as Go");
+        assertTrue(has("go", "primary-button_go__color-background"), "the casting's look: the primary button as Go");
         assertTrue(has("go", "primary-button_go__type-weight"));
         assertTrue(has("go", "primary-button__effect-opacity--disabled"), "the treatment: the component's, common to every role");
         assertTrue(has("go", "primary-button__shape-shadow--hover"));
-        assertFalse(has("go", "primary-button__color-surface"), "not the button on its own: it is cast as Go");
+        assertFalse(has("go", "primary-button__color-background"), "not the button on its own: it is cast as Go");
         int targets = eval("LOOK_TARGETS.length").asInt(), treated = eval("TREATED['primary-button'].length").asInt();
         assertEquals(targets + treated, eval("go.el.classes().length").asInt(), "a class for each target, a treatment for each the sheet treats it in");
         assertFalse(eval("go.el.classes().some(function (c) { return c.indexOf('el-button') === 0 || c.indexOf('el_button') === 0; })").asBoolean(),
                 "no design word: the look is named by the casting");
-        assertTrue(has("plain", "plain-button__color-surface"), "Standalone unless given");
+        assertTrue(has("plain", "plain-button__color-background"), "Standalone unless given");
         assertEquals("standalone", str("plain.role"));
         assertEquals("button", str("go.el.type"), "a button inside a form does not submit it");
         assertEquals("Save", str("go.label"));
@@ -127,7 +127,7 @@ class ButtonTest extends JsModuleTestBase {
     @Test
     void castings_onlyThoseTheTaxonomyHasASlotFor_aFunctionalRoleLookingAsTheLeafOnItsOwn() {
         eval("var choice = new PlainButton(el('button'), {}, ROLE.CHOICE);");
-        assertTrue(has("choice", "plain-button_choice__color-surface"), "a picker's choice");
+        assertTrue(has("choice", "plain-button_choice__color-background"), "a picker's choice");
         var e = assertThrows(PolyglotException.class, () -> eval("new DangerButton(el('button'), {}, ROLE.GO)"));
         assertTrue(e.getMessage().contains("is never cast as go: only as standalone"), e.getMessage());
         assertThrows(PolyglotException.class, () -> eval("new PlainButton(el('button'), {}, 'go')"), "a role is one of ROLE");

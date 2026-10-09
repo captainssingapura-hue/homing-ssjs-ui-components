@@ -33,9 +33,9 @@ class HouseStylesTest {
 
     /** What a style must decide for the button branch: the button's frame and motion, the control's ring and how it is when it cannot be used. */
     private static final Set<String> BUTTON_BRANCH = Set.of(
-            "button shape-corner", "button shape-rule", "button size-inset", "button size-gap", "button size-extent",
+            "button shape-corner", "button shape-border", "button size-inset", "button size-gap", "button size-extent",
             "button type-face", "button motion-ease", "button shape-shadow", "button motion-transform",
-            "control shape-rule", "control effect-opacity", "control affordance-cursor");
+            "control shape-outline", "control effect-opacity", "control affordance-cursor");
 
     @Test
     void theStyles_areSeven_eachOverBase_andBaseOverNothing() {
@@ -58,23 +58,40 @@ class HouseStylesTest {
             left.put(s.token(), missing);
         }
         assertEquals(Map.of("editorial", Set.of(), "neo-brutalism", Set.of(), "neo-futurism", Set.of(),
-                        "neumorphism", Set.of("button shape-rule"), "glassmorphism", Set.of(), "retro-futurism", Set.of(),
+                        "neumorphism", Set.of("button shape-border"), "glassmorphism", Set.of(), "retro-futurism", Set.of(),
                         "sketchy", Set.of("button shape-shadow")), left,
-                "neumorphism draws no rule and sketchy casts no shadow: each leaves it to Base, whose root says none");
+                "neumorphism draws no border and sketchy casts no shadow: each leaves it to Base, whose root says none");
     }
 
     @Test
     void base_answersEveryRootThatIsNotColour_andWhatEveryStyleSaysAlike() {
         var roots = Base.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
-        assertEquals(Target.leaves().stream().filter(t -> !(t instanceof Target.Color)).map(Target::token).collect(Collectors.toSet()), Set.copyOf(roots),
-                "the twenty-five roots that are not colour");
-        assertEquals(25, roots.size());
+        var semantic = SemanticTokens.INSTANCE.leaves();
+        assertEquals(semantic.stream().filter(t -> !(t instanceof Target.Color)).map(Target::token).collect(Collectors.toSet()), Set.copyOf(roots),
+                "the twenty-seven roots that are not colour, the box's line and its ring apart, and what is drawn over its ground");
+        assertEquals(27, roots.size());
         var alike = new TreeSet<>(classes(Base.INSTANCE.implementations()));
         alike.removeIf(c -> c.startsWith("root "));
         assertEquals(new TreeSet<>(Set.of("control affordance-cursor", "button type-scale", "control shape-shadow", "control motion-transform")), alike,
                 "a control is pointed at, a button's type grows alike, and a control that cannot be used neither lifts nor casts a shadow");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
-        assertEquals(6, palette.size(), "the palette answers the six colour roots");
+        assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
+                "the palette answers every semantic colour at the root");
+        assertEquals(List.of("color-ink", "color-fill", "color-stroke", "color-scrollbar", "color-background", "color-border", "color-outline",
+                        "color-column-rule", "color-box-shadow"),
+                semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).toList(), "nine semantic colours");
+    }
+
+    /** No style names a colour: a shadow is drawn in the box shadow's colours, which the palette gives. */
+    @Test
+    void theStylesNameNoColour_theirShadowsReadThePalettes() {
+        String editorial = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("editorial"), "editorial").css();
+        assertTrue(editorial.contains("/* from harbour: root__color-box-shadow */\n.primary-button__color-box-shadow {\n"
+                + "    --box-shadow-cast: #111936; --box-shadow-lit: #FFFFFF; --box-shadow-glow: #1E2761;\n}\n"), "the palette's, on the element itself");
+        assertTrue(editorial.contains("box-shadow: 0 6px 16px color-mix(in srgb, var(--box-shadow-cast) 12%, transparent);"), "the style's, reading it");
+        assertTrue(editorial.contains("/* from harbour: control__color-outline--focus */\n.primary-button__color-outline--focus {\n"), "the ring's colour on focus");
+        assertTrue(editorial.contains("/* from harbour: primary-button__color-border */\n.primary-button_go__color-border {\n    border-color: #1E2761;\n}\n"),
+                "the box's line, its own");
     }
 
     @Test
@@ -83,11 +100,11 @@ class HouseStylesTest {
             assertEquals(List.of(), theme.check(HOUSE), theme.toString());
             var flat = FlattenSheet.INSTANCE.flatten(HOUSE, theme, theme.toString());
             assertEquals(List.of(), flat.unanswered(), () -> theme + ": every target answered at the root");
-            assertEquals(HOUSE.castings().size() * 27, flat.looks(), () -> theme + ": every casting on every CSS target but the glyph, a silence");
+            assertEquals(HOUSE.castings().size() * 32, flat.looks(), () -> theme + ": every casting on every CSS target the semantic classes answer but the glyph, a silence");
         }
         String sketchy = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("sketchy"), "sketchy").css();
         assertTrue(sketchy.contains("/* from base: root__shape-shadow */\n.danger-button__shape-shadow {\n    box-shadow: none;\n}\n"), "ink casts no shadow");
-        assertTrue(sketchy.contains("/* from sketchy: control__shape-rule--focus */\n.danger-button__shape-rule--focus {\n"), sketchy.substring(0, 400));
+        assertTrue(sketchy.contains("/* from sketchy: control__shape-outline--focus */\n.danger-button__shape-outline--focus {\n"), "its own ring");
     }
 
     @Test

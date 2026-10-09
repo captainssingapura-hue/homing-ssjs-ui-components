@@ -3,7 +3,7 @@
 // A look is one semantic class for each target - the casting's - and one
 // treatment class for each state and target the component is treated in:
 //
-//     primary-button_go__color-surface             the primary button as Go, its surface
+//     primary-button_go__color-background             the primary button as Go, its surface
 //     primary-button__effect-opacity--disabled     the primary button's opacity, disabled
 //
 // The sheet (HouseLookSheet) is flattened: every class named here has its

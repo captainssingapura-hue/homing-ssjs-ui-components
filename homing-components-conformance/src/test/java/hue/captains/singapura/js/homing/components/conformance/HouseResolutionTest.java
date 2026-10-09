@@ -31,7 +31,7 @@ class HouseResolutionTest {
     void theHousesCases_resolveAsWritten() {
         var cases = ResolutionCases.INSTANCE;
         var report = cases.run(lines("house-cases.txt"), cases.java(HOUSE, HouseResolutionTest::theme));
-        assertEquals(25, report.cases(), "every case read");
+        assertEquals(26, report.cases(), "every case read");
         assertEquals(List.of(), report.failures(), () -> String.join("\n", report.failures()));
     }
 
@@ -40,9 +40,9 @@ class HouseResolutionTest {
     void editorial_flattensWhole() {
         var flat = FlattenSheet.INSTANCE.flatten(HOUSE, theme("editorial"), "editorial");
         assertEquals(List.of(), flat.unanswered(), "every target answered at the root");
-        assertEquals(HOUSE.castings().size() * 27, flat.looks(), "every casting on every CSS target but the glyph, a silence");
+        assertEquals(HOUSE.castings().size() * 32, flat.looks(), "every casting on every CSS target the semantic classes answer but the glyph, a silence");
         assertTrue(flat.css().contains("/* from base: control__affordance-cursor */\n.primary-button_go__affordance-cursor {\n    cursor: pointer;\n}\n"), "what every style says alike");
-        assertTrue(flat.css().contains("/* from harbour: primary-button__color-surface */\n.primary-button_go__color-surface {\n"), "the rank copied to the role");
+        assertTrue(flat.css().contains("/* from harbour: primary-button__color-background */\n.primary-button_go__color-background {\n"), "the rank copied to the role");
     }
 
     private static Dressed theme(String name) {

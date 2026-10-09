@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.ui.elements;
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
-import hue.captains.singapura.js.homing.design.Carrier;
 import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.Dressed;
@@ -45,9 +44,9 @@ final class HouseLooks {
         return SHEETS.get(HouseStyles.INSTANCE.dressed(themeSlug).style().token());
     }
 
-    /** Every CSS target, in the tree's order: a look is worn on each. */
+    /** Every CSS target the semantic classes answer, in the tree's order: a look is worn on each. */
     static List<String> targets() {
-        return Target.leaves().stream().filter(t -> t.carrier() == Carrier.CSS).map(Target::token).toList();
+        return SemanticTokens.INSTANCE.cssLeaves().stream().map(Target::token).toList();
     }
 
     /**
@@ -62,8 +61,8 @@ final class HouseLooks {
             var mine = new LinkedHashSet<String>();
             for (State s : State.values()) {
                 if (s == State.REST) continue;
-                for (Target t : Target.leaves()) {
-                    if (t.carrier() != Carrier.CSS || !t.states().contains(s)) continue;
+                for (Target t : tokens.cssLeaves()) {
+                    if (!t.states().contains(s)) continue;
                     for (Dressed theme : HouseStyles.THEMES.values()) {
                         Resolution r = ResolveSemanticClass.INSTANCE.resolve(TAXONOMY, theme, new Casting(leaf), s, t);
                         if (r.outcome() instanceof Resolution.Answered a && !a.body().isBlank()) {

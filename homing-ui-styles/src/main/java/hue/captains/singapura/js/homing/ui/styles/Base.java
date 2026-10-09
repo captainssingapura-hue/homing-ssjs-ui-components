@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -19,7 +20,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.GAP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.INSET;
 import static hue.captains.singapura.js.homing.ui.styles.Say.OPACITY;
 import static hue.captains.singapura.js.homing.ui.styles.Say.ROOT;
-import static hue.captains.singapura.js.homing.ui.styles.Say.RULE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.OUTLINE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SCALE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
@@ -44,7 +45,9 @@ public record Base() implements DesignStyle {
     private static final List<Implementation<?>> ANSWERS = List.of(
             // ── the roots: every target that is not colour ──
             rest(ROOT, CORNER, "border-radius: 0;"),
-            rest(ROOT, RULE, "border-width: 0; border-style: solid; outline-style: none;"),
+            rest(ROOT, BORDER, "border-width: 0; border-style: solid;"),
+            rest(ROOT, OUTLINE, "outline-width: 0; outline-style: none; outline-offset: 0;"),
+            rest(ROOT, Target.Shape.Background.INSTANCE, "background-image: none; background-size: auto; background-repeat: repeat; background-position: 0% 0%;"),
             rest(ROOT, SHADOW, "box-shadow: none;"),
             rest(ROOT, Target.Shape.Clip.INSTANCE, "clip-path: none;"),
             rest(ROOT, INSET, "padding-block: 0; padding-inline: 0;"),

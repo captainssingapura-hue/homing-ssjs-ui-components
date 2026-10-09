@@ -22,7 +22,8 @@ final class Say {
     static final Taxon BUTTON = HouseBranches.Button.INSTANCE;
 
     static final Target.Shape.Corner CORNER = Target.Shape.Corner.INSTANCE;
-    static final Target.Shape.Rule RULE = Target.Shape.Rule.INSTANCE;
+    static final Target.Shape.Border BORDER = Target.Shape.Border.INSTANCE;
+    static final Target.Shape.Outline OUTLINE = Target.Shape.Outline.INSTANCE;
     static final Target.Shape.Shadow SHADOW = Target.Shape.Shadow.INSTANCE;
     static final Target.Size.Inset INSET = Target.Size.Inset.INSTANCE;
     static final Target.Size.Gap GAP = Target.Size.Gap.INSTANCE;
@@ -56,8 +57,8 @@ final class Say {
     }
 
     /** The ring a control wears: on focus, and the three marks of the keys - offered, lent, held. */
-    static Implementation<Target.Shape.Rule> rings(String focus, String candidate, String lent, String held) {
-        return when(CONTROL, RULE, Map.of(State.FOCUS, outline(focus), State.CANDIDATE, outline(candidate),
+    static Implementation<Target.Shape.Outline> rings(String focus, String candidate, String lent, String held) {
+        return when(CONTROL, OUTLINE, Map.of(State.FOCUS, outline(focus), State.CANDIDATE, outline(candidate),
                                           State.LENT, outline(lent), State.HELD, outline(held)));
     }
 

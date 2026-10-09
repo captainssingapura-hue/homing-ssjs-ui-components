@@ -6,23 +6,25 @@ theme editorial
 # the frame is the button's; colour is the palette's, the rank each button's
 plain-button         rest      shape-corner       => button__shape-corner from editorial
 danger-button        rest      shape-corner       => button__shape-corner from editorial
-primary-button       rest      color-surface      => primary-button__color-surface from harbour
+primary-button       rest      color-background   => primary-button__color-background from harbour
 secondary-button     rest      color-ink          => secondary-button__color-ink from harbour
-warning-button       rest      color-edge         => button__color-edge from harbour
+warning-button       rest      color-border       => button__color-border from harbour
+# a box's shadow is drawn in the palette's colours, set on the element itself
+danger-button        rest      color-box-shadow   => root__color-box-shadow from harbour
 # what every style says alike is Base's
 plain-button         rest      type-scale         => button__type-scale from base
 plain-button         rest      affordance-cursor  => control__affordance-cursor from base
 # Go on the primary button, as the action bar casts it: nothing says more of it than of the button
 primary-button_go    rest      type-weight        => root__type-weight from base
 # the plain button in the picker's roles: nothing is said of the roles, so the button's own look
-plain-button_choice  rest      color-surface      => plain-button__color-surface from harbour
+plain-button_choice  rest      color-background   => plain-button__color-background from harbour
 plain-button_cancel  rest      shape-corner       => button__shape-corner from editorial
 # treatments, common to every role: the ring, the lift, how it is when it cannot be used
 plain-button_cancel  disabled  effect-opacity     => control__effect-opacity--disabled from editorial
 danger-button        hover     shape-shadow       => button__shape-shadow--hover from editorial
 danger-button        disabled  shape-shadow       => control__shape-shadow--disabled from base
-danger-button        focus     shape-rule         => control__shape-rule--focus from editorial
-danger-button        focus     color-edge         => control__color-edge--focus from harbour
+danger-button        focus     shape-outline      => control__shape-outline--focus from editorial
+danger-button        focus     color-outline      => control__color-outline--focus from harbour
 danger-button        focus     shape-shadow       => none
 # a functional role is set aside: the dialog's window looks as the floating pane on its own
 floating-pane_window rest      shape-corner       => root__shape-corner from base
@@ -37,9 +39,9 @@ danger-button        rest      shape-corner       => button__shape-corner from s
 
 theme neumorphism
 
-# moulded, not ruled: its ring is its own, its rule Base's
-plain-button         rest      shape-rule         => root__shape-rule from base
-plain-button         focus     shape-rule         => control__shape-rule--focus from neumorphism
+# moulded, not ruled: its ring is its own, its border Base's
+plain-button         rest      shape-border       => root__shape-border from base
+plain-button         focus     shape-outline      => control__shape-outline--focus from neumorphism
 plain-button         active    motion-transform   => none
 
 theme neo-brutalism

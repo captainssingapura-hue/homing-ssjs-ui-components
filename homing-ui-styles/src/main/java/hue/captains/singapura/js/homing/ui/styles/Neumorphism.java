@@ -33,8 +33,8 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
-    private static final String DARK = "color-mix(in srgb, #FAFBFD 80%, black)";
-    private static final String LIGHT = "color-mix(in srgb, #FAFBFD 55%, white)";
+    private static final String DARK = "color-mix(in srgb, var(--box-shadow-cast) 16%, transparent)";
+    private static final String LIGHT = "var(--box-shadow-lit)";
 
     private static final List<Implementation<?>> ANSWERS = answers(
             List.of(rest(BUTTON, CORNER, "border-radius: 12px;"),
