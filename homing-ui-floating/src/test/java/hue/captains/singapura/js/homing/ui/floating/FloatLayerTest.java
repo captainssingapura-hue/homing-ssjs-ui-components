@@ -103,6 +103,7 @@ class FloatLayerTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         // the close button its head holds: the house's, on the new sheet
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})

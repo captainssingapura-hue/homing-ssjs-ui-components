@@ -45,8 +45,10 @@ class DialogKeysTest extends JsModuleTestBase {
         ["dl_scrim", "dl_layer", "dl_float", "dl_actions"].forEach(function (c) { globalThis[c] = c; });
         // a pane that is a frame with a body; the buttons, each dressing the element it is handed
         class FloatingPane { constructor(branch, o) { this.root = el("frame"); this.body = el("body"); this.root.appendChild(this.body); this._o = o; } setActive() {} title() { return this._o.title; } }
-        class PlainButton { static TAG = "button"; constructor(e, p) { this.el = e; this.click = p.onClick; e.addEventListener("click", p.onClick); } }
+        class PlainButton { static TAG = "button"; constructor(e, p) { this.el = e; this.enabled = true; }
+                            setOnClick(h) { var self = this; this.el.addEventListener("click", function (ev) { h.handle({ type: EVENT.CLICK, source: self, raw: ev }); }); } }
         class PrimaryButton extends PlainButton {}
+        var PlainButtonFactory = { create: function (b, n) { return b.createElement(n, "button"); } }, PrimaryButtonFactory = PlainButtonFactory;
         function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} }; }
         var members = {}, kbLog = [], holder = null;
         var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; if (holder === id) holder = null; kbLog.push("leave:" + id); },
@@ -64,6 +66,7 @@ class DialogKeysTest extends JsModuleTestBase {
         js = buildContext();
         js.eval("js", "var console = { error: function (m) { throw new Error(m); } };");
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));   // the roles the dialog casts its buttons in
+        js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
         loadModule(DIR + "ModalityModule.js");
         loadModule(DIR + "DialogModule.js");
         js.eval("js", SHIM);

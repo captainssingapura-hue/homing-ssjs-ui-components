@@ -54,6 +54,13 @@
 const _dialogOwner = Object.freeze({ toString: () => "dialog" });
 
 var _seq = 0;
+
+/** An action's button pressed: its action, given the dialog. */
+class DialogAction {
+    constructor(dialog, action) { this._dialog = dialog; this._action = action; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._action.onClick(this._dialog); }
+}
 var PHI  = 1.6180339887;
 
 class Dialog {
@@ -153,9 +160,9 @@ class Dialog {
         var self = this;
         // the action bar's, drawn inline: the default action leads as Go, the rest are plain Actions;
         // a press reaches its action only while the button is enabled
-        var Kind = a.primary ? PrimaryButton : PlainButton;
-        var btn = new Kind(this.branch.createElement("act_" + a.id, Kind.TAG), { label: a.label,
-                onClick: function () { a.onClick(self); } }, a.primary ? ROLE.GO : ROLE.ACTION);
+        var made = (a.primary ? PrimaryButtonFactory : PlainButtonFactory).create(this.branch, "act_" + a.id);
+        var btn = a.primary ? new PrimaryButton(made, { label: a.label }, ROLE.GO) : new PlainButton(made, { label: a.label }, ROLE.ACTION);
+        btn.setOnClick(new DialogAction(self, a));
         if (a.primary) this._primary = a;
         row.appendChild(btn.el);
         this._buttons[a.id] = btn;
@@ -167,7 +174,7 @@ class Dialog {
         if (ev.key === "Escape") { this.close(); return true; }
         if (ev.key === "Enter" && this._primary && !Dialog._isFormControl(ev.target)) {
             var pb = this._buttons[this._primary.id];
-            if (pb && !pb.el.disabled) this._primary.onClick(this);
+            if (pb && pb.enabled) this._primary.onClick(this);
             return true;
         }
         return false;

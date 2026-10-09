@@ -32,6 +32,13 @@
 
 const _openerOwner = Object.freeze({ toString: () => "tabOpener" });
 
+/** A kind's button pressed: the tab opened as that kind. */
+class TabOpenerPick {
+    constructor(opener, kind) { this._opener = opener; this._kind = kind; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._opener.open(this._kind); }
+}
+
 class TabOpener {
     constructor(branch, opts) {
         if (!branch) throw new Error("[TabOpener] a branch of its own is required");
@@ -56,8 +63,9 @@ class TabOpener {
         css.addClass(grid, mtp_opener_grid);
         root.appendChild(grid);
         this._source.kinds().forEach(function (k) {
-            var pick = new PlainButton(branch.createElement("open-" + k.id, PlainButton.TAG), { label: k.label,
-                    onClick: function () { self.open(k.id); } }, ROLE.CHOICE).el;
+            var button = new PlainButton(PlainButtonFactory.create(branch, "open-" + k.id), { label: k.label }, ROLE.CHOICE);
+            button.setOnClick(new TabOpenerPick(self, k.id));
+            var pick = button.el;
             grid.appendChild(pick);
             self._picks.push(pick);
         });

@@ -15,6 +15,20 @@
 
 const _pickerOwner = Object.freeze({ toString: () => "tabPicker" });
 
+/** A kind's button pressed: the kind picked. */
+class TabPickerPick {
+    constructor(opts, kind) { this._opts = opts; this._kind = kind; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._opts.onPick(this._kind); }
+}
+
+/** The cancel pressed: nothing picked. */
+class TabPickerCancel {
+    constructor(opts) { this._opts = opts; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._opts.onCancel(); }
+}
+
 class TabPicker {
     constructor(branch, opts) {
         var o = opts || {};
@@ -32,11 +46,11 @@ class TabPicker {
         root.appendChild(grid);
         var first = null;
         (o.kinds || []).forEach(function (k, i) {
-            var pick = TabPicker._button(branch, "pick-" + i, k.label == null ? k.id : k.label, ROLE.CHOICE, function () { o.onPick(k.id); });
+            var pick = TabPicker._button(branch, "pick-" + i, k.label == null ? k.id : k.label, ROLE.CHOICE, new TabPickerPick(o, k.id));
             grid.appendChild(pick);
             if (!first) first = pick;
         });
-        var cancel = TabPicker._button(branch, "cancel", "Cancel", ROLE.CANCEL, function () { o.onCancel(); });
+        var cancel = TabPicker._button(branch, "cancel", "Cancel", ROLE.CANCEL, new TabPickerCancel(o));
         root.appendChild(cancel);
         this.root = root;
         this._first = first || cancel;
@@ -44,7 +58,9 @@ class TabPicker {
 
     focus() { try { this._first.focus(); } catch (e) {} }
 
-    static _button(branch, name, text, role, onClick) {
-        return new PlainButton(branch.createElement(name, PlainButton.TAG), { label: String(text), onClick: onClick }, role).el;
+    static _button(branch, name, text, role, press) {
+        var button = new PlainButton(PlainButtonFactory.create(branch, name), { label: String(text) }, role);
+        button.setOnClick(press);
+        return button.el;
     }
 }

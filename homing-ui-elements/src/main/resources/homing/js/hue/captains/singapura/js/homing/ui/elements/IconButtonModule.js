@@ -7,16 +7,17 @@
 // tooltip.
 //
 //   var plus = new Icon(branch.createElement("plus", Icon.TAG), { name: "add" });
-//   var b = new IconButton(branch.createElement("add", IconButton.TAG),
-//                          { icon: plus, label: "Add a tab", onClick: fn }, ROLE.ADD);
+//   var b = new IconButton(IconButtonFactory.create(branch, "add"),
+//                          { icon: plus, label: "Add a tab" }, ROLE.ADD);
 //   b.icon               the Icon it holds; set another name on it, not on the button
 //   b.label = "Add"      its name: aria-label, and its tooltip
 //   b.enabled  b.size
-//   onClick              in the props: called on a press while enabled
+//   b.setOnClick(handler)  a press, while it is enabled
 // =============================================================================
 
 class IconButton extends Button {
     static LEAF = "icon-button";
+    static PARTS = Object.freeze(["icon"]);
 
     constructor(el, props, role) {
         var icon = props ? props.icon : null;
@@ -36,3 +37,6 @@ class IconButton extends Button {
         this.el.setAttribute("title", name);   // the browser's own tooltip: no caption of the house's to draw
     }
 }
+
+/** Its companion: makes the <button> it is realized on, on its owner's branch, under its owner's name. */
+const IconButtonFactory = new SimpleComponentFactory(IconButton);

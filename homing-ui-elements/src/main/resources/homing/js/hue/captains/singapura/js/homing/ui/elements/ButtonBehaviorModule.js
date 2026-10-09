@@ -1,19 +1,18 @@
 // =============================================================================
-// ButtonBehavior — what a button does: a press acts while it is enabled. Shared
-// by the button leaves, the toggle's press its own. It reads the state through the button, keeps none
-// of its own, and never touches the look.
+// ButtonBehavior — what a button does: a press, while it is enabled, is its
+// click, dressed from the DOM's and fired to its handler. Shared by the button
+// leaves, the toggle's press its own. It reads the state through the button,
+// keeps none of its own, and never touches the look.
 //
-//   new ButtonBehavior(el, button, { onClick })
-//     onClick   called on a press, while the button is enabled
+//   new ButtonBehavior(el, button)
 //
 // The element's type is "button" unless the caller says otherwise afterwards, so
 // a button inside a form does not submit it by accident.
 // =============================================================================
 
 class ButtonBehavior {
-    constructor(el, button, props) {
-        var onClick = props && typeof props.onClick === "function" ? props.onClick : null;
+    constructor(el, button) {
         el.type = "button";
-        if (onClick) el.addEventListener("click", function (ev) { if (button.enabled) onClick(ev); });
+        el.addEventListener("click", function (ev) { if (button.enabled) button._fire(EVENT.CLICK, ev); });
     }
 }

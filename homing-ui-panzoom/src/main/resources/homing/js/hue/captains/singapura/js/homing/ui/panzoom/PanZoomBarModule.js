@@ -12,6 +12,13 @@
 
 const _panZoomBarOwner = Object.freeze({ toString: () => "pan-zoom-bar" });
 
+/** A press on one of the bar's buttons: the view told to zoom out, zoom in or fit. */
+class PanZoomPress {
+    constructor(view, act) { this._view = view; this._act = act; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._view[this._act](); }
+}
+
 class PanZoomBar {
     constructor(branch, view) {
         if (!branch) throw new Error("[PanZoomBar] a branch of its own is required");
@@ -25,13 +32,13 @@ class PanZoomBar {
         css.addClass(root, pz_bar);
         root.setAttribute("role", "group");
         root.setAttribute("aria-label", "Zoom");
-        this._out = this._button(root, "out", "−", "Zoom out", ROLE.ZOOM_OUT, function () { view.zoomOut(); });
+        this._out = this._button(root, "out", "−", "Zoom out", ROLE.ZOOM_OUT, new PanZoomPress(view, "zoomOut"));
         this._readout = branch.createElement("readout", "span");
         css.addClass(this._readout, pz_readout);
         this._readout.setAttribute("aria-live", "polite");
         root.appendChild(this._readout);
-        this._in = this._button(root, "in", "+", "Zoom in", ROLE.ZOOM_IN, function () { view.zoomIn(); });
-        this._fit = this._button(root, "fit", "Fit", "Fit the whole", ROLE.FIT, function () { view.fit(); });
+        this._in = this._button(root, "in", "+", "Zoom in", ROLE.ZOOM_IN, new PanZoomPress(view, "zoomIn"));
+        this._fit = this._button(root, "fit", "Fit", "Fit the whole", ROLE.FIT, new PanZoomPress(view, "fit"));
         this.root = root;
         this._off = view.onChange(function (v) { self._follow(v); });
         this._follow(view.view());
@@ -42,8 +49,9 @@ class PanZoomBar {
         this.branch.dissolve();
     }
 
-    _button(root, name, label, said, role, onClick) {
-        var button = new PlainButton(this.branch.createElement(name, PlainButton.TAG), { label: label, size: -1, onClick: onClick }, role);
+    _button(root, name, label, said, role, press) {
+        var button = new PlainButton(PlainButtonFactory.create(this.branch, name), { label: label, size: -1 }, role);
+        button.setOnClick(press);
         button.el.setAttribute("aria-label", said);
         root.appendChild(button.el);
         return button;

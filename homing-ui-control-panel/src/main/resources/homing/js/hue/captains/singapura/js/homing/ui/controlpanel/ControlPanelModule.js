@@ -22,6 +22,24 @@
 
 const _controlPanelOwner = Object.freeze({ toString: () => "controlPanel" });
 
+/** A switch's button pressed: the switch turned over, its words with it, and the panel told. */
+class ControlPanelSwitch {
+    constructor(panel, name, option, sw) { this._panel = panel; this._name = name; this._option = option; this._sw = sw; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() {
+        this._sw.on = !this._sw.on;
+        this._sw.button.label = ControlPanel._said(this._option, this._sw.on);
+        this._panel._onSet(this._name, this._sw.on, true);
+    }
+}
+
+/** An action's or a question's button pressed: the panel told which. */
+class ControlPanelAct {
+    constructor(panel, name) { this._panel = panel; this._name = name; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._panel._onInvoke(this._name); }
+}
+
 class ControlPanel {
     constructor(branch, params) {
         if (!branch) throw new Error("[ControlPanel] a branch of its own is required");
@@ -73,11 +91,8 @@ class ControlPanel {
         var self = this, row = this._row("switches");
         names.forEach(function (n) {
             var o = Controls.option(n), s = { on: !!o.rest, button: null };
-            s.button = new PlainButton(self.branch.createElement("switch-" + n, PlainButton.TAG), { label: ControlPanel._said(o, s.on), onClick: function () {
-                s.on = !s.on;
-                s.button.label = ControlPanel._said(o, s.on);
-                self._onSet(n, s.on, true);
-            } });
+            s.button = new PlainButton(PlainButtonFactory.create(self.branch, "switch-" + n), { label: ControlPanel._said(o, s.on) });
+            s.button.setOnClick(new ControlPanelSwitch(self, n, o, s));
             row.appendChild(s.button.el);
             self._switches[n] = s;
         });
@@ -88,7 +103,9 @@ class ControlPanel {
         if (!names.length) return;
         var self = this, row = this._row("acts");
         names.forEach(function (n) {
-            row.appendChild(new PlainButton(self.branch.createElement("act-" + n, PlainButton.TAG), { label: Controls.option(n).label, onClick: function () { self._onInvoke(n); } }).el);
+            var act = new PlainButton(PlainButtonFactory.create(self.branch, "act-" + n), { label: Controls.option(n).label });
+            act.setOnClick(new ControlPanelAct(self, n));
+            row.appendChild(act.el);
         });
     }
 

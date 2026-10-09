@@ -23,6 +23,13 @@
 // closed have no cross. `css` is injected with the styles import.
 // =============================================================================
 
+/** A chip's cross pressed: the press kept to the cross, and the chip's holder asked to close its tab. */
+class TabChipClose {
+    constructor(handlers) { this._handlers = handlers; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle(event) { if (event.raw) event.raw.stopPropagation(); this._handlers.onClose(); }
+}
+
 class TabChip {
     static mint(branch, tab, handlers, suffix) {
         var s = suffix == null ? "" : String(suffix);
@@ -57,10 +64,8 @@ class TabChip {
         var closer = null, closeBtn = null;
         if (tab.closable !== false && !tab.pinned) {
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
-            closer = new CloseButton(branch.createElement("close" + s, CloseButton.TAG), {
-                label: "Close " + label.textContent,
-                onClick: function (ev) { ev.stopPropagation(); handlers.onClose(); }
-            }, ROLE.CLOSE);
+            closer = new CloseButton(CloseButtonFactory.create(branch, "close" + s), { label: "Close " + label.textContent }, ROLE.CLOSE);
+            closer.setOnClick(new TabChipClose(handlers));
             closeBtn = closer.el;
             css.addClass(closeBtn, mtp_chip_close);   // its place at the chip's end; its look is its own
             closeBtn.setAttribute("tabindex", "-1");

@@ -2,8 +2,10 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
+import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Button;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Control;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Handle;
@@ -20,17 +22,30 @@ public final class HouseControls {
 
     private HouseControls() {}
 
+    /** What every button has: it may be off. */
+    private static final List<StateType<?>> A_BUTTON = List.of(HouseStates.Enabled.INSTANCE);
+
+    /** What a toggle has besides: it may be on. */
+    private static final List<StateType<?>> A_TOGGLE = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Pressed.INSTANCE);
+
+    /** What every button offers: it is clicked. */
+    private static final List<EventType<?>> CLICKED = List.of(HouseEvents.Click.INSTANCE);
+
     // ── buttons ──────────────────────────────────────────────────────────
 
     /** A button with no emphasis. */
     public record PlainButton() implements Component<Button> {
         public static final PlainButton INSTANCE = new PlainButton();
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
     }
 
     /** The one action a view leads with. */
     public record PrimaryButton() implements Component<Button> {
         public static final PrimaryButton INSTANCE = new PrimaryButton();
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -38,6 +53,8 @@ public final class HouseControls {
     /** An action beside the primary one. */
     public record SecondaryButton() implements Component<Button> {
         public static final SecondaryButton INSTANCE = new SecondaryButton();
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -45,6 +62,8 @@ public final class HouseControls {
     /** An action that destroys or cannot be undone. */
     public record DangerButton() implements Component<Button> {
         public static final DangerButton INSTANCE = new DangerButton();
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -52,6 +71,8 @@ public final class HouseControls {
     /** An action that needs a second thought. */
     public record WarningButton() implements Component<Button> {
         public static final WarningButton INSTANCE = new WarningButton();
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -59,6 +80,8 @@ public final class HouseControls {
     /** An action that confirms what went well. */
     public record SuccessButton() implements Component<Button> {
         public static final SuccessButton INSTANCE = new SuccessButton();
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -66,12 +89,16 @@ public final class HouseControls {
     /** A button that is on or off. */
     public record ToggleButton() implements Component<Button> {
         public static final ToggleButton INSTANCE = new ToggleButton();
+        @Override public List<StateType<?>> states() { return A_TOGGLE; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
     }
 
     /** A button that is an icon alone: the icon its part, whichever icon it is. */
     public record IconButton() implements Component<Button> {
         public static final IconButton INSTANCE = new IconButton();
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<Slot<?>> parts() {
@@ -82,6 +109,8 @@ public final class HouseControls {
     /** The button that closes what holds it. */
     public record CloseButton() implements Component<Button> {
         public static final CloseButton INSTANCE = new CloseButton();
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
     }
 

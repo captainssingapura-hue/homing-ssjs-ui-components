@@ -38,7 +38,13 @@ class ButtonTest extends JsModuleTestBase {
             addClass: function (e, h) { ops.push("+" + h.name); e.classList.add(h.name); },
             removeClass: function (e, h) { ops.push("-" + h.name); e.classList.remove(h.name); },
             size: function (e, s) { e.size = s; }, extent: function (e, t) { e.extent = t; }, aspect: function (e, a) { e.aspect = a; } };
-        var go = new PrimaryButton(el("button"), { label: "Save", onClick: function () { log.push("saved"); } }, ROLE.GO);
+        // handlers: objects of classes, each saying what it handles
+        class Saved { canHandle(t) { return t === EVENT.CLICK; } handle(e) { log.push("saved"); } }
+        class Told { constructor(tag) { this.tag = tag; }
+                     canHandle(t) { return t === EVENT.CLICK || t === STATE.ENABLED.changed || t === STATE.PRESSED.changed; }
+                     handle(e) { log.push(this.tag + ":" + e.type + (e instanceof StateChange ? " was " + e.previous + (e.raw ? " by a press" : " by a setter") : "")); } }
+        var go = new PrimaryButton(PrimaryButtonFactory.create({ createElement: function (n, tag) { return el(tag); } }, "go"), { label: "Save" }, ROLE.GO);
+        go.setOnClick(new Saved());
         var plain = new PlainButton(el("button"), { label: "Open", size: -1 });
         """;
 
@@ -46,6 +52,7 @@ class ButtonTest extends JsModuleTestBase {
     void load() {
         js = buildContext();
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
         // the icon an icon button holds: the real Icon, its classes handles as the shim's css takes them
@@ -147,18 +154,19 @@ class ButtonTest extends JsModuleTestBase {
     /** A toggle: a press turns it over while enabled and says so; on, it wears the press its style holds. */
     @Test
     void aToggle_isTurnedOverByAPress_saysSo_andWearsItsPressedTreatments() {
-        eval("var said = []; var t = new ToggleButton(el('button'), { label: 'Bold', onToggle: function (on) { said.push(on); } });");
-        assertEquals("false", str("t.el.getAttribute('aria-pressed')"), "off at rest, and it says so");
+        eval("var t = new ToggleButton(el('button'), { label: 'Bold' }); t.setOnPressedChanged(new Told('t')); t.setOnClick(new Told('t'));");
+        assertEquals("false", str("t.el.getAttribute('aria-pressed')"), "not pressed at rest, and it says so");
         eval("t.el.click();");
-        assertEquals("true", str("t.on"));
+        assertEquals("true", str("t.pressed"));
         assertEquals("true", str("t.el.getAttribute('aria-pressed')"), "the reflection the pressed treatments are shown by");
-        eval("t.enabled = false; t.el.click(); t.enabled = true; t.on = false;");
-        assertEquals("true", str("said"), "a press while off does nothing; a value set in code is not a press");
+        assertEquals("t:pressed-changed was false by a press,t:click", str("log"), "turned over by the press that made it, then the press itself");
+        eval("log.length = 0; t.enabled = false; t.el.click(); t.enabled = true; t.pressed = false;");
+        assertEquals("t:pressed-changed was true by a setter", str("log"), "a press while off does nothing; a setter's change is fired too, with no press");
         assertEquals("false", str("t.el.getAttribute('aria-pressed')"));
         assertTrue(has("t", "toggle-button__shape-shadow--pressed"), "the style's press, held while on");
         assertTrue(has("t", "toggle-button__color-background--pressed"), "the palette's tint");
         assertTrue(has("t", "toggle-button__shape-shadow--hover"), "and every button's treatments besides");
-        assertThrows(PolyglotException.class, () -> eval("new ToggleButton(el('button'), { on: 'yes' })"), "on is true or false");
+        assertThrows(PolyglotException.class, () -> eval("new ToggleButton(el('button'), { pressed: 'yes' })"), "pressed is true or false");
     }
 
     /** The close button: a mark, the style's own cross, never words; its words its name. */
@@ -191,6 +199,46 @@ class ButtonTest extends JsModuleTestBase {
         assertTrue(has("b", "el_icon_button"), "its face laid out: the icon centred in its box, whatever the icon");
         assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { label: 'Add' })"), "its face is an icon");
         assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { icon: el('span') })"), "an Icon, not any element");
+    }
+
+    /** Its companion makes the element it takes, and nothing else, on its owner's branch under its owner's name. */
+    @Test
+    void itsCompanion_makesTheElementItTakes() {
+        eval("var made = []; var branch = { createElement: function (n, tag) { made.push(n + ':' + tag); return el(tag); } };"
+           + "var b = new CloseButton(CloseButtonFactory.create(branch, 'x'), {});");
+        assertEquals("x:button", str("made"));
+        assertEquals("button", str("CloseButtonFactory.tag"));
+        assertTrue(eval("Object.isFrozen(PlainButtonFactory) && PlainButtonFactory instanceof SimpleComponentFactory").asBoolean(), "a singleton, beside its class");
+    }
+
+    /** A handler: asked first what it handles, an object of a class, once and for good - and an event dressed, carrying the DOM's. */
+    @Test
+    void handlers_saySoFirst_areObjectsOfClasses_andStay() {
+        eval("var b = new PlainButton(el('button'), { label: 'Go' });");
+        var e = assertThrows(PolyglotException.class, () -> eval("b.setOnClick({ canHandle: function () { return false; }, handle: function () {} })"));
+        assertTrue(e.getMessage().contains("says it handles click"), e.getMessage());
+        e = assertThrows(PolyglotException.class, () -> eval("b.setOnClick({ canHandle: function () { return true; }, handle: function () {} })"));
+        assertTrue(e.getMessage().contains("never a closure"), "a bare object of functions: " + e.getMessage());
+        assertThrows(PolyglotException.class, () -> eval("b.setOnClick(function () {})"), "a function");
+        eval("b.setOnClick(new Told('b'))");
+        e = assertThrows(PolyglotException.class, () -> eval("b.setOnClick(new Told('again'))"));
+        assertTrue(e.getMessage().contains("set once, it stays"), e.getMessage());
+        e = assertThrows(PolyglotException.class, () -> eval("b._setOn(STATE.PRESSED.changed, new Told('b'))"));
+        assertTrue(e.getMessage().contains("offers no pressed-changed"), "a plain button has no pressed: " + e.getMessage());
+        e = assertThrows(PolyglotException.class, () -> eval("new PlainButton(el('button'), { onClick: function () {} })"));
+        assertTrue(e.getMessage().contains("a handler is set by its setter"), e.getMessage());
+        eval("var raw = { x: 3 }; var got; class Kept { canHandle(t) { return t === EVENT.CLICK; } handle(ev) { got = ev; } }"
+           + "var k = new PlainButton(el('button'), {}); k.setOnClick(new Kept());");
+        eval("k._fire(EVENT.CLICK, raw)");
+        assertTrue(eval("got instanceof ComponentEvent && got.type === EVENT.CLICK && got.source === k && got.raw === raw && Object.isFrozen(got)").asBoolean(),
+                "typed, its component, the raw event carried");
+    }
+
+    /** A state's change is fired from a setter too, with the previous value and no DOM event; the same value again is no change. */
+    @Test
+    void aSettersChange_isFired_withWhatItWas() {
+        eval("var b = new PlainButton(el('button'), {}); b.setOnEnabledChanged(new Told('b')); b.enabled = false; b.enabled = false; b.enabled = true;");
+        assertEquals("b:enabled-changed was true by a setter,b:enabled-changed was false by a setter", str("log"));
     }
 
     @Test

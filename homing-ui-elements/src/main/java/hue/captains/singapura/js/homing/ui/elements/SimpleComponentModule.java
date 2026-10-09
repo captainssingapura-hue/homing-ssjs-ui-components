@@ -20,6 +20,15 @@ public record SimpleComponentModule() implements DomModule<SimpleComponentModule
     /** The base of a simple component's leaves: {@code new Leaf(el, props, role)}; {@code el}, {@code role}. */
     public record SimpleComponent() implements Exportable._Class<SimpleComponentModule> {}
 
+    /** A leaf's companion: {@code new SimpleComponentFactory(Leaf)}; {@code create(branch, name)} makes its element. */
+    public record SimpleComponentFactory() implements Exportable._Class<SimpleComponentModule> {}
+
+    /** One of a component's events, dressed from the DOM's: {@code type}, {@code source}, {@code raw}. */
+    public record ComponentEvent() implements Exportable._Class<SimpleComponentModule> {}
+
+    /** A state's change: a {@code ComponentEvent} with the state's {@code previous} value. */
+    public record StateChange() implements Exportable._Class<SimpleComponentModule> {}
+
     public static final SimpleComponentModule INSTANCE = new SimpleComponentModule();
 
     @Override
@@ -30,5 +39,5 @@ public record SimpleComponentModule() implements DomModule<SimpleComponentModule
                 .build();
     }
 
-    @Override public ExportsOf<SimpleComponentModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new SimpleComponent())); }
+    @Override public ExportsOf<SimpleComponentModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new SimpleComponent(), new SimpleComponentFactory(), new ComponentEvent(), new StateChange())); }
 }

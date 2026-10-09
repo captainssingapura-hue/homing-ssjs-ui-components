@@ -5,10 +5,10 @@
 // picture; its words are its name, said to whoever cannot see the mark, and
 // shown by the browser to whoever points at it: its tooltip.
 //
-//   var c = new CloseButton(branch.createElement("close", CloseButton.TAG), { label: "Close the dialog", onClick: fn }, ROLE.STANDALONE);
+//   var c = new CloseButton(CloseButtonFactory.create(branch, "close"), { label: "Close the dialog" }, ROLE.STANDALONE);
 //   c.label = "Close"    its name: aria-label, and its tooltip; "Close" unless given
 //   c.enabled  c.size
-//   onClick              in the props: called on a press while enabled
+//   c.setOnClick(handler)  a press, while it is enabled
 // =============================================================================
 
 class CloseButton extends Button {
@@ -21,3 +21,6 @@ class CloseButton extends Button {
         this.el.setAttribute("title", name);   // the browser's own tooltip: no caption of the house's to draw
     }
 }
+
+/** Its companion: makes the <button> it is realized on, on its owner's branch, under its owner's name. */
+const CloseButtonFactory = new SimpleComponentFactory(CloseButton);

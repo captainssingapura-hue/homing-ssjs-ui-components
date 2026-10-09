@@ -7,6 +7,13 @@
 
 const _overviewOwner = Object.freeze({ toString: () => "overviewWidget" });
 
+/** The reset pressed: every setting the overview shows goes back to the site's default. */
+class OverviewReset {
+    constructor(settings) { this._settings = settings; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._settings.forEach(function (s) { PreferenceStewardInstance.forget(s.name); }); }
+}
+
 class OverviewWidget {
     constructor(branch, params) {
         branch.activate(_overviewOwner);
@@ -48,9 +55,8 @@ class OverviewWidget {
 
         var actions = branch.createElement("actions", "div");
         css.addClass(actions, pv_actions);
-        this._reset = new PlainButton(branch.createElement("reset", PlainButton.TAG), { label: "Use the site's defaults for all of these", onClick: function () {
-            settings.forEach(function (s) { PreferenceStewardInstance.forget(s.name); });
-        } }, ROLE.RESET);
+        this._reset = new PlainButton(PlainButtonFactory.create(branch, "reset"), { label: "Use the site's defaults for all of these" }, ROLE.RESET);
+        this._reset.setOnClick(new OverviewReset(settings));
         actions.appendChild(this._reset.el);
         root.appendChild(actions);
         this.root = root;

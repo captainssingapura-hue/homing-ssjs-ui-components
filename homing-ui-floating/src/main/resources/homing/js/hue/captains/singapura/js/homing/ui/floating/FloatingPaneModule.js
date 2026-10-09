@@ -52,6 +52,16 @@
 // =============================================================================
 
 const _floatingOwner = Object.freeze({ toString: () => "floatingPane" });
+
+/** The head's cross pressed: the press kept to the cross, and the pane's holder asked to close it. */
+class FloatingPaneClose {
+    constructor(pane) { this._pane = pane; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle(event) {
+        if (event.raw) event.raw.stopPropagation();
+        if (this._pane._onClose) this._pane._onClose(this._pane);
+    }
+}
 var _HELD = 0.6;
 var _MIN_W = 160, _MIN_H = 96;
 var _KEEP = 48;          // how much of the head must stay within the desk, inline
@@ -119,10 +129,8 @@ class FloatingPane {
         head.appendChild(this._title);
         if (opts.closable !== false) {
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
-            var x = new CloseButton(branch.createElement("close", CloseButton.TAG), {
-                label: "Close",
-                onClick: function (e) { e.stopPropagation(); if (self._onClose) self._onClose(self); }
-            }, ROLE.CLOSE);
+            var x = new CloseButton(CloseButtonFactory.create(branch, "close"), { label: "Close" }, ROLE.CLOSE);
+            x.setOnClick(new FloatingPaneClose(self));
             head.appendChild(x.el);
             this._close = x.el;
         }

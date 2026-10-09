@@ -33,6 +33,7 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(CastingsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                CrateEntry.of(StatesAndEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(HouseLookSheet.INSTANCE),
                 CrateEntry.of(LookManifestModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(LookModule.INSTANCE),

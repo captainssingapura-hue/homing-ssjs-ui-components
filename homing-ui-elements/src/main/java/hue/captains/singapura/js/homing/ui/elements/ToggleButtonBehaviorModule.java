@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
+import hue.captains.singapura.js.homing.core.ModuleImports;
 
 import java.util.List;
 
@@ -14,12 +15,16 @@ import java.util.List;
  */
 public record ToggleButtonBehaviorModule() implements DomModule<ToggleButtonBehaviorModule> {
 
-    /** {@code new ToggleButtonBehavior(el, toggle, { onToggle })}. */
+    /** {@code new ToggleButtonBehavior(el, toggle)}. */
     public record ToggleButtonBehavior() implements Exportable._Class<ToggleButtonBehaviorModule> {}
 
     public static final ToggleButtonBehaviorModule INSTANCE = new ToggleButtonBehaviorModule();
 
-    @Override public ImportsFor<ToggleButtonBehaviorModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<ToggleButtonBehaviorModule> imports() {
+        return ImportsFor.<ToggleButtonBehaviorModule>builder()
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .build();
+    }
 
     @Override public ExportsOf<ToggleButtonBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ToggleButtonBehavior())); }
 }

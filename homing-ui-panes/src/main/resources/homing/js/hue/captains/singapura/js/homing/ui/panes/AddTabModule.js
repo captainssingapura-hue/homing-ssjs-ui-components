@@ -42,6 +42,13 @@
 
 const _addTabOwner = Object.freeze({ toString: () => "addTab" });
 
+/** Its go pressed: the tab added. */
+class AddTabGo {
+    constructor(addTab) { this._addTab = addTab; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._addTab.add(); }
+}
+
 class AddTab {
     constructor(branch, opts) {
         if (!branch) throw new Error("[AddTab] a branch of its own is required");
@@ -102,8 +109,8 @@ class AddTab {
             this._how = how;
         }
 
-        this._goButton = new PlainButton(branch.createElement("go", PlainButton.TAG), { label: o.verb == null ? "Add" : String(o.verb),
-                onClick: function () { self.add(); } }, ROLE.GO);
+        this._goButton = new PlainButton(PlainButtonFactory.create(branch, "go"), { label: o.verb == null ? "Add" : String(o.verb) }, ROLE.GO);
+        this._goButton.setOnClick(new AddTabGo(self));
         root.appendChild(this._goButton.el);
         this._go = this._goButton.el;
 

@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
+import hue.captains.singapura.js.homing.core.ModuleImports;
 
 import java.util.List;
 
@@ -14,12 +15,16 @@ import java.util.List;
  */
 public record ButtonBehaviorModule() implements DomModule<ButtonBehaviorModule> {
 
-    /** {@code new ButtonBehavior(el, button, { onClick })}. */
+    /** {@code new ButtonBehavior(el, button)}. */
     public record ButtonBehavior() implements Exportable._Class<ButtonBehaviorModule> {}
 
     public static final ButtonBehaviorModule INSTANCE = new ButtonBehaviorModule();
 
-    @Override public ImportsFor<ButtonBehaviorModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<ButtonBehaviorModule> imports() {
+        return ImportsFor.<ButtonBehaviorModule>builder()
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .build();
+    }
 
     @Override public ExportsOf<ButtonBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ButtonBehavior())); }
 }

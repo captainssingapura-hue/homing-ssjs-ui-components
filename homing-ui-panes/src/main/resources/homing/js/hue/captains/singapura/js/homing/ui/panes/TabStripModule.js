@@ -87,6 +87,20 @@
 
 const _stripOwner = Object.freeze({ toString: () => "tabStrip" });
 
+/** The plus pressed: its holder asked for a tab. */
+class TabStripAdd {
+    constructor(opts) { this._opts = opts; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._opts.onAdd(); }
+}
+
+/** The bar's cross pressed: the press kept to the cross, and its holder asked to close these tabs. */
+class TabStripClose {
+    constructor(opts) { this._opts = opts; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle(event) { if (event.raw) event.raw.stopPropagation(); this._opts.onClose(); }
+}
+
 class TabStrip {
     /** How much of the colour a chip carries while the cursor is on the bar: part of the way, towards what the tab in use carries at full. */
     static ON_THE_BAR = 0.45;
@@ -134,8 +148,8 @@ class TabStrip {
         if (opts && typeof opts.onAdd === "function") {
             // the house's icon button, cast as what adds to its owner, holding the add icon: its look is the style's
             var plus = new Icon(branch.createElement("add-icon", Icon.TAG), { name: "add" });
-            this._add = new IconButton(branch.createElement("add", IconButton.TAG),
-                    { icon: plus, label: "Add a tab", onClick: function () { opts.onAdd(); } }, ROLE.ADD);
+            this._add = new IconButton(IconButtonFactory.create(branch, "add"), { icon: plus, label: "Add a tab" }, ROLE.ADD);
+            this._add.setOnClick(new TabStripAdd(opts));
             var addBtn = this._add.el;
             css.addClass(addBtn, mtp_rail_add);   // its place on the rail
             addBtn._control = true;   // a control on the bar, not its ground
@@ -160,10 +174,9 @@ class TabStrip {
         this._tail.appendChild(this._pill);
         if (opts && typeof opts.onClose === "function") {   // the window's cross, at the very end of its one bar
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
-            var closeBtn = new CloseButton(branch.createElement("close", CloseButton.TAG), {
-                label: "Close these tabs",
-                onClick: function (ev) { ev.stopPropagation(); opts.onClose(); }
-            }, ROLE.CLOSE).el;
+            var closing = new CloseButton(CloseButtonFactory.create(branch, "close"), { label: "Close these tabs" }, ROLE.CLOSE);
+            closing.setOnClick(new TabStripClose(opts));
+            var closeBtn = closing.el;
             css.addClass(closeBtn, mtp_bar_close);   // its place at the bar's end
             closeBtn.setAttribute("tabindex", "-1");
             closeBtn._control = true;

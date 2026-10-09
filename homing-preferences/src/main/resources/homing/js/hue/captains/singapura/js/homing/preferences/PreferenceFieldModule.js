@@ -22,6 +22,13 @@
 
 const _fieldOwner = Object.freeze({ toString: () => "preferenceField" });
 
+/** The field's reset pressed: its setting goes back to the site's default. */
+class PreferenceFieldReset {
+    constructor(field) { this._field = field; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { PreferenceStewardInstance.forget(this._field._name); }
+}
+
 class PreferenceField {
     constructor(branch, params, opts) {
         if (!branch) throw new Error("[PreferenceField] a branch of its own is required");
@@ -54,8 +61,8 @@ class PreferenceField {
         root.appendChild(this._note);
         var actions = branch.createElement("actions", "div");
         css.addClass(actions, pv_actions);
-        this._reset = new PlainButton(branch.createElement("reset", PlainButton.TAG), { label: "Use the site's default",
-                onClick: function () { PreferenceStewardInstance.forget(self._name); } }, ROLE.RESET);
+        this._reset = new PlainButton(PlainButtonFactory.create(branch, "reset"), { label: "Use the site's default" }, ROLE.RESET);
+        this._reset.setOnClick(new PreferenceFieldReset(this));
         actions.appendChild(this._reset.el);
         root.appendChild(actions);
         this.root = root;
