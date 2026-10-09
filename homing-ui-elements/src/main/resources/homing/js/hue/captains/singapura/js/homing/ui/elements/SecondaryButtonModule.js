@@ -8,7 +8,6 @@
 
 class SecondaryButton extends Button {
     static LEAF = "secondary-button";
-    static LOOK = Object.freeze([el_button, el_button_secondary]);
     static DEGREES = Object.freeze(["size", "extent"]);
 
     get extent() { return this._degrees.extent; }

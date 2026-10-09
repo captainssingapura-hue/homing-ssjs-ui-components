@@ -8,7 +8,6 @@
 
 class DangerButton extends Button {
     static LEAF = "danger-button";
-    static LOOK = Object.freeze([el_button, el_button_danger]);
     static DEGREES = Object.freeze(["size", "extent"]);
 
     get extent() { return this._degrees.extent; }

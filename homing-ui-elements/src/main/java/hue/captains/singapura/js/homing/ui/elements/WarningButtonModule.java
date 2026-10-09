@@ -10,7 +10,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
 
-/** The warning button: the button's base, in the warning look. */
+/** The warning button: the button's declarations, worn in its own look. */
 public record WarningButtonModule() implements DomModule<WarningButtonModule>, ImplFor<HouseControls.WarningButton> {
 
     /** An element component: {@code new WarningButton(el, { label, extent, size, onClick }, role)} on an element minted with {@code WarningButton.TAG}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
@@ -25,7 +25,6 @@ public record WarningButtonModule() implements DomModule<WarningButtonModule>, I
     public ImportsFor<WarningButtonModule> imports() {
         return ImportsFor.<WarningButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_button(), new ElementStyles.el_button_warning()), ElementStyles.INSTANCE))
                 .build();
     }
 

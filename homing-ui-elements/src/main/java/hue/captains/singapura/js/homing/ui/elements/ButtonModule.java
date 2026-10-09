@@ -27,7 +27,6 @@ public record ButtonModule() implements DomModule<ButtonModule>, ImplForBranch<H
         return ImportsFor.<ButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ButtonBehaviorModule.ButtonBehavior()), ButtonBehaviorModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_button_on(), new ElementStyles.el_button_off()), ElementStyles.INSTANCE))
                 .build();
     }
 

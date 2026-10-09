@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -85,7 +86,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
             mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
             mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target",
             mtp_opener = "mtp_opener", mtp_opener_note = "mtp_opener_note", mtp_opener_grid = "mtp_opener_grid";
-        var CssClassManagerInstance = css;
+        css.cls = function (name) { return name; };   // the new manager names its classes through the old
         var console = { error: function (m, e) { log.push("error:" + m); } };
         var host = el("div");
         var branch = fakeBranch("page");
@@ -147,10 +148,11 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardHomeModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardStewardModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
-        // the buttons: their castings, generated; the classes their declarations name, before they are read
+        // the buttons: their castings and their looks, generated, before their declarations are read
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", "var el_button = 'el_button', el_button_on = 'el_button_on', el_button_off = 'el_button_off', el_button_plain = 'el_button_plain';");
-        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/ComponentUiModule.js");
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var look_sheet = 'look-sheet';");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/LookModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/SimpleComponentModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/ButtonBehaviorModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/ButtonModule.js");

@@ -8,5 +8,4 @@
 
 class PlainButton extends Button {
     static LEAF = "plain-button";
-    static LOOK = Object.freeze([el_button, el_button_plain]);
 }

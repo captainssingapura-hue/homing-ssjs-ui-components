@@ -10,7 +10,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
 
-/** The primary button: the button's base, in the primary look. */
+/** The primary button: the button's declarations, worn in its own look. */
 public record PrimaryButtonModule() implements DomModule<PrimaryButtonModule>, ImplFor<HouseControls.PrimaryButton> {
 
     /** An element component: {@code new PrimaryButton(el, { label, extent, size, onClick }, role)} on an element minted with {@code PrimaryButton.TAG}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
@@ -25,7 +25,6 @@ public record PrimaryButtonModule() implements DomModule<PrimaryButtonModule>, I
     public ImportsFor<PrimaryButtonModule> imports() {
         return ImportsFor.<PrimaryButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_button(), new ElementStyles.el_button_primary()), ElementStyles.INSTANCE))
                 .build();
     }
 

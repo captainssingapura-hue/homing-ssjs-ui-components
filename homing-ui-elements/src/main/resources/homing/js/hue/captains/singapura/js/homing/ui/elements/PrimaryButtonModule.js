@@ -8,7 +8,6 @@
 
 class PrimaryButton extends Button {
     static LEAF = "primary-button";
-    static LOOK = Object.freeze([el_button, el_button_primary]);
     static DEGREES = Object.freeze(["size", "extent"]);
 
     get extent() { return this._degrees.extent; }

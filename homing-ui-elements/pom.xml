@@ -38,6 +38,12 @@
             <artifactId>homing-core-js</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <!-- The semantic classes: the flattened sheet the house's looks are worn from. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-component-base</artifactId>

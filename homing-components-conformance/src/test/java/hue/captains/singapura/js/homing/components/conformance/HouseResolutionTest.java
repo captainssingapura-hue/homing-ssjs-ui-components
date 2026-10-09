@@ -45,8 +45,10 @@ class HouseResolutionTest {
     }
 
     private static List<String> lines(String name) {
-        try (InputStream in = HouseResolutionTest.class.getResourceAsStream("/resolution/" + name)) {
-            if (in == null) throw new IllegalStateException("no resolution/" + name);
+        InputStream found = HouseResolutionTest.class.getResourceAsStream("/resolution/" + name);
+        if (found == null) found = HouseResolutionTest.class.getResourceAsStream("/homing/looks/" + name);   // a theme the house serves
+        try (InputStream in = found) {
+            if (in == null) throw new IllegalStateException("no resolution/" + name + " or homing/looks/" + name);
             return new String(in.readAllBytes(), StandardCharsets.UTF_8).lines().toList();
         } catch (IOException e) {
             throw new UncheckedIOException(e);

@@ -8,7 +8,6 @@
 
 class SuccessButton extends Button {
     static LEAF = "success-button";
-    static LOOK = Object.freeze([el_button, el_button_success]);
     static DEGREES = Object.freeze(["size", "extent"]);
 
     get extent() { return this._degrees.extent; }

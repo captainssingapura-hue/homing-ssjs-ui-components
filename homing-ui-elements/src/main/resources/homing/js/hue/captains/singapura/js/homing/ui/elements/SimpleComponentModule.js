@@ -6,23 +6,22 @@
 //
 //   the component  its state - one value on each axis, kept here and nowhere
 //                  else, changed only by its setters - its degrees, its role;
-//   its UI         ComponentUi: the element's look, the state's reflections and
-//                  the degrees - the only thing that touches its classes;
+//   its look       Look: the element's semantic classes, the state's reflections
+//                  and the degrees - the only thing that touches its classes;
 //   its behaviour  the leaf's BEHAVIOR: what the element does, its listeners. It
 //                  reads the state and changes it through the component's
 //                  setters; it never touches the look.
 //
 // An AXIS is a sum type of mutually exclusive values: enabled is true or false.
-// Setting one stores the value, shows the new point - its classes swapped at
-// once, its reflection written - and tells the behaviour (changed(axis, value)),
-// in that order; the same value again does nothing. A UI state without a
+// Setting one stores the value, writes its reflection - the look's treatment
+// classes are shown by it, so no class changes - and tells the behaviour
+// (changed(axis, value)), in that order; the same value again does nothing. A UI state without a
 // behavioural one means nothing, so there is no other way to change either.
 //
 // What a leaf declares, as statics - what a generator writes later:
 //   TAG       the element it takes: "button"
 //   LEAF      its token in the taxonomy: "primary-button"; CASTINGS[LEAF] its castings
-//   LOOK      the class handles it wears in every state
-//   AXES      { axis: { values, rest, looks: { value: [handles] }, reflect?(el, value) } }
+//   AXES      { axis: { values, rest, reflect?(el, value) } }
 //   DEGREES   the degrees it varies by: "size", "extent", "aspect"
 //   WORDS     the words it shows: "label"
 //   BEHAVIOR  its behaviour's class: new BEHAVIOR(el, component, props)
@@ -40,7 +39,7 @@ var _COMPONENT_DEGREE_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
 class SimpleComponent {
     constructor(el, props, role) {
         var Leaf = new.target, self = this;
-        if (!Leaf.LEAF || !Leaf.LOOK || !Leaf.BEHAVIOR) throw new Error("[" + Leaf.name + "] is no leaf: a simple component is made as one of its leaves");
+        if (!Leaf.LEAF || !Leaf.BEHAVIOR) throw new Error("[" + Leaf.name + "] is no leaf: a simple component is made as one of its leaves");
         if (!el || String(el.tagName).toLowerCase() !== Leaf.TAG) throw new Error("[" + Leaf.name + "] wants the element minted with its tag, <" + Leaf.TAG + ">");
         var p = props || {}, axes = Leaf.AXES || {}, degrees = Leaf.DEGREES || [], words = Leaf.WORDS || [];
         this.el = el;
@@ -48,8 +47,9 @@ class SimpleComponent {
         this._state = {};
         for (var a in axes) this._state[a] = a in p ? SimpleComponent._value(Leaf, a, p[a]) : axes[a].rest;
         this._degrees = {};
-        this._ui = new ComponentUi(el, Leaf, this.role);
-        this._ui.show(this._state);
+        this._look = new Look(Leaf, this.role);
+        this._look.wear(el);
+        this._look.show(el, this._state);
         degrees.forEach(function (d) { self._degree(d, p[d] == null ? _COMPONENT_DEGREE_REST[d] : p[d]); });
         words.forEach(function (w) { self[w] = p[w]; });
         var rest = {};
@@ -63,12 +63,12 @@ class SimpleComponent {
         return this._state[axis];
     }
 
-    /** A value on an axis: stored, shown, then told to the behaviour; the same value again does nothing. */
+    /** A value on an axis: stored, its reflection written, then told to the behaviour; the same value again does nothing. */
     _set(axis, value) {
         var v = SimpleComponent._value(this.constructor, axis, value);
         if (this._state[axis] === v) return;
         this._state[axis] = v;
-        this._ui.show(this._state);
+        this._look.show(this.el, this._state);
         if (this._behavior && typeof this._behavior.changed === "function") this._behavior.changed(axis, v);
     }
 
@@ -77,7 +77,7 @@ class SimpleComponent {
         if ((this.constructor.DEGREES || []).indexOf(name) < 0) throw new Error("[" + this.constructor.name + "] has no degree '" + name + "'");
         var x = Math.max(-1, Math.min(1, Number(n)));
         this._degrees[name] = Number.isFinite(x) ? x : _COMPONENT_DEGREE_REST[name];
-        this._ui.degree(name, this._degrees[name]);
+        this._look.degree(this.el, name, this._degrees[name]);
     }
 
     static _value(Leaf, axis, value) {

@@ -10,7 +10,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
 
-/** The secondary button: the button's base, in the secondary look. */
+/** The secondary button: the button's declarations, worn in its own look. */
 public record SecondaryButtonModule() implements DomModule<SecondaryButtonModule>, ImplFor<HouseControls.SecondaryButton> {
 
     /** An element component: {@code new SecondaryButton(el, { label, extent, size, onClick }, role)} on an element minted with {@code SecondaryButton.TAG}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
@@ -25,7 +25,6 @@ public record SecondaryButtonModule() implements DomModule<SecondaryButtonModule
     public ImportsFor<SecondaryButtonModule> imports() {
         return ImportsFor.<SecondaryButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_button(), new ElementStyles.el_button_secondary()), ElementStyles.INSTANCE))
                 .build();
     }
 

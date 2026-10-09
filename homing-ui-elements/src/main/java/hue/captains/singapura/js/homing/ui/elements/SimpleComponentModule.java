@@ -10,10 +10,10 @@ import java.util.List;
 
 /**
  * The standard of a simple component: one element, minted by its caller with the tag the
- * component declares. It is three - its state, kept here and changed only by its setters; its UI
- * ({@link ComponentUiModule}); its behaviour, its leaf's - and a state is a value on an axis, a sum
- * type of mutually exclusive values, set by one setter that stores it, shows it and tells the
- * behaviour. Written by hand until it is polished, generated from the declarations after.
+ * component declares. It is three - its state, kept here and changed only by its setters; its look
+ * ({@link LookModule}); its behaviour, its leaf's - and a state is a value on an axis, a sum
+ * type of mutually exclusive values, set by one setter that stores it, writes its reflection and
+ * tells the behaviour. Written by hand until it is polished, generated from the declarations after.
  */
 public record SimpleComponentModule() implements DomModule<SimpleComponentModule> {
 
@@ -25,7 +25,7 @@ public record SimpleComponentModule() implements DomModule<SimpleComponentModule
     @Override
     public ImportsFor<SimpleComponentModule> imports() {
         return ImportsFor.<SimpleComponentModule>builder()
-                .add(new ModuleImports<>(List.of(new ComponentUiModule.ComponentUi()), ComponentUiModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE(), new CastingsModule.CASTINGS()), CastingsModule.INSTANCE))
                 .build();
     }

@@ -8,7 +8,6 @@
 
 class WarningButton extends Button {
     static LEAF = "warning-button";
-    static LOOK = Object.freeze([el_button, el_button_warning]);
     static DEGREES = Object.freeze(["size", "extent"]);
 
     get extent() { return this._degrees.extent; }

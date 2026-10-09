@@ -10,7 +10,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
 
-/** The success button: the button's base, in the success look. */
+/** The success button: the button's declarations, worn in its own look. */
 public record SuccessButtonModule() implements DomModule<SuccessButtonModule>, ImplFor<HouseControls.SuccessButton> {
 
     /** An element component: {@code new SuccessButton(el, { label, extent, size, onClick }, role)} on an element minted with {@code SuccessButton.TAG}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
@@ -25,7 +25,6 @@ public record SuccessButtonModule() implements DomModule<SuccessButtonModule>, I
     public ImportsFor<SuccessButtonModule> imports() {
         return ImportsFor.<SuccessButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_button(), new ElementStyles.el_button_success()), ElementStyles.INSTANCE))
                 .build();
     }
 
