@@ -156,31 +156,32 @@ class HouseStylesTest {
     }
 
     /**
-     * A mark alone stands bare at rest, as Base has it, and under the hand lifts as its style lifts
-     * every button: the style's own hover, not Base's silence. A close turns to danger under the
-     * hand, in every palette; an icon button shows a button's face; off, neither does.
+     * A mark alone is always a part, and flat in every state: its owner's morphism is the only one.
+     * No border, no shadow, no lift - at rest, under the hand, pressed - in any style; under the hand
+     * only its colours change. A close turns to danger, in every palette; an icon button is washed
+     * in the ink it is drawn in; off, neither does.
      */
     @Test
-    void aMarkAlone_isBareAtRest_liftsUnderTheHandAsItsStyleDoes_andACloseTurnsToDanger() {
+    void aMarkAlone_isFlatInEveryState_onlyItsColoursChange_andACloseTurnsToDanger() {
         var close = new Casting(HouseControls.CloseButton.INSTANCE);
         var plus = new Casting(HouseControls.IconButton.INSTANCE);
+        var lifts = List.<Target>of(Target.Shape.Border.INSTANCE, Target.Shape.Shadow.INSTANCE, Target.Motion.Transform.INSTANCE);
         for (var e : HouseStyles.THEMES.entrySet()) {
             Dressed theme = e.getValue();
-            String style = theme.style().token();
-            assertEquals("close-button__shape-shadow from base", said(theme, close, State.REST, Target.Shape.Shadow.INSTANCE), e.getKey());
-            assertEquals("close-button__motion-transform from base", said(theme, close, State.REST, Target.Motion.Transform.INSTANCE), e.getKey());
-            assertEquals("root__shape-border from base", said(theme, close, State.REST, Target.Shape.Border.INSTANCE), e.getKey() + ": no border");
-            assertEquals("button__motion-transform--hover from " + style, said(theme, close, State.HOVER, Target.Motion.Transform.INSTANCE), e.getKey());
-            assertEquals("button__motion-transform--hover from " + style, said(theme, plus, State.HOVER, Target.Motion.Transform.INSTANCE), e.getKey());
-            assertEquals(style.equals("sketchy") ? "none" : "button__shape-shadow--hover from " + style,
-                    said(theme, close, State.HOVER, Target.Shape.Shadow.INSTANCE), e.getKey() + ": ink casts no shadow");
-            assertEquals("control__shape-shadow--disabled from base", said(theme, close, State.DISABLED, Target.Shape.Shadow.INSTANCE), e.getKey());
+            for (Casting mark : List.of(close, plus)) {
+                for (Target t : lifts) {
+                    assertEquals("root__" + t.token() + " from base", said(theme, mark, State.REST, t), e.getKey() + " " + mark + " at rest");
+                    for (State state : List.of(State.HOVER, State.ACTIVE, State.DISABLED))
+                        assertEquals("none", said(theme, mark, state, t), e.getKey() + " " + mark + " " + state + ": flat");
+                }
+            }
             String palette = theme.palette().token();
             assertEquals("close-button__color-background--hover from " + palette, said(theme, close, State.HOVER, Target.Color.Background.INSTANCE));
             assertTrue(body(theme, close, State.HOVER, Target.Color.Background.INSTANCE).contains("background-color: #DC2626;"), "danger, in every palette");
             assertTrue(body(theme, close, State.HOVER, Target.Color.Ink.INSTANCE).contains("color: #FFFFFF;"));
             assertTrue(body(theme, close, State.DISABLED, Target.Color.Background.INSTANCE).contains("background-color: transparent;"), "off: no danger");
-            assertEquals("icon-button__color-background--hover from " + palette, said(theme, plus, State.HOVER, Target.Color.Background.INSTANCE));
+            assertTrue(body(theme, plus, State.HOVER, Target.Color.Background.INSTANCE).contains("background-color: color-mix(in srgb, currentColor 12%, transparent);"),
+                    "a wash of its own ink, on whatever holds it");
         }
     }
 

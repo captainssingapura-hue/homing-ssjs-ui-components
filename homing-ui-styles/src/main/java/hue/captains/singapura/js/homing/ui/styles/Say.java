@@ -12,7 +12,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /** Shorthand for the house's answers: the nodes and targets they are written on, and the answer at rest or per state. */
 final class Say {
@@ -100,36 +99,37 @@ final class Say {
     /** The buttons that are a mark alone: a close button's cross, an icon button's icon. */
     static final List<Taxon> MARKS = List.of(CLOSE, ICON_BUTTON);
 
-    /** What frames a button, which a mark alone goes without in every state: its border, its inset. */
-    static final List<Target> FRAME = List.of(BORDER, INSET);
-
-    /** What a button wears at rest, which a mark alone goes without only at rest: under the hand it lifts and presses as the style's every button does. */
-    static final List<Target> STANCE = List.of(SHADOW, TRANSFORM);
+    /**
+     * What frames a button or lifts it, which a mark alone goes without in every state: its border,
+     * its inset, its shadow, its lift. A mark alone is always a part - a tab's cross, a strip's plus
+     * - and its owner's morphism is the only one: a part that lifts inside a thing that lifts is
+     * two levels of it, and noise.
+     */
+    static final List<Target> FRAME = List.of(BORDER, INSET, SHADOW, TRANSFORM);
 
     /**
-     * The buttons that are a mark alone take Base's bare frame beneath the style's own frame for a
-     * button: no border and no inset ever, its box Base's, and no shadow and no lift at rest - in
-     * every other state the walk goes on up the style, so a mark under the hand lifts as the
-     * style's buttons lift. A style that frames them answers them itself instead.
+     * The buttons that are a mark alone take Base's frame beneath the style's own frame for a
+     * button: flat, in every state - no border, no inset, no shadow, no lift - in Base's box. Under
+     * the hand only its colours change, the palette's. A style that frames them answers them itself
+     * instead.
      */
     static List<Implementation<?>> bareMarks() {
         var out = new ArrayList<Implementation<?>>();
         for (Taxon mark : MARKS) {
-            for (Target t : FRAME) out.add(fromBase(mark, t, Set.of()));
-            out.add(fromBase(mark, EXTENT, Set.of()));
-            for (Target t : STANCE) out.add(fromBase(mark, t, Set.of(State.REST)));
+            for (Target t : FRAME) out.add(fromBase(mark, t));
+            out.add(fromBase(mark, EXTENT));
         }
         return List.copyOf(out);
     }
 
-    private static <T extends Target> Implementation<T> fromBase(Taxon node, T target, Set<State> only) {
-        return new Implementation<>(node, target, new Answer.FromBase<>(only));
+    private static <T extends Target> Implementation<T> fromBase(Taxon node, T target) {
+        return new Implementation<>(node, target, new Answer.FromBase<>());
     }
 
     /**
-     * Base's bare frame for a mark alone: no border, no inset and its type the root's, so the mark
-     * takes the size of the text it sits in; a square box a little larger than the mark, so a
-     * ground under the hand has room round it; and at rest no shadow and no lift.
+     * Base's frame for a mark alone: the root's - nothing - in every state, and its type the root's,
+     * so the mark takes the size of the text it sits in; and a square box a little larger than the
+     * mark, so a ground under the hand has room round it.
      */
     static List<Implementation<?>> bareFrame() {
         var out = new ArrayList<Implementation<?>>();
@@ -137,8 +137,6 @@ final class Say {
             for (Target t : FRAME) out.add(asTheRoot(mark, t));
             out.add(asTheRoot(mark, SCALE));
             out.add(rest(mark, EXTENT, "min-height: 1.5em; min-width: 1.5em;"));
-            out.add(rest(mark, SHADOW, "box-shadow: none;"));
-            out.add(rest(mark, TRANSFORM, "transform: none;"));
         }
         return List.copyOf(out);
     }

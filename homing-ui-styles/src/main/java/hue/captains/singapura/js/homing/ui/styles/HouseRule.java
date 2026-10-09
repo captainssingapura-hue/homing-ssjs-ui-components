@@ -20,7 +20,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * the root, each said whole; a box's shadow cast in the inverted layer, lit in the raised one,
  * glowing in the title colour; the ring of attention in the accent; a button's face - raised, in
  * the text's ink, a hairline round it - a toggle that is on tinted with the accent; a close turning to
- * danger under the hand, an icon button showing a button's face; and each
+ * danger under the hand, an icon button washed in its own ink; and each
  * coloured button's rank - its background, its ink, its border. A coloured button's background and ink move with its extent:
  * the word at 1, the neutral at 0, the meaning turned the other way at -1. Danger, warning and
  * success are the same in every house palette; only the ink they fall back to is the palette's.
@@ -37,6 +37,9 @@ final class HouseRule {
     private static final String DANGER = "#DC2626";
     private static final String DANGER_PRESSED = "#B91C1C";
     private static final String ON_DANGER = "#FFFFFF";
+
+    /** A flat hover for a mark alone: a wash of the ink it is drawn in, so it shows on whatever holds it, light or dark. */
+    private static final String WASH = "color-mix(in srgb, currentColor 12%, transparent)";
 
     /** A ground and nothing drawn on it: the background's whole set, its ramp and its marks transparent. */
     private static String ground(String colour) {
@@ -75,7 +78,7 @@ final class HouseRule {
                 rest(BUTTON, INK, "color: " + s.text() + ";"),
                 rest(BUTTON, BORDER, "border-color: " + s.border() + ";"),
                 // ── a mark alone - a close button's cross, an icon button's icon: no ground of its own, in the ink of what holds it;
-                //    under the hand a close turns to danger, as a window's does, and an icon button shows a button's face; off, neither ──
+                //    under the hand a close turns to danger, as a window's does, and an icon button is washed in the ink it is drawn in; off, neither ──
                 when(HouseControls.CloseButton.INSTANCE, BACKGROUND, Map.of(
                         State.REST, ground("transparent"),
                         State.HOVER, ground(DANGER),
@@ -88,7 +91,7 @@ final class HouseRule {
                         State.ACTIVE, "color: " + ON_DANGER + ";")),
                 when(HouseControls.IconButton.INSTANCE, BACKGROUND, Map.of(
                         State.REST, ground("transparent"),
-                        State.HOVER, ground(s.raised()),
+                        State.HOVER, ground(WASH),
                         State.DISABLED, ground("transparent"))),
                 rest(HouseControls.IconButton.INSTANCE, INK, "color: inherit;"),
                 // ── a toggle that is on: tinted with the accent, edged with it ──
