@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
@@ -64,6 +65,7 @@ public record TabOpenerModule() implements DomModule<TabOpenerModule>, ImplFor<H
     @Override
     public ImportsFor<TabOpenerModule> imports() {
         return ImportsFor.<TabOpenerModule>builder()
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),

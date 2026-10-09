@@ -109,7 +109,6 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
 
     /** The house word, in the brand's own setting. */
     public record mpa_brand_word() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(OnInverted.class, Color.Ink.class), of(House.class, Type.Face.class), of(House.class, Type.Decoration.class), of(House.class, Type.Scale.class), of(House.class, Type.Treatment.class)); }
         @Override public String body() { return ""; }
     }
 

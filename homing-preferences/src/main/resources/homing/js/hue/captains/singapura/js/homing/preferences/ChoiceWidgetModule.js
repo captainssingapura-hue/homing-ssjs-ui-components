@@ -29,10 +29,9 @@ class ChoiceWidget {
             text.textContent = opt.label == null ? String(opt.value) : String(opt.label);
             row.appendChild(text);
             if (opt.note) {
-                var note = branch.createElement("opt-" + i + "-note", "span");
-                css.addClass(note, pv_option_note);
-                note.textContent = String(opt.note);
-                row.appendChild(note);
+                var note = new Caption(CaptionFactory.create(branch, "opt-" + i + "-note"), { text: String(opt.note) }, ROLE.NOTE);
+                css.addClass(note.el, pv_option_note);
+                row.appendChild(note.el);
             }
             row.addEventListener("click", function () { self._field.set(String(opt.value)); });
             list.appendChild(row);

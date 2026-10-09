@@ -24,9 +24,22 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
+import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
+import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
 
 /** Glassmorphism: a rounded pane with a lit top edge, floating on a wide soft shadow. */
 public record Glassmorphism() implements DesignStyle, Derives<Base> {
+
+    /** Its faces: the body's, and the display's for what is set apart. */
+    private static final String BODY = "\"Inter\", \"Segoe UI Variable Text\", \"Segoe UI\", system-ui, sans-serif";
+    private static final String DISPLAY = "\"Inter\", \"Segoe UI Variable Display\", \"Segoe UI\", system-ui, sans-serif";
 
     public static final Glassmorphism INSTANCE = new Glassmorphism();
 
@@ -54,6 +67,13 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
                     closeMark("×")),
             held(PRESS_SHADOW, PRESS_MOVE),
             bareMarks(),
+            // ── its type: the body face on every text, its display face where a text is set apart ──
+            type(TEXT, BODY, null, null),
+            type(HEADING, DISPLAY, "600", null),
+            type(KICKER, DISPLAY, "600", "letter-spacing: 0.14em; text-transform: uppercase;"),
+            type(LABEL, null, "600", null),
+            type(READOUT, DISPLAY, "600", "letter-spacing: -0.01em; font-variant-numeric: tabular-nums;"),
+            type(WORDMARK, DISPLAY, null, "letter-spacing: -0.01em;"),
             measure("10px", "22px", "8px", "64px", "1.3"),
             disabled(".45", "not-allowed"));
 }

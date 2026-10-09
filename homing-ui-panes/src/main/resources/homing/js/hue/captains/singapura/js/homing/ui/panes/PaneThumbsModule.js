@@ -159,7 +159,7 @@ class PaneThumbs {
         at.el.style.setProperty("--thumb-y", pc((r.top - u.t) / u.h));
         at.el.style.setProperty("--thumb-w", pc(r.width / u.w));
         at.el.style.setProperty("--thumb-h", pc(r.height / u.h));
-        at.label.textContent = String(this._labelOf(pane));
+        at.label.text = String(this._labelOf(pane));
         at.el.setAttribute("title", this._labelOf(pane) + " — " + pane.count() + (pane.count() === 1 ? " tab" : " tabs"));
     }
 
@@ -177,9 +177,10 @@ class PaneThumbs {
             var el = own.createElement("thumb", "button");
             css.addClass(el, mtp_thumb);
             el.setAttribute("type", "button");
-            var label = own.createElement("label", "span");
-            css.addClass(label, mtp_thumb_label);
-            el.appendChild(label);
+            // its name, in the house's kicker, cast as its name: placed by the thumbnail, looking as a kicker does
+            var label = new Kicker(KickerFactory.create(own, "label"), {}, ROLE.NAME);
+            css.addClass(label.el, mtp_thumb_label);
+            el.appendChild(label.el);
             el.addEventListener("click", function () { var at = self._at[pane.slotId]; if (at && self._enabledOf(at.pane)) self.pick(at.pane); });
             this.root.appendChild(el);
             this._at[pane.slotId] = { el: el, label: label, pane: pane, branch: own };

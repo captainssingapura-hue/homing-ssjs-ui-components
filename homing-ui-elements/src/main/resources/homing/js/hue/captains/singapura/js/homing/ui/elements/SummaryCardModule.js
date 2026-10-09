@@ -51,27 +51,25 @@ class SummaryCard {
 
         var head = branch.createElement("head", "header");
         css.addClass(head, el_card_head);
-        var title = branch.createElement("title", "h2");
-        css.addClass(title, el_card_title);
-        this._title = branch.createElement("title-text", "span");
-        this._title.textContent = p.title == null ? "" : String(p.title);
-        title.appendChild(this._title);
-        head.appendChild(title);
+        // its texts are the house's, each cast as what it is to the card: placed by the card, looking as they are
+        this._title = new Heading(HeadingFactory.create(branch, "title"), { text: p.title == null ? "" : String(p.title), level: 2 }, ROLE.TITLE);
+        css.addClass(this._title.el, el_card_title);
+        head.appendChild(this._title.el);
+        var badge = null;
         if (p.badge) {
-            var badge = branch.createElement("badge", "span");
-            css.addClass(badge, el_badge);
-            badge.textContent = String(p.badge);
-            head.appendChild(badge);
+            badge = new Badge(BadgeFactory.create(branch, "badge"), { text: String(p.badge) }, ROLE.TAG);
+            css.addClass(badge.el, el_badge);
+            head.appendChild(badge.el);
         }
         card.appendChild(head);
 
         var body = branch.createElement("body", "div");
         css.addClass(body, el_card_body);
+        var text = null;
         if (p.text) {
-            var text = branch.createElement("text", "p");
-            css.addClass(text, el_card_text);
-            text.textContent = String(p.text);
-            body.appendChild(text);
+            text = new Caption(CaptionFactory.create(branch, "text"), { text: String(p.text) }, ROLE.SUMMARY);
+            css.addClass(text.el, el_card_text);
+            body.appendChild(text.el);
         }
         card.appendChild(body);
 
@@ -103,8 +101,8 @@ class SummaryCard {
 
         this.root = card;
         this.body = body;
-        this._parts = [card, head].concat(badge ? [badge] : [], text ? [text] : [], a ? [a] : []);
-        this._parts.push(title);
+        this._parts = [card, head].concat(a ? [a] : []);
+        this._texts = [this._title].concat(badge ? [badge] : [], text ? [text] : []);
         this.size(p.size == null ? 0 : p.size);
         this.aspect(p.aspect == null ? 0 : p.aspect);
     }
@@ -123,12 +121,14 @@ class SummaryCard {
         this._size = Number.isFinite(n) ? n : 0;
         var v = this._size === 0 ? null : this._size;
         this._parts.forEach(function (el) { css.size(el, v); });
+        var n2 = this._size;
+        this._texts.forEach(function (t) { t.size = n2; });   // its texts, by their own size
         return this;
     }
 
     title(text) {
-        if (text !== undefined) this._title.textContent = String(text);
-        return this._title.textContent;
+        if (text !== undefined) this._title.text = String(text);
+        return this._title.text;
     }
 
     /** The card and everything on its branch go together. */

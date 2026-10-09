@@ -89,6 +89,7 @@ class TabStripTest extends JsModuleTestBase {
         js.eval("js", "var look_sheet = 'look-sheet';");
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
             loadModule(ELEMENTS + m);
+        TextsInJs.load(js, this::loadModule);   // and the pill that is its count
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         loadModule(P + "TabDragModule.js");
         loadModule(P + "TabFitModule.js");
@@ -96,7 +97,7 @@ class TabStripTest extends JsModuleTestBase {
         loadModule(P + "TabHandModule.js");
         loadModule(P + "TabChipModule.js");
         loadModule(P + "TabStripModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }

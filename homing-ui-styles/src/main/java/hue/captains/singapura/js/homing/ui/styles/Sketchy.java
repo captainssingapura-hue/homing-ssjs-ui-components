@@ -23,12 +23,25 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
+import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
+import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
 
 /**
  * Sketchy: drawn by hand - a wobbling outline, a marker's rule, a tilt under the hand. Ink casts no
  * shadow, so it says nothing of the shadow: the base's is none.
  */
 public record Sketchy() implements DesignStyle, Derives<Base> {
+
+    /** Its faces: the body's, and the display's for what is set apart. */
+    private static final String BODY = "\"Neucha\", \"Segoe Print\", \"Bradley Hand\", \"Comic Sans MS\", cursive";
+    private static final String DISPLAY = "\"Cabin Sketch\", \"Segoe Print\", \"Bradley Hand\", \"Chalkboard SE\", cursive";
 
     public static final Sketchy INSTANCE = new Sketchy();
 
@@ -49,6 +62,13 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
                     closeMark("✖")),
             held(null, PRESS_MOVE),
             bareMarks(),
+            // ── its type: the body face on every text, its display face where a text is set apart ──
+            type(TEXT, BODY, null, null),
+            type(HEADING, DISPLAY, "700", null),
+            type(KICKER, DISPLAY, "700", "letter-spacing: 0.06em; text-transform: uppercase;"),
+            type(LABEL, null, "700", null),
+            type(READOUT, DISPLAY, "700", "font-variant-numeric: tabular-nums;"),
+            type(WORDMARK, DISPLAY, null, null),
             measure("8px", "16px", "8px", "56px", "1.35"),
             disabled(".5", "not-allowed"));
 }

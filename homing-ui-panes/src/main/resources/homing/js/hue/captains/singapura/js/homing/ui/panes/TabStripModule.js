@@ -169,9 +169,10 @@ class TabStrip {
 
         this._tail = branch.createElement("tail", "div");
         css.addClass(this._tail, mtp_strip_tail);
-        this._pill = branch.createElement("pill", "span");
-        css.addClass(this._pill, mtp_pill);
-        this._tail.appendChild(this._pill);
+        // the count, in the house's pill, cast as its count: placed by the strip, looking as a pill does
+        this._pill = new Pill(PillFactory.create(branch, "pill"), {}, ROLE.COUNT);
+        css.addClass(this._pill.el, mtp_pill);
+        this._tail.appendChild(this._pill.el);
         if (opts && typeof opts.onClose === "function") {   // the window's cross, at the very end of its one bar
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
             var closing = new CloseButton(CloseButtonFactory.create(branch, "close"), { label: "Close these tabs" }, ROLE.CLOSE);
@@ -283,8 +284,8 @@ class TabStrip {
         this._window.reveal(this._active);
     }
     count(n, addOn) {
-        this._pill.textContent = String(n);
-        this._pill.title = "Tabs in this pane: " + n;
+        this._pill.text = String(n);
+        this._pill.el.title = "Tabs in this pane: " + n;
         if (this._add) this._add.enabled = !!addOn;   // off when it would add nothing: inert, and it says so
     }
 

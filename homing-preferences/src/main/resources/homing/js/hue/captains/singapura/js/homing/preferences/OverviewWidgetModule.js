@@ -21,19 +21,17 @@ class OverviewWidget {
         var settings = (params && params.settings) || [];
 
         var root = branch.createElement("root", "div");
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, pv_kicker);
-        kicker.textContent = "group";
-        root.appendChild(kicker);
-        var title = branch.createElement("title", "h2");
-        css.addClass(title, pv_title);
-        title.textContent = params.label || "";
-        root.appendChild(title);
+        // its texts are the house's, each cast as what it is to the overview: placed by it, looking as they are
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "group" }, ROLE.CATEGORY);
+        css.addClass(kicker.el, pv_kicker);
+        root.appendChild(kicker.el);
+        var title = new Heading(HeadingFactory.create(branch, "title"), { text: params.label || "", level: 2 }, ROLE.TITLE);
+        css.addClass(title.el, pv_title);
+        root.appendChild(title.el);
         if (params.summary) {
-            var summary = branch.createElement("summary", "p");
-            css.addClass(summary, pv_summary);
-            summary.textContent = params.summary;
-            root.appendChild(summary);
+            var summary = new Lede(LedeFactory.create(branch, "summary"), { text: params.summary }, ROLE.SUMMARY);
+            css.addClass(summary.el, pv_summary);
+            root.appendChild(summary.el);
         }
 
         var list = branch.createElement("settings", "ul");
@@ -44,12 +42,12 @@ class OverviewWidget {
             css.addClass(li, pv_child);
             var label = branch.createElement("s-" + i + "-label", "span");
             label.textContent = s.label || s.name;
-            var value = branch.createElement("s-" + i + "-value", "span");
-            css.addClass(value, pv_option_note);
+            var value = new Caption(CaptionFactory.create(branch, "s-" + i + "-value"), {}, ROLE.VALUE);
+            css.addClass(value.el, pv_option_note);
             li.appendChild(label);
-            li.appendChild(value);
+            li.appendChild(value.el);
             list.appendChild(li);
-            self._values.push({ name: s.name, el: value });
+            self._values.push({ name: s.name, caption: value });
         });
         root.appendChild(list);
 
@@ -69,7 +67,7 @@ class OverviewWidget {
         var any = false;
         this._values.forEach(function (v) {
             var stored = PreferenceViewInstance.preferred(v.name), pinned = PreferenceViewInstance.override(v.name);
-            v.el.textContent = pinned ? pinned + " (pinned)" : stored ? stored : "default";
+            v.caption.text = pinned ? pinned + " (pinned)" : stored ? stored : "default";
             if (stored) any = true;
         });
         this._reset.enabled = any;

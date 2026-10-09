@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Answer;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +144,55 @@ final class Say {
 
     private static <T extends Target> Implementation<T> asTheRoot(Taxon node, T target) {
         return new Implementation<>(node, target, new Answer.Redirect<>(ROOT));
+    }
+
+    // ── the text leaves ──────────────────────────────────────────────────
+
+    static final Taxon TEXT = HouseBranches.Text.INSTANCE;
+    static final Taxon HEADING = HouseText.Heading.INSTANCE;
+    static final Taxon KICKER = HouseText.Kicker.INSTANCE;
+    static final Taxon CAPTION = HouseText.Caption.INSTANCE;
+    static final Taxon LEDE = HouseText.Lede.INSTANCE;
+    static final Taxon LABEL = HouseText.Label.INSTANCE;
+    static final Taxon READOUT = HouseText.Readout.INSTANCE;
+    static final Taxon BADGE = HouseText.Badge.INSTANCE;
+    static final Taxon PILL = HouseText.Pill.INSTANCE;
+    static final Taxon WORDMARK = HouseText.Wordmark.INSTANCE;
+    static final Target.Type.Weight WEIGHT = Target.Type.Weight.INSTANCE;
+    static final Target.Type.Treatment TREATMENT = Target.Type.Treatment.INSTANCE;
+
+    /** A text leaf's type in a style: its face, its weight, its treatment - each left to what is above it when null. */
+    static List<Implementation<?>> type(Taxon leaf, String face, String weight, String treatment) {
+        var out = new ArrayList<Implementation<?>>();
+        if (face != null) out.add(rest(leaf, FACE, "font-family: " + face + ";"));
+        if (weight != null) out.add(rest(leaf, WEIGHT, "font-weight: " + weight + ";"));
+        if (treatment != null) out.add(rest(leaf, TREATMENT, treatment));
+        return List.copyOf(out);
+    }
+
+    /**
+     * What every text's measure is in the house, whatever the style - harvested from the house's own
+     * typography: each leaf's size and leading, growing with the element's size; a readout's and a
+     * pill's figures of one width; a badge's and a pill's chip.
+     */
+    static List<Implementation<?>> textMeasure() {
+        return List.of(
+                rest(HEADING, SCALE, "font-size: " + grows("18px", "1.2") + "; line-height: 1.25;"),
+                rest(LEDE, SCALE, "font-size: " + grows("17px", "1.2") + "; line-height: 1.55;"),
+                rest(KICKER, SCALE, "font-size: " + grows("11px", "1.15") + "; line-height: 1.4;"),
+                rest(CAPTION, SCALE, "font-size: " + grows("13px", "1.2") + "; line-height: 1.5;"),
+                rest(LABEL, SCALE, "font-size: " + grows("14px", "1.25") + "; line-height: 1.5;"),
+                rest(READOUT, SCALE, "font-size: " + grows("14px", "1.25") + "; line-height: 1.5;"),
+                rest(READOUT, TREATMENT, "font-variant-numeric: tabular-nums;"),
+                rest(BADGE, SCALE, "font-size: " + grows("11px", "1.15") + "; line-height: 1.4;"),
+                rest(BADGE, TREATMENT, "letter-spacing: 0.06em; text-transform: uppercase;"),
+                rest(BADGE, INSET, "padding-block: 0.15em; padding-inline: 0.6em;"),
+                rest(BADGE, CORNER, "border-radius: 999px;"),
+                rest(PILL, SCALE, "font-size: " + grows("12px", "1.15") + "; line-height: 1.5;"),
+                rest(PILL, TREATMENT, "font-variant-numeric: tabular-nums;"),
+                rest(PILL, INSET, "padding-block: 0; padding-inline: 0.5em;"),
+                rest(PILL, CORNER, "border-radius: 999px;"),
+                rest(WORDMARK, SCALE, "font-size: " + grows("22px", "1.2") + "; line-height: 1;"));
     }
 
     /** Every answer of the groups, in order. */

@@ -169,6 +169,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         js.eval("js", "var el_icon_button = 'el_icon_button';");   // the icon button's face, laid out
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/IconButtonModule.js");
+        TextsInJs.load(js, this::loadModule);   // the texts it holds: the count, the prompts, the empty note
         loadModule(EVENTS);
         loadModule(DRAG);
         loadModule(FIT);
@@ -183,7 +184,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule(MODULE);
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabPaneModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabRegisterModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }

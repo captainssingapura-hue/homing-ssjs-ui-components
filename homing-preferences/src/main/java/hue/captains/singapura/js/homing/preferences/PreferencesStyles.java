@@ -76,23 +76,19 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
     // ── A widget's furniture ──────────────────────────────────────────────────
 
     public record pv_kicker() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Kicker.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 0 0 4px;"; }
     }
 
     public record pv_title() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 0 0 6px;"; }
     }
 
     public record pv_summary() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Lede.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return "margin: 0 0 18px;"; }
     }
 
     /** A line about the value: what it is, where it came from. */
     public record pv_note() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return "margin: 12px 0 0;"; }
     }
 
@@ -138,13 +134,11 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
     }
 
     public record pv_option_note() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """
             margin-left: auto;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            min-width: 0;
             """;
         }
     }
@@ -205,7 +199,6 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
     }
 
     public record pv_readout() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 8px 0 0;"; }
     }
 

@@ -40,6 +40,8 @@ public record PanelModule() implements DomModule<PanelModule>, ImplFor<HouseCont
     @Override
     public ImportsFor<PanelModule> imports() {
         return ImportsFor.<PanelModule>builder()
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_panel(),
                         new ElementStyles.el_panel_head(),

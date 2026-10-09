@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.floating;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.elements.LabelModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -32,6 +33,7 @@ public record FloatingPaneModule() implements DomModule<FloatingPaneModule>, Imp
     @Override
     public ImportsFor<FloatingPaneModule> imports() {
         return ImportsFor.<FloatingPaneModule>builder()
+                .add(new ModuleImports<>(List.of(new LabelModule.Label(), new LabelModule.LabelFactory()), LabelModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatEventsModule.FloatEvents()), FloatEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton(), new CloseButtonModule.CloseButtonFactory()), CloseButtonModule.INSTANCE))

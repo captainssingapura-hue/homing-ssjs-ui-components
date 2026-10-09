@@ -199,9 +199,12 @@ class MultiTabPane {
         css.addClass(this._content, mtp_content);
         root.appendChild(this._content);
 
+        // what an empty pane says: a box of the pane's own, filling the content and giving the note its room,
+        // and in it the house's caption, cast as its note - the box shown and hidden, the note only placed
         this._empty = branch.createElement("empty", "div");
         css.addClass(this._empty, mtp_empty);
-        this._empty.textContent = "No tabs";
+        this._emptyNote = new Caption(CaptionFactory.create(branch, "empty-note"), { text: "No tabs" }, ROLE.NOTE);
+        this._empty.appendChild(this._emptyNote.el);
         this._content.appendChild(this._empty);
 
         opts.host.appendChild(root);

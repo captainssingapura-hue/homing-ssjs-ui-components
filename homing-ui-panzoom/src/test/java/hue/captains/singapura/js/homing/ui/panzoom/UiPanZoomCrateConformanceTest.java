@@ -33,7 +33,7 @@ class UiPanZoomCrateConformanceTest {
     @Test
     void theViewPaintsNothingOfItsOwn() {
         var worn = Deployment.wornBy(List.of(PanZoomStyles.INSTANCE));
-        assertTrue(worn.size() >= 5, "the viewport, the hand and the readout wear a handful of pairs; found " + worn.size());
+        assertTrue(worn.size() >= 4, "the viewport and the hand wear a handful of pairs - the readout is the house's, in its own look; found " + worn.size());
         for (CssClass<PanZoomStyles> c : PanZoomStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color") || body.contains("cursor"),

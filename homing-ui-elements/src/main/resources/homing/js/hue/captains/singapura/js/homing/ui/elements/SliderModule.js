@@ -88,10 +88,12 @@ class Slider {
         css.addClass(root, el_slider);
         if (vertical) css.addClass(root, el_slider_vertical);
         this.root = root;
-        this._label = branch.createElement("label", "span");
-        css.addClass(this._label, el_slider_label);
-        this._label.textContent = p.label == null ? "" : String(p.label);
-        root.appendChild(this._label);
+        // its texts are the house's, each cast as what it is to the slider: placed by the slider, looking as they are
+        this._texts = [];
+        this._label = new Label(LabelFactory.create(branch, "label"), { text: p.label == null ? "" : String(p.label) }, ROLE.NAME);
+        css.addClass(this._label.el, el_slider_label);
+        root.appendChild(this._label.el);
+        this._texts.push(this._label);
 
         var rail = branch.createElement("rail", "div");
         css.addClass(rail, el_slider_rail);
@@ -126,12 +128,13 @@ class Slider {
             css.addClass(line, el_slider_tick_line);
             if (vertical) css.addClass(line, el_slider_tick_line_vertical);
             tick.appendChild(line);
-            var caption = branch.createElement("tick-" + t + "-label", "span");
-            css.addClass(caption, el_slider_tick_label);
-            caption.textContent = ticks[t] && ticks[t].label != null ? String(ticks[t].label) : this._format(at);
-            tick.appendChild(caption);
+            var caption = new Caption(CaptionFactory.create(branch, "tick-" + t + "-label"),
+                    { text: ticks[t] && ticks[t].label != null ? String(ticks[t].label) : this._format(at) }, ROLE.FIGURE);
+            css.addClass(caption.el, el_slider_tick_label);
+            tick.appendChild(caption.el);
             rail.appendChild(tick);
-            this._ticks.push(tick, line, caption);
+            this._ticks.push(tick, line);
+            this._texts.push(caption);
         }
         if (this._ticks.length) css.addClass(rail, el_slider_rail_ticked);
         // the knob — the cap, when stood up
@@ -154,10 +157,11 @@ class Slider {
         rail.appendChild(knob);
         root.appendChild(rail);
 
-        this._readout = branch.createElement("readout", "span");
-        css.addClass(this._readout, el_slider_readout);
-        root.appendChild(this._readout);
-        this._parts = [root, this._label, rail, track, this._fill, knob, this._face, this._mark.el, this._readout].concat(this._ticks);
+        this._readout = new Readout(ReadoutFactory.create(branch, "readout"), {}, ROLE.VALUE);
+        css.addClass(this._readout.el, el_slider_readout);
+        root.appendChild(this._readout.el);
+        this._texts.push(this._readout);
+        this._parts = [root, rail, track, this._fill, knob, this._face, this._mark.el].concat(this._ticks);
         if (this._detent) this._parts.push(this._detent);
 
         this._value = this._snap(p.value == null ? this._rest() : Number(p.value), false);
@@ -262,7 +266,7 @@ class Slider {
         this._rail.style.setProperty("--sl-span", pct(Math.abs(fv - fr)));
         this._knob.setAttribute("aria-valuenow", String(this._value));
         this._knob.setAttribute("aria-valuetext", this._format(this._value));
-        this._readout.textContent = this._format(this._value);
+        this._readout.text = this._format(this._value);
     }
 
     // ── the surface ───────────────────────────────────────────────────────
@@ -283,18 +287,20 @@ class Slider {
         this._size = Number.isFinite(n) ? n : 0;
         var v = this._size === 0 ? null : this._size;
         this._parts.forEach(function (el) { css.size(el, v); });
+        var n2 = this._size;
+        this._texts.forEach(function (t) { t.size = n2; });   // its texts, by their own size
         return this;
     }
     label(text) {
-        if (text !== undefined) { this._label.textContent = String(text); this._knob.setAttribute("aria-label", String(text)); }
-        return this._label.textContent;
+        if (text !== undefined) { this._label.text = String(text); this._knob.setAttribute("aria-label", String(text)); }
+        return this._label.text;
     }
     icon(name) {
         if (name !== undefined) { if (name == null) this._mark.clear(); else this._mark.set(name); }
         return this._mark.name();
     }
     labelWidth(w) {
-        if (w == null) this._label.style.removeProperty("--sl-label"); else this._label.style.setProperty("--sl-label", String(w));
+        if (w == null) this._label.el.style.removeProperty("--sl-label"); else this._label.el.style.setProperty("--sl-label", String(w));   // its place: how wide the slider gives it
         return this;
     }
     dispose() {

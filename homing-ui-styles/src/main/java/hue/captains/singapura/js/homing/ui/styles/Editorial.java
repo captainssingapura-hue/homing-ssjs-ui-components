@@ -24,9 +24,22 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
+import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
+import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
 
 /** Editorial, the house's own: a serif voice, a fine rule, a soft lift under the hand. */
 public record Editorial() implements DesignStyle, Derives<Base> {
+
+    /** Its faces: the body's, and the display's for what is set apart. */
+    private static final String BODY = "\"Calibri\", \"Segoe UI\", system-ui, sans-serif";
+    private static final String DISPLAY = "\"Georgia\", serif";
 
     public static final Editorial INSTANCE = new Editorial();
 
@@ -52,6 +65,15 @@ public record Editorial() implements DesignStyle, Derives<Base> {
                     closeMark("✕")),
             held(PRESS_SHADOW, PRESS_MOVE),
             bareMarks(),
+            // ── its type: the body face on every text, its display face where a text is set apart ──
+            type(TEXT, BODY, null, null),
+            type(HEADING, DISPLAY, "700", null),
+            type(KICKER, DISPLAY, "700", "letter-spacing: 2px; text-transform: uppercase;"),
+            type(LEDE, null, null, "font-style: italic;"),
+            type(CAPTION, null, null, "font-style: italic;"),
+            type(LABEL, null, "600", null),
+            type(READOUT, DISPLAY, "700", "font-style: italic; font-variant-numeric: tabular-nums;"),
+            type(WORDMARK, DISPLAY, null, "font-style: italic;"),
             measure("8px", "18px", "8px", "56px", "1.3"),
             disabled(".45", "default"));
 }

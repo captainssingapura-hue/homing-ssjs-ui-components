@@ -24,9 +24,22 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
+import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
+import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
 
 /** Neo-brutalism: square, a heavy rule, a hard offset shadow, and a press that drops into it. */
 public record NeoBrutalism() implements DesignStyle, Derives<Base> {
+
+    /** Its faces: the body's, and the display's for what is set apart. */
+    private static final String BODY = "\"Helvetica Neue\", Arial, sans-serif";
+    private static final String DISPLAY = "\"Arial Black\", \"Impact\", \"Helvetica Neue\", Arial, sans-serif";
 
     public static final NeoBrutalism INSTANCE = new NeoBrutalism();
 
@@ -52,6 +65,13 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
                     closeMark("╳")),
             held(PRESS_SHADOW, PRESS_MOVE),
             bareMarks(),
+            // ── its type: the body face on every text, its display face where a text is set apart ──
+            type(TEXT, BODY, null, null),
+            type(HEADING, DISPLAY, "900", null),
+            type(KICKER, DISPLAY, "900", "letter-spacing: 0.04em; text-transform: uppercase;"),
+            type(LABEL, null, "700", null),
+            type(READOUT, DISPLAY, "900", "font-variant-numeric: tabular-nums;"),
+            type(WORDMARK, DISPLAY, null, "letter-spacing: -0.02em; text-transform: uppercase;"),
             measure("10px", "20px", "10px", "64px", "1.5"),
             disabled(".4", "not-allowed"));
 }

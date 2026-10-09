@@ -53,9 +53,10 @@ class CardKeysTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        TextsInJs.load(js, this::loadModule);   // its texts are the house's
         loadModule(DIR + "component/keyboard/KeysModule.js");
         loadModule(DIR + "ui/elements/SummaryCardModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }

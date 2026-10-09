@@ -2,6 +2,8 @@ package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.elements.WordmarkModule;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
@@ -36,6 +38,8 @@ public record MpaChromeModule() implements DomModule<MpaChromeModule>, ImplFor<H
     @Override
     public ImportsFor<MpaChromeModule> imports() {
         return ImportsFor.<MpaChromeModule>builder()
+                .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark(), new WordmarkModule.WordmarkFactory()), WordmarkModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesButtonModule.PreferencesButton()), PreferencesButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))

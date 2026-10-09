@@ -21,14 +21,14 @@ class ThemeWidget {
         this._field = new PreferenceField(branch.createBranch("field"), params, { kicker: "theme", onValue: function (v) { self._draw(v); } });
         this.root = this._field.root;
 
-        var pending = branch.createElement("pending", "div");
-        css.addClass(pending, pv_kicker);
-        pending.textContent = "Loading the site's themes…";
-        this._field.body.appendChild(pending);
+        // what it is waiting for, in the house's kicker, cast as its status
+        var pending = new Kicker(KickerFactory.create(branch, "pending"), { text: "Loading the site's themes…" }, ROLE.STATUS);
+        css.addClass(pending.el, pv_kicker);
+        this._field.body.appendChild(pending.el);
 
         fetch("/themes").then(function (r) { if (!r.ok) throw new Error("/themes HTTP " + r.status); return r.json(); })
-            .then(function (j) { self._reg = j; pending.remove(); self._draw(self._field.value()); })
-            .catch(function (e) { pending.textContent = "The site's themes could not be loaded: " + e.message; });
+            .then(function (j) { self._reg = j; pending.el.remove(); self._draw(self._field.value()); })
+            .catch(function (e) { pending.text = "The site's themes could not be loaded: " + e.message; });
     }
 
     _decompose(slug) {
@@ -63,10 +63,9 @@ class ThemeWidget {
         })));
         var offered = at.base.colours.filter(function (c) { return c.own || c.fits; });
         if (offered.length > 1) {
-            var k = listsBranch.createElement("coloursKicker", "div");
-            css.addClass(k, pv_kicker);
-            k.textContent = "Colours for " + at.base.label;
-            this._field.body.appendChild(k);
+            var k = new Kicker(KickerFactory.create(listsBranch, "coloursKicker"), { text: "Colours for " + at.base.label }, ROLE.SUBTITLE);
+            css.addClass(k.el, pv_kicker);
+            this._field.body.appendChild(k.el);
             this._field.body.appendChild(this._list(listsBranch, "colours", "Colours", offered.map(function (c) {
                 var p = self._paletteOf(c.palette);
                 return { value: c.slug, label: p.label, note: c.own ? "the design's own" : p.inspiration, selected: c.slug === worn };
@@ -90,10 +89,9 @@ class ThemeWidget {
             text.textContent = o.label;
             row.appendChild(text);
             if (o.note) {
-                var note = b.createElement(key + "-" + i + "-note", "span");
-                css.addClass(note, pv_option_note);
-                note.textContent = o.note;
-                row.appendChild(note);
+                var note = new Caption(CaptionFactory.create(b, key + "-" + i + "-note"), { text: o.note }, ROLE.NOTE);
+                css.addClass(note.el, pv_option_note);
+                row.appendChild(note.el);
             }
             row.addEventListener("click", function () { self._field.set(o.value); });
             ul.appendChild(row);

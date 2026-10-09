@@ -33,10 +33,10 @@ class PanZoomBar {
         root.setAttribute("role", "group");
         root.setAttribute("aria-label", "Zoom");
         this._out = this._button(root, "out", "−", "Zoom out", ROLE.ZOOM_OUT, new PanZoomPress(view, "zoomOut"));
-        this._readout = branch.createElement("readout", "span");
-        css.addClass(this._readout, pz_readout);
-        this._readout.setAttribute("aria-live", "polite");
-        root.appendChild(this._readout);
+        // the zoom, read out by the house's readout - an output, which says its changes to whoever cannot see them
+        this._readout = new Readout(ReadoutFactory.create(branch, "readout"), {}, ROLE.VALUE);
+        css.addClass(this._readout.el, pz_readout);
+        root.appendChild(this._readout.el);
         this._in = this._button(root, "in", "+", "Zoom in", ROLE.ZOOM_IN, new PanZoomPress(view, "zoomIn"));
         this._fit = this._button(root, "fit", "Fit", "Fit the whole", ROLE.FIT, new PanZoomPress(view, "fit"));
         this.root = root;
@@ -58,7 +58,7 @@ class PanZoomBar {
     }
 
     _follow(v) {
-        this._readout.textContent = Math.round(v.zoom * 100) + "%";
+        this._readout.text = Math.round(v.zoom * 100) + "%";
         this._out.enabled = !v.least;
         this._fit.enabled = !v.fitted;
         this._in.enabled = !v.most;

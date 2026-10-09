@@ -166,6 +166,16 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
+    // ── Text ──────────────────────────────────────────────────────────────────
+
+    /** A text leaf's element: no margin of its own - where it sits, and the room round it, are its owner's. Layout only. */
+    public record el_text() implements CssClass<ElementStyles> {
+        @Override public String body() { return "margin: 0;\n"; }
+        // The old designs tint some shadows with the heading's ink, which the texts wore before
+        // they took the house's look; until the old side goes, they keep its binding emitted.
+        @Override public List<? extends Wearable> reads() { return List.of(of(Heading.class, Color.Ink.class)); }
+    }
+
     // ── Slider ────────────────────────────────────────────────────────────────
 
     /** The slider: a row of label, rail and readout — {@code Control.Slider} for its air and its gap. */
@@ -182,7 +192,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     /** The label before the rail; a caller stacking sliders gives them one label width, {@code --sl-label}, so the rails align. */
     public record el_slider_label() implements CssClass<ElementStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-label")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Label.class, Type.Scale.class)); }
         @Override public String body() { return """
             flex: none;
             inline-size: var(--sl-label, auto);
@@ -332,10 +341,9 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The readout after the rail: the value as the caller formats it, in a steady face, right-aligned. */
     public record el_slider_readout() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Label.class, Type.Scale.class), of(Code.class, Type.Face.class), of(Muted.class, Color.Ink.class)); }
+        // its steady width a flex basis, not a min-width: how small a text may be is its look's
         @Override public String body() { return """
-            flex: none;
-            min-width: 4ch;
+            flex: 0 0 4ch;
             text-align: end;
             white-space: nowrap;
             """;
@@ -512,9 +520,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The tick's caption: its number, small and muted, in a steady face. */
     public record el_slider_tick_label() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Code.class, Type.Face.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
-            line-height: 1;
             white-space: nowrap;
             """;
         }
@@ -572,11 +578,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The title in the header: a heading. */
     public record el_slider_group_title() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Heading.class, Type.Scale.class)); }
         @Override public String body() { return """
             margin: 0;
-            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -658,11 +661,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     }
 
     public record el_card_title() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Heading.class, Type.Scale.class)); }
         @Override public String body() { return """
             margin: 0;
-            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -672,8 +672,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** A short upper-case tag beside a title: an inline box on the secondary surface, as the studio's badges are. */
     public record el_badge() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Secondary.class, Color.Surface.class), of(Heading.class, Color.Ink.class), of(Inline.class, Size.Inset.class), of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Inline.class, Shape.Corner.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Inline.class, Size.Inset.class), of(Kicker.class, Type.Scale.class)); }
         @Override public String body() { return """
             margin-left: auto;
             flex: none;
@@ -692,8 +690,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     }
 
     public record el_card_text() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return "margin: 0;"; }
     }
 
@@ -770,11 +766,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The panel's name: a kicker, as a labelled region's is; it ellipsises rather than push out what acts on the panel. */
     public record el_panel_title() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Face.class), of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Kicker.class, Color.Ink.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Kicker.class, Type.Scale.class)); }
         @Override public String body() { return """
             margin: 0;
-            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -907,7 +900,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     @Override
     public List<CssClass<ElementStyles>> cssClasses() {
         return List.of(new el_button(), new el_button_primary(), new el_button_secondary(), new el_button_danger(), new el_button_warning(), new el_button_success(),
-                       new el_button_plain(), new el_button_on(), new el_button_off(), new el_icon_button(),
+                       new el_button_plain(), new el_button_on(), new el_button_off(), new el_icon_button(), new el_text(),
                        new el_slider(), new el_slider_label(), new el_slider_rail(), new el_slider_track(), new el_slider_fill(), new el_slider_detent(),
                        new el_slider_knob(), new el_slider_face(), new el_slider_mark(), new el_slider_held(), new el_slider_face_held(), new el_slider_knob_current(), new el_slider_readout(),
                        new el_slider_vertical(), new el_slider_rail_vertical(), new el_slider_rail_ticked(), new el_slider_track_vertical(), new el_slider_fill_vertical(), new el_slider_detent_vertical(),

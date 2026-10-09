@@ -37,10 +37,10 @@ class TabPicker {
         branch.activate(_pickerOwner);
         var root = branch.createElement("picker", "div");
         css.addClass(root, mtp_opener);
-        var note = branch.createElement("note", "p");
-        css.addClass(note, mtp_opener_note);
-        note.textContent = o.prompt == null ? "What should open here?" : String(o.prompt);
-        root.appendChild(note);
+        // what it asks, in the house's kicker, cast as its prompt: placed by it, looking as a kicker does
+        var note = new Kicker(KickerFactory.create(branch, "note"), { text: o.prompt == null ? "What should open here?" : String(o.prompt) }, ROLE.PROMPT);
+        css.addClass(note.el, mtp_opener_note);
+        root.appendChild(note.el);
         var grid = branch.createElement("grid", "div");
         css.addClass(grid, mtp_opener_grid);
         root.appendChild(grid);

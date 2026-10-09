@@ -74,11 +74,11 @@ class MpaChrome {
         HrefManagerInstance.set(a, (brand && brand.home) || "/");
         var mark = branch.createElement("brandMark", "span");
         css.addClass(mark, mpa_brand_mark);
-        var word = branch.createElement("brandWord", "span");
-        css.addClass(word, mpa_brand_word);
-        word.textContent = (brand && brand.label) || "site";
+        // the site's name, in the house's wordmark, cast as the brand's name: placed by the chrome
+        var word = new Wordmark(WordmarkFactory.create(branch, "brandWord"), { text: (brand && brand.label) || "site" }, ROLE.NAME);
+        css.addClass(word.el, mpa_brand_word);
         a.appendChild(mark);
-        a.appendChild(word);
+        a.appendChild(word.el);
         return a;
     }
 

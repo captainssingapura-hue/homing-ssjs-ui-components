@@ -86,8 +86,8 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
 
     /** The zoom, said: a share of fit, in figures that keep their width. */
     public record pz_readout() implements CssClass<PanZoomStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
-        @Override public String body() { return "min-width: 3.5em;\ntext-align: center;\nfont-variant-numeric: tabular-nums;\n"; }
+        // its width a flex basis, not a min-width: how small a text may be, and its figures, are its look's
+        @Override public String body() { return "flex: 0 0 3.5em;\ntext-align: center;\n"; }
     }
 
     @Override

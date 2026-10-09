@@ -24,9 +24,22 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
+import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
+import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
 
 /** Retro-futurism: a neon ring that flares under the hand, and motion in steps, as a screen of the period moved. */
 public record RetroFuturism() implements DesignStyle, Derives<Base> {
+
+    /** Its faces: the body's, and the display's for what is set apart. */
+    private static final String BODY = "\"Rajdhani\", \"Bahnschrift\", \"Segoe UI\", system-ui, sans-serif";
+    private static final String DISPLAY = "\"Orbitron\", \"Audiowide\", \"Bahnschrift\", \"Eurostile\", \"Impact\", sans-serif";
 
     public static final RetroFuturism INSTANCE = new RetroFuturism();
 
@@ -55,6 +68,15 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
                     closeMark("✘")),
             held(PRESS_SHADOW, PRESS_MOVE),
             bareMarks(),
+            // ── its type: the body face on every text, its display face where a text is set apart ──
+            type(TEXT, BODY, null, null),
+            type(HEADING, DISPLAY, "700", null),
+            type(KICKER, DISPLAY, "700", "letter-spacing: 0.24em; text-transform: uppercase;"),
+            type(LEDE, null, null, "letter-spacing: 0.02em;"),
+            type(CAPTION, null, null, "letter-spacing: 0.04em;"),
+            type(LABEL, null, "700", null),
+            type(READOUT, DISPLAY, "700", "letter-spacing: 0.06em; font-variant-numeric: tabular-nums;"),
+            type(WORDMARK, DISPLAY, null, "letter-spacing: 0.2em; text-transform: uppercase;"),
             measure("8px", "18px", "8px", "56px", "1.3"),
             disabled(".4", "not-allowed"));
 }

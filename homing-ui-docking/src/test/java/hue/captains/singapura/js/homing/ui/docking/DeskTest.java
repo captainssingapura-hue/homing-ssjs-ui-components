@@ -153,6 +153,7 @@ class DeskTest extends JsModuleTestBase {
         js.eval("js", "var el_icon_button = 'el_icon_button';");   // the icon button's face, laid out
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js", "IconButtonModule.js"})
             loadModule(P + "elements/" + m);
+        TextsInJs.load(js, this::loadModule);   // the texts its panes and floats hold
         loadModule(P + "floating/FloatEventsModule.js");
         loadModule(P + "floating/FloatingPaneModule.js");
         loadModule(P + "floating/FloatLayerModule.js");
@@ -174,7 +175,7 @@ class DeskTest extends JsModuleTestBase {
         loadModule(P + "panes/TabPaneModule.js");
         loadModule(P + "panes/TabRegisterModule.js");
         loadModule(P + "docking/DeskModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }

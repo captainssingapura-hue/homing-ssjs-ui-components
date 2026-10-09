@@ -90,7 +90,7 @@ class FloatingPane {
         css.addClass(frame, fp_frame);
         frame.setAttribute("role", "region");
 
-        this._icon = null; this._title = null; this._close = null;
+        this._icon = null; this._title = null; this._close = null; this._closer = null;
         this._iconEl = null;
         var head = opts.head === false ? null : this._mintHead(branch, opts);
         if (head) frame.appendChild(head);
@@ -107,7 +107,7 @@ class FloatingPane {
         this.root = frame;
         this.head = head;
         this.body = body;
-        this._parts = head ? [head, this._title].concat(this._close ? [this._close] : []) : [];
+        this._parts = head ? [head] : [];
         this.title(opts.title == null ? "" : opts.title);
         this.icon(opts.icon || null);
         this.raise(opts.z == null ? 1 : opts.z);
@@ -124,15 +124,17 @@ class FloatingPane {
         css.addClass(this._icon, fp_icon);
         this._icon.setAttribute("aria-hidden", "true");
         head.appendChild(this._icon);
-        this._title = branch.createElement("title", "span");
-        css.addClass(this._title, fp_title);
-        head.appendChild(this._title);
+        // its title is the house's label, cast as its title: placed by the pane, looking as a label does
+        this._title = new Label(LabelFactory.create(branch, "title"), {}, ROLE.TITLE);
+        css.addClass(this._title.el, fp_title);
+        head.appendChild(this._title.el);
         if (opts.closable !== false) {
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
             var x = new CloseButton(CloseButtonFactory.create(branch, "close"), { label: "Close" }, ROLE.CLOSE);
             x.setOnClick(new FloatingPaneClose(self));
             head.appendChild(x.el);
             this._close = x.el;
+            this._closer = x;
         }
         return head;
     }
@@ -140,7 +142,7 @@ class FloatingPane {
     title(text) {
         if (text !== undefined) {
             this._label = String(text);
-            if (this._title) this._title.textContent = this._label;
+            if (this._title) this._title.text = this._label;
             this.root.setAttribute("aria-label", this._label);
         }
         return this._label;
@@ -201,6 +203,8 @@ class FloatingPane {
         this._size = Number.isFinite(n) ? n : 0;
         var v = this._size === 0 ? null : this._size;
         this._parts.forEach(function (el) { css.size(el, v); });
+        if (this._title) this._title.size = this._size;     // its title and its cross, by their own size
+        if (this._closer) this._closer.size = this._size;
         return this;
     }
 

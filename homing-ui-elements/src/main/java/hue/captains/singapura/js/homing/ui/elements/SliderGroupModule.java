@@ -48,6 +48,8 @@ public record SliderGroupModule() implements DomModule<SliderGroupModule>, ImplF
     @Override
     public ImportsFor<SliderGroupModule> imports() {
         return ImportsFor.<SliderGroupModule>builder()
+                .add(new ModuleImports<>(List.of(new HeadingModule.Heading(), new HeadingModule.HeadingFactory()), HeadingModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_slider_group(),
                         new ElementStyles.el_slider_group_held(),

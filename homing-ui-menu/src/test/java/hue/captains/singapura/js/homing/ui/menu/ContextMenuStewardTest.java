@@ -27,7 +27,7 @@ class ContextMenuStewardTest extends JsModuleTestBase {
         var captureListeners = {};   // the document's, capture phase
         function el(tag) {
             var classes = new Set(), attrs = {}, props = {};
-            var node = { tag: tag, children: [], parentNode: null, listeners: {}, textContent: "", isConnected: true,
+            var node = { tag: tag, tagName: String(tag).toUpperCase(), children: [], parentNode: null, listeners: {}, textContent: "", isConnected: true,
                 rect: { left: 0, top: 0, width: 160, height: 32, right: 160, bottom: 32 },
                 style: { setProperty: function (k, v) { props[k] = v; }, removeProperty: function (k) { delete props[k]; }, getPropertyValue: function (k) { return props[k] == null ? "" : props[k]; } },
                 classList: { add: function () { for (var i = 0; i < arguments.length; i++) classes.add(arguments[i]); },
@@ -109,9 +109,10 @@ class ContextMenuStewardTest extends JsModuleTestBase {
         // the icon component reads ICONS as it loads: the wardrobe's names first, as the served module would import them
         js.eval("js", "var ic_base = 'ic_base', ICONS = { check: 'ic_check', disclose: 'ic_disclose', rotate: 'ic_rotate', flip: 'ic_flip', reset: 'ic_reset' };");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
+        TextsInJs.load(js, this::loadModule);   // the caption that is an item's hint
         loadModule(P + "ContextMenuModule.js");
         loadModule(P + "ContextMenuStewardModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }

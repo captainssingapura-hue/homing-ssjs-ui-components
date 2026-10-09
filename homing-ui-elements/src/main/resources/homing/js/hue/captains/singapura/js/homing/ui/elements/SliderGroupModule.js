@@ -49,11 +49,10 @@ class SliderGroup {
         this.root = root;
         var header = branch.createElement("header", "div");
         css.addClass(header, el_slider_group_header);
-        var title = branch.createElement("title", "h3");
-        css.addClass(title, el_slider_group_title);
-        title.textContent = p.title == null ? "" : String(p.title);
+        var title = new Heading(HeadingFactory.create(branch, "title"), { text: p.title == null ? "" : String(p.title), level: 3 }, ROLE.TITLE);
+        css.addClass(title.el, el_slider_group_title);
         if (p.title != null) root.setAttribute("aria-label", String(p.title));
-        header.appendChild(title);
+        header.appendChild(title.el);
         root.appendChild(header);
         var body = branch.createElement("body", "div");
         css.addClass(body, el_slider_group_body);

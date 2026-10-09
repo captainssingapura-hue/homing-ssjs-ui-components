@@ -45,6 +45,17 @@ class HouseStylesTest {
             "close-button shape-border", "close-button size-inset", "close-button size-extent", "close-button shape-shadow", "close-button motion-transform",
             "icon-button shape-border", "icon-button size-inset", "icon-button size-extent", "icon-button shape-shadow", "icon-button motion-transform");
 
+    /** What a style may decide for the text branch: its faces, its weights, how a text is set apart. */
+    private static final Set<String> TEXT_BRANCH = Set.of(
+            "text type-face", "heading type-face", "heading type-weight", "kicker type-face", "kicker type-weight", "kicker type-treatment",
+            "lede type-treatment", "caption type-treatment", "label type-weight", "readout type-face", "readout type-weight", "readout type-treatment",
+            "wordmark type-face", "wordmark type-treatment");
+
+    /** What every style decides for its text, at least: the body's face, and the display's where a text is set apart. */
+    private static final Set<String> TEXT_SET_APART = Set.of(
+            "text type-face", "heading type-face", "heading type-weight", "kicker type-face", "kicker type-weight", "kicker type-treatment",
+            "readout type-face", "readout type-weight", "wordmark type-face");
+
     @Test
     void theStyles_areSeven_eachOverBase_andBaseOverNothing() {
         assertEquals(List.of("editorial", "neo-brutalism", "neo-futurism", "neumorphism", "glassmorphism", "retro-futurism", "sketchy"),
@@ -60,7 +71,11 @@ class HouseStylesTest {
         Map<String, Set<String>> left = new java.util.LinkedHashMap<>();
         for (DesignStyle s : HouseStyles.STYLES) {
             Set<String> answered = classes(s.implementations());
-            assertTrue(BUTTON_BRANCH.containsAll(answered), () -> s.token() + " answers beyond the button branch: " + answered);
+            var allowed = new TreeSet<>(BUTTON_BRANCH);
+            allowed.addAll(TEXT_BRANCH);
+            var beyond = new TreeSet<>(answered);
+            beyond.removeAll(allowed);
+            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches: " + beyond);
             var missing = new TreeSet<>(BUTTON_BRANCH);
             missing.removeAll(answered);
             left.put(s.token(), missing);
@@ -69,6 +84,16 @@ class HouseStylesTest {
                         "neumorphism", Set.of("button shape-border", "toggle-button motion-transform"), "glassmorphism", Set.of(), "retro-futurism", Set.of(),
                         "sketchy", Set.of("button shape-shadow", "toggle-button shape-shadow")), left,
                 "neumorphism draws no border and its press does not move; sketchy casts no shadow: each leaves it to Base, whose root says none");
+    }
+
+    /** Every style sets its text in its own faces: the body's on every text, the display's where a text is set apart. */
+    @Test
+    void eachStyle_setsItsTextInItsOwnFaces() {
+        for (DesignStyle s : HouseStyles.STYLES) {
+            var missing = new TreeSet<>(TEXT_SET_APART);
+            missing.removeAll(classes(s.implementations()));
+            assertEquals(Set.of(), missing, s.token() + " leaves its text's faces to Base");
+        }
     }
 
     @Test
@@ -85,9 +110,12 @@ class HouseStylesTest {
             for (String t : List.of("shape-border", "size-inset", "size-extent", "shape-shadow", "motion-transform", "type-scale")) marks.add(mark + " " + t);
         var expected = new TreeSet<>(Set.of("control affordance-cursor", "button type-scale", "control shape-shadow", "control motion-transform"));
         expected.addAll(marks);
+        for (String text : List.of("heading", "lede", "kicker", "caption", "label", "readout", "badge", "pill", "wordmark")) expected.add(text + " type-scale");
+        expected.addAll(Set.of("readout type-treatment", "badge type-treatment", "badge size-inset", "badge shape-corner",
+                "pill type-treatment", "pill size-inset", "pill shape-corner"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
-                + " and a mark alone goes without a frame, in the size of the text it sits in");
+                + " and a mark alone goes without a frame, in the size of the text it sits in; and every text's measure, its figures and its chip");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");

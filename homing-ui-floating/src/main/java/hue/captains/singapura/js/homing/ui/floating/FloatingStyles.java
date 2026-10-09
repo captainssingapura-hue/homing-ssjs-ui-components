@@ -177,11 +177,8 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
 
     /** The title, one line, cut with an ellipsis. */
     public record fp_title() implements CssClass<FloatingStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Label.class, Type.Scale.class), of(Label.class, Type.Weight.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Label.class, Type.Scale.class)); }
         @Override public String body() { return """
             flex: 1 1 auto;
-            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

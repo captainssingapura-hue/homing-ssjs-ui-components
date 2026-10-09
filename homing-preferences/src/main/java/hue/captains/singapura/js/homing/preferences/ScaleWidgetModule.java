@@ -2,6 +2,8 @@ package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.elements.ReadoutModule;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -26,6 +28,8 @@ public record ScaleWidgetModule() implements Widget<Widget._None, ScaleWidgetMod
     @Override
     public ImportsFor<ScaleWidgetModule> imports() {
         return ImportsFor.<ScaleWidgetModule>builder()
+                .add(new ModuleImports<>(List.of(new ReadoutModule.Readout(), new ReadoutModule.ReadoutFactory()), ReadoutModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferenceFieldModule.PreferenceField()), PreferenceFieldModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_range(),

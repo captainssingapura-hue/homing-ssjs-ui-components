@@ -87,10 +87,10 @@ class ContextMenu {
         label.textContent = node.label;
         el.appendChild(label);
         if (node.hint) {
-            var hint = this._branch.createElement(name + "-hint", "span");
-            css.addClass(hint, cm_item_hint);
-            hint.textContent = node.hint;
-            el.appendChild(hint);
+            // the item's hint, in the house's caption, cast as its hint: placed by the menu
+            var hint = new Caption(CaptionFactory.create(this._branch, name + "-hint"), { text: node.hint }, ROLE.HINT);
+            css.addClass(hint.el, cm_item_hint);
+            el.appendChild(hint.el);
         }
         var row = { id: node.id, el: el, mark: mark, icon: node.icon || null, sub: null, disabled: false, hidden: false, level: level };
         if (node.nodes && node.nodes.length) {

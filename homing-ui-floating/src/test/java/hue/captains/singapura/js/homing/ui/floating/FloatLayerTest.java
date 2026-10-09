@@ -108,10 +108,11 @@ class FloatLayerTest extends JsModuleTestBase {
         js.eval("js", "var look_sheet = 'look-sheet';");
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
+        TextsInJs.load(js, this::loadModule);   // and the label that is its title
         loadModule(EVENTS);
         loadModule(PANE);
         loadModule(DESK);
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }

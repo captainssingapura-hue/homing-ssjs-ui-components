@@ -71,10 +71,10 @@ class Panel {
         if (p.title != null) {
             var head = branch.createElement("head", "header");
             css.addClass(head, el_panel_head);
-            var title = branch.createElement("title", "h2");
-            css.addClass(title, el_panel_title);
-            title.textContent = String(p.title);
-            head.appendChild(title);
+            // its title is the house's kicker, cast as its title: placed by the panel, looking as a kicker does
+            var title = new Kicker(KickerFactory.create(branch, "title"), { text: String(p.title) }, ROLE.TITLE);
+            css.addClass(title.el, el_panel_title);
+            head.appendChild(title.el);
             var slot = branch.createElement("controls", "div");
             css.addClass(slot, el_panel_slot);
             head.appendChild(slot);
@@ -83,7 +83,7 @@ class Panel {
             this.head = head;
             this.controls = slot;
             this._title = title;
-            this._parts.push(head, title, slot);
+            this._parts.push(head, slot);
         }
 
         var body = branch.createElement("body", "div");
@@ -101,8 +101,8 @@ class Panel {
     /** The name in the head, read or set; a panel built without one has no head to name. */
     title(text) {
         if (!this._title) return null;
-        if (text !== undefined) { this._title.textContent = String(text); this.root.setAttribute("aria-label", String(text)); }
-        return this._title.textContent;
+        if (text !== undefined) { this._title.text = String(text); this.root.setAttribute("aria-label", String(text)); }
+        return this._title.text;
     }
 
     /** The size, on the panel and on every part it minted: the size is an element's, not inherited. */
@@ -111,6 +111,7 @@ class Panel {
         this._size = Number.isFinite(n) ? n : 0;
         var v = this._size === 0 ? null : this._size;
         this._parts.forEach(function (el) { css.size(el, v); });
+        if (this._title) this._title.size = this._size == null ? 0 : this._size;   // its title, by its own size
         return this;
     }
 

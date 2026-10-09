@@ -8,7 +8,15 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.BADGE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
+import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
+import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.PILL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.ROOT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
@@ -55,6 +63,7 @@ final class HouseRule {
     /** The palette the seeds make. */
     static List<Implementation<? extends Target.Color>> answers(Seeds s) {
         String toBorder = s.border() + " calc((1 + clamp(-1, var(--extent), 0)) * 100%), transparent";
+        String quiet = "color-mix(in srgb, " + s.text() + " 72%, transparent)";
         return List.of(
                 // ── the roots: every semantic colour, said whole ──
                 rest(ROOT, BACKGROUND, ground("transparent")),
@@ -118,6 +127,16 @@ final class HouseRule {
                 rest(HouseControls.WarningButton.INSTANCE, INK, "color: #713F12;"),
                 rest(HouseControls.SuccessButton.INSTANCE, BACKGROUND,
                         ground(extent("rgba(34, 139, 34, .12)", "rgba(220, 38, 38, .10) calc(clamp(0, calc(-1 * var(--extent)), 1) * 100%), transparent"))),
-                rest(HouseControls.SuccessButton.INSTANCE, INK, "color: #1B5E20;"));
+                rest(HouseControls.SuccessButton.INSTANCE, INK, "color: #1B5E20;"),
+                // ── text: in the text's ink; a heading and a wordmark in the title's; a kicker in the accent's, deepened
+                //    to be read; a lede and a caption quieter; a badge and a pill on a chip of their own ──
+                rest(TEXT, INK, "color: " + s.text() + ";"),
+                rest(HEADING, INK, "color: " + s.title() + ";"),
+                rest(WORDMARK, INK, "color: " + s.title() + ";"),
+                rest(KICKER, INK, "color: color-mix(in srgb, " + s.accentEdge() + " 55%, " + s.text() + ");"),
+                rest(LEDE, INK, "color: " + quiet + ";"),
+                rest(CAPTION, INK, "color: " + quiet + ";"),
+                rest(BADGE, BACKGROUND, ground("color-mix(in srgb, " + s.accent() + " 18%, transparent)")),
+                rest(PILL, BACKGROUND, ground("color-mix(in srgb, " + s.text() + " 10%, transparent)")));
     }
 }

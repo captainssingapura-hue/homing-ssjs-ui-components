@@ -2,6 +2,8 @@ package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -40,6 +42,8 @@ public record PaneThumbsModule() implements DomModule<PaneThumbsModule>, ImplFor
     @Override
     public ImportsFor<PaneThumbsModule> imports() {
         return ImportsFor.<PaneThumbsModule>builder()
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_thumbs(),
                         new PaneStyles.mtp_thumb(),

@@ -394,7 +394,6 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
 
     /** The count: the tabs in the pane, as a kicker. */
     public record mtp_pill() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return "white-space: nowrap;"; }
     }
 
@@ -447,7 +446,6 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
 
     /** The question, quietly: a tab that is asking is not a tab that is shouting. */
     public record mtp_opener_note() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Treatment.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 0;"; }
     }
 
@@ -504,7 +502,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            padding: 0;
+            padding: 0 3px;
             font: inherit;
             """;
         }
@@ -524,12 +522,10 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
 
     /** The word in the box: small, quiet, and clipped rather than allowed to burst the pane it names. */
     public record mtp_thumb_label() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding: 0 3px;
             """;
         }
     }
@@ -562,15 +558,15 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         @Override public String body() { return ""; }
     }
 
-    /** What an empty pane says. */
+    /** The box of an empty pane: fills the content, and gives the note it holds its room. */
     public record mtp_empty() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """
             flex: 1 1 auto;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 24px;
+            text-align: center;
             """;
         }
     }

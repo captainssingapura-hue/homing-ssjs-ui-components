@@ -23,12 +23,25 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
+import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
+import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
 
 /**
  * Neumorphism: moulded out of the page's own clay - no rule, its depth all in light and shade,
  * pressed in when pressed. It draws no line, so says nothing of the rule: the base's is none.
  */
 public record Neumorphism() implements DesignStyle, Derives<Base> {
+
+    /** Its faces: the body's, and the display's for what is set apart. */
+    private static final String BODY = "\"Nunito\", \"Segoe UI\", system-ui, sans-serif";
+    private static final String DISPLAY = "\"Nunito\", \"Quicksand\", \"Varela Round\", \"Segoe UI\", system-ui, sans-serif";
 
     public static final Neumorphism INSTANCE = new Neumorphism();
 
@@ -55,6 +68,13 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
                     closeMark("✗")),
             held(PRESS_SHADOW, null),
             bareMarks(),
+            // ── its type: the body face on every text, its display face where a text is set apart ──
+            type(TEXT, BODY, null, null),
+            type(HEADING, DISPLAY, "800", null),
+            type(KICKER, DISPLAY, "800", "letter-spacing: 0.12em; text-transform: uppercase;"),
+            type(LABEL, null, "700", null),
+            type(READOUT, DISPLAY, "900", "font-variant-numeric: tabular-nums;"),
+            type(WORDMARK, DISPLAY, null, "letter-spacing: 0.02em;"),
             measure("10px", "20px", "8px", "64px", "1.3"),
             disabled(".5", "not-allowed"));
 }

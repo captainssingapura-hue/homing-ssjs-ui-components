@@ -70,12 +70,13 @@ class SliderGroupTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        TextsInJs.load(js, this::loadModule);   // its texts are the house's
         js.eval("js", "var ic_base = 'ic_base', ICONS = { grip: 'ic_grip', size: 'ic_size', aspect: 'ic_aspect', extent: 'ic_extent', level: 'ic_level' };");
         loadModule(DIR + "ui/icons/IconModule.js");
         loadModule(DIR + "component/keyboard/KeysModule.js");
         loadModule(DIR + "ui/elements/SliderModule.js");
         loadModule(DIR + "ui/elements/SliderGroupModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }

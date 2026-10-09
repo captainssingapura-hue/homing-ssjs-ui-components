@@ -47,6 +47,10 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
     @Override
     public ImportsFor<SliderModule> imports() {
         return ImportsFor.<SliderModule>builder()
+                .add(new ModuleImports<>(List.of(new LabelModule.Label(), new LabelModule.LabelFactory()), LabelModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ReadoutModule.Readout(), new ReadoutModule.ReadoutFactory()), ReadoutModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_slider(),
                         new ElementStyles.el_slider_label(),

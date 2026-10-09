@@ -2,6 +2,8 @@ package hue.captains.singapura.js.homing.ui.menu;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -31,6 +33,8 @@ public record ContextMenuModule() implements DomModule<ContextMenuModule>, ImplF
     @Override
     public ImportsFor<ContextMenuModule> imports() {
         return ImportsFor.<ContextMenuModule>builder()
+                .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new MenuStyles.cm_frame(),
                         new MenuStyles.cm_frame_static(),

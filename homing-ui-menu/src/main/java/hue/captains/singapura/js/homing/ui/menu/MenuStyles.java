@@ -110,7 +110,6 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
 
     /** The hint after the label, in a muted caption. */
     public record cm_item_hint() implements CssClass<MenuStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return "flex: none;"; }
     }
 

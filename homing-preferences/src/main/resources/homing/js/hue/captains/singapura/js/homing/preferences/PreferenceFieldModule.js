@@ -40,25 +40,23 @@ class PreferenceField {
         this._onValue = opts && typeof opts.onValue === "function" ? opts.onValue : null;
 
         var root = branch.createElement("field", "div");
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, pv_kicker);
-        kicker.textContent = (opts && opts.kicker) || params.name;
-        root.appendChild(kicker);
-        var title = branch.createElement("title", "h2");
-        css.addClass(title, pv_title);
-        title.textContent = params.label || params.name;
-        root.appendChild(title);
+        // its texts are the house's, each cast as what it is to the field: placed by the field, looking as they are
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: (opts && opts.kicker) || params.name }, ROLE.CATEGORY);
+        css.addClass(kicker.el, pv_kicker);
+        root.appendChild(kicker.el);
+        var title = new Heading(HeadingFactory.create(branch, "title"), { text: params.label || params.name, level: 2 }, ROLE.TITLE);
+        css.addClass(title.el, pv_title);
+        root.appendChild(title.el);
         if (params.summary) {
-            var summary = branch.createElement("summary", "p");
-            css.addClass(summary, pv_summary);
-            summary.textContent = params.summary;
-            root.appendChild(summary);
+            var summary = new Lede(LedeFactory.create(branch, "summary"), { text: params.summary }, ROLE.SUMMARY);
+            css.addClass(summary.el, pv_summary);
+            root.appendChild(summary.el);
         }
         var body = branch.createElement("body", "div");
         root.appendChild(body);
-        this._note = branch.createElement("note", "div");
-        css.addClass(this._note, pv_note);
-        root.appendChild(this._note);
+        this._note = new Caption(CaptionFactory.create(branch, "note"), {}, ROLE.NOTE);
+        css.addClass(this._note.el, pv_note);
+        root.appendChild(this._note.el);
         var actions = branch.createElement("actions", "div");
         css.addClass(actions, pv_actions);
         this._reset = new PlainButton(PlainButtonFactory.create(branch, "reset"), { label: "Use the site's default" }, ROLE.RESET);
@@ -80,7 +78,7 @@ class PreferenceField {
         var v = this.value();
         var pinned = PreferenceViewInstance.override(this._name);
         var stored = PreferenceViewInstance.preferred(this._name);
-        this._note.textContent = pinned ? "Pinned by this page's address: " + pinned + ". A pick here is kept, but this page shows the address's."
+        this._note.text = pinned ? "Pinned by this page's address: " + pinned + ". A pick here is kept, but this page shows the address's."
                                : stored ? "Chosen: " + stored + "."
                                : "The site's default" + (this._fallback === null ? "." : ": " + this._fallback + ".");
         this._reset.enabled = !!stored;

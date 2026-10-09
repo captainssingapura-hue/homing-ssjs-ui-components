@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.elements.PillModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -38,6 +39,7 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
     @Override
     public ImportsFor<TabStripModule> imports() {
         return ImportsFor.<TabStripModule>builder()
+                .add(new ModuleImports<>(List.of(new PillModule.Pill(), new PillModule.PillFactory()), PillModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton(), new IconButtonModule.IconButtonFactory()), IconButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton(), new CloseButtonModule.CloseButtonFactory()), CloseButtonModule.INSTANCE))

@@ -59,8 +59,9 @@ class PanelTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        TextsInJs.load(js, this::loadModule);   // its texts are the house's
         loadModule(DIR + "ui/elements/PanelModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }
@@ -72,7 +73,7 @@ class PanelTest extends JsModuleTestBase {
         assertEquals("Dock A", eval("panel.title()").asString());
         assertEquals("Dock A", eval("panel.root.getAttribute('aria-label')").asString(), "the region is named for whoever cannot see it");
         assertEquals("header,div", eval("panel.root.children.map(function (c) { return c.tag; }).join()").asString(), "the head over the body");
-        assertEquals("h2,div", eval("panel.head.children.map(function (c) { return c.tag; }).join()").asString(), "the name, then the slot");
+        assertEquals("span,div", eval("panel.head.children.map(function (c) { return c.tag; }).join()").asString(), "the name - the house's kicker - then the slot");
         assertTrue(eval("panel.controls === panel.head.children[1]").asBoolean(), "the slot is the caller's to fill");
         assertTrue(eval("host.children[0] === panel.root").asBoolean(), "appended to the host it was given");
         assertEquals("Dock B", eval("panel.title('Dock B'); panel.title()").asString());
@@ -100,9 +101,9 @@ class PanelTest extends JsModuleTestBase {
     @Test
     void theSizeReachesEveryPartThePanelMinted() {
         eval("sized = []; reading.size(0.5)");
-        assertEquals("panel:0.5 head:0.5 title:0.5 controls:0.5 body:0.5", eval("sized.join(' ')").asString());
+        assertEquals("panel:0.5 head:0.5 controls:0.5 body:0.5 title:0.5", eval("sized.join(' ')").asString(), "its title by its own size, after the parts it minted");
         eval("sized = []; panel.size(0)");
-        assertEquals("panel:null head:null title:null controls:null", eval("sized.join(' ')").asString(), "a filled body wears no length to grow");
+        assertEquals("panel:null head:null controls:null title:null", eval("sized.join(' ')").asString(), "a filled body wears no length to grow");
     }
 
 /**
