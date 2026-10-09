@@ -16,6 +16,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
@@ -53,6 +54,7 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
                     rings("1px solid -1px", "1px dashed 4px", "1px solid 2px", "2px solid 2px"),
                     closeMark("✘")),
             held(PRESS_SHADOW, PRESS_MOVE),
+            bareMarks(),
             measure("8px", "18px", "8px", "56px", "1.3"),
             disabled(".4", "not-allowed"));
 }

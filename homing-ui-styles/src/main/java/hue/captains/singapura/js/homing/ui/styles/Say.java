@@ -94,6 +94,43 @@ final class Say {
     /** The close button's mark - the style's own cross - drawn on its {@code ::before}. */
     static Implementation<?> closeMark(String glyph) { return rest(CLOSE, GLYPH, "content: \"" + glyph + "\";"); }
 
+    static final Taxon ICON_BUTTON = HouseControls.IconButton.INSTANCE;
+
+    /** What frames a button, which a mark alone - a close button's cross, an icon button's icon - goes without. */
+    static final List<Target> FRAME = List.of(BORDER, INSET, EXTENT, SHADOW, TRANSFORM);
+
+    /**
+     * The buttons that are a mark alone take Base's bare frame - no border, no inset, no least
+     * width, no shadow, no lift - beneath the style's own frame for a button: a style that frames
+     * them answers them itself instead.
+     */
+    static List<Implementation<?>> bareMarks() {
+        var out = new ArrayList<Implementation<?>>();
+        for (Taxon mark : List.of(CLOSE, ICON_BUTTON)) for (Target t : FRAME) out.add(fromBase(mark, t));
+        return List.copyOf(out);
+    }
+
+    private static <T extends Target> Implementation<T> fromBase(Taxon node, T target) {
+        return new Implementation<>(node, target, new Answer.FromBase<>());
+    }
+
+    /**
+     * Base's bare frame for a mark alone: its frame the root's - nothing - and its type the root's,
+     * so the mark takes the size of the text it sits in.
+     */
+    static List<Implementation<?>> bareFrame() {
+        var out = new ArrayList<Implementation<?>>();
+        for (Taxon mark : List.of(CLOSE, ICON_BUTTON)) {
+            for (Target t : FRAME) out.add(asTheRoot(mark, t));
+            out.add(asTheRoot(mark, SCALE));
+        }
+        return List.copyOf(out);
+    }
+
+    private static <T extends Target> Implementation<T> asTheRoot(Taxon node, T target) {
+        return new Implementation<>(node, target, new Answer.Redirect<>(ROOT));
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {

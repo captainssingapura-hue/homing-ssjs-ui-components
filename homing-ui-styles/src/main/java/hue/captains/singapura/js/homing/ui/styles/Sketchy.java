@@ -15,6 +15,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.FACE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
@@ -47,6 +48,7 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
                     rings("2px dashed -3px", "2px dashed 5px", "2px dotted 3px", "3px solid 3px"),
                     closeMark("✖")),
             held(null, PRESS_MOVE),
+            bareMarks(),
             measure("8px", "16px", "8px", "56px", "1.35"),
             disabled(".5", "not-allowed"));
 }

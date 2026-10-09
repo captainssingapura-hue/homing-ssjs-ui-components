@@ -302,29 +302,13 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     }
 
     /**
-      * The cross on a chip that can be closed: the design's own close mark,
-      * and nothing drawn around it. The word carries the picture — the design
-      * writes it as content on the mark's ::before — so nothing here is one,
-      * and the chip's own frame is frame enough: a ring of its own would be a
-      * second box inside a box. It takes no keys either, being reached
-      * through the party and not by the tab order, so it wears no ring.
+      * Where a chip's cross sits: the house's close button, cast as what
+      * closes its owner, at the chip's end. Its look - the cross, its frame or
+      * none - is the style's; this is its place, and nothing else. It takes
+      * no keys, reached through the party and not by the tab order.
       */
     public record mtp_chip_close() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Interactive.class, Affordance.Cursor.class), of(Icon.Close.class, Type.Glyph.class)); }
-        @Override public String body() { return """
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font: inherit;
-            line-height: 1;
-            inline-size: 1.25em;
-            block-size: 1em;
-            padding: 0;
-            background: transparent;
-            border: 0;
-            flex: none;
-            """;
-        }
+        @Override public String body() { return "flex: none;\nalign-self: center;\n"; }
     }
 
     /** Where a dragged chip will land: a primary bar between two chips. */
@@ -387,94 +371,25 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** The add button when it would add nothing — the desk full, or the holder turned it off: inert, and says so. Toggled beside {@code disabled}. */
     /**
-      * The plus ON THE RAIL, where a browser keeps it: after the last chip,
-      * moving along as tabs come and go, because it is about THE END OF THE
-      * ROW and not about the end of the bar. Parked at the far right it reads
-      * as a tool of the pane; here it reads as "and another", which is what
-      * it does.
-      *
-      * <p>It borrows the chip's GEOMETRY and none of the chip's colour: the
-      * same corner, the same inset and the same height, so it sits in the row
-      * as a sibling and grows with the chips when the size is dialled — and
-      * then it is drawn empty. {@code Selectable × Color.Surface} is flat at
-      * rest and fills under the cursor, which is the whole of a new-tab
-      * button's manner; the chip's own {@code Selectable.Tab} would be a
-      * resting fill, and a plus that looks like a tab is a tab.</p>
-      *
-      * <p>Every one of those is a pair a design binds, so a design that wants
-      * its plus boxed, or bigger, or silent until hovered, says so where it
-      * says everything else.</p>
+      * Where the plus sits ON THE RAIL, where a browser keeps it: after the
+      * last chip, moving along as tabs come and go, because it is about THE END
+      * OF THE ROW and not about the end of the bar. The plus is the house's icon
+      * button, cast as what adds to its owner, holding the add icon: its look
+      * is the style's; this is its place, and nothing else.
       */
     public record mtp_rail_add() implements CssClass<PaneStyles> {
-        /** The axes, because its height is a tab's height and a tab's height moves with them. */
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--size"), new CssVar("--aspect")); }
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Tab.class, Shape.Corner.class),
-                           of(Selectable.class, Color.Surface.class), of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class),
-                           of(Muted.class, Color.Ink.class), of(Control.class, Color.Edge.class),
-                           of(Icon.Add.class, Type.Glyph.class));
-        }
-        /**
-         * The tab's frame BY REFERENCE, as the bar itself reads it: one tab
-         * tall, by the tab's own measure over the tab's own proportion, at
-         * whatever the size and aspect axes say. Worn it would be a tab's
-         * WIDTH as well — a hundred and sixty-eight pixels of nothing — and
-         * the plus is square, because a square is what a glyph wants.
-         */
-        @Override public List<? extends Wearable> reads() { return List.of(of(Control.Tab.class, Size.Extent.class), of(Control.Tab.class, Size.Proportion.class)); }
-        @Override public String body() { return """
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            flex: none;
-            block-size: calc(var(--control-tab-size-extent-inline-size) * pow(var(--control-tab-size-extent-inline-size-ratio), var(--size, 0))
-                           / (var(--control-tab-size-proportion) * pow(var(--control-tab-size-proportion-ratio-aspect), var(--aspect, 0))));
-            aspect-ratio: 1;
-            margin-inline-start: 2px;
-            background-color: transparent;
-            border: 0;
-            font: inherit;
-            line-height: 1;
-            """;
-        }
+        @Override public String body() { return "flex: none;\nalign-self: center;\nmargin-inline-start: 2px;\n"; }
     }
+
     /**
-     * The bar's own cross, at its end, for a pane that is a window — a float,
-     * whose one bar is its strip: pressed, the window and every tab in it
-     * close. The plus's measure and manner, one tab tall and square, with the
-     * design's cross for a glyph in place of its plus.
+     * Where the bar's own cross sits, at its end, for a pane that is a window -
+     * a float, whose one bar is its strip: pressed, the window and every tab in
+     * it close. The house's close button, cast as what closes its owner: its
+     * look is the style's; this is its place, and nothing else.
      */
     public record mtp_bar_close() implements CssClass<PaneStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--size"), new CssVar("--aspect")); }
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Tab.class, Shape.Corner.class),
-                           of(Selectable.class, Color.Surface.class), of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class),
-                           of(Muted.class, Color.Ink.class), of(Control.class, Color.Edge.class),
-                           of(Icon.Close.class, Type.Glyph.class));
-        }
-        @Override public List<? extends Wearable> reads() { return List.of(of(Control.Tab.class, Size.Extent.class), of(Control.Tab.class, Size.Proportion.class)); }
-        @Override public String body() { return """
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            flex: none;
-            block-size: calc(var(--control-tab-size-extent-inline-size) * pow(var(--control-tab-size-extent-inline-size-ratio), var(--size, 0))
-                           / (var(--control-tab-size-proportion) * pow(var(--control-tab-size-proportion-ratio-aspect), var(--aspect, 0))));
-            aspect-ratio: 1;
-            background-color: transparent;
-            border: 0;
-            font: inherit;
-            line-height: 1;
-            """;
-        }
-    }
-    public record mtp_add_off() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Inert.class, Effect.Opacity.class), of(Inert.class, Affordance.Cursor.class)); }
-        @Override public String body() { return ""; }
+        @Override public String body() { return "flex: none;\nalign-self: center;\n"; }
     }
 
     /** The count: the tabs in the pane, as a kicker. */
@@ -663,7 +578,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     @Override
     public List<CssClass<PaneStyles>> cssClasses() {
         return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_strip_current(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_seated(), new mtp_chip_dragging(), new mtp_chip_shifted(),
-                       new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(), new mtp_add_off(),
+                       new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(), new mtp_dock_target(),
                        new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(),
                        new mtp_thumbs(), new mtp_thumb(), new mtp_thumb_on(), new mtp_thumb_off(), new mtp_thumb_label(), new mtp_new(), new mtp_new_pick(),

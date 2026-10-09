@@ -36,7 +36,9 @@ class HouseStylesTest {
             "button shape-corner", "button shape-border", "button size-inset", "button size-gap", "button size-extent",
             "button type-face", "button motion-ease", "button shape-shadow", "button motion-transform",
             "control shape-outline", "control effect-opacity", "control affordance-cursor",
-            "toggle-button shape-shadow", "toggle-button motion-transform", "close-button type-glyph");
+            "toggle-button shape-shadow", "toggle-button motion-transform", "close-button type-glyph",
+            "close-button shape-border", "close-button size-inset", "close-button size-extent", "close-button shape-shadow", "close-button motion-transform",
+            "icon-button shape-border", "icon-button size-inset", "icon-button size-extent", "icon-button shape-shadow", "icon-button motion-transform");
 
     @Test
     void theStyles_areSeven_eachOverBase_andBaseOverNothing() {
@@ -73,8 +75,14 @@ class HouseStylesTest {
         assertEquals(27, roots.size());
         var alike = new TreeSet<>(classes(Base.INSTANCE.implementations()));
         alike.removeIf(c -> c.startsWith("root "));
-        assertEquals(new TreeSet<>(Set.of("control affordance-cursor", "button type-scale", "control shape-shadow", "control motion-transform")), alike,
-                "a control is pointed at, a button's type grows alike, and a control that cannot be used neither lifts nor casts a shadow");
+        var marks = new TreeSet<String>();
+        for (String mark : List.of("close-button", "icon-button"))
+            for (String t : List.of("shape-border", "size-inset", "size-extent", "shape-shadow", "motion-transform", "type-scale")) marks.add(mark + " " + t);
+        var expected = new TreeSet<>(Set.of("control affordance-cursor", "button type-scale", "control shape-shadow", "control motion-transform"));
+        expected.addAll(marks);
+        assertEquals(expected, alike,
+                "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
+                + " and a mark alone goes without a frame, in the size of the text it sits in");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");

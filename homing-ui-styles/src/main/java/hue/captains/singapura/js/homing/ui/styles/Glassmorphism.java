@@ -16,6 +16,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
@@ -52,6 +53,7 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
                     rings("2px solid -2px", "1px dashed 4px", "1px solid 0", "2px solid 0"),
                     closeMark("×")),
             held(PRESS_SHADOW, PRESS_MOVE),
+            bareMarks(),
             measure("10px", "22px", "8px", "64px", "1.3"),
             disabled(".45", "not-allowed"));
 }

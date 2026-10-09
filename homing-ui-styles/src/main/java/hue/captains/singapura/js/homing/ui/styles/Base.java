@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.bareFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -32,9 +34,11 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * The house's base: neutral, a look of no style of its own. It answers every root that is not
  * colour - the element as the browser would leave it, its font its container's - so that every
  * class resolves in a style written over it; and what every house style says alike, so that none
- * has to: a control is pointed at, a button's type grows a step of 1.25 per unit of size, and a
- * control that cannot be used neither lifts nor casts a shadow. Every house style is written over
- * it, and answers only what makes it itself.
+ * has to: a control is pointed at, a button's type grows a step of 1.25 per unit of size, a
+ * control that cannot be used neither lifts nor casts a shadow, and a button that is a mark alone -
+ * a close button's cross, an icon button's icon - goes without a frame, in the size of the text it
+ * sits in, unless a style frames it. Every house style is written over it, and answers only what
+ * makes it itself.
  */
 public record Base() implements DesignStyle {
 
@@ -42,7 +46,7 @@ public record Base() implements DesignStyle {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
-    private static final List<Implementation<?>> ANSWERS = List.of(
+    private static final List<Implementation<?>> ANSWERS = answers(List.of(
             // ── the roots: every target that is not colour ──
             rest(ROOT, CORNER, "border-radius: 0;"),
             rest(ROOT, BORDER, "border-width: 0; border-style: solid;"),
@@ -75,5 +79,7 @@ public record Base() implements DesignStyle {
             rest(CONTROL, CURSOR, "cursor: pointer;"),
             rest(BUTTON, SCALE, "font-size: " + grows("14px", "1.25") + "; line-height: 1.5;"),
             when(CONTROL, SHADOW, Map.of(State.DISABLED, "box-shadow: none;")),
-            when(CONTROL, TRANSFORM, Map.of(State.DISABLED, "transform: none;")));
+            when(CONTROL, TRANSFORM, Map.of(State.DISABLED, "transform: none;"))),
+            // ── a mark alone - a close button's cross, an icon button's icon - goes without a frame ──
+            bareFrame());
 }

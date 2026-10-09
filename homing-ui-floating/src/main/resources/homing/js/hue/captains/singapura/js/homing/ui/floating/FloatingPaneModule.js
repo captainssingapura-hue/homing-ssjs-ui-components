@@ -118,14 +118,13 @@ class FloatingPane {
         css.addClass(this._title, fp_title);
         head.appendChild(this._title);
         if (opts.closable !== false) {
-            var x = branch.createElement("close", "button");
-            x.type = "button";
-            css.addClass(x, fp_close);
-            x.textContent = "×";
-            x.setAttribute("aria-label", "Close");
-            x.addEventListener("click", function (e) { e.stopPropagation(); if (self._onClose) self._onClose(self); });
-            head.appendChild(x);
-            this._close = x;
+            // the house's close button, cast as what closes its owner: its cross and its frame are the style's
+            var x = new CloseButton(branch.createElement("close", CloseButton.TAG), {
+                label: "Close",
+                onClick: function (e) { e.stopPropagation(); if (self._onClose) self._onClose(self); }
+            }, ROLE.CLOSE);
+            head.appendChild(x.el);
+            this._close = x.el;
         }
         return head;
     }

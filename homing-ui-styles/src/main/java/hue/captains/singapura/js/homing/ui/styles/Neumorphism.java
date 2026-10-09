@@ -15,6 +15,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.FACE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
@@ -53,6 +54,7 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
                     rings("2px solid -2px", "2px dotted 4px", "2px solid -3px", "3px solid -3px"),
                     closeMark("✗")),
             held(PRESS_SHADOW, null),
+            bareMarks(),
             measure("10px", "20px", "8px", "64px", "1.3"),
             disabled(".5", "not-allowed"));
 }

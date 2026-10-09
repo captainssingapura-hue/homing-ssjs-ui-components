@@ -129,13 +129,15 @@ class TabStrip {
 
         // THE PLUS, after the last chip while they fit and against the far end once they do not: it is about the
         // end of the ROW, and a browser has taught everyone where that is.
+        this._add = null;
         this._addBtn = null;
         if (opts && typeof opts.onAdd === "function") {
-            var addBtn = branch.createElement("add", "button");
-            addBtn.type = "button";
-            css.addClass(addBtn, mtp_rail_add);   // the glyph is the design's, on the word; nothing is typed in
-            addBtn.setAttribute("aria-label", "Add a tab");
-            addBtn.addEventListener("click", function () { if (!addBtn.disabled) opts.onAdd(); });
+            // the house's icon button, cast as what adds to its owner, holding the add icon: its look is the style's
+            var plus = new Icon(branch.createElement("add-icon", Icon.TAG), { name: "add" });
+            this._add = new IconButton(branch.createElement("add", IconButton.TAG),
+                    { icon: plus, label: "Add a tab", onClick: function () { opts.onAdd(); } }, ROLE.ADD);
+            var addBtn = this._add.el;
+            css.addClass(addBtn, mtp_rail_add);   // its place on the rail
             addBtn._control = true;   // a control on the bar, not its ground
             el.appendChild(addBtn);
             this._addBtn = addBtn;
@@ -157,12 +159,13 @@ class TabStrip {
         css.addClass(this._pill, mtp_pill);
         this._tail.appendChild(this._pill);
         if (opts && typeof opts.onClose === "function") {   // the window's cross, at the very end of its one bar
-            var closeBtn = branch.createElement("close", "button");
-            closeBtn.type = "button";
-            css.addClass(closeBtn, mtp_bar_close);   // the glyph is the design's, on the word
-            closeBtn.setAttribute("aria-label", "Close these tabs");
+            // the house's close button, cast as what closes its owner: its cross and its frame are the style's
+            var closeBtn = new CloseButton(branch.createElement("close", CloseButton.TAG), {
+                label: "Close these tabs",
+                onClick: function (ev) { ev.stopPropagation(); opts.onClose(); }
+            }, ROLE.CLOSE).el;
+            css.addClass(closeBtn, mtp_bar_close);   // its place at the bar's end
             closeBtn.setAttribute("tabindex", "-1");
-            closeBtn.addEventListener("click", function (ev) { ev.stopPropagation(); opts.onClose(); });
             closeBtn._control = true;
             this._tail.appendChild(closeBtn);
         }
@@ -202,14 +205,13 @@ class TabStrip {
     size(s) {
         this._size = s == null ? null : Math.max(-1, Math.min(1, Number(s)));
         css.size(this.el, this._size);
-        if (this._addBtn) css.size(this._addBtn, this._size);   // it stands in the row, so it grows with the row
+        if (this._add) this._add.size = this._size == null ? 0 : this._size;   // it stands in the row, so it grows with the row
         for (var i = 0; i < this._order.length; i++) css.size(this._order[i], this._size);
         this._window.fit(this._active);
     }
     aspect(a) {
         this._aspect = a == null ? null : Math.max(-1, Math.min(1, Number(a)));
         css.aspect(this.el, this._aspect);
-        if (this._addBtn) css.aspect(this._addBtn, this._aspect);   // a tab's height moves with the aspect, and the plus is one tab tall
         for (var j = 0; j < this._order.length; j++) css.aspect(this._order[j], this._aspect);
         this._window.fit(this._active);
     }
@@ -270,10 +272,7 @@ class TabStrip {
     count(n, addOn) {
         this._pill.textContent = String(n);
         this._pill.title = "Tabs in this pane: " + n;
-        if (this._addBtn) {
-            this._addBtn.disabled = !addOn;
-            css.toggleClass(this._addBtn, mtp_add_off, !addOn);
-        }
+        if (this._add) this._add.enabled = !!addOn;   // off when it would add nothing: inert, and it says so
     }
 
     // ── The chip in the hand: the hand's, and what it asks of the strip ──

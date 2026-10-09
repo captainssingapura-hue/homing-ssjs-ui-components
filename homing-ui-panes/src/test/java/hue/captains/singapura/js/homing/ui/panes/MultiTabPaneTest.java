@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.ui.panes;
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.icons.IconStyles;
+import hue.captains.singapura.js.homing.ui.icons.IconsModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,7 +84,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted",
             mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted", mtp_strip_loose = "mtp_strip_loose", mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark",
             mtp_chip_seated = "mtp_chip_seated", mtp_strip_current = "mtp_strip_current",
-            mtp_strip_tail = "mtp_strip_tail", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill",
+            mtp_strip_tail = "mtp_strip_tail", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark", mtp_pill = "mtp_pill",
             mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
             mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target",
             mtp_opener = "mtp_opener", mtp_opener_note = "mtp_opener_note", mtp_opener_grid = "mtp_opener_grid";
@@ -157,6 +159,14 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/ButtonBehaviorModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/ButtonModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/PlainButtonModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/CloseButtonModule.js");
+        // the icon the plus holds: the real Icon, its classes handles as the shim's css takes them
+        js.eval("js", "var ic_base = { name: 'ic_base' };");
+        for (var w : IconStyles.worded())
+            js.eval("js", "var " + w.getClass().getSimpleName() + " = { name: '" + w.getClass().getSimpleName() + "' };");
+        js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/IconButtonModule.js");
         loadModule(EVENTS);
         loadModule(DRAG);
         loadModule(FIT);
@@ -289,9 +299,9 @@ class MultiTabPaneTest extends JsModuleTestBase {
         eval("function plus() { return pane.el.children[0].children.filter(function (c) { return c.has('mtp_rail_add'); })[0]; }"
            + "'abcdefghijklmnopqr'.split('').forEach(function (id) { put(id); })");
         assertEquals(18, eval("pane.count()").asInt(), "eighteen, past the sixteen a pane used to stop at");
-        assertTrue(eval("pane.canAdd() && !plus().has('mtp_add_off')").asBoolean());
+        assertTrue(eval("pane.canAdd() && !plus().disabled").asBoolean());
         eval("pane.setRoom(false)");
-        assertTrue(eval("!pane.canAdd() && plus().has('mtp_add_off') && plus().disabled").asBoolean(), "the desk is full: the plus greyed");
+        assertTrue(eval("!pane.canAdd() && plus().disabled").asBoolean(), "the desk is full: the plus off, which its look shows");
         eval("log = []; plus().fire('click')");
         assertEquals("", log(), "and it asks for nothing");
         eval("pane.setRoom(true); log = []; plus().fire('click')");

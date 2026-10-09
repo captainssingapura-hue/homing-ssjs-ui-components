@@ -68,6 +68,11 @@ final class HouseRule {
                 rest(BUTTON, BACKGROUND, ground(s.raised())),
                 rest(BUTTON, INK, "color: " + s.text() + ";"),
                 rest(BUTTON, BORDER, "border-color: " + s.border() + ";"),
+                // ── a mark alone - a close button's cross, an icon button's icon: no ground of its own, in the ink of what holds it ──
+                rest(HouseControls.CloseButton.INSTANCE, BACKGROUND, ground("transparent")),
+                rest(HouseControls.CloseButton.INSTANCE, INK, "color: inherit;"),
+                rest(HouseControls.IconButton.INSTANCE, BACKGROUND, ground("transparent")),
+                rest(HouseControls.IconButton.INSTANCE, INK, "color: inherit;"),
                 // ── a toggle that is on: tinted with the accent, edged with it ──
                 when(HouseControls.ToggleButton.INSTANCE, BACKGROUND,
                         Map.of(State.PRESSED, ground("color-mix(in srgb, " + s.accent() + " 22%, " + s.raised() + ")"))),

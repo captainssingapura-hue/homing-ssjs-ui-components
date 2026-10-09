@@ -47,6 +47,8 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(SuccessButtonModule.INSTANCE),
                 CrateEntry.of(ToggleButtonBehaviorModule.INSTANCE),
                 CrateEntry.of(ToggleButtonModule.INSTANCE),
+                CrateEntry.of(CloseButtonModule.INSTANCE),
+                CrateEntry.of(IconButtonModule.INSTANCE),
                 CrateEntry.of(SummaryCardModule.INSTANCE),
                 CrateEntry.of(SliderModule.INSTANCE),
                 CrateEntry.of(SliderGroupModule.INSTANCE),

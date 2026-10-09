@@ -32,7 +32,7 @@ class FloatLayerTest extends JsModuleTestBase {
         var log = [];
         function el(tag) {
             var classes = new Set(), attrs = {}, props = {};
-            var node = { tag: tag, children: [], parentNode: null, listeners: {}, textContent: "",
+            var node = { tag: tag, tagName: String(tag).toUpperCase(), children: [], parentNode: null, listeners: {}, textContent: "",
                 style: { setProperty: function (k, v) { props[k] = v; }, removeProperty: function (k) { delete props[k]; }, getPropertyValue: function (k) { return props[k] == null ? "" : props[k]; } },
                 classList: { add: function () { for (var i = 0; i < arguments.length; i++) classes.add(arguments[i]); },
                              remove: function () { for (var i = 0; i < arguments.length; i++) classes.delete(arguments[i]); },
@@ -59,7 +59,8 @@ class FloatLayerTest extends JsModuleTestBase {
                 activate: function (owner) { this.owner = String(owner); } };
         }
         var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };   // in order, so a test can name them
-        var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
+        var css = { cls: function (n) { return n; },
+                    addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); },
                     hasClass: function (e, c) { return e.classList.contains(c); },
@@ -100,6 +101,12 @@ class FloatLayerTest extends JsModuleTestBase {
     void load() {
         js = buildContext();
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
+        // the close button its head holds: the house's, on the new sheet
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var look_sheet = 'look-sheet';");
+        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
         loadModule(EVENTS);
         loadModule(PANE);
         loadModule(DESK);

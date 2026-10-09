@@ -16,6 +16,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
@@ -50,6 +51,7 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
                     rings("3px solid -3px", "4px dashed 4px", "4px dotted 4px", "4px solid 4px"),
                     closeMark("╳")),
             held(PRESS_SHADOW, PRESS_MOVE),
+            bareMarks(),
             measure("10px", "20px", "10px", "64px", "1.5"),
             disabled(".4", "not-allowed"));
 }

@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,12 +27,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TabPaneTest extends JsModuleTestBase {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/panes/";
+    private static final String ELEMENTS = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 
     private static final String SHIM = """
         var log = [];
         function el(tag) {
             var classes = new Set(), attrs = {};
-            var node = { tag: tag, children: [], parentNode: null, listeners: {}, textContent: "", title: "",
+            var node = { tag: tag, tagName: String(tag).toUpperCase(), children: [], parentNode: null, listeners: {}, textContent: "", title: "",
                 classList: { add: function (c) { classes.add(c); }, remove: function (c) { classes.delete(c); }, contains: function (c) { return classes.has(c); } },
                 get firstChild() { return this.children[0] || null; },
                 appendChild: function (c) { if (c.parentNode) c.parentNode.removeChild(c); this.children.push(c); c.parentNode = this; return c; },
@@ -57,7 +60,10 @@ class TabPaneTest extends JsModuleTestBase {
         }
         var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
+                    removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { if (f) e.classList.add(c); else e.classList.remove(c); } };
+        css.cls = function (name) { return name; };   // the new manager names its classes through the old
+        css.extent = function (e, t) { e._extent = t; }; css.size = function (e, s) { e._size = s; }; css.aspect = function (e, a) { e._aspect = a; };   // a button's degrees
         var mtp_chip = "mtp_chip", mtp_chip_seated = "mtp_chip_seated", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on",
             mtp_chip_label = "mtp_chip_label", mtp_chip_mark = "mtp_chip_mark", mtp_chip_close = "mtp_chip_close",
             mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden";
@@ -94,6 +100,12 @@ class TabPaneTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        // the close button: its castings and its looks, generated, before its declaration is read
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var look_sheet = 'look-sheet';");
+        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
+            loadModule(ELEMENTS + m);
         loadModule(P + "PaneKeysModule.js");
         loadModule(P + "TabChipModule.js");
         loadModule(P + "TabPaneModule.js");

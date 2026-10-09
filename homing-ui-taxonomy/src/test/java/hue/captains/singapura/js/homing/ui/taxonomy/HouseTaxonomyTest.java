@@ -41,8 +41,8 @@ class HouseTaxonomyTest {
         assertEquals(17, HOUSE.branches().size());
         assertEquals(85, HOUSE.components().size());
         assertEquals(67, HOUSE.roles().size(), "the catalogue beside the tree");
-        assertEquals(106, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
-        assertEquals(44, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+        assertEquals(107, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
+        assertEquals(45, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
     @Test

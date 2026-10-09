@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,13 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TabStripTest extends JsModuleTestBase {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/panes/";
+    private static final String ELEMENTS = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 
     // three chips of 80 at a pitch of 80 on a strip 30 tall; the second is pinned in one test
     private static final String SHIM = """
         var log = [];
         function el(tag) {
             var classes = new Set(), attrs = {}, props = {};
-            var node = { tag: tag, children: [], parentNode: null, listeners: {}, textContent: "", rect: { left: 0, top: 0, width: 0, height: 0 }, cancelled: 0,
+            var node = { tag: tag, tagName: String(tag).toUpperCase(), children: [], parentNode: null, listeners: {}, textContent: "", rect: { left: 0, top: 0, width: 0, height: 0 }, cancelled: 0,
                 // the bar measures itself to squeeze the row: a style bag and a scroll box, unread by anything else here
                 style: { props: {}, setProperty: function (k, v) { this.props[k] = v; }, removeProperty: function (k) { delete this.props[k]; } },
                 clientWidth: 0, scrollLeft: 0,
@@ -54,10 +57,11 @@ class TabStripTest extends JsModuleTestBase {
                     size: function (e, s) { if (s == null) e.style.removeProperty("--size"); else e.style.setProperty("--size", String(s)); },
                     aspect: function (e, a) { if (a == null) e.style.removeProperty("--aspect"); else e.style.setProperty("--aspect", String(a)); },
                     extent: function (e, t) { if (t == null) e.style.removeProperty("--extent"); else e.style.setProperty("--extent", String(t)); } };
+        css.cls = function (name) { return name; };   // the new manager names its classes through the old
         var getComputedStyle = function () { return { transitionDuration: "0.16s, 0.16s" }; };
         var mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_seated = "mtp_chip_seated",
             mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted",
-            mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_add_mark = "mtp_add_mark", mtp_add_off = "mtp_add_off", mtp_pill = "mtp_pill";
+            mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_add_mark = "mtp_add_mark", mtp_pill = "mtp_pill";
         var strip = new TabStrip(fakeBranch("strip"), { onDrop: function (c, dest) { log.push("drop:" + c._label.textContent + "@" + dest); } });
         strip.el.rect = { left: 0, top: 0, width: 400, height: 30 };
         function make(names, pinned) {
@@ -78,6 +82,12 @@ class TabStripTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        // the chips' close button: its castings and its looks, generated, before its declaration is read
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var look_sheet = 'look-sheet';");
+        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
+            loadModule(ELEMENTS + m);
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         loadModule(P + "TabDragModule.js");
         loadModule(P + "TabFitModule.js");

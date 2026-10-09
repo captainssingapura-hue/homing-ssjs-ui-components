@@ -69,10 +69,14 @@ public final class HouseControls {
         @Override public Button parent() { return Button.INSTANCE; }
     }
 
-    /** A button that is an icon alone. */
+    /** A button that is an icon alone: the icon its part, whichever icon it is. */
     public record IconButton() implements Component<Button> {
         public static final IconButton INSTANCE = new IconButton();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one());
+        }
     }
 
     /** The button that closes what holds it. */

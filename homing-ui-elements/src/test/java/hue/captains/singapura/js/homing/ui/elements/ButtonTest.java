@@ -27,7 +27,7 @@ class ButtonTest extends JsModuleTestBase {
         function el(tag) {
             var classes = new Set(), listeners = {};
             return { tagName: tag.toUpperCase(), type: "", disabled: false, textContent: "", attrs: {},
-                setAttribute: function (k, v) { this.attrs[k] = String(v); }, getAttribute: function (k) { return k in this.attrs ? this.attrs[k] : null; },
+                setAttribute: function (k, v) { this.attrs[k] = String(v); }, kids: [], appendChild: function (c) { this.kids.push(c); }, getAttribute: function (k) { return k in this.attrs ? this.attrs[k] : null; },
                 classList: { add: function (c) { classes.add(c); }, remove: function (c) { classes.delete(c); }, contains: function (c) { return classes.has(c); } },
                 classes: function () { return Array.from(classes); },
                 addEventListener: function (t, fn) { (listeners[t] = listeners[t] || []).push(fn); },
@@ -48,9 +48,15 @@ class ButtonTest extends JsModuleTestBase {
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
+        // the icon an icon button holds: the real Icon, its classes handles as the shim's css takes them
+        js.eval("js", "var ic_base = { name: 'ic_base' };");
+        for (var w : hue.captains.singapura.js.homing.ui.icons.IconStyles.worded())
+            js.eval("js", "var " + w.getClass().getSimpleName() + " = { name: '" + w.getClass().getSimpleName() + "' };");
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)));
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js",
                                       "PlainButtonModule.js", "PrimaryButtonModule.js", "DangerButtonModule.js",
-                                      "ToggleButtonBehaviorModule.js", "ToggleButtonModule.js"})
+                                      "ToggleButtonBehaviorModule.js", "ToggleButtonModule.js", "CloseButtonModule.js", "IconButtonModule.js"})
             loadModule(DIR + m);
         js.eval("js", SHIM);
     }
@@ -152,6 +158,34 @@ class ButtonTest extends JsModuleTestBase {
         assertTrue(has("t", "toggle-button__color-background--pressed"), "the palette's tint");
         assertTrue(has("t", "toggle-button__shape-shadow--hover"), "and every button's treatments besides");
         assertThrows(PolyglotException.class, () -> eval("new ToggleButton(el('button'), { on: 'yes' })"), "on is true or false");
+    }
+
+    /** The close button: a mark, the style's own cross, never words; its words its name. */
+    @Test
+    void aCloseButton_isAMark_namedForWhoeverCannotSeeIt() {
+        eval("var c = new CloseButton(el('button'), {});");
+        assertEquals("Close", str("c.el.getAttribute('aria-label')"), "Close unless given");
+        assertEquals("", str("c.el.textContent"), "no words on its face");
+        assertTrue(has("c", "close-button__type-glyph"), "the mark: the glyph its style draws on ::before");
+        assertTrue(has("c", "close-button__shape-border"), "its frame: Base's bare one, unless its style frames it");
+        eval("c.label = 'Close the dialog'");
+        assertEquals("Close the dialog", str("c.label"));
+        eval("var closing = new CloseButton(el('button'), {}, ROLE.CLOSE);");
+        assertTrue(has("closing", "close-button_close__shape-border"), "cast as what closes its owner");
+    }
+
+    /** The icon button: holds whatever icon it is handed - which icon is the icon's business - and is named for whoever cannot see it. */
+    @Test
+    void anIconButton_holdsWhicheverIconItIsHanded_andNeverAsksItsName() {
+        eval("var plus = new Icon(el('span'), { name: 'add' }); var b = new IconButton(el('button'), { icon: plus, label: 'Add a tab' });");
+        assertTrue(eval("b.icon === plus && b.el.kids[0] === plus.el").asBoolean(), "its face: the icon, in it");
+        assertEquals("Add a tab", str("b.el.getAttribute('aria-label')"));
+        assertEquals("", str("b.el.textContent"), "no words on its face");
+        eval("b.icon.set('remove')");
+        assertEquals("remove", str("b.icon.name()"), "another icon is the icon's to show; the button is not asked");
+        assertTrue(has("b", "icon-button__shape-border"));
+        assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { label: 'Add' })"), "its face is an icon");
+        assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { icon: el('span') })"), "an Icon, not any element");
     }
 
     @Test

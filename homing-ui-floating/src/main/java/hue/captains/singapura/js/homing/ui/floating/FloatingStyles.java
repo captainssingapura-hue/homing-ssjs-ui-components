@@ -189,23 +189,6 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
         }
     }
 
-    /** The cross: a small control on the inverted bar, its edge the bar's, its ring a control's. */
-    public record fp_close() implements CssClass<FloatingStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(OnInverted.class, Color.Ink.class), of(OnInverted.class, Color.Edge.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class),
-                           of(Interactive.class, Affordance.Cursor.class), of(Interactive.class, Motion.Ease.class), of(Inline.class, Size.Inset.class), of(Caption.class, Type.Scale.class));
-        }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Inline.class, Size.Inset.class), of(Caption.class, Type.Scale.class)); }
-        @Override public String body() { return """
-            flex: none;
-            font: inherit;
-            line-height: 1;
-            background: transparent;
-            margin-inline-start: auto;
-            """;
-        }
-    }
-
     /** The body: what the pane holds, filling what the head leaves, scrolling beyond it; and the positioning context for it, so a widget that fills its host by absolute inset fills THE BODY and never climbs over the head. */
     public record fp_body() implements CssClass<FloatingStyles> {
         @Override public String body() { return """
@@ -235,6 +218,6 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
 
     @Override
     public List<CssClass<FloatingStyles>> cssClasses() {
-        return List.of(new fp_desk(), new fp_desk_layer(), new fp_frame(), new fp_hoverable(), new fp_held(), new fp_active(), new fp_head(), new fp_head_held(), new fp_icon(), new fp_icon_on(), new fp_title(), new fp_close(), new fp_body(), new fp_grip());
+        return List.of(new fp_desk(), new fp_desk_layer(), new fp_frame(), new fp_hoverable(), new fp_held(), new fp_active(), new fp_head(), new fp_head_held(), new fp_icon(), new fp_icon_on(), new fp_title(), new fp_body(), new fp_grip());
     }
 }

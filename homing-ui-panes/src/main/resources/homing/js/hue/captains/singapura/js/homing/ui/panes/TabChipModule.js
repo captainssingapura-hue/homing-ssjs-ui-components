@@ -55,12 +55,13 @@ class TabChip {
 
         var closeBtn = null;
         if (tab.closable !== false && !tab.pinned) {
-            closeBtn = branch.createElement("close" + s, "button");
-            closeBtn.type = "button";
-            css.addClass(closeBtn, mtp_chip_close);   // the cross is the design's, drawn by the class's word
-            closeBtn.setAttribute("aria-label", "Close " + label.textContent);
+            // the house's close button, cast as what closes its owner: its cross and its frame are the style's
+            closeBtn = new CloseButton(branch.createElement("close" + s, CloseButton.TAG), {
+                label: "Close " + label.textContent,
+                onClick: function (ev) { ev.stopPropagation(); handlers.onClose(); }
+            }, ROLE.CLOSE).el;
+            css.addClass(closeBtn, mtp_chip_close);   // its place at the chip's end; its look is its own
             closeBtn.setAttribute("tabindex", "-1");
-            closeBtn.addEventListener("click", function (ev) { ev.stopPropagation(); handlers.onClose(); });
             c.appendChild(closeBtn);
         }
         c._close = closeBtn;
