@@ -488,7 +488,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
       */
     public record mtp_thumb() implements CssClass<PaneStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--thumb-x"), new CssVar("--thumb-y"), new CssVar("--thumb-w"), new CssVar("--thumb-h")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Base.class, Color.Surface.class), of(Container.Pane.class, Shape.Rule.class),
+        @Override public List<? extends Wearable> wears() { return List.of(of(Base.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Container.Pane.class, Shape.Rule.class),
                                                                           of(Container.Pane.class, Color.Edge.class), of(Interactive.class, Affordance.Cursor.class),
                                                                           of(Interactive.class, Motion.Ease.class)); }
         @Override public String body() { return """
