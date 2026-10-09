@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyFinding;
+import hue.captains.singapura.tao.ontology.enforcer.OntologyEnforcer;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,9 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The house's taxonomy is read whole, with its role catalogue, and refused nothing - jOntology
- * holding every node stateless; everything reached is declared; every branch has a component under
- * it; and every component the house ships today has its leaf. Its components declare their parts
+ * The house's taxonomy is read whole, with its role catalogue, and refused nothing - and jOntology
+ * holds every node stateless, here rather than in the read; everything reached is declared; every
+ * branch has a component under it; and every component the house ships today has its leaf. Its components declare their parts
  * as slots over the catalogue, and the catalogue's every role is named but one. Every node of both
  * trees means something, and the axes a branch declares are every leaf's under it.
  */
@@ -43,6 +44,27 @@ class HouseTaxonomyTest {
         assertEquals(67, HOUSE.roles().size(), "the catalogue beside the tree");
         assertEquals(107, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
         assertEquals(45, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+    }
+
+    /**
+     * Every node the house declares is a stateless functional object, as jOntology judges one: held
+     * here, at build time, since a read no longer judges state and a running server has no enforcer.
+     * The trees of states and events too, whose nodes no read reaches.
+     */
+    @Test
+    void everyNode_isStateless() {
+        var nodes = new java.util.ArrayList<Object>();
+        nodes.addAll(HOUSE.branches());
+        nodes.addAll(HOUSE.components());
+        nodes.addAll(HOUSE.roleBranches());
+        nodes.addAll(HOUSE.roles());
+        nodes.addAll(HouseStates.ALL);
+        nodes.addAll(HouseEvents.ALL);
+        var enforcer = new OntologyEnforcer();
+        var violations = nodes.stream().map(Object::getClass).distinct()
+                .flatMap(c -> enforcer.enforce(c).stream().map(v -> c.getName() + ": " + v.message()))
+                .toList();
+        assertEquals(List.of(), violations);
     }
 
     @Test

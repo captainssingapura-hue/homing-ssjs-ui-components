@@ -26,6 +26,13 @@
             <artifactId>homing-component-taxonomy</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <!-- Every node stateless, as jOntology judges one: held by the tests, never by a read. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.lang.ontology</groupId>
+            <artifactId>enforcer</artifactId>
+            <version>0.0.1</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
