@@ -54,6 +54,7 @@ class ButtonTest extends JsModuleTestBase {
             js.eval("js", "var " + w.getClass().getSimpleName() + " = { name: '" + w.getClass().getSimpleName() + "' };");
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
+        js.eval("js", "var el_icon_button = { name: 'el_icon_button' };");   // the icon button's face, laid out
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js",
                                       "PlainButtonModule.js", "PrimaryButtonModule.js", "DangerButtonModule.js",
                                       "ToggleButtonBehaviorModule.js", "ToggleButtonModule.js", "CloseButtonModule.js", "IconButtonModule.js"})
@@ -187,6 +188,7 @@ class ButtonTest extends JsModuleTestBase {
         eval("b.icon.set('remove')");
         assertEquals("remove", str("b.icon.name()"), "another icon is the icon's to show; the button is not asked");
         assertTrue(has("b", "icon-button__shape-border"));
+        assertTrue(has("b", "el_icon_button"), "its face laid out: the icon centred in its box, whatever the icon");
         assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { label: 'Add' })"), "its face is an icon");
         assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { icon: el('span') })"), "an Icon, not any element");
     }

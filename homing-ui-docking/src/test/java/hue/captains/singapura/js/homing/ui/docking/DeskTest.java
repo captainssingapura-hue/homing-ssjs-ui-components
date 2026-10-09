@@ -149,6 +149,7 @@ class DeskTest extends JsModuleTestBase {
             js.eval("js", "var " + w.getClass().getSimpleName() + " = { name: '" + w.getClass().getSimpleName() + "' };");
         js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
         loadModule(P + "icons/IconModule.js");
+        js.eval("js", "var el_icon_button = 'el_icon_button';");   // the icon button's face, laid out
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js", "IconButtonModule.js"})
             loadModule(P + "elements/" + m);
         loadModule(P + "floating/FloatEventsModule.js");

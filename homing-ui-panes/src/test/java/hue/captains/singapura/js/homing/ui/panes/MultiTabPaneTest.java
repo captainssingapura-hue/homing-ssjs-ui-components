@@ -166,6 +166,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
             js.eval("js", "var " + w.getClass().getSimpleName() + " = { name: '" + w.getClass().getSimpleName() + "' };");
         js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
+        js.eval("js", "var el_icon_button = 'el_icon_button';");   // the icon button's face, laid out
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/IconButtonModule.js");
         loadModule(EVENTS);
         loadModule(DRAG);

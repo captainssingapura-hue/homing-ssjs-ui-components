@@ -151,6 +151,21 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         @Override public String body() { return ""; }
     }
 
+    // ── Icon button ───────────────────────────────────────────────────────────
+
+    /**
+     * An icon button's face: the icon it holds, centred in its box. The icon is a
+     * grid item there, so its own drop for sitting in a line of text - its
+     * vertical-align - does not apply. Layout only: the button's look is its casting's.
+     */
+    public record el_icon_button() implements CssClass<ElementStyles> {
+        @Override public String body() { return """
+            display: inline-grid;
+            place-items: center;
+            """;
+        }
+    }
+
     // ── Slider ────────────────────────────────────────────────────────────────
 
     /** The slider: a row of label, rail and readout — {@code Control.Slider} for its air and its gap. */
@@ -892,7 +907,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     @Override
     public List<CssClass<ElementStyles>> cssClasses() {
         return List.of(new el_button(), new el_button_primary(), new el_button_secondary(), new el_button_danger(), new el_button_warning(), new el_button_success(),
-                       new el_button_plain(), new el_button_on(), new el_button_off(),
+                       new el_button_plain(), new el_button_on(), new el_button_off(), new el_icon_button(),
                        new el_slider(), new el_slider_label(), new el_slider_rail(), new el_slider_track(), new el_slider_fill(), new el_slider_detent(),
                        new el_slider_knob(), new el_slider_face(), new el_slider_mark(), new el_slider_held(), new el_slider_face_held(), new el_slider_knob_current(), new el_slider_readout(),
                        new el_slider_vertical(), new el_slider_rail_vertical(), new el_slider_rail_ticked(), new el_slider_track_vertical(), new el_slider_fill_vertical(), new el_slider_detent_vertical(),

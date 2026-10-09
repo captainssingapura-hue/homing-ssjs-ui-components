@@ -27,6 +27,7 @@ public record IconButtonModule() implements DomModule<IconButtonModule>, ImplFor
         return ImportsFor.<IconButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ElementStyles.el_icon_button()), ElementStyles.INSTANCE))
                 .build();
     }
 

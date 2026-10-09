@@ -23,6 +23,7 @@ class IconButton extends Button {
         if (!(icon instanceof Icon)) throw new Error("[IconButton] its face is an Icon its caller makes and hands in: { icon }");
         super(el, props, role);
         this._icon = icon;
+        css.addClass(el, el_icon_button);   // its face laid out: the icon centred in its box, whatever the icon
         el.appendChild(icon.el);
     }
 
