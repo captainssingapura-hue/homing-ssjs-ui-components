@@ -1,21 +1,15 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Casting;
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
-import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.Target;
+import hue.captains.singapura.js.homing.design.semantic.DeriveTreatments;
 import hue.captains.singapura.js.homing.design.semantic.Dressed;
 import hue.captains.singapura.js.homing.design.semantic.FlattenSheet;
-import hue.captains.singapura.js.homing.design.semantic.ResolveSemanticClass;
-import hue.captains.singapura.js.homing.design.semantic.Resolution;
 import hue.captains.singapura.js.homing.design.semantic.SemanticTokens;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -45,30 +39,21 @@ final class HouseLooks {
     }
 
     /**
-     * Every component some style treats, and its treatments - {@code effect-opacity--disabled} -
-     * each a class some style's sheet has a rule for. Worn once, so the same in every theme: a
-     * treatment the theme worn has no rule for is a class that does nothing.
+     * Every component some theme treats, and its treatments - {@code effect-opacity--disabled} -
+     * each a class some theme's sheet has a rule for, read from the answers ({@link DeriveTreatments})
+     * once: the styles and palettes are the house's constants. Worn once, so the same in every theme:
+     * a treatment the theme worn has no rule for is a class that does nothing.
      */
-    static Map<String, List<String>> treated() {
+    static Map<String, List<String>> treated() { return TREATED; }
+
+    private static final Map<String, List<String>> TREATED = derive();
+
+    private static Map<String, List<String>> derive() {
         var tokens = SemanticTokens.INSTANCE;
+        var derive = DeriveTreatments.INSTANCE;
         var out = new LinkedHashMap<String, List<String>>();
-        for (Component<?> leaf : TAXONOMY.components()) {
-            var mine = new LinkedHashSet<String>();
-            for (State s : State.values()) {
-                if (s == State.REST) continue;
-                for (Target t : tokens.cssLeaves()) {
-                    if (!t.states().contains(s)) continue;
-                    for (Dressed theme : HouseStyles.THEMES.values()) {
-                        Resolution r = ResolveSemanticClass.INSTANCE.resolve(TAXONOMY, theme, new Casting(leaf), s, t);
-                        if (r.outcome() instanceof Resolution.Answered a && !a.body().isBlank()) {
-                            mine.add(tokens.target(t) + "--" + tokens.state(s));
-                            break;
-                        }
-                    }
-                }
-            }
-            if (!mine.isEmpty()) out.put(leaf.token(), new ArrayList<>(mine));
-        }
-        return out;
+        derive.byComponent(TAXONOMY, derive.union(TAXONOMY, HouseStyles.THEMES.values())).forEach((leaf, mine) ->
+                out.put(leaf.token(), mine.stream().map(t -> tokens.target(t.target()) + "--" + tokens.state(t.state())).toList()));
+        return java.util.Collections.unmodifiableMap(out);
     }
 }
