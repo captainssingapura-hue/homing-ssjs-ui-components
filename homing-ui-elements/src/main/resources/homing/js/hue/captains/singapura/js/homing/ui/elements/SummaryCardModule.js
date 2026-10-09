@@ -30,9 +30,9 @@
 //   interactive thing do; with onClick it is a button to the keyboard too
 //   (role, tabindex, Enter and Space); without, nothing happens on a press.
 //
-// A card's link has its address set through the manager so a typed address
-// stays typed. `css` is injected with the styles import; the manager comes
-// in by its explicit HrefManager import.
+// A card's link is the house's link, cast as what opens it: its address set
+// through the href manager, so a typed address stays typed. `css` is injected
+// with the styles import.
 // =============================================================================
 
 const _cardOwner = Object.freeze({ toString: () => "card" });
@@ -66,6 +66,7 @@ class SummaryCard {
         var body = branch.createElement("body", "div");
         css.addClass(body, el_card_body);
         var text = null;
+        var link = null;
         if (p.text) {
             text = new Caption(CaptionFactory.create(branch, "text"), { text: String(p.text) }, ROLE.SUMMARY);
             css.addClass(text.el, el_card_text);
@@ -76,11 +77,10 @@ class SummaryCard {
         if (p.link && p.link.to) {
             var foot = branch.createElement("foot", "footer");
             css.addClass(foot, el_card_foot);
-            var a = branch.createElement("link", "a");
-            css.addClass(a, el_card_link);
-            HrefManagerInstance.set(a, p.link.to);
-            a.textContent = p.link.label == null ? String(p.link.to) : String(p.link.label);
-            foot.appendChild(a);
+            // its way on, in the house's link, cast as what opens it: placed by the card, in the size of its foot
+            link = new Link(LinkFactory.create(branch, "link"), { text: p.link.label == null ? String(p.link.to) : String(p.link.label), to: p.link.to }, ROLE.OPEN);
+            css.addClass(link.el, el_card_link);
+            foot.appendChild(link.el);
             card.appendChild(foot);
         }
 
@@ -101,7 +101,7 @@ class SummaryCard {
 
         this.root = card;
         this.body = body;
-        this._parts = [card, head].concat(a ? [a] : []);
+        this._parts = [card, head].concat(foot ? [foot] : []);   // the foot sized as a caption, its link taking that size
         this._texts = [this._title].concat(badge ? [badge] : [], text ? [text] : []);
         this.size(p.size == null ? 0 : p.size);
         this.aspect(p.aspect == null ? 0 : p.aspect);

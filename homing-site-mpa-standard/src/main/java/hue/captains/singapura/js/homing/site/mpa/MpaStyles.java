@@ -126,7 +126,6 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
     }
 
     public record mpa_crumb() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(OnInvertedMuted.class, Color.Ink.class), of(Link.class, Type.Decoration.class), of(Link.class, Motion.Ease.class)); }
         @Override public String body() { return "white-space: nowrap;"; }
     }
 

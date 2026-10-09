@@ -61,6 +61,12 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(BadgeModule.INSTANCE),
                 CrateEntry.of(PillModule.INSTANCE),
                 CrateEntry.of(WordmarkModule.INSTANCE),
+                // the ways somewhere - a link, a crumb - and the veil behind a dialog
+                CrateEntry.of(LinkBehaviorModule.INSTANCE),
+                CrateEntry.of(LinkModule.INSTANCE),
+                CrateEntry.of(CrumbModule.INSTANCE),
+                CrateEntry.of(ScrimBehaviorModule.INSTANCE),
+                CrateEntry.of(ScrimModule.INSTANCE),
                 CrateEntry.of(SummaryCardModule.INSTANCE),
                 CrateEntry.of(SliderModule.INSTANCE),
                 CrateEntry.of(SliderGroupModule.INSTANCE),

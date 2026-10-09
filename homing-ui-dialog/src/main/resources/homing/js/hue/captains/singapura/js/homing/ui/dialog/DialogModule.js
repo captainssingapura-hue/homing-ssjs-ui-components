@@ -61,6 +61,13 @@ class DialogAction {
     canHandle(type) { return type === EVENT.CLICK; }
     handle() { this._action.onClick(this._dialog); }
 }
+
+/** The veil behind a modal dialog pressed: the dialog closes. */
+class DialogVeilPress {
+    constructor(dialog) { this._dialog = dialog; }
+    canHandle(type) { return type === EVENT.PRESS; }
+    handle() { this._dialog.close(); }
+}
 var PHI  = 1.6180339887;
 
 class Dialog {
@@ -82,9 +89,11 @@ class Dialog {
         // ── the layer, and the scrim behind it when modal ────────────────────
         var scrim = null;
         if (modal) {
-            scrim = branch.createElement("scrim", "div");
-            css.addClass(scrim, dl_scrim);
-            scrim.addEventListener("mousedown", function () { self.close(); });
+            // the house's scrim, cast as the veil: placed over the page by the dialog, a press on it closing it
+            var veil = new Scrim(ScrimFactory.create(branch, "scrim"), {}, ROLE.VEIL);
+            css.addClass(veil.el, dl_scrim);
+            veil.setOnPress(new DialogVeilPress(this));
+            scrim = veil.el;
             document.body.appendChild(scrim);
         }
         var layer = branch.createElement("layer", "div");

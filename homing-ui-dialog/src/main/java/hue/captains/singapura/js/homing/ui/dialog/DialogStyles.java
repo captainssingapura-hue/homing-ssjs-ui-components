@@ -27,7 +27,6 @@ public record DialogStyles() implements CssGroup<DialogStyles> {
 
     /** Over everything but the frame; the filter is the overlay's word. */
     public record dl_scrim() implements CssClass<DialogStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Overlay.class, Effect.Filter.class)); }
         @Override public String body() { return """
             position: fixed;
             inset: 0;

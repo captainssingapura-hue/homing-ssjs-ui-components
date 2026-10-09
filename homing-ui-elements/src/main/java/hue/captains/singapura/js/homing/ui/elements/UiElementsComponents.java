@@ -11,7 +11,7 @@ public record UiElementsComponents() implements C0_Components<UiElementsComponen
     public static final UiElementsComponents INSTANCE = new UiElementsComponents();
 
     @Override public String name() { return "Elements"; }
-    @Override public String summary() { return "The smallest things: the nine buttons, the nine texts, the summary card, a slider and its group, a panel and an edge strip."; }
+    @Override public String summary() { return "The smallest things: the nine buttons, the nine texts, a link, a crumb, a scrim, the summary card, a slider and its group, a panel and an edge strip."; }
 
     @Override public List<ComponentEntry<UiElementsComponents>> leaves() {
         return List.of(
@@ -33,6 +33,9 @@ public record UiElementsComponents() implements C0_Components<UiElementsComponen
                 ComponentEntry.of(this, new BadgeModule.Badge()),
                 ComponentEntry.of(this, new PillModule.Pill()),
                 ComponentEntry.of(this, new WordmarkModule.Wordmark()),
+                ComponentEntry.of(this, new LinkModule.Link()),
+                ComponentEntry.of(this, new CrumbModule.Crumb()),
+                ComponentEntry.of(this, new ScrimModule.Scrim()),
                 ComponentEntry.of(this, new SummaryCardModule.SummaryCard()),
                 ComponentEntry.of(this, new SliderModule.Slider()),
                 ComponentEntry.of(this, new SliderGroupModule.SliderGroup()),

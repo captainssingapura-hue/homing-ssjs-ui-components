@@ -25,6 +25,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.waysEase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
@@ -74,6 +76,9 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             type(LABEL, null, "600", null),
             type(READOUT, DISPLAY, "700", "font-style: italic; font-variant-numeric: tabular-nums;"),
             type(WORDMARK, DISPLAY, null, "font-style: italic;"),
+            // ── the veil behind a dialog: the page dimmed and softened; a way's colour eased under the hand ──
+            veil("brightness(0.45) blur(2px)"),
+            waysEase("color 140ms ease"),
             measure("8px", "18px", "8px", "56px", "1.3"),
             disabled(".45", "default"));
 }

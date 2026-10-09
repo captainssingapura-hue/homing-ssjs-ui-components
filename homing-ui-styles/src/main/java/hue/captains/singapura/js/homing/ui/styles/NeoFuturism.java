@@ -25,6 +25,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
@@ -76,6 +77,8 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
             type(CAPTION, null, null, "letter-spacing: 0.02em;"),
             type(READOUT, DISPLAY, "300", "letter-spacing: 0.04em; font-variant-numeric: tabular-nums;"),
             type(WORDMARK, DISPLAY, null, "letter-spacing: 0.18em; text-transform: uppercase;"),
+            // ── the veil behind a dialog: deep glass ──
+            veil("blur(14px) saturate(1.4) brightness(0.7)"),
             measure("7px", "16px", "8px", "56px", "1.25"),
             disabled(".4", "not-allowed"));
 }

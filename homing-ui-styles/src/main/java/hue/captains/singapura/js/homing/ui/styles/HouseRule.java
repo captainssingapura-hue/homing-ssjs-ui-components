@@ -12,6 +12,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BADGE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LINK;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PILL;
@@ -137,6 +138,10 @@ final class HouseRule {
                 rest(KICKER, INK, "color: color-mix(in srgb, " + s.accentEdge() + " 50%, currentColor);"),
                 rest(LEDE, INK, "color: " + quiet + ";"),
                 rest(CAPTION, INK, "color: " + quiet + ";"),
+                // ── a link: quieter than the ink it stands in, and in the title's blended into it under the hand; a crumb
+                //    in the ink of the trail it stands in, the root's ──
+                when(LINK, INK, Map.of(State.REST, "color: " + quiet + ";",
+                                       State.HOVER, "color: color-mix(in srgb, " + s.title() + " 50%, currentColor);")),
                 rest(BADGE, BACKGROUND, ground("color-mix(in srgb, " + s.accent() + " 18%, transparent)")),
                 rest(PILL, BACKGROUND, ground("color-mix(in srgb, currentColor 10%, transparent)")));
     }

@@ -49,6 +49,10 @@ class DialogKeysTest extends JsModuleTestBase {
                             setOnClick(h) { var self = this; this.el.addEventListener("click", function (ev) { h.handle({ type: EVENT.CLICK, source: self, raw: ev }); }); } }
         class PrimaryButton extends PlainButton {}
         var PlainButtonFactory = { create: function (b, n) { return b.createElement(n, "button"); } }, PrimaryButtonFactory = PlainButtonFactory;
+        // the veil, a press on it handed to its handler
+        class Scrim { static TAG = "div"; constructor(e, p) { this.el = e; }
+                      setOnPress(h) { var self = this; this.el.addEventListener("mousedown", function (ev) { h.handle({ type: EVENT.PRESS, source: self, raw: ev }); }); } }
+        var ScrimFactory = { create: function (b, n) { return b.createElement(n, "div"); } };
         function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} }; }
         var members = {}, kbLog = [], holder = null;
         var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; if (holder === id) holder = null; kbLog.push("leave:" + id); },

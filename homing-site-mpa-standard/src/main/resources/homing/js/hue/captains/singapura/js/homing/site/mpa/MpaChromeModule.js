@@ -107,12 +107,12 @@ class MpaChrome {
                 this._nav.appendChild(sep);
             }
             var last = i === crumbs.length - 1, linked = !last && typeof crumbs[i].to === "string";
-            var el = this._trail.createElement("crumb-" + i, linked ? "a" : "span");
-            css.addClass(el, mpa_crumb);
-            el.textContent = crumbs[i].text;
-            if (last) el.setAttribute("aria-current", "page");
-            if (linked) HrefManagerInstance.set(el, crumbs[i].to);
-            this._nav.appendChild(el);
+            // each step in the house's crumb, cast as a step and placed by the chrome: the last the page, the
+            // others ways back - but a heading's, which has no way
+            var crumb = new Crumb(CrumbFactory.create(this._trail, "crumb-" + i),
+                                  { text: crumbs[i].text, to: linked ? crumbs[i].to : null, current: last }, ROLE.STEP);
+            css.addClass(crumb.el, mpa_crumb);
+            this._nav.appendChild(crumb.el);
         }
     }
 }

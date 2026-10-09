@@ -31,6 +31,9 @@ public final class HouseControls {
     /** What every button offers: it is clicked. */
     private static final List<EventType<?>> CLICKED = List.of(HouseEvents.Click.INSTANCE);
 
+    /** A crumb's state: whether it is the step that is this page. */
+    private static final List<StateType<?>> A_CRUMB = List.of(HouseStates.Current.INSTANCE);
+
     // ── buttons ──────────────────────────────────────────────────────────
 
     /** A button with no emphasis. */
@@ -144,12 +147,15 @@ public final class HouseControls {
     public record Link() implements Component<Control> {
         public static final Link INSTANCE = new Link();
         @Override public Control parent() { return Control.INSTANCE; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
     /** One step of a trail back. */
     public record Crumb() implements Component<Control> {
         public static final Crumb INSTANCE = new Crumb();
         @Override public Control parent() { return Control.INSTANCE; }
+        @Override public List<StateType<?>> states() { return A_CRUMB; }
+        @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
     /** One tab of a strip: what a pane holds, picked. Its label and its icon slot are its own. */

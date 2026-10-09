@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.Answer;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
@@ -193,6 +194,45 @@ final class Say {
                 rest(PILL, INSET, "padding-block: 0; padding-inline: 0.5em;"),
                 rest(PILL, CORNER, "border-radius: 999px;"),
                 rest(WORDMARK, SCALE, "font-size: " + grows("22px", "1.2") + "; line-height: 1;"));
+    }
+
+    // ── the ways somewhere, and the veil ─────────────────────────────────
+
+    static final Taxon LINK = HouseControls.Link.INSTANCE;
+    static final Taxon CRUMB = HouseControls.Crumb.INSTANCE;
+    static final Taxon SCRIM = HouseContainers.Scrim.INSTANCE;
+    static final Target.Effect.Filter FILTER = Target.Effect.Filter.INSTANCE;
+    static final Target.Type.Decoration DECORATION = Target.Type.Decoration.INSTANCE;
+
+    /** The ways somewhere: a link, and a crumb of a trail - which a style eases and marks alike. */
+    static final List<Taxon> WAYS = List.of(LINK, CRUMB);
+
+    /** How a style veils the page behind a dialog: the scrim's backdrop filter. */
+    static List<Implementation<?>> veil(String backdrop) { return List.of(rest(SCRIM, FILTER, "backdrop-filter: " + backdrop + ";")); }
+
+    /** How a style eases a way's colour under the hand. */
+    static List<Implementation<?>> waysEase(String transition) {
+        var out = new ArrayList<Implementation<?>>();
+        for (Taxon way : WAYS) out.add(rest(way, EASE, "transition: " + transition + ";"));
+        return List.copyOf(out);
+    }
+
+    /** How a style marks a way under the hand: its decoration then, none at rest. */
+    static List<Implementation<?>> waysMarked(String hover) {
+        var out = new ArrayList<Implementation<?>>();
+        for (Taxon way : WAYS) out.add(when(way, DECORATION, Map.of(State.HOVER, hover)));
+        return List.copyOf(out);
+    }
+
+    /**
+     * What the ways' measure is in the house, whatever the style: a link the size of the text it
+     * sits in, grown by its own size; the crumb that is the page set heavier. (It is still pointed at,
+     * as every control is: the cursor offers no current.)
+     */
+    static List<Implementation<?>> waysMeasure() {
+        return List.of(
+                rest(LINK, SCALE, "font-size: " + grows("1em", "1.2") + "; line-height: inherit;"),
+                when(CRUMB, WEIGHT, Map.of(State.CURRENT, "font-weight: 600;")));
     }
 
     /** Every answer of the groups, in order. */

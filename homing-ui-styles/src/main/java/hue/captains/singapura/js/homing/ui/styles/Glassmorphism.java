@@ -25,6 +25,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
@@ -74,6 +75,8 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
             type(LABEL, null, "600", null),
             type(READOUT, DISPLAY, "600", "letter-spacing: -0.01em; font-variant-numeric: tabular-nums;"),
             type(WORDMARK, DISPLAY, null, "letter-spacing: -0.01em;"),
+            // ── the veil behind a dialog: frosted ──
+            veil("blur(10px) saturate(1.2) brightness(0.9)"),
             measure("10px", "22px", "8px", "64px", "1.3"),
             disabled(".45", "not-allowed"));
 }

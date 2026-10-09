@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 
 import java.util.List;
@@ -206,6 +207,7 @@ public final class HouseContainers {
     public record Scrim() implements Component<HouseBranches.Layer> {
         public static final Scrim INSTANCE = new Scrim();
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
+        @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE); }
     }
 
     /** The one keeper of the page's context menus: one open at a time, and a specimen of each kind. Its layer is its own. */

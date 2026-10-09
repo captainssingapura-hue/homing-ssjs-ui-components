@@ -695,6 +695,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The foot: the link, and later the actions; fixed at the bottom. */
     public record el_card_foot() implements CssClass<ElementStyles> {
+        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class)); }
+        @Override public List<? extends Wearable> sizes() { return List.of(of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """
             flex: none;
             display: flex;
@@ -705,8 +707,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The card's link: a link, its ring the link's own on focus. */
     public record el_card_link() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Link.class, Color.Ink.class), of(Link.class, Type.Decoration.class), of(Link.class, Motion.Ease.class), of(Caption.class, Type.Scale.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return ""; }
     }
 
