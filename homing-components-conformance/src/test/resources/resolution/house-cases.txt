@@ -8,7 +8,8 @@ plain-button        rest      shape-corner       => button__shape-corner
 danger-button       rest      shape-corner       => danger-button__shape-corner
 # the rank is each button's
 primary-button      rest      color-surface      => primary-button__color-surface
-secondary-button    rest      color-ink          => root__color-ink
+secondary-button    rest      color-ink          => secondary-button__color-ink
+warning-button      rest      color-edge         => button__color-edge
 # Go on the primary button, as the action bar casts it
 primary-button_go   rest      type-weight        => primary-button_go__type-weight
 primary-button      rest      type-weight        => button__type-weight
