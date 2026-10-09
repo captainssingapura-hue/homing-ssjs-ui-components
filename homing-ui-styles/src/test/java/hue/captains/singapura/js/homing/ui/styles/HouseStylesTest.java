@@ -1,14 +1,19 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
+import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Dressed;
 import hue.captains.singapura.js.homing.design.semantic.FlattenSheet;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
+import hue.captains.singapura.js.homing.design.semantic.ResolveSemanticClass;
+import hue.captains.singapura.js.homing.design.semantic.Resolution;
 import hue.captains.singapura.js.homing.design.semantic.SemanticTokens;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import org.junit.jupiter.api.Test;
 
@@ -148,6 +153,47 @@ class HouseStylesTest {
                 + "    --box-shadow-cast: #1A3829; --box-shadow-lit: #FFFFFF; --box-shadow-glow: #2D5F3F;\n}\n"), "cast in the forest's pine");
         assertTrue(forest.contains("/* from forest: control__color-outline--focus */"), "the ring, the forest's honey");
         assertTrue(forest.contains("outline-color: color-mix(in srgb, #D4A04C 55%, #D4DFCC);"));
+    }
+
+    /**
+     * A mark alone stands bare at rest, as Base has it, and under the hand lifts as its style lifts
+     * every button: the style's own hover, not Base's silence. A close turns to danger under the
+     * hand, in every palette; an icon button shows a button's face; off, neither does.
+     */
+    @Test
+    void aMarkAlone_isBareAtRest_liftsUnderTheHandAsItsStyleDoes_andACloseTurnsToDanger() {
+        var close = new Casting(HouseControls.CloseButton.INSTANCE);
+        var plus = new Casting(HouseControls.IconButton.INSTANCE);
+        for (var e : HouseStyles.THEMES.entrySet()) {
+            Dressed theme = e.getValue();
+            String style = theme.style().token();
+            assertEquals("close-button__shape-shadow from base", said(theme, close, State.REST, Target.Shape.Shadow.INSTANCE), e.getKey());
+            assertEquals("close-button__motion-transform from base", said(theme, close, State.REST, Target.Motion.Transform.INSTANCE), e.getKey());
+            assertEquals("root__shape-border from base", said(theme, close, State.REST, Target.Shape.Border.INSTANCE), e.getKey() + ": no border");
+            assertEquals("button__motion-transform--hover from " + style, said(theme, close, State.HOVER, Target.Motion.Transform.INSTANCE), e.getKey());
+            assertEquals("button__motion-transform--hover from " + style, said(theme, plus, State.HOVER, Target.Motion.Transform.INSTANCE), e.getKey());
+            assertEquals(style.equals("sketchy") ? "none" : "button__shape-shadow--hover from " + style,
+                    said(theme, close, State.HOVER, Target.Shape.Shadow.INSTANCE), e.getKey() + ": ink casts no shadow");
+            assertEquals("control__shape-shadow--disabled from base", said(theme, close, State.DISABLED, Target.Shape.Shadow.INSTANCE), e.getKey());
+            String palette = theme.palette().token();
+            assertEquals("close-button__color-background--hover from " + palette, said(theme, close, State.HOVER, Target.Color.Background.INSTANCE));
+            assertTrue(body(theme, close, State.HOVER, Target.Color.Background.INSTANCE).contains("background-color: #DC2626;"), "danger, in every palette");
+            assertTrue(body(theme, close, State.HOVER, Target.Color.Ink.INSTANCE).contains("color: #FFFFFF;"));
+            assertTrue(body(theme, close, State.DISABLED, Target.Color.Background.INSTANCE).contains("background-color: transparent;"), "off: no danger");
+            assertEquals("icon-button__color-background--hover from " + palette, said(theme, plus, State.HOVER, Target.Color.Background.INSTANCE));
+        }
+    }
+
+    private static String said(Dressed theme, Casting node, State state, Target target) {
+        return switch (ResolveSemanticClass.INSTANCE.resolve(HOUSE, theme, node, state, target).outcome()) {
+            case Resolution.Answered a -> a.className() + " from " + a.layer();
+            case Resolution.Silent s -> "none";
+            case Resolution.Unanswered u -> "unanswered";
+        };
+    }
+
+    private static String body(Dressed theme, Casting node, State state, Target target) {
+        return ((Resolution.Answered) ResolveSemanticClass.INSTANCE.resolve(HOUSE, theme, node, state, target).outcome()).body();
     }
 
     private static Set<String> classes(List<? extends Implementation<?>> implementations) {

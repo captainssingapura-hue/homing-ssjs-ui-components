@@ -37,8 +37,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * has to: a control is pointed at, a button's type grows a step of 1.25 per unit of size, a
  * control that cannot be used neither lifts nor casts a shadow, and a button that is a mark alone -
  * a close button's cross, an icon button's icon - goes without a frame, in the size of the text it
- * sits in, unless a style frames it. Every house style is written over it, and answers only what
- * makes it itself.
+ * sits in, in a square box with room round the mark, and stands flat at rest - under the hand it
+ * lifts as the style's every button does - unless a style frames it. Every house style is
+ * written over it, and answers only what makes it itself.
  */
 public record Base() implements DesignStyle {
 

@@ -165,7 +165,8 @@ class TabPaneTest extends JsModuleTestBase {
     void theChipAndThePaneAreTheSameElements_theNameAndIconChangedInPlace_byTheHolderOrTheWidget() {
         eval("var tp = register.open({ id: 't', title: 'Old', focus: dock, make: widget('w1') }); var chip = tp.chip, pane = tp.pane;");
         eval("tp.title('New');");
-        assertEquals("New|New|Close New", eval("chip._label.textContent + '|' + chip.title + '|' + chip._close.getAttribute('aria-label')").asString());
+        assertEquals("New|New|Close New|Close New", eval("chip._label.textContent + '|' + chip.title + '|' + chip._close.getAttribute('aria-label') + '|' + chip._close.getAttribute('title')").asString(),
+                "the label, the tooltip, and what the cross says it closes - its name and its own tooltip");
         eval("handles.w1.tab.title('Named by the widget');");
         assertEquals("Named by the widget", eval("chip._label.textContent").asString(), "the widget names itself on its own tab");
         assertEquals("Named by the widget", eval("handles.w1.tab.title() + ''").asString());

@@ -15,10 +15,11 @@
 //   TabChip.retitle(chip, title)   the label, the tooltip and what the cross says it closes
 //   TabChip.reicon(chip, icon?)    the holder's element in the icon's slot, or none
 //
-// A chip carries its parts as handles, _icon, _label, _mark and _close, and
-// _chip, so a strip tells a chip from its own ground. A press on it, not on
-// its cross, takes the native focus away from whatever had it, then selects:
-// the chip takes no native focus itself. Pinned tabs and tabs that cannot be
+// A chip carries its parts as handles, _icon, _label, _mark and _close (the
+// cross's element; _closer, the close button itself), and _chip, so a strip
+// tells a chip from its own ground. A press on it, not on its cross, takes
+// the native focus away from whatever had it, then selects: the chip takes no
+// native focus itself. Pinned tabs and tabs that cannot be
 // closed have no cross. `css` is injected with the styles import.
 // =============================================================================
 
@@ -53,18 +54,20 @@ class TabChip {
         c._mark = mark;
         c.appendChild(mark);
 
-        var closeBtn = null;
+        var closer = null, closeBtn = null;
         if (tab.closable !== false && !tab.pinned) {
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
-            closeBtn = new CloseButton(branch.createElement("close" + s, CloseButton.TAG), {
+            closer = new CloseButton(branch.createElement("close" + s, CloseButton.TAG), {
                 label: "Close " + label.textContent,
                 onClick: function (ev) { ev.stopPropagation(); handlers.onClose(); }
-            }, ROLE.CLOSE).el;
+            }, ROLE.CLOSE);
+            closeBtn = closer.el;
             css.addClass(closeBtn, mtp_chip_close);   // its place at the chip's end; its look is its own
             closeBtn.setAttribute("tabindex", "-1");
             c.appendChild(closeBtn);
         }
         c._close = closeBtn;
+        c._closer = closer;   // the button itself: its name, and the tooltip that says it, are its own to change
         c.addEventListener("pointerdown", function (ev) {
             if (ev.button !== 0 || (closeBtn && closeBtn.contains(ev.target))) return;
             TabChip._letGo();
@@ -83,7 +86,7 @@ class TabChip {
         var t = title == null ? "" : String(title);
         chip.title = t;
         if (chip._label) chip._label.textContent = t;
-        if (chip._close) chip._close.setAttribute("aria-label", "Close " + t);
+        if (chip._closer) chip._closer.label = "Close " + t;
     }
 
     /** The chip's icon, now: the holder's element, or none. */

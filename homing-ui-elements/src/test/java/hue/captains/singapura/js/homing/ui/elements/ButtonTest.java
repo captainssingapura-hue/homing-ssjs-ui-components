@@ -168,8 +168,10 @@ class ButtonTest extends JsModuleTestBase {
         assertEquals("", str("c.el.textContent"), "no words on its face");
         assertTrue(has("c", "close-button__type-glyph"), "the mark: the glyph its style draws on ::before");
         assertTrue(has("c", "close-button__shape-border"), "its frame: Base's bare one, unless its style frames it");
+        assertEquals("Close", str("c.el.getAttribute('title')"), "and shown to whoever points at it: the browser's own tooltip");
         eval("c.label = 'Close the dialog'");
         assertEquals("Close the dialog", str("c.label"));
+        assertEquals("Close the dialog", str("c.el.getAttribute('title')"), "the tooltip follows its name");
         eval("var closing = new CloseButton(el('button'), {}, ROLE.CLOSE);");
         assertTrue(has("closing", "close-button_close__shape-border"), "cast as what closes its owner");
     }
@@ -180,6 +182,7 @@ class ButtonTest extends JsModuleTestBase {
         eval("var plus = new Icon(el('span'), { name: 'add' }); var b = new IconButton(el('button'), { icon: plus, label: 'Add a tab' });");
         assertTrue(eval("b.icon === plus && b.el.kids[0] === plus.el").asBoolean(), "its face: the icon, in it");
         assertEquals("Add a tab", str("b.el.getAttribute('aria-label')"));
+        assertEquals("Add a tab", str("b.el.getAttribute('title')"), "its tooltip: the browser's own");
         assertEquals("", str("b.el.textContent"), "no words on its face");
         eval("b.icon.set('remove')");
         assertEquals("remove", str("b.icon.name()"), "another icon is the icon's to show; the button is not asked");

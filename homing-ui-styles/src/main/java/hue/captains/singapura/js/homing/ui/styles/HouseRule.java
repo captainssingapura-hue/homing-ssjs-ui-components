@@ -19,7 +19,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * semantic colours in the same places and differs only in what they are. Every semantic colour at
  * the root, each said whole; a box's shadow cast in the inverted layer, lit in the raised one,
  * glowing in the title colour; the ring of attention in the accent; a button's face - raised, in
- * the text's ink, a hairline round it - a toggle that is on tinted with the accent; and each
+ * the text's ink, a hairline round it - a toggle that is on tinted with the accent; a close turning to
+ * danger under the hand, an icon button showing a button's face; and each
  * coloured button's rank - its background, its ink, its border. A coloured button's background and ink move with its extent:
  * the word at 1, the neutral at 0, the meaning turned the other way at -1. Danger, warning and
  * success are the same in every house palette; only the ink they fall back to is the palette's.
@@ -31,6 +32,11 @@ final class HouseRule {
     private static final Target.Color.Background BACKGROUND = Target.Color.Background.INSTANCE;
     private static final Target.Color.Ink INK = Target.Color.Ink.INSTANCE;
     private static final Target.Color.Border BORDER = Target.Color.Border.INSTANCE;
+
+    /** Danger said whole, for a close under the hand: the same in every house palette, as every feedback colour is. */
+    private static final String DANGER = "#DC2626";
+    private static final String DANGER_PRESSED = "#B91C1C";
+    private static final String ON_DANGER = "#FFFFFF";
 
     /** A ground and nothing drawn on it: the background's whole set, its ramp and its marks transparent. */
     private static String ground(String colour) {
@@ -68,10 +74,22 @@ final class HouseRule {
                 rest(BUTTON, BACKGROUND, ground(s.raised())),
                 rest(BUTTON, INK, "color: " + s.text() + ";"),
                 rest(BUTTON, BORDER, "border-color: " + s.border() + ";"),
-                // ── a mark alone - a close button's cross, an icon button's icon: no ground of its own, in the ink of what holds it ──
-                rest(HouseControls.CloseButton.INSTANCE, BACKGROUND, ground("transparent")),
-                rest(HouseControls.CloseButton.INSTANCE, INK, "color: inherit;"),
-                rest(HouseControls.IconButton.INSTANCE, BACKGROUND, ground("transparent")),
+                // ── a mark alone - a close button's cross, an icon button's icon: no ground of its own, in the ink of what holds it;
+                //    under the hand a close turns to danger, as a window's does, and an icon button shows a button's face; off, neither ──
+                when(HouseControls.CloseButton.INSTANCE, BACKGROUND, Map.of(
+                        State.REST, ground("transparent"),
+                        State.HOVER, ground(DANGER),
+                        State.DISABLED, ground("transparent"),
+                        State.ACTIVE, ground(DANGER_PRESSED))),
+                when(HouseControls.CloseButton.INSTANCE, INK, Map.of(
+                        State.REST, "color: inherit;",
+                        State.HOVER, "color: " + ON_DANGER + ";",
+                        State.DISABLED, "color: inherit;",
+                        State.ACTIVE, "color: " + ON_DANGER + ";")),
+                when(HouseControls.IconButton.INSTANCE, BACKGROUND, Map.of(
+                        State.REST, ground("transparent"),
+                        State.HOVER, ground(s.raised()),
+                        State.DISABLED, ground("transparent"))),
                 rest(HouseControls.IconButton.INSTANCE, INK, "color: inherit;"),
                 // ── a toggle that is on: tinted with the accent, edged with it ──
                 when(HouseControls.ToggleButton.INSTANCE, BACKGROUND,
