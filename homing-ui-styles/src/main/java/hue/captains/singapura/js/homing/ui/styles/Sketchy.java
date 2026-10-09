@@ -1,0 +1,46 @@
+package hue.captains.singapura.js.homing.ui.styles;
+
+import hue.captains.singapura.js.homing.design.State;
+import hue.captains.singapura.js.homing.design.semantic.Derives;
+import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
+import hue.captains.singapura.js.homing.design.semantic.Implementation;
+
+import java.util.List;
+import java.util.Map;
+
+import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.EASE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.FACE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.RULE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
+import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
+import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
+import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
+import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
+import static hue.captains.singapura.js.homing.ui.styles.Say.when;
+
+/**
+ * Sketchy: drawn by hand - a wobbling outline, a marker's rule, a tilt under the hand. Ink casts no
+ * shadow, so it says nothing of the shadow: the base's is none.
+ */
+public record Sketchy() implements DesignStyle, Derives<Base> {
+
+    public static final Sketchy INSTANCE = new Sketchy();
+
+    @Override public Base base() { return Base.INSTANCE; }
+
+    @Override public List<Implementation<?>> implementations() { return ANSWERS; }
+
+    private static final List<Implementation<?>> ANSWERS = answers(
+            List.of(rest(BUTTON, CORNER, "border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;"),
+                    rest(BUTTON, RULE, "border-width: 2px; border-style: solid;"),
+                    rest(BUTTON, FACE, "font-family: \"Cabin Sketch\", \"Segoe Print\", \"Bradley Hand\", \"Chalkboard SE\", cursive;"),
+                    rest(BUTTON, EASE, "transition: transform 120ms ease-out, background-color 120ms ease-out, border-color 120ms ease-out;"),
+                    when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-1px) rotate(-0.6deg);",
+                                                   State.ACTIVE, "transform: translateY(1px) rotate(0.4deg);")),
+                    rings("2px dashed -3px", "2px dashed 5px", "2px dotted 3px", "3px solid 3px")),
+            measure("8px", "16px", "8px", "56px", "1.35"),
+            disabled(".5", "not-allowed"));
+}

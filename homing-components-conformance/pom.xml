@@ -43,6 +43,12 @@
             <artifactId>homing-ui-taxonomy</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- The house styles over Base, in their palette: the themes the house cases are walked in. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-styles</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- THE CHECK - UI-agnostic, and held so by CheckIsUiAgnosticTest: the
              rules, the engine that grades a run, and the export that writes the
              report. Headless, and declared here so the check never reaches them

@@ -8,9 +8,9 @@ import java.util.List;
 
 /**
  * The house's looks as a sheet: flattened, every class a component can wear with its rule, the
- * body copied from the node of the taxonomy the theme answers ({@code FlattenSheet}). It renders
- * itself per theme - the sketch, for every theme, until the house answers more - and a theme
- * switch fetches it again.
+ * body copied from the node of the taxonomy that answers it in the theme worn - a house style over
+ * Base, in its palette ({@code FlattenSheet}). It renders itself per theme, and a theme switch
+ * fetches it again.
  */
 public record HouseLookSheet() implements CssGroup<HouseLookSheet>, SelfRenderedCss {
 
@@ -23,5 +23,5 @@ public record HouseLookSheet() implements CssGroup<HouseLookSheet>, SelfRendered
 
     @Override public List<CssClass<HouseLookSheet>> cssClasses() { return List.of(new look_sheet()); }
 
-    @Override public String css(String themeSlug) { return HouseLooks.SHEET.css(); }
+    @Override public String css(String themeSlug) { return HouseLooks.sheet(themeSlug).css(); }
 }

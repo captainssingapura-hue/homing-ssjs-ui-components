@@ -30,6 +30,7 @@
     <modules>
         <!-- RFC 0067: the house's taxonomy of components - declarations only, on core's taxonomy. -->
         <module>homing-ui-taxonomy</module>
+        <module>homing-ui-styles</module>
         <module>homing-ui-controllability</module>
         <module>homing-ui-elements</module>
         <module>homing-ui-dialog</module>
