@@ -18,6 +18,8 @@ public final class HouseShaping {
     public record Shaping() implements L1_RoleBranch<RoleRoot> {
         public static final Shaping INSTANCE = new Shaping();
         @Override public RoleRoot parent() { return RoleRoot.INSTANCE; }
+        /** Its roles place a part in its owner's room and say nothing of how it looks: cast for its look as Standalone. */
+        @Override public boolean functional() { return true; }
     }
 
     // ── Bands — strips of the owner's room ───────────────────────────────

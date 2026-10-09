@@ -31,6 +31,12 @@
     </properties>
 
     <dependencies>
+        <!-- The resolution of semantic classes over the house taxonomy, and its command line. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
         <!-- The taxonomy the implementations are read against. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

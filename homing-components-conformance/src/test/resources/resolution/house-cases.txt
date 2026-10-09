@@ -1,0 +1,23 @@
+# The house's buttons resolved under the sketch theme: the same walk as core's cases, over the
+# house taxonomy.
+
+answers house-sketch.answers
+
+# the frame is the button's; the danger button's corner is its own
+plain-button        rest      shape-corner       => button__shape-corner
+danger-button       rest      shape-corner       => danger-button__shape-corner
+# the rank is each button's
+primary-button      rest      color-surface      => primary-button__color-surface
+secondary-button    rest      color-ink          => root__color-ink
+# Go on the primary button, as the action bar casts it
+primary-button_go   rest      type-weight        => primary-button_go__type-weight
+primary-button      rest      type-weight        => button__type-weight
+# the plain button in the picker's roles: nothing is said of the roles, so the button's own look
+plain-button_choice rest      color-surface      => plain-button__color-surface
+plain-button_cancel rest      shape-corner       => button__shape-corner
+# treatments, common to every role
+plain-button_cancel disabled  effect-opacity     => control__effect-opacity--disabled
+danger-button       hover     shape-shadow       => button__shape-shadow--hover
+danger-button       focus     shape-shadow       => none
+# a functional role is set aside: the dialog's window looks as the floating pane on its own
+floating-pane_window rest     shape-corner       => root__shape-corner

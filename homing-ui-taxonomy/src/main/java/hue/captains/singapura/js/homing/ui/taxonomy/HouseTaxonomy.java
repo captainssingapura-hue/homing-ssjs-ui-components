@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ReadTaxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
+import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * components' parents. Every component is listed, those that play a role in another and those that
  * stand alone; each declares its parts as slots over the {@link HouseRoleCatalogue}.
  */
-public record HouseTaxonomy() implements StatelessFunctionalObject {
+public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySource {
 
     public static final HouseTaxonomy INSTANCE = new HouseTaxonomy();
 
@@ -57,5 +58,5 @@ public record HouseTaxonomy() implements StatelessFunctionalObject {
     }
 
     /** The house's taxonomy and its role catalogue, read - or refused with every problem in them. */
-    public Taxonomy read() { return new ReadTaxonomy().read(components(), HouseRoleCatalogue.INSTANCE.roles()); }
+    @Override public Taxonomy read() { return new ReadTaxonomy().read(components(), HouseRoleCatalogue.INSTANCE.roles()); }
 }

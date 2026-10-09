@@ -1,0 +1,65 @@
+# A sketch of a theme over the house taxonomy, answering the button family: what a theme
+# answers, not how - the values are the sheet's.
+
+# the roots: a theme answers every target at the root
+root  rest  color-surface
+root  rest  color-ink
+root  rest  color-edge
+root  rest  color-fill
+root  rest  color-stroke
+root  rest  color-scrollbar
+root  rest  shape-corner
+root  rest  shape-rule
+root  rest  shape-shadow
+root  rest  shape-clip
+root  rest  size-inset
+root  rest  size-gap
+root  rest  size-extent
+root  rest  size-proportion
+root  rest  type-face
+root  rest  type-weight
+root  rest  type-scale
+root  rest  type-treatment
+root  rest  type-decoration
+root  rest  type-glyph
+root  rest  motion-ease
+root  rest  motion-transform
+root  rest  motion-animate
+root  rest  effect-opacity
+root  rest  effect-filter
+root  rest  effect-blend
+root  rest  affordance-cursor
+root  rest  affordance-select
+root  rest  sound-cue
+root  rest  asset-icon
+root  rest  asset-illustration
+
+# every control: how it is pointed at, and how it is when it cannot be used
+control  rest      affordance-cursor
+control  disabled  effect-opacity
+control  disabled  affordance-cursor
+
+# the button: its frame, and a lift under the hand
+button  rest   shape-corner
+button  rest   shape-rule
+button  rest   color-edge
+button  rest   size-inset
+button  rest   type-weight
+button  hover  shape-shadow
+button  active motion-transform
+
+# each button's own surface and ink - its rank
+plain-button      rest  color-surface
+primary-button    rest  color-surface
+primary-button    rest  color-ink
+secondary-button  rest  color-surface
+danger-button     rest  color-surface
+danger-button     rest  color-ink
+warning-button    rest  color-surface
+success-button    rest  color-surface
+
+# a different shape for the danger button
+danger-button  rest  shape-corner
+
+# the primary button as Go leads a little harder
+primary-button_go  rest  type-weight
