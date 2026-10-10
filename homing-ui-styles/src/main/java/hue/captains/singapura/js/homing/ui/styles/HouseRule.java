@@ -144,9 +144,10 @@ final class HouseRule {
                 //    in the ink of the trail it stands in, the root's ──
                 when(LINK, INK, Map.of(State.REST, "color: " + quiet + ";",
                                        State.HOVER, "color: color-mix(in srgb, " + s.title() + " 50%, currentColor);")),
-                // ── the marks between things: a separator in the accent, as the old dividers were; a delimiter quieter than
-                //    the ink of the trail it stands in, a sign rather than a word ──
-                rest(SEPARATOR, BORDER, "border-color: " + s.accent() + ";"),
+                // ── the marks between things, each in the ink of what it stands in, so it follows the theme the menu or the
+                //    trail wears, light or dark: a separator that ink faded to a line; a delimiter quieter than the ink of
+                //    the trail, a sign rather than a word ──
+                rest(SEPARATOR, BORDER, "border-color: color-mix(in srgb, currentColor 30%, transparent);"),
                 rest(DELIMITER, INK, "color: color-mix(in srgb, currentColor 60%, transparent);"),
                 rest(BADGE, BACKGROUND, ground("color-mix(in srgb, " + s.accent() + " 18%, transparent)")),
                 rest(PILL, BACKGROUND, ground("color-mix(in srgb, currentColor 10%, transparent)")));
