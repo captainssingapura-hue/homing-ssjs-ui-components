@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The house's tree of states: the respects in which its components may be one way or another,
@@ -17,7 +18,10 @@ import java.util.List;
  *
  * <p>The tree files the types, never their values: a component that has a type is in exactly one of
  * its values at a time, and has one value of each type it names. A type that is yes or no is a
- * {@link Flag}, false at rest unless it says otherwise; the rest are named. Each type's change is an
+ * {@link Flag}, false at rest unless it says otherwise; the rest are named. A design answers each
+ * value but the rest by its word: the established design word where there is one - Enabled's false
+ * is {@code disabled}, Hovered's true {@code hover}, Down's true {@code active} - and the type's name
+ * and the value's otherwise ({@code busy-true}). Each type's change is an
  * event a component offers by having the type; no tree holds it. What each means is in {@code
  * meanings/.../HouseStates.md}.</p>
  */
@@ -82,6 +86,7 @@ public final class HouseStates {
         public static final Enabled INSTANCE = new Enabled();
         @Override public Availability parent() { return Availability.INSTANCE; }
         @Override public boolean rest() { return true; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.FALSE, "disabled"); }
     }
 
     /** Read, reached and copied, but not changed. */
@@ -102,12 +107,14 @@ public final class HouseStates {
     public record Pressed() implements Flag<Picking> {
         public static final Pressed INSTANCE = new Pressed();
         @Override public Picking parent() { return Picking.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "pressed"); }
     }
 
     /** Chosen by a mark of its own: a box ticked, a radio filled, a switch on. */
     public record Checked() implements Flag<Picking> {
         public static final Checked INSTANCE = new Checked();
         @Override public Picking parent() { return Picking.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "checked"); }
     }
 
     /** How much of the group it speaks for is chosen: none, some or all. The mixed checkbox's, never a plain one's. */
@@ -122,6 +129,7 @@ public final class HouseStates {
     public record Selected() implements Flag<Picking> {
         public static final Selected INSTANCE = new Selected();
         @Override public Picking parent() { return Picking.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "selected"); }
     }
 
     // ── disclosure ───────────────────────────────────────────────────────
@@ -130,6 +138,7 @@ public final class HouseStates {
     public record Expanded() implements Flag<Disclosure> {
         public static final Expanded INSTANCE = new Expanded();
         @Override public Disclosure parent() { return Disclosure.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "expanded"); }
     }
 
     /** On view over the page for now: said on what is opened. */
@@ -150,6 +159,7 @@ public final class HouseStates {
     public record Invalid() implements Flag<Validity> {
         public static final Invalid INSTANCE = new Invalid();
         @Override public Validity parent() { return Validity.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "invalid"); }
     }
 
     // ── place ────────────────────────────────────────────────────────────
@@ -158,12 +168,14 @@ public final class HouseStates {
     public record Current() implements Flag<Place> {
         public static final Current INSTANCE = new Current();
         @Override public Place parent() { return Place.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "current"); }
     }
 
     /** Lit from elsewhere: a search's hit, the rows a chart points at. */
     public record Highlighted() implements Flag<Place> {
         public static final Highlighted INSTANCE = new Highlighted();
         @Override public Place parent() { return Place.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "highlighted"); }
     }
 
     /** The one the user is on among its kind, not yet chosen: the option Enter would pick. */
@@ -186,18 +198,21 @@ public final class HouseStates {
     public record Hovered() implements Flag<Interaction> {
         public static final Hovered INSTANCE = new Hovered();
         @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "hover"); }
     }
 
     /** The browser's focus is on it, and shown. */
     public record Focused() implements Flag<Interaction> {
         public static final Focused INSTANCE = new Focused();
         @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "focus"); }
     }
 
     /** Being pressed now: the hand is down on it, not yet let go. */
     public record Down() implements Flag<Interaction> {
         public static final Down INSTANCE = new Down();
         @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "active"); }
     }
 
     /** Where the page's keys are, as the keyboard's steward says: away, candidate, lent or held. */
@@ -207,6 +222,7 @@ public final class HouseStates {
                 new StateValue("lent"), new StateValue("held"));
         @Override public Interaction parent() { return Interaction.INSTANCE; }
         @Override public List<StateValue> values() { return VALUES; }
+        @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "candidate", VALUES.get(2), "lent", VALUES.get(3), "held"); }
     }
 
     // ── physical ─────────────────────────────────────────────────────────
@@ -217,6 +233,7 @@ public final class HouseStates {
         private static final List<StateValue> VALUES = List.of(new StateValue("flat"), new StateValue("elevated"), new StateValue("sunken"));
         @Override public Physical parent() { return Physical.INSTANCE; }
         @Override public List<StateValue> values() { return VALUES; }
+        @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "elevated", VALUES.get(2), "sunken"); }
     }
 
     /** Every type of the tree, branch by branch. */

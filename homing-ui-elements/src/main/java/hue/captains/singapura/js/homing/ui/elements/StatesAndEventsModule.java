@@ -22,9 +22,10 @@ import java.util.Locale;
  * can drift from them:
  *
  * <ul>
- *   <li>{@code STATE[NAME]} - every type of state: {@code { token, values, rest, changed }} - its
- *       values, which exclude one another, the one at rest first; {@code changed} the type of its
- *       change, an event a component offers by having the state;</li>
+ *   <li>{@code STATE[NAME]} - every type of state: {@code { token, values, rest, words, changed }} -
+ *       its values, which exclude one another, the one at rest first; the design word each value
+ *       but the rest is answered by ({@code ENABLED.words["false"]} is {@code disabled}); {@code
+ *       changed} the type of its change, an event a component offers by having the state;</li>
  *   <li>{@code EVENT[NAME]} - every other type of event: {@code { token }}.</li>
  * </ul>
  *
@@ -56,6 +57,8 @@ public record StatesAndEventsModule() implements EsModule<StatesAndEventsModule>
             states.add(constant(token) + ": Object.freeze({ token: " + quoted(token)
                     + ", values: Object.freeze([" + String.join(", ", values.stream().map(v -> quoted(v.token())).toList()) + "])"
                     + ", rest: " + quoted(values.get(0).token())
+                    + ", words: Object.freeze({ " + String.join(", ", values.subList(1, values.size()).stream()
+                            .map(v -> quoted(v.token()) + ": " + quoted(s.word(v))).toList()) + " })"
                     + ", changed: " + type(token + "-changed")
                     + ", toString() { return " + quoted(token) + "; } })");
         }
