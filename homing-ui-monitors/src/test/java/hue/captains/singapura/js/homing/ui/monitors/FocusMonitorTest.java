@@ -12,7 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The monitor over the real party and the real steward, on a fake DOM: one
  * row per node, indented by depth; the holder's row lit and named; a change
  * of structure or of holder redraws; a holder outside the tree is named
- * below it; dispose stops listening.
+ * below it. A widget, shown in a slot as its holders show it: disposed by the
+ * slot, it stops listening, and the slot takes it out and dissolves its branch.
  */
 class FocusMonitorTest extends JsModuleTestBase {
 
@@ -50,7 +51,8 @@ class FocusMonitorTest extends JsModuleTestBase {
         class Dock { constructor() {} }
         class Widget { constructor() {} keyDown(ev) { return true; } }
         var host = el("div");
-        var monitor = new FocusMonitor(fakeBranch("monitor"), { host: host });
+        var slot = new WidgetSlot({ branch: fakeBranch("slot"), host: host });
+        var monitor = slot.show("monitor", FocusMonitor, {});
         function rows() { return monitor.root.children.filter(function (r) { return r.has("fm_row"); }).map(function (r) { return r.prop("--fm-depth") + ":" + r.text() + (r.has("fm_row_holder") ? "*" : ""); }); }
         function outside() { var o = monitor.root.children.filter(function (r) { return r.has("fm_outside"); }); return o.length ? o[0].textContent : null; }
         """;
@@ -69,6 +71,7 @@ class FocusMonitorTest extends JsModuleTestBase {
         loadModule(DIR + "component/keyboard/KeyboardMarkModule.js");
         loadModule(DIR + "component/keyboard/KeyboardHomeModule.js");
         loadModule(DIR + "component/keyboard/KeyboardStewardModule.js");
+        loadModule(DIR + "component/WidgetSlotModule.js");
         loadModule(DIR + "ui/monitors/FocusMonitorModule.js");
         js.eval("js", SHIM);
     }
@@ -133,11 +136,12 @@ class FocusMonitorTest extends JsModuleTestBase {
     }
 
     @Test
-    void disposeStopsListening() {
-        eval("log = []; monitor.dispose(); focusParty.root.join('late', new Widget())");
-        assertEquals("0", eval("String(host.children.length)").asString(), "the tree taken out of the host");
+    void disposedByItsSlot_itStopsListening() {
+        assertEquals("1", eval("String(host.children.length)").asString(), "shown: the slot put its root in the host");
+        eval("log = []; slot.dispose('monitor'); focusParty.root.join('late', new Widget())");
+        assertEquals("0", eval("String(host.children.length)").asString(), "the tree taken out of the host, by the slot");
         assertEquals(0, eval("focusListeners").asInt(), "the document let go");
-        assertTrue(eval("log.join(' ')").asString().endsWith("dissolved:monitor"));
+        assertEquals("dissolved:monitor", eval("log.join(' ')").asString(), "its branch dissolved by the slot, once, and no redraw after");
         eval("focusParty.root.dissolve()");
     }
 }

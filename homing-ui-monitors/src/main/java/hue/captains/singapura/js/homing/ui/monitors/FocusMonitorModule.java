@@ -1,12 +1,13 @@
 package hue.captains.singapura.js.homing.ui.monitors;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 
-import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
-import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -21,14 +22,18 @@ import java.util.List;
  * by id, is named below it. It takes no keys; the steward's own state is the
  * {@link StewardMonitorModule.StewardMonitor}'s.
  */
-public record FocusMonitorModule() implements DomModule<FocusMonitorModule>, ImplFor<HouseMonitors.FocusMonitor> {
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 33,
+        reason = "It makes its own elements, reaches the document, places elements, wears classes of its own, writes attributes, writes styles and writes text of its own: it waits for the designed containers and the content components to draw only components, and for a party that says where the browser's focus moves.")
+public record FocusMonitorModule() implements Widget<Widget._None, FocusMonitorModule>, ImplFor<HouseMonitors.FocusMonitor> {
 
-    /** A branch component: {@code new FocusMonitor(branch, { host })}; {@code refresh()}, {@code dispose()}. */
-    public record FocusMonitor() implements BranchComponent<FocusMonitorModule> {
+    /** A widget: {@code new FocusMonitor(branch, params)}; {@code refresh()}, {@code holderRow()}, {@code candidateRow()}, {@code dispose()}. */
+    public record FocusMonitor() implements Widget._Class<Widget._None, FocusMonitorModule> {
         @Override public String summary() { return "The logical-focus tree as a tree view, the holder of the keys marked; redrawn as the party and the steward speak."; }
     }
 
     public static final FocusMonitorModule INSTANCE = new FocusMonitorModule();
+
+    @Override public String title() { return "Logical focus"; }
 
     @Override
     public ImportsFor<FocusMonitorModule> imports() {

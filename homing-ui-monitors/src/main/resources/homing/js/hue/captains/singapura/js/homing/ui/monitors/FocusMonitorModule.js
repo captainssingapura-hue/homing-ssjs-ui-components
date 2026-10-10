@@ -10,22 +10,22 @@
 // in the tree — a member by id, the older way — is named below the tree.
 // Tooling for a page: it reads the party and the steward and takes no keys;
 // the steward's own state is the StewardMonitor's.
-// A branch component: the caller makes a sub-branch for it and hands it in.
+// A widget: its holder shows it in a slot, and the slot dissolves its branch
+// after dispose().
 //
-//   new FocusMonitor(branch, { host })
-//     .root           the tree element, appended to the host
+//   new FocusMonitor(branch, params)   params: none
+//     .root           the tree element
 //     .refresh()      redrawn by call; it redraws itself on every change
 //     .holderRow()    the lit row's element, or null
 //     .candidateRow() the offered row's element, or null
-//     .dispose()
+//     .dispose()      stops listening
 // =============================================================================
 
 const _monitorOwner = Object.freeze({ toString: () => "focusMonitor" });
 
 class FocusMonitor {
-    constructor(branch, opts) {
+    constructor(branch, params) {
         if (!branch) throw new Error("[FocusMonitor] a branch of its own is required");
-        if (!opts || !opts.host) throw new Error("[FocusMonitor] opts.host is required");
         var self = this;
         branch.activate(_monitorOwner);
         this.branch = branch;
@@ -35,7 +35,6 @@ class FocusMonitor {
         css.addClass(root, fm_tree);
         root.setAttribute("role", "tree");
         root.setAttribute("aria-label", "Logical focus");
-        opts.host.appendChild(root);
         this.root = root;
         this._offParty = focusParty.on(function () { self.refresh(); });
         this._offSteward = KeyboardStewardInstance.on(function () { self.refresh(); });
@@ -107,7 +106,5 @@ class FocusMonitor {
         this._offSteward();
         document.removeEventListener("focusin", this._onFocus, false);
         document.removeEventListener("focusout", this._onFocus, false);
-        if (this.root.parentNode) this.root.parentNode.removeChild(this.root);
-        this.branch.dissolve();
     }
 }

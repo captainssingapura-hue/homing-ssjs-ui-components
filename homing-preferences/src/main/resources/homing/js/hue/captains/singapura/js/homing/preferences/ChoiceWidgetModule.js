@@ -2,8 +2,8 @@
 // ChoiceWidget — one of a list. new ChoiceWidget(branch, params) → root, dispose
 //   params: { name, label, summary?, default?, options: [{ value, label, note? }] }
 // The options are a listbox; the one in force is aria-selected; a click or
-// Enter/Space on an option writes it through the steward, and the field
-// redraws when the store changes, wherever the change came from.
+// Enter/Space on an option writes it through the steward; it follows the
+// store, as its field does, so the mark moves wherever the change came from.
 // =============================================================================
 
 const _choiceOwner = Object.freeze({ toString: () => "choiceWidget" });
@@ -14,7 +14,7 @@ class ChoiceWidget {
         var self = this;
         var options = (params && params.options) || [];
         this._rows = [];
-        this._field = new PreferenceField(branch.createBranch("field"), params, { kicker: "choice", onValue: function (v) { self._mark(v); } });
+        this._field = new PreferenceField(branch.createBranch("field"), Object.assign({}, params, { kicker: "choice" }));
 
         var list = branch.createElement("options", "div");
         css.addClass(list, pv_options);
@@ -37,14 +37,15 @@ class ChoiceWidget {
             list.appendChild(row);
             self._rows.push({ value: String(opt.value), el: row });
         });
-        this._field.body.appendChild(list);
+        this._field.hold(list);
         this.root = this._field.root;
+        this._stop = PreferenceViewInstance.onChange(function () { self._mark(self._field.value()); });
         this._mark(this._field.value());
     }
 
     _mark(v) {
-        (this._rows || []).forEach(function (r) { r.el.setAttribute("aria-selected", r.value === v ? "true" : "false"); });
+        this._rows.forEach(function (r) { r.el.setAttribute("aria-selected", r.value === v ? "true" : "false"); });
     }
 
-    dispose() { this._field.dispose(); }
+    dispose() { this._stop(); this._field.dispose(); }
 }

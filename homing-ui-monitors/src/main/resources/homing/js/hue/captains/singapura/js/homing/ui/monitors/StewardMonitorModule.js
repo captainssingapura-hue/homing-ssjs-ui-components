@@ -6,31 +6,28 @@
 // the keys to, and the steward's invariants: the lamp says the first one
 // broken, and turns the danger colour while one is. Redrawn on every event of
 // the steward and every move of the native focus. Tooling for a page: it
-// takes no keys. A branch component: the caller makes a sub-branch for it
-// and hands it in.
+// takes no keys. A widget: its holder shows it in a slot, and the slot
+// dissolves its branch after dispose().
 //
-//   new StewardMonitor(branch, { host })
-//     .root           the lamp, appended to the host
+//   new StewardMonitor(branch, params)   params: none
+//     .root           the lamp
 //     .lamp()         its text
 //     .broken()       the invariants broken at the last redraw, one sentence each
 //     .refresh()      redrawn by call; it redraws itself on every change
-//     .dispose()
+//     .dispose()      stops listening
 // =============================================================================
 
 const _stewardMonitorOwner = Object.freeze({ toString: () => "stewardMonitor" });
 
 class StewardMonitor {
-    constructor(branch, opts) {
+    constructor(branch, params) {
         if (!branch) throw new Error("[StewardMonitor] a branch of its own is required");
-        if (!opts || !opts.host) throw new Error("[StewardMonitor] opts.host is required");
         var self = this;
         branch.activate(_stewardMonitorOwner);
-        this.branch = branch;
         var lamp = branch.createElement("lamp", "div");
         css.addClass(lamp, sm_lamp);
         lamp.setAttribute("role", "status");
         lamp.setAttribute("aria-label", "Keyboard steward");
-        opts.host.appendChild(lamp);
         this.root = lamp;
         this._offSteward = KeyboardStewardInstance.on(function () { self.refresh(); });
         this._onFocus = function () { self.refresh(); };
@@ -73,7 +70,5 @@ class StewardMonitor {
         this._offSteward();
         document.removeEventListener("focusin", this._onFocus, false);
         document.removeEventListener("focusout", this._onFocus, false);
-        if (this.root.parentNode) this.root.parentNode.removeChild(this.root);
-        this.branch.dissolve();
     }
 }

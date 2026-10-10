@@ -13,7 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The steward monitor over the real steward, on a fake DOM: the lamp says
  * where the focus is — the steward's marker, held, lent or away, and whose —
  * and the first invariant broken; redrawn on the steward's events and the
- * native focus moving; dispose stops listening. The steward was made before
+ * native focus moving. A widget, shown in a slot as its holders show it:
+ * disposed by the slot, it stops listening. The steward was made before
  * this document, so the tests tell it the focus moved as its listener would.
  */
 class StewardMonitorTest extends JsModuleTestBase {
@@ -36,6 +37,7 @@ class StewardMonitorTest extends JsModuleTestBase {
         }
         function fakeBranch(name) {
             return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; },
+                     createBranch: function (n) { return fakeBranch(n); }, dissolveBranch: function (n) { log.push("dissolved:" + n); },
                      dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} };
         }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
@@ -47,7 +49,8 @@ class StewardMonitorTest extends JsModuleTestBase {
         document.activeElement = document.body;
         class Widget { constructor() {} keyDown(ev) { return ev.key === "ArrowUp"; } }
         var host = el("div");
-        var monitor = new StewardMonitor(fakeBranch("monitor"), { host: host });
+        var slot = new WidgetSlot({ branch: fakeBranch("slot"), host: host });
+        var monitor = slot.show("monitor", StewardMonitor, {});
         """;
 
     @BeforeEach
@@ -64,6 +67,7 @@ class StewardMonitorTest extends JsModuleTestBase {
         loadModule(DIR + "component/keyboard/KeyboardMarkModule.js");
         loadModule(DIR + "component/keyboard/KeyboardHomeModule.js");
         loadModule(DIR + "component/keyboard/KeyboardStewardModule.js");
+        loadModule(DIR + "component/WidgetSlotModule.js");
         loadModule(DIR + "ui/monitors/StewardMonitorModule.js");
         js.eval("js", SHIM);
     }
@@ -112,11 +116,11 @@ class StewardMonitorTest extends JsModuleTestBase {
     }
 
     @Test
-    void disposeStopsListening() {
-        eval("log = []; monitor.dispose()");
-        assertEquals("0", eval("String(host.children.length)").asString(), "taken out of the host");
+    void disposedByItsSlot_itStopsListening() {
+        eval("log = []; slot.dispose('monitor')");
+        assertEquals("0", eval("String(host.children.length)").asString(), "taken out of the host, by the slot");
         assertEquals(0, eval("focusListeners").asInt(), "the document let go");
-        assertTrue(eval("log.join(' ')").asString().endsWith("dissolved:monitor"));
+        assertEquals("dissolved:monitor", eval("log.join(' ')").asString(), "its branch dissolved by the slot, once");
         eval("focusParty.root.dissolve()");
     }
 }

@@ -33,7 +33,7 @@ class WholeHouseTaxonomyTest {
     @Test
     void everyModuleThatShipsComponents_extendsTheHouse_withItsOwnLeaves() {
         var extensions = TaxonomyExtensions.INSTANCE.of(HouseTaxonomy.class);
-        assertEquals(List.of("HousePreferences", "HouseSite", "HouseDocking", "HouseFloating", "HouseMenus", "HouseMonitors",
+        assertEquals(List.of("HousePreferences", "HouseSite", "HouseControlPanel", "HouseDocking", "HouseFloating", "HouseMenus", "HouseMonitors",
                              "HousePanes", "HousePanZoom", "HouseSplitGrid"),
                 extensions.stream().map(e -> e.getClass().getSimpleName()).toList(), "in the order of their class names");
         var leaves = new LinkedHashMap<String, Integer>();
@@ -42,17 +42,17 @@ class WholeHouseTaxonomyTest {
                 assertEquals(e.getClass(), c.getClass().getEnclosingClass(), c + " is declared by the module that lists it");
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
-        assertEquals(33, leaves.values().stream().mapToInt(Integer::intValue).sum(), "33 leaves the modules add: " + leaves);
+        assertEquals(34, leaves.values().stream().mapToInt(Integer::intValue).sum(), "34 leaves the modules add: " + leaves);
         assertEquals(53, HouseTaxonomy.INSTANCE.common().size(), "to the 53 common ones");
     }
 
     @Test
     void theWholeHouse_isReadAsItWasBeforeItWasCut() {
         assertEquals(17, HOUSE.branches().size());
-        assertEquals(86, HOUSE.components().size());
+        assertEquals(87, HOUSE.components().size());
         assertEquals(91, HOUSE.roles().size(), "the catalogue beside the tree");
-        assertEquals(107, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
-        assertEquals(45, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+        assertEquals(110, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
+        assertEquals(46, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
     /** Every node of the whole house a stateless functional object, as jOntology judges one: the extensions' too. */
@@ -97,7 +97,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(17 + 86 + 21 + 91 + 8 + 20 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
+        assertEquals(17 + 87 + 21 + 91 + 8 + 20 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 

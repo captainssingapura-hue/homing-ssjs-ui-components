@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyCompone
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.server.PreferenceSteward;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * in the store. Params: {@code name, label, summary?, default?, on?, off?} —
  * the last two the words shown beside the switch in each state.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 14,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 13,
         reason = "It makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ToggleWidgetModule() implements Widget<Widget._None, ToggleWidgetModule>, ImplFor<HousePreferences.ToggleWidget> {
 
@@ -31,6 +32,7 @@ public record ToggleWidgetModule() implements Widget<Widget._None, ToggleWidgetM
     public ImportsFor<ToggleWidgetModule> imports() {
         return ImportsFor.<ToggleWidgetModule>builder()
                 .add(new ModuleImports<>(List.of(new PreferenceFieldModule.PreferenceField()), PreferenceFieldModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PreferenceSteward.PreferenceViewInstance()), PreferenceSteward.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_switch(),
                         new PreferencesStyles.pv_switch_track(),

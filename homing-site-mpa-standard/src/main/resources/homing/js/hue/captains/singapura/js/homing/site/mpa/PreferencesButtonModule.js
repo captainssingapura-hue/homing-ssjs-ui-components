@@ -11,10 +11,11 @@
 //
 // chrome.preferences names the site's registry module: { module }. On the
 // first open it is imported — a module's URL is its class alone, so this is
-// the page's own instance — and its PREFERENCES constant is handed to the view, which
-// loads each node's widget as the node is chosen. The dialog's content is
-// the view; closing the dialog disposes the view first, then the dialog's
-// branch, and the next open builds it again from what the registry says.
+// the page's own instance — and its PREFERENCES constant is the view's params; the
+// view loads each node's widget as the node is chosen. The dialog's content is
+// the view, a widget shown in a slot over the dialog's body; closing the dialog
+// disposes the view first, then the dialog's branch, and the next open builds
+// it again from what the registry says.
 //
 // Done is a plain action, not the primary, so Enter stays the tree's and
 // the widgets'; Escape closes. Nothing is written here: every widget writes
@@ -78,14 +79,17 @@ class PreferencesButton {
             size: { w: 880, h: 580 },
             keyboard: this._keyboard, keyboardId: "preferences",
             content: function (b, body) {
+                var views = b.createBranch("view");
+                views.activate(_prefsOwner);
+                var slot = new WidgetSlot({ branch: views, host: body });
                 _loadRegistry(self._entry).then(function (reg) {
                     if (!self._open) return null;
-                    view = new PreferencesView(b.createBranch("view"), body, reg);
+                    view = slot.show("preferences", PreferencesView, reg);
                     return view.ready;
                 }).then(function (master) {
                     if (master && typeof master.setActive === "function") master.setActive(true);
                 }).catch(function (e) { console.error("[preferences] could not open", e); });
-                return { onKeydown: function (ev) { return !!(view && view.key(ev)); }, dispose: function () { if (view) view.dispose(); view = null; } };
+                return { onKeydown: function (ev) { return !!(view && view.key(ev)); }, dispose: function () { slot.disposeAll(); view = null; } };
             },
             actions: [{ id: "done", label: "Done", onClick: function (d) { d.close(); } }],
             onClose: function () { self._open = null; self._btn.focus(); }

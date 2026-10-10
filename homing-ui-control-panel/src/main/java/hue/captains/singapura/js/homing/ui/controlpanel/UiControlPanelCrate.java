@@ -1,5 +1,7 @@
 package hue.captains.singapura.js.homing.ui.controlpanel;
 
+import hue.captains.singapura.js.homing.component.C0_Components;
+import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
@@ -11,10 +13,10 @@ import java.util.List;
 
 /**
  * The control panel's crate: the house's controllability as a page has it - the generated
- * catalogue and the helper that asks it - and the control panel, which makes each option's control.
- * It ships no component, so it is no vehicle: the control panel is a widget's body.
+ * catalogue and the helper that asks it - and the control panel, a widget, which makes each
+ * option's control. It ships the panel, so it is a vehicle.
  */
-public final class UiControlPanelCrate implements Crate {
+public final class UiControlPanelCrate implements Crate, ComponentVehicle {
 
     public static final UiControlPanelCrate INSTANCE = new UiControlPanelCrate();
 
@@ -24,11 +26,13 @@ public final class UiControlPanelCrate implements Crate {
 
     @Override public List<Crate> requires() { return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiElementsCrate.INSTANCE); }
 
+    @Override public C0_Components<?> components() { return UiControlPanelComponents.INSTANCE; }
+
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(ControlCatalogueModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(ControlsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(ControlPanelModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(ControlPanelModule.INSTANCE),
                 CrateEntry.of(ControlPanelStyles.INSTANCE));
     }
 }

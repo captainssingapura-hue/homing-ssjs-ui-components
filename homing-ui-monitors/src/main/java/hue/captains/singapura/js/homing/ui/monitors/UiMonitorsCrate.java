@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.component.C0_Components;
 import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
-import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 
@@ -30,8 +29,8 @@ public final class UiMonitorsCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(FocusMonitorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(StewardMonitorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(FocusMonitorModule.INSTANCE),
+                CrateEntry.of(StewardMonitorModule.INSTANCE),
                 CrateEntry.of(FocusStyles.INSTANCE));
     }
 }

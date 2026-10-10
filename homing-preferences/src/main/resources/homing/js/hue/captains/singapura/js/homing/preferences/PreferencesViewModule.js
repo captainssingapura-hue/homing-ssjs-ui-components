@@ -1,9 +1,10 @@
 // =============================================================================
 // PreferencesView — a master slot on the left, a detail slot on the right.
-// A branch component: the caller makes a sub-branch for it and hands it in;
-// dispose() dissolves it.
+// A widget: its holder shows it in a slot - a dialog's body, a page's - and
+// the slot dissolves its branch after dispose().
 //
-//   new PreferencesView(branch, host, registry)
+//   new PreferencesView(branch, registry)
+//     .root         the view: the two panes side by side
 //     .select(path) → Promise<widget|null>
 //     .ready        → Promise<master>
 //     .key(ev)      a keydown from whoever holds the keys for the view — the dialog it is
@@ -13,8 +14,7 @@
 //     .dispose()
 //
 //   branch     the view's own, handed unactivated
-//   host       the element the view fills
-//   registry   a site's PREFERENCES: { tree, master: {module, export, params},
+//   registry   its params: a site's PREFERENCES: { tree, master: {module, export, params},
 //              nodes: { path: { label, summary, widget: {module, export, params} } } }
 //              where `export` names the widget's CLASS in its module
 //
@@ -48,13 +48,11 @@ function _load(entry) {
 }
 
 class PreferencesView {
-    constructor(branch, host, registry) {
+    constructor(branch, registry) {
         if (!branch)   throw new Error("[PreferencesView] a branch of its own is required");
-        if (!host)     throw new Error("[PreferencesView] host is required");
         if (!registry || !registry.nodes || !registry.master) throw new Error("[PreferencesView] registry is required");
         var self = this;
         branch.activate(_viewOwner);
-        this._branch = branch;
         this._registry = registry;
         this._disposed = false;
         this._wanted = null;        // the path last asked for, so a slow import cannot show a stale one
@@ -67,7 +65,6 @@ class PreferencesView {
         css.addClass(detailPane, pv_detail);
         root.appendChild(masterPane);
         root.appendChild(detailPane);
-        host.appendChild(root);
         this.root = root;
         this._masterPane = masterPane; this._detailPane = detailPane;
 
@@ -117,6 +114,5 @@ class PreferencesView {
         this._disposed = true;
         this._detailSlot.disposeAll();
         this._masterSlot.disposeAll();
-        this._branch.dissolve();
     }
 }

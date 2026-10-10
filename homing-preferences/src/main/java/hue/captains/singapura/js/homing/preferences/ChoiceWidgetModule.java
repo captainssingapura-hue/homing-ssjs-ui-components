@@ -10,6 +10,7 @@ import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.server.PreferenceSteward;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * note, drawn as a listbox; the chosen one is written through the steward.
  * Params: {@code name, label, summary?, default?, options: [{value, label, note?}]}.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 16,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 15,
         reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ChoiceWidgetModule() implements Widget<Widget._None, ChoiceWidgetModule>, ImplFor<HousePreferences.ChoiceWidget> {
 
@@ -35,6 +36,7 @@ public record ChoiceWidgetModule() implements Widget<Widget._None, ChoiceWidgetM
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferenceFieldModule.PreferenceField()), PreferenceFieldModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PreferenceSteward.PreferenceViewInstance()), PreferenceSteward.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_options(),
                         new PreferencesStyles.pv_option(),

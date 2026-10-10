@@ -1,7 +1,12 @@
 package hue.captains.singapura.js.homing.ui.monitors;
 
 import hue.captains.singapura.js.homing.conformance.rules.CrateDependencyRule;
+import hue.captains.singapura.js.homing.component.Widget;
+import hue.captains.singapura.js.homing.conformance.rules.DeclaredDebts;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
+import hue.captains.singapura.js.homing.conformance.rules.Finding;
+import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
+import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.conformance.rules.OrphanCheck;
 import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
 import hue.captains.singapura.js.homing.core.CssClass;
@@ -9,6 +14,7 @@ import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,18 +34,21 @@ class UiMonitorsCrateConformanceTest {
     }
 
     @Test
-    void everyServedModuleKeepsItsLanesDiscipline() {
+    void everyServedModuleKeepsItsLanesDiscipline_butTheDebtsItsWidgetsDeclare() {
         int checked = 0;
+        var raw = new ArrayList<Finding>();
         for (var entry : UiMonitorsCrate.INSTANCE.entries()) {
-            if (!(entry.declaredType() instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
+            var declared = entry.module() instanceof Widget<?, ?> ? StandardJsModuleType.WIDGET : entry.declaredType();
+            if (!(declared instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
             String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src));
-            assertEquals(List.of(), findings, () -> m + ": "
-                    + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
+            raw.addAll(DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src)));
             checked++;
         }
-        assertEquals(2, checked, "the two monitors; the styles are a sheet");
+        assertEquals(2, checked, "the two monitors, widgets both; the styles are a sheet");
+        assertEquals(List.of(), DeclaredDebts.INSTANCE.unbalanced(List.of(UiMonitorsCrate.INSTANCE), raw), "a debt owed exactly as declared");
+        var errors = FindingGrader.STRICT.grade(raw).stream().filter(GradedFinding::isError).map(g -> g.finding().fingerprint()).toList();
+        assertEquals(List.of(), errors, "no finding but what a widget owes");
     }
 
     /** Every class the sheet declares is imported by one of the two monitors — the fm_ ones by the focus monitor, the sm_ ones by the steward monitor. */
