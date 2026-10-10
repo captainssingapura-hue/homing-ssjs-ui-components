@@ -433,12 +433,18 @@ final class Say {
         return List.of(when(TAB, SHADOW, tabStates("box-shadow", hover, chosen, held)));
     }
 
-    /** What every style's tab says alike: its text the caption's size, none of it taken by the hand; pointed at, and grabbed while it is dragged; its strip's text kept from the hand too. */
+    /**
+     * What every style's tab says alike: its text the caption's size, none of it taken by the hand; pointed at, and
+     * grabbed while it is dragged. Its strip's text kept from the hand too, and its strip's own room - the room its
+     * tail keeps between the count and the cross, and round them - eight pixels.
+     */
     static List<Implementation<?>> tabBase() {
         return List.of(new Implementation<>(TAB, SCALE, new Answer.Redirect<>(CAPTION)),
                        rest(TAB, Target.Affordance.Select.INSTANCE, "user-select: none;"),
                        when(TAB, CURSOR, Map.of(State.REST, "cursor: pointer;", State.DRAGGING, "cursor: grabbing;")),
-                       rest(TAB_STRIP, Target.Affordance.Select.INSTANCE, "user-select: none;"));
+                       rest(TAB_STRIP, Target.Affordance.Select.INSTANCE, "user-select: none;"),
+                       rest(TAB_STRIP, GAP, "gap: 8px;"),
+                       rest(TAB_STRIP, INSET, "padding-block: 0; padding-inline: 8px;"));
     }
 
     /** Every answer of the groups, in order. */

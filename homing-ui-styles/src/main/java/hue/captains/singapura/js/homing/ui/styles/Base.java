@@ -100,6 +100,6 @@ public record Base() implements DesignStyle {
             sliderBase(),
             // ── a menu's text the label's face, kept from the hand; its rows pointed at, in the label's size ──
             menuBase(),
-            // ── a tab's text the caption's size, kept from the hand, pointed at and grabbed; its strip's text kept from the hand ──
+            // ── a tab's text the caption's size, kept from the hand, pointed at and grabbed; its strip's text kept from the hand, its tail's room ──
             tabBase());
 }

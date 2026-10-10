@@ -226,7 +226,6 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** The end of the strip: the add button and the count, pushed right. */
     /**
       * THE WINDOW over the row. The strip is the whole bar — the rail, the
       * plus, the count — and this is the part of it the chips live in, and the
@@ -260,14 +259,13 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
+    /** The end of the strip - the count, and a float's cross - pushed right; its room is the strip's look's. */
     public record mtp_strip_tail() implements CssClass<PaneStyles> {
         @Override public String body() { return """
             display: flex;
             align-items: center;
             align-self: center;
-            gap: 8px;
             margin-left: auto;
-            padding: 0 8px;
             flex-shrink: 0;
             """;
         }

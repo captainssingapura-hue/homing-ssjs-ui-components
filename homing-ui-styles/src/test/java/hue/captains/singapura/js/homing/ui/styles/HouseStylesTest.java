@@ -138,12 +138,12 @@ class HouseStylesTest {
         expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph", "pane-thumb shape-border"));
         expected.addAll(Set.of("slider size-inset", "slider size-gap", "slider affordance-select", "knob type-scale", "knob affordance-cursor", "detent size-extent", "tick size-extent"));
         expected.addAll(Set.of("context-menu type-face", "context-menu affordance-select", "menu-item size-gap", "menu-item type-scale", "menu-item affordance-cursor"));
-        expected.addAll(Set.of("tab type-scale", "tab affordance-select", "tab affordance-cursor", "tab-strip affordance-select"));
+        expected.addAll(Set.of("tab type-scale", "tab affordance-select", "tab affordance-cursor", "tab-strip affordance-select", "tab-strip size-gap", "tab-strip size-inset"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
                 + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash;"
-                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand");
+                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");

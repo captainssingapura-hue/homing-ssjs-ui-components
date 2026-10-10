@@ -1,7 +1,7 @@
 // =============================================================================
 // TabStrip — the row of chips over a pane: chips with a label and a cross,
-// the tail with the add button and the count, the drop mark, and the drag
-// that reorders. It holds no tab state: the pane tells it which chips, in
+// the plus after the last chip, the tail with the count (and a float's
+// cross), the drop mark, and the drag that reorders. It holds no tab state: the pane tells it which chips, in
 // which order, and which is active; it tells the pane what was clicked and
 // where a dragged chip landed. A branch component: the pane makes a
 // sub-branch for it and hands it in.
@@ -83,9 +83,11 @@
 // the hand carries --mtp-drag-x, a chip stepping aside --mtp-shift-x.
 //
 // Its look is the house's: the strip wears a tab strip's casting - raised,
-// ruled along its foot, lit while it is current - and the mark where a tab
-// would land a drop mark's, cast as that landing. Its own classes only
-// place. `css` is injected with the styles import.
+// ruled along its foot, lit while it is current - but for its room, which its
+// tail wears (TabStrip.TAIL): the room between the count and the cross, and
+// round them. A bar with no tail - a single-tab pane's - leaves it off. The
+// mark where a tab would land wears a drop mark's, cast as that landing. Its
+// own classes only place. `css` is injected with the styles import.
 // =============================================================================
 
 const _stripOwner = Object.freeze({ toString: () => "tabStrip" });
@@ -108,6 +110,8 @@ class TabStripClose {
 
 class TabStrip {
     static LEAF = "tab-strip";
+    /** The targets of a strip's look its tail wears and its bar does not: the strip's room, between its own things and round them. */
+    static TAIL = Object.freeze(["size-gap", "size-inset"]);
 
     constructor(branch, opts) {
         if (!branch) throw new Error("[TabStrip] a branch of its own is required");
@@ -123,7 +127,8 @@ class TabStrip {
 
         var el = branch.createElement("strip", "div");
         css.addClass(el, mtp_strip);
-        new Look(TabStrip, ROLE.STANDALONE).wear(el);   // as a pane's tabs too: a role that only places it
+        var look = new Look(TabStrip, ROLE.STANDALONE);   // as a pane's tabs too: a role that only places it
+        look.wear(el, { except: TabStrip.TAIL });
         el.setAttribute("role", "tablist");
         this.el = el;
         // a press on the strip moves no native focus by the browser's default: a chip is not focusable, and the
@@ -174,6 +179,7 @@ class TabStrip {
 
         this._tail = branch.createElement("tail", "div");
         css.addClass(this._tail, mtp_strip_tail);
+        look.wear(this._tail, { only: TabStrip.TAIL });
         // the count, in the house's pill, cast as its count: placed by the strip, looking as a pill does
         this._pill = new Pill(branch.elementMaker("pill"), {}, ROLE.COUNT);
         css.addClass(this._pill.el, mtp_pill);
