@@ -130,9 +130,8 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
         @Override public String body() { return "display: none;"; }
     }
 
-    /** A separator between rows: the design's divider. */
+    /** A separator between sections: the house's separator, placed - its line is its own look's, the room round it the menu's. */
     public record cm_separator() implements CssClass<MenuStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Divider.class, Color.Edge.class), of(Divider.class, Shape.Rule.class)); }
         @Override public String body() { return """
             flex: none;
             margin-block: 4px;

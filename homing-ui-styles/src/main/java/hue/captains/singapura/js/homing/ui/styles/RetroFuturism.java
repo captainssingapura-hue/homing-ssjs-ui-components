@@ -25,6 +25,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.separatorRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
@@ -78,6 +79,8 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
             type(LABEL, null, "700", null),
             type(READOUT, DISPLAY, "700", "letter-spacing: 0.06em; font-variant-numeric: tabular-nums;"),
             type(WORDMARK, DISPLAY, null, "letter-spacing: 0.2em; text-transform: uppercase;"),
+            // ── its separator ruled at two pixels ──
+            separatorRule("2px"),
             // ── the veil behind a dialog: a little blur, a little contrast ──
             veil("blur(4px) contrast(1.2)"),
             measure("8px", "18px", "8px", "56px", "1.3"),

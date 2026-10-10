@@ -51,9 +51,9 @@ class HouseStylesTest {
             "lede type-treatment", "caption type-treatment", "label type-weight", "readout type-face", "readout type-weight", "readout type-treatment",
             "wordmark type-face", "wordmark type-treatment");
 
-    /** What a style may decide for the ways somewhere and the veil: how a way eases and is marked under the hand, how the page behind a dialog is veiled. */
-    private static final Set<String> WAYS_AND_VEIL = Set.of(
-            "link motion-ease", "crumb motion-ease", "link type-decoration", "crumb type-decoration", "scrim effect-filter");
+    /** What a style may decide for the ways somewhere, the marks between things and the veil: how a way eases and is marked under the hand, how thick a separator is ruled, how the page behind a dialog is veiled. */
+    private static final Set<String> WAYS_MARKS_AND_VEIL = Set.of(
+            "link motion-ease", "crumb motion-ease", "link type-decoration", "crumb type-decoration", "scrim effect-filter", "separator shape-border");
 
     /** What every style decides for its text, at least: the body's face, and the display's where a text is set apart. */
     private static final Set<String> TEXT_SET_APART = Set.of(
@@ -77,10 +77,10 @@ class HouseStylesTest {
             Set<String> answered = classes(s.implementations());
             var allowed = new TreeSet<>(BUTTON_BRANCH);
             allowed.addAll(TEXT_BRANCH);
-            allowed.addAll(WAYS_AND_VEIL);
+            allowed.addAll(WAYS_MARKS_AND_VEIL);
             var beyond = new TreeSet<>(answered);
             beyond.removeAll(allowed);
-            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways and the veil: " + beyond);
+            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks and the veil: " + beyond);
             var missing = new TreeSet<>(BUTTON_BRANCH);
             missing.removeAll(answered);
             left.put(s.token(), missing);
@@ -118,11 +118,11 @@ class HouseStylesTest {
         for (String text : List.of("heading", "lede", "kicker", "caption", "label", "readout", "badge", "pill", "wordmark")) expected.add(text + " type-scale");
         expected.addAll(Set.of("readout type-treatment", "badge type-treatment", "badge size-inset", "badge shape-corner",
                 "pill type-treatment", "pill size-inset", "pill shape-corner"));
-        expected.addAll(Set.of("link type-scale", "crumb type-weight"));
+        expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
-                + " a link the size of the text it sits in, and the crumb that is the page set heavier");
+                + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");
@@ -149,9 +149,10 @@ class HouseStylesTest {
             assertEquals(List.of(), theme.check(HOUSE), theme.toString());
             var flat = FlattenSheet.INSTANCE.flatten(HOUSE, theme, theme.toString());
             assertEquals(List.of(), flat.unanswered(), () -> theme + ": every target answered at the root");
-            long marked = HOUSE.castings().stream().filter(c -> c.component() == hue.captains.singapura.js.homing.ui.taxonomy.HouseControls.CloseButton.INSTANCE).count();
+            long marked = HOUSE.castings().stream().filter(c -> c.component() == hue.captains.singapura.js.homing.ui.taxonomy.HouseControls.CloseButton.INSTANCE
+                    || c.component() == hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks.Delimiter.INSTANCE).count();
             assertEquals(HOUSE.castings().size() * 32 + marked, flat.looks(),
-                    () -> theme + ": every casting on every CSS target the semantic classes answer; the glyph a silence but the close button's mark");
+                    () -> theme + ": every casting on every CSS target the semantic classes answer; the glyph a silence but the close button's mark and the delimiter's sign");
         }
         String sketchy = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("sketchy"), "sketchy").css();
         assertTrue(sketchy.contains("/* from base: root__shape-shadow */\n.danger-button__shape-shadow {\n    box-shadow: none;\n}\n"), "ink casts no shadow");

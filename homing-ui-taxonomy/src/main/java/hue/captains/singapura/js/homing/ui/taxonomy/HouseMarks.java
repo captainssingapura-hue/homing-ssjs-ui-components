@@ -33,9 +33,15 @@ public final class HouseMarks {
         @Override public Mark parent() { return Mark.INSTANCE; }
     }
 
-    /** A line between things in a row or a list. */
+    /** A line between the rows of a list or a menu: one group ruled off from the next. */
     public record Separator() implements Component<Mark> {
         public static final Separator INSTANCE = new Separator();
+        @Override public Mark parent() { return Mark.INSTANCE; }
+    }
+
+    /** A mark between the steps of a run, on one line with them: the sign between a trail's crumbs. */
+    public record Delimiter() implements Component<Mark> {
+        public static final Delimiter INSTANCE = new Delimiter();
         @Override public Mark parent() { return Mark.INSTANCE; }
     }
 

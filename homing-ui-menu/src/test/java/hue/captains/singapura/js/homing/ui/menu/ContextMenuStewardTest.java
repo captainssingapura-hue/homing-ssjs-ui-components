@@ -110,6 +110,8 @@ class ContextMenuStewardTest extends JsModuleTestBase {
         js.eval("js", "var ic_base = 'ic_base', ICONS = { check: 'ic_check', disclose: 'ic_disclose', rotate: 'ic_rotate', flip: 'ic_flip', reset: 'ic_reset' };");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         TextsInJs.load(js, this::loadModule);   // the caption that is an item's hint
+        for (String m : new String[] {"MarkBehaviorModule.js", "SeparatorModule.js"})   // and the separator between sections
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
         loadModule(P + "ContextMenuModule.js");
         loadModule(P + "ContextMenuStewardModule.js");
         js.eval("js", TextsInJs.withCss(SHIM));

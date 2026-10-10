@@ -25,6 +25,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.separatorRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
@@ -73,6 +74,8 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
             type(LABEL, null, "700", null),
             type(READOUT, DISPLAY, "900", "font-variant-numeric: tabular-nums;"),
             type(WORDMARK, DISPLAY, null, "letter-spacing: -0.02em; text-transform: uppercase;"),
+            // ── its separator ruled hard, at four pixels ──
+            separatorRule("4px"),
             // ── the veil behind a dialog: the page drained of colour, hard ──
             veil("grayscale(1) contrast(1.4)"),
             measure("10px", "20px", "10px", "64px", "1.5"),

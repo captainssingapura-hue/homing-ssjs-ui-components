@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.WordmarkModule;
 import hue.captains.singapura.js.homing.ui.elements.CrumbModule;
+import hue.captains.singapura.js.homing.ui.elements.DelimiterModule;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
@@ -41,6 +42,7 @@ public record MpaChromeModule() implements DomModule<MpaChromeModule>, ImplFor<H
         return ImportsFor.<MpaChromeModule>builder()
                 .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark(), new WordmarkModule.WordmarkFactory()), WordmarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CrumbModule.Crumb(), new CrumbModule.CrumbFactory()), CrumbModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DelimiterModule.Delimiter(), new DelimiterModule.DelimiterFactory()), DelimiterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesButtonModule.PreferencesButton()), PreferencesButtonModule.INSTANCE))

@@ -13,6 +13,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
 import static hue.captains.singapura.js.homing.ui.styles.Say.bareFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.textMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.waysMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.marksMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -87,5 +88,6 @@ public record Base() implements DesignStyle {
             bareFrame(),
             // ── every text's measure: its size and leading, harvested from the house's own type ──
             textMeasure(),
-            waysMeasure());
+            waysMeasure(),
+            marksMeasure());
 }

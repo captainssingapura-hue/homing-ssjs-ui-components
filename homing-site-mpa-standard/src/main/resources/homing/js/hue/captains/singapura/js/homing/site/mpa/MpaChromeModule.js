@@ -100,11 +100,10 @@ class MpaChrome {
         this._trail.activate(_chromeOwner);
         for (var i = 0; i < crumbs.length; i++) {
             if (i > 0) {
-                var sep = this._trail.createElement("sep-" + i, "span");
-                css.addClass(sep, mpa_crumb_sep);
-                sep.textContent = "/";
-                sep.setAttribute("aria-hidden", "true");
-                this._nav.appendChild(sep);
+                // the house's delimiter, cast as the break between steps: its sign its look's, placed by the chrome
+                var sep = new Delimiter(DelimiterFactory.create(this._trail, "sep-" + i), {}, ROLE.BREAK);
+                css.addClass(sep.el, mpa_crumb_sep);
+                this._nav.appendChild(sep.el);
             }
             var last = i === crumbs.length - 1, linked = !last && typeof crumbs[i].to === "string";
             // each step in the house's crumb, cast as a step and placed by the chrome: the last the page, the

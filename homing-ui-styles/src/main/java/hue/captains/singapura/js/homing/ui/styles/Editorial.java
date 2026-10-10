@@ -25,6 +25,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.separatorRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.waysEase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
@@ -76,6 +77,8 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             type(LABEL, null, "600", null),
             type(READOUT, DISPLAY, "700", "font-style: italic; font-variant-numeric: tabular-nums;"),
             type(WORDMARK, DISPLAY, null, "font-style: italic;"),
+            // ── its separator ruled at two pixels ──
+            separatorRule("2px"),
             // ── the veil behind a dialog: the page dimmed and softened; a way's colour eased under the hand ──
             veil("brightness(0.45) blur(2px)"),
             waysEase("color 140ms ease"),

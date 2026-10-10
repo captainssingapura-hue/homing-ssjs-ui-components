@@ -63,10 +63,10 @@ class ContextMenu {
         var divided = MenuTree.divided(nodes);
         for (var i = 0; i < divided.length; i++) {
             if (divided[i].divider) {
-                var sep = this._branch.createElement(prefix + "sep-" + i, "div");
-                css.addClass(sep, cm_separator);
-                sep.setAttribute("role", "separator");
-                f.appendChild(sep);
+                // the house's separator, cast as the break between sections: placed by the menu
+                var sep = new Separator(SeparatorFactory.create(this._branch, prefix + "sep-" + i), {}, ROLE.BREAK);
+                css.addClass(sep.el, cm_separator);
+                f.appendChild(sep.el);
             }
             level.rows.push(this._row(f, divided[i].node, prefix, level));
         }

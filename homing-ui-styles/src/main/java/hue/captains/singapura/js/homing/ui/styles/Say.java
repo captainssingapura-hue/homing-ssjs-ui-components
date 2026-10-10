@@ -9,6 +9,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.ArrayList;
@@ -233,6 +234,23 @@ final class Say {
         return List.of(
                 rest(LINK, SCALE, "font-size: " + grows("1em", "1.2") + "; line-height: inherit;"),
                 when(CRUMB, WEIGHT, Map.of(State.CURRENT, "font-weight: 600;")));
+    }
+
+    // ── the marks between things ─────────────────────────────────────────
+
+    static final Taxon SEPARATOR = HouseMarks.Separator.INSTANCE;
+    static final Taxon DELIMITER = HouseMarks.Delimiter.INSTANCE;
+
+    /** How thick a style rules one group of rows off from the next: the separator's line, along its foot. */
+    static List<Implementation<?>> separatorRule(String width) {
+        return List.of(rest(SEPARATOR, BORDER, "border-width: 0 0 " + width + " 0; border-style: solid;"));
+    }
+
+    /** The marks between things in the house, whatever the style: a separator a hairline unless its style rules it thicker; a delimiter a slash. */
+    static List<Implementation<?>> marksMeasure() {
+        var out = new ArrayList<Implementation<?>>(separatorRule("1px"));
+        out.add(rest(DELIMITER, GLYPH, "content: \"/\";"));
+        return List.copyOf(out);
     }
 
     /** Every answer of the groups, in order. */

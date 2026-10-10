@@ -53,7 +53,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseText.Wordmark.INSTANCE,
                 // marks and tracks
                 HouseMarks.Icon.INSTANCE, HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE,
-                HouseMarks.Lamp.INSTANCE, HouseMarks.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE,
+                HouseMarks.Delimiter.INSTANCE, HouseMarks.Lamp.INSTANCE, HouseMarks.DropMark.INSTANCE, HouseMarks.Indicator.INSTANCE,
                 HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
     }
 

@@ -40,7 +40,7 @@ class HouseTaxonomyTest {
     @Test
     void theHouseIsReadWhole_withItsCatalogue() {
         assertEquals(17, HOUSE.branches().size());
-        assertEquals(85, HOUSE.components().size());
+        assertEquals(86, HOUSE.components().size());
         assertEquals(67, HOUSE.roles().size(), "the catalogue beside the tree");
         assertEquals(107, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
         assertEquals(45, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
@@ -126,7 +126,7 @@ class HouseTaxonomyTest {
         HOUSE.components().forEach(c -> nodes.add(HOUSE.meaning(c).markdown()));
         HOUSE.roleBranches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
-        assertEquals(17 + 85 + 21 + 67, nodes.size());
+        assertEquals(17 + 86 + 21 + 67, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));

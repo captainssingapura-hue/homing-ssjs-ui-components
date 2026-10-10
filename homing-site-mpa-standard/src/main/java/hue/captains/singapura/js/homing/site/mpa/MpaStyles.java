@@ -130,7 +130,6 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
     }
 
     public record mpa_crumb_sep() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return ""; }
     }
 

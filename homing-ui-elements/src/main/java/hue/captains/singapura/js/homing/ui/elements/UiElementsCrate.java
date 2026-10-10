@@ -67,6 +67,10 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(CrumbModule.INSTANCE),
                 CrateEntry.of(ScrimBehaviorModule.INSTANCE),
                 CrateEntry.of(ScrimModule.INSTANCE),
+                // the marks between things: a line between rows, a sign between steps
+                CrateEntry.of(MarkBehaviorModule.INSTANCE),
+                CrateEntry.of(SeparatorModule.INSTANCE),
+                CrateEntry.of(DelimiterModule.INSTANCE),
                 CrateEntry.of(SummaryCardModule.INSTANCE),
                 CrateEntry.of(SliderModule.INSTANCE),
                 CrateEntry.of(SliderGroupModule.INSTANCE),
