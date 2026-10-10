@@ -37,6 +37,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
 import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
 
 /**
  * Neumorphism: moulded out of the page's own clay - no rule, its depth all in light and shade,
@@ -88,5 +91,9 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
             sliderShape("999px", "0", "50%", "1px", "6px"),
             sliderMarks("2px", "10px", "1px", "6px"),
             currentKnob("2px solid -2px"),
+            // ── its menu moulded out of the page ──
+            menuFrame("14px", "0", "8px", "2px", "210px"),
+            menuRow("10px", "8px", "14px"),
+            menuShadow("14px 14px 28px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -14px -14px 28px var(--box-shadow-lit)"),
             disabled(".5", "not-allowed"));
 }

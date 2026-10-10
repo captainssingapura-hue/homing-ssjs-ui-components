@@ -39,6 +39,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
 import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
 
 /** Neo-futurism: a hairline, a lit rim that glows under the hand, a long eased glide. */
 public record NeoFuturism() implements DesignStyle, Derives<Base> {
@@ -91,5 +94,9 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
             sliderMarks("1px", "10px", "1px", "6px"),
             markAlone(),
             currentKnob("1px solid -1px"),
+            // ── its menu a fine panel, deep and edged with a glow ──
+            menuFrame("2px", "1px", "6px", "1px", "210px"),
+            menuRow("2px", "7px", "14px"),
+            menuShadow("0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent), 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent)"),
             disabled(".4", "not-allowed"));
 }

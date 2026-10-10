@@ -16,6 +16,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.waysMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.marksMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.thumbRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderBase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -95,5 +96,7 @@ public record Base() implements DesignStyle {
             // ── a pane's thumbnail ruled round with a hairline ──
             thumbRule("1px"),
             // ── a slider's room, its knob grabbed, and its detent and ticks as most styles mark them ──
-            sliderBase());
+            sliderBase(),
+            // ── a menu's text the label's face, kept from the hand; its rows pointed at, in the label's size ──
+            menuBase());
 }

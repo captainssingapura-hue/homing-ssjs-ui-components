@@ -40,6 +40,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
 import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
 
 /** Retro-futurism: a neon ring that flares under the hand, and motion in steps, as a screen of the period moved. */
 public record RetroFuturism() implements DesignStyle, Derives<Base> {
@@ -95,5 +98,9 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
             sliderMarks("2px", "14px", "1px", "7px"),
             markAlone(),
             currentKnob("1px solid -1px"),
+            // ── its menu glowing over the page ──
+            menuFrame("3px", "1px", "6px", "2px", "200px"),
+            menuRow("2px", "7px", "12px"),
+            menuShadow("0 0 48px color-mix(in srgb, var(--box-shadow-glow) 45%, transparent), 0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 60%, transparent)"),
             disabled(".4", "not-allowed"));
 }

@@ -17,7 +17,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.SEPARATOR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DELIMITER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CONTEXT_MENU;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DETENT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.MENU_ITEM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.FILL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.GROOVE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KNOB;
@@ -178,6 +180,13 @@ final class HouseRule {
                 rest(KNOB, BACKGROUND, ground(s.raised())),
                 when(KNOB, BORDER, Map.of(State.DRAGGING, "border-color: " + s.accent() + ";")),
                 when(KNOB, Target.Color.Outline.INSTANCE, Map.of(
-                        State.CURRENT, "outline-color: color-mix(in srgb, " + s.accent() + " 55%, " + s.border() + ");")));
+                        State.CURRENT, "outline-color: color-mix(in srgb, " + s.accent() + " 55%, " + s.border() + ");")),
+                // ── a context menu: raised, in the text's ink, a hairline round it; a row bare, the one the cursor is on tinted with the accent ──
+                rest(CONTEXT_MENU, BACKGROUND, ground(s.raised())),
+                rest(CONTEXT_MENU, INK, "color: " + s.text() + ";"),
+                rest(CONTEXT_MENU, BORDER, "border-color: " + s.border() + ";"),
+                when(MENU_ITEM, BACKGROUND, Map.of(
+                        State.REST, ground("transparent"),
+                        State.HIGHLIGHTED, ground("color-mix(in srgb, " + s.accent() + " 28%, transparent)"))));
     }
 }

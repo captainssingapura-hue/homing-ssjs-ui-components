@@ -37,6 +37,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
 import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuBackdrop;
 
 /** Glassmorphism: a rounded pane with a lit top edge, floating on a wide soft shadow. */
 public record Glassmorphism() implements DesignStyle, Derives<Base> {
@@ -85,5 +89,10 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
             sliderMeasure("220px", "26px", "6px", "18px", "14px", "28px"),
             sliderShape("999px", "1px", "50%", "1px", "4px"),
             currentKnob("2px solid -2px"),
+            // ── its menu a pane of frosted glass ──
+            menuFrame("12px", "1px", "8px", "2px", "210px"),
+            menuRow("8px", "8px", "14px"),
+            menuShadow("0 24px 80px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent)"),
+            menuBackdrop("blur(16px) saturate(1.6)"),
             disabled(".45", "not-allowed"));
 }

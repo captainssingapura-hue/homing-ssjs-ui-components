@@ -39,6 +39,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
 import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
 
 /**
  * Sketchy: drawn by hand - a wobbling outline, a marker's rule, a tilt under the hand. Ink casts no
@@ -87,5 +89,8 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
             sliderShape("6px 4px 5px 7px / 4px 6px 7px 5px", "2px", "50% 45% 55% 50% / 45% 55% 50% 50%", "2px", "5px 3px 4px 6px / 3px 5px 6px 4px"),
             sliderMarks("2px", "14px", "2px", "8px"),
             currentKnob("2px dashed -3px"),
+            // ── its menu drawn by hand, casting nothing ──
+            menuFrame("8px 6px 7px 9px / 6px 8px 9px 7px", "2px", "8px", "2px", "200px"),
+            menuRow("6px 4px 5px 7px / 4px 6px 7px 5px", "7px", "12px"),
             disabled(".5", "not-allowed"));
 }

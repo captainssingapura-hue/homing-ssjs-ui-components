@@ -40,6 +40,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
 import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
 
 /** Neo-brutalism: square, a heavy rule, a hard offset shadow, and a press that drops into it. */
 public record NeoBrutalism() implements DesignStyle, Derives<Base> {
@@ -91,5 +94,9 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
             sliderShape("0", "3px", "0", "3px", "0"),
             sliderMarks("3px", "18px", "2px", "8px"),
             currentKnob("3px solid -3px"),
+            // ── its menu a ruled block, its shadow hard and set off ──
+            menuFrame("0", "3px", "6px", "0", "200px"),
+            menuRow("0", "8px", "12px"),
+            menuShadow("12px 12px 0 var(--box-shadow-cast)"),
             disabled(".4", "not-allowed"));
 }

@@ -62,12 +62,6 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
      */
     public record cm_frame() implements CssClass<MenuStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--cm-x"), new CssVar("--cm-y")); }
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Container.Menu.class, Shape.Corner.class), of(Container.Menu.class, Shape.Rule.class),
-                           of(Container.Menu.class, Size.Inset.class), of(Container.Menu.class, Size.Gap.class), of(Container.Menu.class, Size.Extent.class),
-                           of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Effect.Filter.class), of(Overlay.class, Shape.Shadow.class),
-                           of(Body.class, Color.Ink.class), of(Body.class, Type.Face.class));
-        }
         @Override public String body() { return """
             position: absolute;
             left: var(--cm-x, 0px);
@@ -76,8 +70,6 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
             flex-direction: column;
             box-sizing: border-box;
             pointer-events: auto;
-            outline: none;
-            user-select: none;
             """;
         }
     }
@@ -88,16 +80,10 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
      * its colour: the design's rest, hover, and the cursor as highlighted.
      */
     public record cm_item() implements CssClass<MenuStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Option.class, Shape.Corner.class), of(Control.Option.class, Size.Inset.class), of(Control.Option.class, Size.Gap.class),
-                           of(Selectable.class, Color.Surface.class), of(Selectable.class, Color.Ink.class), of(Selectable.class, Motion.Ease.class),
-                           of(Interactive.class, Affordance.Cursor.class), of(Label.class, Type.Scale.class));
-        }
         @Override public String body() { return """
             display: flex;
             align-items: center;
             white-space: nowrap;
-            outline: none;
             """;
         }
     }
@@ -115,14 +101,7 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
 
     /** The mark after a row with rows: the disclose icon, muted, at the end. */
     public record cm_item_disclose() implements CssClass<MenuStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return "margin-inline-start: auto;"; }
-    }
-
-    /** A row that cannot be picked now: inert. */
-    public record cm_item_disabled() implements CssClass<MenuStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Inert.class, Effect.Opacity.class), of(Inert.class, Affordance.Cursor.class)); }
-        @Override public String body() { return ""; }
     }
 
     /** A row hidden for the bound object: not there. Last in the sheet, so it wins the display. */
@@ -163,6 +142,6 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
     @Override
     public List<CssClass<MenuStyles>> cssClasses() {
         return List.of(new cm_layer(), new cm_frame(), new cm_frame_static(), new cm_specimen(), new cm_item(), new cm_item_label(), new cm_item_hint(),
-                       new cm_item_disclose(), new cm_item_disabled(), new cm_separator(), new cm_item_hidden());
+                       new cm_item_disclose(), new cm_separator(), new cm_item_hidden());
     }
 }

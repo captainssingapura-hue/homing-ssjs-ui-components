@@ -40,6 +40,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
 import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
 import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
 
 /** Editorial, the house's own: a serif voice, a fine rule, a soft lift under the hand. */
 public record Editorial() implements DesignStyle, Derives<Base> {
@@ -92,5 +95,9 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             sliderShape("999px", "1px", "50%", "1.5px", "3px"),
             markAlone(),
             currentKnob("2px solid -2px"),
+            // ── its menu a hairline frame, softly lifted ──
+            menuFrame("6px", "1px", "6px", "2px", "200px"),
+            menuRow("4px", "7px", "12px"),
+            menuShadow("0 10px 30px color-mix(in srgb, var(--box-shadow-cast) 45%, transparent), 0 2px 6px color-mix(in srgb, var(--box-shadow-cast) 30%, transparent)"),
             disabled(".45", "default"));
 }

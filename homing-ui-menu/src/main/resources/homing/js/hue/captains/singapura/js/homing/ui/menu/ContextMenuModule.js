@@ -23,19 +23,26 @@
 //   menu.key(ev) → boolean        arrows, Home, End, Enter, Space, Left, Right
 //   menu.dispose()
 //
-// The cursor is data-highlighted on a row — the word Selectable draws it —
+// The cursor is data-highlighted on a row - its look tints it -
 // and moves by MenuGeometry.step within the deepest open frame, skipping
 // disabled and hidden rows and wrapping. A row with rows opens them beside
 // it on hover, on Enter and on ArrowRight; hovering another row of the same
 // frame closes them, ArrowLeft steps back a level. A row's mark is an Icon:
 // the row's own word, or the check when the row is checked; a row with rows
 // ends in the disclose mark; a divider sits where the section changes.
-// `css` is injected with the styles import.
+// Its look is the house's: every frame wears the menu's casting - the owner,
+// lifted over the page as its style casts it - and every row a menu item's,
+// as a choice, flat. A row off says so by aria-disabled, which its look fades
+// by. Its own classes only place. `css` is injected with the styles import.
 // =============================================================================
 
 const _menuOwner = Object.freeze({ toString: () => "contextMenu" });
+/** A row's leaf: a menu item, which nothing realizes on its own - the menu draws it here. */
+const _MENU_ITEM = Object.freeze({ LEAF: "menu-item" });
 
 class ContextMenu {
+    static LEAF = "context-menu";
+
     constructor(branch, type, hooks, opts) {
         if (!branch) throw new Error("[ContextMenu] a branch of its own is required");
         branch.activate(_menuOwner);
@@ -46,6 +53,8 @@ class ContextMenu {
         this._object = null;
         this._viewport = { w: 0, h: 0 };
         this._path = [];                // the rows whose submenu is open, outermost first
+        this._frameLook = new Look(ContextMenu, ROLE.STANDALONE);
+        this._rowLook = new Look(_MENU_ITEM, ROLE.CHOICE);
         this._root = this._level("frame", type.kind, type.nodes, "", 0);
         this.el = this._root.el;
     }
@@ -54,6 +63,7 @@ class ContextMenu {
     _level(name, label, nodes, prefix, depth) {
         var f = this._branch.createElement(name, "div");
         css.addClass(f, cm_frame);
+        this._frameLook.wear(f);
         if (this._specimen) css.addClass(f, cm_frame_static);
         f.setAttribute("role", "menu");
         f.setAttribute("aria-label", label);
@@ -64,7 +74,7 @@ class ContextMenu {
         for (var i = 0; i < divided.length; i++) {
             if (divided[i].divider) {
                 // the house's separator, cast as the break between sections: placed by the menu
-                var sep = new Separator(SeparatorFactory.create(this._branch, prefix + "sep-" + i), {}, ROLE.BREAK);
+                var sep = new Separator(this._branch.elementMaker(prefix + "sep-" + i), {}, ROLE.BREAK);
                 css.addClass(sep.el, cm_separator);
                 f.appendChild(sep.el);
             }
@@ -77,6 +87,7 @@ class ContextMenu {
         var name = prefix + "row-" + node.id.replace(/[^A-Za-z0-9_-]/g, "_");
         var el = this._branch.createElement(name, "div");
         css.addClass(el, cm_item);
+        this._rowLook.wear(el);
         el.setAttribute("role", "menuitem");
         el.setAttribute("tabindex", "-1");
         el.setAttribute("data-id", node.id);
@@ -88,7 +99,7 @@ class ContextMenu {
         el.appendChild(label);
         if (node.hint) {
             // the item's hint, in the house's caption, cast as its hint: placed by the menu
-            var hint = new Caption(CaptionFactory.create(this._branch, name + "-hint"), { text: node.hint }, ROLE.HINT);
+            var hint = new Caption(this._branch.elementMaker(name + "-hint"), { text: node.hint }, ROLE.HINT);
             css.addClass(hint.el, cm_item_hint);
             el.appendChild(hint.el);
         }
@@ -121,7 +132,6 @@ class ContextMenu {
             var s = (typeof state === "function" && state(r.id, object)) || {};
             r.disabled = !!s.disabled;
             r.hidden = !!s.hidden;
-            css.toggleClass(r.el, cm_item_disabled, r.disabled);
             css.toggleClass(r.el, cm_item_hidden, r.hidden);
             r.el.setAttribute("aria-disabled", r.disabled ? "true" : "false");
             if (s.checked != null) r.el.setAttribute("aria-checked", s.checked ? "true" : "false"); else r.el.removeAttribute("aria-checked");

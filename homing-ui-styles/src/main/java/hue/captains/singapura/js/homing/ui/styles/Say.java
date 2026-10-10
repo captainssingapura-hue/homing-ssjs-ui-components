@@ -9,6 +9,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
@@ -24,6 +25,7 @@ final class Say {
     static final Taxon ROOT = Root.INSTANCE;
     static final Taxon CONTROL = HouseBranches.Control.INSTANCE;
     static final Taxon BUTTON = HouseBranches.Button.INSTANCE;
+    static final Taxon ITEM = HouseBranches.Item.INSTANCE;
 
     static final Target.Shape.Corner CORNER = Target.Shape.Corner.INSTANCE;
     static final Target.Shape.Border BORDER = Target.Shape.Border.INSTANCE;
@@ -74,9 +76,12 @@ final class Say {
 
     /** How a control looks when it cannot be used: its opacity, and the pointer over it. */
     static List<Implementation<?>> disabled(String opacity, String cursor) {
-        return List.of(
-                when(CONTROL, OPACITY, Map.of(State.DISABLED, "opacity: " + opacity + ";")),
-                when(CONTROL, CURSOR, Map.of(State.DISABLED, "cursor: " + cursor + ";")));
+        var out = new ArrayList<Implementation<?>>();
+        for (Taxon used : List.of(CONTROL, ITEM)) {   // a control, and an item - a menu's row - that cannot be used, alike
+            out.add(when(used, OPACITY, Map.of(State.DISABLED, "opacity: " + opacity + ";")));
+            out.add(when(used, CURSOR, Map.of(State.DISABLED, "cursor: " + cursor + ";")));
+        }
+        return List.copyOf(out);
     }
 
     static final Taxon TOGGLE = HouseControls.ToggleButton.INSTANCE;
@@ -324,6 +329,43 @@ final class Say {
                 when(KNOB, CURSOR, Map.of(State.REST, "cursor: grab;", State.DRAGGING, "cursor: grabbing;"))));
         out.addAll(sliderMarks("2px", "12px", "1px", "7px"));
         return List.copyOf(out);
+    }
+
+    // ── a context menu: its frame - the owner, whose morphism is the menu's only one - and its rows, flat ──
+
+    static final Taxon CONTEXT_MENU = HouseContainers.ContextMenu.INSTANCE;
+    static final Taxon MENU_ITEM = HouseItems.MenuItem.INSTANCE;
+
+    /** A menu's frame in a style: its corner and rule, the room above and below its rows, between them, and its least width. */
+    static List<Implementation<?>> menuFrame(String corner, String rule, String insetBlock, String gap, String width) {
+        return List.of(rest(CONTEXT_MENU, CORNER, "border-radius: " + corner + ";"),
+                       rest(CONTEXT_MENU, BORDER, "border-width: " + rule + "; border-style: solid;"),
+                       rest(CONTEXT_MENU, INSET, "padding-block: " + insetBlock + "; padding-inline: 0;"),
+                       rest(CONTEXT_MENU, GAP, "gap: " + gap + ";"),
+                       rest(CONTEXT_MENU, EXTENT, "min-width: " + width + ";"));
+    }
+
+    /** A menu's row in a style: its corner and its room, above and below, then at its sides. */
+    static List<Implementation<?>> menuRow(String corner, String block, String inline) {
+        return List.of(rest(MENU_ITEM, CORNER, "border-radius: " + corner + ";"),
+                       rest(MENU_ITEM, INSET, "padding-block: " + block + "; padding-inline: " + inline + ";"));
+    }
+
+    /** A menu's frame lifted over the page, as a style casts it: in the palette's shadow colours, never its own. */
+    static List<Implementation<?>> menuShadow(String shadow) {
+        return List.of(rest(CONTEXT_MENU, SHADOW, "box-shadow: " + shadow + ";"));
+    }
+
+    /** What a menu's frame does to the page behind it, seen through it: frosted, in a style of glass. */
+    static List<Implementation<?>> menuBackdrop(String backdrop) { return List.of(rest(CONTEXT_MENU, FILTER, "backdrop-filter: " + backdrop + ";")); }
+
+    /** What every style's menu says alike: its text the label's face, none of it taken by the hand; a row pointed at, its parts ten pixels apart, in the label's size. */
+    static List<Implementation<?>> menuBase() {
+        return List.of(new Implementation<>(CONTEXT_MENU, FACE, new Answer.Redirect<>(LABEL)),
+                       rest(CONTEXT_MENU, Target.Affordance.Select.INSTANCE, "user-select: none;"),
+                       rest(MENU_ITEM, GAP, "gap: 10px;"),
+                       new Implementation<>(MENU_ITEM, SCALE, new Answer.Redirect<>(LABEL)),
+                       rest(MENU_ITEM, CURSOR, "cursor: pointer;"));
     }
 
     /** Every answer of the groups, in order. */
