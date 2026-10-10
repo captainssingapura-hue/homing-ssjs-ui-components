@@ -33,6 +33,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
+import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
 
 /**
  * Neumorphism: moulded out of the page's own clay - no rule, its depth all in light and shade,
@@ -79,5 +83,10 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
             // ── the veil behind a dialog: soft ──
             veil("blur(6px)"),
             measure("10px", "20px", "8px", "64px", "1.3"),
+            // ── its slider a soft unruled channel, the knob a round disc ruled with a hairline - flat, so the line is what shows it ──
+            sliderMeasure("220px", "28px", "8px", "22px", "16px", "30px"),
+            sliderShape("999px", "0", "50%", "1px", "6px"),
+            sliderMarks("2px", "10px", "1px", "6px"),
+            currentKnob("2px solid -2px"),
             disabled(".5", "not-allowed"));
 }

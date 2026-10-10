@@ -225,6 +225,13 @@ public final class HouseStates {
         @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "candidate", VALUES.get(2), "lent", VALUES.get(3), "held"); }
     }
 
+    /** Held by the hand and moved: from the press that grabs it to the release. */
+    public record Dragging() implements Flag<Interaction> {
+        public static final Dragging INSTANCE = new Dragging();
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "dragging"); }
+    }
+
     // ── physical ─────────────────────────────────────────────────────────
 
     /** How far off its own plane it sits: flat, elevated or sunken. */
@@ -236,6 +243,15 @@ public final class HouseStates {
         @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "elevated", VALUES.get(2), "sunken"); }
     }
 
+    /** Which way a thing laid along a line runs: horizontal, or vertical - stood up, as a fader. */
+    public record Orientation() implements StateType<Physical> {
+        public static final Orientation INSTANCE = new Orientation();
+        private static final List<StateValue> VALUES = List.of(new StateValue("horizontal"), new StateValue("vertical"));
+        @Override public Physical parent() { return Physical.INSTANCE; }
+        @Override public List<StateValue> values() { return VALUES; }
+        @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "vertical"); }
+    }
+
     /** Every type of the tree, branch by branch. */
     public static final List<StateType<?>> ALL = List.of(
             Enabled.INSTANCE, ReadOnly.INSTANCE, Busy.INSTANCE,
@@ -244,6 +260,6 @@ public final class HouseStates {
             Required.INSTANCE, Invalid.INSTANCE,
             Current.INSTANCE, Highlighted.INSTANCE, Pointed.INSTANCE,
             Empty.INSTANCE,
-            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE,
-            Elevation.INSTANCE);
+            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE,
+            Elevation.INSTANCE, Orientation.INSTANCE);
 }

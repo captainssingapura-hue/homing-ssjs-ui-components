@@ -45,7 +45,12 @@ class SliderGroupTest extends JsModuleTestBase {
                 has: function (c) { return classes.has(c); }, attr: function (k) { return attrs[k]; }, listening: function (t) { return (this.listeners[t] || []).length; } };
             return node;
         }
-        function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = name + "/" + n; return e; }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function (o) { this.owner = String(o); } }; }
+        // a maker is single-use, and known for one: the texts are made by their own makers
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
+        function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = name + "/" + n; return e; },
+                                             elementMaker: function (n) { var self = this, mk = function (tag) { makers.delete(mk); return self.createElement(n, tag); }; makers.add(mk); return mk; },
+                                             createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function (o) { this.owner = String(o); } }; }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); }, size: function () {}, extent: function () {}, aspect: function () {} };
@@ -74,6 +79,7 @@ class SliderGroupTest extends JsModuleTestBase {
         js.eval("js", "var ic_base = 'ic_base', ICONS = { grip: 'ic_grip', size: 'ic_size', aspect: 'ic_aspect', extent: 'ic_extent', level: 'ic_level' };");
         loadModule(DIR + "ui/icons/IconModule.js");
         loadModule(DIR + "component/keyboard/KeysModule.js");
+        loadModule(DIR + "ui/elements/SliderScaleModule.js");
         loadModule(DIR + "ui/elements/SliderModule.js");
         loadModule(DIR + "ui/elements/SliderGroupModule.js");
         js.eval("js", TextsInJs.withCss(SHIM));
@@ -88,7 +94,7 @@ class SliderGroupTest extends JsModuleTestBase {
     void oneMemberForAllTheSliders_theFirstCurrent_theSlidersInside() {
         assertEquals("join:mixer", kbLog(), "the group joined as its branch's name; the sliders did not");
         assertEquals("A", currentLabel());
-        assertEquals("true,false,false", eval("[a, b, c].map(function (s) { return knobOf(s).has('el_slider_knob_current'); }).join()").asString());
+        assertEquals("true,false,false", eval("[a, b, c].map(function (s) { return knobOf(s).attr('aria-current') === 'true'; }).join()").asString(), "the current one's knob ringed, by its aria-current");
         assertEquals("3", eval("String(body.children.length)").asString(), "the sliders' roots in the body");
         assertEquals("A,B,C", eval("g.sliders().map(function (s) { return s.label(); }).join()").asString());
         assertEquals("Mixer", eval("header.children[0].textContent").asString());
@@ -107,7 +113,7 @@ class SliderGroupTest extends JsModuleTestBase {
         assertEquals("A", currentLabel(), "wrapped");
         eval("members.mixer.keyDown({ key: 'Tab', shiftKey: true })");
         assertEquals("C", currentLabel(), "and back, wrapping");
-        assertEquals("false,false,true", eval("[a, b, c].map(function (s) { return knobOf(s).has('el_slider_knob_current'); }).join()").asString(), "the ring moved");
+        assertEquals("false,false,true", eval("[a, b, c].map(function (s) { return knobOf(s).attr('aria-current') === 'true'; }).join()").asString(), "the ring moved");
     }
 
     @Test

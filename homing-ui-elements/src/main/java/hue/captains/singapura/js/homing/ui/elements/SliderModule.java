@@ -47,10 +47,11 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
     @Override
     public ImportsFor<SliderModule> imports() {
         return ImportsFor.<SliderModule>builder()
-                .add(new ModuleImports<>(List.of(new LabelModule.Label(), new LabelModule.LabelFactory()), LabelModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ReadoutModule.Readout(), new ReadoutModule.ReadoutFactory()), ReadoutModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LabelModule.Label()), LabelModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderScaleModule.SliderScale()), SliderScaleModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_slider(),
                         new ElementStyles.el_slider_label(),
@@ -61,24 +62,15 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
                         new ElementStyles.el_slider_knob(),
                         new ElementStyles.el_slider_face(),
                         new ElementStyles.el_slider_mark(),
-                        new ElementStyles.el_slider_held(),
-                        new ElementStyles.el_slider_face_held(),
-                        new ElementStyles.el_slider_knob_current(),
                         new ElementStyles.el_slider_readout(),
                         new ElementStyles.el_slider_vertical(),
                         new ElementStyles.el_slider_rail_vertical(),
-                        new ElementStyles.el_slider_rail_ticked(),
                         new ElementStyles.el_slider_track_vertical(),
                         new ElementStyles.el_slider_fill_vertical(),
                         new ElementStyles.el_slider_detent_vertical(),
                         new ElementStyles.el_slider_cap(),
                         new ElementStyles.el_slider_cap_face(),
                         new ElementStyles.el_slider_cap_mark(),
-                        new ElementStyles.el_slider_tick(),
-                        new ElementStyles.el_slider_tick_vertical(),
-                        new ElementStyles.el_slider_tick_line(),
-                        new ElementStyles.el_slider_tick_line_vertical(),
-                        new ElementStyles.el_slider_tick_label(),
                         new ElementStyles.el_slider_off()
                 ), ElementStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))

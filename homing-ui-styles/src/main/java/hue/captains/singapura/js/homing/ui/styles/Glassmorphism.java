@@ -34,6 +34,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
+import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
 
 /** Glassmorphism: a rounded pane with a lit top edge, floating on a wide soft shadow. */
 public record Glassmorphism() implements DesignStyle, Derives<Base> {
@@ -78,5 +81,9 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
             // ── the veil behind a dialog: frosted ──
             veil("blur(10px) saturate(1.2) brightness(0.9)"),
             measure("10px", "22px", "8px", "64px", "1.3"),
+            // ── its slider a rounded pane of glass, the knob a disc ──
+            sliderMeasure("220px", "26px", "6px", "18px", "14px", "28px"),
+            sliderShape("999px", "1px", "50%", "1px", "4px"),
+            currentKnob("2px solid -2px"),
             disabled(".45", "not-allowed"));
 }

@@ -17,7 +17,12 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.SEPARATOR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DELIMITER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.DETENT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.FILL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.GROOVE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.KNOB;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PANE_THUMB;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TICK;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PILL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.ROOT;
@@ -159,6 +164,20 @@ final class HouseRule {
                         State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 12%, " + s.raised() + ")"))),
                 when(PANE_THUMB, BORDER, Map.of(
                         State.REST, "border-color: " + s.border() + ";",
-                        State.CURRENT, "border-color: " + s.accent() + ";")));
+                        State.CURRENT, "border-color: " + s.accent() + ";")),
+                // ── a slider, flat: its groove a wash of the ink it stands in, edged quieter than that ink; the fill the accent; a tick
+                //    in that ink, faded; the detent - where it rests - shown only while the knob is dragged; the knob raised, in the
+                //    ink of what holds it, edged with the accent while dragged, and ringed as a focused control when it is a group's current one ──
+                rest(GROOVE, BACKGROUND, ground("color-mix(in srgb, currentColor 10%, transparent)")),
+                rest(GROOVE, BORDER, "border-color: color-mix(in srgb, currentColor 45%, transparent);"),
+                rest(FILL, BACKGROUND, ground(s.accent())),
+                rest(TICK, BACKGROUND, ground("color-mix(in srgb, currentColor 60%, transparent)")),
+                when(DETENT, BACKGROUND, Map.of(
+                        State.REST, ground("transparent"),
+                        State.DRAGGING, ground("color-mix(in srgb, currentColor 60%, transparent)"))),
+                rest(KNOB, BACKGROUND, ground(s.raised())),
+                when(KNOB, BORDER, Map.of(State.DRAGGING, "border-color: " + s.accent() + ";")),
+                when(KNOB, Target.Color.Outline.INSTANCE, Map.of(
+                        State.CURRENT, "outline-color: color-mix(in srgb, " + s.accent() + " 55%, " + s.border() + ");")));
     }
 }

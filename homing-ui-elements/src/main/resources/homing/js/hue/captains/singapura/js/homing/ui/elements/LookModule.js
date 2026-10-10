@@ -18,7 +18,10 @@
 //                                       functional role looks as the leaf on its own
 //     .casting                          its token: primary-button_go
 //     .classes                          every class it wears
-//     .wear(el)  .shed(el)              put them on, take them off
+//     .wear(el, part?)  .shed(el, part?)  put them on, take them off; with part { only: [target…] }
+//                                       or { except: [target…] }, just those targets - a component drawn
+//                                       on more than one element puts each target where it shows: a
+//                                       knob's box the ring and the size, its face the ground and the edge
 //     .show(el, state)                  each axis's reflection written
 //     .degree(el, name, n)              size, extent or aspect; at rest nothing written
 //     .text(el, words)                  the element's words
@@ -50,9 +53,23 @@ class Look {
         void look_sheet;   // the sheet the classes are ruled in: imported, so it loads
     }
 
-    wear(el) { this.classes.forEach(function (c) { css.addClass(el, _lookHandle(c)); }); }
+    wear(el, part) { this._of(part).forEach(function (c) { css.addClass(el, _lookHandle(c)); }); }
 
-    shed(el) { this.classes.forEach(function (c) { css.removeClass(el, _lookHandle(c)); }); }
+    shed(el, part) { this._of(part).forEach(function (c) { css.removeClass(el, _lookHandle(c)); }); }
+
+    /** Its classes, or those of the targets a part says: only these, or all but these - each a target of LOOK_TARGETS. */
+    _of(part) {
+        if (!part) return this.classes;
+        var only = part.only ? new Set(part.only) : null, except = part.except ? new Set(part.except) : null;
+        [].concat(part.only || [], part.except || []).forEach(function (t) {
+            if (LOOK_TARGETS.indexOf(t) < 0) throw new Error("[Look] no target '" + t + "'; one of " + LOOK_TARGETS.join(", "));
+        });
+        return this.classes.filter(function (c) {
+            var t = c.slice(c.indexOf("__") + 2), s = t.indexOf("--");
+            if (s >= 0) t = t.slice(0, s);
+            return (!only || only.has(t)) && (!except || !except.has(t));
+        });
+    }
 
     show(el, state) {
         var axes = this.leaf.AXES || {};

@@ -40,6 +40,7 @@ class DesignWordsTest {
         var expected = new LinkedHashMap<String, String>();
         expected.put("elevated", "elevation(elevated)");
         expected.put("sunken", "elevation(sunken)");
+        expected.put("vertical", "orientation(vertical)");
         expected.put("hover", "hovered(true)");
         expected.put("focus", "focused(true)");
         expected.put("disabled", "enabled(false)");
@@ -53,6 +54,7 @@ class DesignWordsTest {
         expected.put("candidate", "keyboard(candidate)");
         expected.put("lent", "keyboard(lent)");
         expected.put("held", "keyboard(held)");
+        expected.put("dragging", "dragging(true)");
         expected.put("active", "down(true)");
         var words = words();
         var actual = new LinkedHashMap<String, String>();

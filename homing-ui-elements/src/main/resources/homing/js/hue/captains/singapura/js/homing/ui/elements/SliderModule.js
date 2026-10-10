@@ -1,14 +1,17 @@
 // =============================================================================
 // Slider — a number set by a knob on a track, as a BRANCH component: the
 // caller makes a sub-branch for it and hands it in, with its properties.
-// A label before the rail, a readout after; the track is sunk, the fill runs
-// from the detent to the value, the knob is raised and takes the focus, and
+// A label before the rail, a readout after; the knob runs in a groove, the
+// fill runs from the detent to the value, the knob takes the focus, and
 // carries a mark — an Icon: a grip, or the word for what the slider sets.
-// The knob's look is its face's: the design's corner, or a clip that cuts it
-// to a diamond, a hexagon, a pointer — or no face at all, the mark alone on
-// the track, at the knob's own size; the box beneath keeps the ring.
-// Every part is a real element wearing a design word, so a design draws the
-// whole of it: no vendor pseudo-element, nothing of the browser's own slider.
+// Its look is the house's: the slider wears its own casting, and each part
+// is a part of the taxonomy's, worn as cast - the groove as its span, the
+// fill its level, the detent its rest, a tick a notch, the knob its thumb,
+// the texts its name, its figures and its value. Every part flat, in every
+// state: only colours change. The detent - where it rests - shows only while
+// the knob is dragged. Stood up, the knob is a fader's cap, as its style
+// shapes one. Its own classes only place: nothing of the browser's own
+// slider, no vendor pseudo-element.
 //
 //   var s = new Slider(branch.createBranch("size"), {
 //               label: "The tabs' size", axis: true,                     // −1…1 by 0.1, the detent at 0
@@ -21,8 +24,7 @@
 //     icon                     the mark on the knob: an Icon word — "size", "aspect", "extent", "level" —
 //                              for what the slider sets; "grip" unless said; null for a bare knob
 //     vertical: true           stood up, as a fader: the value rises upward, the knob is the
-//                              design's cap — wide across the track, low along it — the
-//                              label above, the readout below
+//                              style's cap, the label above, the readout below
 //     ticks: [{ at, label }…]  a scale beside the track: a tick at each value, its caption
 //     size                     −1 … 1: every length the design gives the slider grows by its ratio
 //     labelWidth               one width for the labels of sliders that stack, so their rails align
@@ -41,22 +43,34 @@
 //     .icon(name?)             read, or set: the knob's mark
 //     .labelWidth(css?)        the label's width: a length, or null for its own
 //     .key(ev)                 a keydown, from whoever holds the keys for it: true when taken
-//     .current(on)             the one of a group: the knob's ring drawn now
+//     .current(on)             the one of a group: the knob ringed now, its aria-current
 //     .focusKnob()             physical focus to the knob: a group's, on Tab
 //     .dispose()
 //   The rail takes the hand anywhere on it: a press jumps and grabs, the
-//   pointer captured at the press; the knob is the focusable part (role
-//   slider, the value in aria). The keys, through the party: arrows by a
-//   step, with Shift by ten, Home and End, PageUp and PageDown by ten; no
-//   keydown listener of the slider's own, ever. A detent has a bite of six
-//   tenths of a step: the hand within it rests there. `css` is injected
-//   with the styles import.
+//   pointer captured at the press, the parts dragging (data-dragging) until
+//   the release; the knob is the focusable part (role slider, the value in
+//   aria). The keys, through the party: arrows by a step, with Shift by ten,
+//   Home and End, PageUp and PageDown by ten; no keydown listener of the
+//   slider's own, ever. A detent has a bite of six tenths of a step: the hand
+//   within it rests there. `css` is injected with the styles import.
 // =============================================================================
 
 const _sliderOwner = Object.freeze({ toString: () => "slider" });
 var _BITE = 0.6;   // of a step, either side of a detent
 
+/** Its parts, which nothing realizes on its own: their tokens, for the look each wears as the slider casts it. */
+const _GROOVE = Object.freeze({ LEAF: "groove" });
+const _FILL = Object.freeze({ LEAF: "fill" });
+const _DETENT = Object.freeze({ LEAF: "detent" });
+const _KNOB = Object.freeze({ LEAF: "knob" });
+
+/** The targets a part shows on an element of its own: the rail its length, its hand and its text kept; the knob's box its size, its ring, its hand and its mark's size. */
+const _ON_THE_RAIL = Object.freeze(["size-extent", "affordance-cursor", "affordance-select"]);
+const _ON_THE_BOX = Object.freeze(["size-extent", "shape-outline", "color-outline", "affordance-cursor", "type-scale"]);
+
 class Slider {
+    static LEAF = "slider";
+
     constructor(branch, props) {
         if (!branch) throw new Error("[Slider] a branch of its own is required");
         var self = this;
@@ -84,13 +98,15 @@ class Slider {
         this._vertical = !!p.vertical;
         var vertical = this._vertical;
 
+        var look = new Look(Slider, ROLE.STANDALONE);
         var root = branch.createElement("slider", "div");
         css.addClass(root, el_slider);
         if (vertical) css.addClass(root, el_slider_vertical);
+        look.wear(root, { except: _ON_THE_RAIL });
         this.root = root;
         // its texts are the house's, each cast as what it is to the slider: placed by the slider, looking as they are
         this._texts = [];
-        this._label = new Label(LabelFactory.create(branch, "label"), { text: p.label == null ? "" : String(p.label) }, ROLE.NAME);
+        this._label = new Label(branch.elementMaker("label"), { text: p.label == null ? "" : String(p.label) }, ROLE.NAME);
         css.addClass(this._label.el, el_slider_label);
         root.appendChild(this._label.el);
         this._texts.push(this._label);
@@ -98,13 +114,16 @@ class Slider {
         var rail = branch.createElement("rail", "div");
         css.addClass(rail, el_slider_rail);
         if (vertical) css.addClass(rail, el_slider_rail_vertical);
+        look.wear(rail, { only: _ON_THE_RAIL });
         this._rail = rail;
         var track = branch.createElement("track", "div");
         css.addClass(track, el_slider_track);
         if (vertical) css.addClass(track, el_slider_track_vertical);
+        new Look(_GROOVE, ROLE.SPAN).wear(track);
         this._fill = branch.createElement("fill", "div");
         css.addClass(this._fill, el_slider_fill);
         if (vertical) css.addClass(this._fill, el_slider_fill_vertical);
+        new Look(_FILL, ROLE.LEVEL).wear(this._fill);
         track.appendChild(this._fill);
         rail.appendChild(track);
         this._detent = null;
@@ -112,34 +131,19 @@ class Slider {
             this._detent = branch.createElement("detent", "div");
             css.addClass(this._detent, el_slider_detent);
             if (vertical) css.addClass(this._detent, el_slider_detent_vertical);
+            new Look(_DETENT, ROLE.REST).wear(this._detent);
             rail.appendChild(this._detent);
         }
-        // the scale: a tick at each value named, its caption beside it
-        this._ticks = [];
-        var ticks = Array.isArray(p.ticks) ? p.ticks : [];
-        for (var t = 0; t < ticks.length; t++) {
-            var at = Number(ticks[t] && ticks[t].at != null ? ticks[t].at : ticks[t]);
-            if (!(at >= this._min && at <= this._max)) continue;
-            var tick = branch.createElement("tick-" + t, "div");
-            css.addClass(tick, el_slider_tick);
-            if (vertical) css.addClass(tick, el_slider_tick_vertical);
-            tick.style.setProperty("--sl-tick", (this._fraction(at) * 100).toFixed(3) + "%");
-            var line = branch.createElement("tick-" + t + "-line", "div");
-            css.addClass(line, el_slider_tick_line);
-            if (vertical) css.addClass(line, el_slider_tick_line_vertical);
-            tick.appendChild(line);
-            var caption = new Caption(CaptionFactory.create(branch, "tick-" + t + "-label"),
-                    { text: ticks[t] && ticks[t].label != null ? String(ticks[t].label) : this._format(at) }, ROLE.FIGURE);
-            css.addClass(caption.el, el_slider_tick_label);
-            tick.appendChild(caption.el);
-            rail.appendChild(tick);
-            this._ticks.push(tick, line);
-            this._texts.push(caption);
-        }
-        if (this._ticks.length) css.addClass(rail, el_slider_rail_ticked);
-        // the knob — the cap, when stood up
+        // the scale: a tick at each value named, its caption beside it - its own code, drawn into the rail
+        var scale = SliderScale.draw(branch, rail, p.ticks, { fraction: function (v) { return self._fraction(v); }, format: this._format,
+                                                              min: this._min, max: this._max, vertical: vertical });
+        this._ticks = scale.parts;
+        this._texts = this._texts.concat(scale.texts);
+        // the knob — the cap, when stood up: its box keeps the ring, its size and its hand; its face is drawn
+        var thumb = new Look(_KNOB, ROLE.THUMB);
         var knob = branch.createElement("knob", "div");
         css.addClass(knob, vertical ? el_slider_cap : el_slider_knob);
+        thumb.wear(knob, { only: _ON_THE_BOX });
         knob.setAttribute("role", "slider");
         knob.setAttribute("tabindex", "0");
         knob.setAttribute("aria-valuemin", String(this._min));
@@ -149,6 +153,8 @@ class Slider {
         this._knob = knob;
         this._face = branch.createElement("face", "div");
         css.addClass(this._face, vertical ? el_slider_cap_face : el_slider_face);
+        thumb.wear(this._face, { except: _ON_THE_BOX });
+        if (vertical) this._face.setAttribute("aria-orientation", "vertical");   // a cap's corner is its style's, as its size is
         knob.appendChild(this._face);
         this._mark = new Icon(branch.createElement("mark", Icon.TAG), null);
         css.addClass(this._mark.el, vertical ? el_slider_cap_mark : el_slider_mark);
@@ -157,12 +163,13 @@ class Slider {
         rail.appendChild(knob);
         root.appendChild(rail);
 
-        this._readout = new Readout(ReadoutFactory.create(branch, "readout"), {}, ROLE.VALUE);
+        this._readout = new Readout(branch.elementMaker("readout"), {}, ROLE.VALUE);
         css.addClass(this._readout.el, el_slider_readout);
         root.appendChild(this._readout.el);
         this._texts.push(this._readout);
         this._parts = [root, rail, track, this._fill, knob, this._face, this._mark.el].concat(this._ticks);
         if (this._detent) this._parts.push(this._detent);
+        this._dragged = [knob, this._face].concat(this._detent ? [this._detent] : []);   // what shows the hand on it
 
         this._value = this._snap(p.value == null ? this._rest() : Number(p.value), false);
         this._draw();
@@ -177,8 +184,7 @@ class Slider {
             ev.preventDefault();
             self._pressed = self._value;
             try { rail.setPointerCapture(ev.pointerId); } catch (e) {}
-            css.addClass(knob, el_slider_held);
-            css.addClass(self._face, el_slider_face_held);
+            self._drag(true);
             self._set(self._fromPointer(ev), true, false);
             try { knob.focus({ preventScroll: true }); } catch (e) {}
             rail.addEventListener("pointermove", self._onMove);
@@ -212,9 +218,9 @@ class Slider {
         this._set(v, false, true);
         return true;
     }
-    /** The one of a group: the knob's ring drawn now, whether or not it has the focus. */
+    /** The one of a group: the knob ringed now, whether or not it has the focus - its aria-current, which its look rings by. */
     current(on) {
-        if (on) css.addClass(this._knob, el_slider_knob_current); else css.removeClass(this._knob, el_slider_knob_current);
+        if (on) this._knob.setAttribute("aria-current", "true"); else this._knob.removeAttribute("aria-current");
         return this;
     }
     /** Physical focus to the knob, without scrolling: a group's, on Tab. */
@@ -245,14 +251,17 @@ class Slider {
         if (changed) { this._draw(); if (this._onInput) this._onInput(v); }
         if (commit && changed && this._onChange) this._onChange(v);
     }
+    /** The hand on the knob, or off it: the parts that show it say so - the knob, its face, the detent, shown only now. */
+    _drag(on) {
+        this._dragged.forEach(function (el) { if (on) el.setAttribute("data-dragging", ""); else el.removeAttribute("data-dragging"); });
+    }
     _release() {
         var rail = this._rail;
         rail.removeEventListener("pointermove", this._onMove);
         rail.removeEventListener("pointerup", this._onUp);
         rail.removeEventListener("pointercancel", this._onUp);
         rail.removeEventListener("lostpointercapture", this._onUp);
-        css.removeClass(this._knob, el_slider_held);
-        css.removeClass(this._face, el_slider_face_held);
+        this._drag(false);
         var was = this._pressed;
         this._pressed = null;
         if (was !== null && was !== this._value && this._onChange) this._onChange(this._value);
@@ -274,10 +283,14 @@ class Slider {
         if (v !== undefined) { this._value = this._snap(Number(v), false); this._draw(); }
         return this._value;
     }
+    /** Off is inert and says so: aria-disabled on the slider, its rail and its knob, which their looks are off by. */
     setOn(on) {
         this._on = !!on;
         css.toggleClass(this.root, el_slider_off, !this._on);
-        this._knob.setAttribute("aria-disabled", this._on ? "false" : "true");
+        var off = this._on ? "false" : "true";
+        this.root.setAttribute("aria-disabled", off);
+        this._rail.setAttribute("aria-disabled", off);
+        this._knob.setAttribute("aria-disabled", off);
         this._knob.setAttribute("tabindex", this._on ? "0" : "-1");
         if (!this._on && this._pressed !== null) this._release();
         return this;

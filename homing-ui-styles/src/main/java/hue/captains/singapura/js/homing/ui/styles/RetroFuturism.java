@@ -35,6 +35,11 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
+import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
+import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
 
 /** Retro-futurism: a neon ring that flares under the hand, and motion in steps, as a screen of the period moved. */
 public record RetroFuturism() implements DesignStyle, Derives<Base> {
@@ -84,5 +89,11 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
             // ── the veil behind a dialog: a little blur, a little contrast ──
             veil("blur(4px) contrast(1.2)"),
             measure("8px", "18px", "8px", "56px", "1.3"),
+            // ── its slider a ruled bar, the knob its mark alone ──
+            sliderMeasure("220px", "26px", "6px", "18px", "14px", "28px"),
+            sliderShape("3px", "2px", "3px", "1px", "2px"),
+            sliderMarks("2px", "14px", "1px", "7px"),
+            markAlone(),
+            currentKnob("1px solid -1px"),
             disabled(".4", "not-allowed"));
 }

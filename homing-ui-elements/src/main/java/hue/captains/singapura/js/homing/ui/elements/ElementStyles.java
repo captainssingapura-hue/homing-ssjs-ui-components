@@ -180,7 +180,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The slider: a row of label, rail and readout — {@code Control.Slider} for its air and its gap. */
     public record el_slider() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Control.Slider.class, Size.Inset.class), of(Control.Slider.class, Size.Gap.class), of(Body.class, Color.Ink.class)); }
         @Override public String body() { return """
             display: flex;
             align-items: center;
@@ -207,22 +206,16 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * {@code --sl-span} — and read by the parts that draw them.
      */
     public record el_slider_rail() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Control.Slider.class, Size.Extent.class), of(Interactive.class, Affordance.Cursor.class)); }
         @Override public String body() { return """
             position: relative;
             flex: none;
             touch-action: none;
-            user-select: none;
             """;
         }
     }
 
     /** The track: the groove, sunk, across the rail at its middle. */
     public record el_slider_track() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Slider.Track.class, Size.Extent.class), of(Control.Slider.Track.class, Shape.Corner.class), of(Control.Slider.Track.class, Shape.Rule.class),
-                           of(Recessed.class, Color.Surface.class), of(Muted.class, Color.Edge.class));
-        }
         @Override public String body() { return """
             position: absolute;
             inset-inline: 0;
@@ -238,7 +231,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     /** The fill: the track's inside from the detent to the value, in the primary surface. */
     public record el_slider_fill() implements CssClass<ElementStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-from"), new CssVar("--sl-span")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class)); }
         @Override public String body() { return """
             position: absolute;
             top: 0;
@@ -252,13 +244,11 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     /** The detent: the notch at the rest, drawn in muted ink at the design's width and height. */
     public record el_slider_detent() implements CssClass<ElementStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-rest")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Detent.class, Size.Extent.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
             position: absolute;
             top: 50%;
             left: var(--sl-rest, 0%);
             translate: -50% -50%;
-            background-color: currentColor;
             pointer-events: none;
             """;
         }
@@ -272,17 +262,12 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      */
     public record el_slider_knob() implements CssClass<ElementStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-value")); }
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Slider.Knob.class, Size.Extent.class), of(Control.Slider.Knob.class, Shape.Rule.class), of(Control.class, Color.Edge.class),
-                           of(Dragging.class, Affordance.Cursor.class), of(Interactive.class, Motion.Ease.class));
-        }
         @Override public String body() { return """
             position: absolute;
             top: 50%;
             left: var(--sl-value, 0%);
             translate: -50% -50%;
             box-sizing: border-box;
-            outline: none;
             """;
         }
     }
@@ -296,11 +281,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * mark.
      */
     public record el_slider_face() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Slider.Knob.class, Shape.Corner.class), of(Control.Slider.Knob.class, Shape.Clip.class), of(Control.Slider.Knob.class, Effect.Opacity.class),
-                           of(Control.class, Shape.Rule.class), of(Raised.class, Color.Surface.class), of(Control.class, Color.Edge.class), of(Raised.class, Shape.Shadow.class),
-                           of(Interactive.class, Motion.Ease.class));
-        }
         @Override public String body() { return """
             position: absolute;
             inset: 0;
@@ -311,7 +291,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The mark on the knob: an {@code Icon}, centred over the face, at the size the design gives a knob's mark — the knob's own, when it is the knob. */
     public record el_slider_mark() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Control.Slider.Knob.class, Type.Scale.class)); }
         @Override public String body() { return """
             position: absolute;
             top: 50%;
@@ -319,24 +298,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
             translate: -50% -50%;
             """;
         }
-    }
-
-    /** The knob in the hand: the dragged word's lift, on the box, so the face and the mark rise together. */
-    public record el_slider_held() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Dragging.class, Motion.Transform.class)); }
-        @Override public String body() { return ""; }
-    }
-
-    /** The face in the hand: the dragged word's shadow — nothing, when the face is not there. */
-    public record el_slider_face_held() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Dragging.class, Shape.Shadow.class)); }
-        @Override public String body() { return ""; }
-    }
-
-    /** The knob of the current slider of a group: the ring drawn now, whether or not the knob has the focus. */
-    public record el_slider_knob_current() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
-        @Override public String body() { return ""; }
     }
 
     /** The readout after the rail: the value as the caller formats it, in a steady face, right-aligned. */
@@ -422,10 +383,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      */
     public record el_slider_cap() implements CssClass<ElementStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-value")); }
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Slider.Cap.class, Size.Extent.class), of(Control.Slider.Cap.class, Shape.Rule.class), of(Control.class, Color.Edge.class),
-                           of(Dragging.class, Affordance.Cursor.class), of(Interactive.class, Motion.Ease.class));
-        }
         @Override public String body() { return """
             position: absolute;
             left: 50%;
@@ -435,17 +392,12 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
             display: flex;
             align-items: center;
             justify-content: center;
-            outline: none;
             """;
         }
     }
 
     /** The cap's face: always there — a fader is held by its cap — raised, the control's rule and edge, the cap's corner. */
     public record el_slider_cap_face() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Slider.Cap.class, Shape.Corner.class), of(Control.class, Shape.Rule.class),
-                           of(Raised.class, Color.Surface.class), of(Control.class, Color.Edge.class), of(Raised.class, Shape.Shadow.class), of(Interactive.class, Motion.Ease.class));
-        }
         @Override public String body() { return """
             position: absolute;
             inset: 0;
@@ -456,7 +408,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The mark on the cap, upright again, at the size the design gives a cap's mark. */
     public record el_slider_cap_mark() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Control.Slider.Cap.class, Type.Scale.class)); }
         @Override public String body() { return """
             position: relative;
             writing-mode: horizontal-tb;
@@ -505,10 +456,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The tick's line: the design's tick, along and across the track, in muted ink. */
     public record el_slider_tick_line() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Tick.class, Size.Extent.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return """
             flex: none;
-            background-color: currentColor;
             """;
         }
     }
@@ -528,7 +477,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** A slider that is off: inert, and says so. */
     public record el_slider_off() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Inert.class, Effect.Opacity.class), of(Inert.class, Affordance.Cursor.class)); }
         @Override public String body() { return "pointer-events: none;"; }
     }
 
@@ -902,7 +850,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         return List.of(new el_button(), new el_button_primary(), new el_button_secondary(), new el_button_danger(), new el_button_warning(), new el_button_success(),
                        new el_button_plain(), new el_button_on(), new el_button_off(), new el_icon_button(), new el_text(),
                        new el_slider(), new el_slider_label(), new el_slider_rail(), new el_slider_track(), new el_slider_fill(), new el_slider_detent(),
-                       new el_slider_knob(), new el_slider_face(), new el_slider_mark(), new el_slider_held(), new el_slider_face_held(), new el_slider_knob_current(), new el_slider_readout(),
+                       new el_slider_knob(), new el_slider_face(), new el_slider_mark(), new el_slider_readout(),
                        new el_slider_vertical(), new el_slider_rail_vertical(), new el_slider_rail_ticked(), new el_slider_track_vertical(), new el_slider_fill_vertical(), new el_slider_detent_vertical(),
                        new el_slider_cap(), new el_slider_cap_face(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
                        new el_slider_off(),

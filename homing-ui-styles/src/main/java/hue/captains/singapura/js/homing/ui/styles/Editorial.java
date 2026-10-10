@@ -36,6 +36,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
+import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
+import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
 
 /** Editorial, the house's own: a serif voice, a fine rule, a soft lift under the hand. */
 public record Editorial() implements DesignStyle, Derives<Base> {
@@ -83,5 +87,10 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             veil("brightness(0.45) blur(2px)"),
             waysEase("color 140ms ease"),
             measure("8px", "18px", "8px", "56px", "1.3"),
+            // ── its slider a hairline groove, the knob its grip alone, a fader's cap squared off ──
+            sliderMeasure("220px", "24px", "4px", "16px", "14px", "28px"),
+            sliderShape("999px", "1px", "50%", "1.5px", "3px"),
+            markAlone(),
+            currentKnob("2px solid -2px"),
             disabled(".45", "default"));
 }

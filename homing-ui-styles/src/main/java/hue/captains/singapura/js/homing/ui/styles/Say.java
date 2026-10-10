@@ -262,6 +262,70 @@ final class Say {
         return List.of(rest(PANE_THUMB, BORDER, "border-width: " + width + "; border-style: solid;"));
     }
 
+    // ── a slider: its rail, the groove its knob runs in, the fill, the detent and its ticks, and the knob -
+    //    every part flat, in every state; only colours change ──
+
+    static final Taxon SLIDER = HouseControls.Slider.INSTANCE;
+    static final Taxon GROOVE = HouseMarks.Groove.INSTANCE;
+    static final Taxon FILL = HouseMarks.Fill.INSTANCE;
+    static final Taxon DETENT = HouseMarks.Detent.INSTANCE;
+    static final Taxon TICK = HouseMarks.Tick.INSTANCE;
+    static final Taxon KNOB = HouseControls.Knob.INSTANCE;
+
+    /** How a slider's lengths grow with its size: by 1.3 a unit, as they always have. */
+    private static final String SLIDER_GROWTH = "1.3";
+
+    private static String along(String inline, String block) {
+        return "inline-size: " + grows(inline, SLIDER_GROWTH) + "; block-size: " + grows(block, SLIDER_GROWTH) + ";";
+    }
+
+    /**
+     * A slider's measure in a style - each said along its track, then across, so a fader, whose
+     * rail is stood up, turns them with it: the rail's length and height, the groove's thickness,
+     * the knob's square, and a fader's cap - long across its track, low along it.
+     */
+    static List<Implementation<?>> sliderMeasure(String railLength, String railHeight, String groove, String knob, String capAlong, String capAcross) {
+        return List.of(rest(SLIDER, EXTENT, along(railLength, railHeight)),
+                       rest(GROOVE, EXTENT, "block-size: " + grows(groove, SLIDER_GROWTH) + ";"),
+                       when(KNOB, EXTENT, Map.of(State.REST, along(knob, knob), State.VERTICAL, along(capAlong, capAcross))));
+    }
+
+    /** A slider's lines and corners in a style: the groove's, the knob's, and a fader's cap's corner. */
+    static List<Implementation<?>> sliderShape(String grooveCorner, String grooveRule, String knobCorner, String knobRule, String capCorner) {
+        return List.of(rest(GROOVE, CORNER, "border-radius: " + grooveCorner + ";"),
+                       rest(GROOVE, BORDER, "border-width: " + grooveRule + "; border-style: solid;"),
+                       when(KNOB, CORNER, Map.of(State.REST, "border-radius: " + knobCorner + ";", State.VERTICAL, "border-radius: " + capCorner + ";")),
+                       rest(KNOB, BORDER, "border-width: " + knobRule + "; border-style: solid;"));
+    }
+
+    /** The marks on a slider's track: the detent - along the track, then across it - and a tick's line, the same way. */
+    static List<Implementation<?>> sliderMarks(String detentAlong, String detentAcross, String tickAlong, String tickAcross) {
+        return List.of(rest(DETENT, EXTENT, along(detentAlong, detentAcross)),
+                       rest(TICK, EXTENT, along(tickAlong, tickAcross)));
+    }
+
+    /** A knob that is its mark alone: its face drawn as nothing, the mark on the track, the ring still on its box. */
+    static List<Implementation<?>> markAlone() {
+        return List.of(rest(KNOB, OPACITY, "opacity: 0;"));
+    }
+
+    /** The knob of the slider a group has its keys on: ringed as a focused control is, whether or not it has the focus. */
+    static List<Implementation<?>> currentKnob(String focus) {
+        return List.of(when(KNOB, OUTLINE, Map.of(State.CURRENT, outline(focus))));
+    }
+
+    /** What every style's slider says alike: its room round the row and between its parts, no text taken by the hand, a knob grabbed and its mark's size; the detent and the ticks as most styles mark them. */
+    static List<Implementation<?>> sliderBase() {
+        var out = new ArrayList<Implementation<?>>(List.of(
+                rest(SLIDER, INSET, "padding-block: 4px; padding-inline: 0;"),
+                rest(SLIDER, GAP, "gap: 12px;"),
+                rest(SLIDER, Target.Affordance.Select.INSTANCE, "user-select: none;"),
+                rest(KNOB, SCALE, "font-size: " + grows("16px", SLIDER_GROWTH) + "; line-height: 1;"),
+                when(KNOB, CURSOR, Map.of(State.REST, "cursor: grab;", State.DRAGGING, "cursor: grabbing;"))));
+        out.addAll(sliderMarks("2px", "12px", "1px", "7px"));
+        return List.copyOf(out);
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {

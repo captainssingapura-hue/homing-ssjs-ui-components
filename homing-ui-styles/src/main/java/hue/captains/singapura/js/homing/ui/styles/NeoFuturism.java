@@ -34,6 +34,11 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
+import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
+import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
 
 /** Neo-futurism: a hairline, a lit rim that glows under the hand, a long eased glide. */
 public record NeoFuturism() implements DesignStyle, Derives<Base> {
@@ -80,5 +85,11 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
             // ── the veil behind a dialog: deep glass ──
             veil("blur(14px) saturate(1.4) brightness(0.7)"),
             measure("7px", "16px", "8px", "56px", "1.25"),
+            // ── its slider a fine wire, the knob its mark alone, the marks fine ──
+            sliderMeasure("240px", "22px", "2px", "18px", "12px", "26px"),
+            sliderShape("999px", "1px", "0", "1px", "2px"),
+            sliderMarks("1px", "10px", "1px", "6px"),
+            markAlone(),
+            currentKnob("1px solid -1px"),
             disabled(".4", "not-allowed"));
 }

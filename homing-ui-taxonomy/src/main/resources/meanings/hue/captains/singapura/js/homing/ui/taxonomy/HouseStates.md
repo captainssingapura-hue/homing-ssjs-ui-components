@@ -131,7 +131,15 @@ Where the page's keys are, as the keyboard's steward keeps them: away; a candida
 would come if the user confirmed; lent, here and handed to a control inside; or held, here and
 listened to.
 
+## Dragging
+
+Held by the user's hand and being moved, from the press that grabbed it until it is let go.
+
 ## Elevation
 
 How far off its own plane the component sits: flat, lifted towards the user or pressed in, its holder
 deciding what that says.
+
+## Orientation
+
+Which way a component laid along a line runs: across the page, or stood up, as a fader is.

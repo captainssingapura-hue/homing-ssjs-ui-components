@@ -35,6 +35,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
+import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
 
 /**
  * Sketchy: drawn by hand - a wobbling outline, a marker's rule, a tilt under the hand. Ink casts no
@@ -78,5 +82,10 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
             // ── no veil behind a dialog: the page stays as it is drawn; a way underlined, wavily, when pointed at ──
             waysMarked("text-decoration-line: underline; text-decoration-style: wavy; text-underline-offset: 3px;"),
             measure("8px", "16px", "8px", "56px", "1.35"),
+            // ── its slider drawn by hand, groove and knob alike, the marks in pen ──
+            sliderMeasure("220px", "26px", "5px", "18px", "15px", "30px"),
+            sliderShape("6px 4px 5px 7px / 4px 6px 7px 5px", "2px", "50% 45% 55% 50% / 45% 55% 50% 50%", "2px", "5px 3px 4px 6px / 3px 5px 6px 4px"),
+            sliderMarks("2px", "14px", "2px", "8px"),
+            currentKnob("2px dashed -3px"),
             disabled(".5", "not-allowed"));
 }

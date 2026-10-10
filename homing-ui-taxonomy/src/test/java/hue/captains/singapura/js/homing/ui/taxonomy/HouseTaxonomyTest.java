@@ -129,7 +129,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(15 + 54 + 21 + 91 + 8 + 20 + 7 + 14, nodes.size());
+        assertEquals(15 + 54 + 21 + 91 + 8 + 22 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
@@ -148,13 +148,14 @@ class HouseTaxonomyTest {
         assertEquals(List.of("pointing", "dragging", "editing", "asking", "loading", "timing", "scrolling"),
                 HOUSE.events().branches().stream().map(b -> b.name().value()).toList());
         assertEquals(HouseEvents.ALL, HOUSE.events().types());
-        assertEquals(List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Keyboard.INSTANCE),
-                HOUSE.states().children(HouseStates.Interaction.INSTANCE), "what the hand and the keys do, folded into the tree");
+        assertEquals(List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE),
+                HOUSE.states().children(HouseStates.Interaction.INSTANCE), "what the hand and the keys do, folded into the tree - the hand's drag among them");
         assertEquals(List.of("true", "false"), tokens(HouseStates.Enabled.INSTANCE), "enabled at rest");
         assertEquals(List.of("false", "true"), tokens(HouseStates.Pressed.INSTANCE), "pressed only when pressed");
         assertEquals(List.of("none", "some", "all"), tokens(HouseStates.Coverage.INSTANCE), "the mixed checkbox's, a type of its own");
         assertEquals(List.of("away", "candidate", "lent", "held"), tokens(HouseStates.Keyboard.INSTANCE));
         assertEquals(List.of("flat", "elevated", "sunken"), tokens(HouseStates.Elevation.INSTANCE));
+        assertEquals(List.of("horizontal", "vertical"), tokens(HouseStates.Orientation.INSTANCE), "laid along, unless stood up");
     }
 
     private static List<String> tokens(hue.captains.singapura.js.homing.component.taxonomy.StateType<?> type) {

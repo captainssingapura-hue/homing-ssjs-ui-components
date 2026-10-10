@@ -36,6 +36,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LABEL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.READOUT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.WORDMARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderShape;
+import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
+import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
 
 /** Neo-brutalism: square, a heavy rule, a hard offset shadow, and a press that drops into it. */
 public record NeoBrutalism() implements DesignStyle, Derives<Base> {
@@ -82,5 +86,10 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
             // ── the veil behind a dialog: the page drained of colour, hard ──
             veil("grayscale(1) contrast(1.4)"),
             measure("10px", "20px", "10px", "64px", "1.5"),
+            // ── its slider a thick ruled bar, the knob a square block, the marks heavy ──
+            sliderMeasure("240px", "28px", "10px", "20px", "16px", "32px"),
+            sliderShape("0", "3px", "0", "3px", "0"),
+            sliderMarks("3px", "18px", "2px", "8px"),
+            currentKnob("3px solid -3px"),
             disabled(".4", "not-allowed"));
 }

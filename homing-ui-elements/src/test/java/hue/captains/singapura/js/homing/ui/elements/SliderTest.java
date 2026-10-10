@@ -31,7 +31,7 @@ class SliderTest extends JsModuleTestBase {
                              remove: function () { for (var i = 0; i < arguments.length; i++) classes.delete(arguments[i]); },
                              contains: function (c) { return classes.has(c); }, toggle: function (c, f) { if (f) classes.add(c); else classes.delete(c); } },
                 appendChild: function (c) { this.children.push(c); c.parentNode = this; return c; },
-                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; }, removeAttribute: function (k) { delete attrs[k]; },
+                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; }, removeAttribute: function (k) { delete attrs[k]; }, hasAttribute: function (k) { return k in attrs; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 removeEventListener: function (t, fn) { var l = this.listeners[t] || []; var i = l.indexOf(fn); if (i >= 0) l.splice(i, 1); },
                 getBoundingClientRect: function () { return this.rect; },
@@ -41,7 +41,12 @@ class SliderTest extends JsModuleTestBase {
                 has: function (c) { return classes.has(c); }, attr: function (k) { return attrs[k]; }, prop: function (k) { return props[k]; }, listening: function (t) { return (this.listeners[t] || []).length; } };
             return node;
         }
-        function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function (o) { this.owner = String(o); } }; }
+        // a maker is single-use, and known for one: the texts are made by their own makers
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
+        function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; },
+                                             elementMaker: function (n) { var self = this, mk = function (tag) { makers.delete(mk); return self.createElement(n, tag); }; makers.add(mk); return mk; },
+                                             createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function (o) { this.owner = String(o); } }; }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); }, size: function (e, s) { e.size = s; }, extent: function () {}, aspect: function () {} };
@@ -64,6 +69,7 @@ class SliderTest extends JsModuleTestBase {
         js.eval("js", "var ic_base = 'ic_base', ICONS = { grip: 'ic_grip', size: 'ic_size', aspect: 'ic_aspect', extent: 'ic_extent', level: 'ic_level' };");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/SliderScaleModule.js");
         loadModule(MODULE);
         js.eval("js", TextsInJs.withCss(SHIM));
     }
@@ -81,6 +87,15 @@ class SliderTest extends JsModuleTestBase {
         assertEquals("-1,1,0,0.0,The tabs' size", eval("[knob.attr('aria-valuemin'), knob.attr('aria-valuemax'), knob.attr('aria-valuenow'), knob.attr('aria-valuetext'), knob.attr('aria-label')].join(',')").asString());
         assertEquals("0.0", eval("readout.textContent").asString());
         assertTrue(eval("detent.has('el_slider_detent') && knob.has('el_slider_knob')").asBoolean());
+        // its look is the house's: each part worn as the slider casts it, the knob's box and face sharing its casting's targets
+        assertTrue(eval("s.root.has('slider__size-inset') && !s.root.has('slider__size-extent') && rail.has('slider__size-extent') && rail.has('slider__affordance-cursor')").asBoolean(),
+                "the slider's row its room, its rail its length and the hand");
+        assertTrue(eval("rail.children[0].has('groove_span__color-background') && rail.children[0].children[0].has('fill_level__color-background')").asBoolean(), "the groove as its span, the fill as its level");
+        assertTrue(eval("detent.has('detent_rest__color-background') && detent.has('detent__color-background--dragging')").asBoolean(), "the detent as its rest, shown while dragged");
+        assertTrue(eval("knob.has('knob_thumb__size-extent') && knob.has('knob_thumb__shape-outline') && knob.has('knob__size-extent--vertical') && !knob.has('knob_thumb__color-background')").asBoolean(),
+                "the knob's box its size - a cap's when stood up - and its ring");
+        assertTrue(eval("face.has('knob_thumb__color-background') && face.has('knob_thumb__shape-corner') && face.has('knob__shape-corner--vertical') && !face.has('knob_thumb__shape-outline')").asBoolean(),
+                "its face the ground, the edge and the corner");
         assertTrue(eval("mark.has('ic_base') && mark.has('ic_grip')").asBoolean(), "a grip on the knob unless the slider says what it sets");
         assertEquals("grip", eval("s.icon()").asString());
         eval("s.icon('size');");
@@ -101,7 +116,8 @@ class SliderTest extends JsModuleTestBase {
         // the rail is 200px from 100: a press at 250 is three quarters along → 0.5 on the axis
         eval("log = []; var down = rail.fire('pointerdown', { button: 0, pointerId: 3, clientX: 250 });");
         assertEquals("capture:3 in:0.5 focus:div", log(), "captured at the press, the value set live, the knob focused");
-        assertTrue(eval("down.defaulted && knob.has('el_slider_held')").asBoolean());
+        assertTrue(eval("down.defaulted && knob.hasAttribute('data-dragging') && face.hasAttribute('data-dragging') && detent.hasAttribute('data-dragging')").asBoolean(),
+                "dragging: the knob, its face, and the detent - shown only now");
         assertEquals("75.000%", eval("rail.prop('--sl-value')").asString());
         eval("log = []; rail.fire('pointermove', { clientX: 206 });");
         assertEquals("in:0", log(), "206 is 0.06 on the axis: within the detent's bite of six tenths of a step, so it rests at nought");
@@ -111,7 +127,7 @@ class SliderTest extends JsModuleTestBase {
         assertEquals("", log(), "the same value again is nothing");
         eval("log = []; rail.fire('pointerup', {});");
         assertEquals("change:0.1", log(), "released: the change, once, since the value moved from the press");
-        assertFalse(eval("knob.has('el_slider_held')").asBoolean());
+        assertFalse(eval("knob.hasAttribute('data-dragging') || face.hasAttribute('data-dragging') || detent.hasAttribute('data-dragging')").asBoolean(), "let go: no part dragging, the detent hidden");
         assertEquals("0", eval("String(rail.listening('pointermove'))").asString(), "the hand's listeners are gone");
         eval("log = []; rail.fire('pointerdown', { button: 0, pointerId: 4, clientX: 220 }); rail.fire('pointermove', { clientX: 220 }); rail.fire('pointerup', {});");
         assertEquals("capture:4 in:0.2 focus:div change:0.2", log());
@@ -174,7 +190,7 @@ class SliderTest extends JsModuleTestBase {
             """);
         assertTrue(eval("f.root.has('el_slider_vertical') && vr.has('el_slider_rail_vertical') && vr.has('el_slider_rail_ticked')").asBoolean());
         assertTrue(eval("vk.has('el_slider_cap') && !vk.has('el_slider_knob') && vk.children[0].has('el_slider_cap_face') && vk.children[1].has('el_slider_cap_mark') && vk.children[1].has('ic_level')").asBoolean(), "the cap, its face, its mark");
-        assertEquals("vertical", eval("vk.attr('aria-orientation')").asString());
+        assertEquals("vertical,vertical", eval("vk.attr('aria-orientation') + ',' + vk.children[0].attr('aria-orientation')").asString(), "the cap stood up, its box and its face: its style's size and corner");
         assertEquals("4", eval("String(vticks.length)").asString(), "a tick per value on the scale; one off it is dropped");
         assertEquals("100.000%,85.714%,57.143%,0.000%", eval("vticks.map(function (t) { return t.prop('--sl-tick'); }).join(',')").asString(), "each at its fraction of the length");
         assertTrue(eval("vticks[0].has('el_slider_tick_vertical') && vticks[0].children[0].has('el_slider_tick_line_vertical') && vticks[0].children[1].textContent === '+10'").asBoolean());
@@ -191,7 +207,8 @@ class SliderTest extends JsModuleTestBase {
     @Test
     void offIsInert_theSizeReachesEveryPart_disposeDissolves() {
         eval("s.setOn(false); log = [];");
-        assertTrue(eval("s.root.has('el_slider_off') && knob.attr('aria-disabled') === 'true' && knob.attr('tabindex') === '-1'").asBoolean());
+        assertTrue(eval("s.root.has('el_slider_off') && [s.root, rail, knob].every(function (e) { return e.attr('aria-disabled') === 'true'; }) && knob.attr('tabindex') === '-1'").asBoolean(),
+                "off: the slider, its rail and its knob say so, which their looks are off by");
         eval("rail.fire('pointerdown', { button: 0, pointerId: 1, clientX: 300 }); knob.fire('keydown', { key: 'End' });");
         assertEquals("", log(), "off: neither the hand nor the keys");
         eval("s.setOn(true); s.size(0.5);");

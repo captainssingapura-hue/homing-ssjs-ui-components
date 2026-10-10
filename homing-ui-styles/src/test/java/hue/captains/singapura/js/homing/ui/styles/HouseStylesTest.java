@@ -57,6 +57,10 @@ class HouseStylesTest {
             "link motion-ease", "crumb motion-ease", "link type-decoration", "crumb type-decoration", "scrim effect-filter", "separator shape-border",
             "pane-thumb shape-border");
 
+    /** What every style decides for its slider: its measure, its lines and corners, and how its knob is ringed when it is a group's current one; its marks and a knob that is its mark alone where it says so. */
+    private static final Set<String> SLIDER = Set.of("slider size-extent", "groove size-extent", "groove shape-corner", "groove shape-border",
+            "knob size-extent", "knob shape-corner", "knob shape-border", "knob shape-outline", "knob effect-opacity", "detent size-extent", "tick size-extent");
+
     /** What every style decides for its text, at least: the body's face, and the display's where a text is set apart. */
     private static final Set<String> TEXT_SET_APART = Set.of(
             "text type-face", "heading type-face", "heading type-weight", "kicker type-face", "kicker type-weight", "kicker type-treatment",
@@ -80,9 +84,10 @@ class HouseStylesTest {
             var allowed = new TreeSet<>(BUTTON_BRANCH);
             allowed.addAll(TEXT_BRANCH);
             allowed.addAll(WAYS_MARKS_AND_VEIL);
+            allowed.addAll(SLIDER);
             var beyond = new TreeSet<>(answered);
             beyond.removeAll(allowed);
-            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil and a pane's thumbnail's rule: " + beyond);
+            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil, a pane's thumbnail's rule and its slider: " + beyond);
             var missing = new TreeSet<>(BUTTON_BRANCH);
             missing.removeAll(answered);
             left.put(s.token(), missing);
@@ -121,11 +126,12 @@ class HouseStylesTest {
         expected.addAll(Set.of("readout type-treatment", "badge type-treatment", "badge size-inset", "badge shape-corner",
                 "pill type-treatment", "pill size-inset", "pill shape-corner"));
         expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph", "pane-thumb shape-border"));
+        expected.addAll(Set.of("slider size-inset", "slider size-gap", "slider affordance-select", "knob type-scale", "knob affordance-cursor", "detent size-extent", "tick size-extent"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
                 + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash;"
-                + " a pane's thumbnail ruled round with a hairline");
+                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");
