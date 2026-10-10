@@ -3,9 +3,11 @@
 //   params: { name: "theme", label, summary? }
 //
 // Two listboxes from /themes: the designs, and the colours the chosen design
-// is offered in. A pick is field.set(slug) — the steward's remember — and the
-// CSS manager, which follows the store, switches every sheet; the field
-// redraws on the same change, so the marks and the note move together.
+// is offered in. A design picked keeps the colours worn now when they fit it
+// (its own, or a palette that says it suits it), else takes its own colours.
+// A pick is field.set(slug) — the steward's remember — and the CSS manager,
+// which follows the store, switches every sheet; the field redraws on the
+// same change, so the marks and the note move together.
 // =============================================================================
 
 const _owner = Object.freeze({ toString: () => "themeWidget" });
@@ -58,8 +60,10 @@ class ThemeWidget {
         listsBranch.activate(_owner);
         var at = this._decompose(worn) || { base: reg.themes[0], colour: null };
 
+        // a design picked keeps the colours worn now when they fit it, else takes its own
+        var wornPalette = at.colour ? at.colour.palette : null;
         this._field.body.appendChild(this._list(listsBranch, "designs", "Designs", reg.themes.map(function (t) {
-            return { value: t.slug, label: t.label, note: t.inspiration, selected: t.slug === at.base.slug };
+            return { value: ThemeWidget._switchTo(t, wornPalette), label: t.label, note: t.inspiration, selected: t.slug === at.base.slug };
         })));
         var offered = at.base.colours.filter(function (c) { return c.own || c.fits; });
         if (offered.length > 1) {
@@ -71,6 +75,16 @@ class ThemeWidget {
                 return { value: c.slug, label: p.label, note: c.own ? "the design's own" : p.inspiration, selected: c.slug === worn };
             })));
         }
+    }
+
+    /**
+     * The theme a design is switched to: the design in the palette worn now, when that palette fits it - its own,
+     * or one that says it suits it - else the design in its own colours.
+     */
+    static _switchTo(design, wornPalette) {
+        var kept = wornPalette == null ? null
+                 : design.colours.filter(function (c) { return c.palette === wornPalette && (c.own || c.fits); })[0];
+        return kept ? kept.slug : design.slug;
     }
 
     _list(b, key, ariaLabel, options) {

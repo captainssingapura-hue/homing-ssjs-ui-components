@@ -24,6 +24,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -160,16 +161,41 @@ class HouseStylesTest {
     }
 
     @Test
-    void aPageIsWornInTheStyleAndPaletteItsSlugNames_theDefaultsOtherwise() {
+    void aPageIsWornInTheStyleAndPaletteItsSlugNames_theStylesOwnOtherwise() {
         var styles = HouseStyles.INSTANCE;
-        assertEquals("sketchy in harbour", styles.dressed("sketchy").toString());
+        assertEquals("sketchy in marker", styles.dressed("sketchy").toString(), "a style alone is worn in its own palette");
+        assertEquals("glassmorphism in frost", styles.dressed("glassmorphism").toString());
+        assertEquals("neo-brutalism in neo-brutalism", styles.dressed("neo-brutalism").toString(), "the old design's own colours, a palette of their own");
         assertEquals("sketchy in forest", styles.dressed("sketchy_forest").toString());
-        assertEquals("sketchy in harbour", styles.dressed("sketchy_sunset").toString(), "a palette the house has not yet: the style's own");
+        assertEquals("glassmorphism in harbour", styles.dressed("glassmorphism_harbour").toString(), "any style in any palette, asked for by name");
+        assertEquals("sketchy in marker", styles.dressed("sketchy_sunset").toString(), "a palette the house has not yet: the style's own");
         assertEquals("editorial in harbour", styles.dressed("flat-morphism").toString(), "retired: the default");
         assertEquals("editorial in forest", styles.dressed("flat-morphism_forest").toString(), "the default style, in the palette named");
         assertEquals("editorial in harbour", styles.dressed(null).toString());
         assertEquals("neumorphism_forest", styles.slug(styles.dressed("neumorphism_forest")));
-        assertEquals(14, HouseStyles.THEMES.size(), "seven styles, each in two palettes");
+        assertEquals("neumorphism", styles.slug(styles.dressed("neumorphism_clay")), "a style in its own palette is named alone");
+        assertEquals(56, HouseStyles.THEMES.size(), "seven styles, each in eight palettes");
+        assertEquals("editorial", HouseStyles.THEMES.keySet().iterator().next(), "the default first");
+        for (DesignStyle s : HouseStyles.STYLES)
+            assertTrue(HouseStyles.PALETTES.contains(styles.own(s)), s.token() + " has a palette of its own among the house's");
+    }
+
+    /**
+     * A palette says which styles it suits - as the old palettes said which designs - and a change of
+     * style keeps the palette worn when it suits the new style, else takes the new style's own.
+     */
+    @Test
+    void aChangeOfStyle_keepsThePaletteWhenItSuits_elseTakesTheStylesOwn() {
+        var styles = HouseStyles.INSTANCE;
+        var editorialInForest = styles.dressed("editorial_forest");
+        assertEquals("sketchy in forest", styles.switchTo(editorialInForest, Sketchy.INSTANCE).toString(), "Forest suits Sketchy: kept");
+        assertEquals("glassmorphism in frost", styles.switchTo(editorialInForest, Glassmorphism.INSTANCE).toString(), "Forest does not suit Glassmorphism: its own");
+        assertEquals("neo-futurism in frost", styles.switchTo(styles.dressed("glassmorphism"), NeoFuturism.INSTANCE).toString(), "Frost suits Neo-futurism");
+        assertEquals("retro-futurism in synthwave", styles.switchTo(styles.dressed("editorial"), RetroFuturism.INSTANCE).toString(), "Harbour does not suit Retro-futurism");
+        assertEquals("editorial in harbour", styles.switchTo(styles.dressed("sketchy_harbour"), Editorial.INSTANCE).toString(), "a style's own always suits it");
+        assertTrue(styles.fits(Neumorphism.INSTANCE, Harbour.INSTANCE));
+        assertFalse(styles.fits(Glassmorphism.INSTANCE, Harbour.INSTANCE));
+        assertEquals(java.util.Set.of(), NeoBrutalismColours.INSTANCE.suits(), "the old design offered its own colours to no other");
     }
 
     /**
@@ -179,7 +205,8 @@ class HouseStylesTest {
      */
     @Test
     void theHousePalettes_answerAlike_andAStyleCastsInWhicheverItIsWornIn() {
-        assertEquals(classes(Harbour.INSTANCE.implementations()), classes(Forest.INSTANCE.implementations()), "one rule, two sets of seeds");
+        for (var p : HouseStyles.PALETTES)
+            assertEquals(classes(Harbour.INSTANCE.implementations()), classes(p.implementations()), "one rule, eight sets of seeds: " + p.token());
         String harbour = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("editorial"), "editorial").css();
         String forest = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("editorial_forest"), "editorial_forest").css();
         String shadow = "/* from editorial: button__shape-shadow--hover */\n.primary-button__shape-shadow--hover {\n";
