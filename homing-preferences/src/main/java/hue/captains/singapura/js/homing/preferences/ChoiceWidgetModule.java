@@ -18,7 +18,7 @@ import java.util.List;
  * note, drawn as a listbox; the chosen one is written through the steward.
  * Params: {@code name, label, summary?, default?, options: [{value, label, note?}]}.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 16,
         reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ChoiceWidgetModule() implements Widget<Widget._None, ChoiceWidgetModule>, ImplFor<HousePreferences.ChoiceWidget> {
 

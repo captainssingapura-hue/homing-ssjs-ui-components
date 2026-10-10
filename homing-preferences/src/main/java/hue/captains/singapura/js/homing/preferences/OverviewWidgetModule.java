@@ -25,7 +25,7 @@ import java.util.List;
  * {@code label, summary?, settings: [{name, label}]} — the settings below
  * the group, flattened by the site when it declares the tree.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 27,
         reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule>, ImplFor<HousePreferences.OverviewWidget> {
 

@@ -22,7 +22,7 @@ import java.util.List;
  * {@code onSelect(fn)}, {@code select(path)} — so a real tree view is one
  * provider away. Params: {@code tree, labels}, as the registry stamps them.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 13,
         reason = "It makes its own elements, places elements, wears classes of its own, writes attributes, writes styles and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ListMasterWidgetModule() implements Widget<Widget._None, ListMasterWidgetModule>, ImplFor<HousePreferences.ListMasterWidget> {
 

@@ -17,7 +17,7 @@ import java.util.List;
  * A preference that is a number in a range: a slider with a readout.
  * Params: {@code name, label, summary?, default?, min, max, step?, unit?}.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 7,
         reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own and writes attributes: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ScaleWidgetModule() implements Widget<Widget._None, ScaleWidgetModule>, ImplFor<HousePreferences.ScaleWidget> {
 

@@ -76,7 +76,7 @@ class ComponentsConformanceTest {
     void everyServedModuleKeepsItsLane() {
         List<Finding> raw = new ConformanceEngine(ComponentsConformance.POLICY, new ServedModuleRenderer())
                 .checkCrates(ComponentsConformance.TOP_LEVEL);
-        assertEquals(List.of(), DeclaredDebts.INSTANCE.paid(ComponentsConformance.TOP_LEVEL, raw), "a debt that is paid: remove its @ConformanceDebt");
+        assertEquals(List.of(), DeclaredDebts.INSTANCE.unbalanced(ComponentsConformance.TOP_LEVEL, raw), "a debt not as declared - owed exactly, never more");
         List<GradedFinding> graded = ComponentsConformance.grader(ALLOW_PRE_EXISTING).grade(raw);
         List<GradedFinding> errors = graded.stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors, () -> "conformance ERRORS (" + errors.size() + "):\n"
