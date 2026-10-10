@@ -1,9 +1,10 @@
 // =============================================================================
 // SimpleComponent — the standard of a SIMPLE component (Implementing Components,
-// the guide): one element, which it owns no more than a value owns anything. Its
-// companion makes the element; its owner asks for it, hands it in, and places
-// it. (A COMPOSED component takes a branch of the DOM-ops party and mints its own
-// tree on it: another standard.) A simple component is three:
+// the guide): one element, which it owns no more than a value owns anything. It
+// makes the element itself, of its own tag, with the single-use maker its owner
+// hands it - branch.elementMaker(name) - so its owner never holds a bare element;
+// its owner places it. (A COMPOSED component takes a branch of the DOM-ops party
+// and mints its own tree on it: another standard.) A simple component is three:
 //
 //   the component  its state - one value on each axis, kept here and nowhere
 //                  else, changed only by its setters - its degrees, its role,
@@ -43,8 +44,10 @@
 // an accessor for each axis, degree and word, a setter for each event, and its
 // companion beside it: const PrimaryButtonFactory = new SimpleComponentFactory(PrimaryButton).
 //
-//   var el = PrimaryButtonFactory.create(branch, "save");
-//   var b = new PrimaryButton(el, props, role?)
+//   var b = new PrimaryButton(branch.elementMaker("save"), props, role?)
+//     make    the maker its owner's branch issues: it makes the <TAG>, once. An
+//             element its companion made is still taken, the old way, until every
+//             owner hands a maker; a widget may not (widget-draws-only-components)
 //     props   an axis, a degree, a word or a part by its name, and nothing else
 //     role    one of ROLE, Standalone unless given; refused unless the leaf is cast in it
 //   .el  .role
@@ -53,10 +56,16 @@
 var _COMPONENT_DEGREE_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
 
 class SimpleComponent {
-    constructor(el, props, role) {
+    constructor(make, props, role) {
         var Leaf = new.target, self = this;
         if (!Leaf.LEAF || !Leaf.BEHAVIOR) throw new Error("[" + Leaf.name + "] is no leaf: a simple component is made as one of its leaves");
-        if (!el || String(el.tagName).toLowerCase() !== Leaf.TAG) throw new Error("[" + Leaf.name + "] wants the element its companion makes, <" + Leaf.TAG + ">");
+        var el = make;   // an element its companion made: the old way, until every owner hands a maker
+        if (typeof make === "function") {
+            if (!DomOpsParty.isElementMaker(make))
+                throw new Error("[" + Leaf.name + "] takes the maker its owner's branch issues - branch.elementMaker(name) - and no other function");
+            el = make(Leaf.TAG);
+        }
+        if (!el || String(el.tagName).toLowerCase() !== Leaf.TAG) throw new Error("[" + Leaf.name + "] wants the maker its owner's branch issues - branch.elementMaker(name) - and makes its own <" + Leaf.TAG + ">");
         var p = props || {}, axes = Leaf.AXES || {}, degrees = Leaf.DEGREES || [], words = Leaf.WORDS || [], parts = Leaf.PARTS || [];
         for (var k in p) if (!(k in axes) && degrees.indexOf(k) < 0 && words.indexOf(k) < 0 && parts.indexOf(k) < 0)
             throw new Error("[" + Leaf.name + "] has no axis, degree, word or part '" + k + "'"
@@ -168,7 +177,7 @@ class SimpleComponentFactory {
     /** The type of element it makes. */
     get tag() { return this._tag; }
 
-    /** An element for the component, minted on the owner's branch under the owner's name. */
+    /** An element for the component, minted on the owner's branch under the owner's name: the old way - an owner hands a maker now (branch.elementMaker). */
     create(branch, name) { return branch.createElement(name, this._tag); }
 }
 

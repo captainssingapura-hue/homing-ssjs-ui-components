@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 
 import java.util.List;
 
@@ -36,6 +37,7 @@ public record SimpleComponentModule() implements DomModule<SimpleComponentModule
         return ImportsFor.<SimpleComponentModule>builder()
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE(), new CastingsModule.CASTINGS()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DomOpsPartyModule.DomOpsParty()), DomOpsPartyModule.INSTANCE))
                 .build();
     }
 
