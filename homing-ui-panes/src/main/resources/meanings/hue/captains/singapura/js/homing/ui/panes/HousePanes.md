@@ -4,10 +4,6 @@
 
 Brings forward one of the things a pane holds, and stands for it among the others.
 
-## PaneThumb
-
-Picks one pane by a small picture of where it is.
-
 ## PaneThumbs
 
 Shows where the panes are, small, so the user can pick one by its place.

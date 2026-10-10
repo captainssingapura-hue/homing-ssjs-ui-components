@@ -32,7 +32,7 @@ class UiSplitGridCrateConformanceTest {
     @Test
     void theSplitterPaintsNothingOfItsOwn() {
         var worn = Deployment.wornBy(List.of(SplitGridStyles.INSTANCE));
-        assertTrue(worn.size() >= 5, "the divider classes wear a handful of pairs; found " + worn.size());
+        assertTrue(worn.size() >= 4, "the divider classes wear a handful of pairs - the mirror none, its look the house's; found " + worn.size());
         for (CssClass<SplitGridStyles> c : SplitGridStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color"),

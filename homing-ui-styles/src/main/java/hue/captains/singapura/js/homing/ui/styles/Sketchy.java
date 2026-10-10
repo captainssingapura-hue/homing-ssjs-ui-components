@@ -25,6 +25,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
 import static hue.captains.singapura.js.homing.ui.styles.Say.separatorRule;
+import static hue.captains.singapura.js.homing.ui.styles.Say.thumbRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.waysMarked;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
@@ -71,8 +72,9 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
             type(LABEL, null, "700", null),
             type(READOUT, DISPLAY, "700", "font-variant-numeric: tabular-nums;"),
             type(WORDMARK, DISPLAY, null, null),
-            // ── its separator ruled at two pixels, as its pen draws ──
+            // ── its separator and a pane's thumbnail ruled at two pixels, as its pen draws ──
             separatorRule("2px"),
+            thumbRule("2px"),
             // ── no veil behind a dialog: the page stays as it is drawn; a way underlined, wavily, when pointed at ──
             waysMarked("text-decoration-line: underline; text-decoration-style: wavy; text-underline-offset: 3px;"),
             measure("8px", "16px", "8px", "56px", "1.35"),

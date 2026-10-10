@@ -16,9 +16,9 @@ class Delimiter extends SimpleComponent {
     static TAG = "span";
     static BEHAVIOR = MarkBehavior;
 
-    constructor(el, props, role) {
-        super(el, props, role);
-        el.setAttribute("aria-hidden", "true");
+    constructor(make, props, role) {
+        super(make, props, role);
+        this.el.setAttribute("aria-hidden", "true");
     }
 }
 

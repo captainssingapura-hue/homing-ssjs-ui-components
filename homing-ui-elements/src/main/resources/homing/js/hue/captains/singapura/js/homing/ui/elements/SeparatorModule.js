@@ -15,9 +15,9 @@ class Separator extends SimpleComponent {
     static TAG = "div";
     static BEHAVIOR = MarkBehavior;
 
-    constructor(el, props, role) {
-        super(el, props, role);
-        el.setAttribute("role", "separator");
+    constructor(make, props, role) {
+        super(make, props, role);
+        this.el.setAttribute("role", "separator");
     }
 }
 

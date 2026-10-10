@@ -19,13 +19,13 @@ class IconButton extends Button {
     static LEAF = "icon-button";
     static PARTS = Object.freeze(["icon"]);
 
-    constructor(el, props, role) {
+    constructor(make, props, role) {
         var icon = props ? props.icon : null;
         if (!(icon instanceof Icon)) throw new Error("[IconButton] its face is an Icon its caller makes and hands in: { icon }");
-        super(el, props, role);
+        super(make, props, role);
         this._icon = icon;
-        css.addClass(el, el_icon_button);   // its face laid out: the icon centred in its box, whatever the icon
-        el.appendChild(icon.el);
+        css.addClass(this.el, el_icon_button);   // its face laid out: the icon centred in its box, whatever the icon
+        this.el.appendChild(icon.el);
     }
 
     get icon() { return this._icon; }

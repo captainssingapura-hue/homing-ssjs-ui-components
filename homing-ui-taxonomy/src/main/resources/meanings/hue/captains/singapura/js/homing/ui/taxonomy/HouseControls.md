@@ -66,6 +66,10 @@ Sets a number along a scale, natively, with no more than the scale itself.
 
 Sets one value from a list that opens when asked and closes once picked.
 
+## PaneThumb
+
+Picks one pane by a small picture of where it is.
+
 ## Switch
 
 Sets a setting on or off, in one movement, and shows which it is.

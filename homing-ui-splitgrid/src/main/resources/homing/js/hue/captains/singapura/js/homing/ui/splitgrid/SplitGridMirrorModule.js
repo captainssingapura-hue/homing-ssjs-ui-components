@@ -1,12 +1,13 @@
 // =============================================================================
 // SplitGridMirror — the arrangement of a grid, drawn at a scale, with a cursor
-// the keyboard moves from cell to cell. A branch component: the caller makes
-// a sub-branch for it and hands it in; dispose() dissolves it. It never
-// touches the grid: the owner tells it the layout and the box, and it draws
-// them from the geometry — the same rectangles the grid has, scaled.
+// the keyboard moves from cell to cell. A control, and a branch component: the
+// caller makes a sub-branch for it and hands it in; dispose() dissolves it. It
+// never touches the grid: the owner tells it the layout and the box, and it
+// draws them from the geometry — the same rectangles the grid has, scaled.
 //
-//   new SplitGridMirror(branch, { host, scale?, dividerPx?, minPx?, onEvent?, keyboard?, keyboardId? })
+//   new SplitGridMirror(branch, { host, scale?, dividerPx?, minPx?, labelOf?, onEvent?, keyboard?, keyboardId? })
 //     host      where the mirror's box goes; scale 0.25 by default
+//     labelOf   (cellId) → the name a cell is drawn with; its id unless said
 //     keyboard  the page's KeyboardSteward: the mirror joins the keyboard party as
 //               keyboardId (its branch's name, unless said) and claims by the
 //               convention; without, its holder hands it the keys by mirror.key(ev)
@@ -15,7 +16,7 @@
 //   mirror.reflect(layout, box)  the grid's layout() and its box { w, h }: redrawn
 //   mirror.scale(s?)             read, or set and redraw
 //   mirror.cursor(id?)           read, or set: the cell the cursor is at, marked
-//                                Current here; reports CursorMoved(id, "call")
+//                                current here (aria-current); reports CursorMoved(id, "call")
 //   mirror.rects()               the geometry as drawn, unscaled
 //   mirror.key(ev)               a keydown from whoever holds the keys: an arrow moves the
 //                                cursor; true when taken. No keydown listener of its own
@@ -28,13 +29,22 @@
 // When the cell the cursor was at is gone after a reflect, the cursor goes to
 // the first cell, reported as "call". The owner decides what the cursor means
 // — the active pane, the one to switch to — and marks the real cell itself.
+//
+// Its look is the house's: the mirror wears its own casting, and each cell is a
+// pane's thumbnail - the picture of a pane to pick it by, cast as a choice -
+// with its name in a kicker. Its own classes place, and paint nothing: where
+// a cell is and how large, from the geometry, as variables the drawing sets.
 // `css` is injected with the styles import.
 // =============================================================================
 
 const _mirrorOwner = Object.freeze({ toString: () => "splitGridMirror" });
+/** A cell's leaf: a pane's thumbnail, which nothing realizes on its own - the mirror draws it here. */
+const _PANE_THUMB = Object.freeze({ LEAF: "pane-thumb" });
 var _KEYS = Object.freeze({ ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down" });
 
 class SplitGridMirror {
+    static LEAF = "split-grid-mirror";
+
     constructor(branch, opts) {
         if (!branch) throw new Error("[SplitGridMirror] a branch of its own is required");
         if (!opts || !opts.host) throw new Error("[SplitGridMirror] opts.host is required");
@@ -44,6 +54,8 @@ class SplitGridMirror {
         this._sink = typeof opts.onEvent === "function" ? opts.onEvent : null;
         this._scale = opts.scale == null ? 0.25 : Math.max(0.05, Math.min(1, Number(opts.scale) || 0.25));
         this._opts = { dividerPx: opts.dividerPx, minPx: opts.minPx };
+        this._labelOf = typeof opts.labelOf === "function" ? opts.labelOf : function (id) { return id; };
+        this._thumb = new Look(_PANE_THUMB, ROLE.CHOICE);
         this._layout = null;
         this._box = { w: 0, h: 0 };
         this._rects = { cells: {}, dividers: [] };
@@ -54,6 +66,7 @@ class SplitGridMirror {
 
         var el = branch.createElement("mirror", "div");
         css.addClass(el, sgm_root);
+        new Look(SplitGridMirror, ROLE.STANDALONE).wear(el);
         el.tabIndex = 0;
         el.setAttribute("role", "group");
         el.setAttribute("aria-label", "Layout");
@@ -131,9 +144,12 @@ class SplitGridMirror {
             var r = self._rects.cells[id];
             var box = self._drawing.createElement("cell-" + i, "div");   // the drawing's own name, from a count: two ids of one safe spelling are two boxes
             css.addClass(box, sgm_cell);
-            css.toggleClass(box, sgm_cell_current, id === self._cursor);
+            self._thumb.wear(box);
             box.setAttribute("data-cell", id);
-            box.setAttribute("aria-current", id === self._cursor ? "true" : "false");
+            SplitGridMirror._mark(box, id === self._cursor);
+            var name = new Kicker(self._drawing.elementMaker("cell-" + i + "-name"), { text: String(self._labelOf(id)) }, ROLE.NAME);
+            css.addClass(name.el, sgm_name);
+            box.appendChild(name.el);
             box.style.setProperty("--sgm-x", Math.round(r.x * s) + "px");
             box.style.setProperty("--sgm-y", Math.round(r.y * s) + "px");
             box.style.setProperty("--sgm-w", Math.max(1, Math.round(r.w * s)) + "px");
@@ -149,11 +165,14 @@ class SplitGridMirror {
         if (id === this._cursor) return;
         var self = this;
         this._cursor = id;
-        this._cells.forEach(function (box, cellId) {
-            css.toggleClass(box, sgm_cell_current, cellId === id);
-            box.setAttribute("aria-current", cellId === id ? "true" : "false");
-        });
+        this._cells.forEach(function (box, cellId) { SplitGridMirror._mark(box, cellId === id); });
         if (id !== null) this._fire(SplitGridEvents.CursorMoved(id, by));
+    }
+
+    /** The cell the cursor is at says so - aria-current, which its look is current by - and no other says anything. */
+    static _mark(box, current) {
+        if (current) box.setAttribute("aria-current", "true");
+        else box.removeAttribute("aria-current");
     }
 
     _fire(ev) {

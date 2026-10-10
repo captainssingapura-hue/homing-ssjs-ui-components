@@ -9,19 +9,11 @@ import java.util.List;
 import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Box.Control;
 import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
-import static hue.captains.singapura.js.homing.design.Interaction.Current;
 import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Layer.Recessed;
 import static hue.captains.singapura.js.homing.design.Structure.Hairline;
-import static hue.captains.singapura.js.homing.design.Structure.Divider;
-import static hue.captains.singapura.js.homing.design.Structure.Spine;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
 import static hue.captains.singapura.js.homing.design.Target.Color;
 import static hue.captains.singapura.js.homing.design.Target.Motion;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
 
 /**
  * The split grid's classes. A split is a flex row or column; each child takes
@@ -250,13 +242,11 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
     // ── The mirror ────────────────────────────────────────────────────────
 
     /**
-     * The mirror's box: a recessed floor the grid's size at scale ({@code --sgm-w},
-     * {@code --sgm-h}), a control to the keyboard — its rule carries the ring on
-     * focus — with the cells drawn on it.
+     * The mirror's box, placed: the grid's size at scale ({@code --sgm-w}, {@code --sgm-h}),
+     * the cells drawn in it. It paints nothing - its look is the house's, its casting's.
      */
     public record sgm_root() implements CssClass<SplitGridStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sgm-w"), new CssVar("--sgm-h")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class), of(Raised.class, Color.Edge.class)); }
         @Override public String body() { return """
             position: relative;
             box-sizing: content-box;
@@ -267,10 +257,13 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
         }
     }
 
-    /** A cell in the mirror: a raised box at the cell's place and measure, scaled ({@code --sgm-x}, {@code --sgm-y}, {@code --sgm-w}, {@code --sgm-h}). */
+    /**
+     * A cell in the mirror, placed: at the cell's place and measure, scaled ({@code --sgm-x},
+     * {@code --sgm-y}, {@code --sgm-w}, {@code --sgm-h}), its name in the middle. It paints nothing -
+     * a cell is a pane's thumbnail, and wears that look; current is its aria-current.
+     */
     public record sgm_cell() implements CssClass<SplitGridStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sgm-x"), new CssVar("--sgm-y"), new CssVar("--sgm-w"), new CssVar("--sgm-h")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Interactive.class, Affordance.Cursor.class), of(Interactive.class, Motion.Ease.class)); }
         @Override public String body() { return """
             position: absolute;
             box-sizing: border-box;
@@ -278,14 +271,23 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
             top: var(--sgm-y);
             width: var(--sgm-w);
             height: var(--sgm-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
             """;
         }
     }
 
-    /** The cell the cursor is at: the current one. */
-    public record sgm_cell_current() implements CssClass<SplitGridStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Current.class, Color.Surface.class), of(Current.class, Color.Edge.class)); }
-        @Override public String body() { return ""; }
+    /** A cell's name, placed: on one line, cut short where the cell is narrower than it. */
+    public record sgm_name() implements CssClass<SplitGridStyles> {
+        @Override public String body() { return """
+            max-width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            """;
+        }
     }
 
     @Override
@@ -293,6 +295,6 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
         return List.of(new sg_root(), new sg_split(), new sg_split_h(), new sg_split_v(), new sg_child(), new sg_child_h(), new sg_child_v(),
                        new sg_cell(), new sg_divider(), new sg_divider_h(), new sg_divider_v(), new sg_divider_lit(), new sg_child_lit(),
                        new sg_divider_seam(), new sg_root_seam(),
-                       new sgm_root(), new sgm_cell(), new sgm_cell_current());
+                       new sgm_root(), new sgm_cell(), new sgm_name());
     }
 }

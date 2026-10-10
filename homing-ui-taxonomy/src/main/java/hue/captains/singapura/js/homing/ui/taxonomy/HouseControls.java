@@ -170,6 +170,16 @@ public final class HouseControls {
         @Override public Control parent() { return Control.INSTANCE; }
     }
 
+    /** A pane, picked by a small picture of where it is, with its name: a thumbnail's, a grid's mirror's. */
+    public record PaneThumb() implements Component<Control> {
+        public static final PaneThumb INSTANCE = new PaneThumb();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
+        }
+    }
+
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
     public record Switch() implements Component<Control> {
         public static final Switch INSTANCE = new Switch();

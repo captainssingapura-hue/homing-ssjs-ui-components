@@ -17,9 +17,9 @@ class Text extends SimpleComponent {
     static WORDS = Object.freeze(["text"]);
     static BEHAVIOR = TextBehavior;
 
-    constructor(el, props, role) {
-        super(el, props, role);
-        css.addClass(el, el_text);
+    constructor(make, props, role) {
+        super(make, props, role);
+        css.addClass(this.el, el_text);   // the element made, whether its maker or its companion made it
     }
 
     get text() { return this.el.textContent; }

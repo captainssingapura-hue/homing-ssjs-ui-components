@@ -253,6 +253,15 @@ final class Say {
         return List.copyOf(out);
     }
 
+    // ── a pane's thumbnail: a picture of a pane to pick it by - a part, flat in every state ──
+
+    static final Taxon PANE_THUMB = HouseControls.PaneThumb.INSTANCE;
+
+    /** How thick a style rules a pane's thumbnail round: a hairline unless its style rules it thicker. Flat: no shadow, no lift, in any state. */
+    static List<Implementation<?>> thumbRule(String width) {
+        return List.of(rest(PANE_THUMB, BORDER, "border-width: " + width + "; border-style: solid;"));
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {

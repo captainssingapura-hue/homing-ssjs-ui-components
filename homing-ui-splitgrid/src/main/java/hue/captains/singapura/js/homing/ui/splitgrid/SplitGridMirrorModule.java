@@ -11,6 +11,9 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 import java.util.List;
 
 /**
@@ -19,11 +22,13 @@ import java.util.List;
  * workspace's rule. It never touches the grid: the owner tells it the layout
  * and the box, and reads the cursor from {@code CursorMoved}. A widget
  * switcher in the making: a shortcut can raise it scaled, the arrows pick a
- * pane, and the owner makes that pane active. A branch component.
+ * pane, and the owner makes that pane active. A control, and a branch
+ * component: it wears its own casting, and draws each cell as a pane's
+ * thumbnail, cast as a choice, its name in a kicker; its own classes place.
  */
 public record SplitGridMirrorModule() implements DomModule<SplitGridMirrorModule>, ImplFor<HouseSplitGrid.SplitGridMirror> {
 
-    /** The class: {@code new SplitGridMirror(branch, {host, scale?, onEvent?})}; {@code reflect(layout, box)}, {@code scale}, {@code cursor}, {@code rects}, {@code dispose}. */
+    /** The class: {@code new SplitGridMirror(branch, {host, scale?, labelOf?, onEvent?})}; {@code reflect(layout, box)}, {@code scale}, {@code cursor}, {@code rects}, {@code dispose}. */
     public record SplitGridMirror() implements BranchComponent<SplitGridMirrorModule>, NeedKeyboard {
         @Override public String summary() { return "The arrangement of a grid, drawn at a scale, with a cursor the keyboard moves from cell to cell."; }
         /** The arrows, through the party: the cursor to the cell beside it. */
@@ -42,10 +47,13 @@ public record SplitGridMirrorModule() implements DomModule<SplitGridMirrorModule
                 .add(new ModuleImports<>(List.of(new SplitGridTreeModule.SplitGridTree()), SplitGridTreeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridGeometryModule.SplitGridGeometry()), SplitGridGeometryModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new SplitGridStyles.sgm_root(),
                         new SplitGridStyles.sgm_cell(),
-                        new SplitGridStyles.sgm_cell_current()
+                        new SplitGridStyles.sgm_name()
                 ), SplitGridStyles.INSTANCE))
                 .build();
     }

@@ -54,6 +54,18 @@
             <artifactId>homing-design-core</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <!-- The mirror wears the house's look, and its cells' names are the house's kickers. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-elements</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- How the mirror is controlled - arranged - which its branch no longer says. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-controllability</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>

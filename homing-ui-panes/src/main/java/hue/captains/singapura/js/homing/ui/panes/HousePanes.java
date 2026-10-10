@@ -31,7 +31,7 @@ public record HousePanes() implements TaxonomyExtension {
 
     /** Every component this module declares. */
     @Override public List<Component<?>> components() {
-        return List.of(Tab.INSTANCE, PaneThumb.INSTANCE, PaneThumbs.INSTANCE, AddTab.INSTANCE, TabOpener.INSTANCE,
+        return List.of(Tab.INSTANCE, PaneThumbs.INSTANCE, AddTab.INSTANCE, TabOpener.INSTANCE,
                        TabPicker.INSTANCE, MultiTabPane.INSTANCE, SingleTabPane.INSTANCE, TabPane.INSTANCE,
                        TabStrip.INSTANCE, DropMark.INSTANCE);
     }
@@ -48,23 +48,13 @@ public record HousePanes() implements TaxonomyExtension {
         }
     }
 
-    /** A pane, picked by its thumbnail. */
-    public record PaneThumb() implements Component<HouseBranches.Control> {
-        public static final PaneThumb INSTANCE = new PaneThumb();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Control parent() { return HouseBranches.Control.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
-        }
-    }
-
     /** The thumbnails of the panes one may open. */
     public record PaneThumbs() implements Component<HouseBranches.Container> {
         public static final PaneThumbs INSTANCE = new PaneThumbs();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(PaneThumb.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
+            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
         }
     }
 

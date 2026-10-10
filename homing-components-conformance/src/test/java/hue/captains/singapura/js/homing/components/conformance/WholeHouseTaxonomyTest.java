@@ -42,8 +42,8 @@ class WholeHouseTaxonomyTest {
                 assertEquals(e.getClass(), c.getClass().getEnclosingClass(), c + " is declared by the module that lists it");
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
-        assertEquals(34, leaves.values().stream().mapToInt(Integer::intValue).sum(), "34 leaves the modules add: " + leaves);
-        assertEquals(53, HouseTaxonomy.INSTANCE.common().size(), "to the 53 common ones");
+        assertEquals(33, leaves.values().stream().mapToInt(Integer::intValue).sum(), "33 leaves the modules add: " + leaves);
+        assertEquals(54, HouseTaxonomy.INSTANCE.common().size(), "to the 54 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's");
     }
 
     @Test
@@ -76,13 +76,14 @@ class WholeHouseTaxonomyTest {
 
     /**
      * Every word of the catalogue the whole house says, but those it has for the common components it
-     * has no leaf for yet - kept whole so a component is built from them - and Host, a floater's.
+     * has no leaf for yet - kept whole so a component is built from them - Host, a floater's, and Cell, a
+     * grid's own cell's, which the mirror drew until its cells became pane thumbnails.
      */
     @Test
     void everyRoleNamed_butTheWordsKeptForWhatIsToCome() {
         assertEquals(List.of("placeholder", "error", "check", "query", "skip", "increase", "decrease", "clear", "remove",
                              "previous", "next", "first", "last", "more", "foot", "host", "body", "media", "fallback", "editor",
-                             "group", "column", "opener", "pull", "scroll"),
+                             "cell", "group", "column", "opener", "pull", "scroll"),
                 HOUSE.roles().stream().filter(r -> HOUSE.partsNaming(r).isEmpty()).map(r -> r.name().value()).toList());
     }
 
@@ -123,7 +124,7 @@ class WholeHouseTaxonomyTest {
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));
         assertEquals(expected, actual);
-        assertEquals(9 + 7, HouseControllability.INSTANCE.classification().declared().size(), "the common nine, and seven the modules declare");
+        assertEquals(9 + 8, HouseControllability.INSTANCE.classification().declared().size(), "the common nine, and eight the modules declare - the split grid's mirror, a control, arranged as the grid is");
         for (Component<?> leaf : HOUSE.components())
             assertTrue(HouseControllability.INSTANCE.findControlType(HOUSE, leaf) != null, leaf + " has a type");
     }

@@ -14,6 +14,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.bareFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.textMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.waysMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.marksMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.thumbRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -41,8 +42,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * control that cannot be used neither lifts nor casts a shadow, and a button that is a mark alone -
  * a close button's cross, an icon button's icon - goes without a frame, in the size of the text it
  * sits in, in a square box with room round the mark, and flat in every state - a part, whose
- * owner's morphism is the only one - unless a style frames it. Every house style is written over
- * it, and answers only what makes it itself.
+ * owner's morphism is the only one - unless a style frames it; and a pane's thumbnail is ruled round
+ * with a hairline, as flat. Every house style is written over it, and answers only what makes it itself.
  */
 public record Base() implements DesignStyle {
 
@@ -89,5 +90,7 @@ public record Base() implements DesignStyle {
             // ── every text's measure: its size and leading, harvested from the house's own type ──
             textMeasure(),
             waysMeasure(),
-            marksMeasure());
+            marksMeasure(),
+            // ── a pane's thumbnail ruled round with a hairline ──
+            thumbRule("1px"));
 }

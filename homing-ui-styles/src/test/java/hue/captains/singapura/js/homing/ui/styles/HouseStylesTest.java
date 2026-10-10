@@ -54,7 +54,8 @@ class HouseStylesTest {
 
     /** What a style may decide for the ways somewhere, the marks between things and the veil: how a way eases and is marked under the hand, how thick a separator is ruled, how the page behind a dialog is veiled. */
     private static final Set<String> WAYS_MARKS_AND_VEIL = Set.of(
-            "link motion-ease", "crumb motion-ease", "link type-decoration", "crumb type-decoration", "scrim effect-filter", "separator shape-border");
+            "link motion-ease", "crumb motion-ease", "link type-decoration", "crumb type-decoration", "scrim effect-filter", "separator shape-border",
+            "pane-thumb shape-border");
 
     /** What every style decides for its text, at least: the body's face, and the display's where a text is set apart. */
     private static final Set<String> TEXT_SET_APART = Set.of(
@@ -81,7 +82,7 @@ class HouseStylesTest {
             allowed.addAll(WAYS_MARKS_AND_VEIL);
             var beyond = new TreeSet<>(answered);
             beyond.removeAll(allowed);
-            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks and the veil: " + beyond);
+            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil and a pane's thumbnail's rule: " + beyond);
             var missing = new TreeSet<>(BUTTON_BRANCH);
             missing.removeAll(answered);
             left.put(s.token(), missing);
@@ -119,11 +120,12 @@ class HouseStylesTest {
         for (String text : List.of("heading", "lede", "kicker", "caption", "label", "readout", "badge", "pill", "wordmark")) expected.add(text + " type-scale");
         expected.addAll(Set.of("readout type-treatment", "badge type-treatment", "badge size-inset", "badge shape-corner",
                 "pill type-treatment", "pill size-inset", "pill shape-corner"));
-        expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph"));
+        expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph", "pane-thumb shape-border"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
-                + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash");
+                + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash;"
+                + " a pane's thumbnail ruled round with a hairline");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");

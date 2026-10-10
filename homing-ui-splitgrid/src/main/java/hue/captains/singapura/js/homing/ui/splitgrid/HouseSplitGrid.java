@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 
@@ -37,13 +38,16 @@ public record HouseSplitGrid() implements TaxonomyExtension {
         }
     }
 
-    /** A split grid's shape, drawn small. */
-    public record SplitGridMirror() implements Component<HouseBranches.Split> {
+    /**
+     * A split grid's shape, drawn small: a control - it takes the keys, and its cursor picks a pane -
+     * whose cells are pictures of the panes, each with its name, as a pane's thumbnail is.
+     */
+    public record SplitGridMirror() implements Component<HouseBranches.Control> {
         public static final SplitGridMirror INSTANCE = new SplitGridMirror();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
+        @Override public HouseBranches.Control parent() { return HouseBranches.Control.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(GridCell.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
+            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
         }
     }
 

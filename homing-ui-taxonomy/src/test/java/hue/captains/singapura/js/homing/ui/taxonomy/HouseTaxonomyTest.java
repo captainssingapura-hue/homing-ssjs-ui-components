@@ -46,10 +46,10 @@ class HouseTaxonomyTest {
     @Test
     void theBaseIsReadWhole_withItsCatalogue() {
         assertEquals(15, HOUSE.branches().size(), "the view and the field have no common leaf: their leaves are the extensions'");
-        assertEquals(53, HOUSE.components().size());
+        assertEquals(54, HOUSE.components().size());
         assertEquals(91, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
-        assertEquals(38, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
-        assertEquals(16, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+        assertEquals(39, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
+        assertEquals(17, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
     /**
@@ -129,7 +129,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(15 + 53 + 21 + 91 + 8 + 20 + 7 + 14, nodes.size());
+        assertEquals(15 + 54 + 21 + 91 + 8 + 20 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));

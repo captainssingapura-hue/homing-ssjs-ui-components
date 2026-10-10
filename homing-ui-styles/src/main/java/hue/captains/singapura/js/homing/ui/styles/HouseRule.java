@@ -17,6 +17,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.SEPARATOR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DELIMITER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.PANE_THUMB;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PILL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.ROOT;
@@ -30,7 +31,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * glowing in the title colour; the ring of attention in the accent; a button's face - raised, in
  * the text's ink, a hairline round it - a toggle that is on tinted with the accent; a close turning to
  * danger under the hand, an icon button washed in its own ink; and each
- * coloured button's rank - its background, its ink, its border. A coloured button's background and ink move with its extent:
+ * coloured button's rank - its background, its ink, its border; a pane's thumbnail raised and
+ * hairlined, the current one tinted and edged with the accent. A coloured button's background and ink move with its extent:
  * the word at 1, the neutral at 0, the meaning turned the other way at -1. Danger, warning and
  * success are the same in every house palette; only the ink they fall back to is the palette's.
  */
@@ -150,6 +152,13 @@ final class HouseRule {
                 rest(SEPARATOR, BORDER, "border-color: color-mix(in srgb, currentColor 30%, transparent);"),
                 rest(DELIMITER, INK, "color: color-mix(in srgb, currentColor 60%, transparent);"),
                 rest(BADGE, BACKGROUND, ground("color-mix(in srgb, " + s.accent() + " 18%, transparent)")),
-                rest(PILL, BACKGROUND, ground("color-mix(in srgb, currentColor 10%, transparent)")));
+                rest(PILL, BACKGROUND, ground("color-mix(in srgb, currentColor 10%, transparent)")),
+                // ── a pane's thumbnail: raised, a hairline round it; the current one - the cursor's - tinted with the accent and edged with it ──
+                when(PANE_THUMB, BACKGROUND, Map.of(
+                        State.REST, ground(s.raised()),
+                        State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 12%, " + s.raised() + ")"))),
+                when(PANE_THUMB, BORDER, Map.of(
+                        State.REST, "border-color: " + s.border() + ";",
+                        State.CURRENT, "border-color: " + s.accent() + ";")));
     }
 }
