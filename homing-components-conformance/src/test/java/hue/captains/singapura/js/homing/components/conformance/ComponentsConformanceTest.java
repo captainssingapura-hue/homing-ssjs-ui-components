@@ -5,14 +5,13 @@ import hue.captains.singapura.js.homing.conformance.engine.ServedModuleRenderer;
 import hue.captains.singapura.js.homing.conformance.rules.CrateConformance;
 import hue.captains.singapura.js.homing.conformance.rules.CrateCoverage;
 import hue.captains.singapura.js.homing.conformance.rules.CssConformance;
+import hue.captains.singapura.js.homing.conformance.rules.DeclaredDebts;
 import hue.captains.singapura.js.homing.conformance.rules.Finding;
 import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.component.ComponentDetails;
 import hue.captains.singapura.js.homing.component.ComponentTrees;
 import hue.captains.singapura.js.homing.component.Implementations;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardRegistry;
-import hue.captains.singapura.js.homing.conformance.rules.RuleLedger;
-import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.design.Deployment;
@@ -53,9 +52,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ComponentsConformanceTest {
 
-    /** The widgets' debt under widget-draws-only-components, recorded when the rule came: only shrinks. */
-    private static final RuleLedger WIDGETS = ComponentsConformance.WIDGETS;
-
     private static final boolean ALLOW_PRE_EXISTING =
             Boolean.parseBoolean(System.getProperty("conformance.allowPreExisting", "true"));
 
@@ -80,8 +76,7 @@ class ComponentsConformanceTest {
     void everyServedModuleKeepsItsLane() {
         List<Finding> raw = new ConformanceEngine(ComponentsConformance.POLICY, new ServedModuleRenderer())
                 .checkCrates(ComponentsConformance.TOP_LEVEL);
-        WIDGETS.recordIfAsked(raw, "src/main/resources");
-        assertEquals(List.of(), WIDGETS.stale(getClass(), raw), "the widget ledger names debt that is paid: strike these lines");
+        assertEquals(List.of(), DeclaredDebts.INSTANCE.paid(ComponentsConformance.TOP_LEVEL, raw), "a debt that is paid: remove its @ConformanceDebt");
         List<GradedFinding> graded = ComponentsConformance.grader(ALLOW_PRE_EXISTING).grade(raw);
         List<GradedFinding> errors = graded.stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors, () -> "conformance ERRORS (" + errors.size() + "):\n"

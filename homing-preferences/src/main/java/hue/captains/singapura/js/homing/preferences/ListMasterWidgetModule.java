@@ -6,6 +6,8 @@ import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
 import hue.captains.singapura.js.homing.component.Widget;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -20,6 +22,8 @@ import java.util.List;
  * {@code onSelect(fn)}, {@code select(path)} — so a real tree view is one
  * provider away. Params: {@code tree, labels}, as the registry stamps them.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes its own elements, places elements, wears classes of its own, writes attributes, writes styles and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ListMasterWidgetModule() implements Widget<Widget._None, ListMasterWidgetModule>, ImplFor<HousePreferences.ListMasterWidget> {
 
     /** The class. */

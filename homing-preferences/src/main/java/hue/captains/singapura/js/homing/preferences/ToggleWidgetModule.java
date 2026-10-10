@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.preferences;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 
 import hue.captains.singapura.js.homing.component.Widget;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
@@ -14,6 +16,8 @@ import java.util.List;
  * in the store. Params: {@code name, label, summary?, default?, on?, off?} —
  * the last two the words shown beside the switch in each state.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes its own elements, places elements, wears classes of its own, writes attributes and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ToggleWidgetModule() implements Widget<Widget._None, ToggleWidgetModule>, ImplFor<HousePreferences.ToggleWidget> {
 
     /** The class. */

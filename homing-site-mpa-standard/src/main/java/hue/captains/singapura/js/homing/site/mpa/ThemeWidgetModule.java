@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
@@ -21,6 +23,8 @@ import java.util.List;
  * follows the store as it always has. Built on the generic field, so the
  * header, the note and the reset are the same as every other setting's.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own, writes attributes, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ThemeWidgetModule() implements Widget<Widget._None, ThemeWidgetModule>, ImplFor<HouseSite.ThemeWidget> {
 
     /** The class. */

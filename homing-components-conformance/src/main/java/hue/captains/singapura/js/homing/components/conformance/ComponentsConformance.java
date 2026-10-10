@@ -5,8 +5,6 @@ import hue.captains.singapura.js.homing.conformance.rules.Baseline;
 import hue.captains.singapura.js.homing.conformance.rules.CrateClosure;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
-import hue.captains.singapura.js.homing.conformance.rules.RuleLedger;
-import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.design.Design;
@@ -101,9 +99,6 @@ public final class ComponentsConformance {
         return TOP_LEVEL.stream().flatMap(c -> c.entries().stream()).map(e -> e.moduleClass()).collect(Collectors.toSet());
     }
 
-    /** The components' widgets' debt under widget-draws-only-components, recorded when the rule came: only shrinks. */
-    public static final RuleLedger WIDGETS = new RuleLedger(WidgetDrawsOnlyComponentsRule.INSTANCE.id(), "components-widget-ledger.txt");
-
     /** The committed baseline: empty, and held empty on purpose. */
     public static Baseline baseline() {
         try (InputStream in = ComponentsConformance.class.getResourceAsStream("/components-conformance-baseline.txt")) {
@@ -118,11 +113,11 @@ public final class ComponentsConformance {
         }
     }
 
-    /** The framework-strict grader with the components' (empty) allowances and baseline - and the widget rule's ledger. */
+    /** The framework-strict grader with the components' (empty) allowances and baseline; a module's declared debts honoured. */
     public static FindingGrader grader(boolean allowPreExisting) {
-        return WIDGETS.over(FindingGrader.STRICT
+        return FindingGrader.STRICT
                 .withAllowlist(ALLOWANCES)
                 .withBaseline(baseline())
-                .allowingPreExisting(allowPreExisting), ComponentsConformance.class);
+                .allowingPreExisting(allowPreExisting);
     }
 }

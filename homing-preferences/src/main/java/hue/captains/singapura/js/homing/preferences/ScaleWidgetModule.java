@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.ui.elements.ReadoutModule;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 
@@ -15,6 +17,8 @@ import java.util.List;
  * A preference that is a number in a range: a slider with a readout.
  * Params: {@code name, label, summary?, default?, min, max, step?, unit?}.
  */
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class,
+        reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own and writes attributes: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ScaleWidgetModule() implements Widget<Widget._None, ScaleWidgetModule>, ImplFor<HousePreferences.ScaleWidget> {
 
     /** The class. */
