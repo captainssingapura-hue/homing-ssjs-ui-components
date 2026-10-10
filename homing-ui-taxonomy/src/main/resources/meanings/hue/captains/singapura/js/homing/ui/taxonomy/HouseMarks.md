@@ -28,6 +28,10 @@ Says by a light how something is: alive, dormant, broken.
 
 A small sign of a state: which one is current, which one has the keys.
 
+## DropMark
+
+Shows where a dragged thing would land.
+
 ## Groove
 
 The line a value is set along: the whole of its range.

@@ -57,6 +57,12 @@ public final class HouseMarks {
         @Override public Mark parent() { return Mark.INSTANCE; }
     }
 
+    /** Where a dragged thing would land. */
+    public record DropMark() implements Component<Mark> {
+        public static final DropMark INSTANCE = new DropMark();
+        @Override public Mark parent() { return Mark.INSTANCE; }
+    }
+
     // ── tracks ───────────────────────────────────────────────────────────
 
     /** The line a knob runs along. */

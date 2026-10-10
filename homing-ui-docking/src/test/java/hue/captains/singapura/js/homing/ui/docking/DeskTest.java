@@ -69,6 +69,15 @@ class DeskTest extends JsModuleTestBase {
                 dissolve: function () { if (this.parent) this.parent.kids.delete(name); },
                 activate: function (owner) { this.owner = String(owner); } };
         }
+        // a maker is single-use, and known for one: the strip's plus, its count and the crosses are made by their own makers
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
+        var _branchOf = fakeBranch;
+        fakeBranch = function () {
+            var b = _branchOf.apply(null, arguments);
+            b.elementMaker = function (n) { var mk = function (tag) { makers.delete(mk); return b.createElement(n, tag); }; makers.add(mk); return mk; };
+            return b;
+        };
         var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
@@ -81,10 +90,9 @@ class DeskTest extends JsModuleTestBase {
         var fp_desk = "fp_desk", fp_desk_layer = "fp_desk_layer", fp_frame = "fp_frame", fp_hoverable = "fp_hoverable", fp_held = "fp_held", fp_active = "fp_active",
             fp_head = "fp_head", fp_head_held = "fp_head_held", fp_icon = "fp_icon", fp_icon_on = "fp_icon_on", fp_title = "fp_title", fp_body = "fp_body", fp_grip = "fp_grip";
         var mtp_pane = "mtp_pane", mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted",
-            mtp_chip_seated = "mtp_chip_seated",
             mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_bar_close = "mtp_bar_close", mtp_add_mark = "mtp_add_mark",
             mtp_pill = "mtp_pill", mtp_content = "mtp_content", mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden",
-            mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target", mtp_strip_current = "mtp_strip_current";
+            mtp_empty = "mtp_empty", mtp_dock_target = "mtp_dock_target";
         var console = { error: function (m, e) { log.push("error:" + m); } };
         var page = fakeBranch("page");
         var host = el("div");
@@ -190,7 +198,7 @@ class DeskTest extends JsModuleTestBase {
         eval("var c = chipOf(A, 'Two'); c.fire('pointerdown', { button: 0, pointerId: 7, clientX: 140, clientY: 15, target: c });"
            + "c.fire('pointermove', { clientX: 146, clientY: 15 }); c.fire('pointermove', { clientX: 900, clientY: 15 });");
         assertEquals("0px", eval("c.prop('--mtp-drag-x')").asString(), "far right: kept within the row, on its own slot");
-        assertTrue(eval("c.has('mtp_chip_dragging') && !c.has('mtp_chip_seated') && A.el.children[0].has('mtp_strip_loose')").asBoolean(), "in the hand: the design's word for a thing dragged, not for a thing seated");
+        assertTrue(eval("c.has('mtp_chip_dragging') && c.getAttribute('data-dragging') !== null && A.el.children[0].has('mtp_strip_loose')").asBoolean(), "in the hand: the look's state for a thing dragged, and over the row");
         eval("c.fire('pointermove', { clientX: 110, clientY: -200 }); c.fire('pointermove', { clientX: 110, clientY: 400 });");
         assertEquals("-30px", eval("c.prop('--mtp-drag-x')").asString(), "far above, far below: the rail; part way to One's slot, still nearest its own");
         assertFalse(eval("chipOf(A, 'One').has('mtp_chip_shifted')").asBoolean());
@@ -200,7 +208,7 @@ class DeskTest extends JsModuleTestBase {
         eval("c.fire('pointerup', { clientX: 50, clientY: 20 });");
         assertEquals("active:lone:t2 capture:div TabMoved", log(), "the press activates, then a move and nothing else: nothing floated");
         assertEquals("t2,t1", eval("A.tabs().join(',')").asString(), "the drag reordered the dock");
-        assertTrue(eval("!c.has('mtp_chip_dragging') && c.has('mtp_chip_seated') && !A.el.children[0].has('mtp_strip_loose') && c.prop('--mtp-drag-x') == null && !chipOf(A, 'One').has('mtp_chip_shifted') && chipOf(A, 'One').prop('--mtp-shift-x') == null").asBoolean(), "let go, nothing of the drag remains; seated again");
+        assertTrue(eval("!c.has('mtp_chip_dragging') && c.getAttribute('data-dragging') === null && !A.el.children[0].has('mtp_strip_loose') && c.prop('--mtp-drag-x') == null && !chipOf(A, 'One').has('mtp_chip_shifted') && chipOf(A, 'One').prop('--mtp-shift-x') == null").asBoolean(), "let go, nothing of the drag remains; seated again");
         assertTrue(eval("desk._layer === null").asBoolean(), "no float was wanted, so there is no float layer");
     }
 
@@ -478,9 +486,9 @@ class DeskTest extends JsModuleTestBase {
             assertEquals("", log(), "the browser's own focus arriving is left where it is");
             assertFalse(eval("f.host.wouldHold()").asBoolean(), "a yield from the tab passes it by: there is no bar to come back to");
             eval("f.host.within(true);");
-            assertTrue(eval("a.chip._mark.has('mtp_chip_mark_on') && f.host.bar().has('mtp_strip_current') && !a.chip.has('mtp_chip_lifted')").asBoolean(), "the keys inside: the chip marked, the bar lit, nothing lifted");
+            assertTrue(eval("a.chip._mark.has('mtp_chip_mark_on') && f.host.bar().getAttribute('aria-current') === 'true' && !a.chip.has('mtp_chip_lifted')").asBoolean(), "the keys inside: the chip marked, the bar lit, nothing lifted");
             eval("f.host.within(false);");
-            assertFalse(eval("a.chip._mark.has('mtp_chip_mark_on') || f.host.bar().has('mtp_strip_current')").asBoolean());
+            assertFalse(eval("a.chip._mark.has('mtp_chip_mark_on') || f.host.bar().getAttribute('aria-current') !== null").asBoolean());
         }
         /** DETACH: a tab-pane off its dock into a float of its own, as it is — the same chip, the same pane — reported as one move; its bar at the point, kept within the layer. */
         @Test

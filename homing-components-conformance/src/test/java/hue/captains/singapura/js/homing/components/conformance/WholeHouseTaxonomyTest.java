@@ -42,8 +42,8 @@ class WholeHouseTaxonomyTest {
                 assertEquals(e.getClass(), c.getClass().getEnclosingClass(), c + " is declared by the module that lists it");
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
-        assertEquals(33, leaves.values().stream().mapToInt(Integer::intValue).sum(), "33 leaves the modules add: " + leaves);
-        assertEquals(54, HouseTaxonomy.INSTANCE.common().size(), "to the 54 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's");
+        assertEquals(30, leaves.values().stream().mapToInt(Integer::intValue).sum(), "30 leaves the modules add: " + leaves);
+        assertEquals(57, HouseTaxonomy.INSTANCE.common().size(), "to the 57 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands");
     }
 
     @Test
@@ -104,9 +104,8 @@ class WholeHouseTaxonomyTest {
 
     @Test
     void anExtensionsLeaf_composedOfTheBasesAndItsOwn() {
-        assertEquals(List.of("tab-strip-add 0..1 icon-button", "tab-strip-count 1 pill", "tab-strip-close 0..1 close-button",
-                             "tab-strip-landing 0..1 drop-mark"),
-                said(HousePanes.TabStrip.INSTANCE));
+        assertEquals(List.of("multi-tab-pane-tabs 1 tab-strip", "multi-tab-pane-picker 0..1 tab-picker", "multi-tab-pane-note 0..1 caption"),
+                said(HousePanes.MultiTabPane.INSTANCE), "the strip a common leaf, the picker its module's own");
         var chip = HOUSE.partsOf(HousePanes.TabPane.INSTANCE).get(0);
         assertEquals(List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT), HOUSE.extents(chip), "a tab-pane's chip is a tab, and has a tab's");
     }

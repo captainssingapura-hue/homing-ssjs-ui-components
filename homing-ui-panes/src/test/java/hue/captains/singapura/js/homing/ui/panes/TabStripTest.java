@@ -38,7 +38,7 @@ class TabStripTest extends JsModuleTestBase {
                 appendChild: function (c) { if (c.parentNode) c.parentNode.removeChild(c); this.children.push(c); c.parentNode = this; return c; },
                 insertBefore: function (c, ref) { if (c.parentNode) c.parentNode.removeChild(c); var i = ref ? this.children.indexOf(ref) : -1; if (i < 0) this.children.push(c); else this.children.splice(i, 0, c); c.parentNode = this; return c; },
                 removeChild: function (c) { var i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); c.parentNode = null; return c; },
-                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; },
+                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; }, removeAttribute: function (k) { delete attrs[k]; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 removeEventListener: function (t, fn) { var l = this.listeners[t] || []; var i = l.indexOf(fn); if (i >= 0) l.splice(i, 1); },
                 contains: function (c) { return c === this; },
@@ -51,6 +51,15 @@ class TabStripTest extends JsModuleTestBase {
             return node;
         }
         function fakeBranch(name) { return { name: name, createElement: function (n, tag) { return el(tag); }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () {}, activate: function () {} }; }
+        // a maker is single-use, and known for one: the strip's plus, its count and the crosses are made by their own makers
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
+        var _branchOf = fakeBranch;
+        fakeBranch = function () {
+            var b = _branchOf.apply(null, arguments);
+            b.elementMaker = function (n) { var mk = function (tag) { makers.delete(mk); return b.createElement(n, tag); }; makers.add(mk); return mk; };
+            return b;
+        };
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); },
@@ -59,7 +68,7 @@ class TabStripTest extends JsModuleTestBase {
                     extent: function (e, t) { if (t == null) e.style.removeProperty("--extent"); else e.style.setProperty("--extent", String(t)); } };
         css.cls = function (name) { return name; };   // the new manager names its classes through the old
         var getComputedStyle = function () { return { transitionDuration: "0.16s, 0.16s" }; };
-        var mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_seated = "mtp_chip_seated",
+        var mtp_strip = "mtp_strip", mtp_rail = "mtp_rail", mtp_strip_loose = "mtp_strip_loose", mtp_chip = "mtp_chip", mtp_chip_label = "mtp_chip_label", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on", mtp_chip_mark = "mtp_chip_mark", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_lifted = "mtp_chip_lifted",
             mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_shifted = "mtp_chip_shifted",
             mtp_chip_close = "mtp_chip_close", mtp_drop_mark = "mtp_drop_mark", mtp_strip_tail = "mtp_strip_tail", mtp_add = "mtp_add", mtp_rail_add = "mtp_rail_add", mtp_add_mark = "mtp_add_mark", mtp_pill = "mtp_pill";
         var strip = new TabStrip(fakeBranch("strip"), { onDrop: function (c, dest) { log.push("drop:" + c._label.textContent + "@" + dest); } });
@@ -76,7 +85,8 @@ class TabStripTest extends JsModuleTestBase {
         var A = chips[0], B = chips[1], C = chips[2];
         function x(c) { return c.prop("--mtp-drag-x") == null ? "-" : c.prop("--mtp-drag-x"); }
         function shifts() { return chips.map(function (c) { return c.has("mtp_chip_shifted") ? c.prop("--mtp-shift-x") : "."; }).join(" "); }
-        function state(c) { return ["mtp_chip_seated", "mtp_chip_dragging", "mtp_chip_shifted"].filter(function (k) { return c.has(k); }).join("+") || "none"; }
+        // the look's reflection of a thing dragged, and the classes that place it
+        function state(c) { return (c.getAttribute("data-dragging") === null ? [] : ["dragging"]).concat(["mtp_chip_dragging", "mtp_chip_shifted"].filter(function (k) { return c.has(k); })).join("+") || "seated"; }
         """;
 
     @BeforeEach
@@ -105,10 +115,10 @@ class TabStripTest extends JsModuleTestBase {
 
     @Test
     void theChipFollowsTheHandAlongTheRail_neverOffIt_theOthersSteppingAsideLive() {
-        assertEquals("mtp_chip_seated", eval("state(A)").asString());
+        assertEquals("seated", eval("state(A)").asString());
         // press A 20 in; 6 along starts the drag; the hand wanders 200 down and 50 up: only x matters
         eval("A.fire('pointerdown', { button: 0, pointerId: 1, clientX: 60, clientY: 10, target: A }); A.fire('pointermove', { clientX: 66, clientY: 10 });");
-        assertEquals("mtp_chip_dragging", eval("state(A)").asString(), "in the hand: the design's word for a thing dragged");
+        assertEquals("dragging+mtp_chip_dragging", eval("state(A)").asString(), "in the hand: the look's state for a thing dragged, and over the row");
         assertTrue(eval("strip.el.has('mtp_strip_loose')").asBoolean());
         eval("A.fire('pointermove', { clientX: 90, clientY: 210 });");
         assertEquals("30px", eval("x(A)").asString(), "30 along, the 200 down nothing");
@@ -129,7 +139,7 @@ class TabStripTest extends JsModuleTestBase {
         eval("A.fire('pointerdown', { button: 0, pointerId: 1, clientX: 60, clientY: 10, target: A }); A.fire('pointermove', { clientX: 66, clientY: 10 }); A.fire('pointermove', { clientX: 150, clientY: 10 }); log.length = 0;");
         eval("A.fire('pointerup', { clientX: 150, clientY: 10 });");
         assertEquals("drop:A@1 settle:A:10px 0->0 0/160", log(), "landed on B's slot, then the last leg: from 10 past the slot onto it, in the design's 160ms");
-        assertEquals("mtp_chip_seated", eval("state(A)").asString());
+        assertEquals("seated", eval("state(A)").asString());
         assertEquals("-", eval("x(A)").asString());
         assertEquals(". . .", eval("shifts()").asString(), "B's step taken back");
         assertEquals("1", eval("String(B.cancelled)").asString(), "and not eased: B is where the arrangement puts it, not sliding there");

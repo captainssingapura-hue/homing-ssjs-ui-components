@@ -368,6 +368,79 @@ final class Say {
                        rest(MENU_ITEM, CURSOR, "cursor: pointer;"));
     }
 
+    // ── a tab and its strip: the tab the owner of its morphism - lifted under the hand, when chosen, pressed or
+    //    dragged - its cross flat; the strip a raised bar, ruled along its foot; where a dragged tab would land, a bar ──
+
+    static final Taxon TAB = HouseControls.Tab.INSTANCE;
+    static final Taxon TAB_STRIP = HouseContainers.TabStrip.INSTANCE;
+    static final Taxon DROP_MARK = HouseMarks.DropMark.INSTANCE;
+
+    /** How a tab's lengths grow with its size: by 1.3 a unit, as they always have. */
+    private static final String TAB_GROWTH = "1.3";
+
+    /** A tab's height: its width over its proportion, the proportion widened or narrowed by the element's aspect, by 1.5 a unit. */
+    private static String tabHeight(String width, String proportion) {
+        return "calc(" + grows(width, TAB_GROWTH) + " / (" + proportion + " * pow(1.5, var(--aspect, 0))))";
+    }
+
+    /**
+     * A tab's measure in a style: its width, and its height written down - its width over its proportion - rather
+     * than left to a ratio, which a crowded row squeezing the width would answer with a shorter tab; the room at its
+     * sides and between its parts; and its strip one tab tall and the room for a lift, whether or not it holds one.
+     */
+    static List<Implementation<?>> tabMeasure(String width, String proportion, String inline, String gap) {
+        return List.of(rest(TAB, EXTENT, "inline-size: " + grows(width, TAB_GROWTH) + "; block-size: " + tabHeight(width, proportion) + ";"),
+                       rest(TAB, INSET, "padding-block: 0; padding-inline: " + grows(inline, TAB_GROWTH) + ";"),
+                       rest(TAB, GAP, "gap: " + grows(gap, TAB_GROWTH) + ";"),
+                       rest(TAB_STRIP, EXTENT, "min-height: calc(" + tabHeight(width, proportion) + " + 8px);"));
+    }
+
+    /** A tab's frame in a style: its corners - cut at the top - its rule, and the chosen one's where it is ruled heavier, else null; and its strip's rule along its foot. */
+    static List<Implementation<?>> tabFrame(String corner, String rule, String chosenRule, String stripRule) {
+        String style = "0".equals(rule) ? "none" : "solid";
+        var rules = new java.util.EnumMap<State, String>(State.class);
+        rules.put(State.REST, "border-width: " + rule + "; border-style: " + style + ";");
+        if (chosenRule != null) rules.put(State.SELECTED, "border-width: " + chosenRule + "; border-style: solid;");
+        return List.of(rest(TAB, CORNER, "border-radius: " + corner + ";"),
+                       when(TAB, BORDER, rules),
+                       rest(TAB_STRIP, BORDER, "border-width: 0 0 " + stripRule + " 0; border-style: solid;"));
+    }
+
+    /** A body for each of the states a tab moves in - under the hand, chosen, and pressed or dragged alike - each left out where null. */
+    private static Map<State, String> tabStates(String property, String hover, String chosen, String held) {
+        var out = new java.util.EnumMap<State, String>(State.class);
+        if (hover != null) out.put(State.HOVER, property + ": " + hover + ";");
+        if (chosen != null) out.put(State.SELECTED, property + ": " + chosen + ";");
+        if (held != null) { out.put(State.DRAGGING, property + ": " + held + ";"); out.put(State.ACTIVE, property + ": " + held + ";"); }
+        return out;
+    }
+
+    /**
+     * How a tab moves in a style: what is eased and how - a tab stepping aside for the one in the hand among it,
+     * by its translate - and how far it is lifted under the hand, chosen, and pressed or dragged, each null where
+     * the style does not move it.
+     */
+    static List<Implementation<?>> tabMotion(String ease, String hover, String chosen, String held) {
+        var out = new ArrayList<Implementation<?>>();
+        out.add(rest(TAB, EASE, "transition: " + ease + ";"));
+        var moves = tabStates("transform", hover, chosen, held);
+        if (!moves.isEmpty()) out.add(when(TAB, TRANSFORM, moves));
+        return List.copyOf(out);
+    }
+
+    /** How a tab is lifted off its strip in a style, in the palette's shadow colours: under the hand, chosen, and pressed or dragged. */
+    static List<Implementation<?>> tabShadow(String hover, String chosen, String held) {
+        return List.of(when(TAB, SHADOW, tabStates("box-shadow", hover, chosen, held)));
+    }
+
+    /** What every style's tab says alike: its text the caption's size, none of it taken by the hand; pointed at, and grabbed while it is dragged; its strip's text kept from the hand too. */
+    static List<Implementation<?>> tabBase() {
+        return List.of(new Implementation<>(TAB, SCALE, new Answer.Redirect<>(CAPTION)),
+                       rest(TAB, Target.Affordance.Select.INSTANCE, "user-select: none;"),
+                       when(TAB, CURSOR, Map.of(State.REST, "cursor: pointer;", State.DRAGGING, "cursor: grabbing;")),
+                       rest(TAB_STRIP, Target.Affordance.Select.INSTANCE, "user-select: none;"));
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {

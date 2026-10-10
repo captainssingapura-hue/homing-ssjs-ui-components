@@ -14,14 +14,29 @@
 //       is the browser's own menu suppressed.
 //   TabChip.retitle(chip, title)   the label, the tooltip and what the cross says it closes
 //   TabChip.reicon(chip, icon?)    the holder's element in the icon's slot, or none
+//   TabChip.keys(chip, state)      where the keys are, said on the chip: "held" while the
+//       cursor is on its strip - lifted, its mark the colour part of the way -
+//       "lent" while what its tab holds has them - down, the mark at full - or null
+//   TabChip.grip(chip, on)         in the hand, or set down: dragging, and over the row
 //
 // A chip carries its parts as handles, _icon, _label, _mark and _close (the
 // cross's element; _closer, the close button itself), and _chip, so a strip
 // tells a chip from its own ground. A press on it, not on its cross, takes
 // the native focus away from whatever had it, then selects: the chip takes no
 // native focus itself. Pinned tabs and tabs that cannot be
-// closed have no cross. `css` is injected with the styles import.
+// closed have no cross.
+//
+// Its look is the house's: a chip wears the tab's casting - the chip a
+// tab-pane carries, a role that only places it - and the design draws it at
+// rest, under the hand, selected (aria-selected) and dragging (data-dragging):
+// the owner of its morphism, its cross flat. Its mark is the within icon's
+// picture, in the colour of an icon that says where the keys are. Its own
+// classes only place. `css` is injected with the styles import.
 // =============================================================================
+
+/** A chip's leaf - a tab, cast as the chip a tab-pane carries - and its mark's: an icon, cast as the one that says where the keys are. */
+const _TAB = Object.freeze({ LEAF: "tab" });
+const _KEYS_ICON = Object.freeze({ LEAF: "icon" });
 
 /** A chip's cross pressed: the press kept to the cross, and the chip's holder asked to close its tab. */
 class TabChipClose {
@@ -31,11 +46,15 @@ class TabChipClose {
 }
 
 class TabChip {
+    /** How much of the colour a chip's mark carries while the cursor is on the bar: part of the way, towards what the tab in use carries at full. */
+    static ON_THE_BAR = 0.45;
+
     static mint(branch, tab, handlers, suffix) {
         var s = suffix == null ? "" : String(suffix);
         var c = branch.createElement("chip" + s, "div");
         c._chip = true;
-        css.addClass(c, mtp_chip, mtp_chip_seated);
+        css.addClass(c, mtp_chip);
+        TabChip._looks().tab.wear(c);
         c.setAttribute("role", "tab");
         c.setAttribute("aria-selected", "false");
         c.title = tab.title == null ? "" : String(tab.title);
@@ -57,6 +76,7 @@ class TabChip {
         c.appendChild(label);
         var mark = branch.createElement("mark" + s, "span");   // the within mark, after the label: shown only while the keys are in this tab
         css.addClass(mark, mtp_chip_mark);
+        TabChip._looks().keys.wear(mark, { only: ["color-ink"] });   // its colour the look's; its picture still the icon word's
         mark.setAttribute("aria-hidden", "true");
         c._mark = mark;
         c.appendChild(mark);
@@ -64,7 +84,7 @@ class TabChip {
         var closer = null, closeBtn = null;
         if (tab.closable !== false && !tab.pinned) {
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
-            closer = new CloseButton(CloseButtonFactory.create(branch, "close" + s), { label: "Close " + label.textContent }, ROLE.CLOSE);
+            closer = new CloseButton(branch.elementMaker("close" + s), { label: "Close " + label.textContent }, ROLE.CLOSE);
             closer.setOnClick(new TabChipClose(handlers));
             closeBtn = closer.el;
             css.addClass(closeBtn, mtp_chip_close);   // its place at the chip's end; its look is its own
@@ -97,6 +117,34 @@ class TabChip {
     /** The chip's icon, now: the holder's element, or none. */
     static reicon(chip, icon) {
         if (chip._icon) TabChip._iconIn(chip._icon, icon);
+    }
+
+    /**
+     * Where the keys are, said on the chip. The whole operation is lift and
+     * shift: "held" - the cursor on its strip, the arrows walking the tabs - the
+     * chip is lifted off the row and its mark carries the colour part of the
+     * way; "lent" - the keys inside its tab - it sits back down and the same
+     * mark carries the same colour at full; anything else, neither.
+     */
+    static keys(chip, state) {
+        var on = state === "held" || state === "lent";
+        css.toggleClass(chip, mtp_chip_lifted, state === "held");   // on the bar: picked up. In the tab, or nowhere: down
+        if (!chip._mark) return;
+        css.toggleClass(chip._mark, mtp_chip_mark_on, on);
+        css.extent(chip._mark, on ? (state === "held" ? TabChip.ON_THE_BAR : 1) : null);
+    }
+
+    /** The chip in the hand, or set down: the design's word for a thing dragged while it is, and lifted over the row along it. */
+    static grip(chip, on) {
+        if (on) chip.setAttribute("data-dragging", "");
+        else chip.removeAttribute("data-dragging");
+        css.toggleClass(chip, mtp_chip_dragging, !!on);
+    }
+
+    /** The tab's look and its mark's, made with the first chip: the page's castings are read by then. */
+    static _looks() {
+        if (!TabChip._worn) TabChip._worn = { tab: new Look(_TAB, ROLE.CHIP), keys: new Look(_KEYS_ICON, ROLE.KEYS) };
+        return TabChip._worn;
     }
 
     /** What the slot shows: the one icon given, or nothing and hidden. */

@@ -9,41 +9,20 @@ import java.util.List;
 import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Box.Control;
 import hue.captains.singapura.js.homing.design.Icon;
 import static hue.captains.singapura.js.homing.design.Box.Container;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
-import static hue.captains.singapura.js.homing.design.Interaction.Dragging;
 import static hue.captains.singapura.js.homing.design.Interaction.DropTarget;
-import static hue.captains.singapura.js.homing.design.Interaction.Focus;
-import static hue.captains.singapura.js.homing.design.Interaction.Inert;
-import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
-import static hue.captains.singapura.js.homing.design.Interaction.Current;
-import static hue.captains.singapura.js.homing.design.Interaction.Selectable;
 import static hue.captains.singapura.js.homing.design.Layer.Base;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Layer.Recessed;
-import static hue.captains.singapura.js.homing.design.Pairing.OnPrimary;
-import static hue.captains.singapura.js.homing.design.Structure.Divider;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
 import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Effect;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
 import static hue.captains.singapura.js.homing.design.Target.Type;
 import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Size;
-import static hue.captains.singapura.js.homing.design.Target.Type;
 import static hue.captains.singapura.js.homing.design.Text.Body;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Kicker;
 
 /**
- * The panes' classes. A pane is a base surface; its strip is raised with a
- * divider under it; a chip is selectable, and the active one is
- * {@code aria-selected} so the design shows it however it shows a chosen
- * row; the chip in flight is inert; the drop mark is a primary bar. The
- * bodies hold layout and nothing that could be a value.
+ * The panes' classes. A pane is a base surface. Its strip, its chips and the
+ * mark where a dragged chip would land wear the house's look - a tab strip's,
+ * a tab's, a drop mark's - so their classes here only place them: the bodies
+ * hold layout and nothing that could be a value.
  *
  * <p>Names are {@code mtp_}; the studio's pane paints {@code .hmtp-} from an
  * injected sheet, so both may be on one page while the swap is under way.</p>
@@ -69,87 +48,28 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     }
 
     /**
-     * The strip: raised, a divider under it, scrolling sideways when the chips overflow. The chips sit on its
-     * bottom edge; the room above them for a lift is the rail's, since the rail is what clips. One tab tall and
-     * that room, whether or not it holds a tab, so a bar does not grow when its first tab comes.
+     * The strip: a row, scrolling sideways when the chips overflow. The chips sit on its bottom edge; the room
+     * above them for a lift is the rail's, since the rail is what clips. Its look - raised, ruled along its foot,
+     * one tab tall and that room whether or not it holds a tab, lit while current - is a tab strip's.
      */
     public record mtp_strip() implements CssClass<PaneStyles> {
-        /** The axes are set here and the chips inherit them, so the bar can measure a tab by the same numbers they do. */
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--size"), new CssVar("--aspect")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Divider.class, Color.Edge.class), of(Divider.class, Shape.Rule.class)); }
-        /**
-         * The tab's frame, by reference rather than worn: a bar is one tab
-         * tall whether or not it holds one — a dock parted off and still
-         * empty is a bar, not a line — and the height follows the size and
-         * the aspect axes and the theme, because it is the tab's own measure
-         * over the tab's own proportion, not a number written down here.
-         */
-        @Override public List<? extends Wearable> reads() { return List.of(of(Control.Tab.class, Size.Extent.class), of(Control.Tab.class, Size.Proportion.class)); }
         @Override public String body() { return """
             display: flex;
             align-items: flex-end;
             flex-shrink: 0;
             overflow: hidden;
-            min-block-size: calc(var(--control-tab-size-extent-inline-size) * pow(var(--control-tab-size-extent-inline-size-ratio), var(--size, 0))
-                               / (var(--control-tab-size-proportion) * pow(var(--control-tab-size-proportion-ratio-aspect), var(--aspect, 0)))
-                               + 8px);
-            user-select: none;
             """;
         }
     }
 
     /**
-     * A chip: {@code Control.Tab} to the design — a hard frame whose inline
-     * measure is the design's, grown by the element's size, its block size
-     * following its proportion, wide and low, widened or narrowed by the
-     * element's aspect; its corners cut at the top, its rule and ring a
-     * control's. Selectable.Tab for its colour — seen at rest, tinted and
-     * edged as a selectable hovered, then the design's hover, press,
-     * selected and focus — and Selectable for its motion. The label is
-     * ellipsised within. Dragged by the pointer, so no touch scrolling on it.
+     * A chip: its look is a tab's - its measure, its frame, its colours and how it moves, by state - and here
+     * only its row: what it holds in a line, squeezed no wider than the row allows, the label ellipsised within.
+     * Dragged by the pointer, so no touch scrolling on it.
      */
-    /**
-     * The bar of the dock being worked in, lit: the word for the one you are
-     * on, across the strip and nothing else. A HINT, not an outline — the
-     * rooms of a workspace are divided by the grid's lines and a second set
-     * of lines around one of them says the same thing twice; a bar that has
-     * come up a shade says where the work is without drawing anything at all.
-     * Colour only, so nothing moves, and it sits over the strip's own raised
-     * face because a design's word for the current thing outranks a layer's.
-     */
-    public record mtp_strip_current() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Current.class, Color.Surface.class)); }
-        @Override public String body() { return ""; }
-    }
-
     public record mtp_chip() implements CssClass<PaneStyles> {
-        /** {@code Control × Color.Edge} is the ring's colour and the keys' mark: bound at those states only, so the chip's own edge is still Selectable.Tab's. */
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Tab.class, Shape.Rule.class), of(Control.Tab.class, Shape.Corner.class), of(Control.class, Color.Edge.class),
-                           of(Control.Tab.class, Size.Inset.class), of(Control.Tab.class, Size.Gap.class), of(Control.Tab.class, Size.Extent.class), of(Control.Tab.class, Size.Proportion.class),
-                           of(Selectable.Tab.class, Color.Surface.class), of(Selectable.Tab.class, Color.Ink.class), of(Selectable.Tab.class, Color.Edge.class),
-                           of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class),
-                           of(Caption.class, Type.Scale.class));
-        }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Control.Tab.class, Size.Inset.class), of(Control.Tab.class, Size.Gap.class), of(Control.Tab.class, Size.Extent.class), of(Caption.class, Type.Scale.class)); }
-        @Override public List<? extends Wearable> aspects() { return List.of(of(Control.Tab.class, Size.Proportion.class)); }
-        /** The squeeze, set on the rail and read here; and the axes, because the height below is written in them. */
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--chip-fit"), new CssVar("--size"), new CssVar("--aspect")); }
-        /**
-         * The tab's frame BY REFERENCE as well as worn, and for one reason:
-         * the height is then WRITTEN DOWN rather than left to the proportion.
-         * {@code Size.Proportion} is an {@code aspect-ratio}, which is exactly
-         * right while a tab is the width the design asked for — and exactly
-         * wrong the moment a crowded row squeezes it, because a ratio given a
-         * narrower width answers with a shorter tab. Eight tabs in a bar meant
-         * for five came out half as tall as the bar they sat in.
-         *
-         * <p>So the height is the design's own number — its extent over its
-         * proportion, the same expression the bar uses to be one tab tall —
-         * and with both sizes given, the ratio has nothing left to drive. The
-         * squeeze is then a width and only ever a width.</p>
-         */
-        @Override public List<? extends Wearable> reads() { return List.of(of(Control.Tab.class, Size.Extent.class), of(Control.Tab.class, Size.Proportion.class)); }
+        /** The squeeze, set on the rail and read here. */
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--chip-fit")); }
         @Override public String body() { return """
             display: inline-flex;
             align-items: center;
@@ -158,8 +78,6 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
             white-space: nowrap;
             flex: none;
             max-inline-size: var(--chip-fit, none);
-            block-size: calc(var(--control-tab-size-extent-inline-size) * pow(var(--control-tab-size-extent-inline-size-ratio), var(--size, 0))
-                           / (var(--control-tab-size-proportion) * pow(var(--control-tab-size-proportion-ratio-aspect), var(--aspect, 0))));
             touch-action: none;
             """;
         }
@@ -172,12 +90,10 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
      * neighbours while it is up.
      *
      * <p>The lift is its own translate and not the design's transform: a chip
-     * that is selected already wears {@code Selectable.Tab}'s transform at a
-     * state, which nothing plain can out-specify. The drag lifts itself the
-     * same way, along the other axis.</p>
+     * that is selected already wears the tab's transform at a state, which
+     * nothing plain can out-specify; the tab's look eases it.</p>
      */
     public record mtp_chip_lifted() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Selectable.class, Motion.Ease.class)); }
         @Override public String body() { return """
             position: relative;
             z-index: 1;
@@ -188,15 +104,13 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
 
     /**
      * The mark on a chip while the keys are inside its tab: the design's
-     * picture for "within", in the chip's own ink and never in the way of the
-     * hand. It is there only while the keys are in the tab — the chip says
+     * picture for "within" - its colour the look's, an icon that says where the
+     * keys are - never in the way of the hand. It is there only while the keys are in the tab — the chip says
      * *held* while the bar has them, and *lent* with this mark while what the
      * tab holds has them.
      */
     public record mtp_chip_mark() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Icon.Within.class, Type.Glyph.class), of(Primary.class, Color.Ink.class)); }
-        /** The one colour, at two degrees: part of the way while the cursor is on the bar, at full while the keys are in the tab. */
-        @Override public List<? extends Wearable> extents() { return List.of(of(Primary.class, Color.Ink.class)); }
+        @Override public List<? extends Wearable> wears() { return List.of(of(Icon.Within.class, Type.Glyph.class)); }
         @Override public String body() { return """
             display: none;
             flex: none;
@@ -256,37 +170,26 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     }
 
     /**
-     * A chip in its seat — in the row, not in the hand: the design's lift and
-     * shadow by state, hover, press and selected. Taken off while the chip is
-     * in the hand or afloat, so the design's word for those is the one seen.
-     */
-    public record mtp_chip_seated() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Selectable.class, Motion.Transform.class), of(Selectable.class, Shape.Shadow.class)); }
-        @Override public String body() { return ""; }
-    }
-
-    /**
-     * The chip in the hand: lifted over the row and under the hand along
-     * it, where {@code --mtp-drag-x} put it — its own translate, so the
-     * design's transform is the one for a thing being dragged, with its
-     * shadow and cursor.
+     * The chip in the hand: over the row and under the hand along it, where
+     * {@code --mtp-drag-x} put it - by its offset, which nothing eases, so it is
+     * where the hand is; the tab's look draws it dragging (data-dragging),
+     * lifted, with its shadow and cursor.
      */
     public record mtp_chip_dragging() implements CssClass<PaneStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--mtp-drag-x")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Dragging.class, Motion.Transform.class), of(Dragging.class, Shape.Shadow.class), of(Dragging.class, Affordance.Cursor.class)); }
         @Override public String body() { return """
             position: relative;
             z-index: 2;
-            translate: var(--mtp-drag-x, 0px) 0;
+            left: var(--mtp-drag-x, 0px);
             """;
         }
     }
 
-    /** A chip stepping aside for the one in the hand: one pitch over, {@code --mtp-shift-x}, eased by the design as any move of a selectable. */
+    /** A chip stepping aside for the one in the hand: one pitch over, {@code --mtp-shift-x}, by its translate, which the tab's look eases. */
     public record mtp_chip_shifted() implements CssClass<PaneStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--mtp-shift-x")); }
         @Override public String body() { return """
-            transform: translateX(var(--mtp-shift-x, 0px));
+            translate: var(--mtp-shift-x, 0px) 0;
             """;
         }
     }
@@ -311,9 +214,8 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         @Override public String body() { return "flex: none;\nalign-self: center;\n"; }
     }
 
-    /** Where a dragged chip will land: a primary bar between two chips. */
+    /** Where a dragged chip will land: a bar between two chips, its colour a drop mark's. */
     public record mtp_drop_mark() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class)); }
         @Override public String body() { return """
             width: 3px;
             flex-shrink: 0;
@@ -481,7 +383,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
 
     @Override
     public List<CssClass<PaneStyles>> cssClasses() {
-        return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_strip_current(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_seated(), new mtp_chip_dragging(), new mtp_chip_shifted(),
+        return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_dragging(), new mtp_chip_shifted(),
                        new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(), new mtp_dock_target(),
                        new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(),

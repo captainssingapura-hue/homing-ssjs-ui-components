@@ -70,6 +70,10 @@ Sets one value from a list that opens when asked and closes once picked.
 
 Picks one pane by a small picture of where it is.
 
+## Tab
+
+Brings forward one of the things a pane holds, and stands for it among the others.
+
 ## Switch
 
 Sets a setting on or off, in one movement, and shows which it is.

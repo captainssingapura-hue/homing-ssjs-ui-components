@@ -40,6 +40,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
 
 /**
  * Neumorphism: moulded out of the page's own clay - no rule, its depth all in light and shade,
@@ -95,5 +99,10 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
             menuFrame("14px", "0", "8px", "2px", "210px"),
             menuRow("10px", "8px", "14px"),
             menuShadow("14px 14px 28px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -14px -14px 28px var(--box-shadow-lit)"),
+            // ── its tabs moulded out of the strip, the chosen one pressed into it ──
+            tabMeasure("168px", "5", "14px", "8px"),
+            tabFrame("10px 10px 0 0", "0", null, "1px"),
+            tabMotion("box-shadow 180ms ease, transform 180ms ease, translate 180ms ease, background-color 180ms ease, color 120ms ease", null, null, "translateY(-2px)"),
+            tabShadow("3px 3px 6px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -3px -3px 6px var(--box-shadow-lit)", "inset 5px 5px 10px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset -5px -5px 10px var(--box-shadow-lit)", "10px 10px 20px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -10px -10px 20px var(--box-shadow-lit)"),
             disabled(".5", "not-allowed"));
 }

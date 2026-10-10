@@ -32,7 +32,8 @@ class UiPanesCrateConformanceTest {
     @Test
     void thePanePaintsNothingOfItsOwn() {
         var worn = Deployment.wornBy(List.of(PaneStyles.INSTANCE));
-        assertTrue(worn.size() >= 30, "the pane's classes wear over thirty distinct pairs; found " + worn.size());
+        assertEquals(9, worn.size(), "the pane's classes wear only the pane's frame, the drop target's and the within mark's picture - the strip, its chips"
+                + " and the drop mark wear the house's look; found " + worn);
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color"),

@@ -43,6 +43,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
 
 /** Retro-futurism: a neon ring that flares under the hand, and motion in steps, as a screen of the period moved. */
 public record RetroFuturism() implements DesignStyle, Derives<Base> {
@@ -102,5 +106,10 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
             menuFrame("3px", "1px", "6px", "2px", "200px"),
             menuRow("2px", "7px", "12px"),
             menuShadow("0 0 48px color-mix(in srgb, var(--box-shadow-glow) 45%, transparent), 0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 60%, transparent)"),
+            // ── its tabs glowing, stepping up in frames ──
+            tabMeasure("168px", "5.5", "12px", "8px"),
+            tabFrame("3px 3px 0 0", "1px", null, "2px"),
+            tabMotion("box-shadow 140ms ease-out, transform 140ms steps(3, end), translate 140ms steps(3, end), background-color 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out", null, "translateY(-1px)", "translateY(-3px)"),
+            tabShadow("0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 10px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 28px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 36px color-mix(in srgb, var(--box-shadow-glow) 80%, transparent)"),
             disabled(".4", "not-allowed"));
 }

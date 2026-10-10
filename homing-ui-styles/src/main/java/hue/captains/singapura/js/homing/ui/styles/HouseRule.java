@@ -3,7 +3,11 @@ package hue.captains.singapura.js.homing.ui.styles;
 import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
+import hue.captains.singapura.js.homing.design.semantic.Answer;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +23,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTEXT_MENU;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DETENT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.DROP_MARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TAB;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TAB_STRIP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.MENU_ITEM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.FILL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.GROOVE;
@@ -39,7 +46,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * the text's ink, a hairline round it - a toggle that is on tinted with the accent; a close turning to
  * danger under the hand, an icon button washed in its own ink; and each
  * coloured button's rank - its background, its ink, its border; a pane's thumbnail raised and
- * hairlined, the current one tinted and edged with the accent. A coloured button's background and ink move with its extent:
+ * hairlined, the current one tinted and edged with the accent; a tab tinted with the accent, the chosen one on the title
+ * colour, and its strip raised and ruled in the accent. A coloured button's background and ink move with its extent:
  * the word at 1, the neutral at 0, the meaning turned the other way at -1. Danger, warning and
  * success are the same in every house palette; only the ink they fall back to is the palette's.
  */
@@ -187,6 +195,23 @@ final class HouseRule {
                 rest(CONTEXT_MENU, BORDER, "border-color: " + s.border() + ";"),
                 when(MENU_ITEM, BACKGROUND, Map.of(
                         State.REST, ground("transparent"),
-                        State.HIGHLIGHTED, ground("color-mix(in srgb, " + s.accent() + " 28%, transparent)"))));
+                        State.HIGHLIGHTED, ground("color-mix(in srgb, " + s.accent() + " 28%, transparent)"))),
+                // ── a tab: tinted with the accent, more under the hand; the chosen one on the title colour, in the ink written on it and
+                //    edged with it. Its strip raised, ruled along its foot in the accent, and lit with it while the work is in its pane;
+                //    where a dragged tab would land, a bar of the accent; the mark that says the keys are in a tab, in the accent as
+                //    far as its extent - part of the way while the cursor is on the strip, at full while the keys are in the tab ──
+                when(TAB, BACKGROUND, Map.of(
+                        State.REST, ground("color-mix(in srgb, " + s.accent() + " 8%, transparent)"),
+                        State.HOVER, ground("color-mix(in srgb, " + s.accent() + " 15%, transparent)"),
+                        State.SELECTED, ground(s.title()))),
+                when(TAB, INK, Map.of(State.REST, "color: " + s.text() + ";", State.SELECTED, "color: " + s.onInverted() + ";")),
+                when(TAB, BORDER, Map.of(State.REST, "border-color: " + s.border() + ";", State.SELECTED, "border-color: " + s.title() + ";")),
+                when(TAB_STRIP, BACKGROUND, Map.of(
+                        State.REST, ground(s.raised()),
+                        State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 7%, " + s.raised() + ")"))),
+                rest(TAB_STRIP, BORDER, "border-color: " + s.accent() + ";"),
+                rest(DROP_MARK, BACKGROUND, ground(s.accent())),
+                new Implementation<>(new Casting(HouseMarks.Icon.INSTANCE, HouseSaying.Keys.INSTANCE), INK,
+                        new Answer.Own<>("color: color-mix(in srgb, " + s.accent() + " calc(clamp(0, var(--extent), 1) * 100%), currentColor);")));
     }
 }

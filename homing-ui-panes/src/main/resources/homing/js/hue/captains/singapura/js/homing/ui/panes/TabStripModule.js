@@ -36,10 +36,9 @@
 //     strip.window                  TabWindow: the row squeezed to the room, and where over it
 //         the bar is looking. The strip tells it the row and which chip to rest on; it owns
 //         the rail, the squeeze and the scrolling, and the wheel here asks it to step
-//     strip.keys(chip, state)       where the keys are, said on one chip: "held"
-//         while the bar has them — the chip lifted, the colour part of the way —
-//         "lent" while what the tab holds has them — the chip down again, the
-//         colour at full, the within mark on it — or null on none
+//     strip.keys(chip, state)       where the keys are, said on one chip and on no other:
+//         TabChip.keys - "held" while the bar has them, "lent" while what the tab
+//         holds has them - or null on none
 //     strip.count(n, addOn)         the pill, and the add button on or off
 //     strip.ground(target)          whether an event's target is the strip's own ground — the
 //         room the chips leave, and the tail — and not a chip or a control on it: where a
@@ -52,7 +51,7 @@
 //                                   desk whose hand carries a chip across strips and floats; none, the hand's
 //     strip.slide(chip, x, grabX?)  → the hand's slide begun by call: { place(x), end(commit) }
 //     strip.unmark()
-//     strip.current(on)             the bar lit: this is the dock being worked in
+//     strip.current(on)             the bar lit: this is the dock being worked in (aria-current)
 //     strip.size(s?)                the chips' size, −1..1, 0 the design's; every chip, now and later
 //     strip.dispose()
 //     strip.aspect(a?)              the chips' aspect, −1..1, 0 the design's proportion — wide,
@@ -62,7 +61,7 @@
 // strip are its pane's — ← → walk the tabs while the pane holds them — and
 // a chip that were a focusable button would take them away after every
 // press. The design draws the hover, the press and the selected one, since
-// the chip wears Selectable. The press is the selection: a chip is selected
+// the chip wears the tab's look. The press is the selection: a chip is selected
 // the moment it is pressed, before any release, and the chip in the hand —
 // pressed, dragged, pulled off — is the selected one throughout; nothing
 // else selects while it is held. A press on the strip moves no native focus
@@ -81,11 +80,17 @@
 // A tab offered from outside is marked where it would land: a bar inserted
 // between chips, at the count of those whose middle is left of the point,
 // never before the pinned ones. Nothing is positioned by hand: the chip in
-// the hand carries --mtp-drag-x, a chip stepping aside --mtp-shift-x. `css`
-// is injected with the styles import.
+// the hand carries --mtp-drag-x, a chip stepping aside --mtp-shift-x.
+//
+// Its look is the house's: the strip wears a tab strip's casting - raised,
+// ruled along its foot, lit while it is current - and the mark where a tab
+// would land a drop mark's, cast as that landing. Its own classes only
+// place. `css` is injected with the styles import.
 // =============================================================================
 
 const _stripOwner = Object.freeze({ toString: () => "tabStrip" });
+/** The mark's leaf: a drop mark, which nothing realizes on its own - the strip draws it here. */
+const _DROP_MARK = Object.freeze({ LEAF: "drop-mark" });
 
 /** The plus pressed: its holder asked for a tab. */
 class TabStripAdd {
@@ -102,8 +107,7 @@ class TabStripClose {
 }
 
 class TabStrip {
-    /** How much of the colour a chip carries while the cursor is on the bar: part of the way, towards what the tab in use carries at full. */
-    static ON_THE_BAR = 0.45;
+    static LEAF = "tab-strip";
 
     constructor(branch, opts) {
         if (!branch) throw new Error("[TabStrip] a branch of its own is required");
@@ -119,6 +123,7 @@ class TabStrip {
 
         var el = branch.createElement("strip", "div");
         css.addClass(el, mtp_strip);
+        new Look(TabStrip, ROLE.STANDALONE).wear(el);   // as a pane's tabs too: a role that only places it
         el.setAttribute("role", "tablist");
         this.el = el;
         // a press on the strip moves no native focus by the browser's default: a chip is not focusable, and the
@@ -148,7 +153,7 @@ class TabStrip {
         if (opts && typeof opts.onAdd === "function") {
             // the house's icon button, cast as what adds to its owner, holding the add icon: its look is the style's
             var plus = new Icon(branch.createElement("add-icon", Icon.TAG), { name: "add" });
-            this._add = new IconButton(IconButtonFactory.create(branch, "add"), { icon: plus, label: "Add a tab" }, ROLE.ADD);
+            this._add = new IconButton(branch.elementMaker("add"), { icon: plus, label: "Add a tab" }, ROLE.ADD);
             this._add.setOnClick(new TabStripAdd(opts));
             var addBtn = this._add.el;
             css.addClass(addBtn, mtp_rail_add);   // its place on the rail
@@ -170,12 +175,12 @@ class TabStrip {
         this._tail = branch.createElement("tail", "div");
         css.addClass(this._tail, mtp_strip_tail);
         // the count, in the house's pill, cast as its count: placed by the strip, looking as a pill does
-        this._pill = new Pill(PillFactory.create(branch, "pill"), {}, ROLE.COUNT);
+        this._pill = new Pill(branch.elementMaker("pill"), {}, ROLE.COUNT);
         css.addClass(this._pill.el, mtp_pill);
         this._tail.appendChild(this._pill.el);
         if (opts && typeof opts.onClose === "function") {   // the window's cross, at the very end of its one bar
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
-            var closing = new CloseButton(CloseButtonFactory.create(branch, "close"), { label: "Close these tabs" }, ROLE.CLOSE);
+            var closing = new CloseButton(branch.elementMaker("close"), { label: "Close these tabs" }, ROLE.CLOSE);
             closing.setOnClick(new TabStripClose(opts));
             var closeBtn = closing.el;
             css.addClass(closeBtn, mtp_bar_close);   // its place at the bar's end
@@ -187,6 +192,7 @@ class TabStrip {
 
         this._mark = branch.createElement("mark", "div");     // in the strip only while a drag is on
         css.addClass(this._mark, mtp_drop_mark);
+        new Look(_DROP_MARK, ROLE.LANDING).wear(this._mark);
         this._mark.setAttribute("aria-hidden", "true");
     }
 
@@ -212,7 +218,8 @@ class TabStrip {
     // bar needs one because it keeps a tab's room whether or not it holds a tab to measure.
     /** The bar of the dock being worked in, lit: a hint across the strip, and nothing that moves. */
     current(on) {
-        css.toggleClass(this.el, mtp_strip_current, !!on);
+        if (on) this.el.setAttribute("aria-current", "true");
+        else this.el.removeAttribute("aria-current");
         return this;
     }
 
@@ -252,29 +259,18 @@ class TabStrip {
         this._pinned.delete(c);
         this._hand.disarm(c);
         c.setAttribute("aria-selected", "false");
-        css.toggleClass(c, mtp_chip_lifted, false);
-        if (c._mark) { css.toggleClass(c._mark, mtp_chip_mark_on, false); css.extent(c._mark, null); }
+        TabChip.keys(c, null);
         if (c.parentNode === this._rail) this._rail.removeChild(c);
     }
     /**
-     * Where the keys are, said on one chip and on no other. The whole
-     * operation is lift and shift: the chip the CURSOR is on — the bar has
-     * the keys, and the arrows walk the tabs — is LIFTED off the row, and its
-     * mark carries the colour part of the way; the chip whose tab the keys
-     * are INSIDE sits back down at its regular elevation, and the same mark
-     * carries the same colour at FULL. One colour, two degrees, and the
+     * Where the keys are, said on one chip and on no other: lifted while the
+     * CURSOR is on it, its mark part of the way; down with its mark at FULL
+     * while the keys are INSIDE its tab. One colour, two degrees, and the
      * elevation says which of the two it is. Everything else is a chip like
      * any other.
      */
     keys(chip, state) {
-        var all = this._order;
-        for (var i = 0; i < all.length; i++) {
-            var c = all[i], on = c === chip && (state === "held" || state === "lent");
-            css.toggleClass(c, mtp_chip_lifted, on && state === "held");   // on the bar: picked up. In the tab, or nowhere: down
-            if (!c._mark) continue;
-            css.toggleClass(c._mark, mtp_chip_mark_on, on);
-            css.extent(c._mark, on ? (state === "held" ? TabStrip.ON_THE_BAR : 1) : null);
-        }
+        for (var i = 0; i < this._order.length; i++) TabChip.keys(this._order[i], this._order[i] === chip ? state : null);
         return this;
     }
 
@@ -290,15 +286,13 @@ class TabStrip {
     }
 
     // ── The chip in the hand: the hand's, and what it asks of the strip ──
-    /** Taken: the design's word for a thing dragged, in place of the seated one; the strip clips nothing meanwhile. */
+    /** Taken: the design's word for a thing dragged; the strip clips nothing meanwhile. */
     _grip(c) {
-        css.removeClass(c, mtp_chip_seated);
-        css.addClass(c, mtp_chip_dragging);
+        TabChip.grip(c, true);
         css.addClass(this.el, mtp_strip_loose);
     }
     _release(c) {
-        css.removeClass(c, mtp_chip_dragging);
-        css.addClass(c, mtp_chip_seated);
+        TabChip.grip(c, false);
         css.removeClass(this.el, mtp_strip_loose);
     }
     /**

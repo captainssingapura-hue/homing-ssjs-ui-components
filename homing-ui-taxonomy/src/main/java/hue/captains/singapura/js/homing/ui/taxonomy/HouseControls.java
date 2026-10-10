@@ -180,6 +180,18 @@ public final class HouseControls {
         }
     }
 
+    /** One tab of a strip: what a pane holds, picked. Its label and its icon slot are its own. */
+    public record Tab() implements Component<Control> {
+        public static final Tab INSTANCE = new Tab();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Keys.INSTANCE).one(),
+                           DSL.part(CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
+        }
+    }
+
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
     public record Switch() implements Component<Control> {
         public static final Switch INSTANCE = new Switch();

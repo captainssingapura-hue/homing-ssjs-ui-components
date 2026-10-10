@@ -41,6 +41,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuBackdrop;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
 
 /** Glassmorphism: a rounded pane with a lit top edge, floating on a wide soft shadow. */
 public record Glassmorphism() implements DesignStyle, Derives<Base> {
@@ -94,5 +98,10 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
             menuRow("8px", "8px", "14px"),
             menuShadow("0 24px 80px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent)"),
             menuBackdrop("blur(16px) saturate(1.6)"),
+            // ── its tabs panes of glass, lit along their top edge when chosen ──
+            tabMeasure("176px", "5.5", "14px", "8px"),
+            tabFrame("10px 10px 0 0", "1px", null, "1px"),
+            tabMotion("box-shadow 220ms ease, transform 220ms ease, translate 220ms ease, background-color 160ms ease, border-color 160ms ease", "translateY(-1px)", "translateY(-2px)", "translateY(-4px)"),
+            tabShadow("0 4px 14px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 8px 24px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset 0 1px 0 var(--box-shadow-lit)", "0 16px 40px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), inset 0 1px 0 var(--box-shadow-lit)"),
             disabled(".45", "not-allowed"));
 }

@@ -49,3 +49,8 @@ Lines up the actions that end a matter, the one to lead with apart.
 ## Trail
 
 Shows the way from the site's home to where the user is, each step a way back.
+
+## TabStrip
+
+Lines up a pane's tabs, says how many are out of sight, and lets the user add one, close the pane,
+and drop a tab into place.

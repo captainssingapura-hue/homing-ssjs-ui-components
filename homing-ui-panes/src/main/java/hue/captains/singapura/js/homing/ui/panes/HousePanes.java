@@ -2,14 +2,13 @@ package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
-import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
@@ -19,8 +18,9 @@ import java.util.List;
 
 /**
  * The house's tabbed panes, as this module adds them to the house's taxonomy: the panes of
- * many tabs and of one, a tab whole and the chip that names it, the strip they sit in and where a
- * dragged tab would land, the thumbnails of the panes and the ways to open a tab. In the tree if and
+ * many tabs and of one, a tab whole, the thumbnails of the panes and the ways to open a tab. The tab,
+ * the strip it sits in and where a dragged tab would land are the common tree's, so the styles can
+ * answer them. In the tree if and
  * only if this module is on the classpath.
  */
 public record HousePanes() implements TaxonomyExtension {
@@ -31,21 +31,8 @@ public record HousePanes() implements TaxonomyExtension {
 
     /** Every component this module declares. */
     @Override public List<Component<?>> components() {
-        return List.of(Tab.INSTANCE, PaneThumbs.INSTANCE, AddTab.INSTANCE, TabOpener.INSTANCE,
-                       TabPicker.INSTANCE, MultiTabPane.INSTANCE, SingleTabPane.INSTANCE, TabPane.INSTANCE,
-                       TabStrip.INSTANCE, DropMark.INSTANCE);
-    }
-
-    /** One tab of a strip: what a pane holds, picked. Its label and its icon slot are its own. */
-    public record Tab() implements Component<HouseBranches.Control> {
-        public static final Tab INSTANCE = new Tab();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Control parent() { return HouseBranches.Control.INSTANCE; }
-        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Keys.INSTANCE).one(),
-                           DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
-        }
+        return List.of(PaneThumbs.INSTANCE, AddTab.INSTANCE, TabOpener.INSTANCE,
+                       TabPicker.INSTANCE, MultiTabPane.INSTANCE, SingleTabPane.INSTANCE, TabPane.INSTANCE);
     }
 
     /** The thumbnails of the panes one may open. */
@@ -100,7 +87,7 @@ public record HousePanes() implements TaxonomyExtension {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one(),
+            return List.of(DSL.part(HouseContainers.TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one(),
                            DSL.part(TabPicker.INSTANCE).as(HouseDoing.Picker.INSTANCE).optional(),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).optional());
         }
@@ -112,7 +99,7 @@ public record HousePanes() implements TaxonomyExtension {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one());
+            return List.of(DSL.part(HouseContainers.TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one());
         }
     }
 
@@ -122,26 +109,8 @@ public record HousePanes() implements TaxonomyExtension {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).one());
+            return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).one());
         }
     }
 
-    /** A pane's tabs in a row, with a way to add one, to close the pane, a count of the hidden, and where a dragged tab would land. */
-    public record TabStrip() implements Component<HouseBranches.Bar> {
-        public static final TabStrip INSTANCE = new TabStrip();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
-                           DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
-                           DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
-                           DSL.part(DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional());
-        }
-    }
-
-    /** Where a dragged thing would land. */
-    public record DropMark() implements Component<HouseBranches.Mark> {
-        public static final DropMark INSTANCE = new DropMark();
-        @Override public HouseBranches.Mark parent() { return HouseBranches.Mark.INSTANCE; }
-    }
 }

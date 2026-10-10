@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 import hue.captains.singapura.js.homing.ui.elements.CloseButtonModule;
 
 import java.util.List;
@@ -33,15 +34,18 @@ public record TabChipModule() implements DomModule<TabChipModule> {
     public ImportsFor<TabChipModule> imports() {
         return ImportsFor.<TabChipModule>builder()
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton(), new CloseButtonModule.CloseButtonFactory()), CloseButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton()), CloseButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_chip(),
-                        new PaneStyles.mtp_chip_seated(),
                         new PaneStyles.mtp_chip_icon(),
                         new PaneStyles.mtp_chip_icon_on(),
                         new PaneStyles.mtp_chip_label(),
                         new PaneStyles.mtp_chip_mark(),
+                        new PaneStyles.mtp_chip_mark_on(),
+                        new PaneStyles.mtp_chip_lifted(),
+                        new PaneStyles.mtp_chip_dragging(),
                         new PaneStyles.mtp_chip_close()
                 ), PaneStyles.INSTANCE))
                 .build();

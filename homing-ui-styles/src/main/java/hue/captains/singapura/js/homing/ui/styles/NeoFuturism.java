@@ -42,6 +42,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
 
 /** Neo-futurism: a hairline, a lit rim that glows under the hand, a long eased glide. */
 public record NeoFuturism() implements DesignStyle, Derives<Base> {
@@ -98,5 +102,10 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
             menuFrame("2px", "1px", "6px", "1px", "210px"),
             menuRow("2px", "7px", "14px"),
             menuShadow("0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent), 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent)"),
+            // ── its tabs fine-edged, glowing when chosen; its strip a hairline along its foot ──
+            tabMeasure("184px", "6.5", "14px", "8px"),
+            tabFrame("2px 2px 0 0", "1px", null, "1px"),
+            tabMotion("transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), translate 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 220ms ease, background-color 220ms ease, color 160ms ease", "translateY(-1px)", "translateY(-1px)", "translateY(-2px) scale(1.015)"),
+            tabShadow("0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 45%, transparent), 0 0 16px color-mix(in srgb, var(--box-shadow-glow) 25%, transparent)", "0 0 0 1px var(--box-shadow-glow), 0 0 36px color-mix(in srgb, var(--box-shadow-glow) 45%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 0 0 1px var(--box-shadow-glow), 0 0 40px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)"),
             disabled(".4", "not-allowed"));
 }

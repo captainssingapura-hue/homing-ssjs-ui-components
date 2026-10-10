@@ -38,10 +38,14 @@
 //   pane.dispose()   refused while it holds its tab, which is its desk's
 //
 // Its reports are MultiTabPane's, on one sink: TabActivated, TabRenamed, and
-// TabRemoved when its tab closes. `css` is injected with the styles import.
+// TabRemoved when its tab closes. Its bar wears a tab strip's look, as a pane
+// of many does, lit (aria-current) while the keys are in its tab. `css` is
+// injected with the styles import.
 // =============================================================================
 
 const _singleOwner = Object.freeze({ toString: () => "singleTabPane" });
+/** Its bar's leaf: a tab strip, as a pane of many has one - drawn here, with its one chip. */
+const _TAB_STRIP = Object.freeze({ LEAF: "tab-strip" });
 
 class SingleTabPane {
     /** The kind a chip's menu is asked for: the Java TabMenu's, the dock's own. */
@@ -68,6 +72,7 @@ class SingleTabPane {
         // the bar: the dock's strip, holding the chip alone. A press on it moves no native focus by the browser's default
         var bar = branch.createElement("bar", "div");
         css.addClass(bar, mtp_strip);
+        new Look(_TAB_STRIP, ROLE.TABS).wear(bar);   // a pane's tabs, as a pane of many has them: a role that only places them
         bar.setAttribute("role", "tablist");
         bar.style.setProperty("--chip-fit", "100%");   // the chip never wider than its window: the label ellipsises, the cross stays
         bar.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
@@ -188,7 +193,8 @@ class SingleTabPane {
             css.toggleClass(e.chip._mark, mtp_chip_mark_on, this._inside);
             css.extent(e.chip._mark, this._inside ? 1 : null);
         }
-        css.toggleClass(this._bar, mtp_strip_current, this._inside);
+        if (this._inside) this._bar.setAttribute("aria-current", "true");
+        else this._bar.removeAttribute("aria-current");
     }
 
     dispose() {

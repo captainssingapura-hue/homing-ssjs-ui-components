@@ -40,7 +40,7 @@ class TabPaneTest extends JsModuleTestBase {
                 removeChild: function (c) { var i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); c.parentNode = null; return c; },
                 remove: function () { if (this.parentNode) this.parentNode.removeChild(this); },
                 contains: function (t) { for (var x = t; x; x = x.parentNode) if (x === this) return true; return false; },
-                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; },
+                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; }, removeAttribute: function (k) { delete attrs[k]; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 fire: function (t, ev) { var e = ev || {}; e.defaultPrevented = false; e.preventDefault = function () { e.defaultPrevented = true; }; e.stopPropagation = function () {};
                                          (this.listeners[t] || []).slice().forEach(function (fn) { fn(e); }); return e; },
@@ -58,13 +58,22 @@ class TabPaneTest extends JsModuleTestBase {
                 dissolve: function () { Array.from(this.kids.values()).forEach(function (k) { k.dissolve(); }); this.els.forEach(function (e) { e.remove(); }); this.els.clear();
                                         this.dissolved = true; if (this.parent) this.parent.kids.delete(name); } };
         }
+        // a maker is single-use, and known for one: the strip's plus, its count and the crosses are made by their own makers
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
+        var _branchOf = fakeBranch;
+        fakeBranch = function () {
+            var b = _branchOf.apply(null, arguments);
+            b.elementMaker = function (n) { var mk = function (tag) { makers.delete(mk); return b.createElement(n, tag); }; makers.add(mk); return mk; };
+            return b;
+        };
         var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { if (f) e.classList.add(c); else e.classList.remove(c); } };
         css.cls = function (name) { return name; };   // the new manager names its classes through the old
         css.extent = function (e, t) { e._extent = t; }; css.size = function (e, s) { e._size = s; }; css.aspect = function (e, a) { e._aspect = a; };   // a button's degrees
-        var mtp_chip = "mtp_chip", mtp_chip_seated = "mtp_chip_seated", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on",
+        var mtp_chip = "mtp_chip", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on",
             mtp_chip_label = "mtp_chip_label", mtp_chip_mark = "mtp_chip_mark", mtp_chip_close = "mtp_chip_close",
             mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden";
         var console = { error: function (m) { log.push("error:" + m); } };

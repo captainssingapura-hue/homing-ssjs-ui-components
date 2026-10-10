@@ -17,6 +17,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.marksMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.thumbRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuBase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -98,5 +99,7 @@ public record Base() implements DesignStyle {
             // ── a slider's room, its knob grabbed, and its detent and ticks as most styles mark them ──
             sliderBase(),
             // ── a menu's text the label's face, kept from the hand; its rows pointed at, in the label's size ──
-            menuBase());
+            menuBase(),
+            // ── a tab's text the caption's size, kept from the hand, pointed at and grabbed; its strip's text kept from the hand ──
+            tabBase());
 }

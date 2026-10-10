@@ -41,6 +41,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.currentKnob;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderMarks;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
 
 /**
  * Sketchy: drawn by hand - a wobbling outline, a marker's rule, a tilt under the hand. Ink casts no
@@ -92,5 +95,9 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
             // ── its menu drawn by hand, casting nothing ──
             menuFrame("8px 6px 7px 9px / 6px 8px 9px 7px", "2px", "8px", "2px", "200px"),
             menuRow("6px 4px 5px 7px / 4px 6px 7px 5px", "7px", "12px"),
+            // ── its tabs drawn by hand, the chosen one ruled heavier and askew, casting nothing ──
+            tabMeasure("160px", "5", "12px", "8px"),
+            tabFrame("8px 6px 0 0 / 6px 8px 0 0", "2px", "3px", "2px"),
+            tabMotion("transform 120ms ease-out, translate 120ms ease-out, background-color 120ms ease-out, border-color 120ms ease-out", null, "rotate(-0.4deg)", "translateY(-2px) rotate(-1deg)"),
             disabled(".5", "not-allowed"));
 }

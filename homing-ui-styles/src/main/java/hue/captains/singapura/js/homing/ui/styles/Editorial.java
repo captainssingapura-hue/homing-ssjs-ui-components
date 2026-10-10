@@ -43,6 +43,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.markAlone;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
 
 /** Editorial, the house's own: a serif voice, a fine rule, a soft lift under the hand. */
 public record Editorial() implements DesignStyle, Derives<Base> {
@@ -99,5 +103,10 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             menuFrame("6px", "1px", "6px", "2px", "200px"),
             menuRow("4px", "7px", "12px"),
             menuShadow("0 10px 30px color-mix(in srgb, var(--box-shadow-cast) 45%, transparent), 0 2px 6px color-mix(in srgb, var(--box-shadow-cast) 30%, transparent)"),
+            // ── its tabs cut square at the foot, softly lifted when chosen; its strip ruled along its foot ──
+            tabMeasure("168px", "6", "12px", "8px"),
+            tabFrame("4px 4px 0 0", "1.5px", null, "2px"),
+            tabMotion("transform 160ms ease, translate 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease", "translateY(-1px)", "translateY(-2px)", "translateY(-4px)"),
+            tabShadow("0 4px 12px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 8px 20px color-mix(in srgb, var(--box-shadow-cast) 18%, transparent)", "0 14px 30px color-mix(in srgb, var(--box-shadow-cast) 20%, transparent)"),
             disabled(".45", "default"));
 }
