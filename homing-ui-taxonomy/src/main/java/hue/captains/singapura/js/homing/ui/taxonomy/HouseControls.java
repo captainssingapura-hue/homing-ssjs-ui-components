@@ -158,18 +158,6 @@ public final class HouseControls {
         @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
-    /** One tab of a strip: what a pane holds, picked. Its label and its icon slot are its own. */
-    public record Tab() implements Component<Control> {
-        public static final Tab INSTANCE = new Tab();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
-        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Keys.INSTANCE).one(),
-                           DSL.part(CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
-        }
-    }
-
     /** A value picked along a scale. */
     public record Range() implements Component<Control> {
         public static final Range INSTANCE = new Range();
@@ -190,39 +178,6 @@ public final class HouseControls {
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Groove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
                            DSL.part(Knob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one());
-        }
-    }
-
-    /** A pane, picked by its thumbnail. */
-    public record PaneThumb() implements Component<Control> {
-        public static final PaneThumb INSTANCE = new PaneThumb();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
-        }
-    }
-
-    /** The site's mark and name, a way home. */
-    public record Brand() implements Component<Control> {
-        public static final Brand INSTANCE = new Brand();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
-                           DSL.part(HouseText.Wordmark.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
-        }
-    }
-
-    /** The button that opens the site's preferences in a dialog, the preferences' view its page. */
-    public record PreferencesButton() implements Component<Control> {
-        public static final PreferencesButton INSTANCE = new PreferencesButton();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
-                           DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional(),
-                           DSL.part(HouseContainers.PreferencesView.INSTANCE).as(HouseShaping.Page.INSTANCE).optional());
         }
     }
 

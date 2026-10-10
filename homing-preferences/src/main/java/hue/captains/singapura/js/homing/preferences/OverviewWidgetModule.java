@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.HeadingModule;
 import hue.captains.singapura.js.homing.ui.elements.LedeModule;
@@ -24,7 +23,7 @@ import java.util.List;
  * {@code label, summary?, settings: [{name, label}]} — the settings below
  * the group, flattened by the site when it declares the tree.
  */
-public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule>, ImplFor<HouseContainers.OverviewWidget> {
+public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule>, ImplFor<HousePreferences.OverviewWidget> {
 
     /** The class. */
     public record OverviewWidget() implements Widget._Class<Widget._None, OverviewWidgetModule> {}

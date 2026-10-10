@@ -78,10 +78,15 @@ class HouseRoleCatalogueTest {
         assertEquals(List.of(), new CatalogueNames().clashes(CATALOGUE.branches(), CATALOGUE.roles()));
     }
 
+    /**
+     * Read with the base tree alone, a role only an extension's parts are named in goes unnamed: the
+     * catalogue is the house's whole vocabulary, and the whole house names every word of it but
+     * one - held by the components conformance, where every extension is.
+     */
     @Test
-    void readWithTheHouse_everyRoleNamedButOne() {
+    void readWithTheBase_theWordsOnlyTheExtensionsSay_goUnnamed() {
         var findings = HouseTaxonomy.INSTANCE.read().findings();
-        assertEquals(1, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
-                "only Host, a floater's - and the floater is not in the first cut");
+        assertEquals(38, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
+                "thirty-seven the extensions name, and Host - a floater's, not in the first cut");
     }
 }

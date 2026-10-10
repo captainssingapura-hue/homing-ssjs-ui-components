@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.panzoom;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.ReadoutModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
@@ -16,7 +15,7 @@ import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import java.util.List;
 
 /** The controls of a pan-zoom view: out, the zoom said, in, fit - the elements' buttons, following the view they drive. */
-public record PanZoomBarModule() implements DomModule<PanZoomBarModule>, ImplFor<HouseContainers.PanZoomBar> {
+public record PanZoomBarModule() implements DomModule<PanZoomBarModule>, ImplFor<HousePanZoom.PanZoomBar> {
 
     public static final PanZoomBarModule INSTANCE = new PanZoomBarModule();
 

@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.splitgrid;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
@@ -22,7 +21,7 @@ import java.util.List;
  * switcher in the making: a shortcut can raise it scaled, the arrows pick a
  * pane, and the owner makes that pane active. A branch component.
  */
-public record SplitGridMirrorModule() implements DomModule<SplitGridMirrorModule>, ImplFor<HouseContainers.SplitGridMirror> {
+public record SplitGridMirrorModule() implements DomModule<SplitGridMirrorModule>, ImplFor<HouseSplitGrid.SplitGridMirror> {
 
     /** The class: {@code new SplitGridMirror(branch, {host, scale?, onEvent?})}; {@code reflect(layout, box)}, {@code scale}, {@code cursor}, {@code rects}, {@code dispose}. */
     public record SplitGridMirror() implements BranchComponent<SplitGridMirrorModule>, NeedKeyboard {

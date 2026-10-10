@@ -40,13 +40,4 @@ public final class HouseItems {
         }
     }
 
-    /** One setting of a group, listed with its value. Its name is its own. */
-    public record SettingRow() implements Component<Item> {
-        public static final SettingRow INSTANCE = new SettingRow();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Item parent() { return Item.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Value.INSTANCE).one());
-        }
-    }
 }

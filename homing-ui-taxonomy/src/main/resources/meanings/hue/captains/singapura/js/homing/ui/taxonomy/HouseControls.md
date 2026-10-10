@@ -58,10 +58,6 @@ Takes the user somewhere else, and says where.
 
 Takes the user back to one place on the way they came.
 
-## Tab
-
-Brings forward one of the things a pane holds, and stands for it among the others.
-
 ## Range
 
 Sets a number along a scale, natively, with no more than the scale itself.
@@ -73,18 +69,6 @@ Sets one value from a list that opens when asked and closes once picked.
 ## Switch
 
 Sets a setting on or off, in one movement, and shows which it is.
-
-## PaneThumb
-
-Picks one pane by a small picture of where it is.
-
-## Brand
-
-Says whose site this is, and takes the user home.
-
-## PreferencesButton
-
-Opens the site's preferences, where the user sets how the site behaves for them.
 
 ## Slider
 

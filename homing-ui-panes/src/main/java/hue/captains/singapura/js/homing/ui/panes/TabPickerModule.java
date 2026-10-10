@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
@@ -26,7 +25,7 @@ import java.util.List;
  * <p>Its choices are native buttons: the browser's own keys walk and press
  * them, and the first takes the focus when the picker is shown.</p>
  */
-public record TabPickerModule() implements DomModule<TabPickerModule>, ImplFor<HouseContainers.TabPicker> {
+public record TabPickerModule() implements DomModule<TabPickerModule>, ImplFor<HousePanes.TabPicker> {
 
     /** The class. */
     public record TabPicker() implements BranchComponent<TabPickerModule> {

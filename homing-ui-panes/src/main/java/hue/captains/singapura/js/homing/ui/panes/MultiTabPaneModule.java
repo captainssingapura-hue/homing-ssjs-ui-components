@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 
@@ -52,7 +51,7 @@ import java.util.Set;
  * log or a checkpoint as it is. The strip, its chips and the drag that
  * reorders are {@link TabStrip}'s.</p>
  */
-public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, ImplFor<HouseContainers.MultiTabPane> {
+public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, ImplFor<HousePanes.MultiTabPane> {
 
     /** The class. */
     public record MultiTabPane() implements BranchComponent<MultiTabPaneModule>, NeedContextMenu, NeedKeyboard {

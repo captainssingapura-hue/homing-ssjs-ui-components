@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -26,7 +25,7 @@ import java.util.List;
  * writes through the steward, and the page follows the store as it always
  * has, so a theme picked in the dialog is worn behind it as it is picked.</p>
  */
-public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule>, ImplFor<HouseControls.PreferencesButton> {
+public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule>, ImplFor<HouseSite.PreferencesButton> {
 
     /** The class. */
     public record PreferencesButton() implements BranchComponent<PreferencesButtonModule> {

@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -19,7 +18,7 @@ import java.util.List;
  * and so is closing it; what it is asked where it stands — a press, a menu —
  * goes to the host it is in. RFC 0066 E3, appendix "tab-panes".
  */
-public record TabPaneModule() implements DomModule<TabPaneModule>, ImplFor<HouseContainers.TabPane> {
+public record TabPaneModule() implements DomModule<TabPaneModule>, ImplFor<HousePanes.TabPane> {
 
     /** The class. */
     public record TabPane() implements BranchComponent<TabPaneModule> {

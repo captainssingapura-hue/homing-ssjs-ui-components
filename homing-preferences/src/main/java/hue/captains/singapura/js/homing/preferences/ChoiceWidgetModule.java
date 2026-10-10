@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 
@@ -17,7 +16,7 @@ import java.util.List;
  * note, drawn as a listbox; the chosen one is written through the steward.
  * Params: {@code name, label, summary?, default?, options: [{value, label, note?}]}.
  */
-public record ChoiceWidgetModule() implements Widget<Widget._None, ChoiceWidgetModule>, ImplFor<HouseContainers.ChoiceWidget> {
+public record ChoiceWidgetModule() implements Widget<Widget._None, ChoiceWidgetModule>, ImplFor<HousePreferences.ChoiceWidget> {
 
     /** The class. */
     public record ChoiceWidget() implements Widget._Class<Widget._None, ChoiceWidgetModule> {}

@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -21,7 +20,7 @@ import java.util.List;
  * {@code onSelect(fn)}, {@code select(path)} — so a real tree view is one
  * provider away. Params: {@code tree, labels}, as the registry stamps them.
  */
-public record ListMasterWidgetModule() implements Widget<Widget._None, ListMasterWidgetModule>, ImplFor<HouseContainers.ListMasterWidget> {
+public record ListMasterWidgetModule() implements Widget<Widget._None, ListMasterWidgetModule>, ImplFor<HousePreferences.ListMasterWidget> {
 
     /** The class. */
     public record ListMasterWidget() implements Widget._Class<Widget._None, ListMasterWidgetModule>, NeedKeyboard {

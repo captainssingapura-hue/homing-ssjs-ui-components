@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.WidgetSlotModule;
@@ -27,7 +26,7 @@ import java.util.List;
  * params and shows its root. What a widget writes, it writes through the
  * steward; the view neither carries nor forwards a value.</p>
  */
-public record PreferencesViewModule() implements DomModule<PreferencesViewModule>, ImplFor<HouseContainers.PreferencesView> {
+public record PreferencesViewModule() implements DomModule<PreferencesViewModule>, ImplFor<HousePreferences.PreferencesView> {
 
     /** The class. */
     public record PreferencesView() implements BranchComponent<PreferencesViewModule>, NeedKeyboard {

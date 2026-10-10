@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.splitgrid;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -19,7 +18,7 @@ import java.util.List;
  * arrangement as one {@code SplitGridEvents} object. It never knows what a
  * cell holds. A branch component.
  */
-public record SplitGridModule() implements DomModule<SplitGridModule>, ImplFor<HouseContainers.SplitGrid> {
+public record SplitGridModule() implements DomModule<SplitGridModule>, ImplFor<HouseSplitGrid.SplitGrid> {
 
     /** The class: {@code new SplitGrid(branch, {host, layout, minCellPx?, onEvent?})}; {@code cell}, {@code cells}, {@code layout}, {@code setRatios}, {@code subdivide}, {@code remove}, {@code dispose}. */
     public record SplitGrid() implements BranchComponent<SplitGridModule> {

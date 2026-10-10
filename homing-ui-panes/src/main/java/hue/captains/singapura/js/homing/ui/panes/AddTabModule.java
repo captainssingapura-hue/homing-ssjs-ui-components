@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -32,7 +31,7 @@ import java.util.List;
  * nothing here joins the keyboard party, which is what a small control should
  * be and what leaves the party to the containers that need it.</p>
  */
-public record AddTabModule() implements DomModule<AddTabModule>, ImplFor<HouseContainers.AddTab> {
+public record AddTabModule() implements DomModule<AddTabModule>, ImplFor<HousePanes.AddTab> {
 
     /** The class. */
     public record AddTab() implements BranchComponent<AddTabModule> {

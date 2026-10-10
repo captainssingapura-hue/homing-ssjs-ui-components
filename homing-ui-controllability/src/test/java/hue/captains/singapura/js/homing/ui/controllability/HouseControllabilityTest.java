@@ -81,6 +81,12 @@ class HouseControllabilityTest {
     }
 
     @Test
+    void theCommonLeavesAlone_onThisClasspath() {
+        assertEquals(9, HouseControllability.INSTANCE.classification().declared().size(),
+                "no module that extends the house is here: the types of its leaves are declared beside them, and read where they are");
+    }
+
+    @Test
     void theDemoedLeaves_areClassifiedByType() {
         var expected = new LinkedHashMap<String, String>();
         for (String b : List.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "slider"))
@@ -88,13 +94,11 @@ class HouseControllabilityTest {
         expected.put("panel", "emphasised");
         expected.put("edge-strip", "holdable");
         expected.put("dialog", "modal-overlay");
-        for (String o : List.of("context-menu", "float-layer", "tab-opener")) expected.put(o, "overlay");
-        expected.put("svg-pan-zoom", "zoomable");
-        for (String a : List.of("split-pane", "split-grid", "split-grid-mirror", "pane-thumbs")) expected.put(a, "arrangeable");
+        expected.put("context-menu", "overlay");
+        expected.put("split-pane", "arrangeable");
         expected.put("floating-pane", "placeable");
         expected.put("icon", "content");
-        for (String m : List.of("focus-monitor", "steward-monitor", "context-menu-steward")) expected.put(m, "monitor");
-        for (String p : List.of("summary-card", "slider-group", "list-master-widget", "add-tab", "pan-zoom-bar")) expected.put(p, "plain");
+        for (String p : List.of("summary-card", "slider-group")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));
         assertEquals(expected, actual);
@@ -103,7 +107,7 @@ class HouseControllabilityTest {
     @Test
     void aBranchClassifiesEveryLeafUnderIt_andANodeWithNothingOnItsLineageIsPlain() {
         assertEquals("switchable", typeOf("toggle-button"), "under the Button branch, declared on the branch");
-        assertEquals("arrangeable", typeOf("dock-grid"), "under the Split branch, declared on the branch");
+        assertEquals("arrangeable", typeOf("split-pane"), "under the Split branch, declared on the branch");
         assertEquals("plain", typeOf("heading"));
         for (Component<?> leaf : TAXONOMY.components())
             assertTrue(HouseControllability.INSTANCE.findControlType(TAXONOMY, leaf) != null, leaf + " has a type");

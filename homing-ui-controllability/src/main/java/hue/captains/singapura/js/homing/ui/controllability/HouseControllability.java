@@ -32,7 +32,10 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.ServiceLoader;
 
 /**
  * The house's controllability: its control options, the control types they make up, and every leaf
@@ -84,26 +87,27 @@ public record HouseControllability() implements StatelessFunctionalObject {
     /** The catalogue, read - or refused with every problem in it. */
     public ControlCatalogue catalogue() { return ReadControls.INSTANCE.read(options()); }
 
-    /** The house's leaves classified: on a branch for every leaf under it, on a leaf for itself; plain otherwise. */
+    /**
+     * The house's leaves classified: on a branch for every leaf under it, on a leaf for itself; plain
+     * otherwise. The common leaves here, then those of every module on the classpath that extends
+     * the house ({@link ControllabilityExtension}), in the order of their class names.
+     */
     public ControlClassification classification() {
-        return new ControlClassification(List.of(
+        var declared = new ArrayList<>(List.of(
                 new ControlTypeAt(HouseBranches.Button.INSTANCE, SWITCHABLE),
                 new ControlTypeAt(HouseControls.Slider.INSTANCE, SWITCHABLE),
                 new ControlTypeAt(HouseContainers.Panel.INSTANCE, EMPHASISED),
                 new ControlTypeAt(HouseContainers.EdgeStrip.INSTANCE, HOLDABLE),
                 new ControlTypeAt(HouseContainers.Dialog.INSTANCE, MODAL_OVERLAY),
                 new ControlTypeAt(HouseContainers.ContextMenu.INSTANCE, OVERLAY),
-                new ControlTypeAt(HouseContainers.FloatLayer.INSTANCE, OVERLAY),
-                new ControlTypeAt(HouseContainers.TabOpener.INSTANCE, OVERLAY),
-                new ControlTypeAt(HouseContainers.SvgPanZoom.INSTANCE, ZOOMABLE),
                 new ControlTypeAt(HouseBranches.Split.INSTANCE, ARRANGEABLE),
-                new ControlTypeAt(HouseContainers.PaneThumbs.INSTANCE, ARRANGEABLE),
                 new ControlTypeAt(HouseContainers.FloatingPane.INSTANCE, PLACEABLE),
-                new ControlTypeAt(HouseMarks.Icon.INSTANCE, CONTENT),
-                new ControlTypeAt(HouseContainers.FocusMonitor.INSTANCE, MONITOR),
-                new ControlTypeAt(HouseContainers.StewardMonitor.INSTANCE, MONITOR),
-                new ControlTypeAt(HouseContainers.ContextMenuSteward.INSTANCE, MONITOR)),
-                PLAIN);
+                new ControlTypeAt(HouseMarks.Icon.INSTANCE, CONTENT)));
+        var extensions = new ArrayList<ControllabilityExtension>();
+        ServiceLoader.load(ControllabilityExtension.class, HouseControllability.class.getClassLoader()).forEach(extensions::add);
+        extensions.sort(Comparator.comparing(e -> e.getClass().getName()));
+        for (ControllabilityExtension e : extensions) declared.addAll(e.classification());
+        return new ControlClassification(declared, PLAIN);
     }
 
     /** {@code controlType = findControlType(component)}, in the house's taxonomy as read. */

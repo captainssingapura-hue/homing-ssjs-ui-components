@@ -24,10 +24,6 @@ Marks where one step of a run ends and the next begins, on the same line as the 
 
 Says by a light how something is: alive, dormant, broken.
 
-## DropMark
-
-Shows where a dragged thing would land.
-
 ## Indicator
 
 A small sign of a state: which one is current, which one has the keys.

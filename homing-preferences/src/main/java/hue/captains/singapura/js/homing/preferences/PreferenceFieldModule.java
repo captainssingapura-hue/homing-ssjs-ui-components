@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.HeadingModule;
 import hue.captains.singapura.js.homing.ui.elements.LedeModule;
@@ -27,7 +26,7 @@ import java.util.List;
  * writes a pick, forgets on reset, and follows the store so a change made
  * anywhere is drawn here.
  */
-public record PreferenceFieldModule() implements DomModule<PreferenceFieldModule>, ImplFor<HouseContainers.PreferenceField> {
+public record PreferenceFieldModule() implements DomModule<PreferenceFieldModule>, ImplFor<HousePreferences.PreferenceField> {
 
     /** The class. */
     public record PreferenceField() implements BranchComponent<PreferenceFieldModule> {

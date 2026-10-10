@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.docking;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -25,7 +24,7 @@ import java.util.Set;
  * the workspace detour). The desk is the holder's; the grid adds its docks
  * to it and takes them off as their regions go.
  */
-public record DockGridModule() implements DomModule<DockGridModule>, ImplFor<HouseContainers.DockGrid> {
+public record DockGridModule() implements DomModule<DockGridModule>, ImplFor<HouseDocking.DockGrid> {
 
     /** The class: {@code new DockGrid(branch, { host, desk, layout?, menus?, dock?, chooseRegion?, onEvent? })}. */
     public record DockGrid() implements BranchComponent<DockGridModule>, NeedContextMenu {

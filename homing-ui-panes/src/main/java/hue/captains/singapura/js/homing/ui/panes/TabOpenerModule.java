@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
@@ -41,7 +40,7 @@ import java.util.List;
  * widget rather than out of the room. That seam is wired here once, so a page
  * need not wire it.</p>
  */
-public record TabOpenerModule() implements DomModule<TabOpenerModule>, ImplFor<HouseContainers.TabOpener> {
+public record TabOpenerModule() implements DomModule<TabOpenerModule>, ImplFor<HousePanes.TabOpener> {
 
     /** The class. */
     public record TabOpener() implements BranchComponent<TabOpenerModule>, NeedKeyboard {

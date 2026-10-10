@@ -142,8 +142,8 @@ class ButtonTest extends JsModuleTestBase {
 
     @Test
     void castings_onlyThoseTheTaxonomyHasASlotFor_aFunctionalRoleLookingAsTheLeafOnItsOwn() {
-        eval("var choice = new PlainButton(el('button'), {}, ROLE.CHOICE);");
-        assertTrue(has("choice", "plain-button_choice__color-background"), "a picker's choice");
+        eval("var action = new PlainButton(el('button'), {}, ROLE.ACTION);");
+        assertTrue(has("action", "plain-button_action__color-background"), "an action bar's action");
         var e = assertThrows(PolyglotException.class, () -> eval("new DangerButton(el('button'), {}, ROLE.GO)"));
         assertTrue(e.getMessage().contains("is never cast as go: only as standalone"), e.getMessage());
         assertThrows(PolyglotException.class, () -> eval("new PlainButton(el('button'), {}, 'go')"), "a role is one of ROLE");

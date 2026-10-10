@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.elements.PillModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
@@ -27,7 +26,7 @@ import java.util.List;
  * the pinned ones. It holds no tab state; the pane arranges, selects and
  * counts, and turns a drop into a move.
  */
-public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<HouseContainers.TabStrip> {
+public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<HousePanes.TabStrip> {
 
     /** The class. */
     public record TabStrip() implements BranchComponent<TabStripModule> {
