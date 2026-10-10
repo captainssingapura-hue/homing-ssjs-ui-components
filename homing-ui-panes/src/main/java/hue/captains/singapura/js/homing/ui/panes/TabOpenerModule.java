@@ -30,9 +30,8 @@ import java.util.List;
  * thing inside itself would be a tab that is always an opener wearing somebody
  * else's name. Giving the tab up and asking the {@link
  * TabSourceModule.TabSource} for a fresh one costs three calls and leaves
- * nothing of the opener behind — and it is the same minting rule {@link
- * AddTabModule.AddTab} uses, so a tab opened here and a tab added there are
- * the same kind of thing.</p>
+ * nothing of the opener behind — and it is the source's one minting rule, so a
+ * tab opened here and a tab added from code are the same kind of thing.</p>
  *
  * <p>Its choices are native buttons inside a logical member: the widget holds
  * the keys for the dock, the focused button holds them for the widget — said

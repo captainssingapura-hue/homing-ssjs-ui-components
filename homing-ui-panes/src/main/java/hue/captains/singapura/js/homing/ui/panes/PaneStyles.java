@@ -460,98 +460,6 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    // ── the little picture of the panes, and the control that adds by it ──
-
-    /**
-      * The frame of the picture: the room every pane is in, at the shape it
-      * really has. The aspect is measured rather than chosen — a tall
-      * workspace gets a tall thumbnail — so that the small arrangement is the
-      * big one, and pointing at a box is pointing at a place.
-      */
-    public record mtp_thumbs() implements CssClass<PaneStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--thumbs-width"), new CssVar("--thumbs-aspect")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Container.Pane.class, Shape.Corner.class)); }
-        @Override public String body() { return """
-            position: relative;
-            flex: 0 0 auto;
-            box-sizing: border-box;
-            inline-size: var(--thumbs-width, 132px);
-            aspect-ratio: var(--thumbs-aspect, 1.6);
-            """;
-        }
-    }
-
-    /**
-      * One pane, small. It wears the pane's own rule and edge because that is
-      * what it is a picture OF; what the pane holds is not drawn, since a
-      * thumbnail of a workspace is about places and not about contents.
-      */
-    public record mtp_thumb() implements CssClass<PaneStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--thumb-x"), new CssVar("--thumb-y"), new CssVar("--thumb-w"), new CssVar("--thumb-h")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Base.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Container.Pane.class, Shape.Rule.class),
-                                                                          of(Container.Pane.class, Color.Edge.class), of(Interactive.class, Affordance.Cursor.class),
-                                                                          of(Interactive.class, Motion.Ease.class)); }
-        @Override public String body() { return """
-            position: absolute;
-            inset-inline-start: var(--thumb-x, 0%);
-            inset-block-start: var(--thumb-y, 0%);
-            inline-size: var(--thumb-w, 100%);
-            block-size: var(--thumb-h, 100%);
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            padding: 0 3px;
-            font: inherit;
-            """;
-        }
-    }
-
-    /** The one the control is pointing at: the word for the current thing, and nothing that moves. */
-    public record mtp_thumb_on() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Current.class, Color.Surface.class), of(Current.class, Color.Edge.class)); }
-        @Override public String body() { return ""; }
-    }
-
-    /** A pane that would not take another: shown, because where it is belongs to the picture, but not choosable. */
-    public record mtp_thumb_off() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Inert.class, Effect.Opacity.class), of(Inert.class, Affordance.Cursor.class)); }
-        @Override public String body() { return ""; }
-    }
-
-    /** The word in the box: small, quiet, and clipped rather than allowed to burst the pane it names. */
-    public record mtp_thumb_label() implements CssClass<PaneStyles> {
-        @Override public String body() { return """
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            """;
-        }
-    }
-
-    /** The control's row: the picture, the list, the button. */
-    public record mtp_new() implements CssClass<PaneStyles> {
-        @Override public String body() { return """
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            """;
-        }
-    }
-
-    /** What to mount: a native list, dressed as the control beside it. */
-    public record mtp_new_pick() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Raised.class, Color.Edge.class),
-                                                                          of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Interactive.class, Affordance.Cursor.class)); }
-        @Override public String body() { return """
-            font: inherit;
-            padding: 3px 6px;
-            """;
-        }
-    }
-
     /** The pane while a tab from outside is offered to it: the drop-target word, on its surface, its edge and its rule. */
     public record mtp_dock_target() implements CssClass<PaneStyles> {
         @Override public List<? extends Wearable> wears() { return List.of(of(DropTarget.class, Color.Surface.class), of(DropTarget.class, Color.Edge.class), of(DropTarget.class, Shape.Rule.class)); }
@@ -577,7 +485,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
                        new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(), new mtp_dock_target(),
                        new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(),
-                       new mtp_thumbs(), new mtp_thumb(), new mtp_thumb_on(), new mtp_thumb_off(), new mtp_thumb_label(), new mtp_new(), new mtp_new_pick(),
+                       
                        new mtp_tab_content_hidden());   // last, so hidden wins over what a panel or the empty note says of its display
     }
 }
