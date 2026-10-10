@@ -12,7 +12,8 @@
 // put on. A treatment's rule holds its state's selector, so a state shows
 // when its reflection is written - the component writes the reflection
 // (show), and the class does the rest. Nothing changes on a theme switch:
-// the names are the casting's, and the sheet is fetched again.
+// the names are the casting's, and the sheet - derived, the theme's - is
+// fetched again by the theme's owner (RFC 0064, D25).
 //
 //   var look = new Look(Leaf, role)     the leaf's casting in a role of ROLE; a
 //                                       functional role looks as the leaf on its own
@@ -27,18 +28,12 @@
 //     .text(el, words)                  the element's words
 //
 // Leaf is the component's class: its token (LEAF) and its axes (AXES), each
-// with the reflection its value writes. `css` - the manager underneath - is
-// injected with the sheet's import, and puts the classes on.
+// with the reflection its value writes. The look puts its classes on itself:
+// they are a derived sheet's, and the CSS manager handles only what does not
+// vary. `css` - the manager - is injected for the element's degrees.
 // =============================================================================
 
 var _LOOK_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
-var _lookHandles = new Map();   // class name → the manager's handle for it
-
-function _lookHandle(name) {
-    var h = _lookHandles.get(name);
-    if (!h) { h = css.cls(name); _lookHandles.set(name, h); }
-    return h;
-}
 
 class Look {
     constructor(Leaf, role) {
@@ -53,9 +48,9 @@ class Look {
         void look_sheet;   // the sheet the classes are ruled in: imported, so it loads
     }
 
-    wear(el, part) { this._of(part).forEach(function (c) { css.addClass(el, _lookHandle(c)); }); }
+    wear(el, part) { this._of(part).forEach(function (c) { el.classList.add(c); }); }
 
-    shed(el, part) { this._of(part).forEach(function (c) { css.removeClass(el, _lookHandle(c)); }); }
+    shed(el, part) { this._of(part).forEach(function (c) { el.classList.remove(c); }); }
 
     /** Its classes, or those of the targets a part says: only these, or all but these - each a target of LOOK_TARGETS. */
     _of(part) {

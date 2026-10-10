@@ -6,6 +6,7 @@ import hue.captains.singapura.js.homing.conformance.rules.CrateClosure;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
+import hue.captains.singapura.js.homing.conformance.rules.RuleId;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
@@ -81,8 +82,13 @@ public final class ComponentsConformance {
     /** The framework's policy, unextended: the components declare no types of their own. */
     public static final JsRulePolicy POLICY = DefaultJsRulePolicy.INSTANCE;
 
-    /** Documented, intentional exceptions: none. */
-    public static final List<Allowance> ALLOWANCES = List.of();
+    /** Documented, intentional exceptions. */
+    public static final List<Allowance> ALLOWANCES = List.of(
+            new Allowance(
+                    "hue.captains.singapura.js.homing.ui.elements.LookModule",
+                    new RuleId("no-raw-css"),
+                    "Look IS the look's manager: the classes it puts on are a derived sheet's, the theme's, which the CSS "
+                            + "manager does not handle (RFC 0064, D25) - so its classList calls are where that typed path ends."));
 
     /** Every look the framework's designs offer — each design in each palette that fits it; each must bind every pair a class wears. */
     public static List<Design> designs() {
@@ -113,7 +119,7 @@ public final class ComponentsConformance {
         }
     }
 
-    /** The framework-strict grader with the components' (empty) allowances and baseline; a module's declared debts honoured. */
+    /** The framework-strict grader with the components' allowances and (empty) baseline; a module's declared debts honoured. */
     public static FindingGrader grader(boolean allowPreExisting) {
         return FindingGrader.STRICT
                 .withAllowlist(ALLOWANCES)
