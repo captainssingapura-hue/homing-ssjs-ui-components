@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 /**
  * The house's role catalogue, its first top branch: what a part tells about its owner - what it
  * is, more about it, how to use it, how it is now, a state shown by a mark, the marks of a scale.
- * Twenty-one roles under six branches.
+ * Twenty-four roles under six branches.
  */
 public final class HouseSaying {
 
@@ -66,6 +66,8 @@ public final class HouseSaying {
     public record Hint() implements Role<Guiding> { public static final Hint INSTANCE = new Hint(); @Override public Guiding parent() { return Guiding.INSTANCE; } }
     /** Asks the user what to do. */
     public record Prompt() implements Role<Guiding> { public static final Prompt INSTANCE = new Prompt(); @Override public Guiding parent() { return Guiding.INSTANCE; } }
+    /** Suggests what to put in the owner while it holds nothing. */
+    public record Placeholder() implements Role<Guiding> { public static final Placeholder INSTANCE = new Placeholder(); @Override public Guiding parent() { return Guiding.INSTANCE; } }
 
     // ── Reporting — says how it is now ───────────────────────────────────
 
@@ -83,6 +85,8 @@ public final class HouseSaying {
     public record Count() implements Role<Reporting> { public static final Count INSTANCE = new Count(); @Override public Reporting parent() { return Reporting.INSTANCE; } }
     /** Says how the owner is: loading, failed. */
     public record Status() implements Role<Reporting> { public static final Status INSTANCE = new Status(); @Override public Reporting parent() { return Reporting.INSTANCE; } }
+    /** Says what is wrong with what the owner holds. */
+    public record Error() implements Role<Reporting> { public static final Error INSTANCE = new Error(); @Override public Reporting parent() { return Reporting.INSTANCE; } }
 
     // ── Signalling — shows a state or a place, by a mark ─────────────────
 
@@ -98,6 +102,8 @@ public final class HouseSaying {
     public record Landing() implements Role<Signalling> { public static final Landing INSTANCE = new Landing(); @Override public Signalling parent() { return Signalling.INSTANCE; } }
     /** Shows that a choice leads further. */
     public record Disclose() implements Role<Signalling> { public static final Disclose INSTANCE = new Disclose(); @Override public Signalling parent() { return Signalling.INSTANCE; } }
+    /** Shows by a mark that the owner is chosen. */
+    public record Check() implements Role<Signalling> { public static final Check INSTANCE = new Check(); @Override public Signalling parent() { return Signalling.INSTANCE; } }
 
     // ── Scaling — marks the owner's scale ────────────────────────────────
 

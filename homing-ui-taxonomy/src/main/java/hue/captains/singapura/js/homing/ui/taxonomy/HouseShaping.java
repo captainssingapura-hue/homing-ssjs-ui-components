@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 /**
  * The house's role catalogue, its third top branch: how a part makes up its owner's room - its
  * bands, what it shows over or under itself, what it shows, one of many it holds, what divides
- * them, what the hand takes. Twenty-two roles under six branches.
+ * them, what the hand takes. Thirty-two roles under six branches.
  */
 public final class HouseShaping {
 
@@ -36,6 +36,8 @@ public final class HouseShaping {
     public record Actions() implements Role<Bands> { public static final Actions INSTANCE = new Actions(); @Override public Bands parent() { return Bands.INSTANCE; } }
     /** The bar of the owner's tabs. */
     public record Tabs() implements Role<Bands> { public static final Tabs INSTANCE = new Tabs(); @Override public Bands parent() { return Bands.INSTANCE; } }
+    /** The band that closes the owner: its last word and its actions. */
+    public record Foot() implements Role<Bands> { public static final Foot INSTANCE = new Foot(); @Override public Bands parent() { return Bands.INSTANCE; } }
 
     // ── Layers — what the owner shows over or under itself ───────────────
 
@@ -51,7 +53,7 @@ public final class HouseShaping {
     public record Veil() implements Role<Layers> { public static final Veil INSTANCE = new Veil(); @Override public Layers parent() { return Layers.INSTANCE; } }
     /** A pane floating on the owner. */
     public record Float() implements Role<Layers> { public static final Float INSTANCE = new Float(); @Override public Layers parent() { return Layers.INSTANCE; } }
-    /** A menu shown where it was asked. */
+    /** What the owner shows over the page where it was asked: a menu, a list, a popover, a tip. */
     public record Popup() implements Role<Layers> { public static final Popup INSTANCE = new Popup(); @Override public Layers parent() { return Layers.INSTANCE; } }
 
     // ── Contents — what the owner shows ──────────────────────────────────
@@ -76,6 +78,14 @@ public final class HouseShaping {
     public record Setting() implements Role<Contents> { public static final Setting INSTANCE = new Setting(); @Override public Contents parent() { return Contents.INSTANCE; } }
     /** Lays the owner's regions out. */
     public record Layout() implements Role<Contents> { public static final Layout INSTANCE = new Layout(); @Override public Contents parent() { return Contents.INSTANCE; } }
+    /** What the owner holds between its head and its foot. */
+    public record Body() implements Role<Contents> { public static final Body INSTANCE = new Body(); @Override public Contents parent() { return Contents.INSTANCE; } }
+    /** A picture or a film that stands for the owner or shows it. */
+    public record Media() implements Role<Contents> { public static final Media INSTANCE = new Media(); @Override public Contents parent() { return Contents.INSTANCE; } }
+    /** Stands in for the owner's media when it cannot be shown. */
+    public record Fallback() implements Role<Contents> { public static final Fallback INSTANCE = new Fallback(); @Override public Contents parent() { return Contents.INSTANCE; } }
+    /** Takes the owner's value from the user. */
+    public record Editor() implements Role<Contents> { public static final Editor INSTANCE = new Editor(); @Override public Contents parent() { return Contents.INSTANCE; } }
 
     // ── Members — one of many the owner holds ────────────────────────────
 
@@ -93,6 +103,10 @@ public final class HouseShaping {
     public record Dock() implements Role<Members> { public static final Dock INSTANCE = new Dock(); @Override public Members parent() { return Members.INSTANCE; } }
     /** One region of a grid, drawn. */
     public record Cell() implements Role<Members> { public static final Cell INSTANCE = new Cell(); @Override public Members parent() { return Members.INSTANCE; } }
+    /** A run of the owner's members under a heading of their own. */
+    public record Group() implements Role<Members> { public static final Group INSTANCE = new Group(); @Override public Members parent() { return Members.INSTANCE; } }
+    /** Heads one column of the owner's cells. */
+    public record Column() implements Role<Members> { public static final Column INSTANCE = new Column(); @Override public Members parent() { return Members.INSTANCE; } }
 
     // ── Dividers — separate its regions or members ───────────────────────
 
@@ -119,4 +133,10 @@ public final class HouseShaping {
     public record Reveal() implements Role<Handles> { public static final Reveal INSTANCE = new Reveal(); @Override public Handles parent() { return Handles.INSTANCE; } }
     /** Carries the owner into a strip, to be picked, moved and closed. */
     public record Chip() implements Role<Handles> { public static final Chip INSTANCE = new Chip(); @Override public Handles parent() { return Handles.INSTANCE; } }
+    /** Opens what the owner shows over the page. */
+    public record Opener() implements Role<Handles> { public static final Opener INSTANCE = new Opener(); @Override public Handles parent() { return Handles.INSTANCE; } }
+    /** Is pulled to bring the owner in or send it away. */
+    public record Pull() implements Role<Handles> { public static final Pull INSTANCE = new Pull(); @Override public Handles parent() { return Handles.INSTANCE; } }
+    /** Moves the user through what the owner holds. */
+    public record Scroll() implements Role<Handles> { public static final Scroll INSTANCE = new Scroll(); @Override public Handles parent() { return Handles.INSTANCE; } }
 }

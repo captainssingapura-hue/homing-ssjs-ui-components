@@ -47,7 +47,7 @@ class HouseTaxonomyTest {
     void theBaseIsReadWhole_withItsCatalogue() {
         assertEquals(15, HOUSE.branches().size(), "the view and the field have no common leaf: their leaves are the extensions'");
         assertEquals(53, HOUSE.components().size());
-        assertEquals(67, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
+        assertEquals(91, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
         assertEquals(38, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
         assertEquals(16, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
@@ -55,7 +55,7 @@ class HouseTaxonomyTest {
     /**
      * Every node the house declares is a stateless functional object, as jOntology judges one: held
      * here, at build time, since a read no longer judges state and a running server has no enforcer.
-     * The trees of states and events too, whose nodes no read reaches.
+     * The trees of states and of events too.
      */
     @Test
     void everyNode_isStateless() {
@@ -64,8 +64,10 @@ class HouseTaxonomyTest {
         nodes.addAll(HOUSE.components());
         nodes.addAll(HOUSE.roleBranches());
         nodes.addAll(HOUSE.roles());
-        nodes.addAll(HouseStates.ALL);
-        nodes.addAll(HouseEvents.ALL);
+        nodes.addAll(HOUSE.states().branches());
+        nodes.addAll(HOUSE.states().types());
+        nodes.addAll(HOUSE.events().branches());
+        nodes.addAll(HOUSE.events().types());
         var enforcer = new OntologyEnforcer();
         var violations = nodes.stream().map(Object::getClass).distinct()
                 .flatMap(c -> enforcer.enforce(c).stream().map(v -> c.getName() + ": " + v.message()))
@@ -123,10 +125,40 @@ class HouseTaxonomyTest {
         HOUSE.components().forEach(c -> nodes.add(HOUSE.meaning(c).markdown()));
         HOUSE.roleBranches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
-        assertEquals(15 + 53 + 21 + 67, nodes.size());
+        HOUSE.states().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
+        HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
+        HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
+        HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
+        assertEquals(15 + 53 + 21 + 91 + 8 + 20 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
+    }
+
+    /**
+     * The trees of states and of events are whole in the base, as the catalogue is - read whether or
+     * not a component has their types, filed by what they are about. The tree files a state's types,
+     * never its values: each type has its values, the one at rest first.
+     */
+    @Test
+    void theStatesAndEvents_wholeInTheBase_filedByWhatTheyAreAbout() {
+        assertEquals(List.of("availability", "picking", "disclosure", "validity", "place", "content", "interaction", "physical"),
+                HOUSE.states().branches().stream().map(b -> b.name().value()).toList());
+        assertEquals(HouseStates.ALL, HOUSE.states().types(), "every type, whether or not a component has it yet");
+        assertEquals(List.of("pointing", "dragging", "editing", "asking", "loading", "timing", "scrolling"),
+                HOUSE.events().branches().stream().map(b -> b.name().value()).toList());
+        assertEquals(HouseEvents.ALL, HOUSE.events().types());
+        assertEquals(List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Keyboard.INSTANCE),
+                HOUSE.states().children(HouseStates.Interaction.INSTANCE), "what the hand and the keys do, folded into the tree");
+        assertEquals(List.of("true", "false"), tokens(HouseStates.Enabled.INSTANCE), "enabled at rest");
+        assertEquals(List.of("false", "true"), tokens(HouseStates.Pressed.INSTANCE), "pressed only when pressed");
+        assertEquals(List.of("none", "some", "all"), tokens(HouseStates.Coverage.INSTANCE), "the mixed checkbox's, a type of its own");
+        assertEquals(List.of("away", "candidate", "lent", "held"), tokens(HouseStates.Keyboard.INSTANCE));
+        assertEquals(List.of("flat", "elevated", "sunken"), tokens(HouseStates.Elevation.INSTANCE));
+    }
+
+    private static List<String> tokens(hue.captains.singapura.js.homing.component.taxonomy.StateType<?> type) {
+        return type.values().stream().map(hue.captains.singapura.js.homing.component.taxonomy.StateValue::token).toList();
     }
 
     @Test

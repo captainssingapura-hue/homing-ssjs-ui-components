@@ -1,38 +1,232 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Flag;
+import hue.captains.singapura.js.homing.component.taxonomy.L1_StateBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.StateRoot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
+import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
 
 import java.util.List;
 
 /**
- * The house's tree of states: what its components may be, cutting across them. Harvested from
- * the components there are, and grown as more come: so far the buttons' - every button may be
- * off, and a toggle may be on - and a crumb's, the step of a trail that is where the page is. Each state's change is an event a component offers by having the
- * state; no tree holds it.
+ * The house's tree of states: the respects in which its components may be one way or another,
+ * cutting across them, filed by what they are about. Whole, as the role catalogue is: it covers the
+ * common cases - the states the components of a common library have, and the ones the page's
+ * machinery keeps - so a component, the house's or a downstream's, is built from these, and adds a
+ * type of its own only where none here says what it means.
+ *
+ * <p>The tree files the types, never their values: a component that has a type is in exactly one of
+ * its values at a time, and has one value of each type it names. A type that is yes or no is a
+ * {@link Flag}, false at rest unless it says otherwise; the rest are named. Each type's change is an
+ * event a component offers by having the type; no tree holds it. What each means is in {@code
+ * meanings/.../HouseStates.md}.</p>
  */
 public final class HouseStates {
 
     private HouseStates() {}
 
-    /** Usable: off, it is inert and says so. */
-    public record Enabled() implements StateType<StateRoot> {
-        public static final Enabled INSTANCE = new Enabled();
+    // ── branches ─────────────────────────────────────────────────────────
+
+    /** Whether the user can use it, and how far. */
+    public record Availability() implements L1_StateBranch<StateRoot> {
+        public static final Availability INSTANCE = new Availability();
         @Override public StateRoot parent() { return StateRoot.INSTANCE; }
     }
+
+    /** Whether it is chosen, and how. */
+    public record Picking() implements L1_StateBranch<StateRoot> {
+        public static final Picking INSTANCE = new Picking();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** Whether what it opens is open, or it is itself on view. */
+    public record Disclosure() implements L1_StateBranch<StateRoot> {
+        public static final Disclosure INSTANCE = new Disclosure();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** Whether what it holds will do. */
+    public record Validity() implements L1_StateBranch<StateRoot> {
+        public static final Validity INSTANCE = new Validity();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** Whether it is where the user is, what the user is about to pick, or lit by something else. */
+    public record Place() implements L1_StateBranch<StateRoot> {
+        public static final Place INSTANCE = new Place();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** Whether it holds anything. */
+    public record Content() implements L1_StateBranch<StateRoot> {
+        public static final Content INSTANCE = new Content();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** What the user's hand and keys are doing with it now. */
+    public record Interaction() implements L1_StateBranch<StateRoot> {
+        public static final Interaction INSTANCE = new Interaction();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** Where it sits in the page's depth. */
+    public record Physical() implements L1_StateBranch<StateRoot> {
+        public static final Physical INSTANCE = new Physical();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    // ── availability ─────────────────────────────────────────────────────
+
+    /** Usable: true at rest; off, it is inert and says so. */
+    public record Enabled() implements Flag<Availability> {
+        public static final Enabled INSTANCE = new Enabled();
+        @Override public Availability parent() { return Availability.INSTANCE; }
+        @Override public boolean rest() { return true; }
+    }
+
+    /** Read, reached and copied, but not changed. */
+    public record ReadOnly() implements Flag<Availability> {
+        public static final ReadOnly INSTANCE = new ReadOnly();
+        @Override public Availability parent() { return Availability.INSTANCE; }
+    }
+
+    /** Working: what it shows, or what it was asked to do, is on the way. */
+    public record Busy() implements Flag<Availability> {
+        public static final Busy INSTANCE = new Busy();
+        @Override public Availability parent() { return Availability.INSTANCE; }
+    }
+
+    // ── picking ──────────────────────────────────────────────────────────
 
     /** Pressed and staying so until pressed again: a toggle that is on. */
-    public record Pressed() implements StateType<StateRoot> {
+    public record Pressed() implements Flag<Picking> {
         public static final Pressed INSTANCE = new Pressed();
-        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+        @Override public Picking parent() { return Picking.INSTANCE; }
     }
 
-    /** The one of its kind that is where the reader is: the trail's step that is this page. */
-    public record Current() implements StateType<StateRoot> {
+    /** Chosen by a mark of its own: a box ticked, a radio filled, a switch on. */
+    public record Checked() implements Flag<Picking> {
+        public static final Checked INSTANCE = new Checked();
+        @Override public Picking parent() { return Picking.INSTANCE; }
+    }
+
+    /** How much of the group it speaks for is chosen: none, some or all. The mixed checkbox's, never a plain one's. */
+    public record Coverage() implements StateType<Picking> {
+        public static final Coverage INSTANCE = new Coverage();
+        private static final List<StateValue> VALUES = List.of(new StateValue("none"), new StateValue("some"), new StateValue("all"));
+        @Override public Picking parent() { return Picking.INSTANCE; }
+        @Override public List<StateValue> values() { return VALUES; }
+    }
+
+    /** Picked from among its kind: an option, a tab, a day, a row. */
+    public record Selected() implements Flag<Picking> {
+        public static final Selected INSTANCE = new Selected();
+        @Override public Picking parent() { return Picking.INSTANCE; }
+    }
+
+    // ── disclosure ───────────────────────────────────────────────────────
+
+    /** What it opens is open: said on what opens it. */
+    public record Expanded() implements Flag<Disclosure> {
+        public static final Expanded INSTANCE = new Expanded();
+        @Override public Disclosure parent() { return Disclosure.INSTANCE; }
+    }
+
+    /** On view over the page for now: said on what is opened. */
+    public record Shown() implements Flag<Disclosure> {
+        public static final Shown INSTANCE = new Shown();
+        @Override public Disclosure parent() { return Disclosure.INSTANCE; }
+    }
+
+    // ── validity ─────────────────────────────────────────────────────────
+
+    /** Must be given before what it belongs to is sent. */
+    public record Required() implements Flag<Validity> {
+        public static final Required INSTANCE = new Required();
+        @Override public Validity parent() { return Validity.INSTANCE; }
+    }
+
+    /** What it holds is refused. */
+    public record Invalid() implements Flag<Validity> {
+        public static final Invalid INSTANCE = new Invalid();
+        @Override public Validity parent() { return Validity.INSTANCE; }
+    }
+
+    // ── place ────────────────────────────────────────────────────────────
+
+    /** The one of its kind that is where the user is: the trail's step that is this page. */
+    public record Current() implements Flag<Place> {
         public static final Current INSTANCE = new Current();
-        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+        @Override public Place parent() { return Place.INSTANCE; }
     }
 
-    /** Every state of the tree, in its order. */
-    public static final List<StateType<?>> ALL = List.of(Enabled.INSTANCE, Pressed.INSTANCE, Current.INSTANCE);
+    /** Lit from elsewhere: a search's hit, the rows a chart points at. */
+    public record Highlighted() implements Flag<Place> {
+        public static final Highlighted INSTANCE = new Highlighted();
+        @Override public Place parent() { return Place.INSTANCE; }
+    }
+
+    /** The one the user is on among its kind, not yet chosen: the option Enter would pick. */
+    public record Pointed() implements Flag<Place> {
+        public static final Pointed INSTANCE = new Pointed();
+        @Override public Place parent() { return Place.INSTANCE; }
+    }
+
+    // ── content ──────────────────────────────────────────────────────────
+
+    /** Holds nothing yet. */
+    public record Empty() implements Flag<Content> {
+        public static final Empty INSTANCE = new Empty();
+        @Override public Content parent() { return Content.INSTANCE; }
+    }
+
+    // ── interaction ──────────────────────────────────────────────────────
+
+    /** The pointer is over it. */
+    public record Hovered() implements Flag<Interaction> {
+        public static final Hovered INSTANCE = new Hovered();
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+    }
+
+    /** The browser's focus is on it, and shown. */
+    public record Focused() implements Flag<Interaction> {
+        public static final Focused INSTANCE = new Focused();
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+    }
+
+    /** Being pressed now: the hand is down on it, not yet let go. */
+    public record Down() implements Flag<Interaction> {
+        public static final Down INSTANCE = new Down();
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+    }
+
+    /** Where the page's keys are, as the keyboard's steward says: away, candidate, lent or held. */
+    public record Keyboard() implements StateType<Interaction> {
+        public static final Keyboard INSTANCE = new Keyboard();
+        private static final List<StateValue> VALUES = List.of(new StateValue("away"), new StateValue("candidate"),
+                new StateValue("lent"), new StateValue("held"));
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public List<StateValue> values() { return VALUES; }
+    }
+
+    // ── physical ─────────────────────────────────────────────────────────
+
+    /** How far off its own plane it sits: flat, elevated or sunken. */
+    public record Elevation() implements StateType<Physical> {
+        public static final Elevation INSTANCE = new Elevation();
+        private static final List<StateValue> VALUES = List.of(new StateValue("flat"), new StateValue("elevated"), new StateValue("sunken"));
+        @Override public Physical parent() { return Physical.INSTANCE; }
+        @Override public List<StateValue> values() { return VALUES; }
+    }
+
+    /** Every type of the tree, branch by branch. */
+    public static final List<StateType<?>> ALL = List.of(
+            Enabled.INSTANCE, ReadOnly.INSTANCE, Busy.INSTANCE,
+            Pressed.INSTANCE, Checked.INSTANCE, Coverage.INSTANCE, Selected.INSTANCE,
+            Expanded.INSTANCE, Shown.INSTANCE,
+            Required.INSTANCE, Invalid.INSTANCE,
+            Current.INSTANCE, Highlighted.INSTANCE, Pointed.INSTANCE,
+            Empty.INSTANCE,
+            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE,
+            Elevation.INSTANCE);
 }

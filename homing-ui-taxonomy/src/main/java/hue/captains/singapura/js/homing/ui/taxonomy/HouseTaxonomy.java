@@ -15,10 +15,14 @@ import java.util.List;
  * hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension TaxonomyExtension}): the
  * panes, the dock, the preferences and the rest, each declared beside its code, in the tree if and
  * only if its module is there. A downstream extends the house the same way. All are read into one
- * levelled tree, with the house's role catalogue beside it. The branches need no listing - they are
- * reached through the components' parents. Every component is listed, those that play a role in
- * another and those that stand alone; each declares its parts as slots over the {@link
- * HouseRoleCatalogue}.
+ * levelled tree. The branches need no listing - they are reached through the components' parents.
+ * Every component is listed, those that play a role in another and those that stand alone; each
+ * declares its parts as slots over the {@link HouseRoleCatalogue}.
+ *
+ * <p>Beside the tree, the house's role catalogue, its {@link HouseStates tree of states} and its
+ * {@link HouseEvents tree of events}: not cut by module, but whole - covering the common cases, so a
+ * component is built from their words, and a module adds one of its own only where none says what it
+ * means.</p>
  */
 public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySource {
 
@@ -56,8 +60,16 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
     /** Every component the house declares on this classpath: the common ones, then each extension's. */
     public List<Component<?>> components() { return TaxonomyExtensions.INSTANCE.components(HouseTaxonomy.class, common()); }
 
-    /** The house's taxonomy and its role catalogue, read - or refused with every problem in them. */
+    /**
+     * The house's taxonomy, read with its role catalogue and its trees of states and of events - each
+     * whole in the house, and extended only where a module has a word of its own - or refused with
+     * every problem in them.
+     */
     @Override public Taxonomy read() {
-        return new ReadTaxonomy().read(components(), TaxonomyExtensions.INSTANCE.roles(HouseTaxonomy.class, HouseRoleCatalogue.INSTANCE.roles()));
+        var extensions = TaxonomyExtensions.INSTANCE;
+        return new ReadTaxonomy().read(components(),
+                extensions.roles(HouseTaxonomy.class, HouseRoleCatalogue.INSTANCE.roles()),
+                extensions.states(HouseTaxonomy.class, HouseStates.ALL),
+                extensions.events(HouseTaxonomy.class, HouseEvents.ALL));
     }
 }

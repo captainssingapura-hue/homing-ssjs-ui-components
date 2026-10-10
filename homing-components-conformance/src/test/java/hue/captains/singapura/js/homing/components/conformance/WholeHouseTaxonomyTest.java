@@ -6,11 +6,8 @@ import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtensions;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyFinding;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControllability;
 import hue.captains.singapura.js.homing.ui.panes.HousePanes;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseEvents;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.tao.ontology.enforcer.OntologyEnforcer;
 import org.junit.jupiter.api.Test;
@@ -53,7 +50,7 @@ class WholeHouseTaxonomyTest {
     void theWholeHouse_isReadAsItWasBeforeItWasCut() {
         assertEquals(17, HOUSE.branches().size());
         assertEquals(86, HOUSE.components().size());
-        assertEquals(67, HOUSE.roles().size(), "the catalogue beside the tree");
+        assertEquals(91, HOUSE.roles().size(), "the catalogue beside the tree");
         assertEquals(107, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
         assertEquals(45, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
@@ -66,8 +63,10 @@ class WholeHouseTaxonomyTest {
         nodes.addAll(HOUSE.components());
         nodes.addAll(HOUSE.roleBranches());
         nodes.addAll(HOUSE.roles());
-        nodes.addAll(HouseStates.ALL);
-        nodes.addAll(HouseEvents.ALL);
+        nodes.addAll(HOUSE.states().branches());
+        nodes.addAll(HOUSE.states().types());
+        nodes.addAll(HOUSE.events().branches());
+        nodes.addAll(HOUSE.events().types());
         var enforcer = new OntologyEnforcer();
         var violations = nodes.stream().map(Object::getClass).distinct()
                 .flatMap(c -> enforcer.enforce(c).stream().map(v -> c.getName() + ": " + v.message()))
@@ -75,11 +74,16 @@ class WholeHouseTaxonomyTest {
         assertEquals(List.of(), violations);
     }
 
+    /**
+     * Every word of the catalogue the whole house says, but those it has for the common components it
+     * has no leaf for yet - kept whole so a component is built from them - and Host, a floater's.
+     */
     @Test
-    void everyRoleNamed_butHost() {
-        assertEquals(List.of("ROLE_UNNAMED: Host is named by no component"),
-                HOUSE.findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).map(Object::toString).toList(),
-                "a floater's host: the floater is not in the first cut");
+    void everyRoleNamed_butTheWordsKeptForWhatIsToCome() {
+        assertEquals(List.of("placeholder", "error", "check", "query", "skip", "increase", "decrease", "clear", "remove",
+                             "previous", "next", "first", "last", "more", "foot", "host", "body", "media", "fallback", "editor",
+                             "group", "column", "opener", "pull", "scroll"),
+                HOUSE.roles().stream().filter(r -> HOUSE.partsNaming(r).isEmpty()).map(r -> r.name().value()).toList());
     }
 
     @Test
@@ -89,7 +93,11 @@ class WholeHouseTaxonomyTest {
         HOUSE.components().forEach(c -> nodes.add(HOUSE.meaning(c).markdown()));
         HOUSE.roleBranches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
-        assertEquals(17 + 86 + 21 + 67, nodes.size());
+        HOUSE.states().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
+        HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
+        HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
+        HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
+        assertEquals(17 + 86 + 21 + 91 + 8 + 20 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 
