@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.components.conformance;
 
 import hue.captains.singapura.js.homing.conformance.rules.Allowance;
+import hue.captains.singapura.js.homing.layout.LayoutCrate;
 import hue.captains.singapura.js.homing.conformance.rules.Baseline;
 import hue.captains.singapura.js.homing.conformance.rules.CrateClosure;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
@@ -58,6 +59,7 @@ public final class ComponentsConformance {
 
     /** The fresh crates: what the gate grades and the studio browses. */
     public static final List<Crate> TOP_LEVEL = List.of(
+            LayoutCrate.INSTANCE,
             UiElementsCrate.INSTANCE,
             UiDialogCrate.INSTANCE,
             UiPreferencesCrate.INSTANCE,
@@ -75,7 +77,7 @@ public final class ComponentsConformance {
 
     /** One class per Maven module, for the coverage check: nothing served from these modules may be uncrated. */
     public static final List<Class<?>> ANCHORS = List.of(
-            UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
+            LayoutCrate.class, UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
             UiSplitCrate.class, UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiMonitorsCrate.class, UiMenuCrate.class, MpaCrate.class,
             UiControlPanelCrate.class);
 

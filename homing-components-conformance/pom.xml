@@ -31,6 +31,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-layout</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- The resolution of semantic classes over the house taxonomy, and its command line. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
