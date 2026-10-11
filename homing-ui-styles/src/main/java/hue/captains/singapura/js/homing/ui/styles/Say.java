@@ -447,6 +447,23 @@ final class Say {
                        rest(TAB_STRIP, INSET, "padding-block: 0; padding-inline: 8px;"));
     }
 
+    // ── a switch: a slider's groove that is a control, its knob in it, both flat; the groove turns to the accent when it
+    //    is on, the knob slides along it ──
+
+    static final Taxon SWITCH = HouseControls.Switch.INSTANCE;
+
+    /**
+     * What every style's switch says alike: no room inside it - its knob is placed in its groove - and twelve
+     * pixels between it and its word; and how its parts move - the knob along the groove, by its translate, and the
+     * groove's colour when it turns on - eased alike.
+     */
+    static List<Implementation<?>> switchBase() {
+        return List.of(rest(SWITCH, INSET, "padding-block: 0; padding-inline: 0;"),
+                       rest(SWITCH, GAP, "gap: 12px;"),
+                       rest(KNOB, EASE, "transition: translate 160ms ease;"),
+                       rest(GROOVE, EASE, "transition: background-color 160ms ease, border-color 160ms ease;"));
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {

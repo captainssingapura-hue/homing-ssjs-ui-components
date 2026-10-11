@@ -47,7 +47,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.when;
  * danger under the hand, an icon button washed in its own ink; and each
  * coloured button's rank - its background, its ink, its border; a pane's thumbnail raised and
  * hairlined, the current one tinted and edged with the accent; a tab tinted with the accent, the chosen one on the title
- * colour, and its strip raised and ruled in the accent. A coloured button's background and ink move with its extent:
+ * colour, and its strip raised and ruled in the accent; a switch's groove the accent when it is on. A coloured button's background and ink move with its extent:
  * the word at 1, the neutral at 0, the meaning turned the other way at -1. Danger, warning and
  * success are the same in every house palette; only the ink they fall back to is the palette's.
  */
@@ -178,8 +178,12 @@ final class HouseRule {
                 // ── a slider, flat: its groove a wash of the ink it stands in, edged quieter than that ink; the fill the accent; a tick
                 //    in that ink, faded; the detent - where it rests - shown only while the knob is dragged; the knob raised, in the
                 //    ink of what holds it, edged with the accent while dragged, and ringed as a focused control when it is a group's current one ──
-                rest(GROOVE, BACKGROUND, ground("color-mix(in srgb, currentColor 10%, transparent)")),
-                rest(GROOVE, BORDER, "border-color: color-mix(in srgb, currentColor 45%, transparent);"),
+                when(GROOVE, BACKGROUND, Map.of(
+                        State.REST, ground("color-mix(in srgb, currentColor 10%, transparent)"),
+                        State.CHECKED, ground(s.accent()))),
+                when(GROOVE, BORDER, Map.of(
+                        State.REST, "border-color: color-mix(in srgb, currentColor 45%, transparent);",
+                        State.CHECKED, "border-color: " + s.accent() + ";")),
                 rest(FILL, BACKGROUND, ground(s.accent())),
                 rest(TICK, BACKGROUND, ground("color-mix(in srgb, currentColor 60%, transparent)")),
                 when(DETENT, BACKGROUND, Map.of(
