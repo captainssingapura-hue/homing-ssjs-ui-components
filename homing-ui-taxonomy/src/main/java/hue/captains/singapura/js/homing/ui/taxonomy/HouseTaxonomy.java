@@ -44,7 +44,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 // containers
                 HouseContainers.PlainCard.INSTANCE, HouseContainers.SummaryCard.INSTANCE, HouseContainers.SliderGroup.INSTANCE,
                 HouseContainers.Panel.INSTANCE, HouseContainers.Dialog.INSTANCE, HouseContainers.FloatingPane.INSTANCE,
-                HouseContainers.ContextMenu.INSTANCE, HouseContainers.Scrim.INSTANCE, HouseContainers.PreferencesView.INSTANCE, HouseContainers.SplitPane.INSTANCE,
+                HouseContainers.ContextMenu.INSTANCE, HouseContainers.Scrim.INSTANCE, HouseContainers.SplitPane.INSTANCE,
                 HouseContainers.EdgeStrip.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseContainers.Trail.INSTANCE,
                 HouseContainers.TabStrip.INSTANCE,
                 // regions

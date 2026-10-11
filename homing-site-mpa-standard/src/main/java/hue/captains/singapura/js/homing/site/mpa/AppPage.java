@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.core.AppModule;
+import hue.captains.singapura.js.homing.preferences.PreferencesViewModule;
 import hue.captains.singapura.js.homing.core.ParamCodec;
 import hue.captains.singapura.js.homing.core.QueryString;
 import hue.captains.singapura.js.homing.core.StampedParams;
@@ -55,7 +56,8 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
         String crumbs  = stampCrumbs(trail);
         String brand   = "Object.freeze({label:" + StampedParams.jsString(mpa.brand().label())
                        + ",home:" + StampedParams.jsString(mpa.brand().home()) + "})";
-        String prefs   = "Object.freeze({module:" + StampedParams.jsString(mpa.moduleUrl(mpa.preferences())) + "})";
+        String prefs   = "Object.freeze({module:" + StampedParams.jsString(mpa.moduleUrl(mpa.preferences()))
+                       + ",view:" + StampedParams.jsString(mpa.moduleUrl(PreferencesViewModule.INSTANCE)) + "})";
 
         return new HtmlPageContent("""
                 <!DOCTYPE html>

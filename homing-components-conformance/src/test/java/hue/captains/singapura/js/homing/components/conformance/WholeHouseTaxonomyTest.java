@@ -42,8 +42,8 @@ class WholeHouseTaxonomyTest {
                 assertEquals(e.getClass(), c.getClass().getEnclosingClass(), c + " is declared by the module that lists it");
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
-        assertEquals(27, leaves.values().stream().mapToInt(Integer::intValue).sum(), "27 leaves the modules add: " + leaves);
-        assertEquals(60, HouseTaxonomy.INSTANCE.common().size(), "to the 60 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand, its preferences button and the view it opens");
+        assertEquals(28, leaves.values().stream().mapToInt(Integer::intValue).sum(), "28 leaves the modules add: " + leaves);
+        assertEquals(59, HouseTaxonomy.INSTANCE.common().size(), "to the 59 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button");
     }
 
     @Test
@@ -51,7 +51,7 @@ class WholeHouseTaxonomyTest {
         assertEquals(17, HOUSE.branches().size());
         assertEquals(87, HOUSE.components().size());
         assertEquals(91, HOUSE.roles().size(), "the catalogue beside the tree");
-        assertEquals(110, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
+        assertEquals(111, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the preferences' view laid out by a split among them");
         assertEquals(46, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 

@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.split.SplitPaneModule;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 
@@ -17,7 +17,8 @@ import java.util.List;
 
 /**
  * The preferences view: a master slot on the left holding the tree widget,
- * a detail slot on the right holding one widget per node, every widget
+ * a detail slot on the right holding one widget per node, laid out by a split -
+ * the line between them is the split's, and the user may move it - every widget
  * loaded the first time it is needed and kept until the view is disposed.
  *
  * <p>{@code new PreferencesView(branch, registry)}: root, select, ready, key, dispose. A widget,
@@ -28,9 +29,9 @@ import java.util.List;
  * params and shows its root. What a widget writes, it writes through the
  * steward; the view neither carries nor forwards a value.</p>
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 8,
-        reason = "It makes its own elements, places elements and wears classes of its own: it waits for the designed containers to draw only components.")
-public record PreferencesViewModule() implements Widget<Widget._None, PreferencesViewModule>, ImplFor<HouseContainers.PreferencesView> {
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
+        reason = "It makes the box its split fills, and gives the split's regions their room with classes of its own: it waits for a region's room to be the layout's.")
+public record PreferencesViewModule() implements Widget<Widget._None, PreferencesViewModule>, ImplFor<HousePreferences.PreferencesView> {
 
     /** The class. */
     public record PreferencesView() implements Widget._Class<Widget._None, PreferencesViewModule>, NeedKeyboard {
@@ -49,6 +50,7 @@ public record PreferencesViewModule() implements Widget<Widget._None, Preference
     public ImportsFor<PreferencesViewModule> imports() {
         return ImportsFor.<PreferencesViewModule>builder()
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SplitPaneModule.SplitPane()), SplitPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_root(),
                         new PreferencesStyles.pv_master(),

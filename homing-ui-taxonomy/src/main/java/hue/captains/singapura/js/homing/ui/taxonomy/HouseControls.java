@@ -203,7 +203,7 @@ public final class HouseControls {
         }
     }
 
-    /** The button that opens a site's preferences in a dialog, the preferences' view its page. */
+    /** The button that opens a site's preferences in a dialog, a slot its page: what is shown there is a widget, the site's. */
     public record PreferencesButton() implements Component<Control> {
         public static final PreferencesButton INSTANCE = new PreferencesButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
@@ -211,7 +211,7 @@ public final class HouseControls {
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
                            DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional(),
-                           DSL.part(HouseContainers.PreferencesView.INSTANCE).as(HouseShaping.Page.INSTANCE).optional());
+                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Page.INSTANCE).optional());
         }
     }
 

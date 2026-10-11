@@ -24,20 +24,18 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
     /** Master beside detail; the master as wide as its names, the detail the rest. */
     public record pv_root() implements CssClass<PreferencesStyles> {
         @Override public String body() { return """
-            display: grid;
-            grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
-            gap: 0;
+            display: flex;
             min-height: 360px;
-            align-items: stretch;
+            flex: 1 1 auto;
+            align-self: stretch;
+            min-width: 0;
             """;
         }
     }
 
     /** The master pane: divided from the detail. */
     public record pv_master() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Divider.class, Color.Edge.class), of(Divider.class, Shape.Rule.class)); }
         @Override public String body() { return """
-            border-width: 0 1px 0 0;
             padding: 8px 8px 8px 0;
             min-width: 0;
             overflow: auto;

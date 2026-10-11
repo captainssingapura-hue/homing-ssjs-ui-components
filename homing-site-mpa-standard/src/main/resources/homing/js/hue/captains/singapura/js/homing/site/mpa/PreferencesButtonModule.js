@@ -9,8 +9,8 @@
 //     .el      the button's wrap, appended to the bar
 //     .open()  what the button does
 //
-// chrome.preferences names the site's registry module: { module }. On the
-// first open it is imported — a module's URL is its class alone, so this is
+// chrome.preferences names the site's registry module and the view's: { module, view }.
+// On the first open both are imported — a module's URL is its class alone, so this is
 // the page's own instance — and its PREFERENCES constant is the view's params; the
 // view loads each node's widget as the node is chosen. The dialog's content is
 // the view, a widget shown in a slot over the dialog's body; closing the dialog
@@ -26,6 +26,7 @@
 const _prefsOwner = Object.freeze({ toString: () => "preferencesButton" });
 const _SYMBOL = Object.freeze({ LEAF: "icon" });   // the button's mark: an icon, as its symbol
 var _registry = null;   // Promise<PREFERENCES>, once per page
+var _view = null;       // Promise<the view's class>, once per page
 
 function _loadRegistry(entry) {
     if (!_registry) {
@@ -35,6 +36,16 @@ function _loadRegistry(entry) {
         });
     }
     return _registry;
+}
+
+function _loadView(entry) {
+    if (!_view) {
+        _view = import(entry.view).then(function (m) {
+            if (typeof m.PreferencesView !== "function") throw new Error("[preferences] " + entry.view + " exports no PreferencesView");
+            return m.PreferencesView;
+        });
+    }
+    return _view;
 }
 
 class PreferencesButton {
@@ -69,7 +80,7 @@ class PreferencesButton {
         this._btn = btn;
 
         this._entry = chrome && chrome.preferences;
-        if (!this._entry || !this._entry.module) { btn.disabled = true; return; }
+        if (!this._entry || !this._entry.module || !this._entry.view) { btn.disabled = true; return; }
         btn.addEventListener("click", function () { self.open(); });
     }
 
@@ -84,9 +95,9 @@ class PreferencesButton {
                 var views = b.createBranch("view");
                 views.activate(_prefsOwner);
                 var slot = new WidgetSlot({ branch: views, host: body });
-                _loadRegistry(self._entry).then(function (reg) {
+                Promise.all([_loadView(self._entry), _loadRegistry(self._entry)]).then(function (got) {
                     if (!self._open) return null;
-                    view = slot.show("preferences", PreferencesView, reg);
+                    view = slot.show("preferences", got[0], got[1]);
                     return view.ready;
                 }).then(function (master) {
                     if (master && typeof master.setActive === "function") master.setActive(true);
