@@ -11,6 +11,9 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import java.util.List;
 
 /**
@@ -20,7 +23,7 @@ import java.util.List;
  * cross or Escape, and reports every mutation as one {@code FloatEvents}
  * object on one sink. The workspace's substrate.
  */
-public record FloatLayerModule() implements DomModule<FloatLayerModule>, ImplFor<HouseFloating.FloatLayer> {
+public record FloatLayerModule() implements DomModule<FloatLayerModule>, ImplFor<HouseContainers.FloatLayer> {
 
     /** The class: {@code new FloatLayer(branch, {host, onEvent?, minW?, minH?})}; {@code open(spec)}, {@code raise(id)}, {@code close(id)}, {@code dispose()}. */
     public record FloatLayer() implements BranchComponent<FloatLayerModule>, NeedKeyboard {
@@ -37,6 +40,8 @@ public record FloatLayerModule() implements DomModule<FloatLayerModule>, ImplFor
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatEventsModule.FloatEvents()), FloatEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingStyles.fp_desk(), new FloatingStyles.fp_desk_layer()), FloatingStyles.INSTANCE))
                 .build();
     }

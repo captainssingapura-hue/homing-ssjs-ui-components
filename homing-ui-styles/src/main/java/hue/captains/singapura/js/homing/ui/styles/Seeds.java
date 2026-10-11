@@ -2,8 +2,8 @@ package hue.captains.singapura.js.homing.ui.styles;
 
 /**
  * The colours a house palette is written from, light: as many as the branches answered so far ask
- * for - the button's, and the page's. The old seed palettes have thirteen; the recessed layer, the
- * muted ink and the muted ink on inverted come with the branches that need them.
+ * for - the button's, the page's, and the desk's. The old seed palettes have thirteen; the muted ink
+ * and the muted ink on inverted come with the branches that need them.
  *
  * @param raised     a layer lifted off the page: the plain button's ground, and the lit side of a shadow
  * @param inverted   the darkest layer: what a box casts
@@ -15,6 +15,7 @@ package hue.captains.singapura.js.homing.ui.styles;
  * @param onAccent   the ink written on the accent
  * @param border     the hairline: a button's border, and where the ramp of a coloured button ends at 0
  * @param ground     the page's ground: what everything on a page stands on
+ * @param recessed   a layer pressed below the page: the desk panes float over
  */
 record Seeds(String raised, String inverted, String text, String onInverted, String title, String accent, String accentEdge,
-             String onAccent, String border, String ground) {}
+             String onAccent, String border, String ground, String recessed) {}

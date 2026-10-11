@@ -47,7 +47,6 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
 
     /** The desk: a recessed floor filling its host (a flex box), where the panes are placed. */
     public record fp_desk() implements CssClass<FloatingStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class)); }
         @Override public String body() { return """
             position: relative;
             flex: 1 1 auto;

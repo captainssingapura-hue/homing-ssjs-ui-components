@@ -24,7 +24,7 @@ public record NeoBrutalismColours() implements ColorPalette {
 
     public static final NeoBrutalismColours INSTANCE = new NeoBrutalismColours();
 
-    static final Seeds SEEDS = new Seeds("#FFFFFF", "#000000", "#000000", "#000000", "#FFE800", "#FF3B21", "#000000", "#000000", "#000000", "#FFFFFF");
+    static final Seeds SEEDS = new Seeds("#FFFFFF", "#000000", "#000000", "#000000", "#FFE800", "#FF3B21", "#000000", "#000000", "#000000", "#FFFFFF", "#EFEFEF");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);
 

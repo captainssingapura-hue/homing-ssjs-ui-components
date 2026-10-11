@@ -33,7 +33,7 @@ class WholeHouseTaxonomyTest {
     @Test
     void everyModuleThatShipsComponents_extendsTheHouse_withItsOwnLeaves() {
         var extensions = TaxonomyExtensions.INSTANCE.of(HouseTaxonomy.class);
-        assertEquals(List.of("HousePreferences", "HouseSite", "HouseControlPanel", "HouseFloating", "HouseMenus", "HouseMonitors",
+        assertEquals(List.of("HousePreferences", "HouseSite", "HouseControlPanel", "HouseMenus", "HouseMonitors",
                              "HousePanes", "HousePanZoom", "HouseSplitGrid"),
                 extensions.stream().map(e -> e.getClass().getSimpleName()).toList(), "in the order of their class names");
         var leaves = new LinkedHashMap<String, Integer>();
@@ -42,8 +42,8 @@ class WholeHouseTaxonomyTest {
                 assertEquals(e.getClass(), c.getClass().getEnclosingClass(), c + " is declared by the module that lists it");
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
-        assertEquals(27, leaves.values().stream().mapToInt(Integer::intValue).sum(), "27 leaves the modules add - the dock grid retired, its docks a split grid's residents: " + leaves);
-        assertEquals(61, HouseTaxonomy.INSTANCE.common().size(), "to the 61 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar");
+        assertEquals(26, leaves.values().stream().mapToInt(Integer::intValue).sum(), "26 leaves the modules add - the dock grid retired, its docks a split grid's residents; the float layer common now: " + leaves);
+        assertEquals(62, HouseTaxonomy.INSTANCE.common().size(), "to the 62 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on");
     }
 
     @Test

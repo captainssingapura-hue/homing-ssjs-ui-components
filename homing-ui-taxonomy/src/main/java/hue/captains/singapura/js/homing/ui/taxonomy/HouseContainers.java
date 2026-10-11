@@ -87,6 +87,16 @@ public final class HouseContainers {
         }
     }
 
+    /** The layer floating panes are stacked on: a desk of its own, recessed, or laid over what it is on. */
+    public record FloatLayer() implements Component<HouseBranches.Layer> {
+        public static final FloatLayer INSTANCE = new FloatLayer();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Float.INSTANCE).any());
+        }
+    }
+
     /** Heads a pane that floats: its title and its close, and where the hand takes it to move it. */
     public record TitleBar() implements Component<HouseBranches.Bar> {
         public static final TitleBar INSTANCE = new TitleBar();

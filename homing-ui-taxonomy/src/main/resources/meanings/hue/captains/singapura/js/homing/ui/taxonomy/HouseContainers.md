@@ -38,6 +38,11 @@ Holds the page back while something above it asks for the user's attention.
 
 Keeps controls out of the way at an edge until the pointer reaches for them.
 
+## FloatLayer
+
+Keeps the panes floating over the page, and which is in front: a desk of its own, recessed below the page, or laid
+over what it stands on.
+
 ## TitleBar
 
 Heads a pane that floats over the page: its title, its close, and where the hand takes it to move it.

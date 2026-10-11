@@ -612,6 +612,7 @@ final class Say {
     static final Taxon GROUND = HouseContainers.Ground.INSTANCE;
     static final Taxon FLOATING_PANE = HouseContainers.FloatingPane.INSTANCE;
     static final Taxon TITLE_BAR = HouseContainers.TitleBar.INSTANCE;
+    static final Taxon FLOAT_LAYER = HouseContainers.FloatLayer.INSTANCE;
     /** A label cast as a title: a floating pane's, on its title bar. */
     static final Casting PANE_TITLE = new Casting(HouseText.Label.INSTANCE, HouseSaying.Title.INSTANCE);
     static final Taxon SITE_BAR = HouseContainers.SiteBar.INSTANCE;

@@ -18,7 +18,7 @@ public record Forest() implements ColorPalette {
 
     public static final Forest INSTANCE = new Forest();
 
-    static final Seeds SEEDS = new Seeds("#FFFFFF", "#1A3829", "#2A3D2E", "#FFFFFF", "#2D5F3F", "#D4A04C", "#A6781E", "#1A3829", "#D4DFCC", "#F6F8F3");
+    static final Seeds SEEDS = new Seeds("#FFFFFF", "#1A3829", "#2A3D2E", "#FFFFFF", "#2D5F3F", "#D4A04C", "#A6781E", "#1A3829", "#D4DFCC", "#F6F8F3", "#EDF1EA");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);
 
