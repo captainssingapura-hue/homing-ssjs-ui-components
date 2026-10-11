@@ -31,8 +31,10 @@ class ListMasterWidget {
         (function walk(node, path, depth) {
             var key = path ? path + "/" + node.segment : node.segment;
             var label = (params.labels && params.labels[key]) || node.segment;
+            var look = new Look(Object.freeze({ LEAF: "list-row" }), ROLE.CHOICE);   // each row's: a listed row, as its choice
             var row = branch.createElement("row-" + self._rows.length, "div");
             css.addClass(row, pv_list_row);
+            look.wear(row);
             row.setAttribute("role", "option");
             row.style.setProperty("--pv-depth", String(depth));   // DATA, via the runtime var
             row.textContent = label;

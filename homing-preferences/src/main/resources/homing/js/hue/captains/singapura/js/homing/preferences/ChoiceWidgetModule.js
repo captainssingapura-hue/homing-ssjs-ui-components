@@ -20,10 +20,12 @@ class ChoiceWidget {
         css.addClass(list, pv_options);
         list.setAttribute("role", "listbox");
         list.setAttribute("aria-label", params.label || params.name);
+        var look = new Look(Object.freeze({ LEAF: "choice-option" }), ROLE.CHOICE);   // each option's: a choice option, as its choice
         options.forEach(function (opt, i) {
             var row = branch.createElement("opt-" + i, "button");
             row.type = "button";
             css.addClass(row, pv_option);
+            look.wear(row);
             row.setAttribute("role", "option");
             var text = branch.createElement("opt-" + i + "-label", "span");
             text.textContent = opt.label == null ? String(opt.value) : String(opt.label);

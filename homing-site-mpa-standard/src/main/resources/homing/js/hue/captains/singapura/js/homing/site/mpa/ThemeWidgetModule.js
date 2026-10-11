@@ -63,7 +63,7 @@ class ThemeWidget {
 
         // a design picked keeps the colours worn now when they fit it, else takes its own
         var wornPalette = at.colour ? at.colour.palette : null;
-        this._field.hold(this._list(listsBranch, "designs", "Designs", reg.themes.map(function (t) {
+        this._field.hold(this._list(listsBranch, "designs", "Designs", ROLE.STYLE, reg.themes.map(function (t) {
             return { value: ThemeWidget._switchTo(t, wornPalette), label: t.label, note: t.inspiration, selected: t.slug === at.base.slug };
         })));
         var offered = at.base.colours.filter(function (c) { return c.own || c.fits; });
@@ -71,7 +71,7 @@ class ThemeWidget {
             var k = new Kicker(KickerFactory.create(listsBranch, "coloursKicker"), { text: "Colours for " + at.base.label }, ROLE.SUBTITLE);
             css.addClass(k.el, pv_kicker);
             this._field.hold(k.el);
-            this._field.hold(this._list(listsBranch, "colours", "Colours", offered.map(function (c) {
+            this._field.hold(this._list(listsBranch, "colours", "Colours", ROLE.PALETTE, offered.map(function (c) {
                 var p = self._paletteOf(c.palette);
                 return { value: c.slug, label: p.label, note: c.own ? "the design's own" : p.inspiration, selected: c.slug === worn };
             })));
@@ -88,8 +88,9 @@ class ThemeWidget {
         return kept ? kept.slug : design.slug;
     }
 
-    _list(b, key, ariaLabel, options) {
+    _list(b, key, ariaLabel, role, options) {
         var self = this;
+        var look = new Look(Object.freeze({ LEAF: "choice-option" }), role);   // each option's: a choice option, as a style or a palette
         var ul = b.createElement(key, "div");
         css.addClass(ul, pv_options);
         ul.setAttribute("role", "listbox");
@@ -98,6 +99,7 @@ class ThemeWidget {
             var row = b.createElement(key + "-" + i, "button");
             row.type = "button";
             css.addClass(row, pv_option);
+            look.wear(row);
             row.setAttribute("role", "option");
             row.setAttribute("aria-selected", o.selected ? "true" : "false");
             var text = b.createElement(key + "-" + i + "-label", "span");

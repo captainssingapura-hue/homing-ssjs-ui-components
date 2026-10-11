@@ -55,9 +55,11 @@ class FocusMonitor {
         this._holderRow = null;
         this._candidateRow = null;
         var seq = 0;
+        var entry = new Look(Object.freeze({ LEAF: "list-row" }), ROLE.ENTRY);   // each row's: a listed row, as an entry - compact; the holder's the current one
         function row(depth, kind, name, component, id) {
             var el = rows.createElement("r" + (++seq), "div");
             css.addClass(el, fm_row);
+            entry.wear(el);
             el.setAttribute("role", "treeitem");
             el.setAttribute("aria-level", String(depth + 1));
             el.style.setProperty("--fm-depth", String(depth));
@@ -75,7 +77,7 @@ class FocusMonitor {
                 c.textContent = component;
                 el.appendChild(c);
             }
-            if (id !== null && id === holder) { css.addClass(el, fm_row_holder); el.setAttribute("aria-selected", "true"); el.setAttribute("data-keys", (KeyboardStewardInstance.marker() || {}).state === "lent" ? "lent" : "held"); self._holderRow = el; seen = true; }
+            if (id !== null && id === holder) { css.addClass(el, fm_row_holder); el.setAttribute("aria-current", "true"); el.setAttribute("data-keys", (KeyboardStewardInstance.marker() || {}).state === "lent" ? "lent" : "held"); self._holderRow = el; seen = true; }
             else if (id !== null && id === cand) { el.setAttribute("data-keys", "candidate"); self._candidateRow = el; }
             self.root.appendChild(el);
         }

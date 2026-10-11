@@ -464,6 +464,38 @@ final class Say {
                        rest(GROOVE, EASE, "transition: background-color 160ms ease, border-color 160ms ease;"));
     }
 
+    // ── the items: a row of a list - a choice, a listed row, a setting, a menu's row - clear at rest, the chosen one on
+    //    the title colour, the cursor's tinted; ringed as a control is; its corner and rule a button's ──
+
+    static final Taxon CHOICE_OPTION = HouseItems.ChoiceOption.INSTANCE;
+    static final Taxon LIST_ROW = HouseItems.ListRow.INSTANCE;
+
+    /** The items a hand points at - a choice, a listed row, a menu's row - each lit under it; a setting's row is only read. */
+    static final List<Taxon> POINTED = List.of(CHOICE_OPTION, LIST_ROW, MENU_ITEM);
+
+    /**
+     * What every style's items say alike: a button's corner and rule, a control's ring - a row may have the keys - six
+     * pixels above and below, ten between its parts, the label's text, its colours eased; a choice and a listed row
+     * set in from their sides and pointed at, a listed row compact and in the caption's size - a list master's, a
+     * monitor's (only the base taxonomy's castings are answered: a list row as a choice is an extension's).
+     */
+    static List<Implementation<?>> itemBase() {
+        return List.of(new Implementation<>(ITEM, CORNER, new Answer.Redirect<>(BUTTON)),
+                       new Implementation<>(ITEM, BORDER, new Answer.Redirect<>(BUTTON)),
+                       new Implementation<>(ITEM, OUTLINE, new Answer.Redirect<>(CONTROL)),
+                       rest(ITEM, INSET, "padding-block: 6px; padding-inline: 0;"),
+                       rest(ITEM, GAP, "gap: 10px;"),
+                       new Implementation<>(ITEM, FACE, new Answer.Redirect<>(LABEL)),
+                       new Implementation<>(ITEM, SCALE, new Answer.Redirect<>(LABEL)),
+                       rest(ITEM, EASE, "transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;"),
+                       rest(CHOICE_OPTION, INSET, "padding-block: 7px; padding-inline: 10px;"),
+                       rest(CHOICE_OPTION, CURSOR, "cursor: pointer;"),
+                       rest(LIST_ROW, INSET, "padding-block: 4px; padding-inline: 8px;"),
+                       rest(LIST_ROW, GAP, "gap: 8px;"),
+                       rest(LIST_ROW, CURSOR, "cursor: pointer;"),
+                       new Implementation<>(LIST_ROW, SCALE, new Answer.Redirect<>(CAPTION)));
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {

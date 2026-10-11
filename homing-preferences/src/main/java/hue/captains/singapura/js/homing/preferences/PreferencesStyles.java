@@ -8,19 +8,13 @@ import java.util.List;
 import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Box.Control;
 import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
 import static hue.captains.singapura.js.homing.design.Interaction.Focus;
 import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
-import static hue.captains.singapura.js.homing.design.Interaction.Selectable;
 import static hue.captains.singapura.js.homing.design.Structure.Divider;
 import static hue.captains.singapura.js.homing.design.Target.Affordance;
 import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
 import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Body;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
 
 /**
  * The view's two panes and the widgets' fields. Words worn, layout in the
@@ -110,15 +104,11 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
-    /** An option: selectable, marked by aria-selected. */
+    /** An option, its words in a row across the list; its look - a choice option's, marked by aria-selected - is the house's. */
     public record pv_option() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Selectable.class, Color.Surface.class), of(Selectable.class, Color.Ink.class), of(Selectable.class, Color.Edge.class), of(Selectable.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class), of(Body.class, Type.Face.class)); }
         @Override public String body() { return """
-            font: inherit;
             display: flex;
             align-items: baseline;
-            gap: 10px;
-            padding: 7px 10px;
             text-align: left;
             width: 100%;
             box-sizing: border-box;
@@ -206,12 +196,11 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
-    /** A row of the flat tree: selectable, indented by its depth, which is data on the row. */
+    /** A row of the flat tree, its words set in by its depth, which is data on the row; its look - a listed row's - is the house's. */
     public record pv_list_row() implements CssClass<PreferencesStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pv-depth")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Selectable.class, Color.Surface.class), of(Selectable.class, Color.Ink.class), of(Selectable.class, Color.Edge.class), of(Selectable.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class), of(Body.class, Type.Face.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """
-            padding: 6px 10px 6px calc(10px + var(--pv-depth, 0) * 16px);
+            text-indent: calc(var(--pv-depth, 0) * 16px);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -233,13 +222,10 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
+    /** A setting's row: its name and its value in a row; its look - a setting row's, ruled off as a separator rules - is the house's. */
     public record pv_child() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Divider.class, Color.Edge.class), of(Divider.class, Shape.Rule.class), of(Body.class, Color.Ink.class)); }
         @Override public String body() { return """
-            border-width: 0 0 1px 0;
-            padding: 6px 0;
             display: flex;
-            gap: 12px;
             align-items: baseline;
             """;
         }

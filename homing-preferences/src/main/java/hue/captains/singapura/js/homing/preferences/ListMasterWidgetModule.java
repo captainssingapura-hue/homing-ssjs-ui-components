@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -42,6 +44,8 @@ public record ListMasterWidgetModule() implements Widget<Widget._None, ListMaste
     @Override
     public ImportsFor<ListMasterWidgetModule> imports() {
         return ImportsFor.<ListMasterWidgetModule>builder()
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_list(),
                         new PreferencesStyles.pv_list_row()

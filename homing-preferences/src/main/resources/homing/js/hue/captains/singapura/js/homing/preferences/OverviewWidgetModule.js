@@ -8,6 +8,9 @@
 const _overviewOwner = Object.freeze({ toString: () => "overviewWidget" });
 
 /** The reset pressed: every setting the overview shows goes back to the site's default. */
+/** What of a separator's look a setting's row wears: the line along its foot. */
+const _THE_RULE = Object.freeze(["shape-border", "color-border"]);
+
 class OverviewReset {
     constructor(settings) { this._settings = settings; }
     canHandle(type) { return type === EVENT.CLICK; }
@@ -37,9 +40,13 @@ class OverviewWidget {
         var list = branch.createElement("settings", "ul");
         css.addClass(list, pv_children);
         this._values = [];
+        // each setting's row: a setting row, its look the house's but for its line, which is a separator's
+        var row = new Look(Object.freeze({ LEAF: "setting-row" }), ROLE.ENTRY), rule = new Look(Object.freeze({ LEAF: "separator" }), ROLE.BREAK);
         settings.forEach(function (s, i) {
             var li = branch.createElement("s-" + i, "li");
             css.addClass(li, pv_child);
+            row.wear(li, { except: _THE_RULE });
+            rule.wear(li, { only: _THE_RULE });
             var label = branch.createElement("s-" + i + "-label", "span");
             label.textContent = s.label || s.name;
             var value = new Caption(CaptionFactory.create(branch, "s-" + i + "-value"), {}, ROLE.VALUE);

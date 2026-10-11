@@ -19,6 +19,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.sliderBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.switchBase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.itemBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -104,5 +105,7 @@ public record Base() implements DesignStyle {
             // ── a tab's text the caption's size, kept from the hand, pointed at and grabbed; its strip's text kept from the hand, its tail's room ──
             tabBase(),
             // ── a switch: no room inside it, its word kept apart, its parts eased as they move and turn ──
-            switchBase());
+            switchBase(),
+            // ── an item's corner and rule a button's, ringed as a control, its room and its text; a choice and a listed row pointed at ──
+            itemBase());
 }

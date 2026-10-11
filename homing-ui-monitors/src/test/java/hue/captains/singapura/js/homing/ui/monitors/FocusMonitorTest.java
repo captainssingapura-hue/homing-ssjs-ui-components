@@ -45,6 +45,9 @@ class FocusMonitorTest extends JsModuleTestBase {
         }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); } };
         ["fm_tree", "fm_row", "fm_row_holder", "fm_kind", "fm_name", "fm_component", "fm_outside"].forEach(function (c) { globalThis[c] = c; });
+        // the rows' look: put on by name, which is all the tree asks of it here
+        var ROLE = { ENTRY: { token: "entry", functional: true } };
+        class Look { constructor(Leaf) { this.casting = Leaf.LEAF; } wear(e) { e.classList.add(this.casting); } }
         var focusListeners = 0;
         var document = { body: el("body"), activeElement: null, addEventListener: function () { focusListeners++; }, removeEventListener: function () { focusListeners--; } };
         document.activeElement = document.body;
@@ -93,7 +96,7 @@ class FocusMonitorTest extends JsModuleTestBase {
         eval("KeyboardStewardInstance.claim(w)");
         assertEquals("0:root | 1:branch dock Dock | 2:leaf widget Widget* | 1:leaf card Widget", rows(), "the holder's row lit, the root's caption gone");
         assertEquals("widget", eval("monitor.holderRow().children[1].textContent").asString());
-        assertEquals("true", eval("monitor.holderRow().getAttribute('aria-selected')").asString());
+        assertEquals("true", eval("monitor.holderRow().getAttribute('aria-current')").asString(), "the holder's row is the current one");
         eval("KeyboardStewardInstance.claim(c)");
         assertEquals("0:root | 1:branch dock Dock | 2:leaf widget Widget | 1:leaf card Widget*", rows(), "the keys moved: the row moved with them");
         eval("focusParty.root.createBranch('desk', new Dock()).adopt(w)");

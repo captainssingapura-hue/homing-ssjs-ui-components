@@ -4,13 +4,11 @@ import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
 import hue.captains.singapura.js.homing.core.Wearable;
-
 import java.util.List;
 import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
 import static hue.captains.singapura.js.homing.design.Box.Inline;
-import static hue.captains.singapura.js.homing.design.Box.Control;
 import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
 import static hue.captains.singapura.js.homing.design.Feedback.Danger;
 import static hue.captains.singapura.js.homing.design.Pairing.OnDanger;
@@ -42,25 +40,20 @@ public record FocusStyles() implements CssGroup<FocusStyles> {
         }
     }
 
-    /** A row: a node of the tree, indented by its depth through the runtime variable the monitor sets; an option, so a design can mark the one that holds the keys. */
+    /** A row: a node of the tree, set in by its depth through the runtime variable the monitor sets; its look - a listed row's, as an entry, ringed where the keys are - is the house's. */
     public record fm_row() implements CssClass<FocusStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--fm-depth")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Interactive.class, Motion.Ease.class), of(Muted.class, Color.Ink.class),
-                                                                          of(Control.Option.class, Shape.Rule.class), of(Control.class, Color.Edge.class)); }
         @Override public String body() { return """
             display: flex;
             align-items: baseline;
-            gap: 8px;
-            padding: 2px 8px;
-            padding-inline-start: calc(8px + var(--fm-depth, 0) * 18px);
+            margin-inline-start: calc(var(--fm-depth, 0) * 18px);
             white-space: nowrap;
             """;
         }
     }
 
-    /** The row of the one that holds the keys: the current surface and the body's ink; the keys' own mark is the design's answer to the row's word, through {@code data-keys}. */
+    /** The row of the one that holds the keys, marked: its look is the current one's (aria-current), its keys' mark the ring a control wears (data-keys). */
     public record fm_row_holder() implements CssClass<FocusStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Current.class, Color.Surface.class), of(Current.class, Color.Edge.class), of(Body.class, Color.Ink.class), of(Inline.class, Shape.Corner.class)); }
         @Override public String body() { return ""; }
     }
 

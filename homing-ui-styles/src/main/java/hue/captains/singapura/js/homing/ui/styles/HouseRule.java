@@ -27,6 +27,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.DROP_MARK;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TAB;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TAB_STRIP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.MENU_ITEM;
+import static hue.captains.singapura.js.homing.ui.styles.Say.ITEM;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CHOICE_OPTION;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LIST_ROW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.FILL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.GROOVE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KNOB;
@@ -193,13 +196,10 @@ final class HouseRule {
                 when(KNOB, BORDER, Map.of(State.DRAGGING, "border-color: " + s.accent() + ";")),
                 when(KNOB, Target.Color.Outline.INSTANCE, Map.of(
                         State.CURRENT, "outline-color: color-mix(in srgb, " + s.accent() + " 55%, " + s.border() + ");")),
-                // ── a context menu: raised, in the text's ink, a hairline round it; a row bare, the one the cursor is on tinted with the accent ──
+                // ── a context menu: raised, in the text's ink, a hairline round it; its rows items (below) ──
                 rest(CONTEXT_MENU, BACKGROUND, ground(s.raised())),
                 rest(CONTEXT_MENU, INK, "color: " + s.text() + ";"),
                 rest(CONTEXT_MENU, BORDER, "border-color: " + s.border() + ";"),
-                when(MENU_ITEM, BACKGROUND, Map.of(
-                        State.REST, ground("transparent"),
-                        State.HIGHLIGHTED, ground("color-mix(in srgb, " + s.accent() + " 28%, transparent)"))),
                 // ── a tab: tinted with the accent, more under the hand; the chosen one on the title colour, in the ink written on it and
                 //    edged with it. Its strip raised, ruled along its foot in the accent, and lit with it while the work is in its pane;
                 //    where a dragged tab would land, a bar of the accent; the mark that says the keys are in a tab, in the accent as
@@ -215,6 +215,27 @@ final class HouseRule {
                         State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 7%, " + s.raised() + ")"))),
                 rest(TAB_STRIP, BORDER, "border-color: " + s.accent() + ";"),
                 rest(DROP_MARK, BACKGROUND, ground(s.accent())),
+                // ── an item - a row of a list: clear at rest; the chosen one on the title colour, in the ink written on it, edged with
+                //    it; the current one - a monitor's holder - tinted lightly with the accent; the one the cursor is on tinted more
+                //    and edged with it; ringed as a control is ──
+                when(ITEM, BACKGROUND, Map.of(
+                        State.REST, ground("transparent"),
+                        State.SELECTED, ground(s.title()),
+                        State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 12%, transparent)"),
+                        State.HIGHLIGHTED, ground("color-mix(in srgb, " + s.accent() + " 28%, transparent)"))),
+                when(ITEM, INK, Map.of(State.SELECTED, "color: " + s.onInverted() + ";")),
+                when(ITEM, BORDER, Map.of(
+                        State.REST, "border-color: transparent;",
+                        State.SELECTED, "border-color: " + s.title() + ";",
+                        State.HIGHLIGHTED, "border-color: " + s.accent() + ";")),
+                new Implementation<>(ITEM, Target.Color.Outline.INSTANCE, new Answer.Redirect<>(CONTROL)),
+                // ── one a hand points at - a choice, a listed row, a menu's row - washed with the accent under it, hairlined ──
+                when(CHOICE_OPTION, BACKGROUND, Map.of(State.HOVER, ground("color-mix(in srgb, " + s.accent() + " 15%, transparent)"))),
+                when(CHOICE_OPTION, BORDER, Map.of(State.HOVER, "border-color: " + s.border() + ";")),
+                when(LIST_ROW, BACKGROUND, Map.of(State.HOVER, ground("color-mix(in srgb, " + s.accent() + " 15%, transparent)"))),
+                when(LIST_ROW, BORDER, Map.of(State.HOVER, "border-color: " + s.border() + ";")),
+                when(MENU_ITEM, BACKGROUND, Map.of(State.HOVER, ground("color-mix(in srgb, " + s.accent() + " 15%, transparent)"))),
+                when(MENU_ITEM, BORDER, Map.of(State.HOVER, "border-color: " + s.border() + ";")),
                 new Implementation<>(new Casting(HouseMarks.Icon.INSTANCE, HouseSaying.Keys.INSTANCE), INK,
                         new Answer.Own<>("color: color-mix(in srgb, " + s.accent() + " calc(clamp(0, var(--extent), 1) * 100%), currentColor);")));
     }
