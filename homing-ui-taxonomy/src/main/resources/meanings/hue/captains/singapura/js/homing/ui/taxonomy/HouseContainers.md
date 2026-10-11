@@ -38,6 +38,10 @@ Holds the page back while something above it asks for the user's attention.
 
 Keeps controls out of the way at an edge until the pointer reaches for them.
 
+## TitleBar
+
+Heads a pane that floats over the page: its title, its close, and where the hand takes it to move it.
+
 ## Ground
 
 The surface a page stands on: its ground, the ink and the face of what is written on it, and its scrollbar.

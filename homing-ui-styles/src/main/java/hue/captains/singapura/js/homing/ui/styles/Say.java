@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
 import hue.captains.singapura.js.homing.design.State;
@@ -11,6 +12,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.ArrayList;
@@ -608,6 +610,10 @@ final class Say {
     static final Taxon BRAND = HouseControls.Brand.INSTANCE;
     static final Taxon PREFERENCES_BUTTON = HouseControls.PreferencesButton.INSTANCE;
     static final Taxon GROUND = HouseContainers.Ground.INSTANCE;
+    static final Taxon FLOATING_PANE = HouseContainers.FloatingPane.INSTANCE;
+    static final Taxon TITLE_BAR = HouseContainers.TitleBar.INSTANCE;
+    /** A label cast as a title: a floating pane's, on its title bar. */
+    static final Casting PANE_TITLE = new Casting(HouseText.Label.INSTANCE, HouseSaying.Title.INSTANCE);
     static final Taxon SITE_BAR = HouseContainers.SiteBar.INSTANCE;
 
     /**
@@ -641,6 +647,42 @@ final class Say {
         out.add(rest(GROUND, FACE, "font-family: " + face + ";"));
         if (barRule != null) out.add(rest(SITE_BAR, BORDER, "border-width: 0 0 " + barRule + " 0; border-style: solid;"));
         if (barBackdrop != null) out.add(rest(SITE_BAR, FILTER, "backdrop-filter: " + barBackdrop + ";"));
+        return List.copyOf(out);
+    }
+
+    /**
+     * What every style's floating pane says alike - a dialog's window is one: its frame a card's, its corner and its
+     * rule; its shadow and its lift eased; its title bar five pixels above and below what it carries and twelve at its
+     * sides, eight between, a hairline under it, taken by the hand and grabbed while it is held, none of its text taken.
+     */
+    static List<Implementation<?>> paneBase() {
+        return List.of(new Implementation<>(FLOATING_PANE, CORNER, new Answer.Redirect<>(CARD)),
+                       new Implementation<>(FLOATING_PANE, BORDER, new Answer.Redirect<>(CARD)),
+                       rest(FLOATING_PANE, EASE, "transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;"),
+                       rest(TITLE_BAR, INSET, "padding-block: 5px; padding-inline: 12px;"),
+                       rest(TITLE_BAR, GAP, "gap: 8px;"),
+                       rest(TITLE_BAR, BORDER, "border-width: 0 0 1px 0; border-style: solid;"),
+                       when(TITLE_BAR, CURSOR, Map.of(State.REST, "cursor: grab;", State.DRAGGING, "cursor: grabbing;")),
+                       rest(TITLE_BAR, Target.Affordance.Select.INSTANCE, "user-select: none;"));
+    }
+
+    /**
+     * A style's floating pane: its shadow at rest - over what it floats on - while it is the active one, while the hand
+     * is on its head (lit from there), and while it is in the hand, and how far each of the last two lifts it; its title
+     * bar's face, and its room and its rule where the style's differ from the house's (null).
+     */
+    static List<Implementation<?>> pane(String rest, String current, String lit, String held, String litMove, String heldMove,
+                                        String barFace, String barInset, String barGap, String barRule) {
+        var out = new ArrayList<Implementation<?>>();
+        out.add(when(FLOATING_PANE, SHADOW, Map.of(State.REST, "box-shadow: " + rest + ";", State.CURRENT, "box-shadow: " + current + ";",
+                                                  State.HIGHLIGHTED, "box-shadow: " + lit + ";", State.DRAGGING, "box-shadow: " + held + ";")));
+        out.add(when(FLOATING_PANE, TRANSFORM, Map.of(State.HIGHLIGHTED, "transform: " + litMove + ";", State.DRAGGING, "transform: " + heldMove + ";")));
+        out.add(rest(TITLE_BAR, FACE, "font-family: " + barFace + ";"));
+        // its title in the bar's face: a label cast as a title, which the style's texts would otherwise set in the body's
+        out.add(new Implementation<>(PANE_TITLE, FACE, new Answer.Own<>("font-family: " + barFace + ";")));
+        if (barInset != null) out.add(rest(TITLE_BAR, INSET, barInset));
+        if (barGap != null) out.add(rest(TITLE_BAR, GAP, "gap: " + barGap + ";"));
+        if (barRule != null) out.add(rest(TITLE_BAR, BORDER, "border-width: 0 0 " + barRule + " 0; border-style: solid;"));
         return List.copyOf(out);
     }
 

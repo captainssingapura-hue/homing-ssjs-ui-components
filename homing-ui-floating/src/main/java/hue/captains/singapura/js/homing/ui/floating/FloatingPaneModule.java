@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 import hue.captains.singapura.js.homing.ui.elements.CloseButtonModule;
 import java.util.List;
 
@@ -38,13 +39,10 @@ public record FloatingPaneModule() implements DomModule<FloatingPaneModule>, Imp
                 .add(new ModuleImports<>(List.of(new FloatEventsModule.FloatEvents()), FloatEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton(), new CloseButtonModule.CloseButtonFactory()), CloseButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new FloatingStyles.fp_frame(),
-                        new FloatingStyles.fp_hoverable(),
-                        new FloatingStyles.fp_held(),
-                        new FloatingStyles.fp_active(),
                         new FloatingStyles.fp_head(),
-                        new FloatingStyles.fp_head_held(),
                         new FloatingStyles.fp_icon(),
                         new FloatingStyles.fp_icon_on(),
                         new FloatingStyles.fp_title(),

@@ -46,10 +46,10 @@ class HouseTaxonomyTest {
     @Test
     void theBaseIsReadWhole_withItsCatalogue() {
         assertEquals(14, HOUSE.branches().size(), "the view, the field and the split have no common leaf: their leaves are the extensions' - a view is a widget, a split the grid's");
-        assertEquals(60, HOUSE.components().size());
+        assertEquals(61, HOUSE.components().size());
         assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
         assertEquals(50, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the site bar's brand and trail among them; the brand's mark its own colour, no icon");
-        assertEquals(21, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+        assertEquals(22, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
     /**
@@ -129,7 +129,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(14 + 60 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
+        assertEquals(14 + 61 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
@@ -168,8 +168,8 @@ class HouseTaxonomyTest {
         assertEquals(List.of(ExtentAxis.SIZE, ExtentAxis.COLOUR), HOUSE.extents(HouseControls.DangerButton.INSTANCE),
                 "a coloured button a colour too");
         assertEquals(List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT), HOUSE.extents(HouseContainers.PlainCard.INSTANCE), "every card a size and an aspect");
-        var close = HOUSE.partsOf(HouseContainers.FloatingPane.INSTANCE).get(2);
-        assertEquals(List.of(ExtentAxis.SIZE), HOUSE.extents(close), "a floating pane's close is a button, and has a button's");
+        var close = HOUSE.partsOf(HouseContainers.TitleBar.INSTANCE).get(1);
+        assertEquals(List.of(ExtentAxis.SIZE), HOUSE.extents(close), "a floating pane's close - its title bar's - is a button, and has a button's");
         var open = HOUSE.partsOf(HouseContainers.SummaryCard.INSTANCE).get(3);
         assertEquals(List.of(), HOUSE.extents(open), "a card's link has none of its card's: a part follows its own component");
     }

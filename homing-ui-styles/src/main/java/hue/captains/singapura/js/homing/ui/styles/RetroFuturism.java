@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.pane;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
@@ -123,5 +124,7 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
             cardShadow("0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 10px color-mix(in srgb, var(--box-shadow-glow) 25%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 24px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 6px color-mix(in srgb, var(--box-shadow-glow) 40%, transparent)"),
             disabled(".4", "not-allowed"),
             // ── its page: the face everything on it is written in, and the site's bar ──
+            // ── its floating pane - a dialog's window is one: its shadows, its lift in the hand, its title bar ──
+            pane("0 0 48px color-mix(in srgb, var(--box-shadow-glow) 45%, transparent), 0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 60%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 40px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 30%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 24px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 36px color-mix(in srgb, var(--box-shadow-glow) 80%, transparent)", "translateY(-2px)", "translateY(-3px)", DISPLAY, null, null, null),
             siteChrome(BODY, "2px", null));
 }

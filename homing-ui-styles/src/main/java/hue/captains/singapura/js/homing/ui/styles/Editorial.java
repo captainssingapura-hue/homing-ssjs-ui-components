@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.pane;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
@@ -120,5 +121,7 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             cardShadow("0 1px 3px color-mix(in srgb, var(--box-shadow-cast) 4%, transparent)", "0 6px 16px color-mix(in srgb, var(--box-shadow-cast) 12%, transparent)", "0 1px 2px color-mix(in srgb, var(--box-shadow-cast) 8%, transparent)"),
             disabled(".45", "default"),
             // ── its page: the face everything on it is written in, and the site's bar ──
+            // ── its floating pane - a dialog's window is one: its shadows, its lift in the hand, its title bar ──
+            pane("0 10px 30px color-mix(in srgb, var(--box-shadow-cast) 45%, transparent), 0 2px 6px color-mix(in srgb, var(--box-shadow-cast) 30%, transparent)", "0 10px 30px color-mix(in srgb, var(--box-shadow-cast) 45%, transparent), 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 28%, transparent), 0 0 36px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent)", "0 6px 16px color-mix(in srgb, var(--box-shadow-glow) 12%, transparent)", "0 14px 30px color-mix(in srgb, var(--box-shadow-glow) 20%, transparent)", "translateY(-2px)", "translateY(-4px)", DISPLAY, null, null, null),
             siteChrome(BODY, "2px", null));
 }

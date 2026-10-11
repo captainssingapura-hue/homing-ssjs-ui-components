@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.pane;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
@@ -119,5 +120,7 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
             cardShadow("4px 4px 0 var(--box-shadow-cast)", "8px 8px 0 var(--box-shadow-cast)", "0 0 0 var(--box-shadow-cast)"),
             disabled(".4", "not-allowed"),
             // ── its page: the face everything on it is written in, and the site's bar ──
+            // ── its floating pane - a dialog's window is one: its shadows, its lift in the hand, its title bar ──
+            pane("12px 12px 0 var(--box-shadow-cast)", "12px 12px 0 var(--box-shadow-cast), 0 0 0 4px var(--box-shadow-glow)", "8px 8px 0 var(--box-shadow-cast)", "10px 10px 0 var(--box-shadow-cast)", "translate(-2px, -2px)", "translate(-4px, -4px)", DISPLAY, "padding-block: 6px; padding-inline: 12px;", "10px", "2px"),
             siteChrome(BODY, "4px", null));
 }

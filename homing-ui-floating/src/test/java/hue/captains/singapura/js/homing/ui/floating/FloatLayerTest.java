@@ -41,6 +41,7 @@ class FloatLayerTest extends JsModuleTestBase {
                 appendChild: function (c) { if (c.parentNode) c.parentNode.removeChild(c); this.children.push(c); c.parentNode = this; return c; },
                 removeChild: function (c) { var i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); c.parentNode = null; return c; },
                 setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; },
+                removeAttribute: function (k) { delete attrs[k]; }, hasAttribute: function (k) { return k in attrs; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 removeEventListener: function (t, fn) { var l = this.listeners[t] || []; var i = l.indexOf(fn); if (i >= 0) l.splice(i, 1); },
                 contains: function (c) { return c === this; },
@@ -92,7 +93,7 @@ class FloatLayerTest extends JsModuleTestBase {
                 default: log.push("?" + ev.kind);
             } } });
         desk.root.clientWidth = 800; desk.root.clientHeight = 600;
-        function frames() { return desk.root.children.map(function (f) { return f.getAttribute("aria-label") + (f.has("fp_active") ? "*" : "") + "@z" + f.prop("--fp-z"); }).join(","); }
+        function frames() { return desk.root.children.map(function (f) { return f.getAttribute("aria-label") + (f.getAttribute("aria-current") === "true" ? "*" : "") + "@z" + f.prop("--fp-z"); }).join(","); }
         function headOf(id) { return desk.pane(id).root.children[0]; }
         function gripOf(id) { return desk.pane(id).root.children[2]; }
         """;
@@ -187,20 +188,19 @@ class FloatLayerTest extends JsModuleTestBase {
     void aDragOnTheHeadMoves_clampedToTheDesk_reportedOnceWhenTheHandLetsGo() {
         eval("desk.open({ id: 'a', title: 'A' }); log.length = 0;");
         String head = "headOf('a')";
-        String lift = "var f = desk.pane('a').root; f.has('fp_held') ? 'held' + (f.has('fp_hoverable') ? '+hover' : '') : f.has('fp_hoverable') ? 'hoverable' : 'rest'";
+        String lift = "var f = desk.pane('a').root; f.hasAttribute('data-dragging') ? 'held' + (f.hasAttribute('data-highlighted') ? '+lit' : '') : f.hasAttribute('data-highlighted') ? 'lit' : 'rest'";
         eval(head + ".fire('pointerenter', {});");
-        assertEquals("hoverable", eval(lift).asString(), "over the head: the frame wears the interactive word");
+        assertEquals("lit", eval(lift).asString(), "over the head: the frame lit from there");
         eval(head + ".fire('pointerdown', { button: 0, pointerId: 1, clientX: 100, clientY: 100 });");
-        assertTrue(eval(head + ".has('fp_head_held')").asBoolean(), "held while the hand is on it");
-        assertEquals("held", eval(lift).asString(), "in the hand: the frame wears Dragging, not Interactive");
-        assertEquals("0.6", eval(head + ".prop('--extent')").asString());
+        assertTrue(eval(head + ".hasAttribute('data-dragging')").asBoolean(), "held while the hand is on it");
+        assertEquals("held", eval(lift).asString(), "in the hand: the frame dragging, not lit");
         eval(head + ".fire('pointermove', { clientX: 150, clientY: 130 }); " + head + ".fire('pointermove', { clientX: 2000, clientY: 2000 });");
         assertEquals("", log(), "nothing per pixel");
         assertEquals("752,552", eval("var b = desk.pane('a').bounds(); b.x + ',' + b.y").asString(), "clamped: 48px of the head stays on the desk");
         eval(head + ".fire('pointerup', { clientX: 2000, clientY: 2000 });");
         assertEquals("moved:a@752,552", log());
-        assertFalse(eval(head + ".has('fp_head_held')").asBoolean());
-        assertEquals("hoverable", eval(lift).asString(), "let go, still over the head: back to hover");
+        assertFalse(eval(head + ".hasAttribute('data-dragging')").asBoolean());
+        assertEquals("lit", eval(lift).asString(), "let go, still over the head: lit again");
         eval(head + ".fire('pointerleave', {});");
         assertEquals("rest", eval(lift).asString(), "off the head: nothing");
         assertEquals("752px", eval("desk.pane('a').root.prop('--fp-x')").asString());
@@ -230,15 +230,15 @@ class FloatLayerTest extends JsModuleTestBase {
         eval("var ic = el('i'); f.icon(ic);");
         assertTrue(eval("f.icon() === ic").asBoolean(), "an icon is kept, and shown nowhere");
         eval("bar.fire('pointerenter', {});");
-        assertTrue(eval("f.root.has('fp_hoverable')").asBoolean(), "over the handle, the frame lifts as over a head");
+        assertTrue(eval("f.root.hasAttribute('data-highlighted')").asBoolean(), "over the handle, the frame lit as over a head");
         eval("bar.fire('pointerdown', { button: 0, pointerId: 1, clientX: 100, clientY: 100, target: knob });");
-        assertFalse(eval("f.root.has('fp_held')").asBoolean(), "a press the holder says no to moves nothing");
+        assertFalse(eval("f.root.hasAttribute('data-dragging')").asBoolean(), "a press the holder says no to moves nothing");
         eval("bar.fire('pointerdown', { button: 0, pointerId: 1, clientX: 100, clientY: 100, target: bar });");
-        assertTrue(eval("f.root.has('fp_held')").asBoolean());
+        assertTrue(eval("f.root.hasAttribute('data-dragging')").asBoolean());
         eval("bar.fire('pointermove', { clientX: 150, clientY: 130 }); bar.fire('pointerup', { type: 'pointerup', clientX: 150, clientY: 130 });");
         assertEquals("moved:h@74,54", log(), "moved by the handle, reported once");
         eval("bar.fire('pointerleave', {});");
-        assertFalse(eval("f.root.has('fp_hoverable') || f.root.has('fp_held')").asBoolean());
+        assertFalse(eval("f.root.hasAttribute('data-highlighted') || f.root.hasAttribute('data-dragging')").asBoolean());
     }
 
     /** A frame that is not one tab — a float of many — is never offered: its drags are not the holder's to watch. */

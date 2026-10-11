@@ -25,6 +25,7 @@ import static hue.captains.singapura.js.homing.design.Interaction.Inert;
 import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
 import static hue.captains.singapura.js.homing.design.Layer.Base;
 import static hue.captains.singapura.js.homing.design.Layer.Overlay;
+import static hue.captains.singapura.js.homing.design.Layer.Inverted;
 import static hue.captains.singapura.js.homing.design.Layer.Raised;
 import static hue.captains.singapura.js.homing.design.Layer.Recessed;
 import static hue.captains.singapura.js.homing.design.Structure.Detent;
@@ -778,6 +779,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                            of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Body.class, Type.Face.class),
                            of(Overlay.class, Shape.Shadow.class));
         }
+        /** The overlay's shadow is cast in the inverted layer's colour, which the old design binds only when it is required: read, so it stays bound. */
+        @Override public List<? extends Wearable> reads() { return List.of(of(Inverted.class, Color.Surface.class)); }
         @Override public String body() { return """
             position: absolute;
             inset-inline: 0;

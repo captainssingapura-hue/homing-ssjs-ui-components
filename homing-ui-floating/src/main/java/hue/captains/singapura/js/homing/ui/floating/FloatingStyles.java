@@ -79,11 +79,6 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
      */
     public record fp_frame() implements CssClass<FloatingStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--fp-x"), new CssVar("--fp-y"), new CssVar("--fp-w"), new CssVar("--fp-h"), new CssVar("--fp-z")); }
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Container.Pane.Floating.class, Shape.Corner.class), of(Container.Pane.Floating.class, Shape.Rule.class), of(Container.Pane.Floating.class, Color.Edge.class),
-                           of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Body.class, Color.Ink.class), of(Body.class, Type.Face.class),
-                           of(Overlay.class, Shape.Shadow.class));
-        }
         @Override public String body() { return """
             position: absolute;
             left: var(--fp-x);
@@ -102,36 +97,8 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
         }
     }
 
-    /**
-     * The frame while the hand is on its head: it wears the interactive word,
-     * and since the head is inside it the frame is hovered — so the design's
-     * own hover lifts it. Off the head, the class is gone, and the pointer
-     * over the body lifts nothing.
-     */
-    public record fp_hoverable() implements CssClass<FloatingStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Interactive.class, Motion.Transform.class), of(Interactive.class, Shape.Shadow.class), of(Interactive.class, Motion.Ease.class)); }
-        @Override public String body() { return ""; }
-    }
-
-    /** The frame in the hand: what the design does to a thing being dragged — higher than hover, moving. */
-    public record fp_held() implements CssClass<FloatingStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Dragging.class, Motion.Transform.class), of(Dragging.class, Shape.Shadow.class), of(Interactive.class, Motion.Ease.class)); }
-        @Override public String body() { return ""; }
-    }
-
-    /** The active pane: the ring drawn now, on its edge and as its glow. */
-    public record fp_active() implements CssClass<FloatingStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Focus.class, Color.Edge.class), of(Focus.class, Shape.Shadow.class)); }
-        @Override public String body() { return ""; }
-    }
-
     /** The head: the inverted bar that names the pane and moves it; a pane's air is its head's. */
     public record fp_head() implements CssClass<FloatingStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Inverted.class, Color.Surface.class), of(OnInverted.class, Color.Ink.class), of(Hairline.class, Color.Edge.class), of(Hairline.class, Shape.Rule.class),
-                           of(Container.Pane.Floating.class, Size.Inset.class), of(Container.Pane.Floating.class, Size.Gap.class), of(Dragging.class, Affordance.Cursor.class), of(Heading.class, Type.Face.class));
-        }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Pane.Floating.class, Size.Inset.class), of(Container.Pane.Floating.class, Size.Gap.class)); }
         @Override public String body() { return """
             flex: none;
             display: flex;
@@ -141,13 +108,6 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
             touch-action: none;
             """;
         }
-    }
-
-    /** The head while the hand holds it: lit by extent, as the splitter's handle is. */
-    public record fp_head_held() implements CssClass<FloatingStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class), of(OnPrimary.class, Color.Ink.class)); }
-        @Override public List<? extends Wearable> extents() { return wears(); }
-        @Override public String body() { return ""; }
     }
 
     /**
@@ -215,6 +175,6 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
 
     @Override
     public List<CssClass<FloatingStyles>> cssClasses() {
-        return List.of(new fp_desk(), new fp_desk_layer(), new fp_frame(), new fp_hoverable(), new fp_held(), new fp_active(), new fp_head(), new fp_head_held(), new fp_icon(), new fp_icon_on(), new fp_title(), new fp_body(), new fp_grip());
+        return List.of(new fp_desk(), new fp_desk_layer(), new fp_frame(), new fp_head(), new fp_icon(), new fp_icon_on(), new fp_title(), new fp_body(), new fp_grip());
     }
 }

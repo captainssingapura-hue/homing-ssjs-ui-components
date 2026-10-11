@@ -21,6 +21,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.SEPARATOR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BOUNDARY_LINE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.GROUND;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SITE_BAR;
+import static hue.captains.singapura.js.homing.ui.styles.Say.FLOATING_PANE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TITLE_BAR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DELIMITER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
@@ -119,6 +121,17 @@ final class HouseRule {
                 rest(SITE_BAR, BACKGROUND, ground(s.inverted())),
                 rest(SITE_BAR, INK, "color: " + s.ground() + ";"),
                 rest(SITE_BAR, BORDER, "border-color: " + s.accent() + ";"),
+                // ── a pane that floats - a dialog's window is one: raised, in the text's ink, a hairline round it, the accent's edge
+                //    while it is the active one; its title bar inverted as the site's bar is, a hairline under it, the title's
+                //    colour while it is in the hand ──
+                rest(FLOATING_PANE, BACKGROUND, ground(s.raised())),
+                rest(FLOATING_PANE, INK, "color: " + s.text() + ";"),
+                when(FLOATING_PANE, BORDER, Map.of(
+                        State.REST, "border-color: " + s.border() + ";",
+                        State.CURRENT, "border-color: color-mix(in srgb, " + s.accent() + " 55%, " + s.border() + ");")),
+                when(TITLE_BAR, BACKGROUND, Map.of(State.REST, ground(s.inverted()), State.DRAGGING, ground(s.title()))),
+                when(TITLE_BAR, INK, Map.of(State.REST, "color: " + s.ground() + ";", State.DRAGGING, "color: " + s.onInverted() + ";")),
+                rest(TITLE_BAR, BORDER, "border-color: " + s.border() + ";"),
                 // ── the ring: on focus, and the keys' marks - offered, lent, held ──
                 when(CONTROL, Target.Color.Outline.INSTANCE, Map.of(
                         State.FOCUS, "outline-color: color-mix(in srgb, " + s.accent() + " 55%, " + s.border() + ");",

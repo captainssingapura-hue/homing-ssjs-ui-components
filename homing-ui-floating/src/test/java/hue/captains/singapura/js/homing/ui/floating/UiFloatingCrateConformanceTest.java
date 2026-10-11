@@ -32,7 +32,7 @@ class UiFloatingCrateConformanceTest {
     @Test
     void theFloatingPanePaintsNothingOfItsOwn() {
         var worn = Deployment.wornBy(List.of(FloatingStyles.INSTANCE));
-        assertTrue(worn.size() >= 20, "nine classes wear over twenty distinct pairs; found " + worn.size());
+        assertEquals(1, worn.size(), "the pane and its title bar wear the house's look; only the desk's ground is still a word - found " + worn.size());
         for (CssClass<FloatingStyles> c : FloatingStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color"),

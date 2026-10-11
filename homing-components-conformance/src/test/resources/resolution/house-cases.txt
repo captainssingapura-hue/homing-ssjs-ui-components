@@ -27,7 +27,7 @@ danger-button        focus     shape-outline      => control__shape-outline--foc
 danger-button        focus     color-outline      => control__color-outline--focus from harbour
 danger-button        focus     shape-shadow       => none
 # a functional role is set aside: the dialog's window looks as the floating pane on its own
-floating-pane_window rest      shape-corner       => root__shape-corner from base
+floating-pane_window rest      shape-corner       => card__shape-corner from editorial
 # a toggle that is on is held pressed, tinted with the accent; the close button draws the style's own cross
 toggle-button        pressed   shape-shadow       => toggle-button__shape-shadow--pressed from editorial
 toggle-button        pressed   color-background   => toggle-button__color-background--pressed from harbour

@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.pane;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
@@ -116,5 +117,7 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
             cardShadow("5px 5px 10px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -5px -5px 10px var(--box-shadow-lit)", "7px 7px 14px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -7px -7px 14px var(--box-shadow-lit)", "inset 4px 4px 8px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset -4px -4px 8px var(--box-shadow-lit)"),
             disabled(".5", "not-allowed"),
             // ── its page: the face everything on it is written in, and the site's bar ──
+            // ── its floating pane - a dialog's window is one: its shadows, its lift in the hand, its title bar ──
+            pane("14px 14px 28px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), -14px -14px 28px var(--box-shadow-lit)", "14px 14px 28px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), -14px -14px 28px var(--box-shadow-lit), 0 0 0 3px color-mix(in srgb, var(--box-shadow-glow) 35%, transparent)", "7px 7px 14px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), -7px -7px 14px var(--box-shadow-lit)", "10px 10px 20px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), -10px -10px 20px var(--box-shadow-lit)", "translateY(-1px)", "translateY(-2px)", DISPLAY, "padding-block: 6px; padding-inline: 14px;", null, null),
             siteChrome(BODY, null, null));
 }
