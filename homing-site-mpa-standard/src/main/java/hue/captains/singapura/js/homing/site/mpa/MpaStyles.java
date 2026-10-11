@@ -83,11 +83,9 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
 
     /** The brand link: mark and word, home. */
     public record mpa_brand() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(OnInverted.class, Color.Ink.class), of(Link.class, Type.Decoration.class)); }
         @Override public String body() { return """
             display: flex;
             align-items: center;
-            gap: 10px;
             flex: 0 0 auto;
             """;
         }
@@ -95,7 +93,6 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
 
     /** The mark beside the word: a primary square, until a site gives a logo. */
     public record mpa_brand_mark() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class)); }
         @Override public String body() { return """
             width: 12px;
             height: 12px;
@@ -196,21 +193,11 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
 
     /** The button on the bar: a control drawn in the bar's ink. */
     public record mpa_prefs_btn() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(OnInverted.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(OnInverted.class, Color.Ink.class), of(Caption.class, Type.Scale.class), of(Body.class, Type.Face.class), of(Interactive.class, Affordance.Cursor.class)); }
         @Override public String body() { return """
-            font: inherit;
-            background: transparent;
-            padding: 5px 12px;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
             """;
         }
-    }
-
-    public record mpa_prefs_btn_label() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(OnInvertedMuted.class, Color.Ink.class)); }
-        @Override public String body() { return ""; }
     }
 
     @Override
@@ -219,6 +206,6 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
                 new mpa_page(), new mpa_root(), new mpa_header(),
                 new mpa_brand(), new mpa_brand_mark(), new mpa_brand_word(),
                 new mpa_crumbs(), new mpa_crumb(), new mpa_crumb_sep(), new mpa_main(), new mpa_main_full(), new mpa_page_app(),
-                new mpa_prefs(), new mpa_prefs_btn(), new mpa_prefs_btn_label());
+                new mpa_prefs(), new mpa_prefs_btn());
     }
 }

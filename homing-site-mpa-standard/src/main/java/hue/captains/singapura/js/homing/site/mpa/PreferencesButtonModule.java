@@ -1,6 +1,9 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.WidgetSlotModule;
@@ -26,7 +29,7 @@ import java.util.List;
  * writes through the steward, and the page follows the store as it always
  * has, so a theme picked in the dialog is worn behind it as it is picked.</p>
  */
-public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule>, ImplFor<HouseSite.PreferencesButton> {
+public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule>, ImplFor<HouseControls.PreferencesButton> {
 
     /** The class. */
     public record PreferencesButton() implements BranchComponent<PreferencesButtonModule> {
@@ -38,14 +41,15 @@ public record PreferencesButtonModule() implements DomModule<PreferencesButtonMo
     @Override
     public ImportsFor<PreferencesButtonModule> imports() {
         return ImportsFor.<PreferencesButtonModule>builder()
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesViewModule.PreferencesView()), PreferencesViewModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new MpaStyles.mpa_prefs(),
-                        new MpaStyles.mpa_prefs_btn(),
-                        new MpaStyles.mpa_prefs_btn_label()
+                        new MpaStyles.mpa_prefs_btn()
                 ), MpaStyles.INSTANCE))
                 .build();
     }

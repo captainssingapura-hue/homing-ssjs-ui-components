@@ -42,8 +42,8 @@ class WholeHouseTaxonomyTest {
                 assertEquals(e.getClass(), c.getClass().getEnclosingClass(), c + " is declared by the module that lists it");
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
-        assertEquals(30, leaves.values().stream().mapToInt(Integer::intValue).sum(), "30 leaves the modules add: " + leaves);
-        assertEquals(57, HouseTaxonomy.INSTANCE.common().size(), "to the 57 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands");
+        assertEquals(27, leaves.values().stream().mapToInt(Integer::intValue).sum(), "27 leaves the modules add: " + leaves);
+        assertEquals(60, HouseTaxonomy.INSTANCE.common().size(), "to the 60 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand, its preferences button and the view it opens");
     }
 
     @Test

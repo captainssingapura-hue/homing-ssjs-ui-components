@@ -34,6 +34,11 @@ Offers the choices that apply where the user asked, there, and closes once one i
 
 Holds the page back while something above it asks for the user's attention.
 
+## PreferencesView
+
+Presents the site's preferences: the settings listed by where they belong, and the one picked,
+beside the list.
+
 ## SplitPane
 
 Shares a room between regions, split and split again, the lines between them movable.

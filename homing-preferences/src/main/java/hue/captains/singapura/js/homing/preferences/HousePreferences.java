@@ -9,7 +9,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
@@ -31,8 +30,7 @@ public record HousePreferences() implements TaxonomyExtension {
     /** Every component this module declares. */
     @Override public List<Component<?>> components() {
         return List.of(PreferenceField.INSTANCE, ChoiceWidget.INSTANCE, ScaleWidget.INSTANCE, ToggleWidget.INSTANCE,
-                       ListMasterWidget.INSTANCE, OverviewWidget.INSTANCE, PreferencesView.INSTANCE,
-                       SettingRow.INSTANCE);
+                       ListMasterWidget.INSTANCE, OverviewWidget.INSTANCE, SettingRow.INSTANCE);
     }
 
     /** One setting: what it is filed under, its title and summary, a note on it, and a way back to the default. Its body is the widget's. */
@@ -104,17 +102,6 @@ public record HousePreferences() implements TaxonomyExtension {
                            DSL.part(HouseText.Lede.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(),
                            DSL.part(SettingRow.INSTANCE).as(HouseShaping.Entry.INSTANCE).any(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Reset.INSTANCE).one());
-        }
-    }
-
-    /** The site's preferences: the index of its settings, and the one chosen. The widgets are held in the slots. */
-    public record PreferencesView() implements Component<HouseBranches.View> {
-        public static final PreferencesView INSTANCE = new PreferencesView();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Index.INSTANCE).one(),
-                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Detail.INSTANCE).one());
         }
     }
 

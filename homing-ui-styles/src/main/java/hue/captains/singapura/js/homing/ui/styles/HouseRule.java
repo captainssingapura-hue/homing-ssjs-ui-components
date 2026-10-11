@@ -24,6 +24,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTEXT_MENU;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DETENT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DROP_MARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.BRAND;
+import static hue.captains.singapura.js.homing.ui.styles.Say.PREFERENCES_BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CARD;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SLIDER_GROUP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.ACTION_BAR;
@@ -221,6 +223,13 @@ final class HouseRule {
                         State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 7%, " + s.raised() + ")"))),
                 rest(TAB_STRIP, BORDER, "border-color: " + s.accent() + ";"),
                 rest(DROP_MARK, BACKGROUND, ground(s.accent())),
+                // ── a brand: its colour - the accent - its mark's ground, its name in the ink of the bar it stands on; a preferences
+                //    button bare, in that ink and outlined in it, washed in it under the hand ──
+                rest(BRAND, BACKGROUND, ground(s.accent())),
+                rest(BRAND, INK, "color: inherit;"),
+                when(PREFERENCES_BUTTON, BACKGROUND, Map.of(State.REST, ground("transparent"), State.HOVER, ground(WASH))),
+                rest(PREFERENCES_BUTTON, INK, "color: inherit;"),
+                rest(PREFERENCES_BUTTON, BORDER, "border-color: currentColor;"),
                 // ── a card, and a group of sliders framed as one: raised, a hairline round it ──
                 rest(CARD, BACKGROUND, ground(s.raised())),
                 rest(CARD, BORDER, "border-color: " + s.border() + ";"),
@@ -271,6 +280,9 @@ final class HouseRule {
                 when(LIST_ROW, BORDER, Map.of(State.HOVER, "border-color: " + s.border() + ";")),
                 when(MENU_ITEM, BACKGROUND, Map.of(State.HOVER, ground("color-mix(in srgb, " + s.accent() + " 15%, transparent)"))),
                 when(MENU_ITEM, BORDER, Map.of(State.HOVER, "border-color: " + s.border() + ";")),
+                // ── an icon as a symbol - a button's mark beside its word - in the ink it stands on, muted ──
+                new Implementation<>(new Casting(HouseMarks.Icon.INSTANCE, HouseSaying.Symbol.INSTANCE), INK,
+                        new Answer.Own<>("color: color-mix(in srgb, currentColor 75%, transparent);")),
                 new Implementation<>(new Casting(HouseMarks.Icon.INSTANCE, HouseSaying.Keys.INSTANCE), INK,
                         new Answer.Own<>("color: color-mix(in srgb, " + s.accent() + " calc(clamp(0, var(--extent), 1) * 100%), currentColor);")));
     }

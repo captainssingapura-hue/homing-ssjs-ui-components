@@ -24,6 +24,7 @@
 // =============================================================================
 
 const _prefsOwner = Object.freeze({ toString: () => "preferencesButton" });
+const _SYMBOL = Object.freeze({ LEAF: "icon" });   // the button's mark: an icon, as its symbol
 var _registry = null;   // Promise<PREFERENCES>, once per page
 
 function _loadRegistry(entry) {
@@ -51,9 +52,10 @@ class PreferencesButton {
         var btn = branch.createElement("prefsBtn", "button");
         btn.type = "button";
         css.addClass(btn, mpa_prefs_btn);
+        new Look(Object.freeze({ LEAF: "preferences-button" }), ROLE.STANDALONE).wear(btn);   // outlined in the ink of the bar it stands on
         btn.setAttribute("aria-haspopup", "dialog");
-        var mark = branch.createElement("prefsBtnMark", "span");   // the bar's muted ink, which the symbol inside takes
-        css.addClass(mark, mpa_prefs_btn_label);
+        var mark = branch.createElement("prefsBtnMark", "span");
+        new Look(_SYMBOL, ROLE.SYMBOL).wear(mark, { only: ["color-ink"] });   // the symbol's ink, which the icon inside takes
         mark.setAttribute("aria-hidden", "true");
         this._symbol = new Icon(branch.createElement("prefsBtnSymbol", Icon.TAG), { name: "settings" });
         mark.appendChild(this._symbol.el);

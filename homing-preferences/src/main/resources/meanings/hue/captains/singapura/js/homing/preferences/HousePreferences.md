@@ -26,11 +26,6 @@ Lists the site's settings by where they belong, so the user picks one to see bes
 Presents a group of settings at once: what the group is, each setting with its value, and the way
 back to the defaults for all of them.
 
-## PreferencesView
-
-Presents the site's preferences: the settings listed by where they belong, and the one picked,
-beside the list.
-
 ## SettingRow
 
 One setting of a group, listed with its value as it stands.

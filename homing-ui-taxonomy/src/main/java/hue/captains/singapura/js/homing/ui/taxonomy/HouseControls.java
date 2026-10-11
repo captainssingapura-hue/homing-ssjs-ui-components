@@ -192,6 +192,29 @@ public final class HouseControls {
         }
     }
 
+    /** A site's mark and name, a way home. */
+    public record Brand() implements Component<Control> {
+        public static final Brand INSTANCE = new Brand();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
+                           DSL.part(HouseText.Wordmark.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
+        }
+    }
+
+    /** The button that opens a site's preferences in a dialog, the preferences' view its page. */
+    public record PreferencesButton() implements Component<Control> {
+        public static final PreferencesButton INSTANCE = new PreferencesButton();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
+                           DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional(),
+                           DSL.part(HouseContainers.PreferencesView.INSTANCE).as(HouseShaping.Page.INSTANCE).optional());
+        }
+    }
+
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
     public record Switch() implements Component<Control> {
         public static final Switch INSTANCE = new Switch();

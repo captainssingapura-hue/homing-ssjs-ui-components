@@ -72,9 +72,12 @@ class MpaChrome {
     static _brand(branch, brand) {
         var a = branch.createElement("brand", "a");
         css.addClass(a, mpa_brand);
+        var look = new Look(Object.freeze({ LEAF: "brand" }), ROLE.STANDALONE);   // the site's brand, on its own: the chrome that holds it is a module's
+        look.wear(a, { except: ["color-background"] });
         HrefManagerInstance.set(a, (brand && brand.home) || "/");
         var mark = branch.createElement("brandMark", "span");
         css.addClass(mark, mpa_brand_mark);
+        look.wear(mark, { only: ["color-background"] });   // its colour is its mark's
         // the site's name, in the house's wordmark, cast as the brand's name: placed by the chrome
         var word = new Wordmark(WordmarkFactory.create(branch, "brandWord"), { text: (brand && brand.label) || "site" }, ROLE.NAME);
         css.addClass(word.el, mpa_brand_word);

@@ -38,13 +38,13 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE,
                 HouseControls.Link.INSTANCE, HouseControls.Crumb.INSTANCE, HouseControls.Range.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.Slider.INSTANCE, HouseControls.Select.INSTANCE,
-                HouseControls.PaneThumb.INSTANCE, HouseControls.Tab.INSTANCE,
+                HouseControls.PaneThumb.INSTANCE, HouseControls.Tab.INSTANCE, HouseControls.Brand.INSTANCE, HouseControls.PreferencesButton.INSTANCE,
                 // items
                 HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE,
                 // containers
                 HouseContainers.PlainCard.INSTANCE, HouseContainers.SummaryCard.INSTANCE, HouseContainers.SliderGroup.INSTANCE,
                 HouseContainers.Panel.INSTANCE, HouseContainers.Dialog.INSTANCE, HouseContainers.FloatingPane.INSTANCE,
-                HouseContainers.ContextMenu.INSTANCE, HouseContainers.Scrim.INSTANCE, HouseContainers.SplitPane.INSTANCE,
+                HouseContainers.ContextMenu.INSTANCE, HouseContainers.Scrim.INSTANCE, HouseContainers.PreferencesView.INSTANCE, HouseContainers.SplitPane.INSTANCE,
                 HouseContainers.EdgeStrip.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseContainers.Trail.INSTANCE,
                 HouseContainers.TabStrip.INSTANCE,
                 // regions

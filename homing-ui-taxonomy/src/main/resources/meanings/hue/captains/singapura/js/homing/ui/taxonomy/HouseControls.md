@@ -74,6 +74,14 @@ Picks one pane by a small picture of where it is.
 
 Brings forward one of the things a pane holds, and stands for it among the others.
 
+## Brand
+
+Says whose site this is, and takes the user home.
+
+## PreferencesButton
+
+Opens the site's preferences, where the user sets how the site behaves for them.
+
 ## Switch
 
 Sets a setting on or off, in one movement, and shows which it is.

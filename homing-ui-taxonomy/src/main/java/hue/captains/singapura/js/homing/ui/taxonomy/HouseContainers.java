@@ -109,6 +109,19 @@ public final class HouseContainers {
         @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE); }
     }
 
+    // ── views ────────────────────────────────────────────────────────────
+
+    /** A site's preferences: the index of its settings, and the one chosen. The widgets are held in the slots. */
+    public record PreferencesView() implements Component<HouseBranches.View> {
+        public static final PreferencesView INSTANCE = new PreferencesView();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Index.INSTANCE).one(),
+                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Detail.INSTANCE).one());
+        }
+    }
+
     // ── splits ───────────────────────────────────────────────────────────
 
     /** Regions split in a tree, and the dividers between them. Its cells are its own. */

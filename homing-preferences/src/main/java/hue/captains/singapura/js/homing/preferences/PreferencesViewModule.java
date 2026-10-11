@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 
@@ -29,7 +30,7 @@ import java.util.List;
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 8,
         reason = "It makes its own elements, places elements and wears classes of its own: it waits for the designed containers to draw only components.")
-public record PreferencesViewModule() implements Widget<Widget._None, PreferencesViewModule>, ImplFor<HousePreferences.PreferencesView> {
+public record PreferencesViewModule() implements Widget<Widget._None, PreferencesViewModule>, ImplFor<HouseContainers.PreferencesView> {
 
     /** The class. */
     public record PreferencesView() implements Widget._Class<Widget._None, PreferencesViewModule>, NeedKeyboard {

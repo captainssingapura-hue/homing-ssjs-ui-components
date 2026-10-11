@@ -588,6 +588,27 @@ final class Say {
                        rest(SLIDER_GROUP, Target.Affordance.Select.INSTANCE, "user-select: none;"));
     }
 
+    // ── a site's brand - its colour its mark's - and its preferences button, outlined in the ink of the bar it stands on ──
+
+    static final Taxon BRAND = HouseControls.Brand.INSTANCE;
+    static final Taxon PREFERENCES_BUTTON = HouseControls.PreferencesButton.INSTANCE;
+
+    /**
+     * What every style's site chrome says alike: a brand's mark ten pixels from its name, undecorated; a preferences
+     * button with a button's corner and rule, five pixels above and below its words and twelve at its sides, eight
+     * between its mark and its word, in the label's face at the caption's size.
+     */
+    static List<Implementation<?>> siteBase() {
+        return List.of(rest(BRAND, GAP, "gap: 10px;"),
+                       rest(BRAND, DECORATION, "text-decoration-line: none;"),
+                       new Implementation<>(PREFERENCES_BUTTON, CORNER, new Answer.Redirect<>(BUTTON)),
+                       new Implementation<>(PREFERENCES_BUTTON, BORDER, new Answer.Redirect<>(BUTTON)),
+                       rest(PREFERENCES_BUTTON, INSET, "padding-block: 5px; padding-inline: 12px;"),
+                       rest(PREFERENCES_BUTTON, GAP, "gap: 8px;"),
+                       new Implementation<>(PREFERENCES_BUTTON, FACE, new Answer.Redirect<>(LABEL)),
+                       new Implementation<>(PREFERENCES_BUTTON, SCALE, new Answer.Redirect<>(CAPTION)));
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {
