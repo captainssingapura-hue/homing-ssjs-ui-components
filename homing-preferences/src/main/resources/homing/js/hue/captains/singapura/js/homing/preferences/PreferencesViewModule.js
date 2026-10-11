@@ -1,6 +1,6 @@
 // =============================================================================
 // PreferencesView — a master slot on the left, a detail slot on the right,
-// laid out by a split: the line between them is the split's, movable.
+// laid out by a split grid, fixed: the line between them is the grid's, movable.
 // A widget: its holder shows it in a slot - a dialog's body, a page's - and
 // the slot dissolves its branch after dispose().
 //
@@ -32,9 +32,10 @@
 // =============================================================================
 
 const _viewOwner = Object.freeze({ toString: () => "preferencesView" });
-// the index a third of the room, the detail the rest; the user moves the line between them
+// the index a third of the room, the detail the rest: fixed - the view never parts or removes a region -
+// and the user moves the line between them
 const _LAYOUT = Object.freeze({ kind: "split", orientation: "horizontal", children: [
-    { pane: { kind: "leaf", slotId: "index" }, ratio: 1 }, { pane: { kind: "leaf", slotId: "detail" }, ratio: 2 }] });
+    { node: { kind: "cell", id: "index" }, ratio: 1 }, { node: { kind: "cell", id: "detail" }, ratio: 2 }] });
 
 var _loaded = new Map();   // module url → Promise<module>; one import per address per page
 
@@ -61,10 +62,10 @@ class PreferencesView {
         this._disposed = false;
         this._wanted = null;        // the path last asked for, so a slow import cannot show a stale one
 
-        var root = branch.createElement("root", "div");   // a flat box the split fills
+        var root = branch.createElement("root", "div");   // a flat box the grid fills
         css.addClass(root, pv_root);
-        this._split = new SplitPane(branch.createBranch("split"), { host: root, minPanePx: 200, layout: _LAYOUT });
-        var masterPane = this._split.slot("index"), detailPane = this._split.slot("detail");
+        this._split = new SplitGrid(branch.createBranch("split"), { host: root, minCellPx: 200, layout: JSON.parse(JSON.stringify(_LAYOUT)) });
+        var masterPane = this._split.cell("index"), detailPane = this._split.cell("detail");
         css.addClass(masterPane, pv_master);
         css.addClass(detailPane, pv_detail);
         this.root = root;

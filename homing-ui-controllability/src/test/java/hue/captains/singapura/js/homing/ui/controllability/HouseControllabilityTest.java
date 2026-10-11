@@ -95,7 +95,6 @@ class HouseControllabilityTest {
         expected.put("edge-strip", "holdable");
         expected.put("dialog", "modal-overlay");
         expected.put("context-menu", "overlay");
-        expected.put("split-pane", "arrangeable");
         expected.put("floating-pane", "placeable");
         expected.put("icon", "content");
         for (String p : List.of("summary-card", "slider-group")) expected.put(p, "plain");
@@ -107,7 +106,6 @@ class HouseControllabilityTest {
     @Test
     void aBranchClassifiesEveryLeafUnderIt_andANodeWithNothingOnItsLineageIsPlain() {
         assertEquals("switchable", typeOf("toggle-button"), "under the Button branch, declared on the branch");
-        assertEquals("arrangeable", typeOf("split-pane"), "under the Split branch, declared on the branch");
         assertEquals("plain", typeOf("heading"));
         for (Component<?> leaf : TAXONOMY.components())
             assertTrue(HouseControllability.INSTANCE.findControlType(TAXONOMY, leaf) != null, leaf + " has a type");

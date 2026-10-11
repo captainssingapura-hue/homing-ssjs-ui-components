@@ -100,7 +100,7 @@ class ComponentsConformanceTest {
         var groups = new ArrayList<CssGroup<?>>();
         for (Crate c : ComponentsConformance.TOP_LEVEL)
             for (var e : c.entries()) if (e.module() instanceof CssGroup<?> g) groups.add(g);
-        assertEquals(13, groups.size(), "one style group per crate that has styles, docking none; the house's look sheet is derived, no group");
+        assertEquals(12, groups.size(), "one style group per crate that has styles, docking none; the house's look sheet is derived, no group");
         var worn = Deployment.wornBy(groups);
         var scaled = Deployment.scaledBy(groups);
         var grown = Deployment.grownBy(groups);
@@ -132,10 +132,10 @@ class ComponentsConformanceTest {
         assertEquals(List.of(), ComponentTrees.validate(ComponentsConformance.TOP_LEVEL));
         var composed = ComponentTrees.compose("components", ComponentsConformance.TOP_LEVEL);
         var vehicles = composed.root().children().stream().map(n -> n.segment().value()).toList();
-        assertEquals(List.of("ui-elements", "server", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split", "ui-pan-zoom", "ui-panes", "ui-docking", "ui-split-grid", "ui-monitors", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the elements require the base (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate; docking catalogues its dock grid, the desk and the floater being statics; the control panel, a widget, last");
+        assertEquals(List.of("ui-elements", "server", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split-grid", "ui-pan-zoom", "ui-panes", "ui-docking", "ui-monitors", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the elements require the base (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate, the preferences the split grid their view is laid out by; docking catalogues its dock grid, the desk and the floater being statics; the control panel, a widget, last");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
-        assertEquals(15, root.vehicleCount());
-        assertEquals(60, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 28 elements (nine buttons, nine texts, a link, a crumb, a scrim, a separator, a delimiter, the summary card, the slider and its group, the panel and the edge strip), 1 icon, 1 dialog, 7 preferences, 1 split, 2 pan-zoom (the view and its bar), 6 panes (the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 2 floating, 1 docking (the dock grid), 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
+        assertEquals(14, root.vehicleCount());
+        assertEquals(59, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 28 elements (nine buttons, nine texts, a link, a crumb, a scrim, a separator, a delimiter, the summary card, the slider and its group, the panel and the edge strip), 1 icon, 1 dialog, 7 preferences, 2 pan-zoom (the view and its bar), 6 panes (the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 2 floating, 1 docking (the dock grid), 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
         assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.TOP_LEVEL));

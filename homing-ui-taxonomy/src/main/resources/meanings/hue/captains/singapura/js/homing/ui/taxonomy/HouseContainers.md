@@ -34,10 +34,6 @@ Offers the choices that apply where the user asked, there, and closes once one i
 
 Holds the page back while something above it asks for the user's attention.
 
-## SplitPane
-
-Shares a room between regions, split and split again, the lines between them movable.
-
 ## EdgeStrip
 
 Keeps controls out of the way at an edge until the pointer reaches for them.

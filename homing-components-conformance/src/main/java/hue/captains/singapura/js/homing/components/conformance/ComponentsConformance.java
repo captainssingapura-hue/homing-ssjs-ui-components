@@ -24,7 +24,6 @@ import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
 import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomCrate;
-import hue.captains.singapura.js.homing.ui.split.UiSplitCrate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -63,7 +62,6 @@ public final class ComponentsConformance {
             UiElementsCrate.INSTANCE,
             UiDialogCrate.INSTANCE,
             UiPreferencesCrate.INSTANCE,
-            UiSplitCrate.INSTANCE,
             UiPanZoomCrate.INSTANCE,
             UiPanesCrate.INSTANCE,
             UiFloatingCrate.INSTANCE,
@@ -78,7 +76,7 @@ public final class ComponentsConformance {
     /** One class per Maven module, for the coverage check: nothing served from these modules may be uncrated. */
     public static final List<Class<?>> ANCHORS = List.of(
             LayoutCrate.class, UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
-            UiSplitCrate.class, UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiMonitorsCrate.class, UiMenuCrate.class, MpaCrate.class,
+            UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiMonitorsCrate.class, UiMenuCrate.class, MpaCrate.class,
             UiControlPanelCrate.class);
 
     /** The framework's policy, unextended: the components declare no types of their own. */

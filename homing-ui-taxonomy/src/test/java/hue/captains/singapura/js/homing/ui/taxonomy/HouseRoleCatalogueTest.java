@@ -86,7 +86,7 @@ class HouseRoleCatalogueTest {
     @Test
     void readWithTheBase_theWordsOnlyTheExtensionsSay_goUnnamed() {
         var findings = HouseTaxonomy.INSTANCE.read().findings();
-        assertEquals(57, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
-                "thirty-two the extensions name, twenty-four no component says yet, and Host - a floater's, not in the first cut");
+        assertEquals(58, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
+                "thirty-three the extensions name - a split's seam among them, now the split grid's alone - twenty-four no component says yet, and Host - a floater's, not in the first cut");
     }
 }

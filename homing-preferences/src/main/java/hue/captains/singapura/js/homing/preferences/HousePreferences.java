@@ -6,7 +6,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.splitgrid.HouseSplitGrid;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
@@ -109,15 +109,15 @@ public record HousePreferences() implements TaxonomyExtension {
     }
 
     /**
-     * The site's preferences, a widget: the index of its settings and the one chosen, side by side. A split lays
-     * them out, so the line between them is the split's; the widgets are held in the slots.
+     * The site's preferences, a widget: the index of its settings and the one chosen, side by side. A split grid lays
+     * them out, fixed, so the line between them is the grid's; the widgets are held in the slots.
      */
     public record PreferencesView() implements Component<HouseBranches.View> {
         public static final PreferencesView INSTANCE = new PreferencesView();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseContainers.SplitPane.INSTANCE).as(HouseShaping.Layout.INSTANCE).one(),
+            return List.of(DSL.part(HouseSplitGrid.SplitGrid.INSTANCE).as(HouseShaping.Layout.INSTANCE).one(),
                            DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Index.INSTANCE).one(),
                            DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Detail.INSTANCE).one());
         }

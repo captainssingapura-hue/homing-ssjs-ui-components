@@ -35,7 +35,7 @@ class HouseTaxonomyTest {
     /** The common components ui-components ships today, by their class names; its Button is realized by the button leaves, its Card by SummaryCard. */
     private static final Set<String> SHIPPED = Set.of(
             "SummaryCard", "Slider", "SliderGroup", "Panel", "EdgeStrip", "Dialog", "FloatingPane", "Icon", "ContextMenu",
-            "SplitPane", "Link", "Crumb", "Scrim", "Separator", "Delimiter", "Label", "Heading", "Caption", "Readout");
+            "Link", "Crumb", "Scrim", "Separator", "Delimiter", "Label", "Heading", "Caption", "Readout");
 
     @Test
     void theBase_aloneOnThisClasspath() {
@@ -45,11 +45,11 @@ class HouseTaxonomyTest {
 
     @Test
     void theBaseIsReadWhole_withItsCatalogue() {
-        assertEquals(15, HOUSE.branches().size(), "the view and the field have no common leaf: their leaves are the extensions' - a view is a widget");
-        assertEquals(59, HOUSE.components().size());
+        assertEquals(14, HOUSE.branches().size(), "the view, the field and the split have no common leaf: their leaves are the extensions' - a view is a widget, a split the grid's");
+        assertEquals(58, HOUSE.components().size());
         assertEquals(91, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
-        assertEquals(50, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
-        assertEquals(21, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+        assertEquals(49, HOUSE.parts().size(), "the slots, each a part once its owner is appended");
+        assertEquals(20, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
     /**
@@ -87,8 +87,8 @@ class HouseTaxonomyTest {
             assertFalse(descendants(b).isEmpty(), b.getClass().getSimpleName() + " has no component under it");
         assertEquals(List.of("control", "item", "container", "region", "text", "mark", "track"),
                 HOUSE.children(Root.INSTANCE).stream().map(n -> n.token()).toList(), "level 1, in the order first reached");
-        assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
-                HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, eight at level 2");
+        assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2),
+                HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, seven at level 2");
     }
 
     @Test
@@ -129,7 +129,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(15 + 59 + 21 + 91 + 8 + 22 + 7 + 14, nodes.size());
+        assertEquals(14 + 58 + 21 + 91 + 8 + 22 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));

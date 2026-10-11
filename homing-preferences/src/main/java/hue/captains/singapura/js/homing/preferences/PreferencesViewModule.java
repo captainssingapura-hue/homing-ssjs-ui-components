@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.split.SplitPaneModule;
+import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 
@@ -17,8 +17,8 @@ import java.util.List;
 
 /**
  * The preferences view: a master slot on the left holding the tree widget,
- * a detail slot on the right holding one widget per node, laid out by a split -
- * the line between them is the split's, and the user may move it - every widget
+ * a detail slot on the right holding one widget per node, laid out by a split
+ * grid, fixed - the line between them is the grid's, and the user may move it - every widget
  * loaded the first time it is needed and kept until the view is disposed.
  *
  * <p>{@code new PreferencesView(branch, registry)}: root, select, ready, key, dispose. A widget,
@@ -30,7 +30,7 @@ import java.util.List;
  * steward; the view neither carries nor forwards a value.</p>
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
-        reason = "It makes the box its split fills, and gives the split's regions their room with classes of its own: it waits for a region's room to be the layout's.")
+        reason = "It makes the box its grid fills, and gives the grid's cells their room with classes of its own: it waits for a region's room to be the layout's.")
 public record PreferencesViewModule() implements Widget<Widget._None, PreferencesViewModule>, ImplFor<HousePreferences.PreferencesView> {
 
     /** The class. */
@@ -50,7 +50,7 @@ public record PreferencesViewModule() implements Widget<Widget._None, Preference
     public ImportsFor<PreferencesViewModule> imports() {
         return ImportsFor.<PreferencesViewModule>builder()
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SplitPaneModule.SplitPane()), SplitPaneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_root(),
                         new PreferencesStyles.pv_master(),

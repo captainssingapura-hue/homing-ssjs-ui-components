@@ -68,7 +68,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-split</artifactId>
+            <artifactId>homing-ui-splitgrid</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

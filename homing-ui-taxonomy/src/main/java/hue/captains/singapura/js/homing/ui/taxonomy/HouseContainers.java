@@ -109,18 +109,6 @@ public final class HouseContainers {
         @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE); }
     }
 
-    // ── splits ───────────────────────────────────────────────────────────
-
-    /** Regions split in a tree, and the dividers between them. Its cells are its own. */
-    public record SplitPane() implements Component<HouseBranches.Split> {
-        public static final SplitPane INSTANCE = new SplitPane();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.Divider.INSTANCE).as(HouseShaping.Seam.INSTANCE).any());
-        }
-    }
-
     // ── bars ─────────────────────────────────────────────────────────────
 
     /** A strip along an edge, revealed by its lip. Its controls are the caller's. */

@@ -36,7 +36,6 @@
         <module>homing-ui-elements</module>
         <module>homing-ui-dialog</module>
         <module>homing-preferences</module>
-        <module>homing-ui-split</module>
         <module>homing-ui-panzoom</module>
         <module>homing-ui-floating</module>
         <module>homing-ui-docking</module>
