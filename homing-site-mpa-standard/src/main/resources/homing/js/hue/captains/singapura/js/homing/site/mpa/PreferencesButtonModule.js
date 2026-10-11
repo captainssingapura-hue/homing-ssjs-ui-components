@@ -2,11 +2,11 @@
 // PreferencesButton — the button on the bar, and the dialog it opens. A
 // branch component: the chrome makes a sub-branch for it and hands it in.
 //
-//   new PreferencesButton(branch, bar, chrome, keyboard)
+//   new PreferencesButton(branch, chrome, keyboard)
 //     keyboard  the page's KeyboardSteward, the chrome's: the dialog claims the keys
 //               on open and hands them to the view, which hands them to the master
 //               or the detail widget by where the focus is
-//     .el      the button's wrap, appended to the bar
+//     .el      the button's wrap, for its owner - the site's bar - to place
 //     .open()  what the button does
 //
 // chrome.preferences names the site's registry module and the view's: { module, view }.
@@ -49,7 +49,7 @@ function _loadView(entry) {
 }
 
 class PreferencesButton {
-    constructor(branch, bar, chrome, keyboard) {
+    constructor(branch, chrome, keyboard) {
         if (!branch) throw new Error("[PreferencesButton] a branch of its own is required");
         this._keyboard = keyboard || null;
         var self = this;
@@ -75,7 +75,6 @@ class PreferencesButton {
         btn.appendChild(mark);
         btn.appendChild(word);
         wrap.appendChild(btn);
-        bar.appendChild(wrap);
         this.el = wrap;
         this._btn = btn;
 

@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.EASE;
@@ -116,5 +117,7 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
             cardFrame("2px", "1px"),
             cardMotion("transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 220ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 220ms ease, background-color 220ms ease, color 160ms ease", "translateY(-1px) scale(1.01)", "scale(0.985)"),
             cardShadow("0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 14%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 60%, transparent), 0 0 28px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 60%, transparent), 0 0 10px color-mix(in srgb, var(--box-shadow-glow) 25%, transparent)"),
-            disabled(".4", "not-allowed"));
+            disabled(".4", "not-allowed"),
+            // ── its page: the face everything on it is written in, and the site's bar ──
+            siteChrome(BODY, null, null));
 }

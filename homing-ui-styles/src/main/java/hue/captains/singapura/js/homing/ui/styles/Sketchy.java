@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.EASE;
@@ -106,5 +107,7 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
             cardMeasure("280px", "16px", "18px", "8px"),
             cardFrame("25px 25px 55px 5px / 5px 55px 25px 25px", "2px"),
             cardMotion("transform 120ms ease-out, background-color 120ms ease-out, border-color 120ms ease-out", "translateY(-1px) rotate(-0.6deg)", "translateY(1px) rotate(0.4deg)"),
-            disabled(".5", "not-allowed"));
+            disabled(".5", "not-allowed"),
+            // ── its page: the face everything on it is written in, and the site's bar ──
+            siteChrome(BODY, "2px", null));
 }

@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.EASE;
@@ -113,5 +114,7 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
             cardFrame("16px", "0"),
             cardMotion("box-shadow 180ms ease, transform 180ms ease, background-color 180ms ease, color 120ms ease", "translateY(-1px)", null),
             cardShadow("5px 5px 10px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -5px -5px 10px var(--box-shadow-lit)", "7px 7px 14px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -7px -7px 14px var(--box-shadow-lit)", "inset 4px 4px 8px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset -4px -4px 8px var(--box-shadow-lit)"),
-            disabled(".5", "not-allowed"));
+            disabled(".5", "not-allowed"),
+            // ── its page: the face everything on it is written in, and the site's bar ──
+            siteChrome(BODY, null, null));
 }

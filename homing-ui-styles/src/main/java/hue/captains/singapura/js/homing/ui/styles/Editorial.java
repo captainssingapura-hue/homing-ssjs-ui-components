@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.EASE;
@@ -117,5 +118,7 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             cardFrame("6px", "1px"),
             cardMotion("transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease", "translateY(-2px)", "translateY(0)"),
             cardShadow("0 1px 3px color-mix(in srgb, var(--box-shadow-cast) 4%, transparent)", "0 6px 16px color-mix(in srgb, var(--box-shadow-cast) 12%, transparent)", "0 1px 2px color-mix(in srgb, var(--box-shadow-cast) 8%, transparent)"),
-            disabled(".45", "default"));
+            disabled(".45", "default"),
+            // ── its page: the face everything on it is written in, and the site's bar ──
+            siteChrome(BODY, "2px", null));
 }

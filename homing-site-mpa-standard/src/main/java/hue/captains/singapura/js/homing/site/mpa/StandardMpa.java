@@ -111,6 +111,12 @@ public final class StandardMpa implements Mpa {
         return new AppPage<>(app, AppModule._None.INSTANCE, this);
     }
 
+    /** {@code app} bound to {@code params}, as a page that fills the viewport: the chrome's slot the whole of the rest. */
+    @Override
+    public <P extends AppModule._Param, M extends AppModule<P, M>> AppPage<P, M> fillingPage(M app, P params) {
+        return new AppPage<>(app, params, this).filling();
+    }
+
     // ── Serving ───────────────────────────────────────────────────────────────
 
     /**

@@ -121,6 +121,26 @@ public final class HouseContainers {
         }
     }
 
+    /**
+     * The surface a page stands on: its ground, the ink and the face of what is written on it, and its
+     * scrollbar. One to a document, worn on its own element: everything on the page stands on it.
+     */
+    public record Ground() implements Component<HouseBranches.Container> {
+        public static final Ground INSTANCE = new Ground();
+        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+    }
+
+    /** Heads a site's pages: its brand, the way to where the user is, and what its owner hands it at its end, in the ink written on it. */
+    public record SiteBar() implements Component<HouseBranches.Bar> {
+        public static final SiteBar INSTANCE = new SiteBar();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseControls.Brand.INSTANCE).as(HouseDoing.Home.INSTANCE).one(),
+                           DSL.part(Trail.INSTANCE).as(HouseDoing.Path.INSTANCE).one());
+        }
+    }
+
     /** A row of actions, at the foot of a dialog or a view. */
     public record ActionBar() implements Component<HouseBranches.Bar> {
         public static final ActionBar INSTANCE = new ActionBar();

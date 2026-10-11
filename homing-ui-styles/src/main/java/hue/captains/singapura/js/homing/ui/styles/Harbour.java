@@ -18,7 +18,7 @@ public record Harbour() implements ColorPalette {
 
     public static final Harbour INSTANCE = new Harbour();
 
-    static final Seeds SEEDS = new Seeds("#FFFFFF", "#111936", "#3B4A6B", "#FFFFFF", "#1E2761", "#F4B942", "#C8921E", "#111936", "#E2E8F0");
+    static final Seeds SEEDS = new Seeds("#FFFFFF", "#111936", "#3B4A6B", "#FFFFFF", "#1E2761", "#F4B942", "#C8921E", "#111936", "#E2E8F0", "#FAFBFD");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);
 

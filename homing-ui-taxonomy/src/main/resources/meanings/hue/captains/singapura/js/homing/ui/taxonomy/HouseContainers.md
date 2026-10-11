@@ -38,6 +38,16 @@ Holds the page back while something above it asks for the user's attention.
 
 Keeps controls out of the way at an edge until the pointer reaches for them.
 
+## Ground
+
+The surface a page stands on: its ground, the ink and the face of what is written on it, and its scrollbar.
+Everything on the page stands on it.
+
+## SiteBar
+
+Heads a site's pages: its brand, the way from its home to where the user is, and its preferences, along the top
+of every page.
+
 ## ActionBar
 
 Lines up the actions that end a matter, the one to lead with apart.

@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.EASE;
@@ -114,5 +115,7 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
             cardMotion("box-shadow 220ms ease, transform 220ms ease, background-color 160ms ease, border-color 160ms ease", "translateY(-2px)", "translateY(0)"),
             cardShadow("0 4px 16px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent), inset 0 1px 0 var(--box-shadow-lit)", "0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset 0 1px 0 var(--box-shadow-lit)", "0 2px 8px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent), inset 0 1px 0 var(--box-shadow-lit)"),
             cardBackdrop("blur(16px) saturate(1.6)"),
-            disabled(".45", "not-allowed"));
+            disabled(".45", "not-allowed"),
+            // ── its page: the face everything on it is written in, and the site's bar ──
+            siteChrome(BODY, null, "blur(20px) saturate(1.4)"));
 }

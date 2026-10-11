@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import java.util.List;
 import java.util.Map;
 
+import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.EASE;
@@ -120,5 +121,7 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
             cardFrame("4px", "1px"),
             cardMotion("box-shadow 140ms ease-out, transform 140ms steps(3, end), background-color 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out", "translateY(-2px)", "translateY(1px)"),
             cardShadow("0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 10px color-mix(in srgb, var(--box-shadow-glow) 25%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 24px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 6px color-mix(in srgb, var(--box-shadow-glow) 40%, transparent)"),
-            disabled(".4", "not-allowed"));
+            disabled(".4", "not-allowed"),
+            // ── its page: the face everything on it is written in, and the site's bar ──
+            siteChrome(BODY, "2px", null));
 }

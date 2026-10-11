@@ -19,6 +19,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LINK;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SEPARATOR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BOUNDARY_LINE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.GROUND;
+import static hue.captains.singapura.js.homing.ui.styles.Say.SITE_BAR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DELIMITER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
@@ -108,6 +110,15 @@ final class HouseRule {
                 rest(ROOT, Target.Color.Scrollbar.INSTANCE, "scrollbar-color: auto;"),
                 rest(ROOT, Target.Color.BoxShadow.INSTANCE,
                         "--box-shadow-cast: " + s.inverted() + "; --box-shadow-lit: " + s.raised() + "; --box-shadow-glow: " + s.title() + ";"),
+                // ── the page's ground: the palette's ground, in the text's ink - which every text on the page takes, standing on it - and
+                //    its scrollbar the ink faded into the ground; the site's bar over it inverted - the ground and the ink changed
+                //    places: the inverted layer its ground, the page's ground its ink - the accent ruled along its foot, as the tab strip's is ──
+                rest(GROUND, BACKGROUND, ground(s.ground())),
+                rest(GROUND, INK, "color: " + s.text() + ";"),
+                rest(GROUND, Target.Color.Scrollbar.INSTANCE, "scrollbar-color: color-mix(in srgb, " + s.text() + " 55%, " + s.ground() + ") " + s.ground() + ";"),
+                rest(SITE_BAR, BACKGROUND, ground(s.inverted())),
+                rest(SITE_BAR, INK, "color: " + s.ground() + ";"),
+                rest(SITE_BAR, BORDER, "border-color: " + s.accent() + ";"),
                 // ── the ring: on focus, and the keys' marks - offered, lent, held ──
                 when(CONTROL, Target.Color.Outline.INSTANCE, Map.of(
                         State.FOCUS, "outline-color: color-mix(in srgb, " + s.accent() + " 55%, " + s.border() + ");",

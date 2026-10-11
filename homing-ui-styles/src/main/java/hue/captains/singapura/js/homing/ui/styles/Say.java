@@ -607,14 +607,22 @@ final class Say {
 
     static final Taxon BRAND = HouseControls.Brand.INSTANCE;
     static final Taxon PREFERENCES_BUTTON = HouseControls.PreferencesButton.INSTANCE;
+    static final Taxon GROUND = HouseContainers.Ground.INSTANCE;
+    static final Taxon SITE_BAR = HouseContainers.SiteBar.INSTANCE;
 
     /**
      * What every style's site chrome says alike: a brand's mark ten pixels from its name, undecorated; a preferences
      * button with a button's corner and rule, five pixels above and below its words and twelve at its sides, eight
-     * between its mark and its word, in the label's face at the caption's size.
+     * between its mark and its word, in the label's face at the caption's size; the site's bar twelve pixels above and
+     * below what it carries and twenty-eight at its sides, twenty between them, a hairline along its foot; the page in the
+     * system's face until a style gives it its own.
      */
     static List<Implementation<?>> siteBase() {
-        return List.of(rest(BRAND, GAP, "gap: 10px;"),
+        return List.of(rest(SITE_BAR, INSET, "padding-block: 12px; padding-inline: 28px;"),
+                       rest(SITE_BAR, GAP, "gap: 20px;"),
+                       rest(SITE_BAR, BORDER, "border-width: 0 0 1px 0; border-style: solid;"),
+                       rest(GROUND, FACE, "font-family: system-ui, sans-serif;"),
+                       rest(BRAND, GAP, "gap: 10px;"),
                        rest(BRAND, DECORATION, "text-decoration-line: none;"),
                        new Implementation<>(PREFERENCES_BUTTON, CORNER, new Answer.Redirect<>(BUTTON)),
                        new Implementation<>(PREFERENCES_BUTTON, BORDER, new Answer.Redirect<>(BUTTON)),
@@ -622,6 +630,18 @@ final class Say {
                        rest(PREFERENCES_BUTTON, GAP, "gap: 8px;"),
                        new Implementation<>(PREFERENCES_BUTTON, FACE, new Answer.Redirect<>(LABEL)),
                        new Implementation<>(PREFERENCES_BUTTON, SCALE, new Answer.Redirect<>(CAPTION)));
+    }
+
+    /**
+     * A style's page: the face of everything written on it - its body face - and the site's bar's rule along its foot
+     * and its backdrop, each left to the house's when null.
+     */
+    static List<Implementation<?>> siteChrome(String face, String barRule, String barBackdrop) {
+        var out = new ArrayList<Implementation<?>>();
+        out.add(rest(GROUND, FACE, "font-family: " + face + ";"));
+        if (barRule != null) out.add(rest(SITE_BAR, BORDER, "border-width: 0 0 " + barRule + " 0; border-style: solid;"));
+        if (barBackdrop != null) out.add(rest(SITE_BAR, FILTER, "backdrop-filter: " + barBackdrop + ";"));
+        return List.copyOf(out);
     }
 
     /** Every answer of the groups, in order. */

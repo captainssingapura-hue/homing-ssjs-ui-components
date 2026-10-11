@@ -135,7 +135,7 @@ class ComponentsConformanceTest {
         assertEquals(List.of("server", "ui-elements", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split-grid", "ui-pan-zoom", "ui-panes", "ui-monitors", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the base first, which sizing requires (sizing ships no component); the elements require it too (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate, the preferences the split grid their view is laid out by; docking catalogues nothing - the desk, its hand, its floater and its docking are statics; the control panel, a widget, last");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
         assertEquals(13, root.vehicleCount());
-        assertEquals(58, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 28 elements (nine buttons, nine texts, a link, a crumb, a scrim, a separator, a delimiter, the summary card, the slider and its group, the panel and the edge strip), 1 icon, 1 dialog, 7 preferences, 2 pan-zoom (the view and its bar), 6 panes (the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 2 floating, 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
+        assertEquals(62, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 32 elements (nine buttons, nine texts, a link, a crumb, a scrim, a separator, a delimiter, the summary card, the slider and its group, the panel and the edge strip, the ground, the site bar, the brand and the trail), 1 icon, 1 dialog, 7 preferences, 2 pan-zoom (the view and its bar), 6 panes (the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 2 floating, 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
         assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.TOP_LEVEL));
@@ -174,10 +174,9 @@ class ComponentsConformanceTest {
         assertEquals(COMPOSITION_LEDGER, problems, () -> "implementations against the taxonomy (" + problems.size() + "):\n" + String.join("\n", problems));
     }
 
-    /** Drawn without the component the leaf declares: the toggle's knob bare, the chip's keys and the brand's mark the design's own, the float's bar its own strip. */
+    /** Drawn without the component the leaf declares: the toggle's knob bare, the chip's keys the design's own, the float's bar its own strip. */
     private static final List<String> COMPOSITION_LEDGER = List.of(
             "ToggleWidgetModule (ToggleWidget) never imports Icon, which its part toggle (an unrealized Switch) → thumb (an unrealized Knob) → symbol calls for",
             "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
-            "TabPaneModule (TabPane) never imports Icon, which its part chip (an unrealized Tab) → keys calls for",
-            "MpaChromeModule (MpaChrome) never imports Icon, which its part home (an unrealized Brand) → symbol calls for");
+            "TabPaneModule (TabPane) never imports Icon, which its part chip (an unrealized Tab) → keys calls for");
 }

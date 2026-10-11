@@ -21,7 +21,7 @@ public record Synthwave() implements ColorPalette {
     public static final Synthwave INSTANCE = new Synthwave();
 
     static final Seeds SEEDS = new Seeds("#FFFFFF", "#2A0A4A", "#2A0A4A", "#FFFFFF", "#E6007E", "#0092A8", "#0092A8", "#0B0221",
-                                         "rgba(230, 0, 126, 0.18)");
+                                         "rgba(230, 0, 126, 0.18)", "#F6EFFF");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);
 

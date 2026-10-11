@@ -41,6 +41,7 @@ public final class MpaCrate implements Crate, ComponentVehicle {
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(MpaChromeModule.INSTANCE),
+                CrateEntry.of(ChromeLayoutModule.INSTANCE),
                 CrateEntry.of(PreferencesButtonModule.INSTANCE),
                 CrateEntry.of(ThemeWidgetModule.INSTANCE),
                 CrateEntry.of(DefaultPreferences.INSTANCE),

@@ -1,66 +1,51 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.elements.LookModule;
-import hue.captains.singapura.js.homing.ui.elements.WordmarkModule;
-import hue.captains.singapura.js.homing.ui.elements.CrumbModule;
-import hue.captains.singapura.js.homing.ui.elements.DelimiterModule;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
-
-import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
-import hue.captains.singapura.js.homing.core.DomModule;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.server.HrefManager;
+import hue.captains.singapura.js.homing.ui.elements.SiteBarModule;
 
 import java.util.List;
 
 /**
- * The page chrome: a bar with the brand, the trail and the preferences
- * button, over the slot the app is mounted in.
+ * The site's chrome: a widget, with no design of its own - the site's bar at its head (the brand, the
+ * trail, the preferences button), over the slot the page's app is mounted in, laid out by the chrome's
+ * own layout. It stands on the page's ground, which the page wears; it makes no element and touches
+ * none, so every look on it is a designed component's.
  *
- * <p>{@code mountChrome(root, chrome)} draws the bar into {@code root} and
- * returns the slot. The scaffold {@link AppPage} writes calls it first, then
- * imports the app and hands it the slot — so the app is any {@code
- * AppModule}, mounted where it always is, and extends nothing to be a page
- * under this chrome. {@code chrome} is what the server stamped: the brand
- * and the crumbs, both frozen data.</p>
+ * <p>The page ({@link AppPage}) constructs it with what the server stamped - the brand, the trail the
+ * router wrote, the preferences, and whether the page fills the viewport - attaches its root, and
+ * mounts the app in its slot.</p>
  */
-public record MpaChromeModule() implements DomModule<MpaChromeModule>, ImplFor<HouseSite.MpaChrome> {
+public record MpaChromeModule() implements Widget<MpaChromeModule.Chrome, MpaChromeModule>, ImplFor<HouseSite.MpaChrome> {
 
-    /** The class. */
-    public record MpaChrome() implements BranchComponent<MpaChromeModule> {
-        @Override public String summary() { return "The page chrome: a bar with the brand, the trail and the preferences button, over the slot the app is mounted in."; }
+    /**
+     * What the server stamps into the page for the chrome, as a frozen object: {@code { brand: { label,
+     * home }, crumbs: [ { text, to } ], preferences: { module, view }, fill }}.
+     */
+    public record Chrome() implements Widget._Param {}
+
+    /** The class: {@code new MpaChrome(branch, params)}; {@code root}, {@code main}, {@code keyboard}, {@code trail}, {@code preferences}. */
+    public record MpaChrome() implements Widget._Class<Chrome, MpaChromeModule> {
+        @Override public String summary() { return "The site's chrome: its bar - the brand, the trail, the preferences - over the slot the page's app is mounted in."; }
     }
 
     public static final MpaChromeModule INSTANCE = new MpaChromeModule();
 
+    @Override public String title() { return "Site chrome"; }
+
+    @Override public Class<Chrome> paramsType() { return Chrome.class; }
+
     @Override
     public ImportsFor<MpaChromeModule> imports() {
         return ImportsFor.<MpaChromeModule>builder()
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark(), new WordmarkModule.WordmarkFactory()), WordmarkModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CrumbModule.Crumb(), new CrumbModule.CrumbFactory()), CrumbModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DelimiterModule.Delimiter(), new DelimiterModule.DelimiterFactory()), DelimiterModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ChromeLayoutModule.ChromeLayout()), ChromeLayoutModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SiteBarModule.SiteBar()), SiteBarModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesButtonModule.PreferencesButton()), PreferencesButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(
-                        new MpaStyles.mpa_page(),
-                        new MpaStyles.mpa_root(),
-                        new MpaStyles.mpa_header(),
-                        new MpaStyles.mpa_brand(),
-                        new MpaStyles.mpa_brand_mark(),
-                        new MpaStyles.mpa_brand_word(),
-                        new MpaStyles.mpa_crumbs(),
-                        new MpaStyles.mpa_crumb(),
-                        new MpaStyles.mpa_crumb_sep(),
-                        new MpaStyles.mpa_main(),
-                        new MpaStyles.mpa_page_app()
-                ), MpaStyles.INSTANCE))
                 .build();
     }
 

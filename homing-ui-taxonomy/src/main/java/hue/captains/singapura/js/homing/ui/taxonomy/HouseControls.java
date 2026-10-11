@@ -193,8 +193,7 @@ public final class HouseControls {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Control parent() { return Control.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
-                           DSL.part(HouseText.Wordmark.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
+            return List.of(DSL.part(HouseText.Wordmark.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
         }
     }
 

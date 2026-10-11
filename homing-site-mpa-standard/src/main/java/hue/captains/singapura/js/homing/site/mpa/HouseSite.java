@@ -36,16 +36,20 @@ public record HouseSite() implements TaxonomyExtension {
         return List.of(MpaChrome.INSTANCE, ThemeWidget.INSTANCE);
     }
 
-    /** The site's chrome: its brand, its trail, its preferences, and the page's room - which is the app's. */
-    public record MpaChrome() implements Component<HouseBranches.Container> {
+    /**
+     * The site's chrome: a widget, with no design of its own - the site's bar at its head, its preferences
+     * handed to the bar's end, and the slot the page's app is loaded in, which is what it shows; laid out by
+     * a layout of its own. It stands on the
+     * page's ground, which the page wears.
+     */
+    public record MpaChrome() implements Component<HouseBranches.View> {
         public static final MpaChrome INSTANCE = new MpaChrome();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Head.INSTANCE).one(),
-                           DSL.part(HouseControls.Brand.INSTANCE).as(HouseDoing.Home.INSTANCE).one(),
-                           DSL.part(HouseContainers.Trail.INSTANCE).as(HouseDoing.Path.INSTANCE).one(),
-                           DSL.part(HouseControls.PreferencesButton.INSTANCE).as(HouseDoing.Preferences.INSTANCE).one());
+            return List.of(DSL.part(HouseContainers.SiteBar.INSTANCE).as(HouseShaping.Head.INSTANCE).one(),
+                           DSL.part(HouseControls.PreferencesButton.INSTANCE).as(HouseDoing.Preferences.INSTANCE).optional(),
+                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Page.INSTANCE).one());
         }
     }
 

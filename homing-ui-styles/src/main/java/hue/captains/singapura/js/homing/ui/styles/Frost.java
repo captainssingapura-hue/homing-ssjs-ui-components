@@ -23,7 +23,7 @@ public record Frost() implements ColorPalette {
     public static final Frost INSTANCE = new Frost();
 
     static final Seeds SEEDS = new Seeds("rgba(255, 255, 255, 0.32)", "#182040", "#1B2340", "#FFFFFF", "#5B7CFF", "#B85CFF", "#7A3FD6", "#FFFFFF",
-                                         "rgba(27, 35, 64, 0.12)");
+                                         "rgba(27, 35, 64, 0.12)", "#DDE7F5");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);
 

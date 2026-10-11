@@ -17,7 +17,7 @@ public record Marker() implements ColorPalette {
 
     public static final Marker INSTANCE = new Marker();
 
-    static final Seeds SEEDS = new Seeds("#FFFFFF", "#333333", "#212529", "#FFFFFF", "#212529", "#E03131", "#B02626", "#FFFFFF", "#333333");
+    static final Seeds SEEDS = new Seeds("#FFFFFF", "#333333", "#212529", "#FFFFFF", "#212529", "#E03131", "#B02626", "#FFFFFF", "#333333", "#FFFFFF");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);
 

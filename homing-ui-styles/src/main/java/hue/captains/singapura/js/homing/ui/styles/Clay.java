@@ -22,7 +22,7 @@ public record Clay() implements ColorPalette {
 
     public static final Clay INSTANCE = new Clay();
 
-    static final Seeds SEEDS = new Seeds("#E0E5EC", "#2D3A4B", "#3B4A5E", "#FFFFFF", "#2D3A4B", "#6C8CFF", "#4F6FE0", "#FFFFFF", "#CBD3DF");
+    static final Seeds SEEDS = new Seeds("#E0E5EC", "#2D3A4B", "#3B4A5E", "#FFFFFF", "#2D3A4B", "#6C8CFF", "#4F6FE0", "#FFFFFF", "#CBD3DF", "#E0E5EC");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);
 
