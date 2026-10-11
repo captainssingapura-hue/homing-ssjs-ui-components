@@ -42,7 +42,10 @@ class StewardMonitorTest extends JsModuleTestBase {
         }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, on) { if (on) e.classList.add(c); else e.classList.remove(c); } };
-        ["sm_lamp", "sm_lamp_dormant", "sm_lamp_broken"].forEach(function (c) { globalThis[c] = c; });
+        ["sm_lamp"].forEach(function (c) { globalThis[c] = c; });
+        // the lamp's look: put on by name, which is all the monitor asks of it here
+        var ROLE = { STANDALONE: { token: "standalone", functional: false } };
+        class Look { constructor(Leaf) { this.casting = Leaf.LEAF; } wear(e) { e.classList.add(this.casting); } }
         function focus(e) { document.activeElement = e; KeyboardStewardInstance._onFocusIn(); }
         var focusListeners = 0;
         var document = { body: el("body"), activeElement: null, addEventListener: function () { focusListeners++; }, removeEventListener: function () { focusListeners--; } };
@@ -77,16 +80,17 @@ class StewardMonitorTest extends JsModuleTestBase {
     @Test
     void theLampSaysWhereTheFocusIs_heldLentOrAway_andWhose() {
         assertEquals("no one holds the keys", eval("monitor.lamp()").asString());
-        assertFalse(eval("monitor.root.has('sm_lamp_dormant') || monitor.root.has('sm_lamp_broken')").asBoolean());
+        assertTrue(eval("monitor.root.has('lamp') && monitor.root.getAttribute('aria-current') === null && monitor.root.getAttribute('aria-invalid') === null").asBoolean(), "a lamp, quiet: nothing holds");
         assertEquals("1", eval("String(host.children.length)").asString(), "the lamp alone");
         eval("var w = focusParty.root.join('widget', new Widget()); KeyboardStewardInstance.claim(w)");
         assertEquals("held by “widget”", eval("monitor.lamp()").asString(), "redrawn on the steward's events");
+        assertEquals("true", eval("monitor.root.getAttribute('aria-current')").asString(), "lit: the keys held");
         eval("var sel = el('select'); sel.setAttribute('aria-label', 'which leaf'); focus(sel)");
         assertEquals("away on select “which leaf” — “widget” keeps the mark, nothing is routed", eval("monitor.lamp()").asString());
-        assertTrue(eval("monitor.root.has('sm_lamp_dormant')").asBoolean());
+        assertTrue(eval("monitor.root.getAttribute('aria-current') === null").asBoolean(), "quiet: away");
         eval("var room = el('div'); KeyboardStewardInstance.enroll(room, w); var inp = el('input'); room.appendChild(inp); focus(inp)");
         assertEquals("lent by “widget” to input", eval("monitor.lamp()").asString(), "no name: the tag alone");
-        assertFalse(eval("monitor.root.has('sm_lamp_dormant')").asBoolean());
+        assertEquals("true", eval("monitor.root.getAttribute('aria-current')").asString(), "lit: the keys lent");
         assertEquals(2, eval("focusListeners").asInt(), "focusin and focusout on the document");
         eval("w.leave(); focus(document.body)");
     }
@@ -97,7 +101,7 @@ class StewardMonitorTest extends JsModuleTestBase {
         eval("var w = focusParty.root.join('widget', new Widget()); var room = el('div'); KeyboardStewardInstance.enroll(room, w); var inp = el('input'); room.appendChild(inp); focus(inp)");
         eval("document.activeElement = document.body; monitor.refresh()");   // the control went, and no event said so
         assertTrue(eval("monitor.lamp()").asString().contains("✗ the marker is lent, and nothing has the browser's focus"), eval("monitor.lamp()").asString());
-        assertTrue(eval("monitor.root.has('sm_lamp_broken') && monitor.broken().length === 1").asBoolean());
+        assertTrue(eval("monitor.root.getAttribute('aria-invalid') === 'true' && monitor.broken().length === 1").asBoolean(), "broken: invalid");
         eval("monitor.refresh()");
         assertEquals("held by “widget”", eval("monitor.lamp()").asString(), "read again, and the steward has it right");
         assertFalse(eval("monitor.root.has('sm_lamp_broken')").asBoolean());

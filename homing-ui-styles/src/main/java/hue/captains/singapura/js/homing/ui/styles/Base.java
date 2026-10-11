@@ -20,6 +20,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.menuBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.switchBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.itemBase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.lampBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -107,5 +108,7 @@ public record Base() implements DesignStyle {
             // ── a switch: no room inside it, its word kept apart, its parts eased as they move and turn ──
             switchBase(),
             // ── an item's corner and rule a button's, ringed as a control, its room and its text; a choice and a listed row pointed at ──
-            itemBase());
+            itemBase(),
+            // ── a lamp's corner, line, room and size ──
+            lampBase());
 }

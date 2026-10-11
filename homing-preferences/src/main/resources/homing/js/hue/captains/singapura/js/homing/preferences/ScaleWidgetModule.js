@@ -19,6 +19,7 @@ class ScaleWidget {
         var range = branch.createElement("range", "input");
         range.type = "range";
         css.addClass(range, pv_range);
+        new Look(Object.freeze({ LEAF: "range" }), ROLE.ADJUST).wear(range);   // a range, as what adjusts: in the accent, ringed as a control
         range.min = params.min; range.max = params.max; range.step = params.step || 1;
         range.setAttribute("aria-label", params.label || params.name);
         range.addEventListener("input", function () { self._readout.text = range.value + self._unit; });

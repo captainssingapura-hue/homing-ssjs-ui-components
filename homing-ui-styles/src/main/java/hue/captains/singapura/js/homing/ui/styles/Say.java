@@ -496,6 +496,23 @@ final class Say {
                        new Implementation<>(LIST_ROW, SCALE, new Answer.Redirect<>(CAPTION)));
     }
 
+    // ── a range - the browser's own slider, in the accent - and a lamp, which says how something is: lit, quiet, or broken ──
+
+    static final Taxon RANGE = HouseControls.Range.INSTANCE;
+    static final Taxon LAMP = HouseMarks.Lamp.INSTANCE;
+
+    /**
+     * What every style's lamp says alike: a button's corner, a hairline round it, four pixels above and below and
+     * eight at its sides, the caption's size, its colours eased as it changes.
+     */
+    static List<Implementation<?>> lampBase() {
+        return List.of(new Implementation<>(LAMP, CORNER, new Answer.Redirect<>(BUTTON)),
+                       rest(LAMP, BORDER, "border-width: 1px; border-style: solid;"),
+                       rest(LAMP, INSET, "padding-block: 4px; padding-inline: 8px;"),
+                       new Implementation<>(LAMP, SCALE, new Answer.Redirect<>(CAPTION)),
+                       rest(LAMP, EASE, "transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;"));
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {

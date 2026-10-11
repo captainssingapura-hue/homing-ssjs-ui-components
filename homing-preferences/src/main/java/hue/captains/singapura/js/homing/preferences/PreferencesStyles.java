@@ -8,11 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
 import static hue.captains.singapura.js.homing.design.Interaction.Focus;
-import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
 import static hue.captains.singapura.js.homing.design.Structure.Divider;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
 import static hue.captains.singapura.js.homing.design.Target.Color;
 import static hue.captains.singapura.js.homing.design.Target.Shape;
 
@@ -167,12 +164,11 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
 
     // ── Scale ─────────────────────────────────────────────────────────────────
 
+    /** The range: as wide as the field allows, drawn in the ink its look sets - the accent - by the browser's own slider. */
     public record pv_range() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class), of(Interactive.class, Affordance.Cursor.class), of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
         @Override public String body() { return """
             width: 100%;
             max-width: 420px;
-            background: transparent;
             accent-color: currentColor;
             """;
         }

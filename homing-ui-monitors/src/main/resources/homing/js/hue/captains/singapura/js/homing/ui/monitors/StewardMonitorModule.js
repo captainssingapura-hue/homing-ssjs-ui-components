@@ -4,7 +4,9 @@
 // lent by it to a native control of its own; or away, the browser's focus
 // outside every member and nothing routed — with the member a walk offers
 // the keys to, and the steward's invariants: the lamp says the first one
-// broken, and turns the danger colour while one is. Redrawn on every event of
+// broken, and turns the danger colour while one is (aria-invalid); lit - the
+// current one - while the keys are held or lent (aria-current). Redrawn on
+// every event of
 // the steward and every move of the native focus. Tooling for a page: it
 // takes no keys. A widget: its holder shows it in a slot, and the slot
 // dissolves its branch after dispose().
@@ -26,6 +28,7 @@ class StewardMonitor {
         branch.activate(_stewardMonitorOwner);
         var lamp = branch.createElement("lamp", "div");
         css.addClass(lamp, sm_lamp);
+        new Look(Object.freeze({ LEAF: "lamp" }), ROLE.STANDALONE).wear(lamp);   // a lamp: quiet, lit (aria-current) or broken (aria-invalid)
         lamp.setAttribute("role", "status");
         lamp.setAttribute("aria-label", "Keyboard steward");
         this.root = lamp;
@@ -47,8 +50,8 @@ class StewardMonitor {
         if (broken.length) say += " · ✗ " + broken[0];
         this.root.textContent = say;
         this._broken = broken;
-        css.toggleClass(this.root, sm_lamp_dormant, !!f && (!at || at.state === "away"));
-        css.toggleClass(this.root, sm_lamp_broken, broken.length > 0);
+        if (at && at.state !== "away") this.root.setAttribute("aria-current", "true"); else this.root.removeAttribute("aria-current");   // lit: the keys held or lent
+        if (broken.length > 0) this.root.setAttribute("aria-invalid", "true"); else this.root.removeAttribute("aria-invalid");   // broken: the danger colour
         return this;
     }
 

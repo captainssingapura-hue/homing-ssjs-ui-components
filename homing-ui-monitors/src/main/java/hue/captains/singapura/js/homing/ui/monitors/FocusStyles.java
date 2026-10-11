@@ -8,18 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Box.Inline;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Feedback.Danger;
-import static hue.captains.singapura.js.homing.design.Pairing.OnDanger;
-import static hue.captains.singapura.js.homing.design.Interaction.Current;
-import static hue.captains.singapura.js.homing.design.Interaction.Focus;
-import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
 import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Body;
 import static hue.captains.singapura.js.homing.design.Text.Caption;
 import static hue.captains.singapura.js.homing.design.Text.Code;
 
@@ -79,26 +68,13 @@ public record FocusStyles() implements CssGroup<FocusStyles> {
 
     // ── the steward monitor ───────────────────────────────────────────────
 
-    /** The lamp: active, the keys are the holder's — the current surface and edge, the body's ink, in a code face. */
+    /** The lamp, on one line; its look is a lamp's - quiet, lit while the keys are held or lent (aria-current), the danger colour while broken (aria-invalid). */
     public record sm_lamp() implements CssClass<FocusStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class), of(Current.class, Color.Surface.class), of(Current.class, Color.Edge.class), of(Focus.class, Shape.Rule.class), of(Body.class, Color.Ink.class), of(Inline.class, Shape.Corner.class), of(Interactive.class, Motion.Ease.class)); }
-        @Override public String body() { return "padding: 4px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"; }
-    }
-
-    /** The lamp while the steward is away: the muted ink, the rule gone, so the eye sees the keys are elsewhere. */
-    public record sm_lamp_dormant() implements CssClass<FocusStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class)); }
-        @Override public String body() { return "font-style: italic; border-color: transparent;"; }
-    }
-
-    /** The lamp while an invariant of the steward's is broken: the danger surface, so it cannot be missed. */
-    public record sm_lamp_broken() implements CssClass<FocusStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Danger.class, Color.Surface.class), of(OnDanger.class, Color.Ink.class), of(Danger.class, Color.Edge.class)); }
-        @Override public String body() { return ""; }
+        @Override public String body() { return "white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"; }
     }
 
     @Override
     public List<CssClass<FocusStyles>> cssClasses() {
-        return List.of(new fm_tree(), new fm_row(), new fm_row_holder(), new fm_kind(), new fm_name(), new fm_component(), new fm_outside(), new sm_lamp(), new sm_lamp_dormant(), new sm_lamp_broken());
+        return List.of(new fm_tree(), new fm_row(), new fm_row_holder(), new fm_kind(), new fm_name(), new fm_component(), new fm_outside(), new sm_lamp());
     }
 }

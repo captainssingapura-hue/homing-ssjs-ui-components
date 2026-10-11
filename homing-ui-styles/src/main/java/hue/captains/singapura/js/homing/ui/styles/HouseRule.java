@@ -24,6 +24,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTEXT_MENU;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DETENT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DROP_MARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.RANGE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.LAMP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TAB;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TAB_STRIP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.MENU_ITEM;
@@ -215,6 +217,23 @@ final class HouseRule {
                         State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 7%, " + s.raised() + ")"))),
                 rest(TAB_STRIP, BORDER, "border-color: " + s.accent() + ";"),
                 rest(DROP_MARK, BACKGROUND, ground(s.accent())),
+                // ── a range: the browser's own slider, drawn in the ink it is set in - the accent - on no ground of its own ──
+                rest(RANGE, BACKGROUND, ground("transparent")),
+                rest(RANGE, INK, "color: " + s.accent() + ";"),
+                // ── a lamp: quiet at rest; lit - the current one - tinted and edged with the accent, in the text's ink; broken - invalid -
+                //    the danger colour, which outranks lit ──
+                when(LAMP, BACKGROUND, Map.of(
+                        State.REST, ground("transparent"),
+                        State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 12%, transparent)"),
+                        State.INVALID, ground(DANGER))),
+                when(LAMP, INK, Map.of(
+                        State.REST, "color: color-mix(in srgb, currentColor 70%, transparent);",
+                        State.CURRENT, "color: " + s.text() + ";",
+                        State.INVALID, "color: " + ON_DANGER + ";")),
+                when(LAMP, BORDER, Map.of(
+                        State.REST, "border-color: transparent;",
+                        State.CURRENT, "border-color: " + s.accent() + ";",
+                        State.INVALID, "border-color: " + DANGER + ";")),
                 // ── an item - a row of a list: clear at rest; the chosen one on the title colour, in the ink written on it, edged with
                 //    it; the current one - a monitor's holder - tinted lightly with the accent; the one the cursor is on tinted more
                 //    and edged with it; ringed as a control is ──
