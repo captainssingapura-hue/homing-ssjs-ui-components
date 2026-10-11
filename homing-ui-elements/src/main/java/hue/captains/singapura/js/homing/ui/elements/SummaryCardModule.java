@@ -35,6 +35,7 @@ public record SummaryCardModule() implements DomModule<SummaryCardModule>, ImplF
     @Override
     public ImportsFor<SummaryCardModule> imports() {
         return ImportsFor.<SummaryCardModule>builder()
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HeadingModule.Heading(), new HeadingModule.HeadingFactory()), HeadingModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BadgeModule.Badge(), new BadgeModule.BadgeFactory()), BadgeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
@@ -43,7 +44,6 @@ public record SummaryCardModule() implements DomModule<SummaryCardModule>, ImplF
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_card(),
-                        new ElementStyles.el_card_action(),
                         new ElementStyles.el_card_head(),
                         new ElementStyles.el_card_title(),
                         new ElementStyles.el_badge(),

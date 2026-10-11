@@ -65,6 +65,10 @@ class HouseStylesTest {
     private static final Set<String> MENU = Set.of("context-menu shape-corner", "context-menu shape-border", "context-menu size-inset", "context-menu size-gap",
             "context-menu size-extent", "context-menu shape-shadow", "context-menu effect-filter", "menu-item shape-corner", "menu-item size-inset", "item effect-opacity", "item affordance-cursor");
 
+    /** What every style decides for its cards: their measure, their frame, how they move and are lifted, and what a frosted one does to the page behind. */
+    private static final Set<String> CARDS = Set.of("card size-extent", "card size-inset", "card size-gap", "card shape-corner", "card shape-border",
+            "card motion-ease", "card motion-transform", "card shape-shadow", "card effect-filter");
+
     /** What every style decides for its tabs: a tab's measure, its frame, how it moves and is lifted; its strip's height and the rule along its foot. */
     private static final Set<String> TABS = Set.of("tab size-extent", "tab size-inset", "tab size-gap", "tab shape-corner", "tab shape-border",
             "tab motion-ease", "tab motion-transform", "tab shape-shadow", "tab-strip size-extent", "tab-strip shape-border");
@@ -95,9 +99,10 @@ class HouseStylesTest {
             allowed.addAll(SLIDER);
             allowed.addAll(MENU);
             allowed.addAll(TABS);
+            allowed.addAll(CARDS);
             var beyond = new TreeSet<>(answered);
             beyond.removeAll(allowed);
-            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil, a pane's thumbnail's rule, its slider, its menu and its tabs: " + beyond);
+            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil, a pane's thumbnail's rule, its slider, its menu, its tabs and its cards: " + beyond);
             var missing = new TreeSet<>(BUTTON_BRANCH);
             missing.removeAll(answered);
             left.put(s.token(), missing);
@@ -144,11 +149,13 @@ class HouseStylesTest {
                 "choice-option size-inset", "choice-option affordance-cursor", "list-row size-inset", "list-row size-gap", "list-row type-scale", "list-row affordance-cursor"));
         expected.addAll(Set.of("lamp shape-corner", "lamp shape-border", "lamp size-inset", "lamp type-scale", "lamp motion-ease"));
         expected.addAll(Set.of("action-bar shape-border", "action-bar size-inset", "action-bar size-gap", "trail size-gap", "trail type-scale"));
+        expected.addAll(Set.of("card size-proportion", "card shape-outline", "card affordance-cursor", "slider-group shape-corner", "slider-group shape-border",
+                "slider-group size-gap", "slider-group shape-outline", "slider-group size-inset", "slider-group affordance-cursor", "slider-group affordance-select"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
                 + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash;"
-                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size; a row of actions capped as groups are ruled apart, its room; a trail's crumbs apart, in the caption's size");
+                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size; a row of actions capped as groups are ruled apart, its room; a trail's crumbs apart, in the caption's size; a card's proportion, ring and pointer, a group of sliders framed as a card");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");

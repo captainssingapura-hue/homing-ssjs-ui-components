@@ -47,6 +47,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
 
 /** Editorial, the house's own: a serif voice, a fine rule, a soft lift under the hand. */
 public record Editorial() implements DesignStyle, Derives<Base> {
@@ -108,5 +112,10 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             tabFrame("4px 4px 0 0", "1.5px", null, "2px"),
             tabMotion("transform 160ms ease, translate 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease", "translateY(-1px)", "translateY(-2px)", "translateY(-4px)"),
             tabShadow("0 4px 12px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 8px 20px color-mix(in srgb, var(--box-shadow-cast) 18%, transparent)", "0 14px 30px color-mix(in srgb, var(--box-shadow-cast) 20%, transparent)"),
+            // ── its cards hairlined, softly lifted under the hand ──
+            cardMeasure("280px", "18px", "20px", "8px"),
+            cardFrame("6px", "1px"),
+            cardMotion("transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease", "translateY(-2px)", "translateY(0)"),
+            cardShadow("0 1px 3px color-mix(in srgb, var(--box-shadow-cast) 4%, transparent)", "0 6px 16px color-mix(in srgb, var(--box-shadow-cast) 12%, transparent)", "0 1px 2px color-mix(in srgb, var(--box-shadow-cast) 8%, transparent)"),
             disabled(".45", "default"));
 }

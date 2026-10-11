@@ -47,6 +47,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
 
 /** Neo-brutalism: square, a heavy rule, a hard offset shadow, and a press that drops into it. */
 public record NeoBrutalism() implements DesignStyle, Derives<Base> {
@@ -107,5 +111,10 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
             tabFrame("0", "3px", null, "4px"),
             tabMotion("transform 70ms steps(2, end), translate 70ms steps(2, end), box-shadow 70ms steps(2, end), background-color 70ms steps(2, end)", "translate(-2px, -2px)", "translate(-3px, -3px)", "translate(-4px, -4px)"),
             tabShadow("4px 4px 0 var(--box-shadow-cast)", "6px 6px 0 var(--box-shadow-cast)", "10px 10px 0 var(--box-shadow-cast)"),
+            // ── its cards ruled blocks, stepping up off a hard shadow and pressed into it ──
+            cardMeasure("280px", "18px", "20px", "10px"),
+            cardFrame("0", "3px"),
+            cardMotion("transform 70ms steps(2, end), box-shadow 70ms steps(2, end), background-color 70ms steps(2, end)", "translate(-2px, -2px)", "translate(5px, 5px)"),
+            cardShadow("4px 4px 0 var(--box-shadow-cast)", "8px 8px 0 var(--box-shadow-cast)", "0 0 0 var(--box-shadow-cast)"),
             disabled(".4", "not-allowed"));
 }

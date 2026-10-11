@@ -136,12 +136,13 @@ class SliderGroupTest extends JsModuleTestBase {
     }
 
     @Test
-    void heldIsWornWhileTheGroupHoldsTheKeys() {
-        assertFalse(eval("g.root.has('el_slider_group_held')").asBoolean());
+    void heldIsTheGroupsToKnow_andItsRingTheStewards() {
+        assertFalse(eval("g._held").asBoolean());
         eval("members.mixer.granted()");
-        assertTrue(eval("g.root.has('el_slider_group_held')").asBoolean());
+        assertTrue(eval("g._held").asBoolean(), "the group knows it holds the keys");
+        assertFalse(eval("g.root.has('el_slider_group_held')").asBoolean(), "and writes nothing for it: the ring is the steward's mark, which the look answers");
         eval("members.mixer.taken('other')");
-        assertFalse(eval("g.root.has('el_slider_group_held')").asBoolean());
+        assertFalse(eval("g._held").asBoolean());
     }
 
     @Test

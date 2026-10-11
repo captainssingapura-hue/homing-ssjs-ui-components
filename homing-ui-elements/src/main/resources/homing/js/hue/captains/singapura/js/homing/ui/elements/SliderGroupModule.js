@@ -33,6 +33,8 @@
 const _groupOwner = Object.freeze({ toString: () => "slider-group" });
 
 class SliderGroup {
+    static LEAF = "slider-group";
+
     constructor(branch, props) {
         if (!branch) throw new Error("[SliderGroup] a branch of its own is required");
         var self = this;
@@ -45,10 +47,13 @@ class SliderGroup {
 
         var root = branch.createElement("group", "div");
         css.addClass(root, el_slider_group);
+        var look = new Look(SliderGroup, ROLE.STANDALONE);   // framed as a card is; ringed while it holds the keys (the steward's data-keys)
+        look.wear(root, { except: ["affordance-cursor"] });
         root.setAttribute("role", "group");
         this.root = root;
         var header = branch.createElement("header", "div");
         css.addClass(header, el_slider_group_header);
+        look.wear(header, { only: ["size-gap", "affordance-cursor"] });   // its head points: a press there makes the group the holder
         var title = new Heading(HeadingFactory.create(branch, "title"), { text: p.title == null ? "" : String(p.title), level: 3 }, ROLE.TITLE);
         css.addClass(title.el, el_slider_group_title);
         if (p.title != null) root.setAttribute("aria-label", String(p.title));
@@ -56,6 +61,7 @@ class SliderGroup {
         root.appendChild(header);
         var body = branch.createElement("body", "div");
         css.addClass(body, el_slider_group_body);
+        look.wear(body, { only: ["size-gap"] });
         if (p.across) css.addClass(body, el_slider_group_body_across);
         root.appendChild(body);
         this._header = header; this._title = title; this._body = body;
@@ -66,8 +72,8 @@ class SliderGroup {
             this._kb = p.keyboard;
             this._kbId = this._kb.join(p.keyboardId != null ? String(p.keyboardId) : branch.name, {
                 keyDown: function (ev) { return self.key(ev); },
-                granted: function () { self._held = true; css.addClass(root, el_slider_group_held); },
-                taken: function () { self._held = false; css.removeClass(root, el_slider_group_held); }
+                granted: function () { self._held = true; },   // its ring is the steward's mark on the root
+                taken: function () { self._held = false; }
             });
             this._offKeys = Keys.claimOn(root, this._kb, this._kbId);
         }

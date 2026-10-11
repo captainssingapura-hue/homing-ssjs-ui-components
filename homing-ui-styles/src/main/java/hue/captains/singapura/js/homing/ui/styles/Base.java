@@ -22,6 +22,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.switchBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.itemBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.lampBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.barBase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTROL;
@@ -113,5 +114,7 @@ public record Base() implements DesignStyle {
             // ── a lamp's corner, line, room and size ──
             lampBase(),
             // ── a row of actions' room, a trail's ──
-            barBase());
+            barBase(),
+            // ── a card's proportion, ring and pointer; a group of sliders framed as a card ──
+            cardBase());
 }

@@ -45,6 +45,11 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardBackdrop;
 
 /** Glassmorphism: a rounded pane with a lit top edge, floating on a wide soft shadow. */
 public record Glassmorphism() implements DesignStyle, Derives<Base> {
@@ -103,5 +108,11 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
             tabFrame("10px 10px 0 0", "1px", null, "1px"),
             tabMotion("box-shadow 220ms ease, transform 220ms ease, translate 220ms ease, background-color 160ms ease, border-color 160ms ease", "translateY(-1px)", "translateY(-2px)", "translateY(-4px)"),
             tabShadow("0 4px 14px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 8px 24px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset 0 1px 0 var(--box-shadow-lit)", "0 16px 40px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), inset 0 1px 0 var(--box-shadow-lit)"),
+            // ── its cards panes of frosted glass, lit along their top edge ──
+            cardMeasure("300px", "20px", "22px", "8px"),
+            cardFrame("18px", "1px"),
+            cardMotion("box-shadow 220ms ease, transform 220ms ease, background-color 160ms ease, border-color 160ms ease", "translateY(-2px)", "translateY(0)"),
+            cardShadow("0 4px 16px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent), inset 0 1px 0 var(--box-shadow-lit)", "0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset 0 1px 0 var(--box-shadow-lit)", "0 2px 8px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent), inset 0 1px 0 var(--box-shadow-lit)"),
+            cardBackdrop("blur(16px) saturate(1.6)"),
             disabled(".45", "not-allowed"));
 }

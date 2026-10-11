@@ -529,6 +529,65 @@ final class Say {
                        new Implementation<>(TRAIL, SCALE, new Answer.Redirect<>(CAPTION)));
     }
 
+    // ── a card: a raised box whose measure is its own, lifted under the hand and pressed; a group of sliders framed as a
+    //    card is, its room its own ──
+
+    static final Taxon CARD = HouseBranches.Card.INSTANCE;
+    static final Taxon SLIDER_GROUP = HouseContainers.SliderGroup.INSTANCE;
+    static final Target.Size.Proportion PROPORTION = Target.Size.Proportion.INSTANCE;
+
+    /** How a card's lengths grow with its size: by 1.3 a unit, as they always have. */
+    private static final String CARD_GROWTH = "1.3";
+
+    /** A card's measure in a style: its width, the room above and below what it holds and at its sides, and between its parts - each grown by its size. */
+    static List<Implementation<?>> cardMeasure(String width, String block, String inline, String gap) {
+        return List.of(rest(CARD, EXTENT, "inline-size: " + grows(width, CARD_GROWTH) + ";"),
+                       rest(CARD, INSET, "padding-block: " + grows(block, CARD_GROWTH) + "; padding-inline: " + grows(inline, CARD_GROWTH) + ";"),
+                       rest(CARD, GAP, "gap: " + grows(gap, CARD_GROWTH) + ";"));
+    }
+
+    /** A card's corners and rule in a style. */
+    static List<Implementation<?>> cardFrame(String corner, String rule) {
+        return List.of(rest(CARD, CORNER, "border-radius: " + corner + ";"),
+                       rest(CARD, BORDER, "border-width: " + rule + "; border-style: " + ("0".equals(rule) ? "none" : "solid") + ";"));
+    }
+
+    /** How a card moves in a style: what is eased, and how far it lifts under the hand and presses when pressed, each null where the style does not move it. */
+    static List<Implementation<?>> cardMotion(String ease, String hover, String pressed) {
+        var moves = new java.util.EnumMap<State, String>(State.class);
+        if (hover != null) moves.put(State.HOVER, "transform: " + hover + ";");
+        if (pressed != null) moves.put(State.ACTIVE, "transform: " + pressed + ";");
+        return List.of(rest(CARD, EASE, "transition: " + ease + ";"), when(CARD, TRANSFORM, moves));
+    }
+
+    /** How a card is lifted off the page in a style, in the palette's shadow colours: at rest, under the hand, and pressed. */
+    static List<Implementation<?>> cardShadow(String rest, String hover, String pressed) {
+        return List.of(when(CARD, SHADOW, Map.of(State.REST, "box-shadow: " + rest + ";", State.HOVER, "box-shadow: " + hover + ";",
+                                                 State.ACTIVE, "box-shadow: " + pressed + ";")));
+    }
+
+    /** What a card does to the page behind it, seen through it: frosted, in a style of glass. */
+    static List<Implementation<?>> cardBackdrop(String backdrop) { return List.of(rest(CARD, FILTER, "backdrop-filter: " + backdrop + ";")); }
+
+    /**
+     * What every style's card says alike: square at aspect 0, twice as wide at 1, twice as tall at -1; ringed as a
+     * control is - a card with an action has the keys - and pointed at, where it has one. A group of sliders framed
+     * as a card is - its corner, its rule, its gap - ringed while it holds the keys, its room six pixels above and
+     * below and twelve at its sides, grown by its size; pointed at by its head, and none of its text taken by the hand.
+     */
+    static List<Implementation<?>> cardBase() {
+        return List.of(rest(CARD, PROPORTION, "aspect-ratio: calc(1 * pow(2, var(--aspect, 0)));"),
+                       new Implementation<>(CARD, OUTLINE, new Answer.Redirect<>(CONTROL)),
+                       rest(CARD, CURSOR, "cursor: pointer;"),
+                       new Implementation<>(SLIDER_GROUP, CORNER, new Answer.Redirect<>(CARD)),
+                       new Implementation<>(SLIDER_GROUP, BORDER, new Answer.Redirect<>(CARD)),
+                       new Implementation<>(SLIDER_GROUP, GAP, new Answer.Redirect<>(CARD)),
+                       new Implementation<>(SLIDER_GROUP, OUTLINE, new Answer.Redirect<>(CONTROL)),
+                       rest(SLIDER_GROUP, INSET, "padding-block: " + grows("6px", CARD_GROWTH) + "; padding-inline: " + grows("12px", CARD_GROWTH) + ";"),
+                       rest(SLIDER_GROUP, CURSOR, "cursor: pointer;"),
+                       rest(SLIDER_GROUP, Target.Affordance.Select.INSTANCE, "user-select: none;"));
+    }
+
     /** Every answer of the groups, in order. */
     @SafeVarargs
     static List<Implementation<?>> answers(List<? extends Implementation<?>>... groups) {

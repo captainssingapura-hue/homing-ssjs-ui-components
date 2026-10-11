@@ -24,6 +24,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTEXT_MENU;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DETENT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DROP_MARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CARD;
+import static hue.captains.singapura.js.homing.ui.styles.Say.SLIDER_GROUP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.ACTION_BAR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRAIL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.RANGE;
@@ -219,6 +221,14 @@ final class HouseRule {
                         State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 7%, " + s.raised() + ")"))),
                 rest(TAB_STRIP, BORDER, "border-color: " + s.accent() + ";"),
                 rest(DROP_MARK, BACKGROUND, ground(s.accent())),
+                // ── a card, and a group of sliders framed as one: raised, a hairline round it ──
+                rest(CARD, BACKGROUND, ground(s.raised())),
+                rest(CARD, BORDER, "border-color: " + s.border() + ";"),
+                rest(SLIDER_GROUP, BACKGROUND, ground(s.raised())),
+                rest(SLIDER_GROUP, BORDER, "border-color: " + s.border() + ";"),
+                // ── each ringed as a control is, in the ring's colours: a card with an action, a group of sliders holding the keys ──
+                new Implementation<>(CARD, Target.Color.Outline.INSTANCE, new Answer.Redirect<>(CONTROL)),
+                new Implementation<>(SLIDER_GROUP, Target.Color.Outline.INSTANCE, new Answer.Redirect<>(CONTROL)),
                 // ── a row of actions: raised, capped off by a hairline; a trail quieter than the bar it stands on ──
                 rest(ACTION_BAR, BACKGROUND, ground(s.raised())),
                 rest(ACTION_BAR, BORDER, "border-color: " + s.border() + ";"),

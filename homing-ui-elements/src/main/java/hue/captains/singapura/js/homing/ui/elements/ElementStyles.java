@@ -484,42 +484,27 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /**
      * The group: sliders that share the keys, one holder in the party for
-     * all of them and one of them current. A framed column, the header then
-     * the body, wearing the container's frame and the pane's room, so a
-     * design draws it as it draws a pane.
+     * all of them and one of them current. A column, the header then the
+     * body; its look - framed as a card is, ringed while it holds the keys -
+     * is the house's.
      */
     public record el_slider_group() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Container.class, Shape.Corner.class), of(Container.class, Shape.Rule.class), of(Container.class, Color.Edge.class),
-                           of(Container.Pane.class, Size.Inset.class), of(Container.Pane.class, Size.Gap.class),
-                           of(Raised.class, Color.Surface.class), of(Interactive.class, Motion.Ease.class));
-        }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Pane.class, Size.Inset.class), of(Container.Pane.class, Size.Gap.class)); }
         @Override public String body() { return """
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
             min-width: 0;
-            outline: none;
             """;
         }
     }
 
-    /** The group holding the keys: the ring drawn now, on the frame. */
-    public record el_slider_group_held() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
-        @Override public String body() { return ""; }
-    }
-
     /** The header: the title; a press on it makes the group the holder of the keys. */
     public record el_slider_group_header() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Interactive.class, Affordance.Cursor.class), of(Container.Pane.class, Size.Gap.class)); }
         @Override public String body() { return """
             flex: none;
             display: flex;
             align-items: baseline;
             min-width: 0;
-            user-select: none;
             """;
         }
     }
@@ -537,8 +522,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The body: the sliders, stacked. */
     public record el_slider_group_body() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Container.Pane.class, Size.Gap.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Pane.class, Size.Gap.class)); }
         @Override public String body() { return """
             display: flex;
             flex-direction: column;
@@ -560,23 +543,13 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     // ── Card ──────────────────────────────────────────────────────────────────
 
     /**
-     * The card: {@code Container.Card.Base} — a raised box whose measure is its
-     * own: the design's inline size, grown by the element's size, its block
-     * size following its aspect — square at 0, the design's widest at +1, its
-     * tallest at −1; a host may cap it, never stretch it. What is inside fits it: the head and the foot are fixed, the
-     * body takes the rest and scrolls. Hover, press and focus as the design
-     * gives an interactive thing; whether a press does anything is the caller's,
-     * and only a card with an action is focusable ({@link el_card_action}).
+     * The card: what is inside fits it - the head and the foot are fixed, the
+     * body takes the rest and scrolls; a host may cap it, never stretch it. Its
+     * look - a raised box whose measure is its own, square at aspect 0, lifted
+     * under the hand, pointed at and focusable only with an action - is the
+     * house's.
      */
     public record el_card() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Container.Card.Base.class, Shape.Corner.class), of(Container.Card.Base.class, Shape.Rule.class), of(Container.Card.Base.class, Color.Edge.class),
-                           of(Container.Card.Base.class, Size.Inset.class), of(Container.Card.Base.class, Size.Gap.class), of(Container.Card.Base.class, Size.Extent.class), of(Container.Card.Base.class, Size.Proportion.class),
-                           of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Effect.Filter.class),
-                           of(Interactive.class, Motion.Transform.class), of(Interactive.class, Shape.Shadow.class), of(Interactive.class, Motion.Ease.class));
-        }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Card.Base.class, Size.Inset.class), of(Container.Card.Base.class, Size.Gap.class), of(Container.Card.Base.class, Size.Extent.class)); }
-        @Override public List<? extends Wearable> aspects() { return List.of(of(Container.Card.Base.class, Size.Proportion.class)); }
         @Override public String body() { return """
             display: flex;
             flex-direction: column;
@@ -589,16 +562,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
-    /** A card with an action: a pointer over it; the caller made it focusable. */
-    public record el_card_action() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Interactive.class, Affordance.Cursor.class)); }
-        @Override public String body() { return ""; }
-    }
-
     /** The head: the title and, beside it, a badge; fixed. */
     public record el_card_head() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Container.Card.Base.class, Size.Gap.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Card.Base.class, Size.Gap.class)); }
         @Override public String body() { return """
             flex: none;
             display: flex;
@@ -643,8 +608,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The foot: the link, and later the actions; fixed at the bottom. */
     public record el_card_foot() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """
             flex: none;
             display: flex;
@@ -854,8 +817,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_vertical(), new el_slider_rail_vertical(), new el_slider_rail_ticked(), new el_slider_track_vertical(), new el_slider_fill_vertical(), new el_slider_detent_vertical(),
                        new el_slider_cap(), new el_slider_cap_face(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
                        new el_slider_off(),
-                       new el_slider_group(), new el_slider_group_held(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
-                       new el_card(), new el_card_action(), new el_card_head(), new el_card_title(), new el_badge(), new el_card_body(), new el_card_text(), new el_card_foot(), new el_card_link(),
+                       new el_slider_group(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
+                       new el_card(), new el_card_head(), new el_card_title(), new el_badge(), new el_card_body(), new el_card_text(), new el_card_foot(), new el_card_link(),
                        new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(), new el_panel_current(), new el_panel_framed(),
                        new el_strip(), new el_strip_hidden(), new el_strip_lip());
     }

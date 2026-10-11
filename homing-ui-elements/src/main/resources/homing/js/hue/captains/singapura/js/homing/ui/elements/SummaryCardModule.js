@@ -38,6 +38,8 @@
 const _cardOwner = Object.freeze({ toString: () => "card" });
 
 class SummaryCard {
+    static LEAF = "summary-card";
+
     constructor(branch, props) {
         if (!branch) throw new Error("[SummaryCard] a branch of its own is required");
         var self = this;
@@ -48,9 +50,12 @@ class SummaryCard {
         this._aspect = 0;
         var card = branch.createElement("card", "article");
         css.addClass(card, el_card);
+        var look = new Look(SummaryCard, ROLE.STANDALONE);   // a card: raised, its measure its own, lifted under the hand
+        look.wear(card, typeof p.onClick === "function" ? undefined : { except: ["affordance-cursor"] });   // pointed at only with an action
 
         var head = branch.createElement("head", "header");
         css.addClass(head, el_card_head);
+        look.wear(head, { only: ["size-gap"] });   // the card's room between its parts, in its head too
         // its texts are the house's, each cast as what it is to the card: placed by the card, looking as they are
         this._title = new Heading(HeadingFactory.create(branch, "title"), { text: p.title == null ? "" : String(p.title), level: 2 }, ROLE.TITLE);
         css.addClass(this._title.el, el_card_title);
@@ -87,7 +92,6 @@ class SummaryCard {
         this._action = typeof p.onClick === "function";
         this._kb = null; this._kbId = null; this._offKeys = null;
         if (this._action) {   // an action: the card is a button to the keyboard too, through the party
-            css.addClass(card, el_card_action);
             card.setAttribute("role", "button");
             card.tabIndex = 0;
             card.addEventListener("click", p.onClick);

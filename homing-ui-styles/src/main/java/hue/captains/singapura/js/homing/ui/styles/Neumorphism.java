@@ -44,6 +44,10 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
 
 /**
  * Neumorphism: moulded out of the page's own clay - no rule, its depth all in light and shade,
@@ -104,5 +108,10 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
             tabFrame("10px 10px 0 0", "0", null, "1px"),
             tabMotion("box-shadow 180ms ease, transform 180ms ease, translate 180ms ease, background-color 180ms ease, color 120ms ease", null, null, "translateY(-2px)"),
             tabShadow("3px 3px 6px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -3px -3px 6px var(--box-shadow-lit)", "inset 5px 5px 10px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset -5px -5px 10px var(--box-shadow-lit)", "10px 10px 20px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -10px -10px 20px var(--box-shadow-lit)"),
+            // ── its cards moulded out of the page, pressed into it ──
+            cardMeasure("300px", "20px", "22px", "8px"),
+            cardFrame("16px", "0"),
+            cardMotion("box-shadow 180ms ease, transform 180ms ease, background-color 180ms ease, color 120ms ease", "translateY(-1px)", null),
+            cardShadow("5px 5px 10px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -5px -5px 10px var(--box-shadow-lit)", "7px 7px 14px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), -7px -7px 14px var(--box-shadow-lit)", "inset 4px 4px 8px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset -4px -4px 8px var(--box-shadow-lit)"),
             disabled(".5", "not-allowed"));
 }

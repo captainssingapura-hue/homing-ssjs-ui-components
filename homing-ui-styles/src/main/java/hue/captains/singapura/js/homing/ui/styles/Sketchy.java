@@ -44,6 +44,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.menuRow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
+import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
 
 /**
  * Sketchy: drawn by hand - a wobbling outline, a marker's rule, a tilt under the hand. Ink casts no
@@ -99,5 +102,9 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
             tabMeasure("160px", "5", "12px", "8px"),
             tabFrame("8px 6px 0 0 / 6px 8px 0 0", "2px", "3px", "2px"),
             tabMotion("transform 120ms ease-out, translate 120ms ease-out, background-color 120ms ease-out, border-color 120ms ease-out", null, "rotate(-0.4deg)", "translateY(-2px) rotate(-1deg)"),
+            // ── its cards drawn by hand, tilted under the hand, casting nothing ──
+            cardMeasure("280px", "16px", "18px", "8px"),
+            cardFrame("25px 25px 55px 5px / 5px 55px 25px 25px", "2px"),
+            cardMotion("transform 120ms ease-out, background-color 120ms ease-out, border-color 120ms ease-out", "translateY(-1px) rotate(-0.6deg)", "translateY(1px) rotate(0.4deg)"),
             disabled(".5", "not-allowed"));
 }
