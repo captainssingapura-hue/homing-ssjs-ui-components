@@ -4,6 +4,8 @@ import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
+import hue.captains.singapura.js.homing.design.semantic.Writing;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,19 @@ public record Base() implements DesignStyle {
     public static final Base INSTANCE = new Base();
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
+
+    /**
+     * Every house word, as a style draws it unless it draws it otherwise: a symbol of the text's own font, in
+     * the ink the mark stands on.
+     */
+    @Override public List<Writing> writings() { return WRITINGS; }
+
+    private static final List<Writing> WRITINGS = List.of(
+            new Writing(HouseWords.Add.INSTANCE, "+"), new Writing(HouseWords.Remove.INSTANCE, "−"), new Writing(HouseWords.Close.INSTANCE, "✕"),
+            new Writing(HouseWords.Reset.INSTANCE, "↺"), new Writing(HouseWords.Rotate.INSTANCE, "↻"), new Writing(HouseWords.Flip.INSTANCE, "⇋"),
+            new Writing(HouseWords.Pin.INSTANCE, "⌖"), new Writing(HouseWords.Check.INSTANCE, "✓"), new Writing(HouseWords.Grip.INSTANCE, "⠿"),
+            new Writing(HouseWords.Disclose.INSTANCE, "▸"), new Writing(HouseWords.Settings.INSTANCE, "⚙"), new Writing(HouseWords.Size.INSTANCE, "⤢"),
+            new Writing(HouseWords.Aspect.INSTANCE, "⬌"), new Writing(HouseWords.Extent.INSTANCE, "◐"), new Writing(HouseWords.Level.INSTANCE, "≡"));
 
     private static final List<Implementation<?>> ANSWERS = answers(List.of(
             // ── the roots: every target that is not colour ──

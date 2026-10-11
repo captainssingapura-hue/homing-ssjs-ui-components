@@ -11,9 +11,10 @@ import hue.captains.singapura.js.homing.server.ServerCrate;
 import java.util.List;
 
 /**
- * The icons' crate: the {@code Icon} element component, the generated table
- * of words and the styles that wear them. A component that shows a mark
- * requires this crate and asks for a word; a design answers every word.
+ * The icons' crate: the {@code Icon} element component, the table of the
+ * house's words generated from its lexicon, the mark's box, and the sheet each
+ * style writes the words in. A component that shows a mark requires this crate
+ * and asks for a word; every house style writes every word.
  */
 public final class UiIconsCrate implements Crate, ComponentVehicle {
     public static final UiIconsCrate INSTANCE = new UiIconsCrate();
@@ -31,6 +32,7 @@ public final class UiIconsCrate implements Crate, ComponentVehicle {
         return List.of(
                 CrateEntry.of(IconModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(IconsModule.INSTANCE),
-                CrateEntry.of(IconStyles.INSTANCE));
+                CrateEntry.of(IconStyles.INSTANCE),
+                CrateEntry.of(LexiconSheet.INSTANCE));
     }
 }

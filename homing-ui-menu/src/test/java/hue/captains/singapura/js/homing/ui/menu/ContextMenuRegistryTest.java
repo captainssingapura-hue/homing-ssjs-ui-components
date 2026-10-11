@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.menu;
 
-import hue.captains.singapura.js.homing.design.Icon;
+import hue.captains.singapura.js.homing.component.taxonomy.Word;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 import hue.captains.singapura.js.homing.ui.menu.tree.M1_Node;
 import hue.captains.singapura.js.homing.ui.menu.tree.M2_Node;
@@ -31,7 +32,7 @@ class ContextMenuRegistryTest {
             public static final Rotate INSTANCE = new Rotate();
             @Override public AnimalMenu parent() { return AnimalMenu.INSTANCE; }
             @Override public String label() { return "Rotate"; }
-            @Override public Class<? extends Icon> icon() { return Icon.Rotate.class; }
+            @Override public Word<?> icon() { return HouseWords.Rotate.INSTANCE; }
             @Override public String hint() { return "a quarter turn"; }
         }
         public record Change() implements M1_Node<AnimalMenu, Change> {

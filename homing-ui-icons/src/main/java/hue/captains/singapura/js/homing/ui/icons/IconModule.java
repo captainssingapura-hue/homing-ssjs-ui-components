@@ -14,16 +14,17 @@ import java.util.List;
 /**
  * The {@code Icon} element component: {@code new Icon(el, { name? })} dresses
  * an element the caller minted — a span, {@code Icon.TAG} — as a mark that
- * means the word named; {@code set(name)} changes the word, {@code clear()}
- * leaves the mark blank at its width, {@code name()} says which it wears.
- * A name not in {@code ICONS} is refused. The picture is the design's.
+ * shows the word of the house's lexicon named; {@code set(name)} changes the
+ * word, {@code clear()} leaves the mark blank at its width, {@code name()} says
+ * which it shows. A name not in {@code ICONS} is refused. The picture is the
+ * style's: it writes the word ({@link LexiconSheet}).
  */
 public record IconModule() implements DomModule<IconModule>, ImplFor<HouseMarks.Icon> {
 
     /** The class. */
     public record Icon() implements ElementComponent<IconModule> {
         @Override public String tag() { return "span"; }
-        @Override public String summary() { return "A mark that means a word of the design's Icon vocabulary; the design draws it."; }
+        @Override public String summary() { return "A mark that shows a word of the house's lexicon; the style worn writes it."; }
     }
 
     public static final IconModule INSTANCE = new IconModule();

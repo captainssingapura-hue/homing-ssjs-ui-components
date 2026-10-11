@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.ui.docking;
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
-import hue.captains.singapura.js.homing.ui.icons.IconStyles;
 import hue.captains.singapura.js.homing.ui.icons.IconsModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
@@ -153,9 +152,7 @@ class DeskTest extends JsModuleTestBase {
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
-        js.eval("js", "var ic_base = { name: 'ic_base' };");
-        for (var w : IconStyles.worded())
-            js.eval("js", "var " + w.getClass().getSimpleName() + " = { name: '" + w.getClass().getSimpleName() + "' };");
+        js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
         js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
         loadModule(P + "icons/IconModule.js");
         js.eval("js", "var el_icon_button = 'el_icon_button';");   // the icon button's face, laid out

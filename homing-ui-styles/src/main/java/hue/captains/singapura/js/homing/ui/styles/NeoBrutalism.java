@@ -4,6 +4,8 @@ import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
+import hue.captains.singapura.js.homing.design.semantic.Writing;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,6 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
 import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
-import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
@@ -67,6 +68,12 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
+    /** The words it draws otherwise than Base: its own cross. */
+    @Override public List<Writing> writings() { return WRITINGS; }
+
+    private static final List<Writing> WRITINGS = List.of(
+            new Writing(HouseWords.Close.INSTANCE, "╳"));
+
     /** The press: pushed into its own shadow. */
     private static final String PRESS_SHADOW = "box-shadow: 0 0 0 var(--box-shadow-cast);";
     private static final String PRESS_MOVE = "transform: translate(5px, 5px);";
@@ -81,8 +88,7 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
                             State.HOVER, "box-shadow: 8px 8px 0 var(--box-shadow-cast);",
                             State.ACTIVE, PRESS_SHADOW)),
                     when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translate(-2px, -2px);", State.ACTIVE, PRESS_MOVE)),
-                    rings("3px solid -3px", "4px dashed 4px", "4px dotted 4px", "4px solid 4px"),
-                    closeMark("╳")),
+                    rings("3px solid -3px", "4px dashed 4px", "4px dotted 4px", "4px solid 4px")),
             held(PRESS_SHADOW, PRESS_MOVE),
             bareMarks(),
             // ── its type: the body face on every text, its display face where a text is set apart ──

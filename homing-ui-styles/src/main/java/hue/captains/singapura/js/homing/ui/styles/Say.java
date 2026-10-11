@@ -101,9 +101,6 @@ final class Say {
         return List.copyOf(out);
     }
 
-    /** The close button's mark - the style's own cross - drawn on its {@code ::before}. */
-    static Implementation<?> closeMark(String glyph) { return rest(CLOSE, GLYPH, "content: \"" + glyph + "\";"); }
-
     static final Taxon ICON_BUTTON = HouseControls.IconButton.INSTANCE;
 
     /** The buttons that are a mark alone: a close button's cross, an icon button's icon. */

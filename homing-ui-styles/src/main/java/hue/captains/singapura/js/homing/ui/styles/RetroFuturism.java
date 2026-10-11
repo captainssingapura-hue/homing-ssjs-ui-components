@@ -4,6 +4,8 @@ import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
+import hue.captains.singapura.js.homing.design.semantic.Writing;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,6 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
 import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
-import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
@@ -67,6 +68,12 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
+    /** The words it draws otherwise than Base: its own cross. */
+    @Override public List<Writing> writings() { return WRITINGS; }
+
+    private static final List<Writing> WRITINGS = List.of(
+            new Writing(HouseWords.Close.INSTANCE, "✘"));
+
     private static final String RING = "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent)";
 
     /** The press: the neon dimmed, the button a step down. */
@@ -84,8 +91,7 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
                             State.HOVER, "box-shadow: " + RING + ", 0 0 24px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent);",
                             State.ACTIVE, PRESS_SHADOW)),
                     when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-2px);", State.ACTIVE, PRESS_MOVE)),
-                    rings("1px solid -1px", "1px dashed 4px", "1px solid 2px", "2px solid 2px"),
-                    closeMark("✘")),
+                    rings("1px solid -1px", "1px dashed 4px", "1px solid 2px", "2px solid 2px")),
             held(PRESS_SHADOW, PRESS_MOVE),
             bareMarks(),
             // ── its type: the body face on every text, its display face where a text is set apart ──

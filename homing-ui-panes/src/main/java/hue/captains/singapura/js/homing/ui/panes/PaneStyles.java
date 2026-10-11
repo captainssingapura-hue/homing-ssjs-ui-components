@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import hue.captains.singapura.js.homing.design.Icon;
 import static hue.captains.singapura.js.homing.design.Box.Container;
 import static hue.captains.singapura.js.homing.design.Interaction.DropTarget;
 import static hue.captains.singapura.js.homing.design.Layer.Base;
@@ -103,14 +102,13 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     }
 
     /**
-     * The mark on a chip while the keys are inside its tab: the design's
-     * picture for "within" - its colour the look's, an icon that says where the
-     * keys are - never in the way of the hand. It is there only while the keys are in the tab — the chip says
+     * The mark on a chip while the keys are inside its tab: the lexicon's word
+     * within, as the style worn writes it - its colour the look's, an icon that
+     * says where the keys are - placed here, never in the way of the hand. It is there only while the keys are in the tab — the chip says
      * *held* while the bar has them, and *lent* with this mark while what the
      * tab holds has them.
      */
     public record mtp_chip_mark() implements CssClass<PaneStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Icon.Within.class, Type.Glyph.class)); }
         @Override public String body() { return """
             display: none;
             flex: none;

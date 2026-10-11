@@ -34,6 +34,10 @@ final class TextsInJs {
         if (js.eval("js", "typeof LOOK_TARGETS === 'undefined'").asBoolean())
             js.eval("js", String.join(System.lineSeparator(), LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "if (typeof look_sheet === 'undefined') globalThis.look_sheet = 'look-sheet';");
+        if (js.eval("js", "typeof ICONS === 'undefined'").asBoolean()) {   // the lexicon's table, as a var: a test may give its own after
+            js.eval("js", "if (typeof lexicon_sheet === 'undefined') globalThis.lexicon_sheet = 'lexicon-sheet';");
+            js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)).replace("const ICONS", "var ICONS"));
+        }
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "TextBehaviorModule.js", "TextModule.js",
                                       "HeadingModule.js", "KickerModule.js", "CaptionModule.js", "LedeModule.js", "LabelModule.js",
                                       "ReadoutModule.js", "BadgeModule.js", "PillModule.js", "WordmarkModule.js"})

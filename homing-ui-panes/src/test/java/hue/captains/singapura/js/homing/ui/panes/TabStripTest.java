@@ -97,6 +97,8 @@ class TabStripTest extends JsModuleTestBase {
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
+        js.eval("js", "var lexicon_sheet = 'lexicon-sheet';");   // the lexicon's table: a mark - the cross, the within mark - is a word of it
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)));
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
             loadModule(ELEMENTS + m);
         TextsInJs.load(js, this::loadModule);   // and the pill that is its count

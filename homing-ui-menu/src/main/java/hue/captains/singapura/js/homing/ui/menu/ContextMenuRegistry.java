@@ -6,7 +6,6 @@ import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.StampedParams;
-import hue.captains.singapura.js.homing.design.Trees;
 import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 import hue.captains.singapura.js.homing.ui.menu.tree.MenuRow;
 import hue.captains.singapura.js.homing.ui.menu.tree.MenuTrees;
@@ -113,7 +112,7 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
             if (i > 0) sb.append(',');
             var r = rows.get(i);
             sb.append("{\"id\":").append(StampedParams.jsString(r.id())).append(",\"label\":").append(StampedParams.jsString(r.label()));
-            if (r.icon() != null) sb.append(",\"icon\":").append(StampedParams.jsString(Trees.semanticToken(r.icon())));
+            if (r.icon() != null) sb.append(",\"icon\":").append(StampedParams.jsString(r.icon().token()));
             if (r.hint() != null) sb.append(",\"hint\":").append(StampedParams.jsString(r.hint()));
             if (r.section() != 0) sb.append(",\"section\":").append(r.section());
             if (!r.children().isEmpty()) { sb.append(",\"nodes\":"); nodes(sb, r.children()); }

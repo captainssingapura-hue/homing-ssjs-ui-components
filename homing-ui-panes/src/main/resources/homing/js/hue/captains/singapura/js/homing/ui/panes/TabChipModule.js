@@ -76,7 +76,8 @@ class TabChip {
         c.appendChild(label);
         var mark = branch.createElement("mark" + s, "span");   // the within mark, after the label: shown only while the keys are in this tab
         css.addClass(mark, mtp_chip_mark);
-        TabChip._looks().keys.wear(mark, { only: ["color-ink"] });   // its colour the look's; its picture still the icon word's
+        TabChip._looks().keys.wear(mark, { only: ["color-ink"] });   // its colour the look's
+        TabChip._looks().keys.mark(mark, "within");                    // its picture the lexicon's word, as the style worn writes it
         mark.setAttribute("aria-hidden", "true");
         c._mark = mark;
         c.appendChild(mark);

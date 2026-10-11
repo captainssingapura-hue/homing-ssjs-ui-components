@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** The Icon component over a fake element: the classes it wears and takes off, the names it refuses, the table it reads. */
+/** The Icon component over a fake element: the box and the word's class it wears and takes off, the names it refuses, the table it reads. */
 class IconTest extends JsModuleTestBase {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/icons/";
@@ -26,15 +26,14 @@ class IconTest extends JsModuleTestBase {
         }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); } };
-        var ic_base = "ic_base";
+        var ic_base = "ic_base", lexicon_sheet = {};
         """;
 
     @BeforeEach
     void load() {
         js = buildContext();
         js.eval("js", SHIM);
-        // the wardrobe's class names, as the served module would import them, then the generated table itself
-        for (var w : IconStyles.worded()) js.eval("js", "var " + w.getClass().getSimpleName() + " = '" + w.getClass().getSimpleName() + "';");
+        // the generated table itself, the sheet it imports a constant in the shim
         js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
         loadModule(P + "IconModule.js");
     }
@@ -44,13 +43,13 @@ class IconTest extends JsModuleTestBase {
     @Test
     void itWearsTheBaseAndTheWordsClass_setChangesTheWord_clearLeavesTheBase() {
         eval("var e = el(); var icon = new Icon(e, { name: 'check' });");
-        assertEquals("ic_base ic_check", eval("e.classes()").asString());
+        assertEquals("ic_base word-check", eval("e.classes()").asString());
         assertEquals("true", eval("e.attr('aria-hidden')").asString(), "a mark is not a label");
         assertEquals("check", eval("icon.name()").asString());
         eval("icon.set('rotate');");
-        assertEquals("ic_base ic_rotate", eval("e.classes()").asString(), "the old word off, the new on");
+        assertEquals("ic_base word-rotate", eval("e.classes()").asString(), "the old word off, the new on");
         eval("icon.set('rotate');");
-        assertEquals("ic_base ic_rotate", eval("e.classes()").asString(), "the same word again: nothing changes");
+        assertEquals("ic_base word-rotate", eval("e.classes()").asString(), "the same word again: nothing changes");
         eval("icon.clear();");
         assertEquals("ic_base", eval("e.classes()").asString(), "blank at its width");
         assertTrue(eval("icon.name() === null").asBoolean());
@@ -61,11 +60,11 @@ class IconTest extends JsModuleTestBase {
     }
 
     @Test
-    void aWordTheVocabularyLacksIsRefused_andTheTableIsTheVocabulary() {
+    void aWordTheLexiconLacksIsRefused_andTheTableIsTheLexicon() {
         var ex = assertThrows(PolyglotException.class, () -> eval("new Icon(el(), { name: 'sparkle' })"));
         assertTrue(ex.getMessage().contains("no icon word 'sparkle'"), ex.getMessage());
-        assertEquals(String.join(",", IconsModule.names()), eval("Icon.NAMES.join(',')").asString());
-        assertTrue(eval("Icon.has('detach') && !Icon.has('toString')").asBoolean());
+        assertEquals(String.join(",", IconsModule.INSTANCE.names()), eval("Icon.NAMES.join(',')").asString());
+        assertTrue(eval("Icon.has('disclose') && !Icon.has('toString')").asBoolean());
         assertFalse(eval("Icon.has('sparkle')").asBoolean());
         assertEquals("span", eval("Icon.TAG").asString());
         assertThrows(PolyglotException.class, () -> eval("new Icon(null)"));

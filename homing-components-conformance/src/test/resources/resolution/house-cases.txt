@@ -32,7 +32,7 @@ floating-pane_window rest      shape-corner       => card__shape-corner from edi
 toggle-button        pressed   shape-shadow       => toggle-button__shape-shadow--pressed from editorial
 toggle-button        pressed   color-background   => toggle-button__color-background--pressed from harbour
 toggle-button        hover     shape-shadow       => button__shape-shadow--hover from editorial
-close-button         rest      type-glyph         => close-button__type-glyph from editorial
+close-button         rest      type-glyph         => root__type-glyph from base
 
 theme sketchy
 

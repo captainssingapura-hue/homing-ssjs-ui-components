@@ -19,7 +19,6 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.SHADOW;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
 import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
-import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
@@ -81,8 +80,7 @@ public record Editorial() implements DesignStyle, Derives<Base> {
                             State.HOVER, "box-shadow: 0 6px 16px color-mix(in srgb, var(--box-shadow-cast) 12%, transparent);",
                             State.ACTIVE, PRESS_SHADOW)),
                     when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-2px);", State.ACTIVE, PRESS_MOVE)),
-                    rings("2px solid -2px", "1px dashed 3px", "1px solid -2px", "2px solid -2px"),
-                    closeMark("✕")),
+                    rings("2px solid -2px", "1px dashed 3px", "1px solid -2px", "2px solid -2px")),
             held(PRESS_SHADOW, PRESS_MOVE),
             bareMarks(),
             // ── its type: the body face on every text, its display face where a text is set apart ──

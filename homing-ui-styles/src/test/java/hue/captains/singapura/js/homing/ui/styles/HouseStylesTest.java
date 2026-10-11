@@ -8,13 +8,17 @@ import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Dressed;
+import hue.captains.singapura.js.homing.design.semantic.FlattenLexicon;
+import hue.captains.singapura.js.homing.design.semantic.WriteWord;
 import hue.captains.singapura.js.homing.design.semantic.FlattenSheet;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.design.semantic.ResolveSemanticClass;
 import hue.captains.singapura.js.homing.design.semantic.Resolution;
 import hue.captains.singapura.js.homing.design.semantic.SemanticTokens;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseLexicon;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -42,7 +46,7 @@ class HouseStylesTest {
             "button shape-corner", "button shape-border", "button size-inset", "button size-gap", "button size-extent",
             "button type-face", "button motion-ease", "button shape-shadow", "button motion-transform",
             "control shape-outline", "control effect-opacity", "control affordance-cursor",
-            "toggle-button shape-shadow", "toggle-button motion-transform", "close-button type-glyph",
+            "toggle-button shape-shadow", "toggle-button motion-transform",
             "close-button shape-border", "close-button size-inset", "close-button size-extent", "close-button shape-shadow", "close-button motion-transform",
             "icon-button shape-border", "icon-button size-inset", "icon-button size-extent", "icon-button shape-shadow", "icon-button motion-transform");
 
@@ -196,14 +200,38 @@ class HouseStylesTest {
             assertEquals(List.of(), theme.check(HOUSE), theme.toString());
             var flat = FlattenSheet.INSTANCE.flatten(HOUSE, theme, theme.toString());
             assertEquals(List.of(), flat.unanswered(), () -> theme + ": every target answered at the root");
-            long marked = HOUSE.castings().stream().filter(c -> c.component() == hue.captains.singapura.js.homing.ui.taxonomy.HouseControls.CloseButton.INSTANCE
-                    || c.component() == hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks.Delimiter.INSTANCE).count();
+            long marked = HOUSE.castings().stream().filter(c -> c.component() == hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks.Delimiter.INSTANCE).count();
             assertEquals(HOUSE.castings().size() * 32 + marked, flat.looks(),
-                    () -> theme + ": every casting on every CSS target the semantic classes answer; the glyph a silence but the close button's mark and the delimiter's sign");
+                    () -> theme + ": every casting on every CSS target the semantic classes answer; the glyph a silence but the delimiter's sign - a close button's cross is the lexicon's word");
         }
         String sketchy = FlattenSheet.INSTANCE.flatten(HOUSE, HouseStyles.THEMES.get("sketchy"), "sketchy").css();
         assertTrue(sketchy.contains("/* from base: root__shape-shadow */\n.danger-button__shape-shadow {\n    box-shadow: none;\n}\n"), "ink casts no shadow");
         assertTrue(sketchy.contains("/* from sketchy: control__shape-outline--focus */\n.danger-button__shape-outline--focus {\n"), "its own ring");
+    }
+
+    /**
+     * Every house style writes every house word - Base all of them, as most styles draw them, and each style
+     * those it draws otherwise: its own cross, and Sketchy its marks in pen, its emoji now text. A word is the
+     * style's, never the palette's: the sheet is the same in every palette.
+     */
+    @Test
+    void everyStyle_writesEveryWord_andItsCrossIsItsOwn() {
+        var lexicon = HouseLexicon.INSTANCE.read();
+        var write = WriteWord.INSTANCE;
+        for (DesignStyle s : HouseStyles.STYLES) {
+            assertEquals(List.of(), write.problems(lexicon, s), s.token());
+            var sheet = FlattenLexicon.INSTANCE.flatten(lexicon, s, s.token());
+            assertEquals(List.of(), sheet.unwritten(), s.token());
+            assertEquals(15, sheet.written(), s.token());
+        }
+        assertEquals(List.of(), write.problems(lexicon, Base.INSTANCE), "Base writes them all");
+        var crosses = new java.util.LinkedHashMap<String, String>();
+        for (DesignStyle s : HouseStyles.STYLES) crosses.put(s.token(), write.write(s, HouseWords.Close.INSTANCE).orElseThrow().glyph());
+        assertEquals(Map.of("editorial", "✕", "neo-brutalism", "╳", "neo-futurism", "⨯", "neumorphism", "✗", "glassmorphism", "×",
+                "retro-futurism", "✘", "sketchy", "✖"), crosses, "each style's own cross, the close button's and every close row's alike");
+        String sketchy = FlattenLexicon.INSTANCE.flatten(lexicon, Sketchy.INSTANCE, "sketchy").css();
+        assertTrue(sketchy.contains(".word-pin::before {\n    content: \"⚲\";\n}\n"), "a pin in pen, no longer an emoji");
+        assertTrue(sketchy.contains("/* from base */\n.word-size::before {\n    content: \"⤢\";\n}\n"), "what it does not draw itself, Base's");
     }
 
     @Test

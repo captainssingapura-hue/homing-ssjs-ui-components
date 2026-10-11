@@ -26,11 +26,14 @@
 //     .show(el, state)                  each axis's reflection written
 //     .degree(el, name, n)              size, extent or aspect; at rest nothing written
 //     .text(el, words)                  the element's words
+//     .mark(el, word)                   the element's mark: a word of the lexicon - "close" - by its
+//                                       class, which the lexicon's sheet draws on the element's ::before
+//                                       as the style worn writes it
 //
 // Leaf is the component's class: its token (LEAF) and its axes (AXES), each
 // with the reflection its value writes. The look puts its classes on itself:
-// they are a derived sheet's, and the CSS manager handles only what does not
-// vary. `css` - the manager - is injected for the element's degrees.
+// they are a derived sheet's - the look's, or the lexicon's for a mark - and
+// the CSS manager handles only what does not vary. `css` - the manager - is injected for the element's degrees.
 // =============================================================================
 
 var _LOOK_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
@@ -77,4 +80,9 @@ class Look {
     }
 
     text(el, words) { el.textContent = words; }
+
+    mark(el, word) {
+        if (!Object.prototype.hasOwnProperty.call(ICONS, word)) throw new Error("[Look] no word '" + word + "' in the lexicon; one of " + Object.keys(ICONS).join(", "));
+        el.classList.add(ICONS[word]);
+    }
 }

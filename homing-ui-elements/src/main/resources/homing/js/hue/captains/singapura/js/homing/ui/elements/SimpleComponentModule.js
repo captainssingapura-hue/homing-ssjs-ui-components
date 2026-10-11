@@ -40,6 +40,7 @@
 //   DEGREES   the degrees it varies by: "size", "extent", "aspect"
 //   WORDS     the words it shows: "label"
 //   PARTS     the parts it is handed, made by its owner: "icon" - its own to hold
+//   MARK      the word of the lexicon its face is, the style worn writing it: "close"
 //   BEHAVIOR  its behaviour's class: new BEHAVIOR(el, component)
 // an accessor for each axis, degree and word, a setter for each event, and its
 // companion beside it: const PrimaryButtonFactory = new SimpleComponentFactory(PrimaryButton).
@@ -78,6 +79,7 @@ class SimpleComponent {
         this._degrees = {};
         this._look = new Look(Leaf, this.role);
         this._look.wear(el);
+        if (Leaf.MARK) this._look.mark(el, Leaf.MARK);   // its face a word of the lexicon, as the style worn writes it
         this._look.show(el, this._state);
         degrees.forEach(function (d) { self._degree(d, p[d] == null ? _COMPONENT_DEGREE_REST[d] : p[d]); });
         words.forEach(function (w) { self[w] = p[w]; });

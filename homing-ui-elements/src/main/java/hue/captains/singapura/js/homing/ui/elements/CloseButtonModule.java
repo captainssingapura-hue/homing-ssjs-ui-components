@@ -11,7 +11,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
 
-/** The close button: the button's declarations, its face the style's own cross and its words its name; worn in its own look. */
+/** The close button: the button's declarations, its face the lexicon's word close - each style's own cross - and its words its name; worn in its own look. */
 public record CloseButtonModule() implements DomModule<CloseButtonModule>, ImplFor<HouseControls.CloseButton> {
 
     /** An element component: {@code new CloseButton(el, { label, size }, role)} on the element its companion makes; {@code setOnClick(handler)}; {@code enabled}, {@code size}, {@code label} - its name. */

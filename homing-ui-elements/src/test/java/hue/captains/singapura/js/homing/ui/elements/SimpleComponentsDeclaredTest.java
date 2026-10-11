@@ -41,9 +41,7 @@ class SimpleComponentsDeclaredTest extends JsModuleTestBase {
                 + " size: function () {}, extent: function () {}, aspect: function () {} };");
         js.eval("js", "var look_sheet = 'look-sheet';");
         // what the simple components need, loaded in the crate's order - icons from their own crate, as handles
-        js.eval("js", "var ic_base = { name: 'ic_base' };");
-        for (var w : hue.captains.singapura.js.homing.ui.icons.IconStyles.worded())
-            js.eval("js", "var " + w.getClass().getSimpleName() + " = { name: '" + w.getClass().getSimpleName() + "' };");
+        js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         var needed = new LinkedHashSet<EsModule<?>>();

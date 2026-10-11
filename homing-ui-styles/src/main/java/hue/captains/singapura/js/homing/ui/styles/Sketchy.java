@@ -4,6 +4,8 @@ import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
+import hue.captains.singapura.js.homing.design.semantic.Writing;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,6 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRANSFORM;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
 import static hue.captains.singapura.js.homing.ui.styles.Say.bareMarks;
-import static hue.captains.singapura.js.homing.ui.styles.Say.closeMark;
 import static hue.captains.singapura.js.homing.ui.styles.Say.disabled;
 import static hue.captains.singapura.js.homing.ui.styles.Say.held;
 import static hue.captains.singapura.js.homing.ui.styles.Say.measure;
@@ -66,6 +67,17 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
 
+    /** The words it draws otherwise than Base: drawn by hand, in pen. */
+    @Override public List<Writing> writings() { return WRITINGS; }
+
+    private static final List<Writing> WRITINGS = List.of(
+            new Writing(HouseWords.Check.INSTANCE, "✔"),
+            new Writing(HouseWords.Disclose.INSTANCE, "➤"),
+            new Writing(HouseWords.Close.INSTANCE, "✖"),
+            new Writing(HouseWords.Pin.INSTANCE, "⚲"),
+            new Writing(HouseWords.Settings.INSTANCE, "⚒"),
+            new Writing(HouseWords.Grip.INSTANCE, "⁘"));
+
     /** The press: pushed down, and tipped the other way. Ink casts no shadow. */
     private static final String PRESS_MOVE = "transform: translateY(1px) rotate(0.4deg);";
 
@@ -75,8 +87,7 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
                     rest(BUTTON, FACE, "font-family: \"Cabin Sketch\", \"Segoe Print\", \"Bradley Hand\", \"Chalkboard SE\", cursive;"),
                     rest(BUTTON, EASE, "transition: transform 120ms ease-out, background-color 120ms ease-out, border-color 120ms ease-out;"),
                     when(BUTTON, TRANSFORM, Map.of(State.HOVER, "transform: translateY(-1px) rotate(-0.6deg);", State.ACTIVE, PRESS_MOVE)),
-                    rings("2px dashed -3px", "2px dashed 5px", "2px dotted 3px", "3px solid 3px"),
-                    closeMark("✖")),
+                    rings("2px dashed -3px", "2px dashed 5px", "2px dotted 3px", "3px solid 3px")),
             held(null, PRESS_MOVE),
             bareMarks(),
             // ── its type: the body face on every text, its display face where a text is set apart ──
