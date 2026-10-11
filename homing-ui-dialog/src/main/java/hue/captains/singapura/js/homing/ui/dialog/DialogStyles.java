@@ -2,17 +2,9 @@ package hue.captains.singapura.js.homing.ui.dialog;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.Wearable;
-
 import java.util.List;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Layer.Overlay;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Structure.Cap;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Effect;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
 
 /**
  * The dialog's own styles — what a dialog adds to the floating pane it is
@@ -51,16 +43,13 @@ public record DialogStyles() implements CssGroup<DialogStyles> {
         @Override public String body() { return "pointer-events: auto;"; }
     }
 
-    /** The action foot: raised, capped off from the body, buttons to the right. */
+    /** The action foot, its buttons to the right; its look - a row of actions, raised and capped off - is the house's. */
     public record dl_actions() implements CssClass<DialogStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Cap.class, Color.Edge.class), of(Cap.class, Shape.Rule.class)); }
         @Override public String body() { return """
             flex: 0 0 auto;
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            gap: 8px;
-            padding: 8px 12px;
             """;
         }
     }

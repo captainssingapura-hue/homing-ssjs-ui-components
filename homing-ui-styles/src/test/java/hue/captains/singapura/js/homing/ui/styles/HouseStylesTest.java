@@ -55,7 +55,7 @@ class HouseStylesTest {
     /** What a style may decide for the ways somewhere, the marks between things and the veil: how a way eases and is marked under the hand, how thick a separator is ruled, how the page behind a dialog is veiled. */
     private static final Set<String> WAYS_MARKS_AND_VEIL = Set.of(
             "link motion-ease", "crumb motion-ease", "link type-decoration", "crumb type-decoration", "scrim effect-filter", "separator shape-border",
-            "pane-thumb shape-border");
+            "action-bar shape-border", "pane-thumb shape-border");
 
     /** What every style decides for its slider: its measure, its lines and corners, and how its knob is ringed when it is a group's current one; its marks and a knob that is its mark alone where it says so. */
     private static final Set<String> SLIDER = Set.of("slider size-extent", "groove size-extent", "groove shape-corner", "groove shape-border",
@@ -143,11 +143,12 @@ class HouseStylesTest {
         expected.addAll(Set.of("item shape-corner", "item shape-border", "item shape-outline", "item size-inset", "item size-gap", "item type-face", "item type-scale", "item motion-ease",
                 "choice-option size-inset", "choice-option affordance-cursor", "list-row size-inset", "list-row size-gap", "list-row type-scale", "list-row affordance-cursor"));
         expected.addAll(Set.of("lamp shape-corner", "lamp shape-border", "lamp size-inset", "lamp type-scale", "lamp motion-ease"));
+        expected.addAll(Set.of("action-bar shape-border", "action-bar size-inset", "action-bar size-gap", "trail size-gap", "trail type-scale"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
                 + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash;"
-                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size");
+                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size; a row of actions capped as groups are ruled apart, its room; a trail's crumbs apart, in the caption's size");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");

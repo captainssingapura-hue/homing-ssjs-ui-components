@@ -7,13 +7,10 @@ import hue.captains.singapura.js.homing.core.Layout;
 import hue.captains.singapura.js.homing.core.Reset;
 import hue.captains.singapura.js.homing.core.Wearable;
 import hue.captains.singapura.js.homing.core.util.CssClassName;
-
 import java.util.List;
 
 import static hue.captains.singapura.js.homing.design.DesignClass.of;
 import static hue.captains.singapura.js.homing.design.Box.Control;
-import static hue.captains.singapura.js.homing.design.Brand.House;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
 import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
 import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
 import static hue.captains.singapura.js.homing.design.Layer.Base;
@@ -25,7 +22,6 @@ import static hue.captains.singapura.js.homing.design.Structure.Divider;
 import static hue.captains.singapura.js.homing.design.Target.Affordance;
 import static hue.captains.singapura.js.homing.design.Target.Color;
 import static hue.captains.singapura.js.homing.design.Target.Effect;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
 import static hue.captains.singapura.js.homing.design.Target.Shape;
 import static hue.captains.singapura.js.homing.design.Target.Type;
 import static hue.captains.singapura.js.homing.design.Text.Body;
@@ -68,9 +64,9 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
         }
     }
 
-    /** The bar: inverted, divided from the page, sticky. */
+    /** The bar: inverted, in the ink written on it - what stands on it takes that ink, the trail quieter - divided from the page, sticky. */
     public record mpa_header() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Inverted.class, Color.Surface.class), of(Inverted.class, Effect.Filter.class), of(Divider.class, Color.Edge.class), of(Divider.class, Shape.Rule.class)); }
+        @Override public List<? extends Wearable> wears() { return List.of(of(Inverted.class, Color.Surface.class), of(OnInverted.class, Color.Ink.class), of(Inverted.class, Effect.Filter.class), of(Divider.class, Color.Edge.class), of(Divider.class, Shape.Rule.class)); }
         @Override public String body() { return """
             padding: 12px 28px;
             display: flex;
@@ -112,13 +108,11 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
         @Override public String body() { return ""; }
     }
 
-    /** The trail: muted on the bar, caption-sized. */
+    /** The trail, its crumbs in a row taking the room the bar leaves; its look - quieter than the bar, caption-sized - is the house's. */
     public record mpa_crumbs() implements CssClass<MpaStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(OnInvertedMuted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """
             display: flex;
             align-items: center;
-            gap: 8px;
             min-width: 0;
             flex: 1 1 auto;
             """;

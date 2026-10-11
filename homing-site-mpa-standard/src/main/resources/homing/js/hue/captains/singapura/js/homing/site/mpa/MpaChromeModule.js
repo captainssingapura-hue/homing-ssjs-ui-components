@@ -50,6 +50,7 @@ class MpaChrome {
         this._trail = null;
         this._nav = branch.createElement("crumbs", "nav");
         css.addClass(this._nav, mpa_crumbs);
+        new Look(Object.freeze({ LEAF: "trail" }), ROLE.PATH).wear(this._nav);   // the trail: quieter than its bar, caption-sized
         this._nav.setAttribute("aria-label", "Breadcrumb");
         this._drawTrail(this._stamped);
         bar.appendChild(this._nav);

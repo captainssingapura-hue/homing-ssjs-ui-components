@@ -28,7 +28,7 @@ class UiDialogCrateConformanceTest {
     @Test
     void theDialogPaintsNothingOfItsOwn() {
         var worn = Deployment.wornBy(List.of(DialogStyles.INSTANCE));
-        assertTrue(worn.size() >= 3, "the dialog's own classes wear its foot and cap; the frame is the pane's, the veil the house's scrim; found " + worn.size());
+        assertEquals(0, worn.size(), "the dialog's own classes wear no design word: its foot is a row of actions, the house's look; the frame is the pane's, the veil the house's scrim; found " + worn);
         for (CssClass<DialogStyles> c : DialogStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid"),

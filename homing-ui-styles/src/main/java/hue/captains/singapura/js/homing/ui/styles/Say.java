@@ -244,11 +244,17 @@ final class Say {
     // ── the marks between things ─────────────────────────────────────────
 
     static final Taxon SEPARATOR = HouseMarks.Separator.INSTANCE;
+    static final Taxon ACTION_BAR = HouseContainers.ActionBar.INSTANCE;
+    static final Taxon TRAIL = HouseContainers.Trail.INSTANCE;
     static final Taxon DELIMITER = HouseMarks.Delimiter.INSTANCE;
 
-    /** How thick a style rules one group of rows off from the next: the separator's line, along its foot. */
+    /**
+     * How thick a style rules one group of rows off from the next: the separator's line, along its foot; and the line
+     * that caps a row of actions off from what is above it - a dialog's - along its top, as thick.
+     */
     static List<Implementation<?>> separatorRule(String width) {
-        return List.of(rest(SEPARATOR, BORDER, "border-width: 0 0 " + width + " 0; border-style: solid;"));
+        return List.of(rest(SEPARATOR, BORDER, "border-width: 0 0 " + width + " 0; border-style: solid;"),
+                       rest(ACTION_BAR, BORDER, "border-width: " + width + " 0 0 0; border-style: solid;"));
     }
 
     /** The marks between things in the house, whatever the style: a separator a hairline unless its style rules it thicker; a delimiter a slash. */
@@ -511,6 +517,16 @@ final class Say {
                        rest(LAMP, INSET, "padding-block: 4px; padding-inline: 8px;"),
                        new Implementation<>(LAMP, SCALE, new Answer.Redirect<>(CAPTION)),
                        rest(LAMP, EASE, "transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;"));
+    }
+
+    // ── the bars: a row of actions and a trail ──
+
+    /** What every style's bars say alike: a row of actions eight pixels apart, its room round them; a trail's crumbs eight apart, in the caption's size. */
+    static List<Implementation<?>> barBase() {
+        return List.of(rest(ACTION_BAR, INSET, "padding-block: 8px; padding-inline: 12px;"),
+                       rest(ACTION_BAR, GAP, "gap: 8px;"),
+                       rest(TRAIL, GAP, "gap: 8px;"),
+                       new Implementation<>(TRAIL, SCALE, new Answer.Redirect<>(CAPTION)));
     }
 
     /** Every answer of the groups, in order. */

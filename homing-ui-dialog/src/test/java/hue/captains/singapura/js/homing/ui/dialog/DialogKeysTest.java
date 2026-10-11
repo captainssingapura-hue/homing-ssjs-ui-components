@@ -59,6 +59,8 @@ class DialogKeysTest extends JsModuleTestBase {
                    claim: function (id) { if (!members[id]) throw new Error("no member " + id); kbLog.push("claim:" + id); holder = id; }, release: function () {}, holder: function () { return holder; }, has: function (id) { return !!members[id]; } };
         members.slider = {}; holder = "slider";   // the page's slider holds before the dialog opens
         var content = { onKeydown: function (ev) { log.push("content:" + ev.key); return ev.key === "ArrowUp"; }, focusEl: null };
+        // the action bar's look: put on by name, which is all the keys ask of it here
+        class Look { constructor(Leaf) { this.casting = Leaf.LEAF; } wear(e) { if (e.classList) e.classList.add(this.casting); } }
         function open(o) {
             return new Dialog(fakeBranch("dialog"), Object.assign({ title: "T", keyboard: kb, content: function () { return content; },
                 actions: [{ id: "ok", label: "OK", primary: true, onClick: function () { log.push("ok"); } }], onClose: function () { log.push("closed"); } }, o || {}));

@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.dialog;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
@@ -51,6 +52,7 @@ public record DialogModule() implements DomModule<DialogModule>, ImplFor<HouseCo
     @Override
     public ImportsFor<DialogModule> imports() {
         return ImportsFor.<DialogModule>builder()
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ModalityModule.Modality()), ModalityModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))

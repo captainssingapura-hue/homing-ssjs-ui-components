@@ -122,6 +122,7 @@ class Dialog {
         if (opts.actions && opts.actions.length) {
             var row = branch.createElement("actions", "div");
             css.addClass(row, dl_actions);
+            new Look(Object.freeze({ LEAF: "action-bar" }), ROLE.ACTIONS).wear(row);   // a row of actions: raised, capped off
             for (var i = 0; i < opts.actions.length; i++) this._action(row, opts.actions[i]);
             frame.appendChild(row);
         }

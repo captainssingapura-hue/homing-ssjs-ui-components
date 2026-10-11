@@ -24,6 +24,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CONTEXT_MENU;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DETENT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DROP_MARK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.ACTION_BAR;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TRAIL;
 import static hue.captains.singapura.js.homing.ui.styles.Say.RANGE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LAMP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TAB;
@@ -217,6 +219,10 @@ final class HouseRule {
                         State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 7%, " + s.raised() + ")"))),
                 rest(TAB_STRIP, BORDER, "border-color: " + s.accent() + ";"),
                 rest(DROP_MARK, BACKGROUND, ground(s.accent())),
+                // ── a row of actions: raised, capped off by a hairline; a trail quieter than the bar it stands on ──
+                rest(ACTION_BAR, BACKGROUND, ground(s.raised())),
+                rest(ACTION_BAR, BORDER, "border-color: " + s.border() + ";"),
+                rest(TRAIL, INK, "color: color-mix(in srgb, currentColor 80%, transparent);"),
                 // ── a range: the browser's own slider, drawn in the ink it is set in - the accent - on no ground of its own ──
                 rest(RANGE, BACKGROUND, ground("transparent")),
                 rest(RANGE, INK, "color: " + s.accent() + ";"),
