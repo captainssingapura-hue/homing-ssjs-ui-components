@@ -33,7 +33,7 @@ class WholeHouseTaxonomyTest {
     @Test
     void everyModuleThatShipsComponents_extendsTheHouse_withItsOwnLeaves() {
         var extensions = TaxonomyExtensions.INSTANCE.of(HouseTaxonomy.class);
-        assertEquals(List.of("HousePreferences", "HouseSite", "HouseControlPanel", "HouseDocking", "HouseFloating", "HouseMenus", "HouseMonitors",
+        assertEquals(List.of("HousePreferences", "HouseSite", "HouseControlPanel", "HouseFloating", "HouseMenus", "HouseMonitors",
                              "HousePanes", "HousePanZoom", "HouseSplitGrid"),
                 extensions.stream().map(e -> e.getClass().getSimpleName()).toList(), "in the order of their class names");
         var leaves = new LinkedHashMap<String, Integer>();
@@ -42,17 +42,17 @@ class WholeHouseTaxonomyTest {
                 assertEquals(e.getClass(), c.getClass().getEnclosingClass(), c + " is declared by the module that lists it");
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
-        assertEquals(28, leaves.values().stream().mapToInt(Integer::intValue).sum(), "28 leaves the modules add: " + leaves);
+        assertEquals(27, leaves.values().stream().mapToInt(Integer::intValue).sum(), "27 leaves the modules add - the dock grid retired, its docks a split grid's residents: " + leaves);
         assertEquals(58, HouseTaxonomy.INSTANCE.common().size(), "to the 58 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button");
     }
 
     @Test
     void theWholeHouse_isReadAsItWasBeforeItWasCut() {
         assertEquals(17, HOUSE.branches().size());
-        assertEquals(86, HOUSE.components().size(), "the split pane retired: its uses are widgets with a fixed split grid");
+        assertEquals(85, HOUSE.components().size(), "the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents");
         assertEquals(91, HOUSE.roles().size(), "the catalogue beside the tree");
-        assertEquals(110, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the preferences' view laid out by a split grid among them");
-        assertEquals(45, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+        assertEquals(108, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the preferences' view laid out by a split grid among them");
+        assertEquals(44, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
     /** Every node of the whole house a stateless functional object, as jOntology judges one: the extensions' too. */
@@ -76,14 +76,15 @@ class WholeHouseTaxonomyTest {
 
     /**
      * Every word of the catalogue the whole house says, but those it has for the common components it
-     * has no leaf for yet - kept whole so a component is built from them - Host, a floater's, and Cell, a
-     * grid's own cell's, which the mirror drew until its cells became pane thumbnails.
+     * has no leaf for yet - kept whole so a component is built from them - Host, a floater's, Cell, a
+     * grid's own cell's, which the mirror drew until its cells became pane thumbnails, and Dock, which the
+     * dock grid gave its docks until they became a split grid's residents, the docking the desk's.
      */
     @Test
     void everyRoleNamed_butTheWordsKeptForWhatIsToCome() {
         assertEquals(List.of("placeholder", "error", "check", "query", "skip", "increase", "decrease", "clear", "remove",
                              "previous", "next", "first", "last", "more", "foot", "host", "body", "media", "fallback", "editor",
-                             "cell", "group", "column", "opener", "pull", "scroll"),
+                             "dock", "cell", "group", "column", "opener", "pull", "scroll"),
                 HOUSE.roles().stream().filter(r -> HOUSE.partsNaming(r).isEmpty()).map(r -> r.name().value()).toList());
     }
 
@@ -98,7 +99,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(17 + 86 + 21 + 91 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
+        assertEquals(17 + 85 + 21 + 91 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 
@@ -117,7 +118,7 @@ class WholeHouseTaxonomyTest {
         var expected = new LinkedHashMap<String, String>();
         for (String o : List.of("context-menu", "float-layer", "tab-opener")) expected.put(o, "overlay");
         expected.put("svg-pan-zoom", "zoomable");
-        for (String a : List.of("split-grid", "split-grid-mirror", "pane-thumbs", "dock-grid")) expected.put(a, "arrangeable");
+        for (String a : List.of("split-grid", "split-grid-mirror", "pane-thumbs")) expected.put(a, "arrangeable");
         for (String m : List.of("focus-monitor", "steward-monitor", "context-menu-steward")) expected.put(m, "monitor");
         for (String p : List.of("list-master-widget", "add-tab", "pan-zoom-bar", "mpa-chrome")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();

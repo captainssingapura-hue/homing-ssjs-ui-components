@@ -11,13 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The dock grid over a fake split grid, fake docks and a fake desk: what the
- * grid itself decides — a region per cell, each dock on the desk and in its
- * cell with the strip's menu; a part makes an empty region; a merge is
- * PaneMerge's plan, all of it or none; close goes to the heir; the ground
- * menu's rows and picks; one sink.
+ * The desk's docking over a fake split grid, fake docks and a fake desk: what the
+ * docking decides - a region per cell of the grid it is handed, each dock a resident
+ * of its cell and on the desk, with the strip's menu; a part subdivides a cell and puts
+ * an empty dock in the new one; a merge is PaneMerge's plan, all of it or none; close
+ * goes to the heir; the ground menu's rows and picks; the docks' one sink; the grid
+ * the holder's, left to it.
  */
-class DockGridTest extends JsModuleTestBase {
+class GridDockingTest extends JsModuleTestBase {
 
     private static final String SHIM = """
         var log = [], events = [];
@@ -52,10 +53,11 @@ class DockGridTest extends JsModuleTestBase {
             removeDock: function (d) { this.docks.splice(this.docks.indexOf(d), 1); log.push("removeDock:" + d.slotId); },
             move: function (tp, to) { tp.from._tabs.splice(tp.from._tabs.indexOf(tp.id), 1); to._tabs.push(tp.id); log.push("move:" + tp.id + "->" + to.slotId); } };
         var menus = { handlers: {}, handle: function (kind, h) { this.handlers[kind] = h; return this; } };
+        function grid(layout) { return new SplitGrid(fakeBranch("grid"), { layout: layout, onEvent: function (ev) { events.push(ev.kind); } }); }
         function two(extra) {
-            return new DockGrid(fakeBranch("docks"), Object.assign({ host: {}, desk: desk, menus: menus, dock: { addable: false },
-                onEvent: function (ev) { events.push(ev.kind); },
-                layout: { kind: "split", orientation: "horizontal", children: [ { node: { kind: "cell", id: "left" } }, { node: { kind: "cell", id: "right" } } ] } }, extra || {}));
+            var g = grid({ kind: "split", orientation: "horizontal", children: [ { node: { kind: "cell", id: "left" } }, { node: { kind: "cell", id: "right" } } ] });
+            return new GridDocking(fakeBranch("docks"), desk, g, Object.assign({ menus: menus, dock: { addable: false },
+                onEvent: function (ev) { events.push(ev.kind); } }, extra || {}));
         }
         function dockOf(dg, id) { return dg.region(id).dock; }
         function row(id, pane) { return menus.handlers.split.state(id, { pane: pane }); }
@@ -66,7 +68,7 @@ class DockGridTest extends JsModuleTestBase {
     void load() {
         js = buildContext();
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/PaneMergeModule.js");
-        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/docking/DockGridModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/docking/GridDockingModule.js");
         js.eval("js", SHIM);
     }
 
@@ -80,11 +82,12 @@ class DockGridTest extends JsModuleTestBase {
         Value o = eval("dockOf(dg, 'left').o");
         assertTrue(eval("dockOf(dg, 'left').o.host === dg.grid.cell('left')").asBoolean(), "its cell is its host");
         assertEquals("left", o.getMember("slotId").asString());
-        assertEquals("split", o.getMember("stripMenu").asString(), "the ground menu is the grid's");
+        assertEquals("split", o.getMember("stripMenu").asString(), "the ground menu is the docking's to answer");
         assertFalse(o.getMember("addable").asBoolean(), "and what every dock is made with, passed through");
         assertEquals("dock-1,dock-2", eval("dg.regions().map(function (r) { return r.dock.o.focusName; }).join()").asString(), "named by a count, never by a cell's id");
         assertTrue(eval("dg.regionOf(dockOf(dg, 'right')).id === 'right'").asBoolean());
-        assertEquals("main", eval("new DockGrid(fakeBranch('one'), { host: {}, desk: desk }).regions()[0].id").asString(), "one cell unless said");
+        assertEquals("main", eval("new GridDocking(fakeBranch('one'), desk, grid({ kind: 'cell', id: 'main' })).regions()[0].id").asString(), "a region for each of the grid's cells, whatever they are");
+        assertThrows(Exception.class, () -> eval("new GridDocking(fakeBranch('none'), desk, null)"), "no grid, no cells to reside in");
     }
 
     @Test
@@ -150,10 +153,10 @@ class DockGridTest extends JsModuleTestBase {
     }
 
     @Test
-    void theGridsEventsAndTheDocks_onOneSink_andDisposeTakesTheDocksThenTheGrid() {
+    void theDocksEvents_onItsSink_andDisposeTakesTheDocks_theGridLeftToItsHolder() {
         eval("var dg = two(); dg.part('left', 'bottom'); dockOf(dg, 'left').o.onEvent({ kind: 'TabActivated' })");
-        assertEquals("Subdivided,TabActivated", eval("events.join()").asString());
+        assertEquals("Subdivided,TabActivated", eval("events.join()").asString(), "the grid's report its holder's, the dock's the docking's - here both on one sink");
         eval("log.length = 0; dg.dispose()");
-        assertEquals("removeDock:left disposed:left removeDock:right disposed:right removeDock:c1 disposed:c1 grid:disposed", eval("log.join(' ')").asString());
+        assertEquals("removeDock:left disposed:left removeDock:right disposed:right removeDock:c1 disposed:c1", eval("log.join(' ')").asString(), "the grid is the holder's to dispose");
     }
 }

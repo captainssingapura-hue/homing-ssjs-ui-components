@@ -57,7 +57,7 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
     public record MultiTabPane() implements BranchComponent<MultiTabPaneModule>, NeedContextMenu, NeedKeyboard {
         @Override public String summary() { return "Tabs in a strip over one panel each; a press selects, a drag reorders along the rail, a right-click offers the tab's menu."; }
         /** The tab menu: opened on a chip when the pane is given a steward ({@code menus}); the site serving the pane serves the kind. */
-        @Override public Set<ContextMenuKind<?>> required() { return Set.of(TabMenu.INSTANCE); }
+        @Override public Set<ContextMenuKind<?>> required() { return Set.of(TabMenu.INSTANCE, SplitMenu.INSTANCE); }
         /** The container's own, while the pane holds the keys: the tabs walked, reordered and detached; the widget entered; the pane yielded; the menu. */
         @Override public List<KeyBinding> keys() {
             return List.of(

@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.ui.docking;
+package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.design.Icon;
 import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
@@ -11,9 +11,10 @@ import java.util.List;
  * chips leave offers — part the region beside or below, merge it into the
  * region across a splitter of its own or into one chosen, or close it, its
  * tabs going where its room goes. Owned here, by the crate whose component
- * answers it ({@link DockGridModule.DockGrid} names it as a need), and derived
- * into any site's registry that serves the grid. The object bound while it is
- * open is the dock's {@code { pane, at }}.
+ * opens it ({@link MultiTabPaneModule.MultiTabPane} names it as a need, beside
+ * the tab menu), answered by the desk's docking when the dock resides in a
+ * split grid, and derived into any site's registry that serves the pane. The
+ * object bound while it is open is the dock's {@code { pane, at }}.
  */
 public record SplitMenu() implements ContextMenuKind<SplitMenu> {
 

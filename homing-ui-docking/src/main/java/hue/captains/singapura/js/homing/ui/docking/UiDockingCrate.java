@@ -1,7 +1,5 @@
 package hue.captains.singapura.js.homing.ui.docking;
 
-import hue.captains.singapura.js.homing.component.C0_Components;
-import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
@@ -9,7 +7,6 @@ import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
-import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import java.util.List;
 
 /**
@@ -23,23 +20,21 @@ import java.util.List;
  * its own: the dock's drop-target look is the pane's, a float's frame the
  * layer's, the lines the grid's.
  */
-public final class UiDockingCrate implements Crate, ComponentVehicle {
+public final class UiDockingCrate implements Crate {
     public static final UiDockingCrate INSTANCE = new UiDockingCrate();
     private UiDockingCrate() {}
 
     @Override public String name() { return "homing-ui-docking"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiPanesCrate.INSTANCE, UiSplitGridCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiPanesCrate.INSTANCE);
     }
-
-    @Override public C0_Components<?> components() { return UiDockingComponents.INSTANCE; }
 
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(DeskModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(FloaterModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(DeskHandModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(DockGridModule.INSTANCE, StandardJsModuleType.PRIMITIVE));
+                CrateEntry.of(GridDockingModule.INSTANCE, StandardJsModuleType.PRIMITIVE));
     }
 }

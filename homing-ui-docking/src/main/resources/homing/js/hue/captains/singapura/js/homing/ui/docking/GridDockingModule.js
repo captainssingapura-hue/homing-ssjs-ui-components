@@ -1,97 +1,93 @@
 // =============================================================================
-// DockGrid — a desk's docks laid out in a split grid. A REGION IS A CELL OF THE
-// GRID AND A DOCK IN IT, and nothing sits between them: no panel, no frame.
-// The grid owns every line and never knows what a cell holds; a dock holds
-// tabs and never knows where it sits; the desk owns the tabs and moves them.
-// What the regions are, and what parting and merging them does, is said here
-// once, for every page that holds a workspace: the gallery's docking page and
-// the workspace are the same thing built from it (RFC 0066 E3, the workspace
-// detour).
+// GridDocking — a desk's docks residing in a split grid: one dock to a cell.
+// The grid is the layout and only the layout: it owns every line and never
+// knows what a cell holds. A dock is a cell's resident - it holds tabs and
+// never knows where it sits. The desk owns the tabs and moves them, and this
+// is how it docks into a grid: what the regions are, and what parting and
+// merging them does, said once for every page that holds docks in a grid -
+// the gallery's docking page and the workspace are the same thing built from
+// it (RFC 0066 E3, the workspace detour; RFC 0068, the dock grid retired).
 //
-//   new DockGrid(branch, { host, desk, layout?, menus?, dock?, chooseRegion?, onEvent?,
-//                          minCellPx?, seam?, thickness? })
-//     host     a flex box; the grid is its item and fills it
-//     desk     the Desk, the whole: every dock is added to it, and taken off it
-//              when its region goes. The holder's, made and disposed by it
-//     layout   the grid's, SplitGridTree's; one cell, "main", unless said
+//   desk.dock(branch, grid, { menus?, dock?, chooseRegion?, onEvent? })  → a GridDocking:
+//   the desk's way in, which makes one - nobody else does
+//     branch   its own, handed unactivated: the docks' branches are made under it
+//     grid     the SplitGrid the docks reside in - the holder's: made by it, its events
+//              its, disposed by it after the docking. Its cells are changed only through
+//              the docking's part, merge and close, so every cell keeps a dock
 //     menus    the page's ContextMenuSteward. A dock's tab bar, on its own ground,
-//              offers DockGrid.MENU - split beside or below, merge the region into
+//              offers GridDocking.MENU - split beside or below, merge the region into
 //              one across a splitter of its own, close it - and the picks are
 //              handled here
-//     dock     what every dock is made with besides what the grid gives it (its
+//     dock     what every dock is made with besides what the docking gives it (its
 //              host, slot, menus, the strip's menu, the sink, its focus name):
 //              addable, keys, …
 //     chooseRegion(from, regions, pick)   asked by "Merge into…" for the region the
 //              tabs go to; pick(region) merges and answers the plan. Without it,
 //              that row is not offered
-//     onEvent  the grid's events and every dock's, on one sink
-//     minCellPx, seam, thickness   the grid's: 160, on, 1 unless said
+//     onEvent  every dock's events, on one sink
 //
-//   dg.grid .desk
-//   dg.regions()          → [{ id, dock }], in the order they were made
-//   dg.region(id)  dg.regionOf(dock)
-//   dg.part(id, side)     → the new region: an empty dock in a cell of its own on
-//                           the left, right, top or bottom of that one
-//   dg.merge(id, intoId)  → PaneMerge's plan. Ok: every tab of the region to the
-//                           one named, in order, its room where the grid can put
-//                           it, and the region gone. Not: nothing moved, and the
-//                           plan says why. The last region stays
-//   dg.close(id)          → the merge into the region the room would go to
-//   dg.across(id)         → [{ way, region }]: the regions across a splitter of its
+//   gd.grid .desk
+//   gd.regions()          → [{ id, dock }], in the order they were made: a region is a cell and its dock
+//   gd.region(id)  gd.regionOf(dock)
+//   gd.part(id, side)     → the new region: the cell subdivided - left, right, top or bottom -
+//                           and an empty dock in the new one
+//   gd.merge(id, intoId)  → PaneMerge's plan. Ok: every tab of the region to the
+//                           one named, in order, then its dock gone and its cell removed,
+//                           the room where the grid can put it. Not: nothing moved, and
+//                           the plan says why. The last region stays
+//   gd.close(id)          → the merge into the region the room would go to
+//   gd.across(id)         → [{ way, region }]: the regions across a splitter of its
 //                           own - left, right, up, down - at most two
-//   dg.heirOf(id)         → the region that gains the room if this one goes
-//   dg.dispose()          the docks, empty, then the grid; dispose the desk first
+//   gd.heirOf(id)         → the region that gains the room if this one goes
+//   gd.dispose()          the docks, off the desk and gone; the grid is the holder's
 //
 // ONE OPERATION, TWO DESTINATIONS. A merge's tabs go to the region named — any
-// region, since moving tabs asks nothing of the geometry — and its room goes
+// region, since moving tabs asks nothing of the layout — and its room goes
 // where the grid can put it: the whole of it to that same region when they
 // share a splitter of their own, else to the neighbour holding it. It is all or
 // nothing: the plan is made from the two docks' tabs before one tab moves, so a
 // merge cannot stop half way and strand a widget.
 // =============================================================================
 
-const _dockGridOwner = Object.freeze({ toString: () => "dockGrid" });
+const _gridDockingOwner = Object.freeze({ toString: () => "gridDocking" });
 
 /** A splitter's side and axis, said as the way across it. */
 function _way(s) { return s.axis === "horizontal" ? (s.side === "before" ? "left" : "right") : (s.side === "before" ? "up" : "down"); }
 
-class DockGrid {
-    /** The strip-ground menu's kind: SplitMenu, declared by the component that answers it. */
+class GridDocking {
+    /** The strip-ground menu's kind: SplitMenu, declared by the dock that opens it. */
     static MENU = "split";
 
-    constructor(branch, opts) {
-        var o = opts || {}, self = this;
-        if (!branch) throw new Error("[DockGrid] a branch of its own is required");
-        if (!o.host) throw new Error("[DockGrid] opts.host is required");
-        if (!o.desk) throw new Error("[DockGrid] opts.desk is required: the docks are its");
-        branch.activate(_dockGridOwner);
+    constructor(branch, desk, grid, opts) {
+        var o = opts || {};
+        if (!branch) throw new Error("[GridDocking] a branch of its own is required");
+        if (!desk) throw new Error("[GridDocking] the desk is required: the docks are its");
+        if (!grid) throw new Error("[GridDocking] the grid is required: the docks reside in its cells");
+        branch.activate(_gridDockingOwner);
         this.branch = branch;
-        this.desk = o.desk;
+        this.desk = desk;
+        this.grid = grid;
         this._dockOpts = o.dock || {};
         this._menus = o.menus || null;
         this._choose = typeof o.chooseRegion === "function" ? o.chooseRegion : null;
         this._sink = typeof o.onEvent === "function" ? o.onEvent : null;
         this._regions = [];
         this._made = 0;   // the docks' names on the branch and the party: a count, never a cell's id
-        this.grid = new SplitGrid(branch.createBranch("grid"), {
-            host: o.host, layout: o.layout || { kind: "cell", id: "main" },
-            minCellPx: o.minCellPx == null ? 160 : o.minCellPx, seam: o.seam !== false, thickness: o.thickness == null ? 1 : o.thickness,
-            onEvent: function (ev) { self._fire(ev); }
-        });
-        this.grid.cells().forEach(function (id) { self._region(id); });
+        var self = this;
+        grid.cells().forEach(function (id) { self._region(id); });
         if (this._menus) this._handle(this._menus);
     }
 
     _fire(ev) {
         if (!this._sink) return;
-        try { this._sink(ev); } catch (e) { console.error("[DockGrid] onEvent threw on " + ev.kind + ":", e); }
+        try { this._sink(ev); } catch (e) { console.error("[GridDocking] onEvent threw on " + ev.kind + ":", e); }
     }
 
-    /** A region: a dock in that cell, on the desk. */
+    /** A region: a dock residing in that cell, on the desk. */
     _region(id) {
         var self = this, n = ++this._made;
         var dock = new MultiTabPane(this.branch.createBranch("dock-" + n), Object.assign({}, this._dockOpts, {
-            host: this.grid.cell(id), slotId: id, menus: this._menus, stripMenu: this._menus ? DockGrid.MENU : null,
+            host: this.grid.cell(id), slotId: id, menus: this._menus, stripMenu: this._menus ? GridDocking.MENU : null,
             focusName: "dock-" + n, onEvent: function (ev) { self._fire(ev); } }));
         this.desk.addDock(dock);
         var r = Object.freeze({ id: id, dock: dock });
@@ -104,7 +100,7 @@ class DockGrid {
     regionOf(dock) { for (var i = 0; i < this._regions.length; i++) if (this._regions[i].dock === dock) return this._regions[i]; return null; }
 
     part(id, side) {
-        if (!this.region(id)) throw new Error("[DockGrid] no region '" + id + "'");
+        if (!this.region(id)) throw new Error("[GridDocking] no region '" + id + "'");
         return this._region(this.grid.subdivide(id, side));
     }
 
@@ -149,7 +145,7 @@ class DockGrid {
      */
     _handle(menus) {
         var self = this;
-        menus.handle(DockGrid.MENU, {
+        menus.handle(GridDocking.MENU, {
             pick: function (id, o) {
                 var r = self.regionOf(o.pane);
                 if (!r) return;
@@ -176,7 +172,6 @@ class DockGrid {
         var desk = this.desk;
         this._regions.forEach(function (r) { try { desk.removeDock(r.dock); } catch (e) {} r.dock.dispose(); });
         this._regions = [];
-        this.grid.dispose();
         try { this.branch.dissolve(); } catch (e) {}
     }
 }

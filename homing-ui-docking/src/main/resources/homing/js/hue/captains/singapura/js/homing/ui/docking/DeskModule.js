@@ -68,6 +68,10 @@
 //                          moment the chip's centre comes near one, the float gone; dragged by its
 //                          bar's own ground, it moves as a window and lands nowhere
 //   desk.floats()          → the floats, bottom of the stack first: none while the layer is not made
+//   desk.dock(branch, grid, opts?) → a GridDocking: the desk's docks residing in a split grid, one to a
+//                          cell - the regions parted, merged and closed there (GridDockingModule). The
+//                          grid is the holder's, the layout and nothing else; the docking is made under
+//                          the branch handed, and disposed by the holder before the grid
 //   desk.dispose()         every tab-pane closed, the floats with them; the layer; the docks'
 //                          focus branches back where they were, for the docks are the page's;
 //                          the desk's own focus branch left
@@ -257,6 +261,8 @@ class Desk {
     }
 
     /** The floats, bottom of the stack first. */
+    dock(branch, grid, opts) { return new GridDocking(branch, this, grid, opts); }
+
     floats() {
         if (!this._layer) return [];
         var byId = new Map();
