@@ -116,7 +116,7 @@ public final class HouseShaping {
         @Override public Shaping parent() { return Shaping.INSTANCE; }
     }
 
-    /** The line between two regions, moved by hand. */
+    /** Where two of the owner's regions meet. */
     public record Seam() implements Role<Dividers> { public static final Seam INSTANCE = new Seam(); @Override public Dividers parent() { return Dividers.INSTANCE; } }
     /** Marks where a group or a step ends. */
     public record Break() implements Role<Dividers> { public static final Break INSTANCE = new Break(); @Override public Dividers parent() { return Dividers.INSTANCE; } }

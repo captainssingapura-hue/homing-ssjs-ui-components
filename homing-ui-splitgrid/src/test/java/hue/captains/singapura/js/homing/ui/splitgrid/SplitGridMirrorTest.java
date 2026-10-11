@@ -75,6 +75,7 @@ class SplitGridMirrorTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         loadModule(P + "SplitGridEventsModule.js");
         loadModule(P + "SplitGridTreeModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/sizing/RailModule.js");
         loadModule(P + "SplitGridGeometryModule.js");
         TextsInJs.load(js, this::loadModule);   // the look, and the kicker each cell's name is
         loadModule(P + "SplitGridMirrorModule.js");

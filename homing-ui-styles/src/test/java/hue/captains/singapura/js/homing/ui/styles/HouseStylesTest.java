@@ -140,7 +140,7 @@ class HouseStylesTest {
         for (String text : List.of("heading", "lede", "kicker", "caption", "label", "readout", "badge", "pill", "wordmark")) expected.add(text + " type-scale");
         expected.addAll(Set.of("readout type-treatment", "badge type-treatment", "badge size-inset", "badge shape-corner",
                 "pill type-treatment", "pill size-inset", "pill shape-corner"));
-        expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph", "pane-thumb shape-border"));
+        expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph", "boundary-line size-extent", "pane-thumb shape-border"));
         expected.addAll(Set.of("slider size-inset", "slider size-gap", "slider affordance-select", "knob type-scale", "knob affordance-cursor", "detent size-extent", "tick size-extent"));
         expected.addAll(Set.of("context-menu type-face", "context-menu affordance-select", "menu-item size-gap", "menu-item type-scale", "menu-item affordance-cursor"));
         expected.addAll(Set.of("tab type-scale", "tab affordance-select", "tab affordance-cursor", "tab-strip affordance-select", "tab-strip size-gap", "tab-strip size-inset"));
@@ -156,7 +156,7 @@ class HouseStylesTest {
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
-                + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash;"
+                + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash, a layout's boundary a hairline;"
                 + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size; a row of actions capped as groups are ruled apart, its room; a trail's crumbs apart, in the caption's size; a card's proportion, ring and pointer, a group of sliders framed as a card; a brand's mark apart from its name, a preferences button framed as a button");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),

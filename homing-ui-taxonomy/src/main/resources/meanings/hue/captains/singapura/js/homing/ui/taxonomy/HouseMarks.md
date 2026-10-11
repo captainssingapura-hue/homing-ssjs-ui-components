@@ -16,6 +16,11 @@ Marks one step of a scale.
 
 Rules one group of rows off from the next, across the list or the menu that holds them.
 
+## BoundaryLine
+
+Where two regions of a layout meet: the line between them, the layout's own, drawn as thick as its look says or not
+drawn at all.
+
 ## Delimiter
 
 Marks where one step of a run ends and the next begins, on the same line as the steps.

@@ -29,13 +29,14 @@ class UiSplitGridCrateConformanceTest {
         assertEquals(List.of(), CrateDependencyRule.check(UiSplitGridCrate.INSTANCE));
     }
 
+    /** The grid's classes place: its line, its mirror and its cells wear the house's look, and nothing here wears a word or holds a value. */
     @Test
-    void theSplitterPaintsNothingOfItsOwn() {
-        var worn = Deployment.wornBy(List.of(SplitGridStyles.INSTANCE));
-        assertTrue(worn.size() >= 4, "the divider classes wear a handful of pairs - the mirror none, its look the house's; found " + worn.size());
+    void theGridPaintsNothingOfItsOwn() {
+        assertTrue(Deployment.wornBy(List.of(SplitGridStyles.INSTANCE)).isEmpty(), "no design word worn: the line's look is the house's casting");
         for (CssClass<SplitGridStyles> c : SplitGridStyles.INSTANCE.cssClasses()) {
             String body = c.body();
-            assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color"),
+            assertTrue(c.wears().isEmpty() && c.reads().isEmpty(), c.getClass().getSimpleName() + " wears or reads a design word");
+            assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color") || body.contains("background"),
                     c.getClass().getSimpleName() + " holds a value the substrate should bind: " + body);
         }
     }

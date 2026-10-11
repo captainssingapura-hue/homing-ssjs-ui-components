@@ -18,6 +18,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.CAPTION;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LINK;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SEPARATOR;
+import static hue.captains.singapura.js.homing.ui.styles.Say.BOUNDARY_LINE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DELIMITER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.KICKER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.LEDE;
@@ -177,6 +178,14 @@ final class HouseRule {
                 //    the trail, a sign rather than a word ──
                 rest(SEPARATOR, BORDER, "border-color: color-mix(in srgb, currentColor 30%, transparent);"),
                 rest(DELIMITER, INK, "color: color-mix(in srgb, currentColor 60%, transparent);"),
+                // ── a layout's boundary: the line two regions meet at, in the palette's edge, whether the hand may move it
+                //    or not; where it may - a splitter - lit with the accent part of the way under the hand, and at full
+                //    while the hand has it or the keys are on it: its colour alone changes ──
+                when(BOUNDARY_LINE, BACKGROUND, Map.of(
+                        State.REST, ground(s.border()),
+                        State.HOVER, ground("color-mix(in srgb, " + s.accent() + " 50%, " + s.border() + ")"),
+                        State.FOCUS, ground(s.accent()),
+                        State.DRAGGING, ground(s.accent()))),
                 rest(BADGE, BACKGROUND, ground("color-mix(in srgb, " + s.accent() + " 18%, transparent)")),
                 rest(PILL, BACKGROUND, ground("color-mix(in srgb, currentColor 10%, transparent)")),
                 // ── a pane's thumbnail: raised, a hairline round it; the current one - the cursor's - tinted with the accent and edged with it ──

@@ -26,13 +26,13 @@ class HouseRoleCatalogueTest {
     private static final RoleCatalogue CATALOGUE = HouseRoleCatalogue.INSTANCE.read();
 
     @Test
-    void threeTopBranches_eighteenBeneath_ninetyOneRoles() {
+    void threeTopBranches_eighteenBeneath_ninetyTwoRoles() {
         assertEquals(List.of(HouseSaying.Saying.INSTANCE, HouseDoing.Doing.INSTANCE, HouseShaping.Shaping.INSTANCE),
                 CATALOGUE.children(RoleRoot.INSTANCE));
         assertEquals(21, CATALOGUE.branches().size());
         assertEquals(18, CATALOGUE.branches().stream().filter(b -> b.level() == 2).count());
-        assertEquals(91, CATALOGUE.roles().size());
-        assertEquals(91, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
+        assertEquals(92, CATALOGUE.roles().size());
+        assertEquals(92, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
     }
 
     @Test
@@ -46,7 +46,7 @@ class HouseRoleCatalogueTest {
         expected.put("scaling", List.of("span", "rest", "notch", "figure"));
         expected.put("choosing", List.of("choice", "style", "palette", "what", "how", "where", "picker", "query"));
         expected.put("committing", List.of("go", "cancel", "action", "skip"));
-        expected.put("changing", List.of("toggle", "adjust", "thumb", "reset", "increase", "decrease", "clear"));
+        expected.put("changing", List.of("toggle", "adjust", "thumb", "splitter", "reset", "increase", "decrease", "clear"));
         expected.put("viewing", List.of("zoom-in", "zoom-out", "fit"));
         expected.put("managing", List.of("close", "add", "remove"));
         expected.put("going", List.of("open", "home", "preferences", "path", "step", "previous", "next", "first", "last", "more"));
@@ -70,7 +70,7 @@ class HouseRoleCatalogueTest {
             assertEquals(2, branch.level(), r + " is filed at level 2");
             perTop.merge(CATALOGUE.parent(branch).name().value(), 1L, Long::sum);
         }
-        assertEquals(Map.of("saying", 24L, "doing", 35L, "shaping", 32L), perTop);
+        assertEquals(Map.of("saying", 24L, "doing", 36L, "shaping", 32L), perTop);
     }
 
     @Test
@@ -86,7 +86,7 @@ class HouseRoleCatalogueTest {
     @Test
     void readWithTheBase_theWordsOnlyTheExtensionsSay_goUnnamed() {
         var findings = HouseTaxonomy.INSTANCE.read().findings();
-        assertEquals(58, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
-                "thirty-three the extensions name - a split's seam among them, now the split grid's alone - twenty-four no component says yet, and Host - a floater's, not in the first cut");
+        assertEquals(59, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
+                "thirty-four the extensions name - a split's seam and its splitter among them, the split grid's alone - twenty-four no component says yet, and Host - a floater's, not in the first cut");
     }
 }

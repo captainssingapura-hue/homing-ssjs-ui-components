@@ -44,7 +44,7 @@ Holds what is shown over the page, apart from its flow, for as long as it is nee
 
 ## Split
 
-Shares a room between several things, each given its share, and lets the user change the shares.
+Shares a room between several things, each given its share; where it is resizable, the user changes the shares.
 
 ## Bar
 

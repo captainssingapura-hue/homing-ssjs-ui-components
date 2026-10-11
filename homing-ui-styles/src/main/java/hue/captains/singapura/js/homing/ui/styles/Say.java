@@ -264,6 +264,21 @@ final class Say {
         return List.copyOf(out);
     }
 
+    // ── a layout's boundary: the line two of its regions meet at ──
+
+    static final Taxon BOUNDARY_LINE = HouseMarks.BoundaryLine.INSTANCE;
+
+    /**
+     * How thick a layout's boundaries are drawn: across the line - laid along, between regions one above the other,
+     * its height; upright, between regions side by side, its width. Its length is its layout's. Flat in every state:
+     * only its colour changes, so a line the hand moves is the same line the layout draws.
+     */
+    static List<Implementation<?>> boundaryRule(String thickness) {
+        return List.of(when(BOUNDARY_LINE, EXTENT, Map.of(
+                State.REST, "block-size: " + thickness + ";",
+                State.VERTICAL, "inline-size: " + thickness + "; block-size: auto;")));
+    }
+
     // ── a pane's thumbnail: a picture of a pane to pick it by - a part, flat in every state ──
 
     static final Taxon PANE_THUMB = HouseControls.PaneThumb.INSTANCE;

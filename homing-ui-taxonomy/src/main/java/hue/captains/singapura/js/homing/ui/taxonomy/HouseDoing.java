@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 /**
  * The house's role catalogue, its second top branch: what a part lets the user do to its owner -
  * choose, commit, change its value, change how it is seen, manage what it holds, go elsewhere.
- * Thirty-five roles under six branches.
+ * Thirty-six roles under six branches.
  */
 public final class HouseDoing {
 
@@ -76,6 +76,8 @@ public final class HouseDoing {
     public record Adjust() implements Role<Changing> { public static final Adjust INSTANCE = new Adjust(); @Override public Changing parent() { return Changing.INSTANCE; } }
     /** Takes the hand to set the value. */
     public record Thumb() implements Role<Changing> { public static final Thumb INSTANCE = new Thumb(); @Override public Changing parent() { return Changing.INSTANCE; } }
+    /** Takes the hand at a boundary, so the room moves from the region on one side of it to the other. */
+    public record Splitter() implements Role<Changing> { public static final Splitter INSTANCE = new Splitter(); @Override public Changing parent() { return Changing.INSTANCE; } }
     /** Puts the owner's value back to its default. */
     public record Reset() implements Role<Changing> { public static final Reset INSTANCE = new Reset(); @Override public Changing parent() { return Changing.INSTANCE; } }
     /** Raises the owner's value by one step. */

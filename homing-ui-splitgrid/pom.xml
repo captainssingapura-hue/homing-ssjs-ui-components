@@ -60,6 +60,12 @@
             <artifactId>homing-ui-elements</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- Sizing, applied when the grid is resizable: a rail to each split, a handle on each line. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-sizing</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- How the mirror is controlled - arranged - which its branch no longer says. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

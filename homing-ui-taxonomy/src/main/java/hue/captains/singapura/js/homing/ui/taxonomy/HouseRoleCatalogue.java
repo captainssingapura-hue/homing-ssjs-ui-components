@@ -36,7 +36,7 @@ public record HouseRoleCatalogue() implements StatelessFunctionalObject {
                 HouseDoing.Choice.INSTANCE, HouseDoing.Style.INSTANCE, HouseDoing.Palette.INSTANCE, HouseDoing.What.INSTANCE,
                 HouseDoing.How.INSTANCE, HouseDoing.Where.INSTANCE, HouseDoing.Picker.INSTANCE, HouseDoing.Query.INSTANCE,
                 HouseDoing.Go.INSTANCE, HouseDoing.Cancel.INSTANCE, HouseDoing.Action.INSTANCE, HouseDoing.Skip.INSTANCE,
-                HouseDoing.Toggle.INSTANCE, HouseDoing.Adjust.INSTANCE, HouseDoing.Thumb.INSTANCE, HouseDoing.Reset.INSTANCE,
+                HouseDoing.Toggle.INSTANCE, HouseDoing.Adjust.INSTANCE, HouseDoing.Thumb.INSTANCE, HouseDoing.Splitter.INSTANCE, HouseDoing.Reset.INSTANCE,
                 HouseDoing.Increase.INSTANCE, HouseDoing.Decrease.INSTANCE, HouseDoing.Clear.INSTANCE,
                 HouseDoing.ZoomIn.INSTANCE, HouseDoing.ZoomOut.INSTANCE, HouseDoing.Fit.INSTANCE,
                 HouseDoing.Close.INSTANCE, HouseDoing.Add.INSTANCE, HouseDoing.Remove.INSTANCE,

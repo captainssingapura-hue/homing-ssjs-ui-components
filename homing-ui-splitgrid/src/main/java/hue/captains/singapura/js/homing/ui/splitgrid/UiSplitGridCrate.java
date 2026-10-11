@@ -7,12 +7,14 @@ import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
+import hue.captains.singapura.js.homing.sizing.SizingCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import java.util.List;
 
 /**
  * The split grid's crate: the grid, the mirror, the tree algebra, the
- * geometry, the events and the styles, on the runtime and the design targets.
+ * geometry, the events and the styles, on the runtime, the house's look and
+ * sizing - which the grid applies when it is resizable.
  * The grid and the mirror are primitives, owning the DOM on their branches;
  * the tree, the geometry and the events are pure logic.
  */
@@ -23,7 +25,7 @@ public final class UiSplitGridCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-splitgrid"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiElementsCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiElementsCrate.INSTANCE, SizingCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiSplitGridComponents.INSTANCE; }

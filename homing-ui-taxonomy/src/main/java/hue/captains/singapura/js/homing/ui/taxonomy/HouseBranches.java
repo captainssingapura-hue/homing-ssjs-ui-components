@@ -30,7 +30,7 @@ public final class HouseBranches {
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
-    /** A control that is grabbed and moved: a knob, a grip, a divider. */
+    /** A control that is grabbed and moved: a knob, a grip. */
     public record Handle() implements L2_ComponentBranch<Control> {
         public static final Handle INSTANCE = new Handle();
         @Override public Control parent() { return Control.INSTANCE; }

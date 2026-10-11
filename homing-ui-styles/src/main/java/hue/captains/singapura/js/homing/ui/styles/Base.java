@@ -14,6 +14,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.bareFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.textMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.waysMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.marksMeasure;
+import static hue.captains.singapura.js.homing.ui.styles.Say.boundaryRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.thumbRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.sliderBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.menuBase;
@@ -100,6 +101,8 @@ public record Base() implements DesignStyle {
             textMeasure(),
             waysMeasure(),
             marksMeasure(),
+            // ── a layout's boundaries a hairline, unless the style draws them thicker ──
+            boundaryRule("1px"),
             // ── a pane's thumbnail ruled round with a hairline ──
             thumbRule("1px"),
             // ── a slider's room, its knob grabbed, and its detent and ticks as most styles mark them ──

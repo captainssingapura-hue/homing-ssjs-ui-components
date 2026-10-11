@@ -135,11 +135,6 @@ public final class HouseControls {
         @Override public Handle parent() { return Handle.INSTANCE; }
     }
 
-    /** What is grabbed to move the line between two regions. */
-    public record Divider() implements Component<Handle> {
-        public static final Divider INSTANCE = new Divider();
-        @Override public Handle parent() { return Handle.INSTANCE; }
-    }
 
     // ── other controls ───────────────────────────────────────────────────
 

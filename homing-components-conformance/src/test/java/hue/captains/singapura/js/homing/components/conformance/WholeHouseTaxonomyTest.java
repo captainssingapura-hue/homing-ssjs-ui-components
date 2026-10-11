@@ -50,8 +50,8 @@ class WholeHouseTaxonomyTest {
     void theWholeHouse_isReadAsItWasBeforeItWasCut() {
         assertEquals(17, HOUSE.branches().size());
         assertEquals(85, HOUSE.components().size(), "the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents");
-        assertEquals(91, HOUSE.roles().size(), "the catalogue beside the tree");
-        assertEquals(108, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the preferences' view laid out by a split grid among them");
+        assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree");
+        assertEquals(109, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the preferences' view laid out by a split grid among them, and the grid's line in two roles");
         assertEquals(44, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
@@ -99,7 +99,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(17 + 85 + 21 + 91 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
+        assertEquals(17 + 85 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 

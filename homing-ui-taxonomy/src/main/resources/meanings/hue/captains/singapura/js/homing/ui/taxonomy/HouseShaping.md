@@ -134,7 +134,8 @@ What separates the owner's regions or members.
 
 ## Seam
 
-The line between two regions, moved by hand to give one more room.
+Where two of the owner's regions meet: the line between them, and nothing the hand takes - a boundary the hand
+moves is a splitter.
 
 ## Break
 

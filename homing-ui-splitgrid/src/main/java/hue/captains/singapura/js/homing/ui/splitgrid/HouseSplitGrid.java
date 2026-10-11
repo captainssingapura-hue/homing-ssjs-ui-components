@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 
@@ -28,13 +29,18 @@ public record HouseSplitGrid() implements TaxonomyExtension {
         return List.of(SplitGrid.INSTANCE, SplitGridMirror.INSTANCE, GridCell.INSTANCE);
     }
 
-    /** A grid of cells split in both directions, its dividers between them. Its cells are its own. */
+    /**
+     * A grid of cells split in both directions, a boundary line where two meet - the grid's part, in the
+     * house's look: a splitter where the grid is resizable, the hand moving it; a seam where it is not.
+     * Its cells are its own.
+     */
     public record SplitGrid() implements Component<HouseBranches.Split> {
         public static final SplitGrid INSTANCE = new SplitGrid();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.Divider.INSTANCE).as(HouseShaping.Seam.INSTANCE).any());
+            return List.of(DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseDoing.Splitter.INSTANCE).any(),
+                           DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseShaping.Seam.INSTANCE).any());
         }
     }
 

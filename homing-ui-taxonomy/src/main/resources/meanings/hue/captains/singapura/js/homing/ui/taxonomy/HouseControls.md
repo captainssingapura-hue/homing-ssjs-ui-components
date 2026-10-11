@@ -46,10 +46,6 @@ What the user takes hold of to move a value along a track.
 
 What the user takes hold of to move the thing it is on.
 
-## Divider
-
-What the user takes hold of to move the line between two regions, giving one more room.
-
 ## Link
 
 Takes the user somewhere else, and says where.

@@ -78,6 +78,11 @@ Sets the owner's number anywhere along its scale.
 
 Takes the user's hand, so the owner's value moves with it.
 
+## Splitter
+
+Takes the user's hand at the boundary between two of the owner's regions, so the room moves from the one to the other
+with it: what makes a split resizable.
+
 ## Reset
 
 Puts the owner's value back to its default, undoing what the user set.

@@ -39,6 +39,16 @@ public final class HouseMarks {
         @Override public Mark parent() { return Mark.INSTANCE; }
     }
 
+    /**
+     * The line where two regions of a layout meet: the layout's own, drawn as its look says - as thick
+     * as that, or not drawn at all. Never by itself: a boundary is between two regions. Its role says
+     * whether the hand may move it; upright, it reads {@code aria-orientation}.
+     */
+    public record BoundaryLine() implements Component<Mark> {
+        public static final BoundaryLine INSTANCE = new BoundaryLine();
+        @Override public Mark parent() { return Mark.INSTANCE; }
+    }
+
     /** A mark between the steps of a run, on one line with them: the sign between a trail's crumbs. */
     public record Delimiter() implements Component<Mark> {
         public static final Delimiter INSTANCE = new Delimiter();

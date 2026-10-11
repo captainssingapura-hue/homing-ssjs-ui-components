@@ -35,7 +35,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseControls.PlainButton.INSTANCE, HouseControls.PrimaryButton.INSTANCE, HouseControls.SecondaryButton.INSTANCE,
                 HouseControls.DangerButton.INSTANCE, HouseControls.WarningButton.INSTANCE, HouseControls.SuccessButton.INSTANCE,
                 HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE,
-                HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Divider.INSTANCE,
+                HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE,
                 HouseControls.Link.INSTANCE, HouseControls.Crumb.INSTANCE, HouseControls.Range.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.Slider.INSTANCE, HouseControls.Select.INSTANCE,
                 HouseControls.PaneThumb.INSTANCE, HouseControls.Tab.INSTANCE, HouseControls.Brand.INSTANCE, HouseControls.PreferencesButton.INSTANCE,
@@ -54,7 +54,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseText.Lede.INSTANCE, HouseText.Readout.INSTANCE, HouseText.Badge.INSTANCE, HouseText.Pill.INSTANCE,
                 HouseText.Wordmark.INSTANCE,
                 // marks and tracks
-                HouseMarks.Icon.INSTANCE, HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE,
+                HouseMarks.Icon.INSTANCE, HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE, HouseMarks.BoundaryLine.INSTANCE,
                 HouseMarks.Delimiter.INSTANCE, HouseMarks.Lamp.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.DropMark.INSTANCE,
                 HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
     }
