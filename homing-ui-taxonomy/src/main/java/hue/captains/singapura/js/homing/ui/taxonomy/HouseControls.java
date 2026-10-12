@@ -165,6 +165,18 @@ public final class HouseControls {
         @Override public Control parent() { return Control.INSTANCE; }
     }
 
+    /** Words the user types: a line of them, or as many as they write - the browser's own editing. */
+    public record TextBox() implements Component<Control> {
+        public static final TextBox INSTANCE = new TextBox();
+        @Override public Control parent() { return Control.INSTANCE; }
+    }
+
+    /** One thing on or off, by a mark in a box - the browser's own. */
+    public record Checkbox() implements Component<Control> {
+        public static final Checkbox INSTANCE = new Checkbox();
+        @Override public Control parent() { return Control.INSTANCE; }
+    }
+
     /** A pane, picked by a small picture of where it is, with its name: a thumbnail's, a grid's mirror's. */
     public record PaneThumb() implements Component<Control> {
         public static final PaneThumb INSTANCE = new PaneThumb();

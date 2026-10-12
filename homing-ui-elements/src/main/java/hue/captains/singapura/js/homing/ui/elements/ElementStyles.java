@@ -646,6 +646,16 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         @Override public String body() { return "overflow: auto;"; }
     }
 
+    // ── The browser's own controls ────────────────────────────────────────────
+
+    /**
+     * A checkbox the browser draws, its mark in the colour its look gives it (the accent): an owner realizing the house's
+     * checkbox on a native one wears this beside its look, as a range does. No margin of its own: where it sits is its owner's.
+     */
+    public record el_checkbox() implements CssClass<ElementStyles> {
+        @Override public String body() { return "accent-color: currentColor;\nmargin: 0;\n"; }
+    }
+
     // ── Edge strip ────────────────────────────────────────────────────────────
 
     /**
@@ -766,6 +776,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_group(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
                        new el_card(), new el_card_head(), new el_card_title(), new el_badge(), new el_card_body(), new el_card_text(), new el_card_foot(), new el_card_link(),
                        new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(),
+                       new el_checkbox(),
                        new el_strip(), new el_strip_hidden(), new el_strip_lip(),
                        new el_site_bar(), new el_site_bar_start(), new el_site_bar_way(), new el_site_bar_end(),
                        new el_brand(), new el_brand_mark(), new el_trail(), new el_trail_crumb());

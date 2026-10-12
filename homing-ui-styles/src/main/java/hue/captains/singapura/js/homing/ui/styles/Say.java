@@ -726,6 +726,34 @@ final class Say {
         return List.copyOf(out);
     }
 
+    // ── the browser's own controls in the house's look: a text box and a select boxed as a button is, a checkbox in the accent ──
+
+    static final Taxon TEXT_BOX = HouseControls.TextBox.INSTANCE;
+    static final Taxon SELECT = HouseControls.Select.INSTANCE;
+    static final Taxon CHECKBOX = HouseControls.Checkbox.INSTANCE;
+    /** The boxes the browser draws text in: a text box, and a select. */
+    static final List<Taxon> BOXES = List.of(TEXT_BOX, SELECT);
+
+    /**
+     * What every style's boxes say alike: a button's corner and rule - a box beside a button is framed as it is - and
+     * its type, in the text's face; four pixels above and below what they hold and eight at their sides, grown by the
+     * size as a button's are; their edge eased as the ring comes; a text box pointed at as text is. A checkbox is the
+     * browser's own mark, in the colour its look gives it; nothing else of it is the house's.
+     */
+    static List<Implementation<?>> boxesBase() {
+        var out = new ArrayList<Implementation<?>>();
+        for (Taxon box : BOXES) {
+            out.add(new Implementation<>(box, CORNER, new Answer.Redirect<>(BUTTON)));
+            out.add(new Implementation<>(box, BORDER, new Answer.Redirect<>(BUTTON)));
+            out.add(new Implementation<>(box, SCALE, new Answer.Redirect<>(BUTTON)));
+            out.add(new Implementation<>(box, FACE, new Answer.Redirect<>(TEXT)));
+            out.add(rest(box, INSET, "padding-block: " + grows("4px", "1.25") + "; padding-inline: " + grows("8px", "1.25") + ";"));
+            out.add(rest(box, EASE, "transition: border-color 140ms ease, outline-color 140ms ease;"));
+        }
+        out.add(rest(TEXT_BOX, CURSOR, "cursor: text;"));
+        return List.copyOf(out);
+    }
+
     // ── a panel: a region that fills what holds it - framed as a card is unless its container draws the lines, a head over its
     //    body, the line under the head the style's own word about panels; lifted off its plane or set into it as the app says ──
 

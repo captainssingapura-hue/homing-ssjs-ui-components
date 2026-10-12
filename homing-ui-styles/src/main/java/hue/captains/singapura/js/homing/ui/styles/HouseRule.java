@@ -36,6 +36,9 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BRAND;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PREFERENCES_BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CARD;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PANEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT_BOX;
+import static hue.captains.singapura.js.homing.ui.styles.Say.SELECT;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CHECKBOX;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PANEL_HEAD;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SLIDER_GROUP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.ACTION_BAR;
@@ -289,6 +292,16 @@ final class HouseRule {
                 rest(CARD, BORDER, "border-color: " + s.border() + ";"),
                 rest(SLIDER_GROUP, BACKGROUND, ground(s.raised())),
                 rest(SLIDER_GROUP, BORDER, "border-color: " + s.border() + ";"),
+                // ── the browser's own controls: a text box set into the page - recessed - a select raised as a button is, each in the
+                //    text's ink with a hairline round it; a checkbox's mark in the accent, on no ground of its own ──
+                rest(TEXT_BOX, BACKGROUND, ground(s.recessed())),
+                rest(TEXT_BOX, INK, "color: " + s.text() + ";"),
+                rest(TEXT_BOX, BORDER, "border-color: " + s.border() + ";"),
+                rest(SELECT, BACKGROUND, ground(s.raised())),
+                rest(SELECT, INK, "color: " + s.text() + ";"),
+                rest(SELECT, BORDER, "border-color: " + s.border() + ";"),
+                rest(CHECKBOX, BACKGROUND, ground("transparent")),
+                rest(CHECKBOX, INK, "color: " + s.accent() + ";"),
                 // ── a panel: raised, in the text's ink, a hairline round it - the accent's while it is the current one; the line
                 //    under its head in the accent, as a tab strip's foot is ──
                 rest(PANEL, BACKGROUND, ground(s.raised())),

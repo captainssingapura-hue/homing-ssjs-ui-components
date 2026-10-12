@@ -62,6 +62,14 @@ Sets a number along a scale, natively, with no more than the scale itself.
 
 Sets one value from a list that opens when asked and closes once picked.
 
+## TextBox
+
+Takes the words the user types - a line, or as many as they write - and lets them edit them where they stand.
+
+## Checkbox
+
+Sets one thing on or off by a mark in a box, and shows which it is.
+
 ## PaneThumb
 
 Picks one pane by a small picture of where it is.
