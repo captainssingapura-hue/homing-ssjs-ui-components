@@ -613,6 +613,19 @@ final class Say {
     /** A label cast as a title: a floating pane's, on its title bar. */
     static final Casting PANE_TITLE = new Casting(HouseText.Label.INSTANCE, HouseSaying.Title.INSTANCE);
     static final Taxon SITE_BAR = HouseContainers.SiteBar.INSTANCE;
+    static final Taxon EDGE_STRIP = HouseContainers.EdgeStrip.INSTANCE;
+
+    /**
+     * What every style's edge strip says alike - a bar of controls laid over its host's foot: eight pixels above and
+     * below what it carries and fourteen at its sides, eight between, a hairline along its top where it lies over the
+     * host, and the shadow of what floats over a page - the floating pane's, as the style worn casts it.
+     */
+    static List<Implementation<?>> stripBase() {
+        return List.of(rest(EDGE_STRIP, INSET, "padding-block: 8px; padding-inline: 14px;"),
+                       rest(EDGE_STRIP, GAP, "gap: 8px;"),
+                       rest(EDGE_STRIP, BORDER, "border-width: 1px 0 0 0; border-style: solid;"),
+                       new Implementation<>(EDGE_STRIP, SHADOW, new Answer.Redirect<>(FLOATING_PANE)));
+    }
 
     /**
      * What every style's site chrome says alike: a brand's mark ten pixels from its name, undecorated; a preferences

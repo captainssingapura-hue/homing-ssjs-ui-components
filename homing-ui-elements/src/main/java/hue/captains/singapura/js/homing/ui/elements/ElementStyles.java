@@ -774,12 +774,10 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * line, and wrap whole to a second row when the host is narrow.
      */
     public record el_strip() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Container.Panel.Head.class, Size.Inset.class), of(Container.Panel.Head.class, Size.Gap.class),
-                           of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Body.class, Type.Face.class),
-                           of(Overlay.class, Shape.Shadow.class));
-        }
-        /** The overlay's shadow is cast in the inverted layer's colour, which the old design binds only when it is required: read, so it stays bound. */
+        /**
+         * The old designs' shadows other classes still wear - a control's, a panel's - are cast in the inverted layer's
+         * colour, which an old design binds only when it is required: read here, so it stays bound until the old stack goes.
+         */
         @Override public List<? extends Wearable> reads() { return List.of(of(Inverted.class, Color.Surface.class)); }
         @Override public String body() { return """
             position: absolute;
@@ -803,7 +801,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The lip: the thin band at the host's foot the hand comes to, in the strip's own face — the strip's edge, showing. */
     public record el_strip_lip() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class)); }
         @Override public String body() { return """
             flex: none;
             block-size: 6px;

@@ -25,7 +25,9 @@
 // without the strip going: it goes a little after the hand has left both.
 //
 // It takes no keys of its own and claims nothing: what is in it is the
-// caller's, as a panel's slot is.
+// caller's, as a panel's slot is. Its look is the house's edge strip; the lip
+// wears only the strip's ground - the strip's edge, showing. Its own classes
+// only place.
 // =============================================================================
 
 const _stripOwner = Object.freeze({ toString: () => "edgeStrip" });
@@ -34,6 +36,8 @@ const _stripOwner = Object.freeze({ toString: () => "edgeStrip" });
 var _EDGE_STRIP_GRACE = 250;
 
 class EdgeStrip {
+    static LEAF = "edge-strip";
+
     /** On a sub-branch the caller made, with its properties. */
     constructor(branch, props) {
         if (!branch) throw new Error("[EdgeStrip] a branch of its own is required");
@@ -45,10 +49,13 @@ class EdgeStrip {
         this._held = false;
         this._timer = null;
 
+        var look = new Look(EdgeStrip, ROLE.STANDALONE);
         var lip = branch.createElement("lip", "div");
         css.addClass(lip, el_strip_lip);
+        look.wear(lip, { only: ["color-background"] });   // the strip's edge, showing
         var strip = branch.createElement("strip", "div");
         css.addClass(strip, el_strip);
+        look.wear(strip);
         strip.setAttribute("role", "group");
         if (p.label != null) strip.setAttribute("aria-label", String(p.label));
         this.lip = lip;

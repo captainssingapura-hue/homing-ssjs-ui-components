@@ -56,8 +56,9 @@ class EdgeStripTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        TextsInJs.load(js, this::loadModule);   // its look the house's
         loadModule(DIR + "ui/elements/EdgeStripModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }
@@ -67,6 +68,10 @@ class EdgeStripTest extends JsModuleTestBase {
     void aLipAtTheFoot_andAStripOverIt_hiddenUntilAskedFor() {
         assertEquals("lip,strip", eval("host.children.map(function (c) { return c.name; }).join()").asString(), "the lip in the host's flow, the strip after it");
         assertTrue(eval("strip.lip.classList.contains('el_strip_lip') && strip.root.classList.contains('el_strip')").asBoolean());
+        assertTrue(eval("strip.root.classList.contains('edge-strip__color-background') && strip.root.classList.contains('edge-strip__size-inset')").asBoolean(),
+                "the strip wears the house's edge strip");
+        assertTrue(eval("strip.lip.classList.contains('edge-strip__color-background') && !strip.lip.classList.contains('edge-strip__size-inset')").asBoolean(),
+                "the lip its ground alone: the strip's edge, showing");
         assertEquals("group", eval("strip.root.getAttribute('role')").asString());
         assertEquals("Workspace", eval("strip.root.getAttribute('aria-label')").asString(), "named for whoever cannot see it");
         assertTrue(eval("hidden() && !strip.isShown()").asBoolean(), "not there until the hand comes to the edge");

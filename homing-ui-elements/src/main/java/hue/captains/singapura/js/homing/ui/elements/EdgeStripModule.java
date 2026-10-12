@@ -40,6 +40,8 @@ public record EdgeStripModule() implements DomModule<EdgeStripModule>, ImplFor<H
                         new ElementStyles.el_strip_hidden(),
                         new ElementStyles.el_strip_lip()
                 ), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();
     }
 

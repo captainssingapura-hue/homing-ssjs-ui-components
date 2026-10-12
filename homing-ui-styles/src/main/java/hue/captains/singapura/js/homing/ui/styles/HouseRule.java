@@ -21,6 +21,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.SEPARATOR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BOUNDARY_LINE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.GROUND;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SITE_BAR;
+import static hue.captains.singapura.js.homing.ui.styles.Say.EDGE_STRIP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.FLOATING_PANE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TITLE_BAR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.FLOAT_LAYER;
@@ -122,6 +123,10 @@ final class HouseRule {
                 rest(SITE_BAR, BACKGROUND, ground(s.inverted())),
                 rest(SITE_BAR, INK, "color: " + s.ground() + ";"),
                 rest(SITE_BAR, BORDER, "border-color: " + s.accent() + ";"),
+                // ── an edge strip, laid over its host's foot: raised, in the text's ink, a hairline along its top ──
+                rest(EDGE_STRIP, BACKGROUND, ground(s.raised())),
+                rest(EDGE_STRIP, INK, "color: " + s.text() + ";"),
+                rest(EDGE_STRIP, BORDER, "border-color: " + s.border() + ";"),
                 // ── the desk panes float over, recessed below the page; a pane that floats - a dialog's window is one: raised, in the text's ink, a hairline round it, the accent's edge
                 //    while it is the active one; its title bar inverted as the site's bar is, a hairline under it, the title's
                 //    colour while it is in the hand ──
