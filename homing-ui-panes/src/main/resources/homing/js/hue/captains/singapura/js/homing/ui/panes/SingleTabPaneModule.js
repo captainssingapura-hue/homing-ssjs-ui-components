@@ -41,15 +41,24 @@
 // TabRemoved when its tab closes. Its bar wears a tab strip's look, as a pane
 // of many does, lit (aria-current) while the keys are in its tab. `css` is
 // injected with the styles import.
+//
+// Its frame wears the house's pane - the page's ground, the text's ink, and a
+// ring inside its edge while the keys are on it (the steward's data-keys) - and
+// no more of the look: the look's room and measure would undo the frame's place
+// in its host.
 // =============================================================================
 
 const _singleOwner = Object.freeze({ toString: () => "singleTabPane" });
 /** Its bar's leaf: a tab strip, as a pane of many has one - drawn here, with its one chip. */
 const _TAB_STRIP = Object.freeze({ LEAF: "tab-strip" });
+/** What of its look a pane's frame wears: its ground, its ink and its rings. */
+const _SINGLE_LOOK = Object.freeze(["color-background", "color-ink", "shape-outline", "color-outline"]);
 /** What of a strip's look its tail wears - the strip's room - which a bar with no tail leaves off. */
 const _NO_TAIL = Object.freeze(["size-gap", "size-inset"]);
 
 class SingleTabPane {
+    static LEAF = "single-tab-pane";
+
     /** The kind a chip's menu is asked for: the Java TabMenu's, the dock's own. */
     static MENU = "tab";
 
@@ -69,6 +78,7 @@ class SingleTabPane {
 
         var root = branch.createElement("pane", "div");
         css.addClass(root, mtp_pane);
+        new Look(SingleTabPane, ROLE.STANDALONE).wear(root, { only: _SINGLE_LOOK });
         this.el = root;
 
         // the bar: the dock's strip, holding the chip alone. A press on it moves no native focus by the browser's default

@@ -346,11 +346,6 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** The pane while a tab from outside is offered to it: the drop-target word, on its surface, its edge and its rule. */
-    public record mtp_dock_target() implements CssClass<PaneStyles> {
-        @Override public String body() { return ""; }
-    }
-
     /** The box of an empty pane: fills the content, and gives the note it holds its room. */
     public record mtp_empty() implements CssClass<PaneStyles> {
         @Override public String body() { return """
@@ -368,7 +363,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     public List<CssClass<PaneStyles>> cssClasses() {
         return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_dragging(), new mtp_chip_shifted(),
                        new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(),
-                       new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(), new mtp_dock_target(),
+                       new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(),
                        new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(),
                        
                        new mtp_tab_content_hidden());   // last, so hidden wins over what a panel or the empty note says of its display

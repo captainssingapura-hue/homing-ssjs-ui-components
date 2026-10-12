@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.panes;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
 import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.LookModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
@@ -87,6 +88,7 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
         return ImportsFor.<MultiTabPaneModule>builder()
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripModule.TabStrip()), TabStripModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys(), new PaneKeysModule.PaneSchemes()), PaneKeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneMenusModule.PaneMenus()), PaneMenusModule.INSTANCE))
@@ -99,8 +101,7 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
                         new PaneStyles.mtp_pane(),
                         new PaneStyles.mtp_content(),
                         new PaneStyles.mtp_tab_content_hidden(),
-                        new PaneStyles.mtp_empty(),
-                        new PaneStyles.mtp_dock_target()
+                        new PaneStyles.mtp_empty()
                 ), PaneStyles.INSTANCE))
                 .build();
     }

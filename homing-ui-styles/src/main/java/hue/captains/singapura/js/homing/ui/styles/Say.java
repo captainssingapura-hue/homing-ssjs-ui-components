@@ -70,6 +70,12 @@ final class Say {
                                           State.LENT, outline(lent), State.HELD, outline(held)));
     }
 
+    /** {@code "2px solid"} as the outline's width and style, drawn inside the element's edge: its offset the width, inward. */
+    private static String inside(String ws) {
+        String[] w = ws.split(" ");
+        return "outline-width: " + w[0] + "; outline-style: " + w[1] + "; outline-offset: -" + w[0] + ";";
+    }
+
     /** {@code "2px solid -2px"} as the outline's width, style and offset. */
     private static String outline(String wso) {
         String[] w = wso.split(" ");
@@ -608,6 +614,28 @@ final class Say {
     static final Taxon PREFERENCES_BUTTON = HouseControls.PreferencesButton.INSTANCE;
     static final Taxon GROUND = HouseContainers.Ground.INSTANCE;
     static final Taxon FLOATING_PANE = HouseContainers.FloatingPane.INSTANCE;
+    /** The panes: the tabbed panes a workspace is cut into, and a pane that floats. */
+    static final Taxon PANE = HouseBranches.Pane.INSTANCE;
+
+    /**
+     * How a style rings a pane while the keys are on it - held, offered, lent to something inside it - each a width
+     * and a line, drawn inside the pane's edge, so panes side by side never paint over each other. A pane has no
+     * frame at rest.
+     */
+    static Implementation<Target.Shape.Outline> paneRings(String held, String candidate, String lent) {
+        return when(PANE, OUTLINE, Map.of(State.HELD, inside(held), State.CANDIDATE, inside(candidate), State.LENT, inside(lent)));
+    }
+
+    /**
+     * What every style's panes say alike: the keys' rings as most styles draw them - a solid line held, a dashed one
+     * offered, a fine one lent - and a dashed ring while a tab is offered to the pane; a pane that floats is lit from
+     * its own head, never offered a tab, so it is never ringed for one.
+     */
+    static List<Implementation<?>> panesBase() {
+        return List.of(when(PANE, OUTLINE, Map.of(State.HELD, inside("2px solid"), State.CANDIDATE, inside("1px dashed"),
+                                                  State.LENT, inside("1px solid"), State.HIGHLIGHTED, inside("2px dashed"))),
+                       when(FLOATING_PANE, OUTLINE, Map.of(State.HIGHLIGHTED, "outline-style: none;")));
+    }
     static final Taxon TITLE_BAR = HouseContainers.TitleBar.INSTANCE;
     static final Taxon FLOAT_LAYER = HouseContainers.FloatLayer.INSTANCE;
     /** A label cast as a title: a floating pane's, on its title bar. */

@@ -27,6 +27,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.itemBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.lampBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.barBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.stripBase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.panesBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
@@ -140,6 +141,8 @@ public record Base() implements DesignStyle {
             barBase(),
             // ── an edge strip's room, its hairline along its top, and the floating pane's shadow ──
             stripBase(),
+            // ── a pane ringed inside its edge while the keys are on it, and while a tab is offered to it ──
+            panesBase(),
             // ── a card's proportion, ring and pointer; a group of sliders framed as a card ──
             cardBase(),
             // ── a brand's mark apart from its name; a preferences button framed as a button is ──

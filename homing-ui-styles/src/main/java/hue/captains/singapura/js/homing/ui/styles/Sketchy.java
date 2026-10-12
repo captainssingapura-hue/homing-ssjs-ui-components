@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static hue.captains.singapura.js.homing.ui.styles.Say.pane;
+import static hue.captains.singapura.js.homing.ui.styles.Say.paneRings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
@@ -126,6 +127,8 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
             disabled(".5", "not-allowed"),
             // ── its page: the face everything on it is written in, and the site's bar ──
             // ── its floating pane - a dialog's window is one: its shadows, its lift in the hand, its title bar ──
+            // ── its panes ringed while the keys are on them, as its old design marked them ──
+            List.of(paneRings("3px solid", "2px dashed", "2px dotted")),
             pane("none", "none", "none", "none", "translateY(-1px) rotate(-0.6deg)", "translateY(-2px) rotate(-1deg)", DISPLAY, null, null, "2px"),
             siteChrome(BODY, "2px", null));
 }

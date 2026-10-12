@@ -23,6 +23,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.GROUND;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SITE_BAR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.EDGE_STRIP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.FLOATING_PANE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.PANE;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TITLE_BAR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.FLOAT_LAYER;
 import static hue.captains.singapura.js.homing.ui.styles.Say.DELIMITER;
@@ -131,7 +132,18 @@ final class HouseRule {
                 //    while it is the active one; its title bar inverted as the site's bar is, a hairline under it, the title's
                 //    colour while it is in the hand ──
                 rest(FLOAT_LAYER, BACKGROUND, ground(s.recessed())),
-                rest(FLOATING_PANE, BACKGROUND, ground(s.raised())),
+                // ── a pane: the page's ground, the text's ink; ringed in the accent while the keys are on it - in full held, fainter
+                //    offered and lent - and washed with it, ringed, while a tab is offered to it ──
+                when(PANE, BACKGROUND, Map.of(State.REST, ground(s.ground()),
+                        State.HIGHLIGHTED, ground("color-mix(in srgb, " + s.accent() + " 10%, " + s.ground() + ")"))),
+                rest(PANE, INK, "color: " + s.text() + ";"),
+                when(PANE, Target.Color.Outline.INSTANCE, Map.of(
+                        State.HELD, "outline-color: " + s.accent() + ";",
+                        State.CANDIDATE, "outline-color: color-mix(in srgb, " + s.accent() + " 45%, transparent);",
+                        State.LENT, "outline-color: color-mix(in srgb, " + s.accent() + " 25%, transparent);",
+                        State.HIGHLIGHTED, "outline-color: " + s.accent() + ";")),
+                // a pane that floats is lit from its own head, never washed: raised in every state
+                when(FLOATING_PANE, BACKGROUND, Map.of(State.REST, ground(s.raised()), State.HIGHLIGHTED, ground(s.raised()))),
                 rest(FLOATING_PANE, INK, "color: " + s.text() + ";"),
                 when(FLOATING_PANE, BORDER, Map.of(
                         State.REST, "border-color: " + s.border() + ";",

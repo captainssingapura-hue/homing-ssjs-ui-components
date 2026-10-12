@@ -143,11 +143,22 @@
 // The strip is TabStrip's, the keys PaneKeys'; `css` is injected with the
 // styles import; the focus party's root, `focusParty`, is the branch a pane
 // joins unless told.
+//
+// Its frame wears the house's pane - the page's ground, the text's ink, and a
+// ring inside its edge while the keys are on it (the steward's data-keys) - and
+// no more of the look: the look's room and measure would undo the frame's place
+// in its host. A tab from outside offered to it lights it from
+// elsewhere (data-highlighted): washed, and ringed.
 // =============================================================================
 
 const _paneOwner = Object.freeze({ toString: () => "multiTabPane" });
 
+/** What of its look a pane's frame wears: its ground, its ink and its rings. */
+const _PANE_LOOK = Object.freeze(["color-background", "color-ink", "shape-outline", "color-outline"]);
+
 class MultiTabPane {
+    static LEAF = "multi-tab-pane";
+
     /**
      * The kind a right-click on the strip's own ground asks for, when the
      * page named one: opened with { pane } bound, and the pane knows nothing
@@ -180,6 +191,7 @@ class MultiTabPane {
         // ── The frame ─────────────────────────────────────────────────────
         var root = branch.createElement("pane", "div");
         css.addClass(root, mtp_pane);
+        new Look(MultiTabPane, ROLE.STANDALONE).wear(root, { only: _PANE_LOOK });
         this.el = root;
 
         this._strip = new TabStrip(branch.createBranch("strip"), {
@@ -299,11 +311,11 @@ class MultiTabPane {
     /** A tab from outside, offered at a point: the index it would take on the strip, or −1 when the point is not on the strip. */
     dropAt(x, y) {
         var index = this._strip.at(x, y);
-        if (index < 0) { css.removeClass(this.el, mtp_dock_target); return -1; }
-        css.addClass(this.el, mtp_dock_target);
+        if (index < 0) { this.el.removeAttribute("data-highlighted"); return -1; }
+        this.el.setAttribute("data-highlighted", "");   // offered a tab: lit from elsewhere
         return index;
     }
-    dropClear() { this._strip.unmark(); css.removeClass(this.el, mtp_dock_target); }
+    dropClear() { this._strip.unmark(); this.el.removeAttribute("data-highlighted"); }
     /** The tab's name, now: the pane shows what the holder calls it. */
     retitle(id, title) { PaneTabs.retitle(this, id, title); return this; }
     /** A tab-pane it holds was renamed: said here, where it is. */

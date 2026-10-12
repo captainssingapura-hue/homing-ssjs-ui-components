@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static hue.captains.singapura.js.homing.ui.styles.Say.pane;
+import static hue.captains.singapura.js.homing.ui.styles.Say.paneRings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteChrome;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
@@ -131,6 +132,8 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
             disabled(".4", "not-allowed"),
             // ── its page: the face everything on it is written in, and the site's bar ──
             // ── its floating pane - a dialog's window is one: its shadows, its lift in the hand, its title bar ──
+            // ── its panes ringed while the keys are on them, as its old design marked them ──
+            List.of(paneRings("1px solid", "1px dashed", "1px solid")),
             pane("0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent), 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent)", "0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent), 0 0 0 1px var(--box-shadow-glow), 0 0 40px color-mix(in srgb, var(--box-shadow-glow) 35%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 60%, transparent), 0 0 28px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 0 0 1px var(--box-shadow-glow), 0 0 40px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "translateY(-1px) scale(1.01)", "translateY(-2px) scale(1.015)", DISPLAY, "padding-block: 4px; padding-inline: 10px;", null, null),
             siteChrome(BODY, null, null));
 }
