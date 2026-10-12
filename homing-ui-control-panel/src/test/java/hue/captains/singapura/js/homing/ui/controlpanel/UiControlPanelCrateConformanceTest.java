@@ -46,7 +46,7 @@ class UiControlPanelCrateConformanceTest {
             var declared = entry.module() instanceof Widget<?, ?> ? StandardJsModuleType.WIDGET : entry.declaredType();
             if (!(declared instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
-            if (m.equals(ControlCatalogueModule.class.getName())) continue;
+            if (m.equals(ControlCatalogueModule.class.getName()) || m.equals(ControlLeavesModule.class.getName())) continue;
             String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
             raw.addAll(DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src)));
             checked++;
@@ -67,7 +67,7 @@ class UiControlPanelCrateConformanceTest {
 
     @Test
     void theCatalogueAPageHas_isTheDeclarations() {
-        String js = String.join("\n", ControlCatalogueModule.INSTANCE.selfContent(null));
+        String js = String.join("\n", ControlCatalogueModule.INSTANCE.selfContent(null)) + "\n" + String.join("\n", ControlLeavesModule.INSTANCE.selfContent(null));
         assertTrue(js.contains("\"size\": Object.freeze({ category: \"degrees\", means: \"extent\", rest: 0, method: \"size\", label: \"Size\" })"), js);
         assertTrue(js.contains("\"colour\": Object.freeze({ category: \"degrees\", means: \"extent\", rest: 1, method: \"extent\", label: \"Colour\" })"), js);
         assertTrue(js.contains("\"enabled\": Object.freeze({ category: \"states\", means: \"switch\", rest: true, method: \"setOn\", label: \"Enabled\" })"), js);

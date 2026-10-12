@@ -51,7 +51,9 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseRegions.Section.INSTANCE, HouseRegions.WidgetSlot.INSTANCE,
                 // text
                 HouseText.Label.INSTANCE, HouseText.Heading1.INSTANCE, HouseText.Heading2.INSTANCE, HouseText.Heading3.INSTANCE,
-                HouseText.Heading4.INSTANCE, HouseText.Heading5.INSTANCE, HouseText.Heading6.INSTANCE, HouseText.Kicker.INSTANCE, HouseText.Caption.INSTANCE,
+                HouseText.Heading4.INSTANCE, HouseText.Heading5.INSTANCE, HouseText.Heading6.INSTANCE,
+                HouseText.Code.INSTANCE, HouseText.SuccessBadge.INSTANCE, HouseText.WarningBadge.INSTANCE, HouseText.DangerBadge.INSTANCE,
+                HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE, HouseRegions.Table.INSTANCE, HouseRegions.HeaderCell.INSTANCE, HouseRegions.DataCell.INSTANCE, HouseText.Kicker.INSTANCE, HouseText.Caption.INSTANCE,
                 HouseText.Lede.INSTANCE, HouseText.Readout.INSTANCE, HouseText.Badge.INSTANCE, HouseText.Pill.INSTANCE,
                 HouseText.Wordmark.INSTANCE,
                 // marks and tracks

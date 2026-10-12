@@ -31,6 +31,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.panesBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.panelBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.boxesBase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.proseBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
@@ -151,6 +152,8 @@ public record Base() implements DesignStyle {
             panelBase(),
             // ── the browser's own boxes - a text box, a select - framed and set as a button is ──
             boxesBase(),
+            // ── a document's content: code, a block of it, a quote, a table's cells; a badge per tone ──
+            proseBase(),
             // ── a brand's mark apart from its name; a preferences button framed as a button is ──
             siteBase());
 }

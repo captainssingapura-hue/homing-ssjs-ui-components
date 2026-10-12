@@ -54,6 +54,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.panel;
+import static hue.captains.singapura.js.homing.ui.styles.Say.prose;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardBackdrop;
 
 /** Glassmorphism: a rounded pane with a lit top edge, floating on a wide soft shadow. */
@@ -135,5 +136,7 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
             pane("0 24px 80px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent)", "0 24px 80px color-mix(in srgb, var(--box-shadow-cast) 30%, transparent), 0 0 0 3px color-mix(in srgb, var(--box-shadow-glow) 40%, transparent)", "0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent), inset 0 1px 0 var(--box-shadow-lit)", "0 16px 40px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), inset 0 1px 0 var(--box-shadow-lit)", "translateY(-2px)", "translateY(-4px)", DISPLAY, "padding-block: 6px; padding-inline: 14px;", null, null),
             // ── its panel: a hairline of light under the head and air around the work; the plate lifts and catches the light along its top, or sinks into the frost ──
             panel("1.3", "10px", "18px", "10px", "1px solid", "16px", "18px", "10px", "0px", "0 10px 30px color-mix(in srgb, var(--box-shadow-cast) 20%, transparent), inset 0 1px 0 color-mix(in srgb, var(--box-shadow-lit) 45%, transparent)", "inset 0 2px 12px color-mix(in srgb, var(--box-shadow-cast) 18%, transparent)"),
+            // ── its prose, as its old Prose word ruled it ──
+            prose("3px", "1px", "0", "6px"),
             siteChrome(BODY, null, "blur(20px) saturate(1.4)"));
 }

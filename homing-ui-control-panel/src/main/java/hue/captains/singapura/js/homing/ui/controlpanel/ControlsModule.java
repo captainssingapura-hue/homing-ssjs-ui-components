@@ -22,8 +22,8 @@ public record ControlsModule() implements EsModule<ControlsModule> {
     @Override
     public ImportsFor<ControlsModule> imports() {
         return ImportsFor.<ControlsModule>builder()
-                .add(new ModuleImports<>(List.of(new ControlCatalogueModule.CONTROL_OPTIONS(), new ControlCatalogueModule.CONTROL_TYPES(),
-                        new ControlCatalogueModule.CONTROL_TYPE_OF(), new ControlCatalogueModule.CONTROL_OPTIONS_OF()), ControlCatalogueModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ControlCatalogueModule.CONTROL_OPTIONS(), new ControlCatalogueModule.CONTROL_TYPES()), ControlCatalogueModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ControlLeavesModule.CONTROL_TYPE_OF(), new ControlLeavesModule.CONTROL_OPTIONS_OF()), ControlLeavesModule.INSTANCE))
                 .build();
     }
 

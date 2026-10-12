@@ -36,6 +36,15 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.BRAND;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PREFERENCES_BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CARD;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PANEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CODE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.CODE_BLOCK;
+import static hue.captains.singapura.js.homing.ui.styles.Say.QUOTE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.HEADER_CELL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.DATA_CELL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.SUCCESS_BADGE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.WARNING_BADGE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.DANGER_BADGE;
+import static hue.captains.singapura.js.homing.ui.styles.Say.SECTION;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT_BOX;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SELECT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CHECKBOX;
@@ -292,6 +301,25 @@ final class HouseRule {
                 rest(CARD, BORDER, "border-color: " + s.border() + ";"),
                 rest(SLIDER_GROUP, BACKGROUND, ground(s.raised())),
                 rest(SLIDER_GROUP, BORDER, "border-color: " + s.border() + ";"),
+                // ── a document's content: code on a wash of the ink it stands in; a block of it set into the page, in the text's ink, a
+                //    hairline round it; a quote ruled in the palette's edge, quieter than its text; a table's cells ruled in it; a badge
+                //    of a tone on its colour's wash, in its colour's ink - the same in every house palette, as feedback is ──
+                rest(CODE, BACKGROUND, ground("color-mix(in srgb, currentColor 8%, transparent)")),
+                rest(CODE_BLOCK, BACKGROUND, ground(s.recessed())),
+                rest(CODE_BLOCK, INK, "color: " + s.text() + ";"),
+                rest(CODE_BLOCK, BORDER, "border-color: " + s.border() + ";"),
+                rest(QUOTE, BORDER, "border-color: " + s.border() + ";"),
+                rest(QUOTE, INK, "color: color-mix(in srgb, currentColor 80%, transparent);"),
+                rest(HEADER_CELL, BORDER, "border-color: " + s.border() + ";"),
+                rest(DATA_CELL, BORDER, "border-color: " + s.border() + ";"),
+                rest(SUCCESS_BADGE, BACKGROUND, ground("rgba(34, 139, 34, .14)")),
+                rest(SUCCESS_BADGE, INK, "color: #1B5E20;"),
+                rest(WARNING_BADGE, BACKGROUND, ground("rgba(202, 138, 4, .16)")),
+                rest(WARNING_BADGE, INK, "color: #713F12;"),
+                rest(DANGER_BADGE, BACKGROUND, ground("rgba(220, 38, 38, .12)")),
+                rest(DANGER_BADGE, INK, "color: #7F1D1D;"),
+                // ── a section the reader is in - a document's, followed as it is read: washed with the accent ──
+                when(SECTION, BACKGROUND, Map.of(State.CURRENT, ground("color-mix(in srgb, " + s.accent() + " 8%, transparent)"))),
                 // ── the browser's own controls: a text box set into the page - recessed - a select raised as a button is, each in the
                 //    text's ink with a hairline round it; a checkbox's mark in the accent, on no ground of its own ──
                 rest(TEXT_BOX, BACKGROUND, ground(s.recessed())),

@@ -55,3 +55,19 @@ A count, kept short, of what cannot all be seen.
 ## Wordmark
 
 A name set as the mark of whom it belongs to.
+
+## Code
+
+Shows words that are code - a name, a value, a command - as code, so they are read as written.
+
+## SuccessBadge
+
+Says in a word that a thing went well: done, passed, resolved.
+
+## WarningBadge
+
+Says in a word that a thing needs a look: in progress, pending, unplaced.
+
+## DangerBadge
+
+Says in a word that a thing went wrong: failed, blocked, broken.

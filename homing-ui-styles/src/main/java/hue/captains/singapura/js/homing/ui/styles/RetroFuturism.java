@@ -56,6 +56,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.panel;
+import static hue.captains.singapura.js.homing.ui.styles.Say.prose;
 
 /** Retro-futurism: a neon ring that flares under the hand, and motion in steps, as a screen of the period moved. */
 public record RetroFuturism() implements DesignStyle, Derives<Base> {
@@ -141,5 +142,7 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
             pane("0 0 48px color-mix(in srgb, var(--box-shadow-glow) 45%, transparent), 0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 60%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 40px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 30%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 24px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 70%, transparent), 0 0 36px color-mix(in srgb, var(--box-shadow-glow) 80%, transparent)", "translateY(-2px)", "translateY(-3px)", DISPLAY, null, null, null),
             // ── its panel: a console's header, the rule under it lit by the palette; the neon burns out over the void, or inward into it ──
             panel("1.3", "8px", "14px", "10px", "1px solid", "12px", "16px", "10px", "0px", "0 0 26px color-mix(in srgb, var(--box-shadow-glow) 45%, transparent)", "inset 0 0 18px color-mix(in srgb, var(--box-shadow-cast) 70%, transparent)"),
+            // ── its prose, as its old Prose word ruled it ──
+            prose("2px", "1px", "0", "2px"),
             siteChrome(BODY, "2px", null));
 }

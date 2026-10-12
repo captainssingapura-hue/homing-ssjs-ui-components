@@ -43,16 +43,16 @@ class WholeHouseTaxonomyTest {
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
         assertEquals(26, leaves.values().stream().mapToInt(Integer::intValue).sum(), "26 leaves the modules add - the dock grid retired, its docks a split grid's residents; the float layer common now: " + leaves);
-        assertEquals(70, HouseTaxonomy.INSTANCE.common().size(), "to the 70 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on; a panel's bar; the browser's own text box and checkbox; a heading for each level of a page's outline");
+        assertEquals(79, HouseTaxonomy.INSTANCE.common().size(), "to the 79 common ones - a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on; a panel's bar; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
     }
 
     @Test
     void theWholeHouse_isReadAsItWasBeforeItWasCut() {
         assertEquals(18, HOUSE.branches().size(), "the headings a branch of the text");
-        assertEquals(96, HOUSE.components().size(), "the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents; the ground, the site bar, the title bar and the panel's bar added, and a text box and a checkbox; the heading a leaf per level");
+        assertEquals(105, HOUSE.components().size(), "the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents; the ground, the site bar, the title bar and the panel's bar added, and a text box and a checkbox; the heading a leaf per level; prose a leaf per element");
         assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree");
-        assertEquals(110, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the preferences' view laid out by a split grid among them, and the grid's line in two roles; a panel's bar and its body");
-        assertEquals(47, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+        assertEquals(112, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the preferences' view laid out by a split grid among them, and the grid's line in two roles; a panel's bar and its body; a table's header and data cells");
+        assertEquals(48, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
     /** Every node of the whole house a stateless functional object, as jOntology judges one: the extensions' too. */
@@ -84,7 +84,7 @@ class WholeHouseTaxonomyTest {
     void everyRoleNamed_butTheWordsKeptForWhatIsToCome() {
         assertEquals(List.of("placeholder", "error", "check", "query", "skip", "increase", "decrease", "clear", "remove",
                              "previous", "next", "first", "last", "more", "foot", "host", "media", "fallback", "editor",
-                             "dock", "cell", "group", "column", "opener", "pull", "scroll"),
+                             "dock", "group", "opener", "pull", "scroll"),
                 HOUSE.roles().stream().filter(r -> HOUSE.partsNaming(r).isEmpty()).map(r -> r.name().value()).toList());
     }
 
@@ -99,7 +99,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(18 + 96 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
+        assertEquals(18 + 105 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 

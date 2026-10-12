@@ -261,12 +261,14 @@ final class Say {
 
     /**
      * What the ways' measure is in the house, whatever the style: a link the size of the text it
-     * sits in, grown by its own size; the crumb that is the page set heavier. (It is still pointed at,
+     * sits in, grown by its own size, and underlined at rest - as the old prose drew it, so a link quieter than the words
+     * round it is still seen as one (a style marks it under the hand its own way); the crumb that is the page set heavier. (It is still pointed at,
      * as every control is: the cursor offers no current.)
      */
     static List<Implementation<?>> waysMeasure() {
         return List.of(
                 rest(LINK, SCALE, "font-size: " + grows("1em", "1.2") + "; line-height: inherit;"),
+                when(LINK, DECORATION, Map.of(State.REST, "text-decoration-line: underline; text-underline-offset: 2px;")),
                 when(CRUMB, WEIGHT, Map.of(State.CURRENT, "font-weight: 600;")));
     }
 
@@ -774,6 +776,63 @@ final class Say {
             out.add(rest(box, EASE, "transition: border-color 140ms ease, outline-color 140ms ease;"));
         }
         out.add(rest(TEXT_BOX, CURSOR, "cursor: text;"));
+        return List.copyOf(out);
+    }
+
+    // ── a document's content: code inline and in a block, a quote, a table and its cells; a badge per tone ──
+
+    static final Taxon CODE = HouseText.Code.INSTANCE;
+    static final Taxon CODE_BLOCK = HouseRegions.CodeBlock.INSTANCE;
+    static final Taxon QUOTE = HouseRegions.Quote.INSTANCE;
+    static final Taxon TABLE = HouseRegions.Table.INSTANCE;
+    static final Taxon HEADER_CELL = HouseRegions.HeaderCell.INSTANCE;
+    static final Taxon DATA_CELL = HouseRegions.DataCell.INSTANCE;
+    static final Taxon SUCCESS_BADGE = HouseText.SuccessBadge.INSTANCE;
+    static final Taxon WARNING_BADGE = HouseText.WarningBadge.INSTANCE;
+    static final Taxon DANGER_BADGE = HouseText.DangerBadge.INSTANCE;
+    /** The badges of a tone: each a badge's chip, in a colour that says how a thing stands. */
+    static final List<Taxon> TONED_BADGES = List.of(SUCCESS_BADGE, WARNING_BADGE, DANGER_BADGE);
+    /** Every house style's code, until a style sets its own: the system's monospace. */
+    static final String MONO = "ui-monospace, SFMono-Regular, Menlo, Consolas, \"Courier New\", monospace";
+
+    private static String rule(String width) { return "0".equals(width) ? "border-width: 0;" : "border-width: 0 0 " + width + " 0; border-style: solid;"; }
+
+    /**
+     * A style's prose, as its old Prose word ruled it: how thick a quote's rule is, along its leading edge; a data cell's
+     * rule along its foot, and a header cell's ({@code "0"} for none); and how round code is. And code in the system's
+     * monospace, said by the style itself: a style answers its text's face on the whole branch, and a style's branch answer
+     * outranks Base's leaf answer (ownership first), so Base alone would leave code in the body's face.
+     */
+    static List<Implementation<?>> prose(String quoteRule, String cellRule, String headerRule, String codeCorner) {
+        return List.of(rest(CODE, FACE, "font-family: " + MONO + ";"),
+                       rest(QUOTE, BORDER, "border-width: 0 0 0 " + quoteRule + "; border-style: solid;"),
+                       rest(DATA_CELL, BORDER, rule(cellRule)),
+                       rest(HEADER_CELL, BORDER, rule(headerRule)),
+                       rest(CODE, CORNER, "border-radius: " + codeCorner + ";"));
+    }
+
+    /**
+     * What every style's prose says alike: code in the system's monospace, a little smaller than the words round it, on
+     * a chip with room at its sides; a block of code in the code's face, at the old code's size, framed by a hairline, as
+     * round as code, with room round its lines; a quote set in from its rule; a header cell heavy; every cell with room
+     * after it; and a badge of a tone measured as a badge is.
+     */
+    static List<Implementation<?>> proseBase() {
+        var out = new ArrayList<Implementation<?>>(List.of(
+                rest(CODE, SCALE, "font-size: 0.875em; line-height: inherit;"),
+                rest(CODE, INSET, "padding-block: 0.1em; padding-inline: 0.35em;"),
+                new Implementation<>(CODE_BLOCK, FACE, new Answer.Redirect<>(CODE)),
+                rest(CODE_BLOCK, SCALE, "font-size: " + grows("12px", "1.2") + "; line-height: 1.5;"),
+                rest(CODE_BLOCK, INSET, "padding-block: 10px; padding-inline: 12px;"),
+                rest(CODE_BLOCK, BORDER, "border-width: 1px; border-style: solid;"),
+                new Implementation<>(CODE_BLOCK, CORNER, new Answer.Redirect<>(CODE)),
+                rest(QUOTE, INSET, "padding-block: 0; padding-inline: 12px 0;"),
+                rest(HEADER_CELL, WEIGHT, "font-weight: 700;"),
+                rest(HEADER_CELL, INSET, "padding-block: 4px; padding-inline: 0 12px;"),
+                rest(DATA_CELL, INSET, "padding-block: 4px; padding-inline: 0 12px;")));
+        for (Taxon badge : TONED_BADGES)
+            for (Target t : List.of(SCALE, TREATMENT, INSET, CORNER)) out.add(new Implementation<>(badge, t, new Answer.Redirect<>(BADGE)));
+        out.addAll(prose("3px", "1px", "0", "3px"));
         return List.copyOf(out);
     }
 

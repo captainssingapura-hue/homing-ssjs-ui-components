@@ -52,6 +52,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.tabMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.panel;
+import static hue.captains.singapura.js.homing.ui.styles.Say.prose;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
 
 /**
@@ -135,5 +136,7 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
             pane("none", "none", "none", "none", "translateY(-1px) rotate(-0.6deg)", "translateY(-2px) rotate(-1deg)", DISPLAY, null, null, "2px"),
             // ── its panel: the head underlined by hand, gone over twice; no depth - ink casts no shadow here ──
             panel("1.35", "10px", "16px", "10px", "3px double", "14px", "16px", "10px", "0px", "none", "none"),
+            // ── its prose, as its old Prose word ruled it ──
+            prose("3px", "2px", "2px", "15px"),
             siteChrome(BODY, "2px", null));
 }

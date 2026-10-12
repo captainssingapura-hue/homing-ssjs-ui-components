@@ -54,6 +54,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
 import static hue.captains.singapura.js.homing.ui.styles.Say.panel;
+import static hue.captains.singapura.js.homing.ui.styles.Say.prose;
 
 /**
  * Neumorphism: moulded out of the page's own clay - no rule, its depth all in light and shade,
@@ -137,5 +138,7 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
             pane("14px 14px 28px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), -14px -14px 28px var(--box-shadow-lit)", "14px 14px 28px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), -14px -14px 28px var(--box-shadow-lit), 0 0 0 3px color-mix(in srgb, var(--box-shadow-glow) 35%, transparent)", "7px 7px 14px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), -7px -7px 14px var(--box-shadow-lit)", "10px 10px 20px color-mix(in srgb, var(--box-shadow-cast) 22%, transparent), -10px -10px 20px var(--box-shadow-lit)", "translateY(-1px)", "translateY(-2px)", DISPLAY, "padding-block: 6px; padding-inline: 14px;", null, null),
             // ── its panel: no line anywhere - the head a plate, the air under it the division; the clay moulded or pressed ──
             panel("1.3", "12px", "18px", "10px", "0 none", "16px", "20px", "10px", "10px", "7px 7px 14px " + DARK + ", -7px -7px 14px " + LIGHT, "inset 7px 7px 14px " + DARK + ", inset -7px -7px 14px " + LIGHT),
+            // ── its prose, as its old Prose word ruled it ──
+            prose("4px", "1px", "0", "6px"),
             siteChrome(BODY, null, null));
 }

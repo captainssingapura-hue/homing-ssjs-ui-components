@@ -85,6 +85,9 @@ class HouseStylesTest {
     private static final Set<String> PANEL = Set.of("panel size-gap", "panel shape-shadow", "panel-bar size-inset", "panel-bar size-gap", "panel-bar shape-border",
             "section size-inset", "section size-gap");
 
+    /** What every style decides for its prose, as its old Prose word ruled it: a quote's rule, a cell's and a header's, how round code is - and Editorial its block of code. */
+    private static final Set<String> PROSE = Set.of("code type-face", "quote shape-border", "data-cell shape-border", "header-cell shape-border", "code shape-corner", "code-block shape-corner");
+
     /** What every style decides for its tabs: a tab's measure, its frame, how it moves and is lifted; its strip's height and the rule along its foot. */
     private static final Set<String> TABS = Set.of("tab size-extent", "tab size-inset", "tab size-gap", "tab shape-corner", "tab shape-border",
             "tab motion-ease", "tab motion-transform", "tab shape-shadow", "tab-strip size-extent", "tab-strip shape-border");
@@ -119,9 +122,10 @@ class HouseStylesTest {
             allowed.addAll(SITE);
             allowed.addAll(PANE);
             allowed.addAll(PANEL);
+            allowed.addAll(PROSE);
             var beyond = new TreeSet<>(answered);
             beyond.removeAll(allowed);
-            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil, a pane's thumbnail's rule, its slider, its menu, its tabs, its cards, its page, its floating pane and its panel: " + beyond);
+            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil, a pane's thumbnail's rule, its slider, its menu, its tabs, its cards, its page, its floating pane, its panel and its prose: " + beyond);
             var missing = new TreeSet<>(BUTTON_BRANCH);
             missing.removeAll(answered);
             left.put(s.token(), missing);
@@ -159,7 +163,7 @@ class HouseStylesTest {
         for (String text : List.of("heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "lede", "kicker", "caption", "label", "readout", "badge", "pill", "wordmark")) expected.add(text + " type-scale");
         expected.addAll(Set.of("readout type-treatment", "badge type-treatment", "badge size-inset", "badge shape-corner",
                 "pill type-treatment", "pill size-inset", "pill shape-corner"));
-        expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph", "boundary-line size-extent", "pane-thumb shape-border"));
+        expected.addAll(Set.of("link type-scale", "link type-decoration", "crumb type-weight", "separator shape-border", "delimiter type-glyph", "boundary-line size-extent", "pane-thumb shape-border"));
         expected.addAll(Set.of("slider size-inset", "slider size-gap", "slider affordance-select", "knob type-scale", "knob affordance-cursor", "detent size-extent", "tick size-extent"));
         expected.addAll(Set.of("context-menu type-face", "context-menu affordance-select", "menu-item size-gap", "menu-item type-scale", "menu-item affordance-cursor"));
         expected.addAll(Set.of("tab type-scale", "tab affordance-select", "tab affordance-cursor", "tab-strip affordance-select", "tab-strip size-gap", "tab-strip size-inset"));
@@ -179,13 +183,19 @@ class HouseStylesTest {
         for (String box : List.of("text-box", "select"))
             for (String t : List.of("shape-corner", "shape-border", "type-scale", "type-face", "size-inset", "motion-ease")) expected.add(box + " " + t);
         expected.add("text-box affordance-cursor");
+        expected.addAll(Set.of("code type-face", "code type-scale", "code size-inset", "code shape-corner",
+                "code-block type-face", "code-block type-scale", "code-block size-inset", "code-block shape-border", "code-block shape-corner",
+                "quote size-inset", "quote shape-border", "header-cell type-weight", "header-cell size-inset", "header-cell shape-border",
+                "data-cell size-inset", "data-cell shape-border"));
+        for (String badge : List.of("success-badge", "warning-badge", "danger-badge"))
+            for (String t : List.of("type-scale", "type-treatment", "size-inset", "shape-corner")) expected.add(badge + " " + t);
         expected.addAll(Set.of("brand size-gap", "brand type-decoration", "preferences-button shape-corner", "preferences-button shape-border",
                 "preferences-button size-inset", "preferences-button size-gap", "preferences-button type-face", "preferences-button type-scale"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
-                + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash, a layout's boundary a hairline;"
-                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size; a row of actions capped as groups are ruled apart, its room; a trail's crumbs apart, in the caption's size; an edge strip's room, its hairline along its top and the floating pane's shadow; a pane ringed inside its edge while the keys are on it and while a tab is offered to it, never a floating one for that; a card's proportion, ring and pointer, a group of sliders framed as a card; a brand's mark apart from its name, a preferences button framed as a button; the site bar's room and its hairline, the page in the system's face; a floating pane framed as a card, eased, its title bar's room, its hairline and its hand; a panel framed as a card, eased; the browser's own boxes - a text box, a select - framed and set as a button is, a text box pointed at as text");
+                + " a link the size of the text it sits in and underlined at rest, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash, a layout's boundary a hairline;"
+                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size; a row of actions capped as groups are ruled apart, its room; a trail's crumbs apart, in the caption's size; an edge strip's room, its hairline along its top and the floating pane's shadow; a pane ringed inside its edge while the keys are on it and while a tab is offered to it, never a floating one for that; a card's proportion, ring and pointer, a group of sliders framed as a card; a brand's mark apart from its name, a preferences button framed as a button; the site bar's room and its hairline, the page in the system's face; a floating pane framed as a card, eased, its title bar's room, its hairline and its hand; a panel framed as a card, eased; the browser's own boxes - a text box, a select - framed and set as a button is, a text box pointed at as text; a document's prose - its code, a block of it, a quote, a table's cells - and a badge per tone measured as a badge is");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");

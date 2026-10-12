@@ -97,4 +97,30 @@ public final class HouseText {
         public static final Wordmark INSTANCE = new Wordmark();
         @Override public Text parent() { return Text.INSTANCE; }
     }
+    // ── code, and the badges that say how a thing stands ──
+
+    /** Words that are code - a name, a value, a command - set apart from the words round them. */
+    public record Code() implements Component<Text> {
+        public static final Code INSTANCE = new Code();
+        @Override public Text parent() { return Text.INSTANCE; }
+    }
+
+    /** A short word saying a thing went well: done, passed, resolved. */
+    public record SuccessBadge() implements Component<Text> {
+        public static final SuccessBadge INSTANCE = new SuccessBadge();
+        @Override public Text parent() { return Text.INSTANCE; }
+    }
+
+    /** A short word saying a thing needs a look: in progress, pending, unplaced. */
+    public record WarningBadge() implements Component<Text> {
+        public static final WarningBadge INSTANCE = new WarningBadge();
+        @Override public Text parent() { return Text.INSTANCE; }
+    }
+
+    /** A short word saying a thing went wrong: failed, blocked, broken. */
+    public record DangerBadge() implements Component<Text> {
+        public static final DangerBadge INSTANCE = new DangerBadge();
+        @Override public Text parent() { return Text.INSTANCE; }
+    }
+
 }
