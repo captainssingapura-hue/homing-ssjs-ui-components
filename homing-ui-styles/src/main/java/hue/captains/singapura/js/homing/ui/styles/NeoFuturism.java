@@ -54,6 +54,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.panel;
 
 /** Neo-futurism: a hairline, a lit rim that glows under the hand, a long eased glide. */
 public record NeoFuturism() implements DesignStyle, Derives<Base> {
@@ -135,5 +136,7 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
             // ── its panes ringed while the keys are on them, as its old design marked them ──
             List.of(paneRings("1px solid", "1px dashed", "1px solid")),
             pane("0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent), 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent)", "0 24px 64px color-mix(in srgb, var(--box-shadow-cast) 35%, transparent), 0 0 0 1px var(--box-shadow-glow), 0 0 40px color-mix(in srgb, var(--box-shadow-glow) 35%, transparent)", "0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 60%, transparent), 0 0 28px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "0 0 0 1px var(--box-shadow-glow), 0 0 40px color-mix(in srgb, var(--box-shadow-glow) 55%, transparent), 0 12px 32px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent)", "translateY(-1px) scale(1.01)", "translateY(-2px) scale(1.015)", DISPLAY, "padding-block: 4px; padding-inline: 10px;", null, null),
+            // ── its panel: a hairline under the head and no more air than the work needs; a plate over the dark keeping a hairline of its own light, or set into it ──
+            panel("1.25", "7px", "12px", "8px", "1px solid", "10px", "14px", "8px", "0px", "0 6px 24px color-mix(in srgb, var(--box-shadow-cast) 45%, transparent), inset 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent)", "inset 0 1px 10px color-mix(in srgb, var(--box-shadow-cast) 55%, transparent)"),
             siteChrome(BODY, null, null));
 }

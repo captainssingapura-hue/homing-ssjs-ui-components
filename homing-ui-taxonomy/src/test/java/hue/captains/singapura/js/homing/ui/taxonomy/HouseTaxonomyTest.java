@@ -46,10 +46,10 @@ class HouseTaxonomyTest {
     @Test
     void theBaseIsReadWhole_withItsCatalogue() {
         assertEquals(14, HOUSE.branches().size(), "the view, the field and the split have no common leaf: their leaves are the extensions' - a view is a widget, a split the grid's");
-        assertEquals(62, HOUSE.components().size());
+        assertEquals(63, HOUSE.components().size(), "the panel's head among them, a bar of its own");
         assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
-        assertEquals(51, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the site bar's brand and trail among them; the brand's mark its own colour, no icon; the float layer's floats");
-        assertEquals(23, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
+        assertEquals(52, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the site bar's brand and trail among them; the brand's mark its own colour, no icon; the float layer's floats; the panel's head and its body");
+        assertEquals(24, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
     }
 
     /**
@@ -129,7 +129,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(14 + 62 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
+        assertEquals(14 + 63 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));

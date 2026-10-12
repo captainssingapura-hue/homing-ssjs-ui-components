@@ -52,6 +52,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.panel;
 
 /** Editorial, the house's own: a serif voice, a fine rule, a soft lift under the hand. */
 public record Editorial() implements DesignStyle, Derives<Base> {
@@ -125,5 +126,7 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             // ── its page: the face everything on it is written in, and the site's bar ──
             // ── its floating pane - a dialog's window is one: its shadows, its lift in the hand, its title bar ──
             pane("0 10px 30px color-mix(in srgb, var(--box-shadow-cast) 45%, transparent), 0 2px 6px color-mix(in srgb, var(--box-shadow-cast) 30%, transparent)", "0 10px 30px color-mix(in srgb, var(--box-shadow-cast) 45%, transparent), 0 0 0 1px color-mix(in srgb, var(--box-shadow-glow) 28%, transparent), 0 0 36px color-mix(in srgb, var(--box-shadow-glow) 30%, transparent)", "0 6px 16px color-mix(in srgb, var(--box-shadow-glow) 12%, transparent)", "0 14px 30px color-mix(in srgb, var(--box-shadow-glow) 20%, transparent)", "translateY(-2px)", "translateY(-4px)", DISPLAY, null, null, null),
+            // ── its panel: a running head with a rule under it; a quiet lift, a quiet press - the page is paper ──
+            panel("1.3", "8px", "14px", "8px", "1px solid", "14px", "16px", "10px", "0px", "0 1px 2px color-mix(in srgb, var(--box-shadow-cast) 8%, transparent), 0 8px 22px color-mix(in srgb, var(--box-shadow-cast) 14%, transparent)", "inset 0 1px 2px color-mix(in srgb, var(--box-shadow-cast) 10%, transparent), inset 0 8px 18px -6px color-mix(in srgb, var(--box-shadow-cast) 16%, transparent)"),
             siteChrome(BODY, "2px", null));
 }

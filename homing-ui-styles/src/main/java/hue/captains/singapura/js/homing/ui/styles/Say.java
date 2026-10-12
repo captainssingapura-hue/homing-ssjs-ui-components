@@ -12,6 +12,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
@@ -723,6 +724,47 @@ final class Say {
         if (barGap != null) out.add(rest(TITLE_BAR, GAP, "gap: " + barGap + ";"));
         if (barRule != null) out.add(rest(TITLE_BAR, BORDER, "border-width: 0 0 " + barRule + " 0; border-style: solid;"));
         return List.copyOf(out);
+    }
+
+    // ── a panel: a region that fills what holds it - framed as a card is unless its container draws the lines, a head over its
+    //    body, the line under the head the style's own word about panels; lifted off its plane or set into it as the app says ──
+
+    static final Taxon PANEL = HouseContainers.Panel.INSTANCE;
+    /** A panel's head: the bar that names it, ruled along its foot. */
+    static final Taxon PANEL_HEAD = HouseContainers.PanelBar.INSTANCE;
+    /**
+     * A section: a stretch of a container's room given one job - a panel's body is one, where what it shows is mounted.
+     * Its room is the room round what it holds; a section a part fills - a dock, a grid - wears none.
+     */
+    static final Taxon SECTION = HouseRegions.Section.INSTANCE;
+
+    /**
+     * A style's panel, every length grown by {@code growth} a unit of size: its head's room above and below and at its
+     * sides, between what it carries, and the line under it (a width and a line, {@code "0 none"} for none); its body's
+     * room, and between what it holds; the room between the head and the body; and its depth - lifted off its plane and
+     * set into it, each a shadow in the palette's shadow colours, {@code "none"} where the style draws no depth.
+     */
+    static List<Implementation<?>> panel(String growth, String headBlock, String headInline, String headGap, String headRule,
+                                         String bodyBlock, String bodyInline, String bodyGap, String gap,
+                                         String elevated, String sunken) {
+        String[] rule = headRule.split(" ");
+        return List.of(rest(PANEL, GAP, "gap: " + grows(gap, growth) + ";"),
+                       when(PANEL, SHADOW, Map.of(State.ELEVATED, "box-shadow: " + elevated + ";", State.SUNKEN, "box-shadow: " + sunken + ";")),
+                       rest(PANEL_HEAD, INSET, "padding-block: " + grows(headBlock, growth) + "; padding-inline: " + grows(headInline, growth) + ";"),
+                       rest(PANEL_HEAD, GAP, "gap: " + grows(headGap, growth) + ";"),
+                       rest(PANEL_HEAD, BORDER, "border-width: 0 0 " + rule[0] + " 0; border-style: " + rule[1] + ";"),
+                       rest(SECTION, INSET, "padding-block: " + grows(bodyBlock, growth) + "; padding-inline: " + grows(bodyInline, growth) + ";"),
+                       rest(SECTION, GAP, "gap: " + grows(bodyGap, growth) + ";"));
+    }
+
+    /**
+     * What every style's panel says alike: its frame a card's - its corner and its rule - which a panel whose container
+     * draws the lines does not wear; and its colours eased as it becomes the current one.
+     */
+    static List<Implementation<?>> panelBase() {
+        return List.of(new Implementation<>(PANEL, CORNER, new Answer.Redirect<>(CARD)),
+                       new Implementation<>(PANEL, BORDER, new Answer.Redirect<>(CARD)),
+                       rest(PANEL, EASE, "transition: border-color 160ms ease, box-shadow 160ms ease;"));
     }
 
     /** Every answer of the groups, in order. */

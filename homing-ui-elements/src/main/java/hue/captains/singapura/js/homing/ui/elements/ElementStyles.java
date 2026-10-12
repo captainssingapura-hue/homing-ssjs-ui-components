@@ -622,38 +622,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     }
 
     /**
-     * The active panel: the region being worked in — its edge in the ring the
-     * design draws now, and the glow it gives what has the keys, exactly as an
-     * active floating pane is marked. The panel is told this by whatever is
-     * mounted in it; it holds no keys of its own.
-     */
-    /**
-      * The panel as the CURRENT one, said in colour and nothing else: its
-      * edge takes the word for the one you are on. The other axis, and the
-      * orthogonal one — depth is the elevation's, colour is this, and a
-      * design may answer either, both or, in the flat case, only this. It
-      * moves nothing: the rule it recolours is the rule the panel already
-      * wears, so a panel becoming current never shifts a pixel.
-      */
-    /**
-      * The panel's FRAME: its rule, its corner and the colour of its edge —
-      * worn unless the panel is bare. A sheet draws its own edge, so a panel
-      * that stands on a ground has this. A panel whose CONTAINER draws the
-      * lines does not: a cell of a split grid already draws the seams between
-      * its rooms and the boundary of the one being worked in, and a room
-      * outlined twice is a mistake, not emphasis. Nothing is overridden to
-      * take a frame away — the frame is a class, and a bare panel is a panel
-      * that never wears it.
-      */
-    public record el_panel_framed() implements CssClass<ElementStyles> {
-        @Override public String body() { return ""; }
-    }
-
-    public record el_panel_current() implements CssClass<ElementStyles> {
-        @Override public String body() { return ""; }
-    }
-
-    /**
      * The body: what the head leaves, flush — for a panel that is filled by
      * what is mounted in it, a dock or a grid, which scrolls on its own. It is
      * the positioning context for what it holds, so a widget that fills its
@@ -797,7 +765,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_off(),
                        new el_slider_group(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
                        new el_card(), new el_card_head(), new el_card_title(), new el_badge(), new el_card_body(), new el_card_text(), new el_card_foot(), new el_card_link(),
-                       new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(), new el_panel_current(), new el_panel_framed(),
+                       new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(),
                        new el_strip(), new el_strip_hidden(), new el_strip_lip(),
                        new el_site_bar(), new el_site_bar_start(), new el_site_bar_way(), new el_site_bar_end(),
                        new el_brand(), new el_brand_mark(), new el_trail(), new el_trail_crumb());

@@ -29,6 +29,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.barBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.stripBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.panesBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardBase;
+import static hue.captains.singapura.js.homing.ui.styles.Say.panelBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.siteBase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CORNER;
@@ -145,6 +146,8 @@ public record Base() implements DesignStyle {
             panesBase(),
             // ── a card's proportion, ring and pointer; a group of sliders framed as a card ──
             cardBase(),
+            // ── a panel framed as a card is, its colours eased as it becomes the current one ──
+            panelBase(),
             // ── a brand's mark apart from its name; a preferences button framed as a button is ──
             siteBase());
 }

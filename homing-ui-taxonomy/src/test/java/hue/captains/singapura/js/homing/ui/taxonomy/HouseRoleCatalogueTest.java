@@ -86,7 +86,7 @@ class HouseRoleCatalogueTest {
     @Test
     void readWithTheBase_theWordsOnlyTheExtensionsSay_goUnnamed() {
         var findings = HouseTaxonomy.INSTANCE.read().findings();
-        assertEquals(56, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
-                "thirty-one the extensions name - a split's seam and its splitter among them, the split grid's alone; the site's home and path the site bar's, in the base, its preferences the chrome's; a float the float layer's, in the base - twenty-four no component says yet, and Host - a floater's, not in the first cut");
+        assertEquals(55, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
+                "thirty-one the extensions name - a split's seam and its splitter among them, the split grid's alone; the site's home and path the site bar's, in the base, its preferences the chrome's; a float the float layer's, in the base - twenty-three no component says yet (a panel's body is said now), and Host - a floater's, not in the first cut");
     }
 }

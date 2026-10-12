@@ -41,7 +41,7 @@ class PanelTest extends JsModuleTestBase {
                     size: function (e, v) { sized.push(e.name + ":" + v); }, extent: function () {}, aspect: function () {},
                     elevation: function (e, v) { lifted.push(e.name + ":" + v); } };
         var lifted = [];
-        ["el_panel", "el_panel_head", "el_panel_title", "el_panel_slot", "el_panel_body", "el_panel_body_air", "el_panel_current", "el_panel_framed"].forEach(function (c) { globalThis[c] = c; });
+        ["el_panel", "el_panel_head", "el_panel_title", "el_panel_slot", "el_panel_body", "el_panel_body_air"].forEach(function (c) { globalThis[c] = c; });
         var observers = [];
         function MutationObserver(fn) { this.fn = fn; this.el = null; observers.push(this); }
         MutationObserver.prototype.observe = function (el, opts) { this.el = el; this.opts = opts; el._observer = this; };
@@ -97,6 +97,26 @@ class PanelTest extends JsModuleTestBase {
         assertFalse(eval("panel.body.classes().indexOf('el_panel_body_air') >= 0").asBoolean());
     }
 
+    /**
+     * Its look: the panel's on the panel - framed as a card is unless it is bare, its least size left to its
+     * placement - its head's room and the line under it on the head, the body's room on a body that holds content.
+     */
+    @Test
+    void itWearsItsLook_theHeadAndTheBodyTheirs_aBarePanelNoFrame() {
+        String root = eval("reading.root.classes()").asString();
+        assertTrue(root.contains("panel__color-background") && root.contains("panel__shape-border") && root.contains("panel__shape-corner"), root);
+        assertTrue(root.contains("panel__shape-shadow--elevated") && root.contains("panel__color-border--current"), "treated: lifted, set in, current - " + root);
+        assertFalse(root.contains("panel__size-extent"), "its least size is its placement's: it fills what holds it");
+        String head = eval("reading.head.classes()").asString();
+        assertTrue(head.contains("panel-bar__size-inset") && head.contains("panel-bar__shape-border") && head.contains("panel-bar__color-border"), head);
+        assertFalse(head.contains("panel-bar__affordance-select"), "the head wears what is answered for it, nothing that would undo its placement");
+        assertTrue(eval("reading.body.classes()").asString().contains("section__size-inset"), "content: the style's room round it");
+        assertFalse(eval("panel.body.classes()").asString().contains("section__"), "filled: flush");
+        String bare = eval("new Panel(page.createBranch(\"cell\"), { bare: true, fills: true }).root.classes()").asString();
+        assertTrue(bare.contains("panel__color-background"), bare);
+        assertFalse(bare.contains("panel__shape-border") || bare.contains("panel__shape-corner"), "bare: its container draws the lines - " + bare);
+    }
+
     /** The size is an element's, not inherited, so the panel carries it to every part it minted - and not to a body that wears no length. */
     @Test
     void theSizeReachesEveryPartThePanelMinted() {
@@ -124,13 +144,13 @@ class PanelTest extends JsModuleTestBase {
         eval("lifted = []; panel.elevation(null)");
         assertEquals("panel:null", eval("lifted.join(' ')").asString(), "flat says nothing at all: the design rests it where it rests it");
         assertFalse(eval("panel.isHighlighted()").asBoolean());
-        assertFalse(eval("panel.root.classes().indexOf(\"el_panel_current\") >= 0").asBoolean());
+        assertFalse(eval("panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean());
         eval("panel.highlight(true)");
-        assertTrue(eval("panel.isHighlighted() && panel.root.classes().indexOf(\"el_panel_current\") >= 0").asBoolean());
+        assertTrue(eval("panel.isHighlighted() && panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean(), "said by its reflection: the look draws the current one");
         eval("lifted = []; panel.elevation(\"elevated\")");
-        assertTrue(eval("panel.isHighlighted() && panel.root.classes().indexOf(\"el_panel_current\") >= 0").asBoolean(), "orthogonal: the depth does not touch the colour");
+        assertTrue(eval("panel.isHighlighted() && panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean(), "orthogonal: the depth does not touch the colour");
         eval("panel.highlight(false)");
-        assertFalse(eval("panel.root.classes().indexOf(\"el_panel_current\") >= 0").asBoolean());
+        assertEquals("null", eval("String(panel.root.getAttribute(\"aria-current\"))").asString(), "no longer current: the reflection taken away, never said false");
         assertEquals("elevated", eval("panel.elevationOf()").asString(), "nor the colour the depth");
     }
 
@@ -160,7 +180,7 @@ class PanelTest extends JsModuleTestBase {
         assertTrue(eval("panel.isWithin()").asBoolean(), "unwatched: it keeps what it says");
         assertEquals(0, eval("dock.root.listening(\"keydown\") + dock.root.listening(\"pointerdown\")").asInt(), "the mounted thing is told nothing and given nothing");
         assertEquals("true false true false true false true", eval("said.join(' ')").asString(), "it said each turn once, and only on a change");
-        assertFalse(eval("panel.root.classes().indexOf(\"el_panel_current\") >= 0 || panel.elevationOf() !== null").asBoolean(),
+        assertFalse(eval("panel.root.getAttribute(\"aria-current\") !== null || panel.elevationOf() !== null").asBoolean(),
                     "and decided nothing by it: no colour, no depth, until an app says what it means");
         assertTrue(eval("panel.watch(dock.root) === panel").asBoolean(), "an element does as well as a component");
         assertFalse(eval("panel.isWithin()").asBoolean(), "read afresh on watching: candidate is not held");

@@ -47,6 +47,11 @@ over what it stands on.
 
 Heads a pane that floats over the page: its title, its close, and where the hand takes it to move it.
 
+## PanelBar
+
+Heads a panel: its title, and at its end what acts on the panel, so the user knows what the panel holds and where
+to act on it.
+
 ## Ground
 
 The surface a page stands on: its ground, the ink and the face of what is written on it, and its scrollbar.

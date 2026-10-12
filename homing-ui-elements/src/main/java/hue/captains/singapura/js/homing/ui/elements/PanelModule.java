@@ -41,6 +41,7 @@ public record PanelModule() implements DomModule<PanelModule>, ImplFor<HouseCont
     public ImportsFor<PanelModule> imports() {
         return ImportsFor.<PanelModule>builder()
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_panel(),
@@ -48,9 +49,7 @@ public record PanelModule() implements DomModule<PanelModule>, ImplFor<HouseCont
                         new ElementStyles.el_panel_title(),
                         new ElementStyles.el_panel_slot(),
                         new ElementStyles.el_panel_body(),
-                        new ElementStyles.el_panel_body_air(),
-                        new ElementStyles.el_panel_current(),
-                        new ElementStyles.el_panel_framed()
+                        new ElementStyles.el_panel_body_air()
                 ), ElementStyles.INSTANCE))
                 .build();
     }

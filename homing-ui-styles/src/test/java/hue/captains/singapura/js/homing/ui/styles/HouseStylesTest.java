@@ -80,6 +80,10 @@ class HouseStylesTest {
     private static final Set<String> PANE = Set.of("floating-pane shape-shadow", "floating-pane motion-transform", "title-bar type-face",
             "title-bar size-inset", "title-bar size-gap", "title-bar shape-border", "label_title type-face", "pane shape-outline");
 
+    /** What every style decides for its panel: the room between its head and its body, and its depth; its head's room and the line under it; a section's room - its body's. */
+    private static final Set<String> PANEL = Set.of("panel size-gap", "panel shape-shadow", "panel-bar size-inset", "panel-bar size-gap", "panel-bar shape-border",
+            "section size-inset", "section size-gap");
+
     /** What every style decides for its tabs: a tab's measure, its frame, how it moves and is lifted; its strip's height and the rule along its foot. */
     private static final Set<String> TABS = Set.of("tab size-extent", "tab size-inset", "tab size-gap", "tab shape-corner", "tab shape-border",
             "tab motion-ease", "tab motion-transform", "tab shape-shadow", "tab-strip size-extent", "tab-strip shape-border");
@@ -113,9 +117,10 @@ class HouseStylesTest {
             allowed.addAll(CARDS);
             allowed.addAll(SITE);
             allowed.addAll(PANE);
+            allowed.addAll(PANEL);
             var beyond = new TreeSet<>(answered);
             beyond.removeAll(allowed);
-            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil, a pane's thumbnail's rule, its slider, its menu, its tabs, its cards, its page and its floating pane: " + beyond);
+            assertTrue(beyond.isEmpty(), () -> s.token() + " answers beyond the button and text branches, the ways, the marks, the veil, a pane's thumbnail's rule, its slider, its menu, its tabs, its cards, its page, its floating pane and its panel: " + beyond);
             var missing = new TreeSet<>(BUTTON_BRANCH);
             missing.removeAll(answered);
             left.put(s.token(), missing);
@@ -169,13 +174,14 @@ class HouseStylesTest {
         expected.addAll(Set.of("site-bar size-inset", "site-bar size-gap", "site-bar shape-border", "ground type-face"));
         expected.addAll(Set.of("floating-pane shape-corner", "floating-pane shape-border", "floating-pane motion-ease", "title-bar size-inset",
                 "title-bar size-gap", "title-bar shape-border", "title-bar affordance-cursor", "title-bar affordance-select"));
+        expected.addAll(Set.of("panel shape-corner", "panel shape-border", "panel motion-ease"));
         expected.addAll(Set.of("brand size-gap", "brand type-decoration", "preferences-button shape-corner", "preferences-button shape-border",
                 "preferences-button size-inset", "preferences-button size-gap", "preferences-button type-face", "preferences-button type-scale"));
         assertEquals(expected, alike,
                 "a control is pointed at, a button's type grows alike, a control that cannot be used neither lifts nor casts a shadow,"
                 + " and a mark alone goes without a frame, in the size of the text it sits in; every text's measure, its figures and its chip;"
                 + " a link the size of the text it sits in, and the crumb that is the page set heavier; a separator a hairline, a delimiter a slash, a layout's boundary a hairline;"
-                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size; a row of actions capped as groups are ruled apart, its room; a trail's crumbs apart, in the caption's size; an edge strip's room, its hairline along its top and the floating pane's shadow; a pane ringed inside its edge while the keys are on it and while a tab is offered to it, never a floating one for that; a card's proportion, ring and pointer, a group of sliders framed as a card; a brand's mark apart from its name, a preferences button framed as a button; the site bar's room and its hairline, the page in the system's face; a floating pane framed as a card, eased, its title bar's room, its hairline and its hand");
+                + " a pane's thumbnail ruled round with a hairline; a slider's room, its text kept from the hand, its knob grabbed and its mark's size, the detent and the ticks as most styles mark them; a menu's text the label's face, kept from the hand, its rows pointed at in the label's size; a tab's text the caption's size, kept from the hand, pointed at and grabbed, and its strip's kept from the hand, its tail's room eight pixels; a switch with no room inside, its word kept apart, its knob and groove eased; an item a button's corner and rule, ringed as a control, a choice and a listed row set in and pointed at; a lamp's corner, line, room and size; a row of actions capped as groups are ruled apart, its room; a trail's crumbs apart, in the caption's size; an edge strip's room, its hairline along its top and the floating pane's shadow; a pane ringed inside its edge while the keys are on it and while a tab is offered to it, never a floating one for that; a card's proportion, ring and pointer, a group of sliders framed as a card; a brand's mark apart from its name, a preferences button framed as a button; the site bar's room and its hairline, the page in the system's face; a floating pane framed as a card, eased, its title bar's room, its hairline and its hand; a panel framed as a card, eased");
         var palette = Harbour.INSTANCE.implementations().stream().filter(i -> i.node().component() instanceof Root).map(i -> i.target().token()).toList();
         assertEquals(semantic.stream().filter(t -> t instanceof Target.Color).map(Target::token).collect(Collectors.toSet()), Set.copyOf(palette),
                 "the palette answers every semantic colour at the root");

@@ -35,6 +35,8 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.DROP_MARK;
 import static hue.captains.singapura.js.homing.ui.styles.Say.BRAND;
 import static hue.captains.singapura.js.homing.ui.styles.Say.PREFERENCES_BUTTON;
 import static hue.captains.singapura.js.homing.ui.styles.Say.CARD;
+import static hue.captains.singapura.js.homing.ui.styles.Say.PANEL;
+import static hue.captains.singapura.js.homing.ui.styles.Say.PANEL_HEAD;
 import static hue.captains.singapura.js.homing.ui.styles.Say.SLIDER_GROUP;
 import static hue.captains.singapura.js.homing.ui.styles.Say.ACTION_BAR;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TRAIL;
@@ -287,6 +289,12 @@ final class HouseRule {
                 rest(CARD, BORDER, "border-color: " + s.border() + ";"),
                 rest(SLIDER_GROUP, BACKGROUND, ground(s.raised())),
                 rest(SLIDER_GROUP, BORDER, "border-color: " + s.border() + ";"),
+                // ── a panel: raised, in the text's ink, a hairline round it - the accent's while it is the current one; the line
+                //    under its head in the accent, as a tab strip's foot is ──
+                rest(PANEL, BACKGROUND, ground(s.raised())),
+                rest(PANEL, INK, "color: " + s.text() + ";"),
+                when(PANEL, BORDER, Map.of(State.REST, "border-color: " + s.border() + ";", State.CURRENT, "border-color: " + s.accent() + ";")),
+                rest(PANEL_HEAD, BORDER, "border-color: " + s.accent() + ";"),
                 // ── each ringed as a control is, in the ring's colours: a card with an action, a group of sliders holding the keys ──
                 new Implementation<>(CARD, Target.Color.Outline.INSTANCE, new Answer.Redirect<>(CONTROL)),
                 new Implementation<>(SLIDER_GROUP, Target.Color.Outline.INSTANCE, new Answer.Redirect<>(CONTROL)),

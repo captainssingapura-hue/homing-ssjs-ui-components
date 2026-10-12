@@ -55,6 +55,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.cardMeasure;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardMotion;
 import static hue.captains.singapura.js.homing.ui.styles.Say.cardShadow;
+import static hue.captains.singapura.js.homing.ui.styles.Say.panel;
 
 /** Neo-brutalism: square, a heavy rule, a hard offset shadow, and a press that drops into it. */
 public record NeoBrutalism() implements DesignStyle, Derives<Base> {
@@ -135,5 +136,7 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
             // ── its panes ringed while the keys are on them, as its old design marked them ──
             List.of(paneRings("6px solid", "6px dashed", "6px dotted")),
             pane("12px 12px 0 var(--box-shadow-cast)", "12px 12px 0 var(--box-shadow-cast), 0 0 0 4px var(--box-shadow-glow)", "8px 8px 0 var(--box-shadow-cast)", "10px 10px 0 var(--box-shadow-cast)", "translate(-2px, -2px)", "translate(-4px, -4px)", DISPLAY, "padding-block: 6px; padding-inline: 12px;", "10px", "2px"),
+            // ── its panel: the head a slab and the line under it a bar; the ink offset, or stamped in - no blur either way ──
+            panel("1.5", "8px", "14px", "10px", "3px solid", "12px", "14px", "12px", "0px", "6px 6px 0 var(--box-shadow-cast)", "inset 4px 4px 0 var(--box-shadow-cast)"),
             siteChrome(BODY, "4px", null));
 }

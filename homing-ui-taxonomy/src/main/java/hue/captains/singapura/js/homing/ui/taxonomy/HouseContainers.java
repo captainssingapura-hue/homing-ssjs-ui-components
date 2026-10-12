@@ -52,14 +52,17 @@ public final class HouseContainers {
         }
     }
 
-    /** A panel that fills what holds it: a head with a title, and a body. Its controls are the caller's. */
+    /**
+     * A panel that fills what holds it: a head that names it, and a body - a section of its room, which what is
+     * mounted in it fills. Its controls are the caller's, at the end of its head.
+     */
     public record Panel() implements Component<HouseBranches.Container> {
         public static final Panel INSTANCE = new Panel();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Head.INSTANCE).optional(),
-                           DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Title.INSTANCE).optional());
+            return List.of(DSL.part(PanelBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional(),
+                           DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Body.INSTANCE).one());
         }
     }
 
@@ -105,6 +108,16 @@ public final class HouseContainers {
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Title.INSTANCE).optional(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
+        }
+    }
+
+    /** Heads a panel: its title, and at its end what acts on the panel - the caller's. */
+    public record PanelBar() implements Component<HouseBranches.Bar> {
+        public static final PanelBar INSTANCE = new PanelBar();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Title.INSTANCE).optional());
         }
     }
 

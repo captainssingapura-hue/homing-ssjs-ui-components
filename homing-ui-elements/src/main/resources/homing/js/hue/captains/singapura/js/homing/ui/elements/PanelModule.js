@@ -46,8 +46,15 @@
 // =============================================================================
 
 const _panelOwner = Object.freeze({ toString: () => "panel" });
+/** Its head - the bar that names it - and its body - a section of its room: each realized inline, in its own look. */
+const _PANEL_HEAD = Object.freeze({ LEAF: "panel-bar" });
+const _PANEL_BODY = Object.freeze({ LEAF: "section" });
+/** What a panel's own placement says, which its look leaves to it: its least size, so it fills what holds it and no more. */
+const _PANEL_PLACED = Object.freeze(["size-extent"]);
 
 class Panel {
+    static LEAF = "panel";
+
     /** On a sub-branch the caller made, with its properties. */
     constructor(branch, props) {
         if (!branch) throw new Error("[Panel] a branch of its own is required");
@@ -63,6 +70,9 @@ class Panel {
 
         var root = branch.createElement("panel", "section");
         css.addClass(root, el_panel);
+        // its look: raised, framed as a card is - unless its container draws the lines - lifted or set in as the app says;
+        // its least size its placement's, so it fills what holds it
+        new Look(Panel, ROLE.STANDALONE).wear(root, { except: p.bare ? _PANEL_PLACED.concat(["shape-corner", "shape-border"]) : _PANEL_PLACED });
         this._parts = [root];
 
         this.head = null;
@@ -71,6 +81,7 @@ class Panel {
         if (p.title != null) {
             var head = branch.createElement("head", "header");
             css.addClass(head, el_panel_head);
+            new Look(_PANEL_HEAD, ROLE.HEAD).wear(head, { only: ["size-inset", "size-gap", "shape-border", "color-border"] });   // its room, and the line under it
             // its title is the house's kicker, cast as its title: placed by the panel, looking as a kicker does
             var title = new Kicker(KickerFactory.create(branch, "title"), { text: String(p.title) }, ROLE.TITLE);
             css.addClass(title.el, el_panel_title);
@@ -88,8 +99,11 @@ class Panel {
 
         var body = branch.createElement("body", "div");
         css.addClass(body, el_panel_body);
-        if (!p.bare) css.addClass(root, el_panel_framed);   // the frame is a class, not an override: a bare panel never wears it
-        if (!p.fills) { css.addClass(body, el_panel_body_air); this._parts.push(body); }
+        if (!p.fills) {   // content: the style's room round it, and a scroll of its own; filled, the body is flush
+            css.addClass(body, el_panel_body_air);
+            new Look(_PANEL_BODY, ROLE.BODY).wear(body, { only: ["size-inset", "size-gap"] });
+            this._parts.push(body);
+        }
         root.appendChild(body);
         this.body = body;
 
@@ -136,8 +150,8 @@ class Panel {
         var want = !!on;
         if (want !== this._highlight) {
             this._highlight = want;
-            if (want) css.addClass(this.root, el_panel_current);
-            else css.removeClass(this.root, el_panel_current);
+            if (want) this.root.setAttribute("aria-current", "true");   // said by its reflection: the look draws it
+            else this.root.removeAttribute("aria-current");
         }
         return this;
     }
