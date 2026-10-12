@@ -39,7 +39,7 @@ final class TextsInJs {
             js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)).replace("const ICONS", "var ICONS"));
         }
         for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "TextBehaviorModule.js", "TextModule.js",
-                                      "HeadingModule.js", "KickerModule.js", "CaptionModule.js", "LedeModule.js", "LabelModule.js",
+                                      "HeadingModule.js", "Heading1Module.js", "Heading2Module.js", "Heading3Module.js", "Heading4Module.js", "Heading5Module.js", "Heading6Module.js", "KickerModule.js", "CaptionModule.js", "LedeModule.js", "LabelModule.js",
                                       "ReadoutModule.js", "BadgeModule.js", "PillModule.js", "WordmarkModule.js"})
             if (js.eval("js", "typeof " + m.replace("Module.js", "") + " === 'undefined'").asBoolean())
                 loadModule.accept(DIR + m);

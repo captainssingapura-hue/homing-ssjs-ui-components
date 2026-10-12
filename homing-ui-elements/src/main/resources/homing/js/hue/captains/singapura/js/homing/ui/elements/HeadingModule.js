@@ -1,26 +1,12 @@
 // =============================================================================
-// Heading — words that say what a container holds, read first. A Text (a simple component) on a <div>, in the heading's look.
+// Heading — what the heading leaves share: words that say what a container
+// holds, read first. A Text (a simple component); never made on its own - each
+// level of a page's outline is a leaf of its own, on its own element, in its own
+// look: Heading1 on an <h1>, a page's own name, down to Heading6 on an <h6>.
 //
-//   var x = new Heading(HeadingFactory.create(branch, "heading"), { text: "…", level: 3 }, ROLE.STANDALONE);
-//   x.text  x.size
-//   x.level = 3          which heading it is in the page's outline, 1 to 6, 2 unless given:
-//                        a heading by its role and its level, whatever element it is on
+//   var h = new Heading4(Heading4Factory.create(branch, "title"), { text: "Books" }, ROLE.TITLE);
+//   h.text = "Shelves"   the words, its whole face
+//   h.size = 0.5         −1 the smallest … 1 the biggest; 0 its level's own
 // =============================================================================
 
-class Heading extends Text {
-    static LEAF = "heading";
-    static TAG = "div";
-    static AXES = Object.freeze({
-        level: Object.freeze({
-            values: Object.freeze([1, 2, 3, 4, 5, 6]),
-            rest: 2,
-            reflect: function (el, n) { el.setAttribute("role", "heading"); el.setAttribute("aria-level", String(n)); }
-        })
-    });
-
-    get level() { return this._get("level"); }
-    set level(n) { this._set("level", Number(n)); }
-}
-
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const HeadingFactory = new SimpleComponentFactory(Heading);
+class Heading extends Text {}

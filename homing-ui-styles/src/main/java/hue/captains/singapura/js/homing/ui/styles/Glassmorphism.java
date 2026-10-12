@@ -28,6 +28,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.pageName;
 import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
@@ -100,6 +101,7 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
             // ── its type: the body face on every text, its display face where a text is set apart ──
             type(TEXT, BODY, null, null),
             type(HEADING, DISPLAY, "600", null),
+            pageName("600", "letter-spacing: -0.02em;", null, null),   // a page's own name, as the old Display was set
             type(KICKER, DISPLAY, "600", "letter-spacing: 0.14em; text-transform: uppercase;"),
             type(LABEL, null, "600", null),
             type(READOUT, DISPLAY, "600", "letter-spacing: -0.01em; font-variant-numeric: tabular-nums;"),

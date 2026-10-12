@@ -29,6 +29,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.pageName;
 import static hue.captains.singapura.js.homing.ui.styles.Say.separatorRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.thumbRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
@@ -100,6 +101,7 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
             // ── its type: the body face on every text, its display face where a text is set apart ──
             type(TEXT, BODY, null, null),
             type(HEADING, DISPLAY, "900", null),
+            pageName("900", "letter-spacing: -0.03em; text-transform: uppercase;", null, null),   // a page's own name, as the old Display was set
             type(KICKER, DISPLAY, "900", "letter-spacing: 0.04em; text-transform: uppercase;"),
             type(LABEL, null, "700", null),
             type(READOUT, DISPLAY, "900", "font-variant-numeric: tabular-nums;"),

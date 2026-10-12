@@ -29,6 +29,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.pageName;
 import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
 import static hue.captains.singapura.js.homing.ui.styles.Say.TEXT;
 import static hue.captains.singapura.js.homing.ui.styles.Say.HEADING;
@@ -102,6 +103,7 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
             // ── its type: the body face on every text, its display face where a text is set apart ──
             type(TEXT, BODY, null, null),
             type(HEADING, DISPLAY, "600", null),
+            pageName("300", "letter-spacing: 0.08em; text-transform: uppercase;", "46px", "1.05"),   // a page's own name, as the old Display was set
             type(KICKER, DISPLAY, "600", "letter-spacing: 0.22em; text-transform: uppercase;"),
             type(LEDE, null, null, "letter-spacing: 0.01em;"),
             type(CAPTION, null, null, "letter-spacing: 0.02em;"),

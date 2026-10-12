@@ -36,7 +36,7 @@ public record SummaryCardModule() implements DomModule<SummaryCardModule>, ImplF
     public ImportsFor<SummaryCardModule> imports() {
         return ImportsFor.<SummaryCardModule>builder()
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new HeadingModule.Heading(), new HeadingModule.HeadingFactory()), HeadingModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading4Module.Heading4(), new Heading4Module.Heading4Factory()), Heading4Module.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BadgeModule.Badge(), new BadgeModule.BadgeFactory()), BadgeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))

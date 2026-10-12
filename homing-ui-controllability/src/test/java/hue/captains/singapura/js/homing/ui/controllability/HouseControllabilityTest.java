@@ -106,7 +106,7 @@ class HouseControllabilityTest {
     @Test
     void aBranchClassifiesEveryLeafUnderIt_andANodeWithNothingOnItsLineageIsPlain() {
         assertEquals("switchable", typeOf("toggle-button"), "under the Button branch, declared on the branch");
-        assertEquals("plain", typeOf("heading"));
+        assertEquals("plain", typeOf("heading4"), "a heading: nothing on its lineage to control");
         for (Component<?> leaf : TAXONOMY.components())
             assertTrue(HouseControllability.INSTANCE.findControlType(TAXONOMY, leaf) != null, leaf + " has a type");
     }

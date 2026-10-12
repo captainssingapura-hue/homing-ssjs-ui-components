@@ -54,7 +54,8 @@ class HouseStylesTest {
     private static final Set<String> TEXT_BRANCH = Set.of(
             "text type-face", "heading type-face", "heading type-weight", "kicker type-face", "kicker type-weight", "kicker type-treatment",
             "lede type-treatment", "caption type-treatment", "label type-weight", "readout type-face", "readout type-weight", "readout type-treatment",
-            "wordmark type-face", "wordmark type-treatment");
+            "wordmark type-face", "wordmark type-treatment",
+            "heading1 type-weight", "heading1 type-treatment", "heading1 type-scale");
 
     /** What a style may decide for the ways somewhere, the marks between things and the veil: how a way eases and is marked under the hand, how thick a separator is ruled, how the page behind a dialog is veiled. */
     private static final Set<String> WAYS_MARKS_AND_VEIL = Set.of(
@@ -155,7 +156,7 @@ class HouseStylesTest {
             for (String t : List.of("shape-border", "size-inset", "size-extent", "shape-shadow", "motion-transform", "type-scale")) marks.add(mark + " " + t);
         var expected = new TreeSet<>(Set.of("control affordance-cursor", "button type-scale", "control shape-shadow", "control motion-transform"));
         expected.addAll(marks);
-        for (String text : List.of("heading", "lede", "kicker", "caption", "label", "readout", "badge", "pill", "wordmark")) expected.add(text + " type-scale");
+        for (String text : List.of("heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "lede", "kicker", "caption", "label", "readout", "badge", "pill", "wordmark")) expected.add(text + " type-scale");
         expected.addAll(Set.of("readout type-treatment", "badge type-treatment", "badge size-inset", "badge shape-corner",
                 "pill type-treatment", "pill size-inset", "pill shape-corner"));
         expected.addAll(Set.of("link type-scale", "crumb type-weight", "separator shape-border", "delimiter type-glyph", "boundary-line size-extent", "pane-thumb shape-border"));

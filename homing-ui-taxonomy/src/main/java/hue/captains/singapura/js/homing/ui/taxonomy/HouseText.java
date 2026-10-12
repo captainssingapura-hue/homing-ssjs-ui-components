@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Text;
 
 /**
  * The house's text: independent components of words, each a role's base wherever a component
- * shows words - a card's title is played by a {@link Heading}, a slider's label by a
+ * shows words - a card's title is played by a {@link Heading4}, a slider's label by a
  * {@link Label}.
  */
 public final class HouseText {
@@ -18,10 +18,42 @@ public final class HouseText {
         @Override public Text parent() { return Text.INSTANCE; }
     }
 
-    /** What a container is called. */
-    public record Heading() implements Component<Text> {
-        public static final Heading INSTANCE = new Heading();
-        @Override public Text parent() { return Text.INSTANCE; }
+    // ── the headings: one leaf for each level of a page's outline, under the Heading branch ──
+
+    /** A page's own name: the first heading of its outline. */
+    public record Heading1() implements Component<HouseBranches.Heading> {
+        public static final Heading1 INSTANCE = new Heading1();
+        @Override public HouseBranches.Heading parent() { return HouseBranches.Heading.INSTANCE; }
+    }
+
+    /** The heading of one of a page's great divisions. */
+    public record Heading2() implements Component<HouseBranches.Heading> {
+        public static final Heading2 INSTANCE = new Heading2();
+        @Override public HouseBranches.Heading parent() { return HouseBranches.Heading.INSTANCE; }
+    }
+
+    /** The heading of a section within a part. */
+    public record Heading3() implements Component<HouseBranches.Heading> {
+        public static final Heading3 INSTANCE = new Heading3();
+        @Override public HouseBranches.Heading parent() { return HouseBranches.Heading.INSTANCE; }
+    }
+
+    /** The heading of a smaller section, or of what a container holds: a card's, a group's, a setting's title. */
+    public record Heading4() implements Component<HouseBranches.Heading> {
+        public static final Heading4 INSTANCE = new Heading4();
+        @Override public HouseBranches.Heading parent() { return HouseBranches.Heading.INSTANCE; }
+    }
+
+    /** The heading of a division within a smaller section. */
+    public record Heading5() implements Component<HouseBranches.Heading> {
+        public static final Heading5 INSTANCE = new Heading5();
+        @Override public HouseBranches.Heading parent() { return HouseBranches.Heading.INSTANCE; }
+    }
+
+    /** The least heading: a division within that. */
+    public record Heading6() implements Component<HouseBranches.Heading> {
+        public static final Heading6 INSTANCE = new Heading6();
+        @Override public HouseBranches.Heading parent() { return HouseBranches.Heading.INSTANCE; }
     }
 
     /** The small line above a heading. */

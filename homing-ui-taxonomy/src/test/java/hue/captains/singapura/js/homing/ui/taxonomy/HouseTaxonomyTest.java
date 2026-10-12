@@ -35,7 +35,7 @@ class HouseTaxonomyTest {
     /** The common components ui-components ships today, by their class names; its Button is realized by the button leaves, its Card by SummaryCard. */
     private static final Set<String> SHIPPED = Set.of(
             "SummaryCard", "Slider", "SliderGroup", "Panel", "EdgeStrip", "Dialog", "FloatingPane", "Icon", "ContextMenu",
-            "Link", "Crumb", "Scrim", "Separator", "Delimiter", "Label", "Heading", "Caption", "Readout");
+            "Link", "Crumb", "Scrim", "Separator", "Delimiter", "Label", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6", "Caption", "Readout");
 
     @Test
     void theBase_aloneOnThisClasspath() {
@@ -45,8 +45,8 @@ class HouseTaxonomyTest {
 
     @Test
     void theBaseIsReadWhole_withItsCatalogue() {
-        assertEquals(14, HOUSE.branches().size(), "the view, the field and the split have no common leaf: their leaves are the extensions' - a view is a widget, a split the grid's");
-        assertEquals(65, HOUSE.components().size(), "the panel's head among them, a bar of its own; the browser's own text box and checkbox");
+        assertEquals(15, HOUSE.branches().size(), "the view, the field and the split have no common leaf: their leaves are the extensions' - a view is a widget, a split the grid's; the headings a branch of the text, a leaf a level");
+        assertEquals(70, HOUSE.components().size(), "the panel's head among them, a bar of its own; the browser's own text box and checkbox; a heading for each level of a page's outline");
         assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
         assertEquals(52, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the site bar's brand and trail among them; the brand's mark its own colour, no icon; the float layer's floats; the panel's head and its body");
         assertEquals(24, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts");
@@ -87,8 +87,8 @@ class HouseTaxonomyTest {
             assertFalse(descendants(b).isEmpty(), b.getClass().getSimpleName() + " has no component under it");
         assertEquals(List.of("control", "item", "container", "region", "text", "mark", "track"),
                 HOUSE.children(Root.INSTANCE).stream().map(n -> n.token()).toList(), "level 1, in the order first reached");
-        assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2),
-                HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, seven at level 2");
+        assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
+                HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, eight at level 2 - the headings among them, a branch of the text");
     }
 
     @Test
@@ -103,7 +103,7 @@ class HouseTaxonomyTest {
         assertEquals(List.of(HouseContainers.PlainCard.INSTANCE, HouseContainers.SummaryCard.INSTANCE),
                 HOUSE.children(HouseBranches.Card.INSTANCE));
         assertTrue(HOUSE.partsOf(HouseContainers.PlainCard.INSTANCE).isEmpty(), "the basic card fixes no part");
-        assertEquals(List.of("summary-card-title 1 heading", "summary-card-tag 0..1 badge",
+        assertEquals(List.of("summary-card-title 1 heading4", "summary-card-tag 0..1 badge",
                              "summary-card-summary 0..1 caption", "summary-card-open 0..1 link"),
                 said(HouseContainers.SummaryCard.INSTANCE));
     }
@@ -129,7 +129,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(14 + 65 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
+        assertEquals(15 + 70 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));

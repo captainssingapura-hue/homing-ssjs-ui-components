@@ -28,7 +28,7 @@ class OverviewWidget {
         var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "group" }, ROLE.CATEGORY);
         css.addClass(kicker.el, pv_kicker);
         root.appendChild(kicker.el);
-        var title = new Heading(HeadingFactory.create(branch, "title"), { text: params.label || "", level: 2 }, ROLE.TITLE);
+        var title = new Heading4(Heading4Factory.create(branch, "title"), { text: params.label || "" }, ROLE.TITLE);
         css.addClass(title.el, pv_title);
         root.appendChild(title.el);
         if (params.summary) {

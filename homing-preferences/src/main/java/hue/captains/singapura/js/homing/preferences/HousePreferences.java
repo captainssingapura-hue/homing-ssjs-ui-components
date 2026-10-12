@@ -43,7 +43,7 @@ public record HousePreferences() implements TaxonomyExtension {
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Category.INSTANCE).one(),
-                           DSL.part(HouseText.Heading.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
+                           DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
                            DSL.part(HouseText.Lede.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).one(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Reset.INSTANCE).one());
@@ -101,7 +101,7 @@ public record HousePreferences() implements TaxonomyExtension {
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Category.INSTANCE).one(),
-                           DSL.part(HouseText.Heading.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
+                           DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
                            DSL.part(HouseText.Lede.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(),
                            DSL.part(SettingRow.INSTANCE).as(HouseShaping.Entry.INSTANCE).any(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Reset.INSTANCE).one());

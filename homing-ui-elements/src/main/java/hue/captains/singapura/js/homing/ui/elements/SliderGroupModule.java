@@ -49,7 +49,7 @@ public record SliderGroupModule() implements DomModule<SliderGroupModule>, ImplF
     public ImportsFor<SliderGroupModule> imports() {
         return ImportsFor.<SliderGroupModule>builder()
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new HeadingModule.Heading(), new HeadingModule.HeadingFactory()), HeadingModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading4Module.Heading4(), new Heading4Module.Heading4Factory()), Heading4Module.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_slider_group(),

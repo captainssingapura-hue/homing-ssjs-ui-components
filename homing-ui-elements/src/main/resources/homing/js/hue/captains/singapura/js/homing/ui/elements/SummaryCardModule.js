@@ -57,7 +57,7 @@ class SummaryCard {
         css.addClass(head, el_card_head);
         look.wear(head, { only: ["size-gap"] });   // the card's room between its parts, in its head too
         // its texts are the house's, each cast as what it is to the card: placed by the card, looking as they are
-        this._title = new Heading(HeadingFactory.create(branch, "title"), { text: p.title == null ? "" : String(p.title), level: 2 }, ROLE.TITLE);
+        this._title = new Heading4(Heading4Factory.create(branch, "title"), { text: p.title == null ? "" : String(p.title) }, ROLE.TITLE);
         css.addClass(this._title.el, el_card_title);
         head.appendChild(this._title.el);
         var badge = null;

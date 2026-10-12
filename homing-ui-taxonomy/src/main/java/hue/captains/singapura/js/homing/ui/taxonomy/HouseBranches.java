@@ -109,6 +109,12 @@ public final class HouseBranches {
         @Override public Root parent() { return Root.INSTANCE; }
     }
 
+    /** Words that say what a container holds, read first: a leaf for each level of a page's outline. */
+    public record Heading() implements L2_ComponentBranch<Text> {
+        public static final Heading INSTANCE = new Heading();
+        @Override public Text parent() { return Text.INSTANCE; }
+    }
+
     /** A line something moves along, or fills. */
     public record Track() implements L1_ComponentBranch<Root> {
         public static final Track INSTANCE = new Track();

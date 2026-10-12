@@ -46,7 +46,7 @@ class PreferenceField {
         var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: params.kicker || params.name }, ROLE.CATEGORY);
         css.addClass(kicker.el, pv_kicker);
         root.appendChild(kicker.el);
-        var title = new Heading(HeadingFactory.create(branch, "title"), { text: params.label || params.name, level: 2 }, ROLE.TITLE);
+        var title = new Heading4(Heading4Factory.create(branch, "title"), { text: params.label || params.name }, ROLE.TITLE);
         css.addClass(title.el, pv_title);
         root.appendChild(title.el);
         if (params.summary) {

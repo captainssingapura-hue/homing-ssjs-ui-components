@@ -4,9 +4,29 @@
 
 Words that name a control or a field, so the user knows what using it will touch.
 
-## Heading
+## Heading1
 
-Words that say what a container holds, read first.
+A page's own name: the first heading of its outline, read before anything else on it.
+
+## Heading2
+
+A part of the page: the heading of one of its great divisions.
+
+## Heading3
+
+A section within a part, under its heading.
+
+## Heading4
+
+A smaller section, or what a container holds - a card's, a group's, a setting's title.
+
+## Heading5
+
+A division within a smaller section.
+
+## Heading6
+
+The least heading: a division within that.
 
 ## Kicker
 

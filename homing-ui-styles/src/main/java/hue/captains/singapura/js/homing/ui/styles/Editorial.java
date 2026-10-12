@@ -26,6 +26,7 @@ import static hue.captains.singapura.js.homing.ui.styles.Say.rest;
 import static hue.captains.singapura.js.homing.ui.styles.Say.rings;
 import static hue.captains.singapura.js.homing.ui.styles.Say.when;
 import static hue.captains.singapura.js.homing.ui.styles.Say.type;
+import static hue.captains.singapura.js.homing.ui.styles.Say.pageName;
 import static hue.captains.singapura.js.homing.ui.styles.Say.separatorRule;
 import static hue.captains.singapura.js.homing.ui.styles.Say.waysEase;
 import static hue.captains.singapura.js.homing.ui.styles.Say.veil;
@@ -91,6 +92,7 @@ public record Editorial() implements DesignStyle, Derives<Base> {
             // ── its type: the body face on every text, its display face where a text is set apart ──
             type(TEXT, BODY, null, null),
             type(HEADING, DISPLAY, "700", null),
+            pageName("700", "letter-spacing: -0.5px;", null, null),   // a page's own name, as the old Display was set
             type(KICKER, DISPLAY, "700", "letter-spacing: 2px; text-transform: uppercase;"),
             type(LEDE, null, null, "font-style: italic;"),
             type(CAPTION, null, null, "font-style: italic;"),

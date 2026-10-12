@@ -162,7 +162,14 @@ final class Say {
     // ── the text leaves ──────────────────────────────────────────────────
 
     static final Taxon TEXT = HouseBranches.Text.INSTANCE;
-    static final Taxon HEADING = HouseText.Heading.INSTANCE;
+    /** The headings, a branch: what every level shares - its face, its weight, its ink - is answered here. */
+    static final Taxon HEADING = HouseBranches.Heading.INSTANCE;
+    static final Taxon HEADING_1 = HouseText.Heading1.INSTANCE;
+    static final Taxon HEADING_2 = HouseText.Heading2.INSTANCE;
+    static final Taxon HEADING_3 = HouseText.Heading3.INSTANCE;
+    static final Taxon HEADING_4 = HouseText.Heading4.INSTANCE;
+    static final Taxon HEADING_5 = HouseText.Heading5.INSTANCE;
+    static final Taxon HEADING_6 = HouseText.Heading6.INSTANCE;
     static final Taxon KICKER = HouseText.Kicker.INSTANCE;
     static final Taxon CAPTION = HouseText.Caption.INSTANCE;
     static final Taxon LEDE = HouseText.Lede.INSTANCE;
@@ -173,6 +180,16 @@ final class Say {
     static final Taxon WORDMARK = HouseText.Wordmark.INSTANCE;
     static final Target.Type.Weight WEIGHT = Target.Type.Weight.INSTANCE;
     static final Target.Type.Treatment TREATMENT = Target.Type.Treatment.INSTANCE;
+
+    /**
+     * A page's own name in a style - the first heading - as the old Display was set: its weight, its treatment, and its size
+     * where the style's differs from the house's ladder (null); its face is every heading's.
+     */
+    static List<Implementation<?>> pageName(String weight, String treatment, String size, String leading) {
+        var out = new ArrayList<Implementation<?>>(type(HEADING_1, null, weight, treatment));
+        if (size != null) out.add(rest(HEADING_1, SCALE, "font-size: " + grows(size, "1.2") + "; line-height: " + leading + ";"));
+        return List.copyOf(out);
+    }
 
     /** A text leaf's type in a style: its face, its weight, its treatment - each left to what is above it when null. */
     static List<Implementation<?>> type(Taxon leaf, String face, String weight, String treatment) {
@@ -190,7 +207,13 @@ final class Say {
      */
     static List<Implementation<?>> textMeasure() {
         return List.of(
-                rest(HEADING, SCALE, "font-size: " + grows("18px", "1.2") + "; line-height: 1.25;"),
+                // the headings' ladder: a page's name the old Display's, the fourth level the old Heading's - a container's title
+                rest(HEADING_1, SCALE, "font-size: " + grows("44px", "1.2") + "; line-height: 1.1;"),
+                rest(HEADING_2, SCALE, "font-size: " + grows("28px", "1.2") + "; line-height: 1.2;"),
+                rest(HEADING_3, SCALE, "font-size: " + grows("22px", "1.2") + "; line-height: 1.25;"),
+                rest(HEADING_4, SCALE, "font-size: " + grows("18px", "1.2") + "; line-height: 1.25;"),
+                rest(HEADING_5, SCALE, "font-size: " + grows("15px", "1.2") + "; line-height: 1.3;"),
+                rest(HEADING_6, SCALE, "font-size: " + grows("13px", "1.2") + "; line-height: 1.4;"),
                 rest(LEDE, SCALE, "font-size: " + grows("17px", "1.2") + "; line-height: 1.55;"),
                 rest(KICKER, SCALE, "font-size: " + grows("11px", "1.15") + "; line-height: 1.4;"),
                 rest(CAPTION, SCALE, "font-size: " + grows("13px", "1.2") + "; line-height: 1.5;"),

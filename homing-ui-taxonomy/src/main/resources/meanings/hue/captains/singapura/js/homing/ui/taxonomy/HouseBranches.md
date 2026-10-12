@@ -66,6 +66,10 @@ A stretch of a container's room with a job of its own, but no frame of its own.
 
 Words the user reads; they inform and do nothing.
 
+## Heading
+
+Words that say what a container holds, read first - at the level of the page's outline they stand at.
+
 ## Track
 
 A line a value lies along, or fills, so its place can be seen.

@@ -54,7 +54,7 @@ class SliderGroup {
         var header = branch.createElement("header", "div");
         css.addClass(header, el_slider_group_header);
         look.wear(header, { only: ["size-gap", "affordance-cursor"] });   // its head points: a press there makes the group the holder
-        var title = new Heading(HeadingFactory.create(branch, "title"), { text: p.title == null ? "" : String(p.title), level: 3 }, ROLE.TITLE);
+        var title = new Heading4(Heading4Factory.create(branch, "title"), { text: p.title == null ? "" : String(p.title) }, ROLE.TITLE);
         css.addClass(title.el, el_slider_group_title);
         if (p.title != null) root.setAttribute("aria-label", String(p.title));
         header.appendChild(title.el);
