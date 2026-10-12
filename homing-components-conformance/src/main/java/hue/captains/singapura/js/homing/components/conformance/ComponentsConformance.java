@@ -10,10 +10,8 @@ import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.RuleId;
 import hue.captains.singapura.js.homing.core.Crate;
-import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
-import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
@@ -96,11 +94,6 @@ public final class ComponentsConformance {
                     new RuleId("no-raw-css"),
                     "Icon IS the lexicon's manager, as Look is the look's: the word's class it puts on is the lexicon sheet's, "
                             + "derived - each style's writing of the word - which the CSS manager does not handle (RFC 0064, D25)."));
-
-    /** Every look the framework's designs offer — each design in each palette that fits it; each must bind every pair a class wears. */
-    public static List<Design> designs() {
-        return HomingDesigns.REGISTRY.themes().stream().map(t -> (Design) t).toList();
-    }
 
     /** The top level and everything it requires, transitively. */
     public static Collection<Crate> closure() {

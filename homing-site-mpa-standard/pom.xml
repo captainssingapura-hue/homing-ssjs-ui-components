@@ -77,6 +77,17 @@
             <artifactId>homing-ui-elements</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- The house's styles and palettes, which the site's themes are (HouseThemes), and the semantic classes they are written in. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-styles</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-dialog</artifactId>

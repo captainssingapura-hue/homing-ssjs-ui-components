@@ -2,15 +2,9 @@ package hue.captains.singapura.js.homing.ui.controlpanel;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
 
 /** The control panel's classes: its column of controls, a row of toggles or buttons, and what it says when there is nothing to control. */
 public record ControlPanelStyles() implements CssGroup<ControlPanelStyles> {
@@ -29,7 +23,6 @@ public record ControlPanelStyles() implements CssGroup<ControlPanelStyles> {
 
     /** What the panel says of itself: nothing to control. Small and quiet. */
     public record cp_note() implements CssClass<ControlPanelStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 0;"; }
     }
 

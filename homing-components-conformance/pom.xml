@@ -78,12 +78,6 @@
             <artifactId>homing-conformance-export</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- The designs the components are held to: the framework's, nothing legacy. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-designs</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
         <!-- The top level: every fresh crate. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>

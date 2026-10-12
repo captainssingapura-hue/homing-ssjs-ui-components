@@ -3,53 +3,10 @@ package hue.captains.singapura.js.homing.ui.elements;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Box.Container;
-import static hue.captains.singapura.js.homing.design.Box.Control;
-import static hue.captains.singapura.js.homing.design.Box.Inline;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
-import static hue.captains.singapura.js.homing.design.Emphasis.Secondary;
-import static hue.captains.singapura.js.homing.design.Feedback.Danger;
-import static hue.captains.singapura.js.homing.design.Feedback.Success;
-import static hue.captains.singapura.js.homing.design.Feedback.Warning;
-import static hue.captains.singapura.js.homing.design.Interaction.Current;
-import static hue.captains.singapura.js.homing.design.Interaction.Dragging;
-import static hue.captains.singapura.js.homing.design.Interaction.Focus;
-import static hue.captains.singapura.js.homing.design.Interaction.Inert;
-import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
-import static hue.captains.singapura.js.homing.design.Layer.Base;
-import static hue.captains.singapura.js.homing.design.Layer.Overlay;
-import static hue.captains.singapura.js.homing.design.Layer.Inverted;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Layer.Recessed;
-import static hue.captains.singapura.js.homing.design.Structure.Detent;
-import static hue.captains.singapura.js.homing.design.Structure.Divider;
-import static hue.captains.singapura.js.homing.design.Structure.Tick;
-import static hue.captains.singapura.js.homing.design.Pairing.OnDanger;
-import static hue.captains.singapura.js.homing.design.Pairing.OnPrimary;
-import static hue.captains.singapura.js.homing.design.Pairing.OnSecondary;
-import static hue.captains.singapura.js.homing.design.Pairing.OnSuccess;
-import static hue.captains.singapura.js.homing.design.Pairing.OnWarning;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Effect;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Size;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Body;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Code;
-import static hue.captains.singapura.js.homing.design.Text.Heading;
-import static hue.captains.singapura.js.homing.design.Text.Kicker;
-import static hue.captains.singapura.js.homing.design.Text.Label;
-import static hue.captains.singapura.js.homing.design.Text.Link;
 
 /**
  * The elements' classes. Every colour, face, edge, corner and motion is a
@@ -74,13 +31,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * grow with the element's size.
      */
     public record el_button() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.Button.Base.class, Shape.Rule.class), of(Control.Button.Base.class, Shape.Corner.class), of(Control.Button.Base.class, Color.Edge.class),
-                           of(Control.Button.Base.class, Size.Inset.class), of(Control.Button.Base.class, Size.Gap.class), of(Control.Button.Base.class, Size.Extent.class),
-                           of(Label.class, Type.Scale.class), of(Heading.class, Type.Face.class),
-                           of(Interactive.class, Affordance.Cursor.class), of(Interactive.class, Motion.Ease.class));
-        }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Control.Button.Base.class, Size.Inset.class), of(Control.Button.Base.class, Size.Gap.class), of(Control.Button.Base.class, Size.Extent.class), of(Label.class, Type.Scale.class)); }
         @Override public String body() { return """
             font: inherit;
             display: inline-flex;
@@ -97,42 +47,31 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * at −1 the meaning turned the other way. Each design anchors each.
      */
     public record el_button_primary() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class), of(OnPrimary.class, Color.Ink.class), of(Primary.class, Color.Edge.class)); }
-        @Override public List<? extends Wearable> extents() { return wears(); }
         @Override public String body() { return ""; }
     }
 
     /** The secondary button: the secondary surface, the ink for it, its edge; scaled as the primary is. */
     public record el_button_secondary() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Secondary.class, Color.Surface.class), of(OnSecondary.class, Color.Ink.class), of(Secondary.class, Color.Edge.class)); }
-        @Override public List<? extends Wearable> extents() { return wears(); }
         @Override public String body() { return ""; }
     }
 
     /** The danger button; at −1 the design's safety, whatever that looks like there. */
     public record el_button_danger() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Danger.class, Color.Surface.class), of(OnDanger.class, Color.Ink.class), of(Danger.class, Color.Edge.class)); }
-        @Override public List<? extends Wearable> extents() { return wears(); }
         @Override public String body() { return ""; }
     }
 
     /** The warning button; at −1 the design's calm. */
     public record el_button_warning() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Warning.class, Color.Surface.class), of(OnWarning.class, Color.Ink.class), of(Warning.class, Color.Edge.class)); }
-        @Override public List<? extends Wearable> extents() { return wears(); }
         @Override public String body() { return ""; }
     }
 
     /** The success button; at −1 the design's failure. */
     public record el_button_success() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Success.class, Color.Surface.class), of(OnSuccess.class, Color.Ink.class), of(Success.class, Color.Edge.class)); }
-        @Override public List<? extends Wearable> extents() { return wears(); }
         @Override public String body() { return ""; }
     }
 
     /** The plain button: raised, in body ink. Not a semantic surface; it does not scale. */
     public record el_button_plain() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Raised.class, Color.Edge.class)); }
         @Override public String body() { return ""; }
     }
 
@@ -142,13 +81,11 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * worn only while on, so an off button neither lifts nor presses.
      */
     public record el_button_on() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Interactive.class, Motion.Transform.class), of(Interactive.class, Shape.Shadow.class)); }
         @Override public String body() { return ""; }
     }
 
     /** A button that is off: inert, and says so. Toggled beside {@code disabled}, in place of {@link el_button_on}. */
     public record el_button_off() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Inert.class, Effect.Opacity.class), of(Inert.class, Affordance.Cursor.class)); }
         @Override public String body() { return ""; }
     }
 
@@ -172,9 +109,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     /** A text leaf's element: no margin of its own - where it sits, and the room round it, are its owner's. Layout only. */
     public record el_text() implements CssClass<ElementStyles> {
         @Override public String body() { return "margin: 0;\n"; }
-        // The old designs tint some shadows with the heading's ink, which the texts wore before
-        // they took the house's look; until the old side goes, they keep its binding emitted.
-        @Override public List<? extends Wearable> reads() { return List.of(of(Heading.class, Color.Ink.class)); }
     }
 
     // ── Slider ────────────────────────────────────────────────────────────────
@@ -632,12 +566,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * design that draws no line under the head parts them with it.
      */
     public record el_panel() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Container.Panel.class, Size.Gap.class), of(Container.Panel.class, Shape.Shadow.class),
-                           // the RAISED face, not the page's: a sheet lies ON something, and has to be able to be seen doing it
-                           of(Raised.class, Color.Surface.class), of(Body.class, Color.Ink.class), of(Body.class, Type.Face.class));
-        }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Panel.class, Size.Gap.class)); }
         // The panel's depth is the design's to draw and the holder's to set: the shadow is worn plainly here, and
         // the design answers it at ELEVATED and SUNKEN — in whatever plane it honestly uses for depth, or not at
         // all. Nothing here says what a register MEANS; the app says that, in its own code.
@@ -660,11 +588,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * panels; the line's colour is the divider's, as a strip's is.
      */
     public record el_panel_head() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Container.Panel.Head.class, Size.Inset.class), of(Container.Panel.Head.class, Size.Gap.class), of(Container.Panel.Head.class, Shape.Rule.class),
-                           of(Raised.class, Color.Surface.class), of(Divider.class, Color.Edge.class));
-        }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Panel.Head.class, Size.Inset.class), of(Container.Panel.Head.class, Size.Gap.class)); }
         @Override public String body() { return """
             flex: none;
             display: flex;
@@ -689,8 +612,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The slot at the end of the head: what acts on the panel, pushed to the end and never squeezed. */
     public record el_panel_slot() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Container.Panel.Head.class, Size.Gap.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Panel.Head.class, Size.Gap.class)); }
         @Override public String body() { return """
             margin-inline-start: auto;
             flex: none;
@@ -725,15 +646,10 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
       * that never wears it.
       */
     public record el_panel_framed() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Container.Panel.class, Shape.Corner.class), of(Container.Panel.class, Shape.Rule.class),
-                           of(Container.Panel.class, Color.Edge.class), of(Raised.class, Color.Edge.class));
-        }
         @Override public String body() { return ""; }
     }
 
     public record el_panel_current() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Current.class, Color.Edge.class)); }
         @Override public String body() { return ""; }
     }
 
@@ -759,8 +675,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     /** The body of a panel that holds content rather than a widget: the design's air around it, its gap between the things in it, and the scroll. */
     public record el_panel_body_air() implements CssClass<ElementStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Container.Panel.Body.class, Size.Inset.class), of(Container.Panel.Body.class, Size.Gap.class)); }
-        @Override public List<? extends Wearable> sizes() { return List.of(of(Container.Panel.Body.class, Size.Inset.class), of(Container.Panel.Body.class, Size.Gap.class)); }
         @Override public String body() { return "overflow: auto;"; }
     }
 
@@ -774,11 +688,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
      * line, and wrap whole to a second row when the host is narrow.
      */
     public record el_strip() implements CssClass<ElementStyles> {
-        /**
-         * The old designs' shadows other classes still wear - a control's, a panel's - are cast in the inverted layer's
-         * colour, which an old design binds only when it is required: read here, so it stays bound until the old stack goes.
-         */
-        @Override public List<? extends Wearable> reads() { return List.of(of(Inverted.class, Color.Surface.class)); }
         @Override public String body() { return """
             position: absolute;
             inset-inline: 0;

@@ -63,6 +63,10 @@ public record Sketchy() implements DesignStyle, Derives<Base> {
 
     public static final Sketchy INSTANCE = new Sketchy();
 
+    @Override public String group() { return "Expressive"; }
+
+    @Override public String inspiration() { return "Drawn by hand in marker on paper — 2px lines, corners that wobble, nothing casts a shadow."; }
+
     @Override public Base base() { return Base.INSTANCE; }
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }

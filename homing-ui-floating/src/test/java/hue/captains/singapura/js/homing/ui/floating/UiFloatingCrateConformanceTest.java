@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.core.CssClass;
-import hue.captains.singapura.js.homing.design.Deployment;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -31,8 +30,6 @@ class UiFloatingCrateConformanceTest {
 
     @Test
     void theFloatingPanePaintsNothingOfItsOwn() {
-        var worn = Deployment.wornBy(List.of(FloatingStyles.INSTANCE));
-        assertTrue(worn.isEmpty(), "the desk, the pane and its title bar wear the house's look: no word is worn - found " + worn.size());
         for (CssClass<FloatingStyles> c : FloatingStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color"),

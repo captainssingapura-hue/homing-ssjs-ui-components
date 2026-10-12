@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import java.util.List;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
 
 /**
  * The dialog's own styles — what a dialog adds to the floating pane it is

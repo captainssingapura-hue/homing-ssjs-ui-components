@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.ui.dialog;
 import hue.captains.singapura.js.homing.conformance.rules.CrateDependencyRule;
 import hue.captains.singapura.js.homing.conformance.rules.OrphanCheck;
 import hue.captains.singapura.js.homing.core.CssClass;
-import hue.captains.singapura.js.homing.design.Deployment;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,8 +26,6 @@ class UiDialogCrateConformanceTest {
 
     @Test
     void theDialogPaintsNothingOfItsOwn() {
-        var worn = Deployment.wornBy(List.of(DialogStyles.INSTANCE));
-        assertEquals(0, worn.size(), "the dialog's own classes wear no design word: its foot is a row of actions, the house's look; the frame is the pane's, the veil the house's scrim; found " + worn);
         for (CssClass<DialogStyles> c : DialogStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid"),

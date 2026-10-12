@@ -3,14 +3,9 @@ package hue.captains.singapura.js.homing.ui.monitors;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Code;
 
 /** The monitors' classes: the focus monitor's tree of rows, each indented by its depth, the holder's row lit; the steward monitor's lamp. */
 public record FocusStyles() implements CssGroup<FocusStyles> {
@@ -19,7 +14,6 @@ public record FocusStyles() implements CssGroup<FocusStyles> {
 
     /** The tree: rows in a column, in a code face. */
     public record fm_tree() implements CssClass<FocusStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Code.class, Type.Face.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """
             display: flex;
             flex-direction: column;

@@ -64,6 +64,10 @@ public record RetroFuturism() implements DesignStyle, Derives<Base> {
 
     public static final RetroFuturism INSTANCE = new RetroFuturism();
 
+    @Override public String group() { return "Expressive"; }
+
+    @Override public String inspiration() { return "A magenta sun over a cyan grid — everything outlined in neon and glowing."; }
+
     @Override public Base base() { return Base.INSTANCE; }
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }

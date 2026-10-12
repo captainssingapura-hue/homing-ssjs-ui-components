@@ -22,6 +22,8 @@ public record Frost() implements ColorPalette {
 
     public static final Frost INSTANCE = new Frost();
 
+    @Override public String inspiration() { return "An aurora behind plates of frosted glass — white at a fraction, rimmed in light."; }
+
     static final Seeds SEEDS = new Seeds("rgba(255, 255, 255, 0.32)", "#182040", "#1B2340", "#FFFFFF", "#5B7CFF", "#B85CFF", "#7A3FD6", "#FFFFFF",
                                          "rgba(27, 35, 64, 0.12)", "#DDE7F5", "rgba(255, 255, 255, 0.18)");
 

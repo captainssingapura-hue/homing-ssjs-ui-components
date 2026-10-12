@@ -20,6 +20,8 @@ public record NeoFuturismColours() implements ColorPalette {
 
     public static final NeoFuturismColours INSTANCE = new NeoFuturismColours();
 
+    @Override public String inspiration() { return "Deep space and one electric cyan, every edge a filament."; }
+
     static final Seeds SEEDS = new Seeds("#FFFFFF", "#0B1020", "#141B2D", "#04121A", "#00C2E0", "#6C4DFF", "#6C4DFF", "#E8F1FF", "#D6DEEB", "#F3F6FB", "#E8EDF6");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);

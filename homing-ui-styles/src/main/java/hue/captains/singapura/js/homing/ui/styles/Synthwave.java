@@ -20,6 +20,8 @@ public record Synthwave() implements ColorPalette {
 
     public static final Synthwave INSTANCE = new Synthwave();
 
+    @Override public String inspiration() { return "A magenta sun over a cyan grid — the colours of a 1984 that never happened."; }
+
     static final Seeds SEEDS = new Seeds("#FFFFFF", "#2A0A4A", "#2A0A4A", "#FFFFFF", "#E6007E", "#0092A8", "#0092A8", "#0B0221",
                                          "rgba(230, 0, 126, 0.18)", "#F6EFFF", "#EFE6FF");
 

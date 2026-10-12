@@ -64,6 +64,10 @@ public record Neumorphism() implements DesignStyle, Derives<Base> {
 
     public static final Neumorphism INSTANCE = new Neumorphism();
 
+    @Override public String group() { return "Expressive"; }
+
+    @Override public String inspiration() { return "One material, moulded — pressed out of the page or into it, never drawn on."; }
+
     @Override public Base base() { return Base.INSTANCE; }
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }

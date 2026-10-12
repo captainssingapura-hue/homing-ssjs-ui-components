@@ -63,6 +63,10 @@ public record NeoFuturism() implements DesignStyle, Derives<Base> {
 
     public static final NeoFuturism INSTANCE = new NeoFuturism();
 
+    @Override public String group() { return "Expressive"; }
+
+    @Override public String inspiration() { return "Cool glass over deep space — one electric cyan, every edge a filament."; }
+
     @Override public Base base() { return Base.INSTANCE; }
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }

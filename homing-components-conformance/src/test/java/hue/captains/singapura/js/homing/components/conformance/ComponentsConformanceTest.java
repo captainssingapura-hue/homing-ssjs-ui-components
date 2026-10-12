@@ -14,8 +14,6 @@ import hue.captains.singapura.js.homing.component.Implementations;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardRegistry;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.design.Deployment;
-import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.tree.TreeLevel;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
@@ -32,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The components' gate, strict from the first day: the baseline is empty and
- * every finding fails the build. Five checks over the fresh crates —
+ * every finding fails the build. Its checks over the fresh crates —
  * <ol>
  *   <li><b>crate integrity</b>: each declares every served module in its
  *       Maven module and every cross-crate import in {@code requires()};</li>
@@ -41,9 +39,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *       framework's policy under the role its crate declares;</li>
  *   <li><b>the CSS graph laws</b>: tokens declared, priors are palettes,
  *       nested references declared, crate reach, no literal families;</li>
- *   <li><b>the substrate</b>: every one of the seven designs binds every
- *       pair every class in these crates wears, and anchors what is worn
- *       with an extent.</li>
  *   <li><b>the catalogue</b>: every component a crate exports is listed by
  *       the crate's own catalogue, once, and the composed tree derived from
  *       the closure has no two vertices alike.</li>
@@ -93,27 +88,6 @@ class ComponentsConformanceTest {
                 .stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors, () -> "css graph ERRORS (" + errors.size() + "):\n"
                 + errors.stream().map(ComponentsConformanceTest::describe).collect(Collectors.joining("\n")));
-    }
-
-    @Test
-    void everyDesignBindsEveryPairTheComponentsWear() {
-        var groups = new ArrayList<CssGroup<?>>();
-        for (Crate c : ComponentsConformance.TOP_LEVEL)
-            for (var e : c.entries()) if (e.module() instanceof CssGroup<?> g) groups.add(g);
-        assertEquals(13, groups.size(), "one style group per crate that has styles, docking none, sizing its handle's; the house's look sheet is derived, no group");
-        var worn = Deployment.wornBy(groups);
-        var scaled = Deployment.scaledBy(groups);
-        var grown = Deployment.grownBy(groups);
-        assertTrue(worn.size() > 50, "the six groups wear many distinct pairs; found " + worn.size());
-        assertTrue(scaled.size() >= 1, "the splitter's lit handle is worn with an extent");
-        assertTrue(grown.get(hue.captains.singapura.js.homing.design.Growth.SIZE).size() >= 1, "the button is worn with a size");
-        assertTrue(grown.get(hue.captains.singapura.js.homing.design.Growth.ASPECT).isEmpty(), "no class is worn with an aspect any more: the card's is the house's look");
-        List<Design> designs = ComponentsConformance.designs();
-        assertTrue(designs.size() >= 7, "the seven designs, each in the palettes that fit it; found " + designs.size());
-        for (Design d : designs) {
-            var r = Deployment.of(worn, scaled, grown, d).resolve();
-            assertEquals(List.of(), r.findings(), () -> d.slug() + ": " + r.findings());
-        }
     }
 
     private static String describe(GradedFinding g) {

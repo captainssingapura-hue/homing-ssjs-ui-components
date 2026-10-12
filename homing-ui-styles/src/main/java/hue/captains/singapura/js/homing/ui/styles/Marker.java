@@ -17,6 +17,8 @@ public record Marker() implements ColorPalette {
 
     public static final Marker INSTANCE = new Marker();
 
+    @Override public String inspiration() { return "Black marker on white paper, and a red pen for what is being pointed at."; }
+
     static final Seeds SEEDS = new Seeds("#FFFFFF", "#333333", "#212529", "#FFFFFF", "#212529", "#E03131", "#B02626", "#FFFFFF", "#333333", "#FFFFFF", "#F7F7F9");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);

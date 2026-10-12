@@ -62,6 +62,10 @@ public record Editorial() implements DesignStyle, Derives<Base> {
 
     public static final Editorial INSTANCE = new Editorial();
 
+    @Override public String group() { return "Neutral"; }
+
+    @Override public String inspiration() { return "The house design — serif headings, hairline rules, a whisper of shadow."; }
+
     @Override public Base base() { return Base.INSTANCE; }
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }

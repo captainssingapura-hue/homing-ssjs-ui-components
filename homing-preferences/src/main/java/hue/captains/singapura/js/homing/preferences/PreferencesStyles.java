@@ -3,15 +3,9 @@ package hue.captains.singapura.js.homing.preferences;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Interaction.Focus;
-import static hue.captains.singapura.js.homing.design.Structure.Divider;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
 
 /**
  * The view's two panes and the widgets' fields. Words worn, layout in the
@@ -180,7 +174,6 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
 
     /** The flat tree: a listbox with a focus ring of its own. */
     public record pv_list() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
         @Override public String body() { return """
             display: flex;
             flex-direction: column;

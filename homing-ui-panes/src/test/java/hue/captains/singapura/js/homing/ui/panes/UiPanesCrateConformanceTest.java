@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.core.CssClass;
-import hue.captains.singapura.js.homing.design.Deployment;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -31,9 +30,6 @@ class UiPanesCrateConformanceTest {
 
     @Test
     void thePanePaintsNothingOfItsOwn() {
-        var worn = Deployment.wornBy(List.of(PaneStyles.INSTANCE));
-        assertEquals(8, worn.size(), "the pane's classes wear only the pane's frame and the drop target's - the strip, its chips"
-                + " and the drop mark wear the house's look, the within mark the lexicon's word; found " + worn);
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color"),

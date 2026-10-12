@@ -22,6 +22,8 @@ public record Clay() implements ColorPalette {
 
     public static final Clay INSTANCE = new Clay();
 
+    @Override public String inspiration() { return "One grey-blue clay, the raised layer the same colour as the page."; }
+
     static final Seeds SEEDS = new Seeds("#E0E5EC", "#2D3A4B", "#3B4A5E", "#FFFFFF", "#2D3A4B", "#6C8CFF", "#4F6FE0", "#FFFFFF", "#CBD3DF", "#E0E5EC", "#D6DBE3");
 
     private static final List<Implementation<? extends Target.Color>> ANSWERS = HouseRule.answers(SEEDS);

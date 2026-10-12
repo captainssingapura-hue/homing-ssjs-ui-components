@@ -49,7 +49,6 @@ class SizingCrateConformanceTest {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("color") || body.contains("border") || body.contains("background"),
                     c.getClass().getSimpleName() + " paints: " + body);
-            assertTrue(c.wears().isEmpty() && c.reads().isEmpty(), c.getClass().getSimpleName() + " wears or reads a design word");
         }
     }
 }

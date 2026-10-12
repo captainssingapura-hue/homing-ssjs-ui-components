@@ -3,31 +3,10 @@ package hue.captains.singapura.js.homing.ui.menu;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Box.Container;
-import static hue.captains.singapura.js.homing.design.Box.Control;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Interaction.Inert;
-import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
-import static hue.captains.singapura.js.homing.design.Interaction.Selectable;
-import static hue.captains.singapura.js.homing.design.Layer.Overlay;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Structure.Divider;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Effect;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Size;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Body;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Label;
 
 /**
  * The context menus' styles: the layer they show in, the frame that is

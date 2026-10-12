@@ -63,6 +63,10 @@ public record Glassmorphism() implements DesignStyle, Derives<Base> {
 
     public static final Glassmorphism INSTANCE = new Glassmorphism();
 
+    @Override public String group() { return "Expressive"; }
+
+    @Override public String inspiration() { return "Plates of frosted glass over an aurora — blurred, rimmed in light, lifted on soft shadow."; }
+
     @Override public Base base() { return Base.INSTANCE; }
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }

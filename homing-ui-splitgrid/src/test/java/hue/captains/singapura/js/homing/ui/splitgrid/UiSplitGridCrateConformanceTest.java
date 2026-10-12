@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.core.CssClass;
-import hue.captains.singapura.js.homing.design.Deployment;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -32,10 +31,8 @@ class UiSplitGridCrateConformanceTest {
     /** The grid's classes place: its line, its mirror and its cells wear the house's look, and nothing here wears a word or holds a value. */
     @Test
     void theGridPaintsNothingOfItsOwn() {
-        assertTrue(Deployment.wornBy(List.of(SplitGridStyles.INSTANCE)).isEmpty(), "no design word worn: the line's look is the house's casting");
         for (CssClass<SplitGridStyles> c : SplitGridStyles.INSTANCE.cssClasses()) {
             String body = c.body();
-            assertTrue(c.wears().isEmpty() && c.reads().isEmpty(), c.getClass().getSimpleName() + " wears or reads a design word");
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color") || body.contains("background"),
                     c.getClass().getSimpleName() + " holds a value the substrate should bind: " + body);
         }

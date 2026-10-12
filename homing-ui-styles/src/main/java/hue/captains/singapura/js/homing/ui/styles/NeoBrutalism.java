@@ -64,6 +64,10 @@ public record NeoBrutalism() implements DesignStyle, Derives<Base> {
 
     public static final NeoBrutalism INSTANCE = new NeoBrutalism();
 
+    @Override public String group() { return "Expressive"; }
+
+    @Override public String inspiration() { return "A riso-print order form — ink rules, offset shadows, one loud yellow."; }
+
     @Override public Base base() { return Base.INSTANCE; }
 
     @Override public List<Implementation<?>> implementations() { return ANSWERS; }
