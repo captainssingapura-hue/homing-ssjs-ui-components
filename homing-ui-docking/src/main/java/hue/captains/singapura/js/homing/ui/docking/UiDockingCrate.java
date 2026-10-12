@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.ui.docking;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
@@ -27,7 +26,7 @@ public final class UiDockingCrate implements Crate {
     @Override public String name() { return "homing-ui-docking"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiPanesCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, UiFloatingCrate.INSTANCE, UiPanesCrate.INSTANCE);
     }
 
     @Override public List<CrateEntry> entries() {

@@ -6,7 +6,6 @@ import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
 
@@ -26,7 +25,7 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-elements"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, CoreJsCrate.INSTANCE, DesignCrate.INSTANCE, UiIconsCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, CoreJsCrate.INSTANCE, UiIconsCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiElementsComponents.INSTANCE; }

@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import java.util.List;
@@ -22,7 +21,7 @@ public final class UiFloatingCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-floating"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiElementsCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, UiElementsCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiFloatingComponents.INSTANCE; }

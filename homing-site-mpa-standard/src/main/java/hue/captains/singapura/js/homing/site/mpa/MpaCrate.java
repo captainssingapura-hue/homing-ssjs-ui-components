@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
@@ -32,8 +31,7 @@ public final class MpaCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-site-mpa-standard"; }
 
     @Override public List<Crate> requires() {
-        return List.of(CoreJsCrate.INSTANCE, ServerCrate.INSTANCE, DesignCrate.INSTANCE,
-                       UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiIconsCrate.INSTANCE, UiElementsCrate.INSTANCE);
+        return List.of(CoreJsCrate.INSTANCE, ServerCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiIconsCrate.INSTANCE, UiElementsCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return MpaComponents.INSTANCE; }
