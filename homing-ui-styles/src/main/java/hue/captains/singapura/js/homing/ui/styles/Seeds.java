@@ -16,6 +16,10 @@ package hue.captains.singapura.js.homing.ui.styles;
  * @param border     the hairline: a button's border, and where the ramp of a coloured button ends at 0
  * @param ground     the page's ground: what everything on a page stands on
  * @param recessed   a layer pressed below the page: the desk panes float over
+ *
+ * <p>Public to read, so a design outside the styles - a design of a design branch, such as the house's
+ * design of the grid's frame - draws in a palette's colours ({@link HouseStyles#seeds}); a palette is
+ * still written only here.</p>
  */
-record Seeds(String raised, String inverted, String text, String onInverted, String title, String accent, String accentEdge,
+public record Seeds(String raised, String inverted, String text, String onInverted, String title, String accent, String accentEdge,
              String onAccent, String border, String ground, String recessed) {}

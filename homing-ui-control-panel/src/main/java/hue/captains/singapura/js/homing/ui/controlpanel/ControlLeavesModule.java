@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.controlpanel;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
+import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -47,10 +48,11 @@ public record ControlLeavesModule() implements EsModule<ControlLeavesModule>, Se
     public List<String> selfContent(ModuleNameResolver resolver) {
         var house = HouseControllability.INSTANCE;
         Taxonomy taxonomy = HouseTaxonomy.INSTANCE.read();
-        String typeOf = taxonomy.components().stream()
+        List<Component<?>> leaves = taxonomy.components().stream().filter(c -> !(c instanceof VirtualComponent<?>)).toList();   // a design draws a virtual leaf; nothing controls it
+        String typeOf = leaves.stream()
                 .map((Component<?> c) -> quoted(c.token()) + ": " + quoted(house.findControlType(taxonomy, c).name()))
                 .collect(Collectors.joining(",\n    "));
-        String optionsOf = taxonomy.components().stream()
+        String optionsOf = leaves.stream()
                 .map((Component<?> c) -> quoted(c.token()) + ": Object.freeze([" + house.optionsFor(taxonomy, c).stream()
                         .map(o -> quoted(o.name().value())).collect(Collectors.joining(", ")) + "])")
                 .collect(Collectors.joining(",\n    "));

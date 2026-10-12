@@ -61,6 +61,21 @@ public record HouseStyles() {
     /** A style's own palette. */
     public ColorPalette own(DesignStyle style) { return ownOf(style); }
 
+    /**
+     * The seeds a house palette is written from: the colours a design outside the styles draws in, palette by
+     * palette - the house's design of the grid's frame. Refused for a palette that is not the house's.
+     */
+    public Seeds seeds(ColorPalette palette) {
+        Seeds s = SEEDS.get(palette);
+        if (s == null) throw new IllegalArgumentException(palette.token() + " is no house palette");
+        return s;
+    }
+
+    private static final Map<ColorPalette, Seeds> SEEDS = Map.of(
+            Harbour.INSTANCE, Harbour.SEEDS, NeoBrutalismColours.INSTANCE, NeoBrutalismColours.SEEDS,
+            NeoFuturismColours.INSTANCE, NeoFuturismColours.SEEDS, Clay.INSTANCE, Clay.SEEDS, Frost.INSTANCE, Frost.SEEDS,
+            Synthwave.INSTANCE, Synthwave.SEEDS, Marker.INSTANCE, Marker.SEEDS, Forest.INSTANCE, Forest.SEEDS);
+
     private static ColorPalette ownOf(DesignStyle style) {
         ColorPalette p = OWN.get(style);
         if (p == null) throw new IllegalArgumentException("the house has no palette of its own for " + style.token());

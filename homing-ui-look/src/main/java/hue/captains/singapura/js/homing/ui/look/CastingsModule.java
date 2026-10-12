@@ -6,6 +6,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleNode;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
+import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
  *   <li>{@code ROLE[NAME]} - Standalone, a component on its own, then every role of the
  *       catalogue: {@code { token, functional }}, functional for a role of the Shaping branch,
  *       whose part is cast for its look as Standalone;</li>
- *   <li>{@code CASTINGS[leaf]} - every leaf, by its token, and the roles it may be cast in:
+ *   <li>{@code CASTINGS[leaf]} - every leaf but a virtual one, by its token, and the roles it may be cast in:
  *       Standalone, then each role a declared slot casts it in.</li>
  * </ul>
  *
@@ -60,6 +61,7 @@ public record CastingsModule() implements EsModule<CastingsModule>, SelfContent 
         roles.add(role("standalone", false));
         for (Role<?> r : taxonomy.roles()) roles.add(role(r.name().value(), functional.contains(r)));
         String castings = taxonomy.components().stream()
+                .filter(c -> !(c instanceof VirtualComponent<?>))   // never cast: a design's concrete leaf is worn
                 .map((Component<?> c) -> quoted(c.token()) + ": Object.freeze([" + String.join(", ", castOf(taxonomy, c)) + "])")
                 .collect(Collectors.joining(",\n    "));
         return List.of(
