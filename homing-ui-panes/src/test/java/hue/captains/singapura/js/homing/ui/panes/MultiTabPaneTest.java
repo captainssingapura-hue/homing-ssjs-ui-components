@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
-import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
-import hue.captains.singapura.js.homing.ui.icons.IconsModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -159,10 +159,10 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         // the buttons: their castings and their looks, generated, before their declarations are read
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
-        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/LookModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/SimpleComponentModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/ButtonBehaviorModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/ButtonModule.js");

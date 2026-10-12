@@ -42,13 +42,12 @@ class UiIconsCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(1, checked, "the component; the table is generated and the styles are a sheet");
+        assertEquals(1, checked, "the component; the styles are a sheet");
     }
 
     @Test
-    void theComponentAndTheTableImportEveryClassDeclared() {
-        var imported = java.util.stream.Stream.of(IconModule.INSTANCE.imports(), IconsModule.INSTANCE.imports())
-                .flatMap(im -> im.getAllImports().values().stream())
+    void theComponentImportsEveryClassDeclared() {
+        var imported = IconModule.INSTANCE.imports().getAllImports().values().stream()
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
         for (CssClass<IconStyles> c : IconStyles.INSTANCE.cssClasses())
             assertTrue(imported.contains(c.getClass().getSimpleName()), c.getClass().getSimpleName() + " is declared but not imported");

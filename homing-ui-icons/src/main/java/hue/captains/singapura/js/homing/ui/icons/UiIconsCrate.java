@@ -6,14 +6,16 @@ import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.server.ServerCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 
 import java.util.List;
 
 /**
- * The icons' crate: the {@code Icon} element component, the table of the
- * house's words generated from its lexicon, the mark's box, and the sheet each
- * style writes the words in. A component that shows a mark requires this crate
- * and asks for a word; every house style writes every word.
+ * The icons' crate: the {@code Icon} element component and the mark's box. The
+ * words it shows are the lexicon's - their table and the sheet each style writes
+ * them in are the look's ({@code UiLookCrate}), the design's, which a component
+ * that shows a word on a mark of its own requires instead; every house style
+ * writes every word.
  */
 public final class UiIconsCrate implements Crate, ComponentVehicle {
     public static final UiIconsCrate INSTANCE = new UiIconsCrate();
@@ -22,7 +24,7 @@ public final class UiIconsCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-icons"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, UiLookCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiIconsComponents.INSTANCE; }
@@ -30,8 +32,6 @@ public final class UiIconsCrate implements Crate, ComponentVehicle {
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(IconModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(IconsModule.INSTANCE),
-                CrateEntry.of(IconStyles.INSTANCE),
-                CrateEntry.of(LexiconSheet.INSTANCE));
+                CrateEntry.of(IconStyles.INSTANCE));
     }
 }

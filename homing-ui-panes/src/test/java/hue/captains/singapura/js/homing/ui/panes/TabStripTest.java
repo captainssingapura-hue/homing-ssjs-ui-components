@@ -1,8 +1,8 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
-import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -94,12 +94,13 @@ class TabStripTest extends JsModuleTestBase {
         js = buildContext();
         // the chips' close button: its castings and its looks, generated, before its declaration is read
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
         js.eval("js", "var lexicon_sheet = 'lexicon-sheet';");   // the lexicon's table: a mark - the cross, the within mark - is a word of it
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)));
-        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
+        for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
             loadModule(ELEMENTS + m);
         TextsInJs.load(js, this::loadModule);   // and the pill that is its count
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");

@@ -1,11 +1,10 @@
-package hue.captains.singapura.js.homing.ui.elements;
+package hue.captains.singapura.js.homing.ui.look;
 
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.icons.IconsModule;
 
 import java.util.List;
 

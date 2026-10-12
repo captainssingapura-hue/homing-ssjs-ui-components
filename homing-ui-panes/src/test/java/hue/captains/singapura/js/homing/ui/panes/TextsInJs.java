@@ -1,8 +1,8 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
-import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
-import hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import org.graalvm.polyglot.Context;
 
@@ -36,9 +36,11 @@ final class TextsInJs {
         js.eval("js", "if (typeof look_sheet === 'undefined') globalThis.look_sheet = 'look-sheet';");
         if (js.eval("js", "typeof ICONS === 'undefined'").asBoolean()) {   // the lexicon's table, as a var: a test may give its own after
             js.eval("js", "if (typeof lexicon_sheet === 'undefined') globalThis.lexicon_sheet = 'lexicon-sheet';");
-            js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)).replace("const ICONS", "var ICONS"));
+            js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)).replace("const ICONS", "var ICONS"));
         }
-        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "TextBehaviorModule.js", "TextModule.js",
+        if (js.eval("js", "typeof Look === 'undefined'").asBoolean())   // the look, the design's: beside the elements, not one of them
+            loadModule.accept("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");
+        for (String m : new String[] {"SimpleComponentModule.js", "TextBehaviorModule.js", "TextModule.js",
                                       "HeadingModule.js", "Heading1Module.js", "Heading2Module.js", "Heading3Module.js", "Heading4Module.js", "Heading5Module.js", "Heading6Module.js", "KickerModule.js", "CaptionModule.js", "LedeModule.js", "LabelModule.js",
                                       "ReadoutModule.js", "BadgeModule.js", "PillModule.js", "WordmarkModule.js"})
             if (js.eval("js", "typeof " + m.replace("Module.js", "") + " === 'undefined'").asBoolean())

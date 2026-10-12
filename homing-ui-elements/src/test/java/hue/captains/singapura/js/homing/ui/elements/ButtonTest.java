@@ -1,6 +1,11 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,10 +62,11 @@ class ButtonTest extends JsModuleTestBase {
         js.eval("js", "var look_sheet = 'look-sheet';");
         // the icon an icon button holds: the real Icon, its classes handles as the shim's css takes them
         js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         js.eval("js", "var el_icon_button = { name: 'el_icon_button' };");   // the icon button's face, laid out
-        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js",
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
+        for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js",
                                       "PlainButtonModule.js", "PrimaryButtonModule.js", "DangerButtonModule.js",
                                       "ToggleButtonBehaviorModule.js", "ToggleButtonModule.js", "CloseButtonModule.js", "IconButtonModule.js"})
             loadModule(DIR + m);

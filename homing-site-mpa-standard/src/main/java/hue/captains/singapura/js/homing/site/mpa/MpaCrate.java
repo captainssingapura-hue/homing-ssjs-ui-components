@@ -10,6 +10,7 @@ import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 
 import java.util.List;
 
@@ -31,7 +32,7 @@ public final class MpaCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-site-mpa-standard"; }
 
     @Override public List<Crate> requires() {
-        return List.of(CoreJsCrate.INSTANCE, ServerCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiIconsCrate.INSTANCE, UiElementsCrate.INSTANCE);
+        return List.of(CoreJsCrate.INSTANCE, ServerCrate.INSTANCE, UiDialogCrate.INSTANCE, UiPreferencesCrate.INSTANCE, UiIconsCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return MpaComponents.INSTANCE; }

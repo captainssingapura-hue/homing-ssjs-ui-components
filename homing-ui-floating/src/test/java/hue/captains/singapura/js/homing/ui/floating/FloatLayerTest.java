@@ -103,11 +103,12 @@ class FloatLayerTest extends JsModuleTestBase {
         js = buildContext();
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         // the close button its head holds: the house's, on the new sheet
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
-        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
+        for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
         TextsInJs.load(js, this::loadModule);   // and the label that is its title
         loadModule(EVENTS);

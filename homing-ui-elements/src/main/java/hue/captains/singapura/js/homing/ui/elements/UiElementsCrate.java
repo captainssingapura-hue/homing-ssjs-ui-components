@@ -8,13 +8,15 @@ import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 
 import java.util.List;
 
 /**
  * The elements' crate: the components and their styles, on the runtime
  * ({@code ServerCrate} — the component base's crate, under its old name
- * until the old structure retires) and the design substrate's targets.
+ * until the old structure retires), each worn in the house's look
+ * ({@code UiLookCrate}, the design's: the look, its castings, its sheet).
  */
 public final class UiElementsCrate implements Crate, ComponentVehicle {
 
@@ -25,18 +27,13 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-elements"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, CoreJsCrate.INSTANCE, UiIconsCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, CoreJsCrate.INSTANCE, UiLookCrate.INSTANCE, UiIconsCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiElementsComponents.INSTANCE; }
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(CastingsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(StatesAndEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(HouseLookSheet.INSTANCE),
-                CrateEntry.of(LookManifestModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(LookModule.INSTANCE),
                 CrateEntry.of(SimpleComponentModule.INSTANCE),
                 CrateEntry.of(ButtonBehaviorModule.INSTANCE),
                 CrateEntry.of(ButtonModule.INSTANCE),

@@ -38,26 +38,15 @@
             <artifactId>homing-core-js</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- The house styles over Base, in their palette: the themes the looks are flattened in. -->
+        <!-- The house's look - the design's: what every component is worn in. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-styles</artifactId>
+            <artifactId>homing-ui-look</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
-        <!-- The semantic classes: the flattened sheet the house's looks are worn from. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-semantic-class</artifactId>
-            <version>${homing.core.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-component-base</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-design-core</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
         <dependency>

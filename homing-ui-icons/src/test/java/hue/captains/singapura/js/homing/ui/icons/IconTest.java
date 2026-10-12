@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.icons;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;

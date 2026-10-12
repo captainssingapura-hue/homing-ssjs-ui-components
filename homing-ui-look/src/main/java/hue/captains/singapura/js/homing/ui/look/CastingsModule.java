@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.ui.elements;
+package hue.captains.singapura.js.homing.ui.look;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;

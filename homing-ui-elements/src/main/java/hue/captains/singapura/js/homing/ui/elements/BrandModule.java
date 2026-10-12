@@ -7,6 +7,8 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.server.HrefManager;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;

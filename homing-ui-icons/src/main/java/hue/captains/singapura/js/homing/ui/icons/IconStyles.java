@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.icons;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
+import hue.captains.singapura.js.homing.ui.look.LexiconSheet;
 
 import java.util.List;
 

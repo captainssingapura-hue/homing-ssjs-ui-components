@@ -1,12 +1,12 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.elements.LookModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;

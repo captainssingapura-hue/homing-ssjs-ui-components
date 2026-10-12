@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.ui.docking;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
-import hue.captains.singapura.js.homing.ui.elements.LookManifestModule;
-import hue.captains.singapura.js.homing.ui.icons.IconsModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -149,14 +149,15 @@ class DeskTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         // the close and icon buttons: their castings and their looks, generated, before their declarations are read
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
         js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
         js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
         loadModule(P + "icons/IconModule.js");
         js.eval("js", "var el_icon_button = 'el_icon_button';");   // the icon button's face, laid out
-        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js", "IconButtonModule.js"})
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
+        for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js", "IconButtonModule.js"})
             loadModule(P + "elements/" + m);
         TextsInJs.load(js, this::loadModule);   // the texts its panes and floats hold
         loadModule(P + "floating/FloatEventsModule.js");

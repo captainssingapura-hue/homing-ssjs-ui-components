@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.ui.icons;
+package hue.captains.singapura.js.homing.ui.look;
 
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseLexicon;
 import org.junit.jupiter.api.Test;

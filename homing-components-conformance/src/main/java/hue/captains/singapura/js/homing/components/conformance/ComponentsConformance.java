@@ -19,6 +19,7 @@ import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
 import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
@@ -59,6 +60,7 @@ public final class ComponentsConformance {
     public static final List<Crate> TOP_LEVEL = List.of(
             LayoutCrate.INSTANCE,
             SizingCrate.INSTANCE,
+            UiLookCrate.INSTANCE,
             UiElementsCrate.INSTANCE,
             UiDialogCrate.INSTANCE,
             UiPreferencesCrate.INSTANCE,
@@ -75,7 +77,7 @@ public final class ComponentsConformance {
 
     /** One class per Maven module, for the coverage check: nothing served from these modules may be uncrated. */
     public static final List<Class<?>> ANCHORS = List.of(
-            LayoutCrate.class, SizingCrate.class, UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
+            LayoutCrate.class, SizingCrate.class, UiLookCrate.class, UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
             UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiMonitorsCrate.class, UiMenuCrate.class, MpaCrate.class,
             UiControlPanelCrate.class);
 
@@ -85,7 +87,7 @@ public final class ComponentsConformance {
     /** Documented, intentional exceptions. */
     public static final List<Allowance> ALLOWANCES = List.of(
             new Allowance(
-                    "hue.captains.singapura.js.homing.ui.elements.LookModule",
+                    "hue.captains.singapura.js.homing.ui.look.LookModule",
                     new RuleId("no-raw-css"),
                     "Look IS the look's manager: the classes it puts on are a derived sheet's, the theme's, which the CSS "
                             + "manager does not handle (RFC 0064, D25) - so its classList calls are where that typed path ends."),

@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.ui.icons;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
+import hue.captains.singapura.js.homing.ui.look.LexiconSheet;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
 import hue.captains.singapura.js.homing.component.ElementComponent;

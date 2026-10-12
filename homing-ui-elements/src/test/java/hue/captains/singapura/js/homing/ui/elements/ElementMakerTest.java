@@ -1,6 +1,10 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import org.graalvm.polyglot.Source;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +46,8 @@ class ElementMakerTest extends JsModuleTestBase {
         js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var look_sheet = 'look-sheet';");
-        for (String m : new String[] {"LookModule.js", "SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "PlainButtonModule.js"})
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
+        for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "PlainButtonModule.js"})
             loadModule(DIR + m);
         js.eval("js", """
                 var owner = { toString: function () { return 'owner'; } };

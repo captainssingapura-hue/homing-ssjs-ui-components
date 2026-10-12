@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.sizing.SizingCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public final class UiSplitGridCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-splitgrid"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, UiElementsCrate.INSTANCE, SizingCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE, SizingCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiSplitGridComponents.INSTANCE; }

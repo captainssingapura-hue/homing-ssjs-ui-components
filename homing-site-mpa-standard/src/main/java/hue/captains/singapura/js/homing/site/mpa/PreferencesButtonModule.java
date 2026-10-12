@@ -1,8 +1,8 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
-import hue.captains.singapura.js.homing.ui.elements.LookModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;

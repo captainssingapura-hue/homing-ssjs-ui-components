@@ -81,6 +81,11 @@
         <!-- The top level: every fresh crate. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-look</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-elements</artifactId>
             <version>${project.parent.version}</version>
         </dependency>

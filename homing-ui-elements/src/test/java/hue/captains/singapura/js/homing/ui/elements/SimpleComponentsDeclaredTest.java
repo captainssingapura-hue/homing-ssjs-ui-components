@@ -4,10 +4,13 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.CssGroup;
+import hue.captains.singapura.js.homing.core.DerivedCss;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.SelfContent;
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -34,6 +38,9 @@ class SimpleComponentsDeclaredTest extends JsModuleTestBase {
     private static final List<EsModule<?>> SIMPLE = UiElementsCrate.INSTANCE.entries().stream().map(CrateEntry::module)
             .filter(m -> m instanceof ImplFor<?> impl && companion(m, impl.leaf()) != null).toList();
 
+    /** Where what they need is: the look's crate - the design's - then the elements' own, in the crates' order. */
+    private static final List<CrateEntry> NEEDED_FROM = Stream.concat(UiLookCrate.INSTANCE.entries().stream(), UiElementsCrate.INSTANCE.entries().stream()).toList();
+
     @BeforeEach
     void load() {
         js = buildContext();
@@ -42,27 +49,26 @@ class SimpleComponentsDeclaredTest extends JsModuleTestBase {
         js.eval("js", "var look_sheet = 'look-sheet';");
         // what the simple components need, loaded in the crate's order - icons from their own crate, as handles
         js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.icons.IconsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         var needed = new LinkedHashSet<EsModule<?>>();
         for (EsModule<?> m : SIMPLE) need(m, needed);
-        for (CrateEntry e : UiElementsCrate.INSTANCE.entries()) {
+        for (CrateEntry e : NEEDED_FROM) {
             EsModule<?> m = e.module();
-            if (!needed.contains(m)) continue;
+            if (!needed.contains(m) || m == IconsModule.INSTANCE) continue;   // the lexicon's table, given above
             if (m instanceof SelfContent sc) js.eval("js", String.join("\n", sc.selfContent(null)));
-            else if (m instanceof CssGroup<?>) continue;
-            else if (m == HouseLookSheet.INSTANCE) continue;
+            else if (m instanceof CssGroup<?> || m instanceof DerivedCss<?>) continue;
             else loadModule("/homing/js/" + m.getClass().getPackageName().replace('.', '/') + "/" + m.getClass().getSimpleName() + ".js");
         }
     }
 
-    /** A module and what it imports from this crate; a style group's classes as handles. */
+    /** A module and what it imports from the look's crate or this one; a style group's classes as handles. */
     private static void need(EsModule<?> m, Set<EsModule<?>> out) {
         if (!out.add(m)) return;
         m.imports().getAllImports().forEach((key, imports) -> {
             if (!(key instanceof EsModule<?> dep)) return;
             if (dep instanceof CssGroup<?>) { out.add(dep); return; }
-            if (UiElementsCrate.INSTANCE.entries().stream().anyMatch(e -> e.module() == dep)) need(dep, out);
+            if (NEEDED_FROM.stream().anyMatch(e -> e.module() == dep)) need(dep, out);
         });
     }
 

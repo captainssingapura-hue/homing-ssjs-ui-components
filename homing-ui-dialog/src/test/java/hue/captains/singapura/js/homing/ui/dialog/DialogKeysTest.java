@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.dialog;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
-import hue.captains.singapura.js.homing.ui.elements.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,7 +72,7 @@ class DialogKeysTest extends JsModuleTestBase {
         js = buildContext();
         js.eval("js", "var console = { error: function (m) { throw new Error(m); } };");
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));   // the roles the dialog casts its buttons in
-        js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.elements.StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
         loadModule(DIR + "ModalityModule.js");
         loadModule(DIR + "DialogModule.js");
         js.eval("js", SHIM);
