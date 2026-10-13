@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
+import hue.captains.singapura.js.homing.design.AnimationEffect;
 import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import static hue.captains.singapura.js.homing.ui.styles.Say.BORDER;
+import static hue.captains.singapura.js.homing.ui.styles.Say.animated;
 import static hue.captains.singapura.js.homing.ui.styles.Say.answers;
 import static hue.captains.singapura.js.homing.ui.styles.Say.bareFrame;
 import static hue.captains.singapura.js.homing.ui.styles.Say.textMeasure;
@@ -102,7 +104,7 @@ public record Base() implements DesignStyle {
             rest(ROOT, Target.Type.Glyph.INSTANCE, ""),
             rest(ROOT, EASE, "transition: none;"),
             rest(ROOT, TRANSFORM, "transform: none;"),
-            rest(ROOT, Target.Motion.Animate.INSTANCE, "animation: none;"),
+            animated(ROOT, AnimationEffect.None.INSTANCE),
             rest(ROOT, OPACITY, "opacity: 1;"),
             rest(ROOT, Target.Effect.Filter.INSTANCE, "filter: none;"),
             rest(ROOT, Target.Effect.Blend.INSTANCE, "mix-blend-mode: normal;"),

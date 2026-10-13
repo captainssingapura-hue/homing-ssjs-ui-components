@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.styles;
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
+import hue.captains.singapura.js.homing.design.AnimationEffect;
 import hue.captains.singapura.js.homing.design.State;
 import hue.captains.singapura.js.homing.design.Target;
 import hue.captains.singapura.js.homing.design.semantic.Answer;
@@ -52,6 +53,11 @@ final class Say {
     /** A body for each state answered. */
     static <T extends Target> Implementation<T> when(Taxon node, T target, Map<State, String> bodies) {
         return new Implementation<>(node, target, new Answer.Own<T>(bodies));
+    }
+
+    /** What moves on its own, at rest: an animation effect, whole - never a body. */
+    static Implementation<Target.Animation.Effect> animated(Taxon node, AnimationEffect effect) {
+        return new Implementation<>(node, Target.Animation.Effect.INSTANCE, new Answer.Animated(effect));
     }
 
     /** A length that grows a step of {@code ratio} per unit of the element's size. */
