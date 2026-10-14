@@ -27,13 +27,13 @@ public record HouseDesigns() implements StatelessFunctionalObject {
     public List<DesignRead> all() { return Read.ALL; }
 
     /** A design as read. */
-    public DesignRead of(Design<?> design) {
+    public DesignRead of(Design<?, ?> design) {
         for (DesignRead d : Read.ALL) if (d.design().equals(design)) return d;
         throw new IllegalArgumentException(design.token() + " is no design on the classpath of the house's branches");
     }
 
     /** A design's sheet in the theme a page is worn in, by its slug. */
-    public String sheet(Design<?> design, String themeSlug) {
+    public String sheet(Design<?, ?> design, String themeSlug) {
         Dressed theme = HouseStyles.INSTANCE.dressed(themeSlug);
         String slug = HouseStyles.INSTANCE.slug(theme);
         return SHEETS.computeIfAbsent(design.token() + "/" + slug,
@@ -41,7 +41,7 @@ public record HouseDesigns() implements StatelessFunctionalObject {
     }
 
     /** A design's object, its first line naming its sheet by the name it is imported by. */
-    public List<String> object(Design<?> design, String sheet) { return DesignObject.INSTANCE.lines(of(design), sheet); }
+    public List<String> object(Design<?, ?> design, String sheet) { return DesignObject.INSTANCE.lines(of(design), sheet); }
 
     /** Each design's sheet in each theme, flattened the first time it is asked for. */
     private static final Map<String, String> SHEETS = new ConcurrentHashMap<>();
