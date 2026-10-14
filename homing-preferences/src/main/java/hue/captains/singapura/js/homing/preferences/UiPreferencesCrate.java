@@ -38,6 +38,7 @@ public final class UiPreferencesCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(ChoiceWidgetModule.INSTANCE),
                 CrateEntry.of(ToggleWidgetModule.INSTANCE),
                 CrateEntry.of(ScaleWidgetModule.INSTANCE),
+                CrateEntry.of(SettingRowModule.INSTANCE),
                 CrateEntry.of(OverviewWidgetModule.INSTANCE),
                 CrateEntry.of(ListMasterWidgetModule.INSTANCE),
                 CrateEntry.of(PreferencesStyles.INSTANCE));

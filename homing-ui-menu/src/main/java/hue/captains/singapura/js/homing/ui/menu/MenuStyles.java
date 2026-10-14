@@ -53,36 +53,6 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
         }
     }
 
-    /**
-     * A row: {@code Control.Option} to the design — its inset, its gap
-     * between mark, label and hint, its corner — and {@code Selectable} for
-     * its colour: the design's rest, hover, and the cursor as highlighted.
-     */
-    public record cm_item() implements CssClass<MenuStyles> {
-        @Override public String body() { return """
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-            """;
-        }
-    }
-
-    /** The label of a row: takes the room the marks and the hint leave. */
-    public record cm_item_label() implements CssClass<MenuStyles> {
-        @Override public String body() { return "flex: 1 1 auto;"; }
-    }
-
-
-    /** The hint after the label, in a muted caption. */
-    public record cm_item_hint() implements CssClass<MenuStyles> {
-        @Override public String body() { return "flex: none;"; }
-    }
-
-    /** The mark after a row with rows: the disclose icon, muted, at the end. */
-    public record cm_item_disclose() implements CssClass<MenuStyles> {
-        @Override public String body() { return "margin-inline-start: auto;"; }
-    }
-
     /** A row hidden for the bound object: not there. Last in the sheet, so it wins the display. */
     public record cm_item_hidden() implements CssClass<MenuStyles> {
         @Override public String body() { return "display: none;"; }
@@ -120,7 +90,7 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
 
     @Override
     public List<CssClass<MenuStyles>> cssClasses() {
-        return List.of(new cm_layer(), new cm_frame(), new cm_frame_static(), new cm_specimen(), new cm_item(), new cm_item_label(), new cm_item_hint(),
-                       new cm_item_disclose(), new cm_separator(), new cm_item_hidden());
+        return List.of(new cm_layer(), new cm_frame(), new cm_frame_static(), new cm_specimen(),
+                       new cm_separator(), new cm_item_hidden());
     }
 }

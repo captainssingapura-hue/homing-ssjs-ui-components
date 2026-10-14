@@ -13,6 +13,13 @@
 
 const _owner = Object.freeze({ toString: () => "preferencesList" });
 
+/** A row pressed: the list's row in force. */
+class ListRowChosen {
+    constructor(list, index) { this._list = list; this._index = index; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._list._choose(this._index); }
+}
+
 class ListMasterWidget {
     constructor(branch, params) {
         branch.activate(_owner);
@@ -31,17 +38,14 @@ class ListMasterWidget {
         (function walk(node, path, depth) {
             var key = path ? path + "/" + node.segment : node.segment;
             var label = (params.labels && params.labels[key]) || node.segment;
-            var look = new Look(Object.freeze({ LEAF: "list-row" }), ROLE.CHOICE);   // each row's: a listed row, as its choice
-            var row = branch.createElement("row-" + self._rows.length, "div");
-            css.addClass(row, pv_list_row);
-            look.wear(row);
-            row.setAttribute("role", "option");
-            row.style.setProperty("--pv-depth", String(depth));   // DATA, via the runtime var
-            row.textContent = label;
-            var index = self._rows.length;
-            row.addEventListener("click", function () { self._choose(index); });
-            list.appendChild(row);
-            self._rows.push({ key: key, el: row });
+            // each row the house's list row, cast as a choice of the list: placed by it, as deep as its setting
+            var row = new ListRow(branch.elementMaker("row-" + self._rows.length), { text: label }, ROLE.CHOICE);
+            css.addClass(row.el, pv_list_row);
+            row.el.setAttribute("role", "option");
+            row.el.style.setProperty("--pv-depth", String(depth));   // DATA, via the runtime var
+            row.setOnClick(new ListRowChosen(self, self._rows.length));
+            list.appendChild(row.el);
+            self._rows.push({ key: key, row: row, el: row.el });
             (node.children || []).forEach(function (c) { walk(c, key, depth + 1); });
         })(params.tree, "", 0);
 
@@ -65,7 +69,7 @@ class ListMasterWidget {
         var rows = this._rows;
         if (i < 0 || i >= rows.length || i === this._current) return;
         this._current = i;
-        rows.forEach(function (r, k) { r.el.setAttribute("aria-selected", k === i ? "true" : "false"); });
+        rows.forEach(function (r, k) { r.row.selected = k === i; });
         this._list.setAttribute("aria-activedescendant", rows[i].el.id || "");
         this._listeners.forEach(function (fn) { fn(rows[i].key); });
     }

@@ -1,5 +1,85 @@
-/* choice-option_style: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-choice-option_style {}
+/* The choice option as style in the base layer: one choice of a setting - tinted under the hand, ringed by the focus, filled while picked. Whole: every property its look has (D9). */
+.styled-choice-option_style {
+    color: inherit;
+    background-color: transparent;
+    border-color: transparent;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 1.5px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 7px;
+    padding-inline: 10px;
+    gap: 10px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    transition: none;
+    transform: none;
+    cursor: pointer;
 
-/* choice-option_palette: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-choice-option_palette {}
+    &:hover {
+        background-color: var(--fp-accent-wash-soft);
+        border-color: var(--fp-border);
+    }
+
+    &:focus-visible {
+        outline-color: var(--fp-ring);
+        outline-width: 2px;
+        outline-style: solid;
+        outline-offset: -2px;
+    }
+
+    &.styled-choice-option_style--selected {
+        color: var(--fp-on-inverted);
+        background-color: var(--fp-title);
+        border-color: var(--fp-title);
+    }
+}
+
+/* The choice option as palette in the base layer: one choice of a setting - tinted under the hand, ringed by the focus, filled while picked. Whole: every property its look has (D9). */
+.styled-choice-option_palette {
+    color: inherit;
+    background-color: transparent;
+    border-color: transparent;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 1.5px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 7px;
+    padding-inline: 10px;
+    gap: 10px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    transition: none;
+    transform: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--fp-accent-wash-soft);
+        border-color: var(--fp-border);
+    }
+
+    &:focus-visible {
+        outline-color: var(--fp-ring);
+        outline-width: 2px;
+        outline-style: solid;
+        outline-offset: -2px;
+    }
+
+    &.styled-choice-option_palette--selected {
+        color: var(--fp-on-inverted);
+        background-color: var(--fp-title);
+        border-color: var(--fp-title);
+    }
+}

@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.preferences;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
-
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
@@ -13,6 +12,8 @@ import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyCompone
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.ListRowModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ import java.util.List;
  * {@code onSelect(fn)}, {@code select(path)} — so a real tree view is one
  * provider away. Params: {@code tree, labels}, as the registry stamps them.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 13,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 11,
         reason = "It makes its own elements, places elements, wears classes of its own, writes attributes, writes styles and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
 public record ListMasterWidgetModule() implements Widget<Widget._None, ListMasterWidgetModule>, ImplFor<HousePreferences.ListMasterWidget> {
 
@@ -45,7 +46,8 @@ public record ListMasterWidgetModule() implements Widget<Widget._None, ListMaste
     public ImportsFor<ListMasterWidgetModule> imports() {
         return ImportsFor.<ListMasterWidgetModule>builder()
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ListRowModule.ListRow()), ListRowModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_list(),
                         new PreferencesStyles.pv_list_row()

@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 /**
  * The monitor over the real party and the real steward, on a fake DOM: one
@@ -37,17 +40,17 @@ class FocusMonitorTest extends JsModuleTestBase {
                 text: function () { return this.children.map(function (c) { return c.textContent; }).filter(Boolean).join(" "); } };
             return node;
         }
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
         function fakeBranch(name) {
             var kids = {};
             return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; },
+                     elementMaker: function (n) { var self = this, mk = function (tag) { makers.delete(mk); return self.createElement(n, tag); }; makers.add(mk); return mk; },
                      createBranch: function (n) { var b = fakeBranch(n); kids[n] = b; return b; }, dissolveBranch: function (n) { delete kids[n]; log.push("dissolved:" + n); },
                      dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} };
         }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); } };
         ["fm_tree", "fm_row", "fm_row_holder", "fm_kind", "fm_name", "fm_component", "fm_outside"].forEach(function (c) { globalThis[c] = c; });
-        // the rows' look: put on by name, which is all the tree asks of it here
-        var ROLE = { ENTRY: { token: "entry", functional: true } };
-        class Look { constructor(Leaf) { this.casting = Leaf.LEAF; } wear(e) { e.classList.add(this.casting); } }
         var focusListeners = 0;
         var document = { body: el("body"), activeElement: null, addEventListener: function () { focusListeners++; }, removeEventListener: function () { focusListeners--; } };
         document.activeElement = document.body;
@@ -75,6 +78,15 @@ class FocusMonitorTest extends JsModuleTestBase {
         loadModule(DIR + "component/keyboard/KeyboardHomeModule.js");
         loadModule(DIR + "component/keyboard/KeyboardStewardModule.js");
         loadModule(DIR + "component/WidgetSlotModule.js");
+        // each row the house's list row: its castings, its states, its look and the simple component it is
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet', ICONS = {}; var CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };");
+        loadModule(DIR + "server/StyledLeaves.js");
+        loadModule(DIR + "ui/look/LookModule.js");
+        for (String m : new String[] {"SimpleComponentModule.js", "ItemBehaviorModule.js", "ListRowModule.js"})
+            loadModule(DIR + "ui/elements/" + m);
         loadModule(DIR + "ui/monitors/FocusMonitorModule.js");
         js.eval("js", SHIM);
     }

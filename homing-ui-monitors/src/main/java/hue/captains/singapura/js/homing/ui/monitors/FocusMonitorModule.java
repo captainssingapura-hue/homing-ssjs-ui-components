@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
-
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.focusParty;
@@ -13,6 +12,7 @@ import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.ListRowModule;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * by id, is named below it. It takes no keys; the steward's own state is the
  * {@link StewardMonitorModule.StewardMonitor}'s.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 33,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 32,
         reason = "It makes its own elements, reaches the document, places elements, wears classes of its own, writes attributes, writes styles and writes text of its own: it waits for the designed containers and the content components to draw only components, and for a party that says where the browser's focus moves.")
 public record FocusMonitorModule() implements Widget<Widget._None, FocusMonitorModule>, ImplFor<HouseMonitors.FocusMonitor> {
 
@@ -41,7 +41,7 @@ public record FocusMonitorModule() implements Widget<Widget._None, FocusMonitorM
     public ImportsFor<FocusMonitorModule> imports() {
         return ImportsFor.<FocusMonitorModule>builder()
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ListRowModule.ListRow()), ListRowModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardSteward(), new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

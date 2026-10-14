@@ -67,7 +67,7 @@ class DesignWordsTest {
     void theValuesWithNoEstablishedWord_takeTheTypesNameAndTheirOwn() {
         var designStates = Arrays.stream(State.values()).map(s -> s.name().toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
         assertEquals(List.of("read-only-true", "busy-true", "coverage-some", "coverage-all", "shown-true", "required-true",
-                             "pointed-true", "empty-true"),
+                             "pointed", "empty-true"),   // pointed its own word now: the menu item's cursor (RFC 0067, phase 5)
                 words().keySet().stream().filter(w -> !designStates.contains(w)).toList());
         assertEquals("busy-true", HouseStates.Busy.INSTANCE.word(StateValue.TRUE));
     }

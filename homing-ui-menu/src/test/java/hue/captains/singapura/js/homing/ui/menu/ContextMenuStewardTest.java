@@ -54,8 +54,8 @@ class ContextMenuStewardTest extends JsModuleTestBase {
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); } };
-        var cm_layer = "cm_layer", cm_frame = "cm_frame", cm_frame_static = "cm_frame_static", cm_specimen = "cm_specimen", cm_item = "cm_item", cm_item_label = "cm_item_label", cm_item_hint = "cm_item_hint",
-            cm_item_disclose = "cm_item_disclose", cm_item_disabled = "cm_item_disabled", cm_item_hidden = "cm_item_hidden", cm_separator = "cm_separator";
+        var cm_layer = "cm_layer", cm_frame = "cm_frame", cm_frame_static = "cm_frame_static", cm_specimen = "cm_specimen", cm_item_hidden = "cm_item_hidden", cm_separator = "cm_separator";
+        var el_menu_item = "el_menu_item", el_menu_item_label = "el_menu_item_label", el_menu_item_hint = "el_menu_item_hint", el_menu_item_disclose = "el_menu_item_disclose";
         var console = { error: function (m, e) { log.push("error:" + m); } };
         var body = el("body");
         var document = { body: body, activeElement: body, listeners: {},
@@ -96,7 +96,7 @@ class ContextMenuStewardTest extends JsModuleTestBase {
         chip.addEventListener("click", function () { log.push("chip:clicked"); });
         chip.addEventListener("contextmenu", function () { log.push("chip:contextmenu"); });
         function frame() { return steward._menus.animal.el; }
-        function rows(f) { return (f || frame()).children.filter(function (c) { return c.has("cm_item"); }); }
+        function rows(f) { return (f || frame()).children.filter(function (c) { return c.has("el_menu_item"); }); }
         function row(id, f) { return rows(f).find(function (r) { return r.attr("data-id") === id; }); }
         function mark(r) { return r.children[0]; }
         function sub(i) { return steward._menus.animal._path[i].sub.el; }
@@ -115,7 +115,7 @@ class ContextMenuStewardTest extends JsModuleTestBase {
         js.eval("js", "var ic_base = 'ic_base', ICONS = { check: 'ic_check', disclose: 'ic_disclose', rotate: 'ic_rotate', flip: 'ic_flip', reset: 'ic_reset' };");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         TextsInJs.load(js, this::loadModule);   // the caption that is an item's hint
-        for (String m : new String[] {"MarkBehaviorModule.js", "SeparatorModule.js"})   // and the separator between sections
+        for (String m : new String[] {"MarkBehaviorModule.js", "SeparatorModule.js", "ItemBehaviorModule.js", "MenuItemModule.js"})   // the separator between sections, and each row the house's menu item
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
         loadModule(P + "ContextMenuModule.js");
         loadModule(P + "ContextMenuStewardModule.js");

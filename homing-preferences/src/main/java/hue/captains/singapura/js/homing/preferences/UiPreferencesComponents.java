@@ -19,7 +19,8 @@ public record UiPreferencesComponents() implements C0_Components<UiPreferencesCo
     @Override public List<ComponentEntry<UiPreferencesComponents>> leaves() {
         return List.of(
                 ComponentEntry.of(this, new PreferencesViewModule.PreferencesView()),
-                ComponentEntry.of(this, new PreferenceFieldModule.PreferenceField()));
+                ComponentEntry.of(this, new PreferenceFieldModule.PreferenceField()),
+                ComponentEntry.of(this, new SettingRowModule.SettingRow()));
     }
 
     /** One per kind of setting: a choice, a scale, a toggle, a list's master, an overview. */

@@ -15,6 +15,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
 import java.util.List;
 
@@ -104,6 +105,7 @@ public record HousePreferences() implements TaxonomyExtension {
                            DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
                            DSL.part(HouseText.Lede.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(),
                            DSL.part(SettingRow.INSTANCE).as(HouseShaping.Entry.INSTANCE).any(),
+                           DSL.part(HouseMarks.Separator.INSTANCE).as(HouseShaping.Break.INSTANCE).any(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Reset.INSTANCE).one());
         }
     }

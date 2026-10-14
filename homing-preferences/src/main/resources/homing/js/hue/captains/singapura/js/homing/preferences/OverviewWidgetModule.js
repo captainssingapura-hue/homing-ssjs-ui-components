@@ -8,8 +8,6 @@
 const _overviewOwner = Object.freeze({ toString: () => "overviewWidget" });
 
 /** The reset pressed: every setting the overview shows goes back to the site's default. */
-/** What of a separator's look a setting's row wears: the line along its foot. */
-const _THE_RULE = Object.freeze(["shape-border", "color-border"]);
 
 class OverviewReset {
     constructor(settings) { this._settings = settings; }
@@ -37,24 +35,17 @@ class OverviewWidget {
             root.appendChild(summary.el);
         }
 
-        var list = branch.createElement("settings", "ul");
+        var list = branch.createElement("settings", "div");
         css.addClass(list, pv_children);
+        list.setAttribute("role", "list");
         this._values = [];
-        // each setting's row: a setting row, its look the house's but for its line, which is a separator's
-        var row = new Look(Object.freeze({ LEAF: "setting-row" }), ROLE.ENTRY), rule = new Look(Object.freeze({ LEAF: "separator" }), ROLE.BREAK);
         settings.forEach(function (s, i) {
-            var li = branch.createElement("s-" + i, "li");
-            css.addClass(li, pv_child);
-            row.wear(li, { except: _THE_RULE });
-            rule.wear(li, { only: _THE_RULE });
-            var label = branch.createElement("s-" + i + "-label", "span");
-            label.textContent = s.label || s.name;
-            var value = new Caption(CaptionFactory.create(branch, "s-" + i + "-value"), {}, ROLE.VALUE);
-            css.addClass(value.el, pv_option_note);
-            li.appendChild(label);
-            li.appendChild(value.el);
-            list.appendChild(li);
-            self._values.push({ name: s.name, caption: value });
+            // the line between two settings, the house's separator cast as a break: the list's own part, never a row's
+            if (i > 0) list.appendChild(new Separator(branch.elementMaker("rule-" + i), {}, ROLE.BREAK).el);
+            // each setting the preferences' setting row, as an entry of the list: its name and its value its own
+            var row = new SettingRow(branch.createBranch("s-" + i), { label: s.label || s.name }, ROLE.ENTRY);
+            list.appendChild(row.el);
+            self._values.push({ name: s.name, row: row });
         });
         root.appendChild(list);
 
@@ -74,7 +65,7 @@ class OverviewWidget {
         var any = false;
         this._values.forEach(function (v) {
             var stored = PreferenceViewInstance.preferred(v.name), pinned = PreferenceViewInstance.override(v.name);
-            v.caption.text = pinned ? pinned + " (pinned)" : stored ? stored : "default";
+            v.row.value = pinned ? pinned + " (pinned)" : stored ? stored : "default";
             if (stored) any = true;
         });
         this._reset.enabled = any;

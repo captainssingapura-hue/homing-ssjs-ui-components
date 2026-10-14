@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * The house's colour tree (RFC 0067, appendix Semantic Colours and Flavours, D16; appendix Two Classes per Leaf): every
  * colour a house leaf's file names, each named for what it is for, in the base scheme. Grown family by family as the
- * leaves move onto files - the buttons first, then the ways, the text, the inputs, the tracks, the handles and the selectors.
+ * leaves move onto files - the buttons first, then the ways, the text, the inputs, the tracks, the handles, the selectors and the items.
  *
  * <ul>
  *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, the text's ink
@@ -49,7 +49,7 @@ public record HouseColours() implements ColorSource {
             Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft,
             Text, TextFaded, OnInverted, OnAccent, WayHovered, HeadingInk, KickerInk,
             Border, GrooveEdge,
-            Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentWash, AccentWashFaint, AccentWashSoft, KeysCandidate, KeysLent,
+            Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
             ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, Sheen,
             GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
 
@@ -124,8 +124,12 @@ public record HouseColours() implements ColorSource {
     public record AccentWash() implements Palettable<Base, Attention>, HouseColour {}
     /** The accent washed fainter, 8%: a tab's ground. */
     public record AccentWashFaint() implements Palettable<Base, Attention>, HouseColour {}
+    /** At 12%: the one that is current, among items. */
+    public record AccentWashLight() implements Palettable<Base, Attention>, HouseColour {}
     /** At 15%: a tab under the hand. */
     public record AccentWashSoft() implements Palettable<Base, Attention>, HouseColour {}
+    /** At 28%: where a menu's cursor is. */
+    public record AccentWashStrong() implements Palettable<Base, Attention>, HouseColour {}
     /** The keys' mark on a candidate for them: the accent at 45%. */
     public record KeysCandidate() implements Palettable<Base, Attention>, HouseColour {}
     /** The keys' mark where they are lent: the accent at 25%. */
@@ -262,7 +266,7 @@ public record HouseColours() implements ColorSource {
                 new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new Clear(),
                 new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
                 new Border(), new GrooveEdge(),
-                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentWash(), new AccentWashFaint(), new AccentWashSoft(), new KeysCandidate(), new KeysLent(),
+                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentWash(), new AccentWashFaint(), new AccentWashLight(), new AccentWashSoft(), new AccentWashStrong(), new KeysCandidate(), new KeysLent(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new Sheen(),
                 new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),
                 new Danger(), new DangerPressed(), new OnDanger(), new DangerTint(), new DangerEdge(), new DangerInk(),

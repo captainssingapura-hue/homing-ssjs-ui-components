@@ -468,6 +468,54 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
+    // ── Items ─────────────────────────────────────────────────────────────────
+
+    /** A menu's item: its glyph, its name, its hint and its way on in a row, on one line. */
+    public record el_menu_item() implements CssClass<ElementStyles> {
+        @Override public String body() { return """
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            """;
+        }
+    }
+
+    /** Its name: the room its glyph and its hint leave. */
+    public record el_menu_item_label() implements CssClass<ElementStyles> {
+        @Override public String body() { return "flex: 1 1 auto;"; }
+    }
+
+    public record el_menu_item_hint() implements CssClass<ElementStyles> {
+        @Override public String body() { return "flex: none;"; }
+    }
+
+    /** Its way into its rows, at its end. */
+    public record el_menu_item_disclose() implements CssClass<ElementStyles> {
+        @Override public String body() { return "margin-inline-start: auto;"; }
+    }
+
+    /** A choice's option: its name and, at its end, its note, on a line; its words from its start. */
+    public record el_choice_option() implements CssClass<ElementStyles> {
+        @Override public String body() { return """
+            display: flex;
+            align-items: baseline;
+            text-align: left;
+            box-sizing: border-box;
+            """;
+        }
+    }
+
+    /** Its note, at its end, cut short where the option ends. */
+    public record el_choice_option_note() implements CssClass<ElementStyles> {
+        @Override public String body() { return """
+            margin-left: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            """;
+        }
+    }
+
     // ── Summary ───────────────────────────────────────────────────────────────
 
     /**
@@ -814,6 +862,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_cap(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
                        new el_slider_off(),
                        new el_slider_group(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
+                       new el_menu_item(), new el_menu_item_label(), new el_menu_item_hint(), new el_menu_item_disclose(), new el_choice_option(), new el_choice_option_note(),
                        new el_card(), new el_summary(), new el_summary_head(), new el_summary_title(), new el_summary_tag(), new el_summary_text(), new el_summary_foot(),
                        new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(),
                        new el_checkbox(), new el_pane_thumb_name(), new el_switch(), new el_switch_groove(), new el_switch_knob(),

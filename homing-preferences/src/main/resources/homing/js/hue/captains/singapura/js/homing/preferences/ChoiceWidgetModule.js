@@ -8,6 +8,13 @@
 
 const _choiceOwner = Object.freeze({ toString: () => "choiceWidget" });
 
+/** An option pressed: the field set to its value. */
+class ChoicePicked {
+    constructor(field, value) { this._field = field; this._value = value; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._field.set(this._value); }
+}
+
 class ChoiceWidget {
     constructor(branch, params) {
         branch.activate(_choiceOwner);
@@ -20,24 +27,14 @@ class ChoiceWidget {
         css.addClass(list, pv_options);
         list.setAttribute("role", "listbox");
         list.setAttribute("aria-label", params.label || params.name);
-        var look = new Look(Object.freeze({ LEAF: "choice-option" }), ROLE.CHOICE);   // each option's: a choice option, as its choice
         options.forEach(function (opt, i) {
-            var row = branch.createElement("opt-" + i, "button");
-            row.type = "button";
-            css.addClass(row, pv_option);
-            look.wear(row);
-            row.setAttribute("role", "option");
-            var text = branch.createElement("opt-" + i + "-label", "span");
-            text.textContent = opt.label == null ? String(opt.value) : String(opt.label);
-            row.appendChild(text);
-            if (opt.note) {
-                var note = new Caption(CaptionFactory.create(branch, "opt-" + i + "-note"), { text: String(opt.note) }, ROLE.NOTE);
-                css.addClass(note.el, pv_option_note);
-                row.appendChild(note.el);
-            }
-            row.addEventListener("click", function () { self._field.set(String(opt.value)); });
-            list.appendChild(row);
-            self._rows.push({ value: String(opt.value), el: row });
+            // each option the house's choice option, cast as a choice of the setting: its name and its note its own; placed by the widget
+            var option = new ChoiceOption(branch.createBranch("opt-" + i), { label: opt.label == null ? String(opt.value) : String(opt.label),
+                                          note: opt.note ? String(opt.note) : null }, ROLE.CHOICE);
+            css.addClass(option.el, pv_option);
+            option.setOnClick(new ChoicePicked(self._field, String(opt.value)));
+            list.appendChild(option.el);
+            self._rows.push({ value: String(opt.value), option: option });
         });
         this._field.hold(list);
         this.root = this._field.root;
@@ -46,7 +43,7 @@ class ChoiceWidget {
     }
 
     _mark(v) {
-        this._rows.forEach(function (r) { r.el.setAttribute("aria-selected", r.value === v ? "true" : "false"); });
+        this._rows.forEach(function (r) { r.option.selected = r.value === v; });
     }
 
     dispose() { this._stop(); this._field.dispose(); }

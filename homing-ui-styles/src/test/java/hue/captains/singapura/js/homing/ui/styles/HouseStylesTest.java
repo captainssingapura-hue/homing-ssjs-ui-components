@@ -75,6 +75,7 @@ class HouseStylesTest {
         assertEquals(3, HouseFamilies.HANDLES.size());
         assertEquals(2, HouseFamilies.SELECTORS.size());
         assertEquals(2, HouseFamilies.CARDS.size());
+        assertEquals(3, HouseFamilies.ITEMS.size());
     }
 
     @Test
@@ -82,7 +83,7 @@ class HouseStylesTest {
         var tree = HouseColours.TREE;
         for (ColorPalette<ColorScheme.Base> p : HouseStyles.PALETTES) {
             assertEquals(List.of(), tree.check(p), p.token());
-            assertEquals(45, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge, the keys' marks, a groove's edge, a tab's washes and shadows among them");
+            assertEquals(47, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge, the keys' marks, a groove's edge, a tab's washes and shadows, an item's current and pointed among them");
         }
         assertEquals(8, HouseStyles.PALETTES.size());
     }

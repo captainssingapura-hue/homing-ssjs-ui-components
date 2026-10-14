@@ -23,22 +23,35 @@
 //   menu.key(ev) → boolean        arrows, Home, End, Enter, Space, Left, Right
 //   menu.dispose()
 //
-// The cursor is data-highlighted on a row - its look tints it -
-// and moves by MenuGeometry.step within the deepest open frame, skipping
-// disabled and hidden rows and wrapping. A row with rows opens them beside
-// it on hover, on Enter and on ArrowRight; hovering another row of the same
-// frame closes them, ArrowLeft steps back a level. A row's mark is an Icon:
-// the row's own word, or the check when the row is checked; a row with rows
-// ends in the disclose mark; a divider sits where the section changes.
-// Its look is the house's: every frame wears the menu's casting - the owner,
-// lifted over the page as its style casts it - and every row a menu item's,
-// as a choice, flat. A row off says so by aria-disabled, which its look fades
-// by. Its own classes only place. `css` is injected with the styles import.
+// A row is the house's menu item, cast as a choice of its menu: its glyph,
+// its name, its hint and its way into its rows its own. The cursor is the
+// row that is Pointed - its look tints it - and moves by MenuGeometry.step
+// within the deepest open frame, skipping rows that are off or hidden and
+// wrapping; the pointer coming onto a row points at it, and the menu follows.
+// A row with rows opens them beside it when pointed at, on Enter and on
+// ArrowRight; pointing at another row of the same frame closes them,
+// ArrowLeft steps back a level. A row's glyph is its own word, or the check
+// when the row is checked; a divider sits where the section changes. Every
+// frame wears the menu's casting - lifted over the page as its style casts
+// it. A row off (its Enabled false) is faded by its look. The menu's own
+// classes only place. `css` is injected with the styles import.
 // =============================================================================
 
 const _menuOwner = Object.freeze({ toString: () => "contextMenu" });
-/** A row's leaf: a menu item, which nothing realizes on its own - the menu draws it here. */
-const _MENU_ITEM = Object.freeze({ LEAF: "menu-item" });
+
+/** The pointer onto a row: the cursor there, and its rows open beside it. A pointing by the menu's own setter is the menu's already. */
+class MenuRowPointed {
+    constructor(menu, row) { this._menu = menu; this._row = row; }
+    canHandle(type) { return type === STATE.POINTED.changed; }
+    handle(event) { if (event.raw && this._row.item.pointed) this._menu._hover(this._row); }
+}
+
+/** A row pressed while usable: picked, or its rows opened. */
+class MenuRowPressed {
+    constructor(menu, row) { this._menu = menu; this._row = row; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle(event) { if (event.raw && typeof event.raw.preventDefault === "function") event.raw.preventDefault(); this._menu._activate(this._row); }
+}
 
 class ContextMenu {
     static LEAF = "context-menu";
@@ -54,7 +67,6 @@ class ContextMenu {
         this._viewport = { w: 0, h: 0 };
         this._path = [];                // the rows whose submenu is open, outermost first
         this._frameLook = new Look(ContextMenu, ROLE.STANDALONE);
-        this._rowLook = new Look(_MENU_ITEM, ROLE.CHOICE);
         this._root = this._level("frame", type.kind, type.nodes, "", 0);
         this.el = this._root.el;
     }
@@ -83,39 +95,17 @@ class ContextMenu {
         return level;
     }
     _row(frame, node, prefix, level) {
-        var self = this;
         var name = prefix + "row-" + node.id.replace(/[^A-Za-z0-9_-]/g, "_");
-        var el = this._branch.createElement(name, "div");
-        css.addClass(el, cm_item);
-        this._rowLook.wear(el);
-        el.setAttribute("role", "menuitem");
-        el.setAttribute("tabindex", "-1");
-        el.setAttribute("data-id", node.id);
-        var mark = new Icon(this._branch.createElement(name + "-mark", Icon.TAG), node.icon ? { name: node.icon } : null);
-        el.appendChild(mark.el);
-        var label = this._branch.createElement(name + "-label", "span");
-        css.addClass(label, cm_item_label);
-        label.textContent = node.label;
-        el.appendChild(label);
-        if (node.hint) {
-            // the item's hint, in the house's caption, cast as its hint: placed by the menu
-            var hint = new Caption(this._branch.elementMaker(name + "-hint"), { text: node.hint }, ROLE.HINT);
-            css.addClass(hint.el, cm_item_hint);
-            el.appendChild(hint.el);
-        }
-        var row = { id: node.id, el: el, mark: mark, icon: node.icon || null, sub: null, disabled: false, hidden: false, level: level };
-        if (node.nodes && node.nodes.length) {
-            var disclose = this._branch.createElement(name + "-disclose", Icon.TAG);
-            css.addClass(disclose, cm_item_disclose);
-            new Icon(disclose, { name: "disclose" });
-            el.appendChild(disclose);
-            el.setAttribute("aria-haspopup", "menu");
-            el.setAttribute("aria-expanded", "false");
-            row.sub = this._level(name + "-sub", node.label, node.nodes, name + "-", level.depth + 1);
-        }
-        el.addEventListener("pointerenter", function () { self._hover(row); });
-        el.addEventListener("click", function (e) { e.preventDefault(); self._activate(row); });
-        frame.appendChild(el);
+        var opens = !!(node.nodes && node.nodes.length);
+        // the house's menu item, cast as a choice of its menu: its glyph, its name, its hint and its way on its own; placed by the menu
+        var item = new MenuItem(this._branch.createBranch(name), { label: node.label, icon: node.icon || null, hint: node.hint || null,
+                                expanded: opens ? false : null }, ROLE.CHOICE);
+        item.el.setAttribute("data-id", node.id);
+        var row = { id: node.id, item: item, el: item.el, mark: item.mark, icon: node.icon || null, sub: null, disabled: false, hidden: false, level: level };
+        if (opens) row.sub = this._level(name + "-sub", node.label, node.nodes, name + "-", level.depth + 1);
+        item.setOnPointedChanged(new MenuRowPointed(this, row));
+        item.setOnClick(new MenuRowPressed(this, row));
+        frame.appendChild(item.el);
         return row;
     }
 
@@ -133,8 +123,8 @@ class ContextMenu {
             r.disabled = !!s.disabled;
             r.hidden = !!s.hidden;
             css.toggleClass(r.el, cm_item_hidden, r.hidden);
-            r.el.setAttribute("aria-disabled", r.disabled ? "true" : "false");
-            if (s.checked != null) r.el.setAttribute("aria-checked", s.checked ? "true" : "false"); else r.el.removeAttribute("aria-checked");
+            r.item.enabled = !r.disabled;
+            r.item.checked = s.checked == null ? null : !!s.checked;
             if (s.checked) r.mark.set("check"); else if (r.icon) r.mark.set(r.icon); else r.mark.clear();
             if (r.sub) this._apply(r.sub, object, state);
         }
@@ -165,8 +155,8 @@ class ContextMenu {
         (function place(level) {
             host.appendChild(level.el);
             for (var i = 0; i < level.rows.length; i++) if (level.rows[i].sub) {
-                level.rows[i].el.setAttribute("aria-expanded", "true");
-                level.rows[i].el.setAttribute("data-highlighted", "true");
+                level.rows[i].item.expanded = true;
+                level.rows[i].item.pointed = true;
                 self._path.push(level.rows[i]);
                 place(level.rows[i].sub);
             }
@@ -183,9 +173,7 @@ class ContextMenu {
     _deepest() { return this._path.length ? this._path[this._path.length - 1].sub : this._root; }
     _highlight(level, i) {
         level.cursor = i;
-        for (var k = 0; k < level.rows.length; k++) {
-            if (k === i) level.rows[k].el.setAttribute("data-highlighted", "true"); else level.rows[k].el.removeAttribute("data-highlighted");
-        }
+        for (var k = 0; k < level.rows.length; k++) level.rows[k].item.pointed = k === i;
     }
     _enabled(level) {
         var out = [];
@@ -228,7 +216,7 @@ class ContextMenu {
         var p = MenuGeometry.beside({ left: f.left, top: a.top, right: f.right, bottom: a.bottom }, { w: r.width, h: r.height }, this._viewport, inset);
         row.sub.el.style.setProperty("--cm-x", p.x + "px");
         row.sub.el.style.setProperty("--cm-y", p.y + "px");
-        row.el.setAttribute("aria-expanded", "true");
+        row.item.expanded = true;
         this._highlight(row.sub, -1);
         this._path.push(row);
     }
@@ -237,7 +225,7 @@ class ContextMenu {
         if (this._specimen) return;             // a specimen is open at every level, and stays so
         while (this._path.length > depth) {
             var row = this._path.pop();
-            row.el.setAttribute("aria-expanded", "false");
+            row.item.expanded = false;
             if (row.sub.el.parentNode) row.sub.el.parentNode.removeChild(row.sub.el);
         }
     }

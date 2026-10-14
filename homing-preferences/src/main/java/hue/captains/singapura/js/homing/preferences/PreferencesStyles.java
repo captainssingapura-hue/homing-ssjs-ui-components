@@ -93,26 +93,9 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
-    /** An option, its words in a row across the list; its look - a choice option's, marked by aria-selected - is the house's. */
+    /** An option, across the list; it lays out its name and its note itself - the house's choice option. */
     public record pv_option() implements CssClass<PreferencesStyles> {
-        @Override public String body() { return """
-            display: flex;
-            align-items: baseline;
-            text-align: left;
-            width: 100%;
-            box-sizing: border-box;
-            """;
-        }
-    }
-
-    public record pv_option_note() implements CssClass<PreferencesStyles> {
-        @Override public String body() { return """
-            margin-left: auto;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            """;
-        }
+        @Override public String body() { return "width: 100%;"; }
     }
 
     // ── Scale ─────────────────────────────────────────────────────────────────
@@ -170,11 +153,22 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
-    /** A setting's row: its name and its value in a row; its look - a setting row's, ruled off as a separator rules - is the house's. */
-    public record pv_child() implements CssClass<PreferencesStyles> {
+    /** A setting's row: its name and, at its end, its value, in a row - the setting row's own layout; its look is its leaf's. */
+    public record pv_setting_row() implements CssClass<PreferencesStyles> {
         @Override public String body() { return """
             display: flex;
             align-items: baseline;
+            """;
+        }
+    }
+
+    /** A setting row's value, at its end, cut short where the row ends. */
+    public record pv_setting_row_value() implements CssClass<PreferencesStyles> {
+        @Override public String body() { return """
+            margin-left: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             """;
         }
     }
@@ -183,9 +177,9 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
     public List<CssClass<PreferencesStyles>> cssClasses() {
         return List.of(new pv_root(), new pv_master(), new pv_detail(),
                        new pv_kicker(), new pv_title(), new pv_summary(), new pv_note(), new pv_actions(),
-                       new pv_options(), new pv_option(), new pv_option_note(),
+                       new pv_options(), new pv_option(),
                        new pv_range(), new pv_readout(),
                        new pv_list(), new pv_list_row(),
-                       new pv_children(), new pv_child());
+                       new pv_children(), new pv_setting_row(), new pv_setting_row_value());
     }
 }

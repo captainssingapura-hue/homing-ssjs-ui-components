@@ -12,6 +12,13 @@
 
 const _owner = Object.freeze({ toString: () => "themeWidget" });
 
+/** A style or a palette pressed: the field set to its value. */
+class ThemePicked {
+    constructor(field, value) { this._field = field; this._value = value; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._field.set(this._value); }
+}
+
 class ThemeWidget {
     constructor(branch, params) {
         branch.activate(_owner);
@@ -90,28 +97,16 @@ class ThemeWidget {
 
     _list(b, key, ariaLabel, role, options) {
         var self = this;
-        var look = new Look(Object.freeze({ LEAF: "choice-option" }), role);   // each option's: a choice option, as a style or a palette
         var ul = b.createElement(key, "div");
         css.addClass(ul, pv_options);
         ul.setAttribute("role", "listbox");
         ul.setAttribute("aria-label", ariaLabel);
         options.forEach(function (o, i) {
-            var row = b.createElement(key + "-" + i, "button");
-            row.type = "button";
-            css.addClass(row, pv_option);
-            look.wear(row);
-            row.setAttribute("role", "option");
-            row.setAttribute("aria-selected", o.selected ? "true" : "false");
-            var text = b.createElement(key + "-" + i + "-label", "span");
-            text.textContent = o.label;
-            row.appendChild(text);
-            if (o.note) {
-                var note = new Caption(CaptionFactory.create(b, key + "-" + i + "-note"), { text: o.note }, ROLE.NOTE);
-                css.addClass(note.el, pv_option_note);
-                row.appendChild(note.el);
-            }
-            row.addEventListener("click", function () { self._field.set(o.value); });
-            ul.appendChild(row);
+            // each the house's choice option, cast as a style or a palette: its name and its note its own; placed by the widget
+            var option = new ChoiceOption(b.createBranch(key + "-" + i), { label: o.label, note: o.note || null, selected: !!o.selected }, role);
+            css.addClass(option.el, pv_option);
+            option.setOnClick(new ThemePicked(self._field, o.value));
+            ul.appendChild(option.el);
         });
         return ul;
     }

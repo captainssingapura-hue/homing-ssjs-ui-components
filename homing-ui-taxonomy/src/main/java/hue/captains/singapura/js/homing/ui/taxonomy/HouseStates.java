@@ -184,6 +184,7 @@ public final class HouseStates {
     public record Pointed() implements Flag<Place>, Importance.Tertiary {
         public static final Pointed INSTANCE = new Pointed();
         @Override public Place parent() { return Place.INSTANCE; }
+        @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "pointed"); }
     }
 
     // ── content ──────────────────────────────────────────────────────────

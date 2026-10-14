@@ -38,6 +38,8 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.KickerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWash;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashFaint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashSoft;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashLight;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashStrong;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentTintFaint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeStrong;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeDeep;
@@ -93,6 +95,8 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case AccentWash c -> mix(seed(s.accent()), 0.18, CLEAR);
             case AccentWashFaint c -> mix(seed(s.accent()), 0.08, CLEAR);
             case AccentWashSoft c -> mix(seed(s.accent()), 0.15, CLEAR);
+            case AccentWashLight c -> mix(seed(s.accent()), 0.12, CLEAR);
+            case AccentWashStrong c -> mix(seed(s.accent()), 0.28, CLEAR);
             case KeysCandidate c -> mix(seed(s.accent()), 0.45, CLEAR);
             case KeysLent c -> mix(seed(s.accent()), 0.25, CLEAR);
             case ShadeFaint c -> mix(seed(s.inverted()), 0.04, CLEAR);

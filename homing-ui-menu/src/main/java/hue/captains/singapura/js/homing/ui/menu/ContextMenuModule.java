@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.ui.menu;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
-import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
+import hue.captains.singapura.js.homing.ui.elements.MenuItemModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.elements.SeparatorModule;
@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.icons.IconModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -35,23 +35,19 @@ public record ContextMenuModule() implements DomModule<ContextMenuModule>, ImplF
     @Override
     public ImportsFor<ContextMenuModule> imports() {
         return ImportsFor.<ContextMenuModule>builder()
-                .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MenuItemModule.MenuItem()), MenuItemModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SeparatorModule.Separator()), SeparatorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new MenuStyles.cm_frame(),
                         new MenuStyles.cm_frame_static(),
-                        new MenuStyles.cm_item(),
-                        new MenuStyles.cm_item_label(),
-                        new MenuStyles.cm_item_hint(),
-                        new MenuStyles.cm_item_disclose(),
                         new MenuStyles.cm_item_hidden(),
                         new MenuStyles.cm_separator()
                 ), MenuStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MenuGeometryModule.MenuGeometry()), MenuGeometryModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MenuTreeModule.MenuTree()), MenuTreeModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .build();
     }
 

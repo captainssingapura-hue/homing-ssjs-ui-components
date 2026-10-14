@@ -35,6 +35,8 @@ public final class HouseContainers {
         /** The pointer over it; the focus on it; where the page's keys are, held by the steward on its root (D12); the hand down on it. */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE,
                 HouseStates.Keyboard.INSTANCE, HouseStates.Down.INSTANCE); }
+        /** Pressed and let go: its one thing. */
+        @Override public List<EventType<?>> events() { return List.of(HouseEvents.Click.INSTANCE); }
     }
 
     // ── views ────────────────────────────────────────────────────────────
