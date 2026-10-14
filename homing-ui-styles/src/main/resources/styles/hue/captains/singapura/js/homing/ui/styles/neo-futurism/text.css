@@ -1,0 +1,383 @@
+/* The label in neo-futurism: words that name what they stand by. Whole: every property its look has (D9). */
+.styled-label {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The label as name in neo-futurism: words that name what they stand by. Whole: every property its look has (D9). */
+.styled-label_name {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The label as title in neo-futurism: words that name what they stand by. Whole: every property its look has (D9). */
+.styled-label_title {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The heading 1 in neo-futurism: the heading of a page. Whole: every property its look has (D9). */
+.styled-heading1 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: calc(46px * pow(1.2, var(--size)));
+    line-height: 1.05;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* The heading 2 in neo-futurism: a heading at the outline's second level. Whole: every property its look has (D9). */
+.styled-heading2 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(28px * pow(1.2, var(--size)));
+    line-height: 1.2;
+    letter-spacing: normal;
+}
+
+/* The heading 3 in neo-futurism: a heading at the third level. Whole: every property its look has (D9). */
+.styled-heading3 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(22px * pow(1.2, var(--size)));
+    line-height: 1.25;
+    letter-spacing: normal;
+}
+
+/* The heading 4 in neo-futurism: a heading at the fourth level. Whole: every property its look has (D9). */
+.styled-heading4 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(18px * pow(1.2, var(--size)));
+    line-height: 1.25;
+    letter-spacing: normal;
+}
+
+/* The heading 4 as title in neo-futurism: a heading at the fourth level. Whole: every property its look has (D9). */
+.styled-heading4_title {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(18px * pow(1.2, var(--size)));
+    line-height: 1.25;
+    letter-spacing: normal;
+}
+
+/* The heading 5 in neo-futurism: a heading at the fifth level. Whole: every property its look has (D9). */
+.styled-heading5 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(15px * pow(1.2, var(--size)));
+    line-height: 1.3;
+    letter-spacing: normal;
+}
+
+/* The heading 6 in neo-futurism: a heading at the sixth level. Whole: every property its look has (D9). */
+.styled-heading6 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.4;
+    letter-spacing: normal;
+}
+
+/* The code in neo-futurism: code in a line of words, in a fixed face on a faint wash. Whole: every property its look has (D9). */
+.styled-code {
+    color: inherit;
+    background-color: var(--fp-wash-faint);
+    border-radius: 2px;
+    padding-block: 0.1em;
+    padding-inline: 0.35em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+    font-weight: inherit;
+    font-size: 0.875em;
+    line-height: inherit;
+    letter-spacing: normal;
+}
+
+/* The success badge in neo-futurism: success said by a badge, its ink on its wash. Whole: every property its look has (D9). */
+.styled-success-badge {
+    --fixed-success-ink: #1b5e20;
+    --fixed-success-wash: rgb(34 139 34 / 0.14);
+    color: var(--fixed-success-ink);
+    background-color: var(--fixed-success-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The warning badge in neo-futurism: a warning said by a badge, its ink on its wash. Whole: every property its look has (D9). */
+.styled-warning-badge {
+    --fixed-warning-ink: #713f12;
+    --fixed-warning-wash: rgb(202 138 4 / 0.16);
+    color: var(--fixed-warning-ink);
+    background-color: var(--fixed-warning-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The danger badge in neo-futurism: danger said by a badge, its ink on its wash. Whole: every property its look has (D9). */
+.styled-danger-badge {
+    --fixed-danger-ink: #7f1d1d;
+    --fixed-danger-wash: rgb(220 38 38 / 0.12);
+    color: var(--fixed-danger-ink);
+    background-color: var(--fixed-danger-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The kicker in neo-futurism: the small line set above a title. Whole: every property its look has (D9). */
+.styled-kicker {
+    color: var(--fp-kicker-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+/* The kicker as name in neo-futurism: the small line set above a title. Whole: every property its look has (D9). */
+.styled-kicker_name {
+    color: var(--fp-kicker-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+/* The kicker as title in neo-futurism: the small line set above a title. Whole: every property its look has (D9). */
+.styled-kicker_title {
+    color: var(--fp-kicker-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 600;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+/* The caption in neo-futurism: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+
+/* The caption as figure in neo-futurism: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption_figure {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+
+/* The caption as hint in neo-futurism: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption_hint {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+
+/* The caption as note in neo-futurism: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption_note {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+
+/* The caption as summary in neo-futurism: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption_summary {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+}
+
+/* The lede in neo-futurism: the line that opens, larger and quieter. Whole: every property its look has (D9). */
+.styled-lede {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(17px * pow(1.2, var(--size)));
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+}
+
+/* The readout in neo-futurism: a figure read off, its digits even. Whole: every property its look has (D9). */
+.styled-readout {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The readout as value in neo-futurism: a figure read off, its digits even. Whole: every property its look has (D9). */
+.styled-readout_value {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The badge in neo-futurism: a tag on the accent's wash. Whole: every property its look has (D9). */
+.styled-badge {
+    color: inherit;
+    background-color: var(--fp-accent-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The badge as tag in neo-futurism: a tag on the accent's wash. Whole: every property its look has (D9). */
+.styled-badge_tag {
+    color: inherit;
+    background-color: var(--fp-accent-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The pill in neo-futurism: a count in a rounded wash. Whole: every property its look has (D9). */
+.styled-pill {
+    color: inherit;
+    background-color: var(--fp-wash-soft);
+    border-radius: 999px;
+    padding-inline: 0.5em;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(12px * pow(1.15, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The pill as count in neo-futurism: a count in a rounded wash. Whole: every property its look has (D9). */
+.styled-pill_count {
+    color: inherit;
+    background-color: var(--fp-wash-soft);
+    border-radius: 999px;
+    padding-inline: 0.5em;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(12px * pow(1.15, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The wordmark in neo-futurism: a name set as the mark of whom it belongs to. Whole: every property its look has (D9). */
+.styled-wordmark {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: inherit;
+    font-size: calc(22px * pow(1.2, var(--size)));
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+/* The wordmark as name in neo-futurism: a name set as the mark of whom it belongs to. Whole: every property its look has (D9). */
+.styled-wordmark_name {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: inherit;
+    font-size: calc(22px * pow(1.2, var(--size)));
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}

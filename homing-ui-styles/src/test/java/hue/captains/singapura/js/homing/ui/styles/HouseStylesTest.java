@@ -58,9 +58,12 @@ class HouseStylesTest {
             for (Component<?> w : HouseFamilies.WAYS)
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(w)), s.token() + " draws " + w.token() + ": its own focus ring on it");
             assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.BrandMark.INSTANCE)), s.token() + ": the brand's mark is Base's, alike in every style");
+            for (Component<?> t : HouseFamilies.TEXTS)
+                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(t)), s.token() + " draws " + t.token() + ": its own faces");
         }
         assertEquals(9, HouseFamilies.BUTTONS.size());
         assertEquals(3, HouseFamilies.WAYS.size());
+        assertEquals(18, HouseFamilies.TEXTS.size());
     }
 
     @Test
@@ -68,7 +71,7 @@ class HouseStylesTest {
         var tree = HouseColours.TREE;
         for (ColorPalette<ColorScheme.Base> p : HouseStyles.PALETTES) {
             assertEquals(List.of(), tree.check(p), p.token());
-            assertEquals(29, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the way's ink and its ink under the hand among them");
+            assertEquals(34, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge among them");
         }
         assertEquals(8, HouseStyles.PALETTES.size());
     }
@@ -86,7 +89,8 @@ class HouseStylesTest {
         assertTrue(Harbour.INSTANCE.color(new HouseColours.Text()).get() instanceof ConcreteColor.Srgb);
         HouseColour any = new HouseColours.Wash();
         assertEquals("rgb(59 74 107 / 0.12)", rule.of(Harbour.SEEDS, any).css(), "the text's ink, washed thin");
-        assertEquals("rgb(59 74 107 / 0.8)", rule.of(Harbour.SEEDS, new HouseColours.WayInk()).css(), "a way's ink: the text's, a fifth faded");
+        assertEquals("rgb(59 74 107 / 0.8)", rule.of(Harbour.SEEDS, new HouseColours.TextFaded()).css(), "the text faded, a way's ink and a caption's: a fifth faded");
+        assertEquals(new ConcreteColor.Srgb(45, 57, 102, 1).css(), rule.of(Harbour.SEEDS, new HouseColours.HeadingInk()).css(), "a heading: the navy leaning half into the text");
         assertEquals("rgb(43 55 101 / 0.9)", rule.of(Harbour.SEEDS, new HouseColours.WayHovered()).css(),
                 "a way under the hand: the house's navy leaning half into the way's ink, as the old sheets mixed it");
     }

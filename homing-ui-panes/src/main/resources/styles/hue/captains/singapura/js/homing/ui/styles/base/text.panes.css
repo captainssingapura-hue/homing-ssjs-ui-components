@@ -1,2 +1,11 @@
-/* kicker_prompt: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-kicker_prompt {}
+/* The kicker as prompt in the base layer: the small line set above a title. Whole: every property its look has (D9). */
+.styled-kicker_prompt {
+    color: var(--fp-kicker-ink);
+    background-color: transparent;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}

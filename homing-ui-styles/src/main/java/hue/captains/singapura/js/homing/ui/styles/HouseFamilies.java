@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.styles;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.Set;
 
@@ -24,8 +25,16 @@ public final class HouseFamilies {
     public static final Set<Component<?>> WAYS = Set.of(
             HouseControls.Link.INSTANCE, HouseControls.Crumb.INSTANCE, HouseControls.Brand.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, then the ways. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS);
+    /** The text: every style's own faces, weights and spacing on every kind of words - a heading at each level among them. */
+    public static final Set<Component<?>> TEXTS = Set.of(
+            HouseText.Label.INSTANCE, HouseText.Heading1.INSTANCE, HouseText.Heading2.INSTANCE, HouseText.Heading3.INSTANCE,
+            HouseText.Heading4.INSTANCE, HouseText.Heading5.INSTANCE, HouseText.Heading6.INSTANCE, HouseText.Code.INSTANCE,
+            HouseText.SuccessBadge.INSTANCE, HouseText.WarningBadge.INSTANCE, HouseText.DangerBadge.INSTANCE,
+            HouseText.Kicker.INSTANCE, HouseText.Caption.INSTANCE, HouseText.Lede.INSTANCE, HouseText.Readout.INSTANCE,
+            HouseText.Badge.INSTANCE, HouseText.Pill.INSTANCE, HouseText.Wordmark.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, then the text. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

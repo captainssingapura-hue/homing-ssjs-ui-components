@@ -63,6 +63,10 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(ReadoutModule.INSTANCE),
                 CrateEntry.of(BadgeModule.INSTANCE),
                 CrateEntry.of(PillModule.INSTANCE),
+                CrateEntry.of(CodeModule.INSTANCE),
+                CrateEntry.of(SuccessBadgeModule.INSTANCE),
+                CrateEntry.of(WarningBadgeModule.INSTANCE),
+                CrateEntry.of(DangerBadgeModule.INSTANCE),
                 CrateEntry.of(WordmarkModule.INSTANCE),
                 // the ways somewhere - a link, a crumb - and the veil behind a dialog
                 CrateEntry.of(LinkBehaviorModule.INSTANCE),

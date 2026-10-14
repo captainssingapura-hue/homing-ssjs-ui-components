@@ -1,0 +1,390 @@
+/* The label in editorial: words that name what they stand by. Whole: every property its look has (D9). */
+.styled-label {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The label as name in editorial: words that name what they stand by. Whole: every property its look has (D9). */
+.styled-label_name {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The label as title in editorial: words that name what they stand by. Whole: every property its look has (D9). */
+.styled-label_title {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 600;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The heading 1 in editorial: the heading of a page. Whole: every property its look has (D9). */
+.styled-heading1 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(44px * pow(1.2, var(--size)));
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+/* The heading 2 in editorial: a heading at the outline's second level. Whole: every property its look has (D9). */
+.styled-heading2 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(28px * pow(1.2, var(--size)));
+    line-height: 1.2;
+    letter-spacing: normal;
+}
+
+/* The heading 3 in editorial: a heading at the third level. Whole: every property its look has (D9). */
+.styled-heading3 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(22px * pow(1.2, var(--size)));
+    line-height: 1.25;
+    letter-spacing: normal;
+}
+
+/* The heading 4 in editorial: a heading at the fourth level. Whole: every property its look has (D9). */
+.styled-heading4 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(18px * pow(1.2, var(--size)));
+    line-height: 1.25;
+    letter-spacing: normal;
+}
+
+/* The heading 4 as title in editorial: a heading at the fourth level. Whole: every property its look has (D9). */
+.styled-heading4_title {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(18px * pow(1.2, var(--size)));
+    line-height: 1.25;
+    letter-spacing: normal;
+}
+
+/* The heading 5 in editorial: a heading at the fifth level. Whole: every property its look has (D9). */
+.styled-heading5 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(15px * pow(1.2, var(--size)));
+    line-height: 1.3;
+    letter-spacing: normal;
+}
+
+/* The heading 6 in editorial: a heading at the sixth level. Whole: every property its look has (D9). */
+.styled-heading6 {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.4;
+    letter-spacing: normal;
+}
+
+/* The code in editorial: code in a line of words, in a fixed face on a faint wash. Whole: every property its look has (D9). */
+.styled-code {
+    color: inherit;
+    background-color: var(--fp-wash-faint);
+    border-radius: 3px;
+    padding-block: 0.1em;
+    padding-inline: 0.35em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+    font-weight: inherit;
+    font-size: 0.875em;
+    line-height: inherit;
+    letter-spacing: normal;
+}
+
+/* The success badge in editorial: success said by a badge, its ink on its wash. Whole: every property its look has (D9). */
+.styled-success-badge {
+    --fixed-success-ink: #1b5e20;
+    --fixed-success-wash: rgb(34 139 34 / 0.14);
+    color: var(--fixed-success-ink);
+    background-color: var(--fixed-success-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The warning badge in editorial: a warning said by a badge, its ink on its wash. Whole: every property its look has (D9). */
+.styled-warning-badge {
+    --fixed-warning-ink: #713f12;
+    --fixed-warning-wash: rgb(202 138 4 / 0.16);
+    color: var(--fixed-warning-ink);
+    background-color: var(--fixed-warning-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The danger badge in editorial: danger said by a badge, its ink on its wash. Whole: every property its look has (D9). */
+.styled-danger-badge {
+    --fixed-danger-ink: #7f1d1d;
+    --fixed-danger-wash: rgb(220 38 38 / 0.12);
+    color: var(--fixed-danger-ink);
+    background-color: var(--fixed-danger-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The kicker in editorial: the small line set above a title. Whole: every property its look has (D9). */
+.styled-kicker {
+    color: var(--fp-kicker-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* The kicker as name in editorial: the small line set above a title. Whole: every property its look has (D9). */
+.styled-kicker_name {
+    color: var(--fp-kicker-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* The kicker as title in editorial: the small line set above a title. Whole: every property its look has (D9). */
+.styled-kicker_title {
+    color: var(--fp-kicker-ink);
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* The caption in editorial: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-style: italic;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The caption as figure in editorial: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption_figure {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-style: italic;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The caption as hint in editorial: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption_hint {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-style: italic;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The caption as note in editorial: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption_note {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-style: italic;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The caption as summary in editorial: a quieter line beside what it tells of. Whole: every property its look has (D9). */
+.styled-caption_summary {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-style: italic;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+}
+
+/* The lede in editorial: the line that opens, larger and quieter. Whole: every property its look has (D9). */
+.styled-lede {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-style: italic;
+    font-size: calc(17px * pow(1.2, var(--size)));
+    line-height: 1.55;
+    letter-spacing: normal;
+}
+
+/* The readout in editorial: a figure read off, its digits even. Whole: every property its look has (D9). */
+.styled-readout {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The readout as value in editorial: a figure read off, its digits even. Whole: every property its look has (D9). */
+.styled-readout_value {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The badge in editorial: a tag on the accent's wash. Whole: every property its look has (D9). */
+.styled-badge {
+    color: inherit;
+    background-color: var(--fp-accent-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The badge as tag in editorial: a tag on the accent's wash. Whole: every property its look has (D9). */
+.styled-badge_tag {
+    color: inherit;
+    background-color: var(--fp-accent-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+/* The pill in editorial: a count in a rounded wash. Whole: every property its look has (D9). */
+.styled-pill {
+    color: inherit;
+    background-color: var(--fp-wash-soft);
+    border-radius: 999px;
+    padding-inline: 0.5em;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(12px * pow(1.15, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The pill as count in editorial: a count in a rounded wash. Whole: every property its look has (D9). */
+.styled-pill_count {
+    color: inherit;
+    background-color: var(--fp-wash-soft);
+    border-radius: 999px;
+    padding-inline: 0.5em;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(12px * pow(1.15, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+    font-variant-numeric: tabular-nums;
+}
+
+/* The wordmark in editorial: a name set as the mark of whom it belongs to. Whole: every property its look has (D9). */
+.styled-wordmark {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: inherit;
+    font-style: italic;
+    font-size: calc(22px * pow(1.2, var(--size)));
+    line-height: 1;
+    letter-spacing: normal;
+}
+
+/* The wordmark as name in editorial: a name set as the mark of whom it belongs to. Whole: every property its look has (D9). */
+.styled-wordmark_name {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: inherit;
+    font-style: italic;
+    font-size: calc(22px * pow(1.2, var(--size)));
+    line-height: 1;
+    letter-spacing: normal;
+}

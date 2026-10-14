@@ -15,18 +15,20 @@ import java.util.List;
 /**
  * The house's colour tree (RFC 0067, appendix Semantic Colours and Flavours, D16; appendix Two Classes per Leaf): every
  * colour a house leaf's file names, each named for what it is for, in the base scheme. Grown family by family as the
- * leaves move onto files - the buttons first, then the ways.
+ * leaves move onto files - the buttons first, then the ways, then the text.
  *
  * <ul>
- *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, a wash under the
- *       hand for a mark alone, and clear;</li>
- *   <li><b>writing</b> - the inks: the text's, on inverted, on the accent; a way's, and a way's under the hand;</li>
+ *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, the text's ink
+ *       washed thin at each strength - under the hand for a mark alone, under code, under a pill - and clear;</li>
+ *   <li><b>writing</b> - the inks: the text's, and faded; on inverted, on the accent; a way's under the hand; a
+ *       heading's, a kicker's;</li>
  *   <li><b>lines</b> - the hairline;</li>
  *   <li><b>attention</b> - the house's own colour, the accent and its edge, the ring a focused control wears, the
- *       accent's tint on a raised face;</li>
+ *       accent's tint on a raised face, and washed thin under a badge;</li>
  *   <li><b>shadows</b> - what a box casts, at each strength the styles draw: the shade of the inverted layer, the sheen
  *       of the raised one, the glow of the house's colour;</li>
- *   <li><b>feedback</b> - danger, warning and success, the same in every house palette: fixed;</li>
+ *   <li><b>feedback</b> - danger, warning and success, the same in every house palette: fixed - a badge's wash of each
+ *       among them;</li>
  *   <li><b>scales</b> - what a coloured button's ground and ink move along, by its degree on the colour axis: the word at
  *       1, neutral at 0, the meaning turned the other way at -1.</li>
  * </ul>
@@ -43,10 +45,10 @@ public record HouseColours() implements ColorSource {
 
     /** Every palettable colour of the house: one sealed set, so a palette's switch over it is exhaustive. */
     public sealed interface HouseColour permits
-            Raised, Ground, Recessed, Inverted, Wash,
-            Text, OnInverted, OnAccent, WayInk, WayHovered,
+            Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft,
+            Text, TextFaded, OnInverted, OnAccent, WayHovered, HeadingInk, KickerInk,
             Border,
-            Title, Accent, AccentEdge, Ring, AccentTint,
+            Title, Accent, AccentEdge, Ring, AccentTint, AccentWash,
             ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, Sheen,
             GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowStrong, GlowBright, GlowFull {}
 
@@ -70,6 +72,10 @@ public record HouseColours() implements ColorSource {
     public record Inverted() implements Palettable<Base, Surfaces>, HouseColour {}
     /** A wash under the hand for a mark alone - an icon button's - that shows on a raised face or the page's ground. */
     public record Wash() implements Palettable<Base, Surfaces>, HouseColour {}
+    /** The text's ink washed fainter, at 8%: the ground code is set on. */
+    public record WashFaint() implements Palettable<Base, Surfaces>, HouseColour {}
+    /** At 10%: a pill's ground. */
+    public record WashSoft() implements Palettable<Base, Surfaces>, HouseColour {}
     /** Nothing drawn: the same in every palette. */
     public record Clear() implements Fixed<Base, Surfaces> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("transparent"); }
@@ -79,14 +85,18 @@ public record HouseColours() implements ColorSource {
 
     /** The ink of what is written. */
     public record Text() implements Palettable<Base, Writing>, HouseColour {}
+    /** The text's ink, a fifth faded into what it stands on: a quieter line - a caption, a lede - and a way somewhere. */
+    public record TextFaded() implements Palettable<Base, Writing>, HouseColour {}
     /** The ink written on the house's own colour and on inverted: the primary button's, the chosen tab's. */
     public record OnInverted() implements Palettable<Base, Writing>, HouseColour {}
     /** The ink written on the accent. */
     public record OnAccent() implements Palettable<Base, Writing>, HouseColour {}
-    /** The ink of a way somewhere - a link: the text's, a fifth faded into what it stands on. */
-    public record WayInk() implements Palettable<Base, Writing>, HouseColour {}
-    /** A way somewhere under the hand: the house's own colour leaning half into the way's ink. */
+    /** A way somewhere under the hand: the house's own colour leaning half into the faded text a way is written in. */
     public record WayHovered() implements Palettable<Base, Writing>, HouseColour {}
+    /** A heading's ink: the house's own colour leaning half into the text's. */
+    public record HeadingInk() implements Palettable<Base, Writing>, HouseColour {}
+    /** A kicker's ink: the accent's edge leaning half into the text's. */
+    public record KickerInk() implements Palettable<Base, Writing>, HouseColour {}
 
     // ── lines ─────────────────────────────────────────────────────────────
 
@@ -105,6 +115,8 @@ public record HouseColours() implements ColorSource {
     public record Ring() implements Palettable<Base, Attention>, HouseColour {}
     /** The accent's tint on a raised face: a toggle that is on. */
     public record AccentTint() implements Palettable<Base, Attention>, HouseColour {}
+    /** The accent washed thin, at 18%: a badge's ground. */
+    public record AccentWash() implements Palettable<Base, Attention>, HouseColour {}
 
     // ── shadows: the inverted layer's shade, the raised one's sheen, the house colour's glow, at each strength ──
 
@@ -173,6 +185,18 @@ public record HouseColours() implements ColorSource {
     public record SuccessTint() implements Fixed<Base, Feedback> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(34, 139, 34, .12)"); }
     }
+    /** Danger's wash, at 12%: a danger badge's ground. */
+    public record DangerWash() implements Fixed<Base, Feedback> {
+        @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(220, 38, 38, .12)"); }
+    }
+    /** Warning's wash, at 16%: a warning badge's ground. */
+    public record WarningWash() implements Fixed<Base, Feedback> {
+        @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(202, 138, 4, .16)"); }
+    }
+    /** Success's wash, at 14%: a success badge's ground. */
+    public record SuccessWash() implements Fixed<Base, Feedback> {
+        @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(34, 139, 34, .14)"); }
+    }
     /** Success's ink. */
     public record SuccessInk() implements Fixed<Base, Feedback> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("#1B5E20"); }
@@ -212,13 +236,14 @@ public record HouseColours() implements ColorSource {
     @Override public ColorTree read() {
         return ReadColors.INSTANCE.read(HouseColours.class, List.of(
                 new Surfaces(), new Writing(), new Lines(), new Attention(), new Shadows(), new Feedback(), new Scales(),
-                new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new Clear(),
-                new Text(), new OnInverted(), new OnAccent(), new WayInk(), new WayHovered(),
+                new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new Clear(),
+                new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
                 new Border(),
-                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(),
+                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentWash(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new Sheen(),
                 new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowStrong(), new GlowBright(), new GlowFull(),
                 new Danger(), new DangerPressed(), new OnDanger(), new DangerTint(), new DangerEdge(), new DangerInk(),
+                new DangerWash(), new WarningWash(), new SuccessWash(),
                 new WarningTint(), new WarningInk(), new SuccessTint(), new SuccessInk(),
                 new PrimaryGround(), new PrimaryInk(), new SecondaryGround(), new DangerGround(), new DangerWriting(),
                 new WarningGround(), new SuccessGround()));

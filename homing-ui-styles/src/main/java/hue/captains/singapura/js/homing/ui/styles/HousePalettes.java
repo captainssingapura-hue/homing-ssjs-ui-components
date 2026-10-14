@@ -29,8 +29,13 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.Sheen;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Text;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Title;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Wash;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.WashFaint;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.WashSoft;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.WayHovered;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours.WayInk;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.TextFaded;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.HeadingInk;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.KickerInk;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWash;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 /**
@@ -57,17 +62,22 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case Recessed c -> seed(s.recessed());
             case Inverted c -> seed(s.inverted());
             case Wash c -> mix(seed(s.text()), 0.12, CLEAR);
+            case WashFaint c -> mix(seed(s.text()), 0.08, CLEAR);
+            case WashSoft c -> mix(seed(s.text()), 0.10, CLEAR);
             case Text c -> seed(s.text());
+            case TextFaded c -> mix(seed(s.text()), 0.80, CLEAR);
             case OnInverted c -> seed(s.onInverted());
             case OnAccent c -> seed(s.onAccent());
-            case WayInk c -> mix(seed(s.text()), 0.80, CLEAR);
             case WayHovered c -> mix(seed(s.title()), 0.50, mix(seed(s.text()), 0.80, CLEAR));
+            case HeadingInk c -> mix(seed(s.title()), 0.50, seed(s.text()));
+            case KickerInk c -> mix(seed(s.accentEdge()), 0.50, seed(s.text()));
             case Border c -> seed(s.border());
             case Title c -> seed(s.title());
             case Accent c -> seed(s.accent());
             case AccentEdge c -> seed(s.accentEdge());
             case Ring c -> mix(seed(s.accent()), 0.55, seed(s.border()));
             case AccentTint c -> mix(seed(s.accent()), 0.22, seed(s.raised()));
+            case AccentWash c -> mix(seed(s.accent()), 0.18, CLEAR);
             case ShadeFaint c -> mix(seed(s.inverted()), 0.04, CLEAR);
             case ShadeLight c -> mix(seed(s.inverted()), 0.08, CLEAR);
             case ShadeSoft c -> mix(seed(s.inverted()), 0.10, CLEAR);
