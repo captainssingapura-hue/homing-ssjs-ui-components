@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.styles;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.Set;
@@ -38,8 +39,16 @@ public final class HouseFamilies {
             HouseControls.TextBox.INSTANCE, HouseControls.Checkbox.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
             HouseControls.Switch.INSTANCE, HouseControls.Slider.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, then the inputs. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS);
+    /** The tracks: the slider's rail and groove, the toggle's groove, the fill - each style's own edge and shape on them. */
+    public static final Set<Component<?>> TRACKS = Set.of(
+            HouseMarks.SliderRail.INSTANCE, HouseMarks.SliderGroove.INSTANCE, HouseMarks.ToggleGroove.INSTANCE, HouseMarks.Fill.INSTANCE);
+
+    /** The handles: the slider's knob, the toggle's, the grip - each style's own face and ring on them. */
+    public static final Set<Component<?>> HANDLES = Set.of(
+            HouseControls.SliderKnob.INSTANCE, HouseControls.ToggleKnob.INSTANCE, HouseControls.Grip.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks and the handles. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

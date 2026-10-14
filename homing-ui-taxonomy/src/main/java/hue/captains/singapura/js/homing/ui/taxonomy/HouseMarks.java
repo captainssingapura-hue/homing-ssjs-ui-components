@@ -1,8 +1,11 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Mark;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Track;
+
+import java.util.List;
 
 /**
  * The house's small signs and the lines things move along: independent components, each a role's
@@ -81,10 +84,26 @@ public final class HouseMarks {
 
     // ── tracks ───────────────────────────────────────────────────────────
 
-    /** The line a knob runs along. */
-    public record Groove() implements Component<Track> {
-        public static final Groove INSTANCE = new Groove();
+    /** The slider's rail: the stretch its value is set along, the hand taken anywhere on it - its groove, fill and knob placed on it. Never alone: a slider's part. */
+    public record SliderRail() implements Component<Track> {
+        public static final SliderRail INSTANCE = new SliderRail();
         @Override public Track parent() { return Track.INSTANCE; }
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Enabled.INSTANCE); }
+    }
+
+    /** The slider's groove: the line its knob runs along. Never alone: a slider's part. */
+    public record SliderGroove() implements Component<Track> {
+        public static final SliderGroove INSTANCE = new SliderGroove();
+        @Override public Track parent() { return Track.INSTANCE; }
+    }
+
+    /** The toggle's groove: the pill a switch's knob slides in, in the accent when the switch is on. Never alone: a switch's part. */
+    public record ToggleGroove() implements Component<Track> {
+        public static final ToggleGroove INSTANCE = new ToggleGroove();
+        @Override public Track parent() { return Track.INSTANCE; }
+        @Override public List<StateType<?>> states() {
+            return List.of(HouseStates.Checked.INSTANCE);
+        }
     }
 
     /** The part of a groove a value fills. */

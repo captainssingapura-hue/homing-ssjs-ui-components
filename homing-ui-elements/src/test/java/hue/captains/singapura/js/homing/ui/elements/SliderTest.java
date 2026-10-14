@@ -58,7 +58,7 @@ class SliderTest extends JsModuleTestBase {
         var page = fakeBranch("page");
         var s = new Slider(page.createBranch("size"), { label: "The tabs' size", axis: true, format: function (v) { return v.toFixed(1); },
                     onInput: function (v) { log.push("in:" + v); }, onChange: function (v) { log.push("change:" + v); } });
-        var rail = s.root.children[1], knob = rail.children[rail.children.length - 1], face = knob.children[0], mark = knob.children[1], detent = rail.children[1], readout = s.root.children[2];
+        var rail = s.root.children[1], knob = rail.children[rail.children.length - 1], mark = knob.children[0], detent = rail.children[1], readout = s.root.children[2];
         """;
 
     @BeforeEach
@@ -70,6 +70,8 @@ class SliderTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/SliderScaleModule.js");
+        for (String m : new String[] {"MarkBehaviorModule.js", "SliderRailModule.js", "SliderGrooveModule.js", "FillModule.js", "SliderKnobModule.js"})
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);   // its parts, each a component
         loadModule(MODULE);
         js.eval("js", TextsInJs.withCss(SHIM));
     }
@@ -87,11 +89,10 @@ class SliderTest extends JsModuleTestBase {
         assertEquals("-1,1,0,0.0,The tabs' size", eval("[knob.attr('aria-valuemin'), knob.attr('aria-valuemax'), knob.attr('aria-valuenow'), knob.attr('aria-valuetext'), knob.attr('aria-label')].join(',')").asString());
         assertEquals("0.0", eval("readout.textContent").asString());
         assertTrue(eval("detent.has('el_slider_detent') && knob.has('el_slider_knob')").asBoolean());
-        // its look: its leaf's class on its root; its parts, played for an owner not yet named, and the slices of the old
-        // look, wear nothing styled until the slider's family moves onto files (RFC 0067, Two Classes per Leaf, phase 5)
-        assertTrue(eval("s.root.has('styled-slider') && !s.root.has('slider__size-inset')").asBoolean(), "its root, its leaf whole (D17); its rail a leaf of its own when the family moves");
-        assertTrue(eval("!rail.children[0].has('groove_span__color-background') && !knob.has('knob_thumb__size-extent')").asBoolean(),
-                "the old look's classes, gone");
+        // its look: its casting's class on its root; each part a component of its own, its casting's class whole (D17)
+        assertTrue(eval("s.root.has('styled-slider') && !s.root.has('slider__size-inset')").asBoolean(), "its root, its casting whole");
+        assertTrue(eval("rail.has('styled-slider-rail') && rail.children[0].has('styled-slider-groove_span') && rail.children[0].children[0].has('styled-fill_level') && knob.has('styled-slider-knob_thumb')").asBoolean(),
+                "the rail - its role only placing it - the groove as its span, the fill its level, the knob its thumb");
         assertTrue(eval("mark.has('ic_base') && mark.has('ic_grip')").asBoolean(), "a grip on the knob unless the slider says what it sets");
         assertEquals("grip", eval("s.icon()").asString());
         eval("s.icon('size');");
@@ -112,8 +113,8 @@ class SliderTest extends JsModuleTestBase {
         // the rail is 200px from 100: a press at 250 is three quarters along → 0.5 on the axis
         eval("log = []; var down = rail.fire('pointerdown', { button: 0, pointerId: 3, clientX: 250 });");
         assertEquals("capture:3 in:0.5 focus:div", log(), "captured at the press, the value set live, the knob focused");
-        assertTrue(eval("down.defaulted && knob.hasAttribute('data-dragging') && face.hasAttribute('data-dragging') && detent.hasAttribute('data-dragging')").asBoolean(),
-                "dragging: the knob, its face, and the detent - shown only now");
+        assertTrue(eval("down.defaulted && knob.has('styled-slider-knob_thumb--dragging') && detent.hasAttribute('data-dragging')").asBoolean(),
+                "dragging: the knob's Dragging state, and the detent shown only now");
         assertEquals("75.000%", eval("rail.prop('--sl-value')").asString());
         eval("log = []; rail.fire('pointermove', { clientX: 206 });");
         assertEquals("in:0", log(), "206 is 0.06 on the axis: within the detent's bite of six tenths of a step, so it rests at nought");
@@ -123,7 +124,7 @@ class SliderTest extends JsModuleTestBase {
         assertEquals("", log(), "the same value again is nothing");
         eval("log = []; rail.fire('pointerup', {});");
         assertEquals("change:0.1", log(), "released: the change, once, since the value moved from the press");
-        assertFalse(eval("knob.hasAttribute('data-dragging') || face.hasAttribute('data-dragging') || detent.hasAttribute('data-dragging')").asBoolean(), "let go: no part dragging, the detent hidden");
+        assertFalse(eval("knob.has('styled-slider-knob_thumb--dragging') || detent.hasAttribute('data-dragging')").asBoolean(), "let go: the knob not dragging, the detent hidden");
         assertEquals("0", eval("String(rail.listening('pointermove'))").asString(), "the hand's listeners are gone");
         eval("log = []; rail.fire('pointerdown', { button: 0, pointerId: 4, clientX: 220 }); rail.fire('pointermove', { clientX: 220 }); rail.fire('pointerup', {});");
         assertEquals("capture:4 in:0.2 focus:div change:0.2", log());
@@ -185,8 +186,9 @@ class SliderTest extends JsModuleTestBase {
             function ins() { return log.filter(function (l) { return l.indexOf("in:") === 0; }).join(" "); }
             """);
         assertTrue(eval("f.root.has('el_slider_vertical') && vr.has('el_slider_rail_vertical') && vr.has('el_slider_rail_ticked')").asBoolean());
-        assertTrue(eval("vk.has('el_slider_cap') && !vk.has('el_slider_knob') && vk.children[0].has('el_slider_cap_face') && vk.children[1].has('el_slider_cap_mark') && vk.children[1].has('ic_level')").asBoolean(), "the cap, its face, its mark");
-        assertEquals("vertical,vertical", eval("vk.attr('aria-orientation') + ',' + vk.children[0].attr('aria-orientation')").asString(), "the cap stood up, its box and its face: its style's size and corner");
+        assertTrue(eval("vk.has('el_slider_cap') && !vk.has('el_slider_knob') && vk.children[0].has('el_slider_cap_mark') && vk.children[0].has('ic_level')").asBoolean(), "the cap, its mark");
+        assertEquals("vertical", eval("vk.attr('aria-orientation')").asString());
+        assertTrue(eval("vk.has('styled-slider-knob_thumb--vertical')").asBoolean(), "the cap stood up: its standing a state of its own, its style's size and corner");
         assertEquals("4", eval("String(vticks.length)").asString(), "a tick per value on the scale; one off it is dropped");
         assertEquals("100.000%,85.714%,57.143%,0.000%", eval("vticks.map(function (t) { return t.prop('--sl-tick'); }).join(',')").asString(), "each at its fraction of the length");
         assertTrue(eval("vticks[0].has('el_slider_tick_vertical') && vticks[0].children[0].has('el_slider_tick_line_vertical') && vticks[0].children[1].textContent === '+10'").asBoolean());
@@ -204,7 +206,9 @@ class SliderTest extends JsModuleTestBase {
     void offIsInert_theSizeReachesEveryPart_disposeDissolves() {
         eval("s.setOn(false); log = [];");
         assertTrue(eval("s.root.has('el_slider_off') && [s.root, rail, knob].every(function (e) { return e.attr('aria-disabled') === 'true'; }) && knob.attr('tabindex') === '-1'").asBoolean(),
-                "off: the slider, its rail and its knob say so, which their looks are off by");
+                "off: the slider, its rail and its knob say so");
+        assertTrue(eval("s.root.has('styled-slider--disabled') && rail.has('styled-slider-rail--disabled') && knob.has('styled-slider-knob_thumb--disabled')").asBoolean(),
+                "and each holds its Enabled state's class, which its look is off by");
         eval("rail.fire('pointerdown', { button: 0, pointerId: 1, clientX: 300 }); knob.fire('keydown', { key: 'End' });");
         assertEquals("", log(), "off: neither the hand nor the keys");
         eval("s.setOn(true); s.size(0.5);");

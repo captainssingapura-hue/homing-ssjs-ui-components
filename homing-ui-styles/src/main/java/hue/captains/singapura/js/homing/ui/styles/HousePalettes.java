@@ -38,6 +38,7 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.KickerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWash;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KeysCandidate;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KeysLent;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.GrooveEdge;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 /**
@@ -74,6 +75,7 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case HeadingInk c -> mix(seed(s.title()), 0.50, seed(s.text()));
             case KickerInk c -> mix(seed(s.accentEdge()), 0.50, seed(s.text()));
             case Border c -> seed(s.border());
+            case GrooveEdge c -> mix(seed(s.text()), 0.45, CLEAR);
             case Title c -> seed(s.title());
             case Accent c -> seed(s.accent());
             case AccentEdge c -> seed(s.accentEdge());

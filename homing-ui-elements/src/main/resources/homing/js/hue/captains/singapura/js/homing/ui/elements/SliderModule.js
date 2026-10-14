@@ -5,9 +5,9 @@
 // fill runs from the detent to the value, the knob takes the focus, and
 // carries a mark — an Icon: a grip, or the word for what the slider sets.
 // Its look is the house's: the slider wears its own casting, and each part
-// is a part of the taxonomy's, worn as cast - the groove as its span, the
-// fill its level, the detent its rest, a tick a notch, the knob its thumb,
-// the texts its name, its figures and its value. Every part flat, in every
+// is a component of its own, made as cast - the rail as its editor, the
+// groove its span, the fill its level, the knob its thumb, the texts its
+// name, its figures and its value; the detent its rest, a tick a notch. Every part flat, in every
 // state: only colours change. The detent - where it rests - shows only while
 // the knob is dragged. Stood up, the knob is a fader's cap, as its style
 // shapes one. Its own classes only place: nothing of the browser's own
@@ -47,8 +47,8 @@
 //     .focusKnob()             physical focus to the knob: a group's, on Tab
 //     .dispose()
 //   The rail takes the hand anywhere on it: a press jumps and grabs, the
-//   pointer captured at the press, the parts dragging (data-dragging) until
-//   the release; the knob is the focusable part (role slider, the value in
+//   pointer captured at the press, the knob dragging - and the detent shown
+//   (data-dragging) - until the release; the knob is the focusable part (role slider, the value in
 //   aria). The keys, through the party: arrows by a step, with Shift by ten,
 //   Home and End, PageUp and PageDown by ten; no keydown listener of the
 //   slider's own, ever. A detent has a bite of six tenths of a step: the hand
@@ -58,18 +58,15 @@
 const _sliderOwner = Object.freeze({ toString: () => "slider" });
 var _BITE = 0.6;   // of a step, either side of a detent
 
-/** Its parts, which nothing realizes on its own: their tokens, for the look each wears as the slider casts it. */
-const _GROOVE = Object.freeze({ LEAF: "groove" });
-const _FILL = Object.freeze({ LEAF: "fill" });
+/** The detent, which nothing realizes on its own yet: its token, for the look it wears as the slider casts it - its family moves in turn. */
 const _DETENT = Object.freeze({ LEAF: "detent" });
-const _KNOB = Object.freeze({ LEAF: "knob" });
-
-/** The targets a part shows on an element of its own: the rail its length, its hand and its text kept; the knob's box its size, its ring, its hand and its mark's size. */
-const _ON_THE_RAIL = Object.freeze(["size-extent", "affordance-cursor", "affordance-select"]);
-const _ON_THE_BOX = Object.freeze(["size-extent", "shape-outline", "color-outline", "affordance-cursor", "type-scale"]);
 
 class Slider {
     static LEAF = "slider";
+    /** Its state, held on its root as its state's class: off. */
+    static AXES = Object.freeze({
+        enabled: Object.freeze({ values: Object.freeze([true, false]), rest: true, state: STATE.ENABLED })
+    });
 
     constructor(branch, props) {
         if (!branch) throw new Error("[Slider] a branch of its own is required");
@@ -102,7 +99,8 @@ class Slider {
         var root = branch.createElement("slider", "div");
         css.addClass(root, el_slider);
         if (vertical) css.addClass(root, el_slider_vertical);
-        look.wear(root);   // its root its leaf whole (RFC 0067, D17); the rail a leaf of its own when the family moves
+        look.wear(root);   // its root its casting whole (RFC 0067, D17)
+        this._look = look;
         this.root = root;
         // its texts are the house's, each cast as what it is to the slider: placed by the slider, looking as they are
         this._texts = [];
@@ -111,19 +109,19 @@ class Slider {
         root.appendChild(this._label.el);
         this._texts.push(this._label);
 
-        var rail = branch.createElement("rail", "div");
+        this._railPart = new SliderRail(branch.elementMaker("rail"), {}, ROLE.EDITOR);   // the stretch it is set along, as its editor
+        var rail = this._railPart.el;
         css.addClass(rail, el_slider_rail);
         if (vertical) css.addClass(rail, el_slider_rail_vertical);
-        look.wear(rail, { only: _ON_THE_RAIL });
         this._rail = rail;
-        var track = branch.createElement("track", "div");
+        this._groove = new SliderGroove(branch.elementMaker("track"), {}, ROLE.SPAN);   // its groove, as its span
+        var track = this._groove.el;
         css.addClass(track, el_slider_track);
         if (vertical) css.addClass(track, el_slider_track_vertical);
-        new Look(_GROOVE, ROLE.SPAN).wear(track);
-        this._fill = branch.createElement("fill", "div");
+        this._level = new Fill(branch.elementMaker("fill"), {}, ROLE.LEVEL);   // its fill, as its level
+        this._fill = this._level.el;
         css.addClass(this._fill, el_slider_fill);
         if (vertical) css.addClass(this._fill, el_slider_fill_vertical);
-        new Look(_FILL, ROLE.LEVEL).wear(this._fill);
         track.appendChild(this._fill);
         rail.appendChild(track);
         this._detent = null;
@@ -139,23 +137,16 @@ class Slider {
                                                               min: this._min, max: this._max, vertical: vertical });
         this._ticks = scale.parts;
         this._texts = this._texts.concat(scale.texts);
-        // the knob — the cap, when stood up: its box keeps the ring, its size and its hand; its face is drawn
-        var thumb = new Look(_KNOB, ROLE.THUMB);
-        var knob = branch.createElement("knob", "div");
+        // the knob, as its thumb - the cap, when stood up: its face, its ring, its size and its hand its own look's
+        this._thumb = new SliderKnob(branch.elementMaker("knob"), { orientation: vertical ? "vertical" : "horizontal" }, ROLE.THUMB);
+        var knob = this._thumb.el;
         css.addClass(knob, vertical ? el_slider_cap : el_slider_knob);
-        thumb.wear(knob, { only: _ON_THE_BOX });
         knob.setAttribute("role", "slider");
         knob.setAttribute("tabindex", "0");
         knob.setAttribute("aria-valuemin", String(this._min));
         knob.setAttribute("aria-valuemax", String(this._max));
-        knob.setAttribute("aria-orientation", vertical ? "vertical" : "horizontal");
         if (p.label != null) knob.setAttribute("aria-label", String(p.label));
         this._knob = knob;
-        this._face = branch.createElement("face", "div");
-        css.addClass(this._face, vertical ? el_slider_cap_face : el_slider_face);
-        thumb.wear(this._face, { except: _ON_THE_BOX });
-        if (vertical) this._face.setAttribute("aria-orientation", "vertical");   // a cap's corner is its style's, as its size is
-        knob.appendChild(this._face);
         this._mark = new Icon(branch.createElement("mark", Icon.TAG), null);
         css.addClass(this._mark.el, vertical ? el_slider_cap_mark : el_slider_mark);
         knob.appendChild(this._mark.el);
@@ -167,9 +158,10 @@ class Slider {
         css.addClass(this._readout.el, el_slider_readout);
         root.appendChild(this._readout.el);
         this._texts.push(this._readout);
-        this._parts = [root, rail, track, this._fill, knob, this._face, this._mark.el].concat(this._ticks);
+        this._parts = [root, this._mark.el].concat(this._ticks);
         if (this._detent) this._parts.push(this._detent);
-        this._dragged = [knob, this._face].concat(this._detent ? [this._detent] : []);   // what shows the hand on it
+        this._sized = [this._railPart, this._groove, this._thumb];   // its parts that grow by its size, each by its own
+        this._dragged = this._detent ? [this._detent] : [];   // the detent, shown only while the knob is dragged
 
         this._value = this._snap(p.value == null ? this._rest() : Number(p.value), false);
         this._draw();
@@ -218,9 +210,9 @@ class Slider {
         this._set(v, false, true);
         return true;
     }
-    /** The one of a group: the knob ringed now, whether or not it has the focus - its aria-current, which its look rings by. */
+    /** The one of a group: the knob ringed now, whether or not it has the focus - its Current state, which its look rings by. */
     current(on) {
-        if (on) this._knob.setAttribute("aria-current", "true"); else this._knob.removeAttribute("aria-current");
+        this._thumb.current = !!on;
         return this;
     }
     /** Physical focus to the knob, without scrolling: a group's, on Tab. */
@@ -251,8 +243,9 @@ class Slider {
         if (changed) { this._draw(); if (this._onInput) this._onInput(v); }
         if (commit && changed && this._onChange) this._onChange(v);
     }
-    /** The hand on the knob, or off it: the parts that show it say so - the knob, its face, the detent, shown only now. */
+    /** The hand on the knob, or off it: the knob dragging, and the detent shown only now. */
     _drag(on) {
+        this._thumb.dragging = !!on;
         this._dragged.forEach(function (el) { if (on) el.setAttribute("data-dragging", ""); else el.removeAttribute("data-dragging"); });
     }
     _release() {
@@ -283,14 +276,14 @@ class Slider {
         if (v !== undefined) { this._value = this._snap(Number(v), false); this._draw(); }
         return this._value;
     }
-    /** Off is inert and says so: aria-disabled on the slider, its rail and its knob, which their looks are off by. */
+    /** Off is inert and says so: the slider, its rail and its knob off, which their looks are off by. */
     setOn(on) {
         this._on = !!on;
         css.toggleClass(this.root, el_slider_off, !this._on);
-        var off = this._on ? "false" : "true";
-        this.root.setAttribute("aria-disabled", off);
-        this._rail.setAttribute("aria-disabled", off);
-        this._knob.setAttribute("aria-disabled", off);
+        this.root.setAttribute("aria-disabled", this._on ? "false" : "true");
+        this._look.show(this.root, { enabled: this._on });
+        this._railPart.enabled = this._on;
+        this._thumb.enabled = this._on;
         this._knob.setAttribute("tabindex", this._on ? "0" : "-1");
         if (!this._on && this._pressed !== null) this._release();
         return this;
@@ -301,6 +294,7 @@ class Slider {
         var v = this._size === 0 ? null : this._size;
         this._parts.forEach(function (el) { css.size(el, v); });
         var n2 = this._size;
+        this._sized.forEach(function (c) { c.size = n2; });   // its parts, each by its own degree
         this._texts.forEach(function (t) { t.size = n2; });   // its texts, by their own size
         return this;
     }

@@ -80,6 +80,8 @@ class SliderGroupTest extends JsModuleTestBase {
         loadModule(DIR + "ui/icons/IconModule.js");
         loadModule(DIR + "component/keyboard/KeysModule.js");
         loadModule(DIR + "ui/elements/SliderScaleModule.js");
+        for (String m : new String[] {"MarkBehaviorModule.js", "SliderRailModule.js", "SliderGrooveModule.js", "FillModule.js", "SliderKnobModule.js"})
+            loadModule(DIR + "ui/elements/" + m);   // the slider's parts, each a component
         loadModule(DIR + "ui/elements/SliderModule.js");
         loadModule(DIR + "ui/elements/SliderGroupModule.js");
         js.eval("js", TextsInJs.withCss(SHIM));

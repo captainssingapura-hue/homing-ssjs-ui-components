@@ -35,7 +35,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseControls.PlainButton.INSTANCE, HouseControls.PrimaryButton.INSTANCE, HouseControls.SecondaryButton.INSTANCE,
                 HouseControls.DangerButton.INSTANCE, HouseControls.WarningButton.INSTANCE, HouseControls.SuccessButton.INSTANCE,
                 HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE,
-                HouseControls.Knob.INSTANCE, HouseControls.Grip.INSTANCE,
+                HouseControls.SliderKnob.INSTANCE, HouseControls.ToggleKnob.INSTANCE, HouseControls.Grip.INSTANCE,
                 HouseControls.Link.INSTANCE, HouseControls.Crumb.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.TextBox.INSTANCE, HouseControls.Checkbox.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.Slider.INSTANCE, HouseControls.Select.INSTANCE,
                 HouseControls.PaneThumb.INSTANCE, HouseControls.Tab.INSTANCE, HouseControls.Brand.INSTANCE, HouseControls.PreferencesButton.INSTANCE,
@@ -59,7 +59,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 // marks and tracks
                 HouseMarks.Icon.INSTANCE, HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE, HouseMarks.BoundaryLine.INSTANCE,
                 HouseMarks.Delimiter.INSTANCE, HouseMarks.Lamp.INSTANCE, HouseMarks.BrandMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.DropMark.INSTANCE,
-                HouseMarks.Groove.INSTANCE, HouseMarks.Fill.INSTANCE);
+                HouseMarks.SliderRail.INSTANCE, HouseMarks.SliderGroove.INSTANCE, HouseMarks.ToggleGroove.INSTANCE, HouseMarks.Fill.INSTANCE);
     }
 
     /** Every component the house declares on this classpath: the common ones, then each extension's. */

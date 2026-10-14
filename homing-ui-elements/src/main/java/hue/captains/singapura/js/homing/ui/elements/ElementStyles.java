@@ -190,10 +190,9 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     }
 
     /**
-     * The knob: the box the hand takes and the keys go to — role slider,
-     * the focusable part — at the design's extent, ringed on focus by the
-     * knob's own rule (no border of its own), lifting under the hand as the
-     * design has a dragged thing lift. Its look is its face's.
+     * The knob: what the hand takes and the keys go to — role slider, the
+     * focusable part — placed at the value across the rail. Its face, its
+     * extent, its ring and its hand are the slider knob's own look.
      */
     public record el_slider_knob() implements CssClass<ElementStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-value")); }
@@ -202,23 +201,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
             top: 50%;
             left: var(--sl-value, 0%);
             translate: -50% -50%;
-            box-sizing: border-box;
-            """;
-        }
-    }
-
-    /**
-     * The face: the knob's silhouette and surface — raised, the control's
-     * rule and edge by lineage, the design's corner, and its clip, which
-     * cuts it to whatever the design draws a knob as — or its absence: a
-     * design whose knob is the mark alone gives the face no opacity, and
-     * the glyph sits on the track by itself. It fills the box, under the
-     * mark.
-     */
-    public record el_slider_face() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            position: absolute;
-            inset: 0;
             box-sizing: border-box;
             """;
         }
@@ -327,16 +309,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
             display: flex;
             align-items: center;
             justify-content: center;
-            """;
-        }
-    }
-
-    /** The cap's face: always there — a fader is held by its cap — raised, the control's rule and edge, the cap's corner. */
-    public record el_slider_cap_face() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            position: absolute;
-            inset: 0;
-            box-sizing: border-box;
             """;
         }
     }
@@ -656,6 +628,45 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         @Override public String body() { return "accent-color: currentColor;\nmargin: 0;\n"; }
     }
 
+    // ── The switch ────────────────────────────────────────────────────────────
+
+    /** The switch: its groove and its words in a row, the room between them its look. */
+    public record el_switch() implements CssClass<ElementStyles> {
+        @Override public String body() { return """
+            display: inline-flex;
+            align-items: center;
+            """;
+        }
+    }
+
+    /** The switch's groove: its own size, the knob placed in it. */
+    public record el_switch_groove() implements CssClass<ElementStyles> {
+        @Override public String body() { return """
+            display: inline-block;
+            vertical-align: middle;
+            box-sizing: content-box;
+            width: 36px;
+            height: 20px;
+            position: relative;
+            flex: none;
+            """;
+        }
+    }
+
+    /** The switch's knob: at the start of its groove, at its end while the switch is on. */
+    public record el_switch_knob() implements CssClass<ElementStyles> {
+        @Override public String body() { return """
+            position: absolute;
+            box-sizing: border-box;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            [aria-checked="true"] & { translate: 16px 0; }
+            """;
+        }
+    }
+
     // ── Edge strip ────────────────────────────────────────────────────────────
 
     /**
@@ -769,14 +780,14 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         return List.of(new el_button(), new el_button_primary(), new el_button_secondary(), new el_button_danger(), new el_button_warning(), new el_button_success(),
                        new el_button_plain(), new el_button_on(), new el_button_off(), new el_icon_button(), new el_text(),
                        new el_slider(), new el_slider_label(), new el_slider_rail(), new el_slider_track(), new el_slider_fill(), new el_slider_detent(),
-                       new el_slider_knob(), new el_slider_face(), new el_slider_mark(), new el_slider_readout(),
+                       new el_slider_knob(), new el_slider_mark(), new el_slider_readout(),
                        new el_slider_vertical(), new el_slider_rail_vertical(), new el_slider_rail_ticked(), new el_slider_track_vertical(), new el_slider_fill_vertical(), new el_slider_detent_vertical(),
-                       new el_slider_cap(), new el_slider_cap_face(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
+                       new el_slider_cap(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
                        new el_slider_off(),
                        new el_slider_group(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
                        new el_card(), new el_card_head(), new el_card_title(), new el_badge(), new el_card_body(), new el_card_text(), new el_card_foot(), new el_card_link(),
                        new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(),
-                       new el_checkbox(),
+                       new el_checkbox(), new el_switch(), new el_switch_groove(), new el_switch_knob(),
                        new el_strip(), new el_strip_hidden(), new el_strip_lip(),
                        new el_site_bar(), new el_site_bar_start(), new el_site_bar_way(), new el_site_bar_end(),
                        new el_brand(), new el_brand_mark(), new el_trail(), new el_trail_crumb());

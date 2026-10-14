@@ -115,45 +115,6 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
-    // ── Toggle ────────────────────────────────────────────────────────────────
-
-    /** The switch and its word in a row; the room between them is the switch's look's. */
-    public record pv_switch() implements CssClass<PreferencesStyles> {
-        @Override public String body() { return """
-            display: inline-flex;
-            align-items: center;
-            """;
-        }
-    }
-
-    /** The switch itself, a groove the knob runs in: its own size; its look is a groove's and a switch's. */
-    public record pv_switch_track() implements CssClass<PreferencesStyles> {
-        @Override public String body() { return """
-            display: inline-block;
-            vertical-align: middle;
-            box-sizing: content-box;
-            width: 36px;
-            height: 20px;
-            position: relative;
-            flex: none;
-            """;
-        }
-    }
-
-    /** The knob: at the groove's start when off, slid to its end when on - by its translate, which its look eases. */
-    public record pv_switch_knob() implements CssClass<PreferencesStyles> {
-        @Override public String body() { return """
-            position: absolute;
-            box-sizing: border-box;
-            top: 2px;
-            left: 2px;
-            width: 16px;
-            height: 16px;
-            [aria-checked="true"] & { translate: 16px 0; }
-            """;
-        }
-    }
-
     // ── Scale ─────────────────────────────────────────────────────────────────
 
     /** The range: as wide as the field allows, drawn in the ink its look sets - the accent - by the browser's own slider. */
@@ -223,7 +184,6 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         return List.of(new pv_root(), new pv_master(), new pv_detail(),
                        new pv_kicker(), new pv_title(), new pv_summary(), new pv_note(), new pv_actions(),
                        new pv_options(), new pv_option(), new pv_option_note(),
-                       new pv_switch(), new pv_switch_track(), new pv_switch_knob(),
                        new pv_range(), new pv_readout(),
                        new pv_list(), new pv_list_row(),
                        new pv_children(), new pv_child());

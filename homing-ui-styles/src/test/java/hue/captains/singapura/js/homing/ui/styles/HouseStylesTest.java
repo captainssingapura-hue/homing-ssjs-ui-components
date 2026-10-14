@@ -54,7 +54,11 @@ class HouseStylesTest {
             for (Component<?> b : HouseFamilies.BUTTONS)
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(b)), s.token() + " draws " + b.token());
             assertEquals(StylingRes.CssContent.INSTANCE, s.style(go), s.token() + " draws the primary button as Go too, a class of its own");
-            assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseControls.Knob.INSTANCE)), s.token() + ": a knob is Base's, for now");
+            assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.Lamp.INSTANCE)), s.token() + ": a lamp is Base's, for now");
+            for (Component<?> t : HouseFamilies.TRACKS)
+                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(t)), s.token() + " draws " + t.token());
+            for (Component<?> h : HouseFamilies.HANDLES)
+                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(h)), s.token() + " draws " + h.token());
             for (Component<?> w : HouseFamilies.WAYS)
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(w)), s.token() + " draws " + w.token() + ": its own focus ring on it");
             assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.BrandMark.INSTANCE)), s.token() + ": the brand's mark is Base's, alike in every style");
@@ -67,6 +71,8 @@ class HouseStylesTest {
         assertEquals(3, HouseFamilies.WAYS.size());
         assertEquals(18, HouseFamilies.TEXTS.size());
         assertEquals(6, HouseFamilies.INPUTS.size());
+        assertEquals(4, HouseFamilies.TRACKS.size());
+        assertEquals(3, HouseFamilies.HANDLES.size());
     }
 
     @Test
@@ -74,7 +80,7 @@ class HouseStylesTest {
         var tree = HouseColours.TREE;
         for (ColorPalette<ColorScheme.Base> p : HouseStyles.PALETTES) {
             assertEquals(List.of(), tree.check(p), p.token());
-            assertEquals(36, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge, the keys' marks among them");
+            assertEquals(37, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge, the keys' marks, a groove's edge among them");
         }
         assertEquals(8, HouseStyles.PALETTES.size());
     }

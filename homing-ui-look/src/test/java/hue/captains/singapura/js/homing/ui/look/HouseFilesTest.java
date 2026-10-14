@@ -32,7 +32,7 @@ class HouseFilesTest {
     void theStyleSheet_isOneClassPerLeaf_theStylesOwnForTheButtons_BasesElsewhere() {
         String editorial = HouseStyleSheet.INSTANCE.css("editorial");
         assertTrue(editorial.contains("/* plain-button: editorial's own */"), "a button, the style's own");
-        assertTrue(editorial.contains("/* knob: base's, editorial answering absence */"), "a leaf it draws not, Base's");
+        assertTrue(editorial.contains("/* lamp: base's, editorial answering absence */"), "a leaf it draws not, Base's");
         assertEquals(HouseStyling.STYLING.taxonomy().castings().size(),
                 editorial.lines().filter(l -> l.matches("/\\* [a-z0-9_-]+: .*('s own|answering absence) \\*/")).count(), "every casting once");
         assertTrue(editorial.contains("/* primary-button_go: editorial's own */"), "the primary button as Go, a class of its own");

@@ -24,6 +24,9 @@ public record InputBehaviorsModule() implements DomModule<InputBehaviorsModule> 
     /** {@code new CheckBehavior(el, box)}: a tick turned by the user, its Checked state's change, then its Commit. */
     public record CheckBehavior() implements Exportable._Class<InputBehaviorsModule> {}
 
+    /** {@code new TurnBehavior(el, sw)}: a press, the switch turned - its groove with it - then its Commit. */
+    public record TurnBehavior() implements Exportable._Class<InputBehaviorsModule> {}
+
     public static final InputBehaviorsModule INSTANCE = new InputBehaviorsModule();
 
     @Override public ImportsFor<InputBehaviorsModule> imports() {
@@ -33,6 +36,6 @@ public record InputBehaviorsModule() implements DomModule<InputBehaviorsModule> 
     }
 
     @Override public ExportsOf<InputBehaviorsModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new EditBehavior(), new PickBehavior(), new CheckBehavior()));
+        return new ExportsOf<>(INSTANCE, List.of(new EditBehavior(), new PickBehavior(), new CheckBehavior(), new TurnBehavior()));
     }
 }

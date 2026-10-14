@@ -9,6 +9,8 @@
 //   new PickBehavior(el, select)   a select's: change - its COMMIT
 //   new CheckBehavior(el, box)     a checkbox's: change - its checked, as the
 //                                  element has it, then its COMMIT
+//   new TurnBehavior(el, sw)       a switch's: a press - turned, then its COMMIT;
+//                                  its groove turned with it
 // =============================================================================
 
 class EditBehavior {
@@ -22,6 +24,20 @@ class PickBehavior {
     constructor(el, select) {
         el.addEventListener("change", function (ev) { select._fire(EVENT.COMMIT, ev); });
     }
+}
+
+class TurnBehavior {
+    constructor(el, sw) {
+        this._switch = sw;
+        el.addEventListener("click", function (ev) {
+            if (!sw.enabled) return;
+            sw._change("checked", !sw.checked, ev);
+            sw._fire(EVENT.COMMIT, ev);
+        });
+    }
+
+    /** Its groove turned with it: on as the switch is. */
+    changed(axis, value) { if (axis === "checked" && this._switch._groove) this._switch._groove.checked = value; }
 }
 
 class CheckBehavior {

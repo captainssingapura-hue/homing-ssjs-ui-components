@@ -37,7 +37,7 @@
     }
 }
 
-/* The switch as toggle in sketchy: a setting on or off - its frame; its groove and knob are their own families'. Whole: every property its look has (D9). */
+/* The switch as toggle in sketchy: a setting on or off - the button its groove and its words sit in; its groove and knob are its parts'. Whole: every property its look has (D9). */
 .styled-switch_toggle {
     color: inherit;
     background-color: transparent;

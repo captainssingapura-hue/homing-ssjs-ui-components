@@ -52,6 +52,10 @@ public final class HouseControls {
     /** What is picked: the user done with it. */
     private static final List<EventType<?>> COMMITTED = List.of(HouseEvents.Commit.INSTANCE);
 
+    /** What the slider's knob has: it may be off; it stands up or lies along; its focus shown; the current of a group; dragged. */
+    private static final List<StateType<?>> A_SLIDER_KNOB = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Orientation.INSTANCE,
+            HouseStates.Focused.INSTANCE, HouseStates.Current.INSTANCE, HouseStates.Dragging.INSTANCE);
+
     /** What a way somewhere has: the browser's - the pointer over it, its focus shown. */
     private static final List<StateType<?>> A_WAY = List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
 
@@ -143,20 +147,24 @@ public final class HouseControls {
 
     // ── handles ──────────────────────────────────────────────────────────
 
-    /** What is grabbed to move a value along a track; its face is its own, and upright it is a cap. */
-    public record Knob() implements Component<Handle> {
-        public static final Knob INSTANCE = new Knob();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+    /** The slider's knob: what is grabbed to move its value along its groove; upright it is a cap. Never alone: a slider's part. */
+    public record SliderKnob() implements Component<Handle> {
+        public static final SliderKnob INSTANCE = new SliderKnob();
         @Override public Handle parent() { return Handle.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one());
-        }
+        @Override public List<StateType<?>> states() { return A_SLIDER_KNOB; }
+    }
+
+    /** The toggle's knob: what shows which way a switch stands, sliding in its groove. Never alone: a switch's part. */
+    public record ToggleKnob() implements Component<Handle> {
+        public static final ToggleKnob INSTANCE = new ToggleKnob();
+        @Override public Handle parent() { return Handle.INSTANCE; }
     }
 
     /** What is grabbed to move the thing it is on. */
     public record Grip() implements Component<Handle> {
         public static final Grip INSTANCE = new Grip();
         @Override public Handle parent() { return Handle.INSTANCE; }
+        @Override public List<StateType<?>> states() { return AN_INPUT; }
     }
 
 
@@ -264,8 +272,8 @@ public final class HouseControls {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Groove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
-                           DSL.part(Knob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one());
+            return List.of(DSL.part(HouseMarks.ToggleGroove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
+                           DSL.part(ToggleKnob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one());
         }
     }
 
@@ -275,15 +283,17 @@ public final class HouseControls {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Input parent() { return Input.INSTANCE; }
         /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Enabled.INSTANCE, HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Name.INSTANCE).one(),
-                           DSL.part(HouseMarks.Groove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
+                           DSL.part(HouseMarks.SliderRail.INSTANCE).as(HouseShaping.Editor.INSTANCE).one(),
+                           DSL.part(HouseMarks.SliderGroove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
                            DSL.part(HouseMarks.Fill.INSTANCE).as(HouseSaying.Level.INSTANCE).one(),
                            DSL.part(HouseMarks.Detent.INSTANCE).as(HouseSaying.Rest.INSTANCE).optional(),
                            DSL.part(HouseMarks.Tick.INSTANCE).as(HouseSaying.Notch.INSTANCE).any(),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Figure.INSTANCE).any(),
-                           DSL.part(Knob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one(),
+                           DSL.part(SliderKnob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one(),
+                           DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
                            DSL.part(HouseText.Readout.INSTANCE).as(HouseSaying.Value.INSTANCE).one());
         }
     }

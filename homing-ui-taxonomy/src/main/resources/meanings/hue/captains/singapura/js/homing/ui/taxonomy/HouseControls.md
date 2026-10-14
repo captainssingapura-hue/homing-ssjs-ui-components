@@ -38,9 +38,13 @@ Does one thing named by a glyph alone, where the glyph is known well enough to n
 
 Closes what it is on.
 
-## Knob
+## SliderKnob
 
-What the user takes hold of to move a value along a track.
+What the user takes hold of to move a slider's value along its groove.
+
+## ToggleKnob
+
+What shows which way a switch stands, sliding in its groove as it is turned.
 
 ## Grip
 

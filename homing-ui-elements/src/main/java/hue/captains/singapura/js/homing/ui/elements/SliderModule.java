@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.elements;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
@@ -54,6 +55,11 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderRailModule.SliderRail()), SliderRailModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderGrooveModule.SliderGroove()), SliderGrooveModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FillModule.Fill()), FillModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderKnobModule.SliderKnob()), SliderKnobModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_slider(),
                         new ElementStyles.el_slider_label(),
@@ -62,7 +68,6 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
                         new ElementStyles.el_slider_fill(),
                         new ElementStyles.el_slider_detent(),
                         new ElementStyles.el_slider_knob(),
-                        new ElementStyles.el_slider_face(),
                         new ElementStyles.el_slider_mark(),
                         new ElementStyles.el_slider_readout(),
                         new ElementStyles.el_slider_vertical(),
@@ -71,7 +76,6 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
                         new ElementStyles.el_slider_fill_vertical(),
                         new ElementStyles.el_slider_detent_vertical(),
                         new ElementStyles.el_slider_cap(),
-                        new ElementStyles.el_slider_cap_face(),
                         new ElementStyles.el_slider_cap_mark(),
                         new ElementStyles.el_slider_off()
                 ), ElementStyles.INSTANCE))

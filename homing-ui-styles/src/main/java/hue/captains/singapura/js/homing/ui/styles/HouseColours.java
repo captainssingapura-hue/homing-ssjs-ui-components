@@ -15,14 +15,14 @@ import java.util.List;
 /**
  * The house's colour tree (RFC 0067, appendix Semantic Colours and Flavours, D16; appendix Two Classes per Leaf): every
  * colour a house leaf's file names, each named for what it is for, in the base scheme. Grown family by family as the
- * leaves move onto files - the buttons first, then the ways, the text and the inputs.
+ * leaves move onto files - the buttons first, then the ways, the text, the inputs, the tracks and the handles.
  *
  * <ul>
  *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, the text's ink
  *       washed thin at each strength - under the hand for a mark alone, under code, under a pill - and clear;</li>
  *   <li><b>writing</b> - the inks: the text's, and faded; on inverted, on the accent; a way's under the hand; a
  *       heading's, a kicker's;</li>
- *   <li><b>lines</b> - the hairline;</li>
+ *   <li><b>lines</b> - the hairline; a groove's edge;</li>
  *   <li><b>attention</b> - the house's own colour, the accent and its edge, the ring a focused control wears, the
  *       accent's tint on a raised face, and washed thin under a badge; the keys' marks - a candidate for them, the keys
  *       lent - in the accent;</li>
@@ -48,7 +48,7 @@ public record HouseColours() implements ColorSource {
     public sealed interface HouseColour permits
             Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft,
             Text, TextFaded, OnInverted, OnAccent, WayHovered, HeadingInk, KickerInk,
-            Border,
+            Border, GrooveEdge,
             Title, Accent, AccentEdge, Ring, AccentTint, AccentWash, KeysCandidate, KeysLent,
             ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, Sheen,
             GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowStrong, GlowBright, GlowFull {}
@@ -103,6 +103,8 @@ public record HouseColours() implements ColorSource {
 
     /** The hairline: a button's border, and where a coloured button's ground ends at 0. */
     public record Border() implements Palettable<Base, Lines>, HouseColour {}
+    /** A groove's edge: the text's ink at 45%. */
+    public record GrooveEdge() implements Palettable<Base, Lines>, HouseColour {}
 
     // ── attention ─────────────────────────────────────────────────────────
 
@@ -243,7 +245,7 @@ public record HouseColours() implements ColorSource {
                 new Surfaces(), new Writing(), new Lines(), new Attention(), new Shadows(), new Feedback(), new Scales(),
                 new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new Clear(),
                 new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
-                new Border(),
+                new Border(), new GrooveEdge(),
                 new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentWash(), new KeysCandidate(), new KeysLent(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new Sheen(),
                 new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowStrong(), new GlowBright(), new GlowFull(),
