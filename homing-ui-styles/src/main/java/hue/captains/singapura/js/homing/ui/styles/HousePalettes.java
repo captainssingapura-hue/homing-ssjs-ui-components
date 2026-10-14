@@ -130,6 +130,12 @@ public record HousePalettes() implements StatelessFunctionalObject {
         };
     }
 
+    /**
+     * One colour so much over another, worked out as the house's own tints are - in sRGB, alpha premultiplied: for a
+     * module grafting colours of its own, its sub-palette's word on them from what a palette gives the house's.
+     */
+    public ConcreteColor.Srgb tint(ConcreteColor.Srgb colour, double share, ConcreteColor.Srgb over) { return mix(colour, share, over); }
+
     private static ConcreteColor.Srgb seed(String written) { return new ConcreteColor.Srgb(written); }
 
     /** {@code a} at {@code share}, {@code b} the rest, in sRGB, alpha premultiplied - CSS's {@code color-mix(in srgb, a p%, b)}. */
