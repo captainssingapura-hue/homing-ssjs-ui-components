@@ -42,7 +42,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 // items
                 HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE,
                 // containers
-                HouseContainers.PlainCard.INSTANCE, HouseContainers.SummaryCard.INSTANCE, HouseContainers.SliderGroup.INSTANCE,
+                HouseContainers.PlainCard.INSTANCE, HouseContainers.ClickableCard.INSTANCE, HouseContainers.SummaryView.INSTANCE, HouseContainers.SliderGroup.INSTANCE,
                 HouseContainers.Panel.INSTANCE, HouseContainers.Dialog.INSTANCE, HouseContainers.FloatingPane.INSTANCE,
                 HouseContainers.ContextMenu.INSTANCE, HouseContainers.Scrim.INSTANCE,
                 HouseContainers.EdgeStrip.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseContainers.Trail.INSTANCE,

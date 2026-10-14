@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
+import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 
@@ -21,19 +22,33 @@ public final class HouseContainers {
 
     // ── cards ────────────────────────────────────────────────────────────
 
-    /** The basic card: a frame and a body the caller fills, no part fixed. The cases are built on it. */
+    /** The basic card: a frame the caller fills, no part fixed - raised, of its own measure, still under the hand. */
     public record PlainCard() implements Component<HouseBranches.Card> {
         public static final PlainCard INSTANCE = new PlainCard();
         @Override public HouseBranches.Card parent() { return HouseBranches.Card.INSTANCE; }
     }
 
-    /** A card that sums something up: a title, a tag beside it, a line of summary, a way to the thing. */
-    public record SummaryCard() implements Component<HouseBranches.Card> {
-        public static final SummaryCard INSTANCE = new SummaryCard();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+    /** A card that is a button: pressed - by the hand, or Enter or Space - it does its one thing. What is in it is its caller's, as in the plain card. */
+    public record ClickableCard() implements Component<HouseBranches.Card> {
+        public static final ClickableCard INSTANCE = new ClickableCard();
         @Override public HouseBranches.Card parent() { return HouseBranches.Card.INSTANCE; }
-        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
+        /** The pointer over it; the focus on it; where the page's keys are, held by the steward on its root (D12); the hand down on it. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE,
+                HouseStates.Keyboard.INSTANCE, HouseStates.Down.INSTANCE); }
+    }
+
+    // ── views ────────────────────────────────────────────────────────────
+
+    /**
+     * Sums one thing up, laid out whole: a title, a tag beside it, a line of summary, a way to the
+     * thing. No frame of its own: shown on whatever holds it - a card, a pane, a dialog. Its texts
+     * sized together.
+     */
+    public record SummaryView() implements Component<HouseBranches.View> {
+        public static final SummaryView INSTANCE = new SummaryView();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
                            DSL.part(HouseText.Badge.INSTANCE).as(HouseSaying.Tag.INSTANCE).optional(),

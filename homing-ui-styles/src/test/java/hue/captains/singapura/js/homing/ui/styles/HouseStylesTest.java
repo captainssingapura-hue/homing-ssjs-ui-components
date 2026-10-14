@@ -74,6 +74,7 @@ class HouseStylesTest {
         assertEquals(4, HouseFamilies.TRACKS.size());
         assertEquals(3, HouseFamilies.HANDLES.size());
         assertEquals(2, HouseFamilies.SELECTORS.size());
+        assertEquals(2, HouseFamilies.CARDS.size());
     }
 
     @Test

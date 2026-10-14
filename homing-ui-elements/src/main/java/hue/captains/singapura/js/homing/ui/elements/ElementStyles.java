@@ -450,11 +450,10 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     // ── Card ──────────────────────────────────────────────────────────────────
 
     /**
-     * The card: what is inside fits it - the head and the foot are fixed, the
-     * body takes the rest and scrolls; a host may cap it, never stretch it. Its
-     * look - a raised box whose measure is its own, square at aspect 0, lifted
-     * under the hand, pointed at and focusable only with an action - is the
-     * house's.
+     * A card, plain or clickable: what its caller puts in it fits it, a column
+     * of what it holds, and scrolls beyond it; a host may cap it, never stretch
+     * it. Its look - a raised box whose measure is its own, square at aspect 0;
+     * the clickable one lifted under the hand - is the house's.
      */
     public record el_card() implements CssClass<ElementStyles> {
         @Override public String body() { return """
@@ -464,25 +463,50 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
             flex: none;
             max-inline-size: 100%;
             min-height: 0;
-            overflow: hidden;
+            overflow: auto;
             """;
         }
     }
 
-    /** The head: the title and, beside it, a badge; fixed. */
-    public record el_card_head() implements CssClass<ElementStyles> {
+    // ── Summary ───────────────────────────────────────────────────────────────
+
+    /**
+     * The summary: its head, its line of summary and its foot in a column, the
+     * room between them its own and grown by its size, the same in every
+     * style; it takes the room what holds it gives, the summary between taking
+     * what the head and the foot leave.
+     */
+    public record el_summary() implements CssClass<ElementStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--size")); }   // its size, set by the summary
+        @Override public String body() { return """
+            display: flex;
+            flex-direction: column;
+            gap: calc(8px * pow(1.3, var(--size, 0)));
+            flex: 1 1 auto;
+            min-width: 0;
+            min-height: 0;
+            """;
+        }
+    }
+
+    /** The head: the title and, at its end, the tag; fixed. */
+    public record el_summary_head() implements CssClass<ElementStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--size")); }   // its size, set by the summary
         @Override public String body() { return """
             flex: none;
             display: flex;
             align-items: baseline;
+            gap: calc(8px * pow(1.3, var(--size, 0)));
             min-width: 0;
             """;
         }
     }
 
-    public record el_card_title() implements CssClass<ElementStyles> {
+    /** The title: on one line, cut short where the head ends. */
+    public record el_summary_title() implements CssClass<ElementStyles> {
         @Override public String body() { return """
             margin: 0;
+            min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -490,8 +514,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
-    /** A short upper-case tag beside a title: an inline box on the secondary surface, as the studio's badges are. */
-    public record el_badge() implements CssClass<ElementStyles> {
+    /** The tag, at the head's end. */
+    public record el_summary_tag() implements CssClass<ElementStyles> {
         @Override public String body() { return """
             margin-left: auto;
             flex: none;
@@ -499,9 +523,10 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
-    /** The body: what is inside, bounded by the card — it takes what the head and the foot leave and scrolls beyond it. */
-    public record el_card_body() implements CssClass<ElementStyles> {
+    /** The line of summary: what the head and the foot leave, scrolling beyond it. */
+    public record el_summary_text() implements CssClass<ElementStyles> {
         @Override public String body() { return """
+            margin: 0;
             flex: 1 1 auto;
             min-height: 0;
             overflow: auto;
@@ -509,23 +534,14 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
-    public record el_card_text() implements CssClass<ElementStyles> {
-        @Override public String body() { return "margin: 0;"; }
-    }
-
-    /** The foot: the link, and later the actions; fixed at the bottom. */
-    public record el_card_foot() implements CssClass<ElementStyles> {
+    /** The foot: the way to the thing; fixed at the bottom. */
+    public record el_summary_foot() implements CssClass<ElementStyles> {
         @Override public String body() { return """
             flex: none;
             display: flex;
             align-items: baseline;
             """;
         }
-    }
-
-    /** The card's link: a link, its ring the link's own on focus. */
-    public record el_card_link() implements CssClass<ElementStyles> {
-        @Override public String body() { return ""; }
     }
 
     // ── The panel: a head, a body, and what is mounted in it ──────────────
@@ -798,7 +814,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_cap(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
                        new el_slider_off(),
                        new el_slider_group(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
-                       new el_card(), new el_card_head(), new el_card_title(), new el_badge(), new el_card_body(), new el_card_text(), new el_card_foot(), new el_card_link(),
+                       new el_card(), new el_summary(), new el_summary_head(), new el_summary_title(), new el_summary_tag(), new el_summary_text(), new el_summary_foot(),
                        new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(),
                        new el_checkbox(), new el_pane_thumb_name(), new el_switch(), new el_switch_groove(), new el_switch_knob(),
                        new el_strip(), new el_strip_hidden(), new el_strip_lip(),

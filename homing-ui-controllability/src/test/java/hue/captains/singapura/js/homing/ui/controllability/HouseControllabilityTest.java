@@ -97,7 +97,7 @@ class HouseControllabilityTest {
         expected.put("context-menu", "overlay");
         expected.put("floating-pane", "placeable");
         expected.put("icon", "content");
-        for (String p : List.of("summary-card", "slider-group")) expected.put(p, "plain");
+        for (String p : List.of("plain-card", "clickable-card", "summary-view", "slider-group")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));
         assertEquals(expected, actual);
@@ -114,7 +114,8 @@ class HouseControllabilityTest {
     @Test
     void aLeafIsControlledBy_itsAxesDegrees_thenItsTypesOptions() {
         assertEquals(List.of("colour", "size", "enabled"), optionsOf("danger-button"));
-        assertEquals(List.of("size", "aspect"), optionsOf("summary-card"));
+        assertEquals(List.of("size", "aspect"), optionsOf("clickable-card"));
+        assertEquals(List.of("size"), optionsOf("summary-view"));
         assertEquals(List.of("open-modal", "open", "close"), optionsOf("dialog").subList(optionsOf("dialog").size() - 3, optionsOf("dialog").size()));
     }
 

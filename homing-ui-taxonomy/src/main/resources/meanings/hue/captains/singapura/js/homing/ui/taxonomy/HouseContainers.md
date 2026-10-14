@@ -2,13 +2,18 @@
 
 ## PlainCard
 
-Stands for one thing, and holds whatever its user puts there. The card to start from when no
-case of it fits.
+Stands for one thing, and holds whatever its user puts there. The card to start from; it does
+nothing when pressed.
 
-## SummaryCard
+## ClickableCard
+
+A card that is a button: it holds whatever its user puts there, and pressed - by the hand, or by
+Enter or Space - it does its one thing, so the user can act on the thing it stands for.
+
+## SummaryView
 
 Sums one thing up - its title, how it is sorted, what it is about - and leads to it, so the user
-can choose among several at a glance.
+can choose among several at a glance. Shown on whatever holds it: a card, a pane, a dialog.
 
 ## SliderGroup
 

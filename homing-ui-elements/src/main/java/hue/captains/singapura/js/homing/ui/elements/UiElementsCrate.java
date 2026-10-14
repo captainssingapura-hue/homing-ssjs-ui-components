@@ -85,7 +85,11 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(SeparatorModule.INSTANCE),
                 CrateEntry.of(DelimiterModule.INSTANCE),
                 CrateEntry.of(BrandMarkModule.INSTANCE),
-                CrateEntry.of(SummaryCardModule.INSTANCE),
+                // the cards - a container, plain or a button - and the summary, a view shown on any container
+                CrateEntry.of(PlainCardModule.INSTANCE),
+                CrateEntry.of(CardBehaviorModule.INSTANCE),
+                CrateEntry.of(ClickableCardModule.INSTANCE),
+                CrateEntry.of(SummaryViewModule.INSTANCE),
                 CrateEntry.of(SliderScaleModule.INSTANCE),
                 // the slider's parts and the toggle's, each a component; the grip
                 CrateEntry.of(SliderRailModule.INSTANCE),

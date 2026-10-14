@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
@@ -50,8 +51,11 @@ public final class HouseFamilies {
     /** The selectors: a tab, a pane's thumbnail - each style's own ground, lift and shadow on them; the grid's mirror Base's. */
     public static final Set<Component<?>> SELECTORS = Set.of(HouseControls.Tab.INSTANCE, HouseControls.PaneThumb.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles and the selectors. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS);
+    /** The cards: the plain one, still; the clickable one, lifted under the hand, sunk under the press, ringed and marked by the keys. */
+    public static final Set<Component<?>> CARDS = Set.of(HouseContainers.PlainCard.INSTANCE, HouseContainers.ClickableCard.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors and the cards. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

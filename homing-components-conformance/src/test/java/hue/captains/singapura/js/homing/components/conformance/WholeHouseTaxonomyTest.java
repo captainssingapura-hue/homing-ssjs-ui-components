@@ -43,13 +43,13 @@ class WholeHouseTaxonomyTest {
             leaves.put(e.getClass().getSimpleName(), e.components().size());
         }
         assertEquals(26, leaves.values().stream().mapToInt(Integer::intValue).sum(), "26 leaves the modules add - the dock grid retired, its docks a split grid's residents; the float layer common now: " + leaves);
-        assertEquals(83, HouseTaxonomy.INSTANCE.common().size(), "to the 83 common ones - the slider's rail, knob and groove apart from the toggle's, the brand's mark and a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on; a panel's bar; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
+        assertEquals(84, HouseTaxonomy.INSTANCE.common().size(), "to the 84 common ones - the card plain or clickable and the summary's view, the slider's rail, knob and groove apart from the toggle's, the brand's mark and a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on; a panel's bar; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
     }
 
     @Test
     void theWholeHouse_isReadAsItWasBeforeItWasCut() {
         assertEquals(24, HOUSE.branches().size(), "the headings a branch of the text; the input, the way and the selector under the control, the surface, the cluster and the chooser under the container, each heading a family");
-        assertEquals(109, HOUSE.components().size(), "the slider's rail, knob and groove and the toggle's parts of their own; the brand's mark a part of its own; the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents; the ground, the site bar, the title bar and the panel's bar added, and a text box and a checkbox; the heading a leaf per level; prose a leaf per element");
+        assertEquals(110, HOUSE.components().size(), "the summary card ditched: the card plain or clickable, the summary a view of its own; the slider's rail, knob and groove and the toggle's parts of their own; the brand's mark a part of its own; the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents; the ground, the site bar, the title bar and the panel's bar added, and a text box and a checkbox; the heading a leaf per level; prose a leaf per element");
         assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree");
         assertEquals(114, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the slider's rail and the brand's mark among them; the preferences' view laid out by a split grid among them, and the grid's line in two roles; a panel's bar and its body; a table's header and data cells");
         assertEquals(47, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts - the slider's knob none: its mark the slider's symbol");
@@ -99,7 +99,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(24 + 109 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
+        assertEquals(24 + 110 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 
