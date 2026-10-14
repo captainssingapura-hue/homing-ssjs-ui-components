@@ -31,7 +31,8 @@ public final class UiLookCrate implements Crate {
         return List.of(
                 CrateEntry.of(CastingsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(StatesAndEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(HouseLookSheet.INSTANCE),
+                CrateEntry.of(HouseStyleSheet.INSTANCE),
+                CrateEntry.of(HousePaletteSheet.INSTANCE),
                 CrateEntry.of(LookManifestModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(LexiconSheet.INSTANCE),
                 CrateEntry.of(IconsModule.INSTANCE),

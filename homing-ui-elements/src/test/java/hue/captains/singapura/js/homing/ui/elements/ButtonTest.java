@@ -59,7 +59,7 @@ class ButtonTest extends JsModuleTestBase {
         js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
-        js.eval("js", "var look_sheet = 'look-sheet';");
+        js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         // the icon an icon button holds: the real Icon, its classes handles as the shim's css takes them
         js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
@@ -78,31 +78,24 @@ class ButtonTest extends JsModuleTestBase {
     private boolean has(String el, String cls) { return eval(el + ".el.classList.contains('" + cls + "')").asBoolean(); }
 
     @Test
-    void wornAtOnce_itsCastingsLookOnEveryTarget_andItsComponentsTreatments() {
-        assertTrue(has("go", "primary-button_go__color-background"), "the casting's look: the primary button as Go");
-        assertTrue(has("go", "primary-button_go__type-weight"));
-        assertTrue(has("go", "primary-button__effect-opacity--disabled"), "the treatment: the component's, common to every role");
-        assertTrue(has("go", "primary-button__shape-shadow--hover"));
-        assertFalse(has("go", "primary-button__color-background"), "not the button on its own: it is cast as Go");
-        int targets = eval("LOOK_TARGETS.length").asInt(), treated = eval("TREATED['primary-button'].length").asInt();
-        assertEquals(targets + treated, eval("go.el.classes().length").asInt(), "a class for each target, a treatment for each the sheet treats it in");
-        assertFalse(eval("go.el.classes().some(function (c) { return c.indexOf('el-button') === 0 || c.indexOf('el_button') === 0; })").asBoolean(),
-                "no design word: the look is named by the casting");
-        assertTrue(has("plain", "plain-button__color-background"), "Standalone unless given");
-        assertEquals("standalone", str("plain.role"));
+    void wornAtOnce_itsLeafsClassAlone_aPartsLeafWhenItsOwnerNamesIt() {
+        assertEquals("styled-plain-button", str("plain.el.classes()"), "its leaf's style-aware class, and nothing else: no class per target");
+        assertEquals("standalone", str("plain.role"), "Standalone unless given");
+        eval("var bar = new PrimaryButton(el('button'), { label: 'Run' }, ROLE.GO, { LEAF: 'action-bar' });");
+        assertEquals("styled-action-bar-go", str("bar.el.classes()"), "playing a part its owner names: the part's leaf alone, none of its own (D10)");
+        assertEquals("", str("go.el.classes()"), "a part played for an owner not named: nothing styled, said once on the console, until its owner hands itself");
         assertEquals("button", str("go.el.type"), "a button inside a form does not submit it");
         assertEquals("Save", str("go.label"));
     }
 
     @Test
-    void aState_writesItsReflection_andNoClassChanges() {
-        eval("ops = []; go.enabled = false;");
-        assertEquals("", str("ops"), "the treatment classes are worn already: the reflection shows them");
-        assertEquals("true", str("go.el.disabled"));
-        eval("go.enabled = true;");
-        assertEquals("false", str("go.el.disabled"));
-        eval("ops = []; go.enabled = true;");
-        assertEquals("", str("ops"), "the same value again does nothing");
+    void aState_writesItsReflection_andHoldsItsClassWhileItHolds() {
+        eval("plain.enabled = false;");
+        assertEquals("true", str("plain.el.disabled"));
+        assertTrue(has("plain", "styled-plain-button--disabled"), "off, its state's class (D12, D21)");
+        eval("plain.enabled = true;");
+        assertEquals("false", str("plain.el.disabled"));
+        assertFalse(has("plain", "styled-plain-button--disabled"), "on again, the rest: no class");
     }
 
     @Test
@@ -146,12 +139,14 @@ class ButtonTest extends JsModuleTestBase {
 
     @Test
     void castings_onlyThoseTheTaxonomyHasASlotFor_aFunctionalRoleLookingAsTheLeafOnItsOwn() {
-        eval("var action = new PlainButton(el('button'), {}, ROLE.ACTION);");
-        assertTrue(has("action", "plain-button_action__color-background"), "an action bar's action");
+        eval("var action = new PlainButton(el('button'), {}, ROLE.ACTION, { LEAF: 'action-bar' });");
+        assertTrue(has("action", "styled-action-bar-action"), "an action bar's action: the part's leaf");
+        var unknown = assertThrows(PolyglotException.class, () -> eval("new PlainButton(el('button'), {}, ROLE.ACTION, { LEAF: 'dialog' })"));
+        assertTrue(unknown.getMessage().contains("'dialog-action' is no leaf of the taxonomy"), unknown.getMessage());
         var e = assertThrows(PolyglotException.class, () -> eval("new DangerButton(el('button'), {}, ROLE.GO)"));
         assertTrue(e.getMessage().contains("is never cast as go: only as standalone"), e.getMessage());
         assertThrows(PolyglotException.class, () -> eval("new PlainButton(el('button'), {}, 'go')"), "a role is one of ROLE");
-        assertEquals("plain-button", str("new Look(PlainButton, { token: 'window', functional: true }).casting"),
+        assertEquals("plain-button", str("new Look(PlainButton, { token: 'window', functional: true }).token"),
                 "a functional role only places its part: the leaf on its own");
     }
 
@@ -162,14 +157,13 @@ class ButtonTest extends JsModuleTestBase {
         assertEquals("false", str("t.el.getAttribute('aria-pressed')"), "not pressed at rest, and it says so");
         eval("t.el.click();");
         assertEquals("true", str("t.pressed"));
-        assertEquals("true", str("t.el.getAttribute('aria-pressed')"), "the reflection the pressed treatments are shown by");
+        assertEquals("true", str("t.el.getAttribute('aria-pressed')"), "its reflection");
+        assertTrue(has("t", "styled-toggle-button--pressed"), "on, its state's class, while it holds (D12)");
         assertEquals("t:pressed-changed was false by a press,t:click", str("log"), "turned over by the press that made it, then the press itself");
         eval("log.length = 0; t.enabled = false; t.el.click(); t.enabled = true; t.pressed = false;");
         assertEquals("t:pressed-changed was true by a setter", str("log"), "a press while off does nothing; a setter's change is fired too, with no press");
         assertEquals("false", str("t.el.getAttribute('aria-pressed')"));
-        assertTrue(has("t", "toggle-button__shape-shadow--pressed"), "the style's press, held while on");
-        assertTrue(has("t", "toggle-button__color-background--pressed"), "the palette's tint");
-        assertTrue(has("t", "toggle-button__shape-shadow--hover"), "and every button's treatments besides");
+        assertFalse(has("t", "styled-toggle-button--pressed"), "off again: the rest, no class");
         assertThrows(PolyglotException.class, () -> eval("new ToggleButton(el('button'), { pressed: 'yes' })"), "pressed is true or false");
     }
 
@@ -179,14 +173,13 @@ class ButtonTest extends JsModuleTestBase {
         eval("var c = new CloseButton(el('button'), {});");
         assertEquals("Close", str("c.el.getAttribute('aria-label')"), "Close unless given");
         assertEquals("", str("c.el.textContent"), "no words on its face");
-        assertTrue(has("c", "close-button__type-glyph"), "the mark: the glyph its style draws on ::before");
-        assertTrue(has("c", "close-button__shape-border"), "its frame: Base's bare one, unless its style frames it");
+        assertTrue(has("c", "styled-close-button"), "its leaf's class");
         assertEquals("Close", str("c.el.getAttribute('title')"), "and shown to whoever points at it: the browser's own tooltip");
         eval("c.label = 'Close the dialog'");
         assertEquals("Close the dialog", str("c.label"));
         assertEquals("Close the dialog", str("c.el.getAttribute('title')"), "the tooltip follows its name");
-        eval("var closing = new CloseButton(el('button'), {}, ROLE.CLOSE);");
-        assertTrue(has("closing", "close-button_close__shape-border"), "cast as what closes its owner");
+        eval("var closing = new CloseButton(el('button'), {}, ROLE.CLOSE, { LEAF: 'title-bar' });");
+        assertTrue(has("closing", "styled-title-bar-close"), "cast as what closes its owner: the owner's part");
     }
 
     /** The icon button: holds whatever icon it is handed - which icon is the icon's business - and is named for whoever cannot see it. */
@@ -199,7 +192,7 @@ class ButtonTest extends JsModuleTestBase {
         assertEquals("", str("b.el.textContent"), "no words on its face");
         eval("b.icon.set('remove')");
         assertEquals("remove", str("b.icon.name()"), "another icon is the icon's to show; the button is not asked");
-        assertTrue(has("b", "icon-button__shape-border"));
+        assertTrue(has("b", "styled-icon-button"));
         assertTrue(has("b", "el_icon_button"), "its face laid out: the icon centred in its box, whatever the icon");
         assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { label: 'Add' })"), "its face is an icon");
         assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { icon: el('span') })"), "an Icon, not any element");

@@ -31,9 +31,9 @@ final class TextsInJs {
             js.eval("js", String.join(System.lineSeparator(), CastingsModule.INSTANCE.selfContent(null)));
         if (js.eval("js", "typeof STATE === 'undefined'").asBoolean())
             js.eval("js", String.join(System.lineSeparator(), StatesAndEventsModule.INSTANCE.selfContent(null)));
-        if (js.eval("js", "typeof LOOK_TARGETS === 'undefined'").asBoolean())
+        if (js.eval("js", "typeof LEAVES === 'undefined'").asBoolean())
             js.eval("js", String.join(System.lineSeparator(), LookManifestModule.INSTANCE.selfContent(null)));
-        js.eval("js", "if (typeof look_sheet === 'undefined') globalThis.look_sheet = 'look-sheet';");
+        js.eval("js", "if (typeof style_sheet === 'undefined') { globalThis.style_sheet = 'style-sheet'; globalThis.palette_sheet = 'palette-sheet'; } if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); if (js.eval("js", "typeof StyledLeaf === 'undefined'").asBoolean()) loadModule.accept("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         if (js.eval("js", "typeof ICONS === 'undefined'").asBoolean()) {   // the lexicon's table, as a var: a test may give its own after
             js.eval("js", "if (typeof lexicon_sheet === 'undefined') globalThis.lexicon_sheet = 'lexicon-sheet';");
             js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)).replace("const ICONS", "var ICONS"));

@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.CssGroup;
@@ -46,7 +47,7 @@ class SimpleComponentsDeclaredTest extends JsModuleTestBase {
         js = buildContext();
         js.eval("js", "var css = { cls: function (n) { return { name: n }; }, addClass: function () {}, removeClass: function () {},"
                 + " size: function () {}, extent: function () {}, aspect: function () {} };");
-        js.eval("js", "var look_sheet = 'look-sheet';");
+        js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         // what the simple components need, loaded in the crate's order - icons from their own crate, as handles
         js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
@@ -89,7 +90,8 @@ class SimpleComponentsDeclaredTest extends JsModuleTestBase {
         for (EsModule<?> m : SIMPLE) {
             Component<?> leaf = ((ImplFor<?>) m).leaf();
             String cls = leaf.getClass().getSimpleName();
-            Set<String> states = new TreeSet<>(leaf.states().stream().map(s -> s.name().value()).toList());
+            // a pseudo state is the browser's: no axis, no setter of the component's (RFC 0067, appendix Two Classes per Leaf, D12)
+            Set<String> states = new TreeSet<>(leaf.states().stream().filter(s -> !(s instanceof Pseudo)).map(s -> s.name().value()).toList());
             Set<String> events = new TreeSet<>(leaf.events().stream().map(e -> e.name().value()).toList());
             Set<String> hasStates = tokens("Object.values(" + cls + ".AXES || {}).filter(function (a) { return a.state; }).map(function (a) { return a.state.token; })");
             Set<String> hasEvents = tokens("(" + cls + ".EVENTS || []).map(function (e) { return e.token; })");

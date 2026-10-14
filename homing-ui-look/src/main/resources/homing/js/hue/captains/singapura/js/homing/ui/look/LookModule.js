@@ -1,77 +1,76 @@
 // =============================================================================
-// Look — the new CSS manager: a component's look worn one to one, by name.
-// A look is one semantic class for each target - the casting's - and one
-// treatment class for each state and target the component is treated in:
+// Look — how a component wears its leaf's style-aware classes (RFC 0067,
+// appendix Two Classes per Leaf), through core's StyledLeaf: its leaf's class -
+// its own on its own, the part's when it plays one, which its owner names (D10)
+// - and the class of each application state its leaf lists, while the state
+// holds (D12). The browser draws the pseudo states itself. The names are the
+// leaves' as Java generates them (LEAVES); the rules are the style worn's, in
+// its sheet (HouseStyleSheet), its colours the palette worn's (HousePaletteSheet),
+// each swapped on its own by the theme's owner. Nothing is resolved here.
 //
-//     primary-button_go__color-background             the primary button as Go, its surface
-//     primary-button__effect-opacity--disabled     the primary button's opacity, disabled
-//
-// The sheet (HouseLookSheet) is flattened: every class named here has its
-// rule, the body copied from the node of the taxonomy the theme answers. So
-// nothing is resolved here and no design word is worn: a class is named and
-// put on. A treatment's rule holds its state's selector, so a state shows
-// when its reflection is written - the component writes the reflection
-// (show), and the class does the rest. Nothing changes on a theme switch:
-// the names are the casting's, and the sheet - derived, the theme's - is
-// fetched again by the theme's owner (RFC 0064, D25).
-//
-//   var look = new Look(Leaf, role)     the leaf's casting in a role of ROLE; a
-//                                       functional role looks as the leaf on its own
-//     .casting                          its token: primary-button_go
-//     .classes                          every class it wears
-//     .wear(el, part?)  .shed(el, part?)  put them on, take them off; with part { only: [target…] }
-//                                       or { except: [target…] }, just those targets - a component drawn
-//                                       on more than one element puts each target where it shows: a
-//                                       knob's box the ring and the size, its face the ground and the edge
-//     .show(el, state)                  each axis's reflection written
+//   var look = new Look(Leaf, role, Owner)   the leaf worn: Leaf's own on its own
+//                                            (ROLE.STANDALONE), the part Owner
+//                                            names - Owner.LEAF + "-" + role.token
+//                                            - when it plays one
+//     .token                            the leaf's token, or null while no owner names the part it plays
+//     .leaf                             the leaf's description, or null
+//     .wear(el)                         the leaf's class on the element
+//     .show(el, state)                  each axis's reflection written, and each state the leaf lists held
 //     .degree(el, name, n)              size, extent or aspect; at rest nothing written
 //     .text(el, words)                  the element's words
 //     .mark(el, word)                   the element's mark: a word of the lexicon - "close" - by its
 //                                       class, which the lexicon's sheet draws on the element's ::before
 //                                       as the style worn writes it
 //
-// Leaf is the component's class: its token (LEAF) and its axes (AXES), each
-// with the reflection its value writes. The look puts its classes on itself:
-// they are a derived sheet's - the look's, or the lexicon's for a mark - and
-// the CSS manager handles only what does not vary. `css` - the manager - is injected for the element's degrees.
+// While the house moves onto files (phase 5), two things wear nothing styled and
+// say so once on the console, each until its family moves: a part played with no
+// owner named - an owner hands its own Leaf as the third argument - and a slice of
+// the old look, wear(el, { only | except }), each slice now a leaf of its own (D17).
 // =============================================================================
 
 var _LOOK_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
+var _LOOK_SAID = new Set();
+
+function _lookSay(said) {
+    if (_LOOK_SAID.has(said)) return;
+    _LOOK_SAID.add(said);
+    if (typeof console !== "undefined" && typeof console.warn === "function") console.warn("[Look] " + said);
+}
 
 class Look {
-    constructor(Leaf, role) {
+    constructor(Leaf, role, Owner) {
         if (!Leaf || !Leaf.LEAF) throw new Error("[Look] a leaf with its token is required");
         if (!role || typeof role.token !== "string") throw new Error("[Look] a role is one of ROLE, not " + role);
-        this.leaf = Leaf;
+        this.component = Leaf;
         this.role = role;
-        this.casting = role.token === "standalone" || role.functional ? Leaf.LEAF : Leaf.LEAF + "_" + role.token;
-        var self = this;
-        this.classes = Object.freeze(LOOK_TARGETS.map(function (t) { return self.casting + "__" + t; })
-                .concat((TREATED[Leaf.LEAF] || []).map(function (s) { return Leaf.LEAF + "__" + s; })));
-        void look_sheet;   // the sheet the classes are ruled in: imported, so it loads
+        if (role.token === "standalone") this.token = Leaf.LEAF;
+        else if (Owner && Owner.LEAF) this.token = Owner.LEAF + "-" + role.token;
+        else if (role.functional) this.token = Leaf.LEAF;
+        else {
+            this.token = null;
+            _lookSay(Leaf.LEAF + " plays " + role.token + " for an owner not named: it wears nothing styled until its owner hands itself (D10)");
+        }
+        this.leaf = this.token == null ? null : LEAVES[this.token] || null;
+        if (this.token != null && !this.leaf) throw new Error("[Look] '" + this.token + "' is no leaf of the taxonomy");
+        void style_sheet; void palette_sheet;   // the sheets its classes are ruled in: imported, so they load
     }
 
-    wear(el, part) { this._of(part).forEach(function (c) { el.classList.add(c); }); }
-
-    shed(el, part) { this._of(part).forEach(function (c) { el.classList.remove(c); }); }
-
-    /** Its classes, or those of the targets a part says: only these, or all but these - each a target of LOOK_TARGETS. */
-    _of(part) {
-        if (!part) return this.classes;
-        var only = part.only ? new Set(part.only) : null, except = part.except ? new Set(part.except) : null;
-        [].concat(part.only || [], part.except || []).forEach(function (t) {
-            if (LOOK_TARGETS.indexOf(t) < 0) throw new Error("[Look] no target '" + t + "'; one of " + LOOK_TARGETS.join(", "));
-        });
-        return this.classes.filter(function (c) {
-            var t = c.slice(c.indexOf("__") + 2), s = t.indexOf("--");
-            if (s >= 0) t = t.slice(0, s);
-            return (!only || only.has(t)) && (!except || !except.has(t));
-        });
+    wear(el, slice) {
+        if (slice) {
+            _lookSay((this.token || this.component.LEAF) + ": a slice of the old look wears nothing styled - it becomes a leaf of its own (D17)");
+            return;
+        }
+        if (this.leaf) StyledLeaf.wear(el, this.leaf);
     }
 
     show(el, state) {
-        var axes = this.leaf.AXES || {};
-        for (var a in axes) if (typeof axes[a].reflect === "function") axes[a].reflect(el, state[a]);
+        var axes = this.component.AXES || {};
+        for (var a in axes) {
+            if (typeof axes[a].reflect === "function") axes[a].reflect(el, state[a]);
+            var held = axes[a].state;
+            if (this.leaf && held && Object.prototype.hasOwnProperty.call(this.leaf.states, held.token))
+                StyledLeaf.hold(el, this.leaf, held.token, state[a]);
+        }
     }
 
     degree(el, name, n) {
@@ -83,6 +82,6 @@ class Look {
 
     mark(el, word) {
         if (!Object.prototype.hasOwnProperty.call(ICONS, word)) throw new Error("[Look] no word '" + word + "' in the lexicon; one of " + Object.keys(ICONS).join(", "));
-        el.classList.add(ICONS[word]);
+        css.addClass(el, css.cls(ICONS[word]));
     }
 }

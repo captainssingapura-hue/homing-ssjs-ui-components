@@ -6,13 +6,14 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.SelfRenderedCss;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The house's lexicon as a sheet: every word a mark may show, the glyph the style worn writes for it,
  * drawn on the mark's {@code ::before} under the word's class ({@code FlattenLexicon}) - the house's
  * words and those of every module on the classpath that adds its own. A derived sheet (RFC 0064, D25):
- * it renders itself per theme, the same in every palette of a style, and the theme's owner fetches it
- * again on a switch - never the CSS manager.
+ * it renders itself per style, the same in every palette, and the theme's owner fetches it
+ * again when the style changes - never the CSS manager.
  */
 public record LexiconSheet() implements DerivedCss<LexiconSheet>, SelfRenderedCss {
 
@@ -23,5 +24,10 @@ public record LexiconSheet() implements DerivedCss<LexiconSheet>, SelfRenderedCs
 
     @Override public ExportsOf<LexiconSheet> exports() { return new ExportsOf<>(INSTANCE, List.of(new lexicon_sheet())); }
 
-    @Override public String css(String themeSlug) { return HouseWordsWritten.sheet(themeSlug); }
+    /** A word is the style's, never the palette's: the sheet varies with the style alone. */
+    @Override public VariesWith variesWith() { return VariesWith.STYLE; }
+
+    @Override public Optional<String> fallback() { return Optional.of(HouseStyling.STYLING.defaultStyle().token()); }
+
+    @Override public String css(String style) { return HouseWordsWritten.sheet(style); }
 }

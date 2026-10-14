@@ -1,0 +1,5 @@
+/* The icon button's icon, a part of its own (D10): the ink of what holds it, whole (D30). */
+.styled-icon-button-symbol {
+    color: inherit;
+    line-height: 1;
+}

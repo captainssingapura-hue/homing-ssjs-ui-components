@@ -39,8 +39,8 @@ class HouseThemesTest {
         assertEquals("Editorial in Forest", cross.label());
         assertEquals("Neo-Brutalism", THEMES.bases().get(1).label());
         assertEquals("Expressive", THEMES.bases().get(1).group());
-        assertTrue(THEMES.fits(editorial, harbour) && THEMES.fits(editorial, forest), "its own, and one that names it");
-        assertFalse(THEMES.fits(THEMES.bases().get(1), harbour), "Harbour does not suit Neo-Brutalism");
+        assertTrue(THEMES.fits(editorial, harbour) && THEMES.fits(editorial, forest), "its own, and any other of its scheme");
+        assertTrue(THEMES.fits(THEMES.bases().get(1), harbour), "the scheme decides (D22): every house palette, as every house style, is of the base");
     }
 
     @Test

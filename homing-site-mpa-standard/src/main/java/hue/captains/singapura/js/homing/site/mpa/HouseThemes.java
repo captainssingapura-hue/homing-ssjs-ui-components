@@ -35,7 +35,7 @@ public record HouseThemes() implements ThemeRegistry {
     }
 
     /** A house palette, as the colours a picker offers a style. */
-    public record Colours(ColorPalette palette) implements Theme {
+    public record Colours(ColorPalette<?> palette) implements Theme {
         @Override public String slug() { return palette.token(); }
         @Override public String label() { return palette.label(); }
         @Override public String group() { return "Colours"; }
@@ -64,13 +64,13 @@ public record HouseThemes() implements ThemeRegistry {
     /** The style a row is, in the colours asked for: the row itself in its own palette. */
     @Override public Theme dressed(Theme base, Theme colours) {
         if (!(base instanceof Worn w) || !(colours instanceof Colours c)) return base;
-        Worn found = WORN.get(HouseStyles.INSTANCE.slug(new Dressed(w.dressed().style(), c.palette())));
+        Worn found = WORN.get(HouseStyles.INSTANCE.slug(w.dressed().style(), c.palette()));
         return found != null ? found : base;
     }
 
     @Override public boolean fits(Theme base, Theme colours) {
         if (!(base instanceof Worn w) || !(colours instanceof Colours c)) return true;
-        DesignStyle style = w.dressed().style();
+        DesignStyle<?> style = w.dressed().style();
         return HouseStyles.INSTANCE.fits(style, c.palette());
     }
 }

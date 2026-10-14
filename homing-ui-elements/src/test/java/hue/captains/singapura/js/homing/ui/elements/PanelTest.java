@@ -103,18 +103,12 @@ class PanelTest extends JsModuleTestBase {
      */
     @Test
     void itWearsItsLook_theHeadAndTheBodyTheirs_aBarePanelNoFrame() {
+        // its look: its leaf's class on its root; its head and body, slices of the old look, wear nothing styled until the
+        // panel's family moves onto files and each is a leaf of its own (RFC 0067, Two Classes per Leaf, phase 5; D17)
         String root = eval("reading.root.classes()").asString();
-        assertTrue(root.contains("panel__color-background") && root.contains("panel__shape-border") && root.contains("panel__shape-corner"), root);
-        assertTrue(root.contains("panel__shape-shadow--elevated") && root.contains("panel__color-border--current"), "treated: lifted, set in, current - " + root);
-        assertFalse(root.contains("panel__size-extent"), "its least size is its placement's: it fills what holds it");
-        String head = eval("reading.head.classes()").asString();
-        assertTrue(head.contains("panel-bar__size-inset") && head.contains("panel-bar__shape-border") && head.contains("panel-bar__color-border"), head);
-        assertFalse(head.contains("panel-bar__affordance-select"), "the head wears what is answered for it, nothing that would undo its placement");
-        assertTrue(eval("reading.body.classes()").asString().contains("section__size-inset"), "content: the style's room round it");
-        assertFalse(eval("panel.body.classes()").asString().contains("section__"), "filled: flush");
-        String bare = eval("new Panel(page.createBranch(\"cell\"), { bare: true, fills: true }).root.classes()").asString();
-        assertTrue(bare.contains("panel__color-background"), bare);
-        assertFalse(bare.contains("panel__shape-border") || bare.contains("panel__shape-corner"), "bare: its container draws the lines - " + bare);
+        assertFalse(root.contains("styled-panel"), "its root, worn by a slice of the old look: nothing styled yet (D17) - " + root);
+        assertFalse(root.contains("panel__color-background"), "the old look's classes, gone - " + root);
+        assertFalse(eval("reading.head.classes()").asString().contains("styled-"), "the head: a slice, nothing styled yet");
     }
 
     /** The size is an element's, not inherited, so the panel carries it to every part it minted - and not to a body that wears no length. */

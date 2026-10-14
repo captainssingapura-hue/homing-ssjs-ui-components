@@ -87,15 +87,11 @@ class SliderTest extends JsModuleTestBase {
         assertEquals("-1,1,0,0.0,The tabs' size", eval("[knob.attr('aria-valuemin'), knob.attr('aria-valuemax'), knob.attr('aria-valuenow'), knob.attr('aria-valuetext'), knob.attr('aria-label')].join(',')").asString());
         assertEquals("0.0", eval("readout.textContent").asString());
         assertTrue(eval("detent.has('el_slider_detent') && knob.has('el_slider_knob')").asBoolean());
-        // its look is the house's: each part worn as the slider casts it, the knob's box and face sharing its casting's targets
-        assertTrue(eval("s.root.has('slider__size-inset') && !s.root.has('slider__size-extent') && rail.has('slider__size-extent') && rail.has('slider__affordance-cursor')").asBoolean(),
-                "the slider's row its room, its rail its length and the hand");
-        assertTrue(eval("rail.children[0].has('groove_span__color-background') && rail.children[0].children[0].has('fill_level__color-background')").asBoolean(), "the groove as its span, the fill as its level");
-        assertTrue(eval("detent.has('detent_rest__color-background') && detent.has('detent__color-background--dragging')").asBoolean(), "the detent as its rest, shown while dragged");
-        assertTrue(eval("knob.has('knob_thumb__size-extent') && knob.has('knob_thumb__shape-outline') && knob.has('knob__size-extent--vertical') && !knob.has('knob_thumb__color-background')").asBoolean(),
-                "the knob's box its size - a cap's when stood up - and its ring");
-        assertTrue(eval("face.has('knob_thumb__color-background') && face.has('knob_thumb__shape-corner') && face.has('knob__shape-corner--vertical') && !face.has('knob_thumb__shape-outline')").asBoolean(),
-                "its face the ground, the edge and the corner");
+        // its look: its leaf's class on its root; its parts, played for an owner not yet named, and the slices of the old
+        // look, wear nothing styled until the slider's family moves onto files (RFC 0067, Two Classes per Leaf, phase 5)
+        assertTrue(eval("!s.root.has('styled-slider') && !s.root.has('slider__size-inset')").asBoolean(), "its root, worn by a slice of the old look: nothing styled yet (D17)");
+        assertTrue(eval("!rail.children[0].has('groove_span__color-background') && !knob.has('knob_thumb__size-extent')").asBoolean(),
+                "the old look's classes, gone");
         assertTrue(eval("mark.has('ic_base') && mark.has('ic_grip')").asBoolean(), "a grip on the knob unless the slider says what it sets");
         assertEquals("grip", eval("s.icon()").asString());
         eval("s.icon('size');");

@@ -1,0 +1,39 @@
+/* The toggle button in the base layer: a button that is on or off: on, tinted with the accent and edged with it. Whole: every property its look has (D9). */
+.styled-toggle-button {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0;
+    box-shadow: none;
+    outline: 0 none;
+    padding-block: calc(8px * pow(1.3, var(--size)));
+    padding-inline: calc(16px * pow(1.3, var(--size)));
+    gap: calc(8px * pow(1.3, var(--size)));
+    min-width: calc(56px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    transition: none;
+    transform: none;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid var(--fp-ring);
+        outline-offset: -2px;
+    }
+
+    &.styled-toggle-button--disabled {
+        opacity: .45;
+        cursor: default;
+        box-shadow: none;
+        transform: none;
+    }
+
+    &.styled-toggle-button--pressed {
+        background-color: var(--fp-accent-tint);
+        border-color: var(--fp-accent-edge);
+    }
+}

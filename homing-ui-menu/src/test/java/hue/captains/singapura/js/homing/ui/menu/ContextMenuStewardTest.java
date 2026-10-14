@@ -188,7 +188,7 @@ class ContextMenuStewardTest extends JsModuleTestBase {
     void theStateOfEachRowIsTheHandlers_askedAtBind_theMarksAreIcons_andASubmenuOpensBesideItsRow() {
         eval("steward.handle('animal', { state: function (id, o) { return id === 'rotate' ? { disabled: o.fixed } : id === o.animal ? { checked: true } : id === 'dog' ? { hidden: o.noDogs } : null; } });");
         eval("steward.open('animal', { fixed: true, animal: 'cat', noDogs: true }, { x: 10, y: 10 });");
-        assertTrue(eval("row('rotate').attr('aria-disabled') === 'true' && row('rotate').has('menu-item__effect-opacity--disabled')").asBoolean(), "off by aria-disabled, which its look fades it by");
+        assertTrue(eval("row('rotate').attr('aria-disabled') === 'true'").asBoolean(), "off by aria-disabled; the class that fades it comes with the menu's family onto files (RFC 0067, phase 5)");
         eval("var sub0 = row('animal'); dispatch(sub0, 'pointerenter', {});");
         assertEquals("true", eval("sub0.attr('aria-expanded')").asString(), "hovered: the submenu is open");
         assertEquals("2", eval("String(menusInDom())").asString(), "the submenu is a second frame in the layer, part of the one menu");

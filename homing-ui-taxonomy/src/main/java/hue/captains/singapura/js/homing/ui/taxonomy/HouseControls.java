@@ -22,11 +22,13 @@ public final class HouseControls {
 
     private HouseControls() {}
 
-    /** What every button has: it may be off. */
-    private static final List<StateType<?>> A_BUTTON = List.of(HouseStates.Enabled.INSTANCE);
+    /** What every button has: it may be off; and the browser's - the pointer over it, its focus shown, the hand down on it. */
+    private static final List<StateType<?>> A_BUTTON = List.of(HouseStates.Enabled.INSTANCE,
+            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE);
 
     /** What a toggle has besides: it may be on. */
-    private static final List<StateType<?>> A_TOGGLE = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Pressed.INSTANCE);
+    private static final List<StateType<?>> A_TOGGLE = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Pressed.INSTANCE,
+            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE);
 
     /** What every button offers: it is clicked. */
     private static final List<EventType<?>> CLICKED = List.of(HouseEvents.Click.INSTANCE);

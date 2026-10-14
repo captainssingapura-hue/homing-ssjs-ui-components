@@ -9,8 +9,9 @@
 //   the component  its state - one value on each axis, kept here and nowhere
 //                  else, changed only by its setters - its degrees, its role,
 //                  and the handlers set on its events;
-//   its look       Look: the element's semantic classes, the state's reflections
-//                  and the degrees - the only thing that touches its classes;
+//   its look       Look: its leaf's style-aware class, a state's class while it
+//                  holds, the reflections and the degrees - the only thing
+//                  that touches its classes;
 //   its behaviour  the leaf's BEHAVIOR: what the element does, its listeners. It
 //                  reads the state, changes it through the component, and has
 //                  the component fire its events; it never touches the look.
@@ -18,8 +19,8 @@
 // An AXIS is a sum type of mutually exclusive values: enabled is true or false.
 // An axis that is one of the house's states names it (state: STATE.ENABLED), and
 // its change is an event the component offers by having it. Setting one stores
-// the value, writes its reflection - the look's treatment classes are shown by
-// it, so no class changes - tells the behaviour (changed(axis, value)), and fires
+// the value, writes its reflection and holds its state's class (RFC 0067, D12)
+// - tells the behaviour (changed(axis, value)), and fires
 // the change to its handler, if one is set, with the previous value: from a
 // setter with no DOM event, from the behaviour with the one that made it. The
 // same value again does nothing.
@@ -45,19 +46,21 @@
 // an accessor for each axis, degree and word, a setter for each event, and its
 // companion beside it: const PrimaryButtonFactory = new SimpleComponentFactory(PrimaryButton).
 //
-//   var b = new PrimaryButton(branch.elementMaker("save"), props, role?)
+//   var b = new PrimaryButton(branch.elementMaker("save"), props, role?, Owner?)
 //     make    the maker its owner's branch issues: it makes the <TAG>, once. An
 //             element its companion made is still taken, the old way, until every
 //             owner hands a maker; a widget may not (widget-draws-only-components)
 //     props   an axis, a degree, a word or a part by its name, and nothing else
 //     role    one of ROLE, Standalone unless given; refused unless the leaf is cast in it
+//     Owner   the owner's class, when the role is a part it plays: the element wears
+//             the part's leaf - Owner.LEAF + "-" + role - alone (RFC 0067, D10)
 //   .el  .role
 // =============================================================================
 
 var _COMPONENT_DEGREE_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
 
 class SimpleComponent {
-    constructor(make, props, role) {
+    constructor(make, props, role, Owner) {
         var Leaf = new.target, self = this;
         if (!Leaf.LEAF || !Leaf.BEHAVIOR) throw new Error("[" + Leaf.name + "] is no leaf: a simple component is made as one of its leaves");
         var el = make;   // an element its companion made: the old way, until every owner hands a maker
@@ -77,7 +80,7 @@ class SimpleComponent {
         for (var a in axes) this._state[a] = a in p ? SimpleComponent._value(Leaf, a, p[a]) : axes[a].rest;
         this._handlers = new Map();
         this._degrees = {};
-        this._look = new Look(Leaf, this.role);
+        this._look = new Look(Leaf, this.role, Owner);
         this._look.wear(el);
         if (Leaf.MARK) this._look.mark(el, Leaf.MARK);   // its face a word of the lexicon, as the style worn writes it
         this._look.show(el, this._state);

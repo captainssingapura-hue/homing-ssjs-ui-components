@@ -26,7 +26,7 @@ final class HouseWordsWritten {
 
     /** The sheet for the theme a page is worn in, by its slug: its style's writing of every word. */
     static String sheet(String themeSlug) {
-        DesignStyle style = HouseStyles.INSTANCE.dressed(themeSlug).style();
+        DesignStyle<?> style = HouseStyles.INSTANCE.dressed(themeSlug).style();
         return SHEETS.computeIfAbsent(style.token(), t -> FlattenLexicon.INSTANCE.flatten(LEXICON, style, t + " - the house's lexicon").css());
     }
 }

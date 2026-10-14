@@ -121,13 +121,15 @@ class SplitGridMirrorTest extends JsModuleTestBase {
     /** Its look is the house's: the mirror in its own casting, each cell a pane's thumbnail cast as a choice, named by its owner or by its id; its own classes only place. */
     @Test
     void itWearsTheHousesLook_eachCellAPanesThumbnail_namedInAKicker() {
-        assertTrue(eval("mirror.el.has('sgm_root') && mirror.el.has('split-grid-mirror__color-background') && mirror.el.has('split-grid-mirror__shape-outline--focus')").asBoolean(),
-                "placed by its own class, worn as itself, and ringed as a control is when focused");
+        assertTrue(eval("mirror.el.has('sgm_root') && mirror.el.has('styled-split-grid-mirror')").asBoolean(),
+                "placed by its own class, and worn as itself: its leaf's class");
         var cell = "mirror.el.children[1]";
-        assertTrue(eval(cell + ".has('sgm_cell') && " + cell + ".has('pane-thumb_choice__color-background') && " + cell + ".has('pane-thumb__color-background--current')").asBoolean(),
-                "a cell is placed by its own class and worn as a pane's thumbnail cast as a choice, with its current treatment");
+        // a cell is a pane's thumbnail played as a choice, its name a kicker played as the name: parts, worn by their leaves
+        // when the split grid's family moves onto files and each owner names the part it hands (RFC 0067, phase 5; D10)
+        assertTrue(eval(cell + ".has('sgm_cell') && !" + cell + ".has('pane-thumb_choice__color-background')").asBoolean(),
+                "a cell is placed by its own class; the old look's classes, gone");
         assertEquals("nav demo explain", eval("mirror.el.children.map(function (b) { return b.children[0].textContent; }).join(' ')").asString(), "named by its id, unless said");
-        assertTrue(eval(cell + ".children[0].has('kicker_name__type-face') && " + cell + ".children[0].has('sgm_name')").asBoolean(), "its name a kicker cast as the name, placed on one line");
+        assertTrue(eval(cell + ".children[0].has('sgm_name')").asBoolean(), "its name placed on one line");
         eval("var named = new SplitGridMirror(branch.createBranch('named'), { host: host, labelOf: function (id) { return id.toUpperCase(); } }); named.reflect(LAYOUT, { w: 1007, h: 607 });");
         assertEquals("NAV DEMO EXPLAIN", eval("named.el.children.map(function (b) { return b.children[0].textContent; }).join(' ')").asString(), "named as its owner says");
     }

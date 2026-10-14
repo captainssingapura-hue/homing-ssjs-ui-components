@@ -50,6 +50,6 @@ public record HouseDesigns() implements StatelessFunctionalObject {
     private static final class Read {
         private Read() {}
         static final List<DesignRead> ALL =
-                ReadDesigns.INSTANCE.read(HouseLooks.TAXONOMY, HouseStyles.THEMES.values(), HouseDesigns.class.getClassLoader());
+                ReadDesigns.INSTANCE.read(HouseStyling.STYLING.taxonomy(), HouseStyles.THEMES.values(), HouseDesigns.class.getClassLoader());
     }
 }
