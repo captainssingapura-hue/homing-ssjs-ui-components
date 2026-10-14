@@ -1,7 +1,9 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Flag;
+import hue.captains.singapura.js.homing.component.taxonomy.Importance;
 import hue.captains.singapura.js.homing.component.taxonomy.L1_StateBranch;
+import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
 import hue.captains.singapura.js.homing.component.taxonomy.StateRoot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
@@ -82,7 +84,7 @@ public final class HouseStates {
     // ── availability ─────────────────────────────────────────────────────
 
     /** Usable: true at rest; off, it is inert and says so. */
-    public record Enabled() implements Flag<Availability> {
+    public record Enabled() implements Flag<Availability>, Importance.Quaternary {
         public static final Enabled INSTANCE = new Enabled();
         @Override public Availability parent() { return Availability.INSTANCE; }
         @Override public boolean rest() { return true; }
@@ -90,13 +92,13 @@ public final class HouseStates {
     }
 
     /** Read, reached and copied, but not changed. */
-    public record ReadOnly() implements Flag<Availability> {
+    public record ReadOnly() implements Flag<Availability>, Importance.Quaternary {
         public static final ReadOnly INSTANCE = new ReadOnly();
         @Override public Availability parent() { return Availability.INSTANCE; }
     }
 
     /** Working: what it shows, or what it was asked to do, is on the way. */
-    public record Busy() implements Flag<Availability> {
+    public record Busy() implements Flag<Availability>, Importance.Quaternary {
         public static final Busy INSTANCE = new Busy();
         @Override public Availability parent() { return Availability.INSTANCE; }
     }
@@ -104,21 +106,21 @@ public final class HouseStates {
     // ── picking ──────────────────────────────────────────────────────────
 
     /** Pressed and staying so until pressed again: a toggle that is on. */
-    public record Pressed() implements Flag<Picking> {
+    public record Pressed() implements Flag<Picking>, Importance.Tertiary {
         public static final Pressed INSTANCE = new Pressed();
         @Override public Picking parent() { return Picking.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "pressed"); }
     }
 
     /** Chosen by a mark of its own: a box ticked, a radio filled, a switch on. */
-    public record Checked() implements Flag<Picking> {
+    public record Checked() implements Flag<Picking>, Importance.Tertiary {
         public static final Checked INSTANCE = new Checked();
         @Override public Picking parent() { return Picking.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "checked"); }
     }
 
     /** How much of the group it speaks for is chosen: none, some or all. The mixed checkbox's, never a plain one's. */
-    public record Coverage() implements StateType<Picking> {
+    public record Coverage() implements StateType<Picking>, Importance.Tertiary {
         public static final Coverage INSTANCE = new Coverage();
         private static final List<StateValue> VALUES = List.of(new StateValue("none"), new StateValue("some"), new StateValue("all"));
         @Override public Picking parent() { return Picking.INSTANCE; }
@@ -126,7 +128,7 @@ public final class HouseStates {
     }
 
     /** Picked from among its kind: an option, a tab, a day, a row. */
-    public record Selected() implements Flag<Picking> {
+    public record Selected() implements Flag<Picking>, Importance.Tertiary {
         public static final Selected INSTANCE = new Selected();
         @Override public Picking parent() { return Picking.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "selected"); }
@@ -135,14 +137,14 @@ public final class HouseStates {
     // ── disclosure ───────────────────────────────────────────────────────
 
     /** What it opens is open: said on what opens it. */
-    public record Expanded() implements Flag<Disclosure> {
+    public record Expanded() implements Flag<Disclosure>, Importance.Tertiary {
         public static final Expanded INSTANCE = new Expanded();
         @Override public Disclosure parent() { return Disclosure.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "expanded"); }
     }
 
     /** On view over the page for now: said on what is opened. */
-    public record Shown() implements Flag<Disclosure> {
+    public record Shown() implements Flag<Disclosure>, Importance.Tertiary {
         public static final Shown INSTANCE = new Shown();
         @Override public Disclosure parent() { return Disclosure.INSTANCE; }
     }
@@ -150,13 +152,13 @@ public final class HouseStates {
     // ── validity ─────────────────────────────────────────────────────────
 
     /** Must be given before what it belongs to is sent. */
-    public record Required() implements Flag<Validity> {
+    public record Required() implements Flag<Validity>, Importance.Quaternary {
         public static final Required INSTANCE = new Required();
         @Override public Validity parent() { return Validity.INSTANCE; }
     }
 
     /** What it holds is refused. */
-    public record Invalid() implements Flag<Validity> {
+    public record Invalid() implements Flag<Validity>, Importance.Tertiary {
         public static final Invalid INSTANCE = new Invalid();
         @Override public Validity parent() { return Validity.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "invalid"); }
@@ -165,21 +167,21 @@ public final class HouseStates {
     // ── place ────────────────────────────────────────────────────────────
 
     /** The one of its kind that is where the user is: the trail's step that is this page. */
-    public record Current() implements Flag<Place> {
+    public record Current() implements Flag<Place>, Importance.Tertiary {
         public static final Current INSTANCE = new Current();
         @Override public Place parent() { return Place.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "current"); }
     }
 
     /** Lit from elsewhere: a search's hit, the rows a chart points at. */
-    public record Highlighted() implements Flag<Place> {
+    public record Highlighted() implements Flag<Place>, Importance.Tertiary {
         public static final Highlighted INSTANCE = new Highlighted();
         @Override public Place parent() { return Place.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "highlighted"); }
     }
 
     /** The one the user is on among its kind, not yet chosen: the option Enter would pick. */
-    public record Pointed() implements Flag<Place> {
+    public record Pointed() implements Flag<Place>, Importance.Tertiary {
         public static final Pointed INSTANCE = new Pointed();
         @Override public Place parent() { return Place.INSTANCE; }
     }
@@ -187,7 +189,7 @@ public final class HouseStates {
     // ── content ──────────────────────────────────────────────────────────
 
     /** Holds nothing yet. */
-    public record Empty() implements Flag<Content> {
+    public record Empty() implements Flag<Content>, Importance.Quaternary {
         public static final Empty INSTANCE = new Empty();
         @Override public Content parent() { return Content.INSTANCE; }
     }
@@ -195,28 +197,31 @@ public final class HouseStates {
     // ── interaction ──────────────────────────────────────────────────────
 
     /** The pointer is over it. */
-    public record Hovered() implements Flag<Interaction> {
+    public record Hovered() implements Flag<Interaction>, Importance.Quinary, Pseudo {
+        @Override public String pseudoClass() { return ":hover"; }
         public static final Hovered INSTANCE = new Hovered();
         @Override public Interaction parent() { return Interaction.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "hover"); }
     }
 
     /** The browser's focus is on it, and shown. */
-    public record Focused() implements Flag<Interaction> {
+    public record Focused() implements Flag<Interaction>, Importance.Quinary, Pseudo {
+        @Override public String pseudoClass() { return ":focus-visible"; }
         public static final Focused INSTANCE = new Focused();
         @Override public Interaction parent() { return Interaction.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "focus"); }
     }
 
     /** Being pressed now: the hand is down on it, not yet let go. */
-    public record Down() implements Flag<Interaction> {
+    public record Down() implements Flag<Interaction>, Importance.Primary, Pseudo {
+        @Override public String pseudoClass() { return ":active"; }
         public static final Down INSTANCE = new Down();
         @Override public Interaction parent() { return Interaction.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "active"); }
     }
 
     /** Where the page's keys are, as the keyboard's steward says: away, candidate, lent or held. */
-    public record Keyboard() implements StateType<Interaction> {
+    public record Keyboard() implements StateType<Interaction>, Importance.Secondary {
         public static final Keyboard INSTANCE = new Keyboard();
         private static final List<StateValue> VALUES = List.of(new StateValue("away"), new StateValue("candidate"),
                 new StateValue("lent"), new StateValue("held"));
@@ -226,7 +231,7 @@ public final class HouseStates {
     }
 
     /** Held by the hand and moved: from the press that grabs it to the release. */
-    public record Dragging() implements Flag<Interaction> {
+    public record Dragging() implements Flag<Interaction>, Importance.Secondary {
         public static final Dragging INSTANCE = new Dragging();
         @Override public Interaction parent() { return Interaction.INSTANCE; }
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "dragging"); }
@@ -235,7 +240,7 @@ public final class HouseStates {
     // ── physical ─────────────────────────────────────────────────────────
 
     /** How far off its own plane it sits: flat, elevated or sunken. */
-    public record Elevation() implements StateType<Physical> {
+    public record Elevation() implements StateType<Physical>, Importance.Senary {
         public static final Elevation INSTANCE = new Elevation();
         private static final List<StateValue> VALUES = List.of(new StateValue("flat"), new StateValue("elevated"), new StateValue("sunken"));
         @Override public Physical parent() { return Physical.INSTANCE; }
@@ -244,7 +249,7 @@ public final class HouseStates {
     }
 
     /** Which way a thing laid along a line runs: horizontal, or vertical - stood up, as a fader. */
-    public record Orientation() implements StateType<Physical> {
+    public record Orientation() implements StateType<Physical>, Importance.Senary {
         public static final Orientation INSTANCE = new Orientation();
         private static final List<StateValue> VALUES = List.of(new StateValue("horizontal"), new StateValue("vertical"));
         @Override public Physical parent() { return Physical.INSTANCE; }
