@@ -19,4 +19,18 @@ public final class HouseFamilies {
             HouseControls.PlainButton.INSTANCE, HouseControls.PrimaryButton.INSTANCE, HouseControls.SecondaryButton.INSTANCE,
             HouseControls.DangerButton.INSTANCE, HouseControls.WarningButton.INSTANCE, HouseControls.SuccessButton.INSTANCE,
             HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE);
+
+    /** The ways: a link, a crumb, the brand - each style's own focus ring on them, and its own hand. The brand's mark is Base's. */
+    public static final Set<Component<?>> WAYS = Set.of(
+            HouseControls.Link.INSTANCE, HouseControls.Crumb.INSTANCE, HouseControls.Brand.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, then the ways. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS);
+
+    @SafeVarargs
+    private static Set<Component<?>> union(Set<Component<?>>... families) {
+        var out = new java.util.LinkedHashSet<Component<?>>();
+        for (var f : families) out.addAll(f);
+        return Set.copyOf(out);
+    }
 }

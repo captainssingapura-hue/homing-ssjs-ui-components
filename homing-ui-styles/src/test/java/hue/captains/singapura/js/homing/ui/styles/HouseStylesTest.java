@@ -15,6 +15,7 @@ import hue.captains.singapura.js.homing.design.styling.PaletteSheet;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.HouseColour;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseLexicon;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 import org.junit.jupiter.api.Test;
@@ -54,8 +55,12 @@ class HouseStylesTest {
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(b)), s.token() + " draws " + b.token());
             assertEquals(StylingRes.CssContent.INSTANCE, s.style(go), s.token() + " draws the primary button as Go too, a class of its own");
             assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseControls.Knob.INSTANCE)), s.token() + ": a knob is Base's, for now");
+            for (Component<?> w : HouseFamilies.WAYS)
+                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(w)), s.token() + " draws " + w.token() + ": its own focus ring on it");
+            assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.BrandMark.INSTANCE)), s.token() + ": the brand's mark is Base's, alike in every style");
         }
         assertEquals(9, HouseFamilies.BUTTONS.size());
+        assertEquals(3, HouseFamilies.WAYS.size());
     }
 
     @Test
@@ -63,7 +68,7 @@ class HouseStylesTest {
         var tree = HouseColours.TREE;
         for (ColorPalette<ColorScheme.Base> p : HouseStyles.PALETTES) {
             assertEquals(List.of(), tree.check(p), p.token());
-            assertEquals(27, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house");
+            assertEquals(29, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the way's ink and its ink under the hand among them");
         }
         assertEquals(8, HouseStyles.PALETTES.size());
     }
@@ -81,6 +86,9 @@ class HouseStylesTest {
         assertTrue(Harbour.INSTANCE.color(new HouseColours.Text()).get() instanceof ConcreteColor.Srgb);
         HouseColour any = new HouseColours.Wash();
         assertEquals("rgb(59 74 107 / 0.12)", rule.of(Harbour.SEEDS, any).css(), "the text's ink, washed thin");
+        assertEquals("rgb(59 74 107 / 0.8)", rule.of(Harbour.SEEDS, new HouseColours.WayInk()).css(), "a way's ink: the text's, a fifth faded");
+        assertEquals("rgb(43 55 101 / 0.9)", rule.of(Harbour.SEEDS, new HouseColours.WayHovered()).css(),
+                "a way under the hand: the house's navy leaning half into the way's ink, as the old sheets mixed it");
     }
 
     @Test

@@ -21,7 +21,7 @@ public record Sketchy() implements Derives<ColorScheme.Base, Base> {
     public static final Sketchy INSTANCE = new Sketchy();
 
     /** The components it draws its own way, on their own and in every role they are cast in, each casting a whole file; every other casting is Base's. */
-    private static final Set<Component<?>> DRAWN = HouseFamilies.BUTTONS;
+    private static final Set<Component<?>> DRAWN = HouseFamilies.DRAWN;
 
     @Override public String group() { return "Expressive"; }
 

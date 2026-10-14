@@ -15,12 +15,12 @@ import java.util.List;
 /**
  * The house's colour tree (RFC 0067, appendix Semantic Colours and Flavours, D16; appendix Two Classes per Leaf): every
  * colour a house leaf's file names, each named for what it is for, in the base scheme. Grown family by family as the
- * leaves move onto files - the buttons first.
+ * leaves move onto files - the buttons first, then the ways.
  *
  * <ul>
  *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, a wash under the
  *       hand for a mark alone, and clear;</li>
- *   <li><b>writing</b> - the inks: the text's, on inverted, on the accent;</li>
+ *   <li><b>writing</b> - the inks: the text's, on inverted, on the accent; a way's, and a way's under the hand;</li>
  *   <li><b>lines</b> - the hairline;</li>
  *   <li><b>attention</b> - the house's own colour, the accent and its edge, the ring a focused control wears, the
  *       accent's tint on a raised face;</li>
@@ -44,7 +44,7 @@ public record HouseColours() implements ColorSource {
     /** Every palettable colour of the house: one sealed set, so a palette's switch over it is exhaustive. */
     public sealed interface HouseColour permits
             Raised, Ground, Recessed, Inverted, Wash,
-            Text, OnInverted, OnAccent,
+            Text, OnInverted, OnAccent, WayInk, WayHovered,
             Border,
             Title, Accent, AccentEdge, Ring, AccentTint,
             ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, Sheen,
@@ -83,6 +83,10 @@ public record HouseColours() implements ColorSource {
     public record OnInverted() implements Palettable<Base, Writing>, HouseColour {}
     /** The ink written on the accent. */
     public record OnAccent() implements Palettable<Base, Writing>, HouseColour {}
+    /** The ink of a way somewhere - a link: the text's, a fifth faded into what it stands on. */
+    public record WayInk() implements Palettable<Base, Writing>, HouseColour {}
+    /** A way somewhere under the hand: the house's own colour leaning half into the way's ink. */
+    public record WayHovered() implements Palettable<Base, Writing>, HouseColour {}
 
     // ── lines ─────────────────────────────────────────────────────────────
 
@@ -209,7 +213,7 @@ public record HouseColours() implements ColorSource {
         return ReadColors.INSTANCE.read(HouseColours.class, List.of(
                 new Surfaces(), new Writing(), new Lines(), new Attention(), new Shadows(), new Feedback(), new Scales(),
                 new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new Clear(),
-                new Text(), new OnInverted(), new OnAccent(),
+                new Text(), new OnInverted(), new OnAccent(), new WayInk(), new WayHovered(),
                 new Border(),
                 new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new Sheen(),

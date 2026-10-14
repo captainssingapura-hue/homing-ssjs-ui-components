@@ -29,6 +29,8 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.Sheen;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Text;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Title;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Wash;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.WayHovered;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.WayInk;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 /**
@@ -58,6 +60,8 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case Text c -> seed(s.text());
             case OnInverted c -> seed(s.onInverted());
             case OnAccent c -> seed(s.onAccent());
+            case WayInk c -> mix(seed(s.text()), 0.80, CLEAR);
+            case WayHovered c -> mix(seed(s.title()), 0.50, mix(seed(s.text()), 0.80, CLEAR));
             case Border c -> seed(s.border());
             case Title c -> seed(s.title());
             case Accent c -> seed(s.accent());

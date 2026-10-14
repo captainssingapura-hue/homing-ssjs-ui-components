@@ -35,7 +35,7 @@ class WholeHouseFilesTest {
     void baseRulesEveryCasting_inItsFamilysFiles_fromTheModuleThatAddsIt() {
         assertEquals(HOUSE.castings().size(), StyleFiles.INSTANCE.written(HOUSE, Base.INSTANCE).size(),
                 "a rule for each of the whole house's castings, the house's own and every extension's, across the jars");
-        assertEquals(164, HOUSE.castings().size(), "105 components on their own, 59 in a role");
+        assertEquals(166, HOUSE.castings().size(), "106 components on their own, 60 in a role - the brand's mark as its symbol among them");
         assertEquals(21, HOUSE.heads().size(), "the families, each headed at one level");
         assertEquals(45, StyleFiles.INSTANCE.present(Base.INSTANCE).size(), "a file per family the house draws, and one per module adding to it");
         assertEquals(List.of(), StyleFiles.INSTANCE.twice(Base.INSTANCE), "no file given twice, one hiding the other");

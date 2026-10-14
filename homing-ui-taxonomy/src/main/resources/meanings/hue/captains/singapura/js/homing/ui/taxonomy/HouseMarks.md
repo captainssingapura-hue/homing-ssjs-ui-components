@@ -29,6 +29,10 @@ Marks where one step of a run ends and the next begins, on the same line as the 
 
 Says by a light how something is: alive, dormant, broken.
 
+## BrandMark
+
+The brand's own sign beside its name: a square of its colour, until the site gives a logo.
+
 ## Indicator
 
 A small sign of a state: which one is current, which one has the keys.

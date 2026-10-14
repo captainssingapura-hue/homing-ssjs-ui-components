@@ -15,8 +15,8 @@ import java.util.List;
 
 /**
  * The brand: the site's own - its mark and its name in the house's wordmark - and the way home. A
- * branch component, worn in the brand's look: its colour its mark's, its name in the ink of what it
- * stands on.
+ * branch component, worn in the brand's look: its colour its mark's - a brand mark, its symbol - its
+ * name in the ink of what it stands on.
  */
 public record BrandModule() implements DomModule<BrandModule>, ImplFor<HouseControls.Brand> {
 
@@ -32,6 +32,7 @@ public record BrandModule() implements DomModule<BrandModule>, ImplFor<HouseCont
         return ImportsFor.<BrandModule>builder()
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new BrandMarkModule.BrandMark(), new BrandMarkModule.BrandMarkFactory()), BrandMarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark(), new WordmarkModule.WordmarkFactory()), WordmarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .add(new ModuleImports<>(List.of(

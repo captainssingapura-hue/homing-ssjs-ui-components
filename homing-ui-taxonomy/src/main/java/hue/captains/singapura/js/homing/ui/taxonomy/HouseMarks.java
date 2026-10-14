@@ -61,6 +61,12 @@ public final class HouseMarks {
         @Override public Mark parent() { return Mark.INSTANCE; }
     }
 
+    /** The brand's mark: a square of its colour, until a site gives a logo. A part of the brand: it is never alone. */
+    public record BrandMark() implements Component<Mark> {
+        public static final BrandMark INSTANCE = new BrandMark();
+        @Override public Mark parent() { return Mark.INSTANCE; }
+    }
+
     /** A small sign of a state: the current tab, the holder of the keys. */
     public record Indicator() implements Component<Mark> {
         public static final Indicator INSTANCE = new Indicator();

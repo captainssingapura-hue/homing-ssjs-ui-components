@@ -37,6 +37,16 @@
 /* lamp: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
 .styled-lamp {}
 
+/* The brand's mark in the base layer: a square of the accent, until a site gives a logo; every style's alike. */
+.styled-brand-mark {
+    background-color: var(--fp-accent);
+}
+
+/* The brand's mark as symbol in the base layer: a square of the accent, until a site gives a logo; every style's alike. */
+.styled-brand-mark_symbol {
+    background-color: var(--fp-accent);
+}
+
 /* indicator: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
 .styled-indicator {}
 

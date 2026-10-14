@@ -8,9 +8,11 @@
 //     role    one of ROLE - Home, as a site's bar carries it; Standalone unless said
 //   brand.root    the <a>
 //
-// Its colour is its mark's - a square of it, until a site gives a logo - and
-// its name is in the ink of what it stands on. `css` is injected with the
-// styles import; the href manager comes in by its explicit import.
+// Its colour is its mark's - a brand mark of its own, cast as its symbol: a
+// square of it, until a site gives a logo - and its name is in the ink of what
+// it stands on. It wears its casting whole; its parts wear theirs. `css` is
+// injected with the styles import; the href manager comes in by its explicit
+// import.
 // =============================================================================
 
 const _brandOwner = Object.freeze({ toString: () => "brand" });
@@ -25,14 +27,12 @@ class Brand {
         var look = new Look(Brand, role || ROLE.STANDALONE);
         var a = branch.createElement("brand", "a");
         css.addClass(a, el_brand);
-        look.wear(a, { except: ["color-background"] });
+        look.wear(a);
         HrefManagerInstance.set(a, p.home || "/");
-        var mark = branch.createElement("mark", "span");
-        css.addClass(mark, el_brand_mark);
-        look.wear(mark, { only: ["color-background"] });   // its colour is its mark's
-        mark.setAttribute("aria-hidden", "true");
+        var mark = new BrandMark(BrandMarkFactory.create(branch, "mark"), {}, ROLE.SYMBOL);   // its colour is its mark's
+        css.addClass(mark.el, el_brand_mark);
         var word = new Wordmark(WordmarkFactory.create(branch, "word"), { text: p.label || "site" }, ROLE.NAME);
-        a.appendChild(mark);
+        a.appendChild(mark.el);
         a.appendChild(word.el);
         this.root = a;
     }

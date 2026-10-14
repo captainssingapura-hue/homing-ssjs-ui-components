@@ -43,6 +43,7 @@ public record UiElementsComponents() implements C0_Components<UiElementsComponen
                 ComponentEntry.of(this, new ScrimModule.Scrim()),
                 ComponentEntry.of(this, new SeparatorModule.Separator()),
                 ComponentEntry.of(this, new DelimiterModule.Delimiter()),
+                ComponentEntry.of(this, new BrandMarkModule.BrandMark()),
                 ComponentEntry.of(this, new SummaryCardModule.SummaryCard()),
                 ComponentEntry.of(this, new SliderModule.Slider()),
                 ComponentEntry.of(this, new SliderGroupModule.SliderGroup()),

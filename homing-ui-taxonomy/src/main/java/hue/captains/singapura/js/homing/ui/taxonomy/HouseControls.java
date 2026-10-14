@@ -36,7 +36,14 @@ public final class HouseControls {
     private static final List<EventType<?>> CLICKED = List.of(HouseEvents.Click.INSTANCE);
 
     /** A crumb's state: whether it is the step that is this page. */
-    private static final List<StateType<?>> A_CRUMB = List.of(HouseStates.Current.INSTANCE);
+    private static final List<StateType<?>> A_CRUMB = List.of(HouseStates.Current.INSTANCE,
+            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
+
+    /** What a way somewhere has: the browser's - the pointer over it, its focus shown. */
+    private static final List<StateType<?>> A_WAY = List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
+
+    /** What the brand has: its focus shown. */
+    private static final List<StateType<?>> A_BRAND = List.of(HouseStates.Focused.INSTANCE);
 
     // ── buttons ──────────────────────────────────────────────────────────
 
@@ -146,6 +153,7 @@ public final class HouseControls {
     public record Link() implements Component<Way> {
         public static final Link INSTANCE = new Link();
         @Override public Way parent() { return Way.INSTANCE; }
+        @Override public List<StateType<?>> states() { return A_WAY; }
         @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
@@ -208,8 +216,10 @@ public final class HouseControls {
         public static final Brand INSTANCE = new Brand();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Way parent() { return Way.INSTANCE; }
+        @Override public List<StateType<?>> states() { return A_BRAND; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Wordmark.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
+            return List.of(DSL.part(HouseMarks.BrandMark.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
+                           DSL.part(HouseText.Wordmark.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
         }
     }
 
