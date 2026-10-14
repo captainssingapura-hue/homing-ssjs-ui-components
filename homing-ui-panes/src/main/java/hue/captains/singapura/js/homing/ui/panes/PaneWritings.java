@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * The panes' words ({@link PaneWords}) written in Base, which every house style is written over: so every
- * style draws them, each as a symbol of the text's own font, in the ink the mark stands on, until a style
+ * style draws them, each as a symbol of the text's own font, in the colour the mark is given, until a style
  * writes one otherwise.
  */
 public record PaneWritings() implements WritingExtension {

@@ -37,7 +37,7 @@ class Icon {
         this.role = role == null ? ROLE.STANDALONE : role;
         css.addClass(el, ic_base);
         this._look = new Look(Icon, this.role);
-        this._look.wear(el);   // its casting's class: the glyph in the ink it stands on; the keys mark's, the accent carried in by its degree
+        this._look.wear(el);   // its casting's class: the glyph in the colour it is given; the keys mark's, the accent carried in by its degree
         el.setAttribute("aria-hidden", "true");
         if (props && props.name != null) this.set(props.name);
     }

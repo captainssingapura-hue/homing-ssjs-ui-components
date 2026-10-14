@@ -62,7 +62,7 @@ class PreferencesButton {
         var btn = branch.createElement("prefsBtn", "button");
         btn.type = "button";
         css.addClass(btn, mpa_prefs_btn);
-        new Look(Object.freeze({ LEAF: "preferences-button" }), ROLE.STANDALONE).wear(btn);   // outlined in the ink of the bar it stands on
+        new Look(Object.freeze({ LEAF: "preferences-button" }), ROLE.STANDALONE).wear(btn);   // outlined in the colour of the bar that holds it
         btn.setAttribute("aria-haspopup", "dialog");
         var mark = branch.createElement("prefsBtnMark", "span");
         mark.setAttribute("aria-hidden", "true");

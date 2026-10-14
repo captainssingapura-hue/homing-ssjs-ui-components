@@ -1,5 +1,5 @@
 // =============================================================================
-// Tick — A scale's tick: a short line in the ink it stands on, its place on the scale its owner's.
+// Tick — A scale's tick: a short line in the colour it is given, its place on the scale its owner's.
 // A simple component on a <div>, in the tick's look.
 //
 //   var tick = new Tick(branch.elementMaker("tick-0-line"), {}, ROLE.NOTCH);

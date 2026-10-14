@@ -1,6 +1,6 @@
 /* The detent in neumorphism: a notch a value may snap to - a line across the groove, shown while what rests on it is in the hand. Whole: every property its look has (D9). */
 .styled-detent {
-    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+    --current-muted: color-mix(in oklab, currentColor 60%, transparent);
 
     color: inherit;
     background-color: transparent;
@@ -26,13 +26,13 @@
     cursor: auto;
 
     &.styled-detent--dragging {
-        background-color: var(--ink-muted);
+        background-color: var(--current-muted);
     }
 }
 
 /* The detent as rest in neumorphism: a notch a value may snap to - a line across the groove, shown while what rests on it is in the hand. Whole: every property its look has (D9). */
 .styled-detent_rest {
-    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+    --current-muted: color-mix(in oklab, currentColor 60%, transparent);
 
     color: inherit;
     background-color: transparent;
@@ -58,16 +58,16 @@
     cursor: auto;
 
     &.styled-detent_rest--dragging {
-        background-color: var(--ink-muted);
+        background-color: var(--current-muted);
     }
 }
 
-/* The tick in neumorphism: a scale's tick - a short line in the ink it stands on. Whole: every property its look has (D9). */
+/* The tick in neumorphism: a scale's tick - a short line in the colour it is given. Whole: every property its look has (D9). */
 .styled-tick {
-    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+    --current-muted: color-mix(in oklab, currentColor 60%, transparent);
 
     color: inherit;
-    background-color: var(--ink-muted);
+    background-color: var(--current-muted);
     border-color: currentColor;
     outline-color: currentColor;
     border-radius: 0;
@@ -90,12 +90,12 @@
     cursor: auto;
 }
 
-/* The tick as notch in neumorphism: a scale's tick - a short line in the ink it stands on. Whole: every property its look has (D9). */
+/* The tick as notch in neumorphism: a scale's tick - a short line in the colour it is given. Whole: every property its look has (D9). */
 .styled-tick_notch {
-    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+    --current-muted: color-mix(in oklab, currentColor 60%, transparent);
 
     color: inherit;
-    background-color: var(--ink-muted);
+    background-color: var(--current-muted);
     border-color: currentColor;
     outline-color: currentColor;
     border-radius: 0;
@@ -118,13 +118,13 @@
     cursor: auto;
 }
 
-/* The separator in neumorphism: a line between groups - its foot ruled in the ink it stands on. Whole: every property its look has (D9). */
+/* The separator in neumorphism: a line between groups - its foot ruled in the colour it is given. Whole: every property its look has (D9). */
 .styled-separator {
-    --ink-hairline: color-mix(in oklab, currentColor 30%, transparent);
+    --current-hairline: color-mix(in oklab, currentColor 30%, transparent);
 
     color: inherit;
     background-color: transparent;
-    border-color: var(--ink-hairline);
+    border-color: var(--current-hairline);
     outline-color: currentColor;
     border-radius: 0;
     box-shadow: none;
@@ -146,11 +146,10 @@
 
 /* The lamp in neumorphism: a light that says how something is - quiet at rest, lit in the accent, broken in danger's colour. Whole: every property its look has (D9). */
 .styled-lamp {
-    --ink-quiet: color-mix(in oklab, currentColor 70%, transparent);
-    --fixed-on-danger: #ffffff;
+    --current-quiet: color-mix(in oklab, currentColor 70%, transparent);
     --fixed-danger: #dc2626;
 
-    color: var(--ink-quiet);
+    color: var(--current-quiet);
     background-color: transparent;
     border-color: transparent;
     outline-color: currentColor;
@@ -178,7 +177,7 @@
     }
 
     &.styled-lamp--invalid {
-        color: var(--fixed-on-danger);
+        color: var(--fp-on-danger);
         background-color: var(--fixed-danger);
         border-color: var(--fixed-danger);
     }

@@ -61,7 +61,7 @@ public final class HouseFamilies {
     /**
      * The marks each style draws its own way: a separator's weight, a lamp's corner, a detent's and a tick's measure. The
      * others - an icon, the sign between steps, an indicator, where a dragged thing lands, a boundary - are Base's
-     * alone, every style's alike, their colours the palette's or the ink they stand on.
+     * alone, every style's alike, their colours the palette's or the colour they are given.
      */
     public static final Set<Component<?>> MARKS = Set.of(HouseMarks.Separator.INSTANCE, HouseMarks.Lamp.INSTANCE,
             HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE);

@@ -239,11 +239,9 @@
     --fixed-success-tint: rgb(34 139 34 / 0.12);
     --fixed-clear: transparent;
     --fixed-danger-tint: rgb(220 38 38 / 0.1);
-    --fixed-success-ink: #1b5e20;
-    --fixed-danger-ink: #7f1d1d;
     --fixed-danger-edge: rgb(220 38 38 / 0.35);
     --along-danger-ground: color-mix(in oklab, var(--fixed-danger-tint) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--fixed-clear) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--fixed-success-tint)));
-    --along-danger-writing: color-mix(in oklab, var(--fixed-danger-ink) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--fp-text) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--fixed-success-ink)));
+    --along-danger-writing: color-mix(in oklab, var(--fp-danger-ink) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--fp-text) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--fp-success-ink)));
 
     color: var(--along-danger-writing);
     background-color: var(--along-danger-ground);
@@ -293,10 +291,9 @@
     --fixed-success-tint: rgb(34 139 34 / 0.12);
     --fixed-clear: transparent;
     --fixed-warning-tint: rgb(202 138 4 / 0.12);
-    --fixed-warning-ink: #713f12;
     --along-warning-ground: color-mix(in oklab, var(--fixed-warning-tint) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--fixed-clear) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--fixed-success-tint)));
 
-    color: var(--fixed-warning-ink);
+    color: var(--fp-warning-ink);
     background-color: var(--along-warning-ground);
     border-color: var(--fp-border);
     border-width: 1.5px;
@@ -344,10 +341,9 @@
     --fixed-danger-tint: rgb(220 38 38 / 0.1);
     --fixed-clear: transparent;
     --fixed-success-tint: rgb(34 139 34 / 0.12);
-    --fixed-success-ink: #1b5e20;
     --along-success-ground: color-mix(in oklab, var(--fixed-success-tint) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--fixed-clear) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--fixed-danger-tint)));
 
-    color: var(--fixed-success-ink);
+    color: var(--fp-success-ink);
     background-color: var(--along-success-ground);
     border-color: var(--fp-border);
     border-width: 1.5px;
@@ -440,7 +436,7 @@
     }
 }
 
-/* The icon button in editorial: an icon alone: no frame, in the ink of what holds it, washed under the hand. Whole: every property its look has (D9). */
+/* The icon button in editorial: an icon alone: no frame, in the colour of what holds it, washed under the hand. Whole: every property its look has (D9). */
 .styled-icon-button {
     color: inherit;
     background-color: transparent;
@@ -480,7 +476,7 @@
     }
 }
 
-/* The icon button as add, in editorial: an icon alone: no frame, in the ink of what holds it, washed under the hand. Whole: every property its look has (D9). */
+/* The icon button as add, in editorial: an icon alone: no frame, in the colour of what holds it, washed under the hand. Whole: every property its look has (D9). */
 .styled-icon-button_add {
     color: inherit;
     background-color: transparent;
@@ -524,7 +520,6 @@
 .styled-close-button {
     --fixed-danger: #dc2626;
     --fixed-danger-pressed: #b91c1c;
-    --fixed-on-danger: #ffffff;
 
     color: inherit;
     background-color: transparent;
@@ -548,7 +543,7 @@
 
     &:hover {
         background-color: var(--fixed-danger);
-        color: var(--fixed-on-danger);
+        color: var(--fp-on-danger);
     }
 
     &:focus-visible {
@@ -567,7 +562,7 @@
 
     &:active {
         background-color: var(--fixed-danger-pressed);
-        color: var(--fixed-on-danger);
+        color: var(--fp-on-danger);
     }
 }
 
@@ -575,7 +570,6 @@
 .styled-close-button_close {
     --fixed-danger: #dc2626;
     --fixed-danger-pressed: #b91c1c;
-    --fixed-on-danger: #ffffff;
 
     color: inherit;
     background-color: transparent;
@@ -599,7 +593,7 @@
 
     &:hover {
         background-color: var(--fixed-danger);
-        color: var(--fixed-on-danger);
+        color: var(--fp-on-danger);
     }
 
     &:focus-visible {
@@ -618,6 +612,6 @@
 
     &:active {
         background-color: var(--fixed-danger-pressed);
-        color: var(--fixed-on-danger);
+        color: var(--fp-on-danger);
     }
 }

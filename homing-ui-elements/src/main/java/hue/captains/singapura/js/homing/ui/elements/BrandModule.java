@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * The brand: the site's own - its mark and its name in the house's wordmark - and the way home. A
  * branch component, worn in the brand's look: its colour its mark's - a brand mark, its symbol - its
- * name in the ink of what it stands on.
+ * name in the colour of what holds it.
  */
 public record BrandModule() implements DomModule<BrandModule>, ImplFor<HouseControls.Brand> {
 

@@ -3,8 +3,8 @@ package hue.captains.singapura.js.homing.ui.styles;
 import hue.captains.singapura.js.homing.design.color.ColorScale;
 import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
+import hue.captains.singapura.js.homing.design.color.CurrentColor;
 import hue.captains.singapura.js.homing.design.color.Fixed;
-import hue.captains.singapura.js.homing.design.color.Ink;
 import hue.captains.singapura.js.homing.design.color.L1_ColorBranch;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorSource;
@@ -21,16 +21,19 @@ import java.util.List;
  * <ul>
  *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, the text's ink
  *       washed thin at each strength - under the hand for a mark alone, under code, under a pill - and clear;</li>
- *   <li><b>writing</b> - the inks: the text's, and faded; on inverted, on the accent; a way's under the hand; a
- *       heading's, a kicker's;</li>
- *   <li><b>lines</b> - the hairline; a groove's edge;</li>
+ *   <li><b>inks</b> - what is written and drawn in, each the palette's, one for each purpose: the text's, and faded;
+ *       on inverted, on the accent, on danger; a way's under the hand; a heading's, a kicker's; danger's, warning's and
+ *       success's (D32);</li>
+ *   <li><b>lines</b> - the hairline; a groove's edge; a line under the hand;</li>
+ *   <li><b>current</b> - CSS's currentColor, the colour an element is given, at a share: for what does not care - a
+ *       separator's line, a tick, a lamp at rest. No ink: an ink is the palette's (D31, D32);</li>
  *   <li><b>attention</b> - the house's own colour, the accent and its edge, the ring a focused control wears, the
  *       accent's tint on a raised face, and washed thin under a badge; the keys' marks - a candidate for them, the keys
  *       lent - in the accent;</li>
  *   <li><b>shadows</b> - what a box casts, at each strength the styles draw: the shade of the inverted layer, the sheen
  *       of the raised one, the glow of the house's colour;</li>
  *   <li><b>feedback</b> - danger, warning and success, the same in every house palette: fixed - a badge's wash of each
- *       among them;</li>
+ *       among them; their inks are the inks';</li>
  *   <li><b>scales</b> - what a coloured button's ground and ink move along, by its degree on the colour axis: the word at
  *       1, neutral at 0, the meaning turned the other way at -1.</li>
  * </ul>
@@ -48,15 +51,16 @@ public record HouseColours() implements ColorSource {
     /** Every palettable colour of the house: one sealed set, so a palette's switch over it is exhaustive. */
     public sealed interface HouseColour permits
             Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft,
-            Text, TextFaded, OnInverted, OnAccent, WayHovered, HeadingInk, KickerInk,
+            Text, TextFaded, OnInverted, OnAccent, OnDanger, WayHovered, HeadingInk, KickerInk, DangerInk, WarningInk, SuccessInk,
             Border, GrooveEdge, LineHovered,
             Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
             ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, Sheen,
             GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
 
     public record Surfaces() implements L1_ColorBranch<Base> {}
-    public record Writing() implements L1_ColorBranch<Base> {}
+    public record Inks() implements L1_ColorBranch<Base> {}
     public record Lines() implements L1_ColorBranch<Base> {}
+    public record Current() implements L1_ColorBranch<Base> {}
     public record Attention() implements L1_ColorBranch<Base> {}
     public record Shadows() implements L1_ColorBranch<Base> {}
     public record Feedback() implements L1_ColorBranch<Base> {}
@@ -83,22 +87,30 @@ public record HouseColours() implements ColorSource {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("transparent"); }
     }
 
-    // ── writing ───────────────────────────────────────────────────────────
+    // ── inks: what is written and drawn in, each the palette's (D32) ──────
 
     /** The ink of what is written. */
-    public record Text() implements Palettable<Base, Writing>, HouseColour {}
+    public record Text() implements Palettable<Base, Inks>, HouseColour {}
     /** The text's ink, a fifth faded into what it stands on: a quieter line - a caption, a lede - and a way somewhere. */
-    public record TextFaded() implements Palettable<Base, Writing>, HouseColour {}
+    public record TextFaded() implements Palettable<Base, Inks>, HouseColour {}
     /** The ink written on the house's own colour and on inverted: the primary button's, the chosen tab's. */
-    public record OnInverted() implements Palettable<Base, Writing>, HouseColour {}
+    public record OnInverted() implements Palettable<Base, Inks>, HouseColour {}
     /** The ink written on the accent. */
-    public record OnAccent() implements Palettable<Base, Writing>, HouseColour {}
+    public record OnAccent() implements Palettable<Base, Inks>, HouseColour {}
     /** A way somewhere under the hand: the house's own colour leaning half into the faded text a way is written in. */
-    public record WayHovered() implements Palettable<Base, Writing>, HouseColour {}
+    public record WayHovered() implements Palettable<Base, Inks>, HouseColour {}
     /** A heading's ink: the house's own colour leaning half into the text's. */
-    public record HeadingInk() implements Palettable<Base, Writing>, HouseColour {}
+    public record HeadingInk() implements Palettable<Base, Inks>, HouseColour {}
     /** A kicker's ink: the accent's edge leaning half into the text's. */
-    public record KickerInk() implements Palettable<Base, Writing>, HouseColour {}
+    public record KickerInk() implements Palettable<Base, Inks>, HouseColour {}
+    /** The ink written on danger. */
+    public record OnDanger() implements Palettable<Base, Inks>, HouseColour {}
+    /** Danger's ink: words that warn of a loss. */
+    public record DangerInk() implements Palettable<Base, Inks>, HouseColour {}
+    /** Warning's ink. */
+    public record WarningInk() implements Palettable<Base, Inks>, HouseColour {}
+    /** Success's ink. */
+    public record SuccessInk() implements Palettable<Base, Inks>, HouseColour {}
 
     // ── lines ─────────────────────────────────────────────────────────────
 
@@ -109,16 +121,16 @@ public record HouseColours() implements ColorSource {
     /** A line under the hand: the accent half into the border - a boundary the hand may move. */
     public record LineHovered() implements Palettable<Base, Lines>, HouseColour {}
 
-    // ── inks: a share of what the element stands on (D31) ─────────────────
+    // ── current: CSS's currentColor at a share, for what does not care (D31, D32) ──
 
-    /** The ink whole: a knot a colour of meaning is mixed into, by the element's degree. */
-    public record Whole() implements Ink<Base, Writing> { @Override public double share() { return 1; } }
-    /** At 70%: words said quietly - a lamp at rest. */
-    public record Quiet() implements Ink<Base, Writing> { @Override public double share() { return 0.70; } }
+    /** The whole of it: a knot a colour of meaning is mixed into, by the element's degree. */
+    public record Whole() implements CurrentColor<Base, Current> { @Override public double share() { return 1; } }
+    /** At 70%: a lamp at rest. */
+    public record Quiet() implements CurrentColor<Base, Current> { @Override public double share() { return 0.70; } }
     /** At 60%: a small mark's - the sign between a trail's steps, a scale's tick, a detent shown. */
-    public record Muted() implements Ink<Base, Lines> { @Override public double share() { return 0.60; } }
+    public record Muted() implements CurrentColor<Base, Current> { @Override public double share() { return 0.60; } }
     /** At 30%: a line between groups - a separator's. */
-    public record Hairline() implements Ink<Base, Lines> { @Override public double share() { return 0.30; } }
+    public record Hairline() implements CurrentColor<Base, Current> { @Override public double share() { return 0.30; } }
 
     // ── attention ─────────────────────────────────────────────────────────
 
@@ -198,10 +210,6 @@ public record HouseColours() implements ColorSource {
     public record DangerPressed() implements Fixed<Base, Feedback> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("#B91C1C"); }
     }
-    /** The ink written on danger. */
-    public record OnDanger() implements Fixed<Base, Feedback> {
-        @Override public ConcreteColor color() { return new ConcreteColor.Srgb("#FFFFFF"); }
-    }
     /** Danger's tint: a danger button's ground. */
     public record DangerTint() implements Fixed<Base, Feedback> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(220, 38, 38, .10)"); }
@@ -210,17 +218,9 @@ public record HouseColours() implements ColorSource {
     public record DangerEdge() implements Fixed<Base, Feedback> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(220, 38, 38, .35)"); }
     }
-    /** Danger's ink. */
-    public record DangerInk() implements Fixed<Base, Feedback> {
-        @Override public ConcreteColor color() { return new ConcreteColor.Srgb("#7F1D1D"); }
-    }
     /** Warning's tint. */
     public record WarningTint() implements Fixed<Base, Feedback> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(202, 138, 4, .12)"); }
-    }
-    /** Warning's ink. */
-    public record WarningInk() implements Fixed<Base, Feedback> {
-        @Override public ConcreteColor color() { return new ConcreteColor.Srgb("#713F12"); }
     }
     /** Success's tint. */
     public record SuccessTint() implements Fixed<Base, Feedback> {
@@ -237,10 +237,6 @@ public record HouseColours() implements ColorSource {
     /** Success's wash, at 14%: a success badge's ground. */
     public record SuccessWash() implements Fixed<Base, Feedback> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(34, 139, 34, .14)"); }
-    }
-    /** Success's ink. */
-    public record SuccessInk() implements Fixed<Base, Feedback> {
-        @Override public ConcreteColor color() { return new ConcreteColor.Srgb("#1B5E20"); }
     }
 
     // ── scales: a coloured button's ground and ink, by its degree ──────────
@@ -270,7 +266,7 @@ public record HouseColours() implements ColorSource {
         @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new SuccessTint(), -1), new Knot<>(new Clear(), 0), new Knot<>(new WarningTint(), 1)); }
     }
     /** The success button's ground: danger's tint turned the other way, nothing at 0, success's tint at 1. */
-    /** The keys mark's ink: its holder's at rest, the accent carried in by its degree - part of the way on a bar, whole in a tab. */
+    /** The keys mark's colour: the colour it is given at rest, the accent carried in by its degree - part of the way on a bar, whole in a tab. */
     public record KeysMark() implements ColorScale<Base, Scales> {
         @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new Whole(), -1), new Knot<>(new Whole(), 0), new Knot<>(new Accent(), 1)); }
     }
@@ -280,17 +276,18 @@ public record HouseColours() implements ColorSource {
 
     @Override public ColorTree read() {
         return ReadColors.INSTANCE.read(HouseColours.class, List.of(
-                new Surfaces(), new Writing(), new Lines(), new Attention(), new Shadows(), new Feedback(), new Scales(),
+                new Surfaces(), new Inks(), new Lines(), new Current(), new Attention(), new Shadows(), new Feedback(), new Scales(),
                 new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new Clear(),
                 new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
+                new OnDanger(), new DangerInk(), new WarningInk(), new SuccessInk(),
                 new Border(), new GrooveEdge(), new LineHovered(),
                 new Whole(), new Quiet(), new Muted(), new Hairline(),
                 new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentWash(), new AccentWashFaint(), new AccentWashLight(), new AccentWashSoft(), new AccentWashStrong(), new KeysCandidate(), new KeysLent(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new Sheen(),
                 new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),
-                new Danger(), new DangerPressed(), new OnDanger(), new DangerTint(), new DangerEdge(), new DangerInk(),
+                new Danger(), new DangerPressed(), new DangerTint(), new DangerEdge(),
                 new DangerWash(), new WarningWash(), new SuccessWash(),
-                new WarningTint(), new WarningInk(), new SuccessTint(), new SuccessInk(),
+                new WarningTint(), new SuccessTint(),
                 new PrimaryGround(), new PrimaryInk(), new SecondaryGround(), new DangerGround(), new DangerWriting(),
                 new WarningGround(), new SuccessGround(), new KeysMark()));
     }

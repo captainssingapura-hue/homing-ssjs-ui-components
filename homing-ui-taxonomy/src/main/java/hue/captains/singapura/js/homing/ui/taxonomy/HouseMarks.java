@@ -23,7 +23,7 @@ public final class HouseMarks {
     public record Icon() implements Component<Mark> {
         public static final Icon INSTANCE = new Icon();
         @Override public Mark parent() { return Mark.INSTANCE; }
-        /** Its colour, moved by its degree: the keys mark carries the accent part of the way into the ink it stands on. */
+        /** Its colour, moved by its degree: the keys mark carries the accent part of the way into the colour it is given. */
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
 

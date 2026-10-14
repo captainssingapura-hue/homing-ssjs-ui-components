@@ -48,7 +48,7 @@
     }
 }
 
-/* The crumb in editorial: a step of a trail back, in the ink of what it stands on; the page itself the boldest. */
+/* The crumb in editorial: a step of a trail back, in the colour of what holds it; the page itself the boldest. */
 .styled-crumb {
     color: inherit;
     background-color: transparent;
@@ -71,7 +71,7 @@
     }
 }
 
-/* The crumb as step in editorial: a step of a trail back, in the ink of what it stands on; the page itself the boldest. */
+/* The crumb as step in editorial: a step of a trail back, in the colour of what holds it; the page itself the boldest. */
 .styled-crumb_step {
     color: inherit;
     background-color: transparent;
@@ -94,7 +94,7 @@
     }
 }
 
-/* The brand in editorial: the site's own, its mark beside its name, in the ink of what it stands on - the way home. */
+/* The brand in editorial: the site's own, its mark beside its name, in the colour of what holds it - the way home. */
 .styled-brand {
     color: inherit;
     background-color: transparent;
@@ -110,7 +110,7 @@
     }
 }
 
-/* The brand as home in editorial: the site's own, its mark beside its name, in the ink of what it stands on - the way home. */
+/* The brand as home in editorial: the site's own, its mark beside its name, in the colour of what holds it - the way home. */
 .styled-brand_home {
     color: inherit;
     background-color: transparent;
