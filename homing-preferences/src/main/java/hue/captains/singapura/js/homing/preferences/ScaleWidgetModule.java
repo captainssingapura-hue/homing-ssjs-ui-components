@@ -1,9 +1,10 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
+import hue.captains.singapura.js.homing.ui.elements.RangeModule;
 import hue.captains.singapura.js.homing.ui.elements.ReadoutModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 
@@ -33,7 +34,8 @@ public record ScaleWidgetModule() implements Widget<Widget._None, ScaleWidgetMod
     @Override
     public ImportsFor<ScaleWidgetModule> imports() {
         return ImportsFor.<ScaleWidgetModule>builder()
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new RangeModule.Range()), RangeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout(), new ReadoutModule.ReadoutFactory()), ReadoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferenceFieldModule.PreferenceField()), PreferenceFieldModule.INSTANCE))

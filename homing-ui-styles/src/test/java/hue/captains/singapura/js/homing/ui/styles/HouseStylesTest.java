@@ -58,12 +58,15 @@ class HouseStylesTest {
             for (Component<?> w : HouseFamilies.WAYS)
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(w)), s.token() + " draws " + w.token() + ": its own focus ring on it");
             assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.BrandMark.INSTANCE)), s.token() + ": the brand's mark is Base's, alike in every style");
+            for (Component<?> i : HouseFamilies.INPUTS)
+                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(i)), s.token() + " draws " + i.token() + ": its own frame and ring");
             for (Component<?> t : HouseFamilies.TEXTS)
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(t)), s.token() + " draws " + t.token() + ": its own faces");
         }
         assertEquals(9, HouseFamilies.BUTTONS.size());
         assertEquals(3, HouseFamilies.WAYS.size());
         assertEquals(18, HouseFamilies.TEXTS.size());
+        assertEquals(6, HouseFamilies.INPUTS.size());
     }
 
     @Test
@@ -71,7 +74,7 @@ class HouseStylesTest {
         var tree = HouseColours.TREE;
         for (ColorPalette<ColorScheme.Base> p : HouseStyles.PALETTES) {
             assertEquals(List.of(), tree.check(p), p.token());
-            assertEquals(34, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge among them");
+            assertEquals(36, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge, the keys' marks among them");
         }
         assertEquals(8, HouseStyles.PALETTES.size());
     }

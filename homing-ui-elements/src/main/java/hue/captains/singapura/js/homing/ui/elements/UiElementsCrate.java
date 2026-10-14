@@ -72,6 +72,12 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(LinkBehaviorModule.INSTANCE),
                 CrateEntry.of(LinkModule.INSTANCE),
                 CrateEntry.of(CrumbModule.INSTANCE),
+                // the browser's own inputs, riding on their elements
+                CrateEntry.of(InputBehaviorsModule.INSTANCE),
+                CrateEntry.of(TextBoxModule.INSTANCE),
+                CrateEntry.of(CheckboxModule.INSTANCE),
+                CrateEntry.of(RangeModule.INSTANCE),
+                CrateEntry.of(SelectModule.INSTANCE),
                 CrateEntry.of(ScrimBehaviorModule.INSTANCE),
                 CrateEntry.of(ScrimModule.INSTANCE),
                 // the marks between things: a line between rows, a sign between steps; the brand's own sign

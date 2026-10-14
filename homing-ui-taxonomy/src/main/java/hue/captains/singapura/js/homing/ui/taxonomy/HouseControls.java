@@ -39,6 +39,19 @@ public final class HouseControls {
     private static final List<StateType<?>> A_CRUMB = List.of(HouseStates.Current.INSTANCE,
             HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
 
+    /** What the browser's own inputs have: they may be off; their focus shown. */
+    private static final List<StateType<?>> AN_INPUT = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Focused.INSTANCE);
+
+    /** What a box ticked, or a switch, has besides: it may be on. */
+    private static final List<StateType<?>> A_CHECK = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Checked.INSTANCE,
+            HouseStates.Focused.INSTANCE);
+
+    /** What is edited: its value changing, the user still at it, and the user done with it. */
+    private static final List<EventType<?>> EDITED = List.of(HouseEvents.Input.INSTANCE, HouseEvents.Commit.INSTANCE);
+
+    /** What is picked: the user done with it. */
+    private static final List<EventType<?>> COMMITTED = List.of(HouseEvents.Commit.INSTANCE);
+
     /** What a way somewhere has: the browser's - the pointer over it, its focus shown. */
     private static final List<StateType<?>> A_WAY = List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
 
@@ -168,24 +181,32 @@ public final class HouseControls {
     /** A value picked along a scale. */
     public record Range() implements Component<Input> {
         public static final Range INSTANCE = new Range();
+        @Override public List<StateType<?>> states() { return AN_INPUT; }
+        @Override public List<EventType<?>> events() { return EDITED; }
         @Override public Input parent() { return Input.INSTANCE; }
     }
 
     /** A value picked from a list that drops down. */
     public record Select() implements Component<Input> {
         public static final Select INSTANCE = new Select();
+        @Override public List<StateType<?>> states() { return AN_INPUT; }
+        @Override public List<EventType<?>> events() { return COMMITTED; }
         @Override public Input parent() { return Input.INSTANCE; }
     }
 
     /** Words the user types: a line of them, or as many as they write - the browser's own editing. */
     public record TextBox() implements Component<Input> {
         public static final TextBox INSTANCE = new TextBox();
+        @Override public List<StateType<?>> states() { return AN_INPUT; }
+        @Override public List<EventType<?>> events() { return EDITED; }
         @Override public Input parent() { return Input.INSTANCE; }
     }
 
     /** One thing on or off, by a mark in a box - the browser's own. */
     public record Checkbox() implements Component<Input> {
         public static final Checkbox INSTANCE = new Checkbox();
+        @Override public List<StateType<?>> states() { return A_CHECK; }
+        @Override public List<EventType<?>> events() { return COMMITTED; }
         @Override public Input parent() { return Input.INSTANCE; }
     }
 
@@ -238,6 +259,8 @@ public final class HouseControls {
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
     public record Switch() implements Component<Input> {
         public static final Switch INSTANCE = new Switch();
+        @Override public List<StateType<?>> states() { return A_CHECK; }
+        @Override public List<EventType<?>> events() { return COMMITTED; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public List<Slot<?>> parts() {

@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * The house's colour tree (RFC 0067, appendix Semantic Colours and Flavours, D16; appendix Two Classes per Leaf): every
  * colour a house leaf's file names, each named for what it is for, in the base scheme. Grown family by family as the
- * leaves move onto files - the buttons first, then the ways, then the text.
+ * leaves move onto files - the buttons first, then the ways, the text and the inputs.
  *
  * <ul>
  *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, the text's ink
@@ -24,7 +24,8 @@ import java.util.List;
  *       heading's, a kicker's;</li>
  *   <li><b>lines</b> - the hairline;</li>
  *   <li><b>attention</b> - the house's own colour, the accent and its edge, the ring a focused control wears, the
- *       accent's tint on a raised face, and washed thin under a badge;</li>
+ *       accent's tint on a raised face, and washed thin under a badge; the keys' marks - a candidate for them, the keys
+ *       lent - in the accent;</li>
  *   <li><b>shadows</b> - what a box casts, at each strength the styles draw: the shade of the inverted layer, the sheen
  *       of the raised one, the glow of the house's colour;</li>
  *   <li><b>feedback</b> - danger, warning and success, the same in every house palette: fixed - a badge's wash of each
@@ -48,7 +49,7 @@ public record HouseColours() implements ColorSource {
             Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft,
             Text, TextFaded, OnInverted, OnAccent, WayHovered, HeadingInk, KickerInk,
             Border,
-            Title, Accent, AccentEdge, Ring, AccentTint, AccentWash,
+            Title, Accent, AccentEdge, Ring, AccentTint, AccentWash, KeysCandidate, KeysLent,
             ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, Sheen,
             GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowStrong, GlowBright, GlowFull {}
 
@@ -117,6 +118,10 @@ public record HouseColours() implements ColorSource {
     public record AccentTint() implements Palettable<Base, Attention>, HouseColour {}
     /** The accent washed thin, at 18%: a badge's ground. */
     public record AccentWash() implements Palettable<Base, Attention>, HouseColour {}
+    /** The keys' mark on a candidate for them: the accent at 45%. */
+    public record KeysCandidate() implements Palettable<Base, Attention>, HouseColour {}
+    /** The keys' mark where they are lent: the accent at 25%. */
+    public record KeysLent() implements Palettable<Base, Attention>, HouseColour {}
 
     // ── shadows: the inverted layer's shade, the raised one's sheen, the house colour's glow, at each strength ──
 
@@ -239,7 +244,7 @@ public record HouseColours() implements ColorSource {
                 new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new Clear(),
                 new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
                 new Border(),
-                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentWash(),
+                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentWash(), new KeysCandidate(), new KeysLent(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new Sheen(),
                 new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowStrong(), new GlowBright(), new GlowFull(),
                 new Danger(), new DangerPressed(), new OnDanger(), new DangerTint(), new DangerEdge(), new DangerInk(),

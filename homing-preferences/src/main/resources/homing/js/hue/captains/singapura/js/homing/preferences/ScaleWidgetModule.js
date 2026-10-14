@@ -2,8 +2,23 @@
 // ScaleWidget — a number in a range. new ScaleWidget(branch, params) → root, dispose
 //   params: { name, label, summary?, default?, min, max, step?, unit? }
 // The store holds the number as a string; the readout shows it with its unit.
-// It follows the store, as its field does.
+// It follows the store, as its field does. Its range is the house's, cast as
+// what adjusts: the readout follows it moving, the field is set when let go.
 // =============================================================================
+
+/** The range moving: the readout follows. */
+class _ScaleMoving {
+    constructor(widget) { this._widget = widget; }
+    canHandle(type) { return type === EVENT.INPUT; }
+    handle(e) { this._widget._readout.text = this._widget._range.value + this._widget._unit; }
+}
+
+/** The range let go: the field set. */
+class _ScaleLetGo {
+    constructor(widget) { this._widget = widget; }
+    canHandle(type) { return type === EVENT.COMMIT; }
+    handle(e) { this._widget._field.set(String(this._widget._range.value)); }
+}
 
 const _scaleOwner = Object.freeze({ toString: () => "scaleWidget" });
 
@@ -16,15 +31,12 @@ class ScaleWidget {
 
         this._readout = new Readout(ReadoutFactory.create(branch, "readout"), {}, ROLE.VALUE);
         css.addClass(this._readout.el, pv_readout);
-        var range = branch.createElement("range", "input");
-        range.type = "range";
-        css.addClass(range, pv_range);
-        new Look(Object.freeze({ LEAF: "range" }), ROLE.ADJUST).wear(range);   // a range, as what adjusts: in the accent, ringed as a control
-        range.min = params.min; range.max = params.max; range.step = params.step || 1;
-        range.setAttribute("aria-label", params.label || params.name);
-        range.addEventListener("input", function () { self._readout.text = range.value + self._unit; });
-        range.addEventListener("change", function () { self._field.set(String(range.value)); });
-        this._field.hold(range);
+        var range = new Range(branch.elementMaker("range"), { min: params.min, max: params.max, step: params.step || 1 }, ROLE.ADJUST);   // what adjusts
+        css.addClass(range.el, pv_range);
+        range.el.setAttribute("aria-label", params.label || params.name);
+        range.setOnInput(new _ScaleMoving(this));
+        range.setOnCommit(new _ScaleLetGo(this));
+        this._field.hold(range.el);
         this._field.hold(this._readout.el);
         this._range = range;
         this.root = this._field.root;

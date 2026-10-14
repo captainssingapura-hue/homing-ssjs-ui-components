@@ -1,0 +1,75 @@
+/* The select as what in neo-futurism: a value picked from a list that drops down, raised off the page. Whole: every property its look has (D9). */
+.styled-select_what {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    outline-color: currentColor;
+    border-radius: 2px;
+    box-shadow: none;
+    border-width: 1px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: calc(4px * pow(1.25, var(--size)));
+    padding-inline: calc(8px * pow(1.25, var(--size)));
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    text-decoration-line: none;
+    transition: border-color 140ms ease, outline-color 140ms ease;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline-color: var(--fp-ring);
+        outline-width: 1px;
+        outline-style: solid;
+        outline-offset: -1px;
+    }
+
+    &.styled-select_what--disabled {
+        box-shadow: none;
+        transform: none;
+        opacity: .4;
+        cursor: not-allowed;
+    }
+}
+
+/* The select as how in neo-futurism: a value picked from a list that drops down, raised off the page. Whole: every property its look has (D9). */
+.styled-select_how {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    outline-color: currentColor;
+    border-radius: 2px;
+    box-shadow: none;
+    border-width: 1px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: calc(4px * pow(1.25, var(--size)));
+    padding-inline: calc(8px * pow(1.25, var(--size)));
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    text-decoration-line: none;
+    transition: border-color 140ms ease, outline-color 140ms ease;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline-color: var(--fp-ring);
+        outline-width: 1px;
+        outline-style: solid;
+        outline-offset: -1px;
+    }
+
+    &.styled-select_how--disabled {
+        box-shadow: none;
+        transform: none;
+        opacity: .4;
+        cursor: not-allowed;
+    }
+}

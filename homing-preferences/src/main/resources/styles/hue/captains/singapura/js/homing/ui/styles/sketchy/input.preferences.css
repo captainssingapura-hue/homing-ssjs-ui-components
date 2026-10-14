@@ -1,0 +1,77 @@
+/* The range as adjust in sketchy: a value along a scale, the browser's own, in the accent. Whole: every property its look has (D9). */
+.styled-range_adjust {
+    color: var(--fp-accent);
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    text-decoration-line: none;
+    transition: none;
+    cursor: pointer;
+    accent-color: currentColor;
+
+    &:focus-visible {
+        outline-color: var(--fp-ring);
+        outline-width: 2px;
+        outline-style: dashed;
+        outline-offset: -3px;
+    }
+
+    &.styled-range_adjust--disabled {
+        box-shadow: none;
+        transform: none;
+        opacity: .5;
+        cursor: not-allowed;
+    }
+}
+
+/* The switch as toggle in sketchy: a setting on or off - its frame; its groove and knob are their own families'. Whole: every property its look has (D9). */
+.styled-switch_toggle {
+    color: inherit;
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    gap: 12px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    text-decoration-line: none;
+    transition: none;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline-color: var(--fp-ring);
+        outline-width: 2px;
+        outline-style: dashed;
+        outline-offset: -3px;
+    }
+
+    &.styled-switch_toggle--disabled {
+        box-shadow: none;
+        transform: none;
+        opacity: .5;
+        cursor: not-allowed;
+    }
+}

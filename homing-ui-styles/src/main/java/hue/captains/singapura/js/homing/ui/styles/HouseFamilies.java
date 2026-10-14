@@ -33,8 +33,13 @@ public final class HouseFamilies {
             HouseText.Kicker.INSTANCE, HouseText.Caption.INSTANCE, HouseText.Lede.INSTANCE, HouseText.Readout.INSTANCE,
             HouseText.Badge.INSTANCE, HouseText.Pill.INSTANCE, HouseText.Wordmark.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, then the text. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS);
+    /** The inputs: the browser's own and the house's - their frames, faces and rings; the switch's and slider's parts their own families'. */
+    public static final Set<Component<?>> INPUTS = Set.of(
+            HouseControls.TextBox.INSTANCE, HouseControls.Checkbox.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE,
+            HouseControls.Switch.INSTANCE, HouseControls.Slider.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, then the inputs. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {
