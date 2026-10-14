@@ -48,7 +48,7 @@ class SliderGroup {
         var root = branch.createElement("group", "div");
         css.addClass(root, el_slider_group);
         var look = new Look(SliderGroup, ROLE.STANDALONE);   // framed as a card is; ringed while it holds the keys (the steward's data-keys)
-        look.wear(root, { except: ["affordance-cursor"] });
+        look.wear(root);   // its root its leaf whole (RFC 0067, D17); its head and body leaves of their own when the family moves
         root.setAttribute("role", "group");
         this.root = root;
         var header = branch.createElement("header", "div");
@@ -75,7 +75,7 @@ class SliderGroup {
                 granted: function () { self._held = true; },   // its ring is the steward's mark on the root
                 taken: function () { self._held = false; }
             });
-            this._offKeys = Keys.claimOn(root, this._kb, this._kbId);
+            this._offKeys = Keys.claimOn(root, this._kb, this._kbId, new Look(SliderGroup, ROLE.STANDALONE).keys());
         }
         // the header: a press makes the group the holder (the convention's, on the root) and
         // puts the focus on the current knob; the default kept off so the press does not blur it

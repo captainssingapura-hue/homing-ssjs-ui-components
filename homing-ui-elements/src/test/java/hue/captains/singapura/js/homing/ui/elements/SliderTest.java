@@ -89,7 +89,7 @@ class SliderTest extends JsModuleTestBase {
         assertTrue(eval("detent.has('el_slider_detent') && knob.has('el_slider_knob')").asBoolean());
         // its look: its leaf's class on its root; its parts, played for an owner not yet named, and the slices of the old
         // look, wear nothing styled until the slider's family moves onto files (RFC 0067, Two Classes per Leaf, phase 5)
-        assertTrue(eval("!s.root.has('styled-slider') && !s.root.has('slider__size-inset')").asBoolean(), "its root, worn by a slice of the old look: nothing styled yet (D17)");
+        assertTrue(eval("s.root.has('styled-slider') && !s.root.has('slider__size-inset')").asBoolean(), "its root, its leaf whole (D17); its rail a leaf of its own when the family moves");
         assertTrue(eval("!rail.children[0].has('groove_span__color-background') && !knob.has('knob_thumb__size-extent')").asBoolean(),
                 "the old look's classes, gone");
         assertTrue(eval("mark.has('ic_base') && mark.has('ic_grip')").asBoolean(), "a grip on the knob unless the slider says what it sets");

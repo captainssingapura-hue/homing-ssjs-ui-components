@@ -16,6 +16,7 @@
 //     .leaf                             the leaf's description, or null
 //     .wear(el)                         the leaf's class on the element
 //     .show(el, state)                  each axis's reflection written, and each state the leaf lists held
+//     .keys()                           its keys' marks for Keys.claimOn: its leaf and its Keyboard state
 //     .degree(el, name, n)              size, extent or aspect; at rest nothing written
 //     .text(el, words)                  the element's words
 //     .mark(el, word)                   the element's mark: a word of the lexicon - "close" - by its
@@ -71,6 +72,18 @@ class Look {
             if (this.leaf && held && Object.prototype.hasOwnProperty.call(this.leaf.states, held.token))
                 StyledLeaf.hold(el, this.leaf, held.token, state[a]);
         }
+    }
+
+    /**
+     * Its keys' marks, for Keys.claimOn: its leaf and the house's Keyboard state of it, which the steward holds on the
+     * root it enrols while the root holds a mark (D12). None while its leaf is not named; refused when its leaf lists no
+     * Keyboard state, its marks then never to show.
+     */
+    keys() {
+        if (!this.leaf) return null;
+        if (!Object.prototype.hasOwnProperty.call(this.leaf.states, "keyboard"))
+            throw new Error("[Look] " + this.token + " lists no keyboard state: the keys' marks on its root could never show");
+        return Object.freeze({ leaf: this.leaf, state: "keyboard" });
     }
 
     degree(el, name, n) {

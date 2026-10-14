@@ -51,8 +51,6 @@
 const _singleOwner = Object.freeze({ toString: () => "singleTabPane" });
 /** Its bar's leaf: a tab strip, as a pane of many has one - drawn here, with its one chip. */
 const _TAB_STRIP = Object.freeze({ LEAF: "tab-strip" });
-/** What of its look a pane's frame wears: its ground, its ink and its rings. */
-const _SINGLE_LOOK = Object.freeze(["color-background", "color-ink", "shape-outline", "color-outline"]);
 /** What of a strip's look its tail wears - the strip's room - which a bar with no tail leaves off. */
 const _NO_TAIL = Object.freeze(["size-gap", "size-inset"]);
 
@@ -78,7 +76,7 @@ class SingleTabPane {
 
         var root = branch.createElement("pane", "div");
         css.addClass(root, mtp_pane);
-        new Look(SingleTabPane, ROLE.STANDALONE).wear(root, { only: _SINGLE_LOOK });
+        new Look(SingleTabPane, ROLE.STANDALONE).wear(root);   // its root its leaf whole (RFC 0067, D17)
         this.el = root;
 
         // the bar: the dock's strip, holding the chip alone. A press on it moves no native focus by the browser's default
@@ -104,7 +102,7 @@ class SingleTabPane {
 
         var above = opts.focus || focusParty.root;
         this.focus = above.createBranch(opts.focusName != null ? String(opts.focusName) : branch.name, this);
-        this._offKeys = Keys.claimOn(root, this.focus.owner);
+        this._offKeys = Keys.claimOn(root, this.focus.owner, new Look(SingleTabPane, ROLE.STANDALONE).keys());
 
         this._content = branch.createElement("content", "div");
         css.addClass(this._content, mtp_content);

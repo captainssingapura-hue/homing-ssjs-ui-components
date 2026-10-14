@@ -102,7 +102,7 @@ class Slider {
         var root = branch.createElement("slider", "div");
         css.addClass(root, el_slider);
         if (vertical) css.addClass(root, el_slider_vertical);
-        look.wear(root, { except: _ON_THE_RAIL });
+        look.wear(root);   // its root its leaf whole (RFC 0067, D17); the rail a leaf of its own when the family moves
         this.root = root;
         // its texts are the house's, each cast as what it is to the slider: placed by the slider, looking as they are
         this._texts = [];
@@ -197,7 +197,7 @@ class Slider {
         if (p.keyboard) {
             this._kb = p.keyboard;
             this._kbId = this._kb.join(p.keyboardId != null ? String(p.keyboardId) : branch.name, { keyDown: function (ev) { return self.key(ev); } });
-            this._offKeys = Keys.claimOn(this.root, this._kb, this._kbId);
+            this._offKeys = Keys.claimOn(this.root, this._kb, this._kbId, new Look(Slider, ROLE.STANDALONE).keys());
         }
     }
 

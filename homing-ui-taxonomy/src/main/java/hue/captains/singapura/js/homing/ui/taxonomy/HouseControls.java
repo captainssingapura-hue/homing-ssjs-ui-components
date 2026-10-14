@@ -239,6 +239,8 @@ public final class HouseControls {
         public static final Slider INSTANCE = new Slider();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Control parent() { return Control.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Name.INSTANCE).one(),
                            DSL.part(HouseMarks.Groove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),

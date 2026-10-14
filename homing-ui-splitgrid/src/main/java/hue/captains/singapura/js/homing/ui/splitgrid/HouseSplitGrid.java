@@ -3,9 +3,11 @@ package hue.captains.singapura.js.homing.ui.splitgrid;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
+import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
@@ -52,6 +54,8 @@ public record HouseSplitGrid() implements TaxonomyExtension {
         public static final SplitGridMirror INSTANCE = new SplitGridMirror();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Control parent() { return HouseBranches.Control.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
         }

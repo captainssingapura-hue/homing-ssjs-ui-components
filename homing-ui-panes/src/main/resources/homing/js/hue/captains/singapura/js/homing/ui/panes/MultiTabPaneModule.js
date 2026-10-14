@@ -153,9 +153,6 @@
 
 const _paneOwner = Object.freeze({ toString: () => "multiTabPane" });
 
-/** What of its look a pane's frame wears: its ground, its ink and its rings. */
-const _PANE_LOOK = Object.freeze(["color-background", "color-ink", "shape-outline", "color-outline"]);
-
 class MultiTabPane {
     static LEAF = "multi-tab-pane";
 
@@ -191,7 +188,7 @@ class MultiTabPane {
         // ── The frame ─────────────────────────────────────────────────────
         var root = branch.createElement("pane", "div");
         css.addClass(root, mtp_pane);
-        new Look(MultiTabPane, ROLE.STANDALONE).wear(root, { only: _PANE_LOOK });
+        new Look(MultiTabPane, ROLE.STANDALONE).wear(root);   // its root its leaf whole (RFC 0067, D17)
         this.el = root;
 
         this._strip = new TabStrip(branch.createBranch("strip"), {
@@ -205,7 +202,7 @@ class MultiTabPane {
         // unless a member inside is nearer
         var above = opts.focus || focusParty.root;
         this.focus = above.createBranch(opts.focusName != null ? String(opts.focusName) : branch.name, this);
-        this._offKeys = Keys.claimOn(root, this.focus.owner);
+        this._offKeys = Keys.claimOn(root, this.focus.owner, new Look(MultiTabPane, ROLE.STANDALONE).keys());
 
         this._content = branch.createElement("content", "div");
         css.addClass(this._content, mtp_content);

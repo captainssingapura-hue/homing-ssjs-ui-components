@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
+import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 
 import java.util.List;
 
@@ -31,6 +32,8 @@ public final class HouseContainers {
         public static final SummaryCard INSTANCE = new SummaryCard();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Card parent() { return HouseBranches.Card.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
                            DSL.part(HouseText.Badge.INSTANCE).as(HouseSaying.Tag.INSTANCE).optional(),
@@ -46,6 +49,8 @@ public final class HouseContainers {
         public static final SliderGroup INSTANCE = new SliderGroup();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
                            DSL.part(HouseControls.Slider.INSTANCE).as(HouseShaping.Member.INSTANCE).any());
@@ -95,6 +100,8 @@ public final class HouseContainers {
         public static final FloatLayer INSTANCE = new FloatLayer();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Float.INSTANCE).any());
         }

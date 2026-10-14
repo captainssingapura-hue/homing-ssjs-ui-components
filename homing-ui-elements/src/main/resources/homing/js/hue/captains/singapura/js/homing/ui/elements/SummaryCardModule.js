@@ -51,7 +51,7 @@ class SummaryCard {
         var card = branch.createElement("card", "article");
         css.addClass(card, el_card);
         var look = new Look(SummaryCard, ROLE.STANDALONE);   // a card: raised, its measure its own, lifted under the hand
-        look.wear(card, typeof p.onClick === "function" ? undefined : { except: ["affordance-cursor"] });   // pointed at only with an action
+        look.wear(card);   // its root its leaf whole (RFC 0067, D17); pointed at only with an action: a state of its own when the cards move
 
         var head = branch.createElement("head", "header");
         css.addClass(head, el_card_head);
@@ -99,7 +99,7 @@ class SummaryCard {
                 var self = this;
                 this._kb = p.keyboard;
                 this._kbId = this._kb.join(p.keyboardId != null ? String(p.keyboardId) : branch.name, { keyDown: function (ev) { return self.key(ev); } });
-                this._offKeys = Keys.claimOn(card, this._kb, this._kbId);
+                this._offKeys = Keys.claimOn(card, this._kb, this._kbId, new Look(SummaryCard, ROLE.STANDALONE).keys());
             }
         }
 

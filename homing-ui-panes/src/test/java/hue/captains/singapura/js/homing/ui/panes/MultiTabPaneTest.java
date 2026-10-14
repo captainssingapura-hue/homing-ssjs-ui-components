@@ -508,7 +508,9 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("a,b,c", eval("pane.focus.members.map(function (m) { return m.name; }).join()").asString(), "the widgets are its members");
         eval("pane.el.fire('pointerdown', { target: pane.el })");
         assertEquals("mtp_s1", eval("holder()").asString(), "a press on the frame: the pane holds");
-        assertEquals("held", eval("String(pane.el.getAttribute('data-keys'))").asString(), "and the steward says so, once, on the root it enrolled: the design answers it on the pane's own word");
+        assertEquals("held", eval("String(pane.el.getAttribute('data-keys'))").asString(), "and the steward says so, once, on the root it enrolled");
+        assertTrue(eval("pane.el.has('styled-multi-tab-pane') && pane.el.has('styled-multi-tab-pane--held')").asBoolean(),
+                "its leaf's Keyboard state, held, as a class the style answers (RFC 0067, D12)");
         assertTrue(eval("pane.keyDown({ key: 'ArrowRight' })").asBoolean());
         assertEquals("b", eval("pane.activeTab()").asString());
         eval("pane.keyDown({ key: 'ArrowRight' }); pane.keyDown({ key: 'ArrowRight' })");
@@ -531,6 +533,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("detach?s1:b b:activate", log(), "Enter: the widget activates itself");
         assertEquals("b", eval("holder()").asString(), "and holds - a claim of its own, not the pane's");
         assertEquals("null", eval("String(pane.el.getAttribute('data-keys'))").asString(), "the pane does not hold them: its frame says nothing — its chip and its bar say they are within it");
+        assertFalse(eval("pane.el.has('styled-multi-tab-pane--held')").asBoolean(), "its Keyboard state at rest: no class");
         eval("log = []; KeyboardStewardInstance._forward('KeyDown', { key: 'ArrowUp', target: null, preventDefault: function () {}, stopPropagation: function () {} })");
         assertEquals("b:key:ArrowUp", log(), "the keys are the widget's now, through the steward");
         eval("log = []; KeyboardStewardInstance.yield(pane.widgetOf('b').focus)");

@@ -74,7 +74,7 @@ class SplitGridMirror {
         if (opts.keyboard) {
             this._kb = opts.keyboard;
             this._kbId = this._kb.join(opts.keyboardId != null ? String(opts.keyboardId) : branch.name, { keyDown: function (ev) { return self.key(ev); } });
-            this._offKeys = Keys.claimOn(el, this._kb, this._kbId);
+            this._offKeys = Keys.claimOn(el, this._kb, this._kbId, new Look(SplitGridMirror, ROLE.STANDALONE).keys());
         }
         opts.host.appendChild(el);
         this.el = el;

@@ -3,9 +3,11 @@ package hue.captains.singapura.js.homing.ui.panes;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
+import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
@@ -86,6 +88,8 @@ public record HousePanes() implements TaxonomyExtension {
         public static final MultiTabPane INSTANCE = new MultiTabPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseContainers.TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one(),
                            DSL.part(TabPicker.INSTANCE).as(HouseDoing.Picker.INSTANCE).optional(),
@@ -98,6 +102,8 @@ public record HousePanes() implements TaxonomyExtension {
         public static final SingleTabPane INSTANCE = new SingleTabPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseContainers.TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one());
         }
