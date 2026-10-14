@@ -26,9 +26,10 @@ class StewardMonitor {
         if (!branch) throw new Error("[StewardMonitor] a branch of its own is required");
         var self = this;
         branch.activate(_stewardMonitorOwner);
-        var lamp = branch.createElement("lamp", "div");
+        // its body the house's lamp: quiet, lit while the keys are held or lent, broken while the steward's invariants are
+        this._lamp = new Lamp(branch.elementMaker("lamp"), {}, ROLE.BODY);
+        var lamp = this._lamp.el;
         css.addClass(lamp, sm_lamp);
-        new Look(Object.freeze({ LEAF: "lamp" }), ROLE.STANDALONE).wear(lamp);   // a lamp: quiet, lit (aria-current) or broken (aria-invalid)
         lamp.setAttribute("role", "status");
         lamp.setAttribute("aria-label", "Keyboard steward");
         this.root = lamp;
@@ -48,10 +49,10 @@ class StewardMonitor {
             : "away on " + StewardMonitor.describe(f) + " — " + StewardMonitor.who(at.id) + " keeps the mark, nothing is routed";
         if (c) say += " · offered to " + StewardMonitor.who(c);
         if (broken.length) say += " · ✗ " + broken[0];
-        this.root.textContent = say;
+        this._lamp.text = say;
         this._broken = broken;
-        if (at && at.state !== "away") this.root.setAttribute("aria-current", "true"); else this.root.removeAttribute("aria-current");   // lit: the keys held or lent
-        if (broken.length > 0) this.root.setAttribute("aria-invalid", "true"); else this.root.removeAttribute("aria-invalid");   // broken: the danger colour
+        this._lamp.current = !!(at && at.state !== "away");   // lit: the keys held or lent
+        this._lamp.invalid = broken.length > 0;               // broken: the danger colour
         return this;
     }
 

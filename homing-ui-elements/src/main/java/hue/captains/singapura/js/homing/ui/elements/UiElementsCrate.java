@@ -85,6 +85,11 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(SeparatorModule.INSTANCE),
                 CrateEntry.of(DelimiterModule.INSTANCE),
                 CrateEntry.of(BrandMarkModule.INSTANCE),
+                CrateEntry.of(LampModule.INSTANCE),
+                CrateEntry.of(DropMarkModule.INSTANCE),
+                CrateEntry.of(DetentModule.INSTANCE),
+                CrateEntry.of(TickModule.INSTANCE),
+                CrateEntry.of(BoundaryLineModule.INSTANCE),
                 // the items: a menu's, a list's row, a choice's option - one behaviour for the three
                 CrateEntry.of(ItemBehaviorModule.INSTANCE),
                 CrateEntry.of(MenuItemModule.INSTANCE),

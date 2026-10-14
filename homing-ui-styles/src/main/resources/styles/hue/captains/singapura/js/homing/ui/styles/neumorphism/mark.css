@@ -1,0 +1,185 @@
+/* The detent in neumorphism: a notch a value may snap to - a line across the groove, shown while what rests on it is in the hand. Whole: every property its look has (D9). */
+.styled-detent {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+
+    color: inherit;
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    inline-size: calc(2px * pow(1.3, var(--size)));
+    block-size: calc(10px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+
+    &.styled-detent--dragging {
+        background-color: var(--ink-muted);
+    }
+}
+
+/* The detent as rest in neumorphism: a notch a value may snap to - a line across the groove, shown while what rests on it is in the hand. Whole: every property its look has (D9). */
+.styled-detent_rest {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+
+    color: inherit;
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    inline-size: calc(2px * pow(1.3, var(--size)));
+    block-size: calc(10px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+
+    &.styled-detent_rest--dragging {
+        background-color: var(--ink-muted);
+    }
+}
+
+/* The tick in neumorphism: a scale's tick - a short line in the ink it stands on. Whole: every property its look has (D9). */
+.styled-tick {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+
+    color: inherit;
+    background-color: var(--ink-muted);
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    inline-size: calc(1px * pow(1.3, var(--size)));
+    block-size: calc(6px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}
+
+/* The tick as notch in neumorphism: a scale's tick - a short line in the ink it stands on. Whole: every property its look has (D9). */
+.styled-tick_notch {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+
+    color: inherit;
+    background-color: var(--ink-muted);
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    inline-size: calc(1px * pow(1.3, var(--size)));
+    block-size: calc(6px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}
+
+/* The separator in neumorphism: a line between groups - its foot ruled in the ink it stands on. Whole: every property its look has (D9). */
+.styled-separator {
+    --ink-hairline: color-mix(in oklab, currentColor 30%, transparent);
+
+    color: inherit;
+    background-color: transparent;
+    border-color: var(--ink-hairline);
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}
+
+/* The lamp in neumorphism: a light that says how something is - quiet at rest, lit in the accent, broken in danger's colour. Whole: every property its look has (D9). */
+.styled-lamp {
+    --ink-quiet: color-mix(in oklab, currentColor 70%, transparent);
+    --fixed-on-danger: #ffffff;
+    --fixed-danger: #dc2626;
+
+    color: var(--ink-quiet);
+    background-color: transparent;
+    border-color: transparent;
+    outline-color: currentColor;
+    border-radius: 12px;
+    box-shadow: none;
+    border-width: 1px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 4px;
+    padding-inline: 8px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+    transform: none;
+    cursor: auto;
+
+    &.styled-lamp--current {
+        color: var(--fp-text);
+        background-color: var(--fp-accent-wash-light);
+        border-color: var(--fp-accent);
+    }
+
+    &.styled-lamp--invalid {
+        color: var(--fixed-on-danger);
+        background-color: var(--fixed-danger);
+        border-color: var(--fixed-danger);
+    }
+}

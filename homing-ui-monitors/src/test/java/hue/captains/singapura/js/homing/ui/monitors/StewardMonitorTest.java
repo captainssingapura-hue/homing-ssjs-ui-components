@@ -2,6 +2,9 @@ package hue.captains.singapura.js.homing.ui.monitors;
 
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,17 +38,19 @@ class StewardMonitorTest extends JsModuleTestBase {
                 has: function (c) { return classes.has(c); } };
             return node;
         }
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
         function fakeBranch(name) {
             return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; },
+                     elementMaker: function (n) { var self = this, mk = function (tag) { makers.delete(mk); return self.createElement(n, tag); }; makers.add(mk); return mk; },
                      createBranch: function (n) { return fakeBranch(n); }, dissolveBranch: function (n) { log.push("dissolved:" + n); },
                      dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} };
         }
-        var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
-                    toggleClass: function (e, c, on) { if (on) e.classList.add(c); else e.classList.remove(c); } };
+        var css = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
+                    toggleClass: function (e, c, on) { if (on) e.classList.add(c); else e.classList.remove(c); }, hasClass: function (e, c) { return e.classList.contains(c); },
+                    size: function () {} };
+        var CssClassManagerInstance = css;
         ["sm_lamp"].forEach(function (c) { globalThis[c] = c; });
-        // the lamp's look: put on by name, which is all the monitor asks of it here
-        var ROLE = { STANDALONE: { token: "standalone", functional: false } };
-        class Look { constructor(Leaf) { this.casting = Leaf.LEAF; } wear(e) { e.classList.add(this.casting); } }
         function focus(e) { document.activeElement = e; KeyboardStewardInstance._onFocusIn(); }
         var focusListeners = 0;
         var document = { body: el("body"), activeElement: null, addEventListener: function () { focusListeners++; }, removeEventListener: function () { focusListeners--; } };
@@ -71,6 +76,15 @@ class StewardMonitorTest extends JsModuleTestBase {
         loadModule(DIR + "component/keyboard/KeyboardHomeModule.js");
         loadModule(DIR + "component/keyboard/KeyboardStewardModule.js");
         loadModule(DIR + "component/WidgetSlotModule.js");
+        // its body the house's lamp: its castings, its states, its look and the simple component it is
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet', ICONS = {};");
+        loadModule(DIR + "server/StyledLeaves.js");
+        loadModule(DIR + "ui/look/LookModule.js");
+        for (String m : new String[] {"SimpleComponentModule.js", "MarkBehaviorModule.js", "LampModule.js"})
+            loadModule(DIR + "ui/elements/" + m);
         loadModule(DIR + "ui/monitors/StewardMonitorModule.js");
         js.eval("js", SHIM);
     }
@@ -80,11 +94,12 @@ class StewardMonitorTest extends JsModuleTestBase {
     @Test
     void theLampSaysWhereTheFocusIs_heldLentOrAway_andWhose() {
         assertEquals("no one holds the keys", eval("monitor.lamp()").asString());
-        assertTrue(eval("monitor.root.has('lamp') && monitor.root.getAttribute('aria-current') === null && monitor.root.getAttribute('aria-invalid') === null").asBoolean(), "a lamp, quiet: nothing holds");
+        assertTrue(eval("monitor.root.has('styled-lamp') && !monitor.root.has('styled-lamp--current') && monitor.root.getAttribute('aria-current') === null && monitor.root.getAttribute('aria-invalid') === null").asBoolean(), "a lamp, quiet: nothing holds");
         assertEquals("1", eval("String(host.children.length)").asString(), "the lamp alone");
         eval("var w = focusParty.root.join('widget', new Widget()); KeyboardStewardInstance.claim(w)");
         assertEquals("held by “widget”", eval("monitor.lamp()").asString(), "redrawn on the steward's events");
         assertEquals("true", eval("monitor.root.getAttribute('aria-current')").asString(), "lit: the keys held");
+        assertTrue(eval("monitor.root.has('styled-lamp--current')").asBoolean(), "lit: its Current state's class held");
         eval("var sel = el('select'); sel.setAttribute('aria-label', 'which leaf'); focus(sel)");
         assertEquals("away on select “which leaf” — “widget” keeps the mark, nothing is routed", eval("monitor.lamp()").asString());
         assertTrue(eval("monitor.root.getAttribute('aria-current') === null").asBoolean(), "quiet: away");
@@ -101,7 +116,7 @@ class StewardMonitorTest extends JsModuleTestBase {
         eval("var w = focusParty.root.join('widget', new Widget()); var room = el('div'); KeyboardStewardInstance.enroll(room, w); var inp = el('input'); room.appendChild(inp); focus(inp)");
         eval("document.activeElement = document.body; monitor.refresh()");   // the control went, and no event said so
         assertTrue(eval("monitor.lamp()").asString().contains("✗ the marker is lent, and nothing has the browser's focus"), eval("monitor.lamp()").asString());
-        assertTrue(eval("monitor.root.getAttribute('aria-invalid') === 'true' && monitor.broken().length === 1").asBoolean(), "broken: invalid");
+        assertTrue(eval("monitor.root.getAttribute('aria-invalid') === 'true' && monitor.root.has('styled-lamp--invalid') && monitor.broken().length === 1").asBoolean(), "broken: invalid");
         eval("monitor.refresh()");
         assertEquals("held by “widget”", eval("monitor.lamp()").asString(), "read again, and the steward has it right");
         assertFalse(eval("monitor.root.has('sm_lamp_broken')").asBoolean());

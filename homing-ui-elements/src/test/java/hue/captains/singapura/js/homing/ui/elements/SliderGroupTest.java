@@ -79,8 +79,10 @@ class SliderGroupTest extends JsModuleTestBase {
         js.eval("js", "var ic_base = 'ic_base', ICONS = { grip: 'ic_grip', size: 'ic_size', aspect: 'ic_aspect', extent: 'ic_extent', level: 'ic_level' };");
         loadModule(DIR + "ui/icons/IconModule.js");
         loadModule(DIR + "component/keyboard/KeysModule.js");
+        for (String m : new String[] {"MarkBehaviorModule.js", "DetentModule.js", "TickModule.js"})   // the slider's detent and its scale's ticks, the house's marks
+            loadModule(DIR + "ui/elements/" + m);
         loadModule(DIR + "ui/elements/SliderScaleModule.js");
-        for (String m : new String[] {"MarkBehaviorModule.js", "SliderRailModule.js", "SliderGrooveModule.js", "FillModule.js", "SliderKnobModule.js"})
+        for (String m : new String[] {"SliderRailModule.js", "SliderGrooveModule.js", "FillModule.js", "SliderKnobModule.js"})
             loadModule(DIR + "ui/elements/" + m);   // the slider's parts, each a component
         loadModule(DIR + "ui/elements/SliderModule.js");
         loadModule(DIR + "ui/elements/SliderGroupModule.js");

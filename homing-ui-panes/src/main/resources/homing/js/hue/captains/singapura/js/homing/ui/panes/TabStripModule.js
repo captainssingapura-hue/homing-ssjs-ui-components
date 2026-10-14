@@ -91,8 +91,6 @@
 // =============================================================================
 
 const _stripOwner = Object.freeze({ toString: () => "tabStrip" });
-/** The mark's leaf: a drop mark, which nothing realizes on its own - the strip draws it here. */
-const _DROP_MARK = Object.freeze({ LEAF: "drop-mark" });
 
 /** The plus pressed: its holder asked for a tab. */
 class TabStripAdd {
@@ -157,7 +155,7 @@ class TabStrip {
         this._addBtn = null;
         if (opts && typeof opts.onAdd === "function") {
             // the house's icon button, cast as what adds to its owner, holding the add icon: its look is the style's
-            var plus = new Icon(branch.createElement("add-icon", Icon.TAG), { name: "add" });
+            var plus = new Icon(branch.createElement("add-icon", Icon.TAG), { name: "add" }, ROLE.SYMBOL);
             this._add = new IconButton(branch.elementMaker("add"), { icon: plus, label: "Add a tab" }, ROLE.ADD);
             this._add.setOnClick(new TabStripAdd(opts));
             var addBtn = this._add.el;
@@ -196,10 +194,9 @@ class TabStrip {
         }
         el.appendChild(this._tail);
 
-        this._mark = branch.createElement("mark", "div");     // in the strip only while a drag is on
+        // the house's drop mark, cast as where a dragged tab would land: in the strip only while a drag is on
+        this._mark = new DropMark(branch.elementMaker("mark"), {}, ROLE.LANDING).el;
         css.addClass(this._mark, mtp_drop_mark);
-        new Look(_DROP_MARK, ROLE.LANDING).wear(this._mark);
-        this._mark.setAttribute("aria-hidden", "true");
     }
 
     chip(tab, handlers, on) {

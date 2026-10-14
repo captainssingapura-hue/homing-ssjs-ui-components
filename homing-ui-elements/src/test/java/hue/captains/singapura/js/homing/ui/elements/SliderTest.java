@@ -69,8 +69,10 @@ class SliderTest extends JsModuleTestBase {
         js.eval("js", "var ic_base = 'ic_base', ICONS = { grip: 'ic_grip', size: 'ic_size', aspect: 'ic_aspect', extent: 'ic_extent', level: 'ic_level' };");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
+        for (String m : new String[] {"MarkBehaviorModule.js", "DetentModule.js", "TickModule.js"})   // the slider's detent and its scale's ticks, the house's marks
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/SliderScaleModule.js");
-        for (String m : new String[] {"MarkBehaviorModule.js", "SliderRailModule.js", "SliderGrooveModule.js", "FillModule.js", "SliderKnobModule.js"})
+        for (String m : new String[] {"SliderRailModule.js", "SliderGrooveModule.js", "FillModule.js", "SliderKnobModule.js"})
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);   // its parts, each a component
         loadModule(MODULE);
         js.eval("js", TextsInJs.withCss(SHIM));

@@ -169,6 +169,9 @@ class DeskTest extends JsModuleTestBase {
         loadModule(P + "panes/TabWindowModule.js");
         loadModule(P + "panes/TabHandModule.js");
         loadModule(P + "panes/TabChipModule.js");
+        // where a dragged tab would land: the house's drop mark
+        if (js.eval("js", "typeof MarkBehavior === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/MarkBehaviorModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/DropMarkModule.js");
         loadModule(P + "panes/TabStripModule.js");
         loadModule(P + "panes/PaneKeysModule.js");
         loadModule(P + "panes/PaneMenusModule.js");

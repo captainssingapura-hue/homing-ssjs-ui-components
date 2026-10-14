@@ -3,6 +3,9 @@ package hue.captains.singapura.js.homing.ui.splitgrid;
 import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,11 +34,12 @@ class SplitGridTest extends JsModuleTestBase {
         var log = [];
         function el(tag) {
             var classes = new Set(), attrs = {}, props = {};
-            return { tag: tag, children: [], parentNode: null, listeners: {}, size: { width: 1000, height: 600 },
+            return { tag: tag, tagName: String(tag).toUpperCase(), children: [], parentNode: null, listeners: {}, size: { width: 1000, height: 600 },
                      // a line is a pixel thick; anything else the size of the whole
                 classList: { add: function () { for (var i = 0; i < arguments.length; i++) classes.add(arguments[i]); },
                              remove: function () { for (var i = 0; i < arguments.length; i++) classes.delete(arguments[i]); },
-                             contains: function (c) { return classes.has(c); }, toggle: function (c, f) { if (f) classes.add(c); else classes.delete(c); } },
+                             contains: function (c) { return classes.has(c); }, toggle: function (c, f) { if (f) classes.add(c); else classes.delete(c); },
+                             [Symbol.iterator]: function () { return classes.values(); } },
                 style: { setProperty: function (k, v) { props[k] = v; }, getPropertyValue: function (k) { return props[k] || ""; } },
                 get firstChild() { return this.children[0] || null; },
                 appendChild: function (c) { if (c.parentNode) c.parentNode.removeChild(c); this.children.push(c); c.parentNode = this; return c; },
@@ -49,23 +53,24 @@ class SplitGridTest extends JsModuleTestBase {
                 fire: function (t, ev) { ev.type = t; (this.listeners[t] || []).slice().forEach(function (fn) { fn(ev); }); },
                 has: function (c) { return classes.has(c); } };
         }
-        // as the party: a name, of an element or a branch, is held until the branch dissolves
+        // as the party: a name, of an element or a branch, is held until the branch dissolves; a maker single-use, and known for one
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
         function fakeBranch(name) {
             var elements = new Set(), branches = new Set();
             return { name: name,
                      createElement: function (n, tag) { if (elements.has(n)) throw new RangeError('name "' + n + '" is already in use on branch "' + name + '"'); elements.add(n); return el(tag); },
+                     elementMaker: function (n) { var self = this, mk = function (tag) { makers.delete(mk); return self.createElement(n, tag); }; makers.add(mk); return mk; },
                      createBranch: function (n) { if (branches.has(n)) throw new RangeError('a branch named "' + n + '" already exists on "' + name + '"'); branches.add(n); return fakeBranch(n); },
                      dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} };
         }
-        var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
+        var css = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
-                    toggleClass: function (e, c, f) { e.classList.toggle(c, f); } };
+                    toggleClass: function (e, c, f) { e.classList.toggle(c, f); }, hasClass: function (e, c) { return e.classList.contains(c); } };
+        var CssClassManagerInstance = css;
         var sg_root = "sg_root", sg_split = "sg_split", sg_split_h = "sg_split_h", sg_split_v = "sg_split_v", sg_child = "sg_child",
             sg_child_h = "sg_child_h", sg_child_v = "sg_child_v", sg_cell = "sg_cell", sg_line = "sg_line", sg_line_fixed = "sg_line_fixed",
             sz_handle = "sz_handle", sz_handle_h = "sz_handle_h", sz_handle_v = "sz_handle_v";
-        // the look: the casting's class alone, so the test reads which casting a line wears
-        class Look { constructor(L, role) { this.casting = role.functional ? L.LEAF : L.LEAF + "_" + role.token; } wear(e) { e.classList.add(this.casting); } }
-        var ROLE = { SPLITTER: { token: "splitter", functional: false }, SEAM: { token: "seam", functional: true } };
         var console = { error: function (m) { log.push("error:" + m); } };
         var host = el("div"), branch = fakeBranch("page");
         var LAYOUT = { kind: "split", orientation: "horizontal", children: [
@@ -99,6 +104,15 @@ class SplitGridTest extends JsModuleTestBase {
         js.eval("js", "var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); } }; var sz_handle = 'sz_handle', sz_handle_h = 'sz_handle_h', sz_handle_v = 'sz_handle_v';");
         loadModule("/homing/js/hue/captains/singapura/js/homing/sizing/SizingHandleModule.js");
         loadModule(P + "SplitGridGeometryModule.js");
+        // each line the house's boundary line: its castings, its states, its look and the simple component it is
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet', ICONS = {};");
+        loadModule("/homing/js/hue/captains/singapura/server/StyledLeaves.js".replace("singapura/server", "singapura/js/homing/server"));
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");
+        for (String m : new String[] {"SimpleComponentModule.js", "MarkBehaviorModule.js", "BoundaryLineModule.js"})
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
         loadModule(P + "SplitGridModule.js");
         js.eval("js", SHIM);
     }
@@ -118,13 +132,22 @@ class SplitGridTest extends JsModuleTestBase {
     }
 
     @Test
+    void aLineInTheHand_holdsItsDraggingState_fromThePressToTheRelease_throughItsHandle() {
+        eval("var l = divider(root(), 0); l.fire('pointerdown', { button: 0, clientX: 250, clientY: 10, pointerId: 1 })");
+        assertTrue(eval("l.has('styled-boundary-line_splitter--dragging') && l.hasAttribute('data-dragging')").asBoolean(), "taken: its Dragging state's class held");
+        eval("l.fire('pointerup', { clientX: 250, clientY: 10, pointerId: 1 })");
+        assertTrue(eval("!l.has('styled-boundary-line_splitter--dragging') && !l.hasAttribute('data-dragging')").asBoolean(), "let go: off again");
+        assertTrue(eval("l.has('styled-boundary-line_splitter--vertical')").asBoolean(), "upright between cells side by side: its Orientation's class");
+    }
+
+    @Test
     void theLinesAreTheGridsPart_aSplitterWhereItIsResizable_aSeamWhereItIsNot() {
-        assertTrue(eval("var l = divider(root(), 0); l.has('boundary-line_splitter') && l.has('sz_handle') && l.has('sz_handle_h') && !l.has('sg_line_fixed')"
+        assertTrue(eval("var l = divider(root(), 0); l.has('styled-boundary-line_splitter') && l.has('sz_handle') && l.has('sz_handle_h') && !l.has('sg_line_fixed')"
                 + " && l.getAttribute('role') === 'separator' && l.getAttribute('aria-orientation') === 'vertical'").asBoolean(), "the hand moves it");
         assertEquals("25", eval("divider(root(), 0).getAttribute('aria-valuenow')").asString(), "it says where it stands");
         assertTrue(eval("divider(root().children[2].children[0], 0).has('sz_handle_v')").asBoolean(), "the line lying down moves up and down");
         eval("var fixed = new SplitGrid(branch.createBranch('fixed'), { host: el('div'), layout: LAYOUT });");
-        assertTrue(eval("var f = divider(fixed.el.children[0], 0); f.has('boundary-line') && f.has('sg_line_fixed') && !f.has('sz_handle') && f.getAttribute('aria-valuenow') === null").asBoolean(),
+        assertTrue(eval("var f = divider(fixed.el.children[0], 0); f.has('styled-boundary-line') && f.has('sg_line_fixed') && !f.has('sz_handle') && f.getAttribute('aria-valuenow') === null").asBoolean(),
                 "not resizable: a seam, no hand on it");
         assertTrue(eval("grid.resizable() && !fixed.resizable()").asBoolean());
         var ex = assertThrows(PolyglotException.class, () -> eval("fixed.setRatios('', [1, 1])"));

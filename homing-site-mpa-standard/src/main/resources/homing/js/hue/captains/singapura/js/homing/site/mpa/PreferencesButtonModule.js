@@ -24,7 +24,6 @@
 // =============================================================================
 
 const _prefsOwner = Object.freeze({ toString: () => "preferencesButton" });
-const _SYMBOL = Object.freeze({ LEAF: "icon" });   // the button's mark: an icon, as its symbol
 var _registry = null;   // Promise<PREFERENCES>, once per page
 var _view = null;       // Promise<the view's class>, once per page
 
@@ -66,9 +65,8 @@ class PreferencesButton {
         new Look(Object.freeze({ LEAF: "preferences-button" }), ROLE.STANDALONE).wear(btn);   // outlined in the ink of the bar it stands on
         btn.setAttribute("aria-haspopup", "dialog");
         var mark = branch.createElement("prefsBtnMark", "span");
-        new Look(_SYMBOL, ROLE.SYMBOL).wear(mark, { only: ["color-ink"] });   // the symbol's ink, which the icon inside takes
         mark.setAttribute("aria-hidden", "true");
-        this._symbol = new Icon(branch.createElement("prefsBtnSymbol", Icon.TAG), { name: "settings" });
+        this._symbol = new Icon(branch.createElement("prefsBtnSymbol", Icon.TAG), { name: "settings" }, ROLE.SYMBOL);   // the button's mark, cast as its symbol
         mark.appendChild(this._symbol.el);
         var word = branch.createElement("prefsBtnWord", "span");
         word.textContent = "Preferences";

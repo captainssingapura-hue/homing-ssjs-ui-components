@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.elements.PillModule;
+import hue.captains.singapura.js.homing.ui.elements.DropMarkModule;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -46,6 +47,7 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
                 .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton()), CloseButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DropMarkModule.DropMark()), DropMarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_strip(),

@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.ui.monitors;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.elements.LampModule;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 
@@ -23,7 +23,7 @@ import java.util.List;
  * invariants broken, in the danger colour. Redrawn on every event of the
  * steward and every move of the native focus. It takes no keys.
  */
-@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 13,
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 10,
         reason = "It makes its own elements, reaches the document, wears classes of its own, writes attributes and writes text of its own: it waits for the content components to draw only components, and for a party that says where the browser's focus moves.")
 public record StewardMonitorModule() implements Widget<Widget._None, StewardMonitorModule>, ImplFor<HouseMonitors.StewardMonitor> {
 
@@ -40,7 +40,7 @@ public record StewardMonitorModule() implements Widget<Widget._None, StewardMoni
     public ImportsFor<StewardMonitorModule> imports() {
         return ImportsFor.<StewardMonitorModule>builder()
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LampModule.Lamp()), LampModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardSteward(), new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

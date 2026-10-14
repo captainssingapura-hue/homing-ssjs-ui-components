@@ -66,7 +66,7 @@ class MenuItem extends SimpleComponent {
         this.el.setAttribute("role", "menuitem");
         this.el.setAttribute("tabindex", "-1");
         // its glyph, the house's icon: its own word, or none - at its width either way, so the names beside it align
-        this.mark = new Icon(branch.createElement("mark", Icon.TAG), icon ? { name: icon } : null);
+        this.mark = new Icon(branch.createElement("mark", Icon.TAG), icon ? { name: icon } : null, ROLE.SYMBOL);
         this.el.appendChild(this.mark.el);
         this._label = branch.createElement("label", "span");
         css.addClass(this._label, el_menu_item_label);
@@ -77,7 +77,7 @@ class MenuItem extends SimpleComponent {
             this.el.appendChild(this._hint.el);
         }
         if (this._get("expanded") !== null) {   // its way into its rows: the disclose mark, at its end
-            this._disclose = new Icon(branch.createElement("disclose", Icon.TAG), { name: "disclose" });
+            this._disclose = new Icon(branch.createElement("disclose", Icon.TAG), { name: "disclose" }, ROLE.DISCLOSE);
             css.addClass(this._disclose.el, el_menu_item_disclose);
             this.el.appendChild(this._disclose.el);
         }

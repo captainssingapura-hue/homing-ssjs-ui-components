@@ -10,7 +10,7 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.sizing.RailModule;
 import hue.captains.singapura.js.homing.sizing.SizingHandleModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.elements.BoundaryLineModule;
 import java.util.List;
 
 /**
@@ -41,7 +41,7 @@ public record SplitGridModule() implements DomModule<SplitGridModule>, ImplFor<H
                 .add(new ModuleImports<>(List.of(new SplitGridGeometryModule.SplitGridGeometry()), SplitGridGeometryModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RailModule.Rail()), RailModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SizingHandleModule.SizingHandle()), SizingHandleModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new BoundaryLineModule.BoundaryLine()), BoundaryLineModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new SplitGridStyles.sg_root(),

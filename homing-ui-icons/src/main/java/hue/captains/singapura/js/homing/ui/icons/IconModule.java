@@ -10,6 +10,8 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 
 import java.util.List;
 
@@ -36,6 +38,8 @@ public record IconModule() implements DomModule<IconModule>, ImplFor<HouseMarks.
         return ImportsFor.<IconModule>builder()
                 .add(new ModuleImports<>(List.of(new IconStyles.ic_base()), IconStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconsModule.ICONS()), IconsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();
     }
 

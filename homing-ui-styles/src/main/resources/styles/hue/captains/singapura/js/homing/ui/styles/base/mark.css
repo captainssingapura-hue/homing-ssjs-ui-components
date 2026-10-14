@@ -1,5 +1,9 @@
-/* icon: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-icon {}
+/* The icon in the base layer: a word of the lexicon, its glyph in the ink it stands on; every style's alike. Whole: every property its look has (D9). */
+.styled-icon {
+    color: inherit;
+    background-color: transparent;
+    line-height: 1;
+}
 
 /* An icon as a symbol - an icon button's face: the ink of what holds it, whole (D30). */
 .styled-icon_symbol {
@@ -7,35 +11,279 @@
     line-height: 1;
 }
 
-/* icon_keys: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-icon_keys {}
+/* The icon as keys in the base layer: the mark that says where the keys are - the ink it stands on at rest, the accent carried in by its degree, part of the way on a bar and whole in a tab; every style's alike. Whole: every property its look has (D9). */
+.styled-icon_keys {
+    --ink-whole: currentColor;
+    --along-keys-mark: color-mix(in oklab, var(--fp-accent) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--ink-whole) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--ink-whole)));
 
-/* icon_disclose: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-icon_disclose {}
+    color: var(--along-keys-mark);
+    background-color: transparent;
+    line-height: 1;
+}
 
-/* detent: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-detent {}
+/* The icon as disclose in the base layer: the way into what an item opens, in the ink it stands on; every style's alike. Whole: every property its look has (D9). */
+.styled-icon_disclose {
+    color: inherit;
+    background-color: transparent;
+    line-height: 1;
+}
 
-/* detent_rest: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-detent_rest {}
+/* The detent in the base layer: a notch a value may snap to - a line across the groove, shown while what rests on it is in the hand. Whole: every property its look has (D9). */
+.styled-detent {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
 
-/* tick: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-tick {}
+    color: inherit;
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    inline-size: calc(2px * pow(1.3, var(--size)));
+    block-size: calc(12px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
 
-/* tick_notch: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-tick_notch {}
+    &.styled-detent--dragging {
+        background-color: var(--ink-muted);
+    }
+}
 
-/* separator: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-separator {}
+/* The detent as rest in the base layer: a notch a value may snap to - a line across the groove, shown while what rests on it is in the hand. Whole: every property its look has (D9). */
+.styled-detent_rest {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
 
-/* boundary-line: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-boundary-line {}
+    color: inherit;
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    inline-size: calc(2px * pow(1.3, var(--size)));
+    block-size: calc(12px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
 
-/* delimiter: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-delimiter {}
+    &.styled-detent_rest--dragging {
+        background-color: var(--ink-muted);
+    }
+}
 
-/* lamp: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-lamp {}
+/* The tick in the base layer: a scale's tick - a short line in the ink it stands on. Whole: every property its look has (D9). */
+.styled-tick {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+
+    color: inherit;
+    background-color: var(--ink-muted);
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    inline-size: calc(1px * pow(1.3, var(--size)));
+    block-size: calc(7px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}
+
+/* The tick as notch in the base layer: a scale's tick - a short line in the ink it stands on. Whole: every property its look has (D9). */
+.styled-tick_notch {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+
+    color: inherit;
+    background-color: var(--ink-muted);
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    inline-size: calc(1px * pow(1.3, var(--size)));
+    block-size: calc(7px * pow(1.3, var(--size)));
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}
+
+/* The separator in the base layer: a line between groups - its foot ruled in the ink it stands on. Whole: every property its look has (D9). */
+.styled-separator {
+    --ink-hairline: color-mix(in oklab, currentColor 30%, transparent);
+
+    color: inherit;
+    background-color: transparent;
+    border-color: var(--ink-hairline);
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}
+
+/* The boundary line in the base layer: the line where two regions meet - in the border's colour, the accent under the hand, focused and in the hand; its cursor sizing's. Whole: every property its look has (D9). */
+.styled-boundary-line {
+    color: inherit;
+    background-color: var(--fp-border);
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    block-size: 1px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+
+    &.styled-boundary-line--vertical {
+        inline-size: 1px;
+        block-size: auto;
+    }
+
+    &:hover {
+        background-color: var(--fp-line-hovered);
+    }
+
+    &:focus-visible {
+        background-color: var(--fp-accent);
+    }
+
+    &.styled-boundary-line--dragging {
+        background-color: var(--fp-accent);
+    }
+}
+
+/* The delimiter in the base layer: the sign between a run's steps, on one line with them - in the ink it stands on, muted. Whole: every property its look has (D9). */
+.styled-delimiter {
+    --ink-muted: color-mix(in oklab, currentColor 60%, transparent);
+
+    color: var(--ink-muted);
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+
+    &::before {
+        content: "/";
+    }
+}
+
+/* The lamp in the base layer: a light that says how something is - quiet at rest, lit in the accent, broken in danger's colour. Whole: every property its look has (D9). */
+.styled-lamp {
+    --ink-quiet: color-mix(in oklab, currentColor 70%, transparent);
+    --fixed-on-danger: #ffffff;
+    --fixed-danger: #dc2626;
+
+    color: var(--ink-quiet);
+    background-color: transparent;
+    border-color: transparent;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 1px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 4px;
+    padding-inline: 8px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    transition: none;
+    transform: none;
+    cursor: auto;
+
+    &.styled-lamp--current {
+        color: var(--fp-text);
+        background-color: var(--fp-accent-wash-light);
+        border-color: var(--fp-accent);
+    }
+
+    &.styled-lamp--invalid {
+        color: var(--fixed-on-danger);
+        background-color: var(--fixed-danger);
+        border-color: var(--fixed-danger);
+    }
+}
 
 /* The brand's mark in the base layer: a square of the accent, until a site gives a logo; every style's alike. */
 .styled-brand-mark {
@@ -47,11 +295,74 @@
     background-color: var(--fp-accent);
 }
 
-/* indicator: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-indicator {}
+/* The indicator in the base layer: a small sign of a state - nothing of its own drawn yet: its holder places it. Whole: every property its look has (D9). */
+.styled-indicator {
+    color: inherit;
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}
 
-/* drop-mark: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-drop-mark {}
+/* The drop mark in the base layer: where a dragged thing would land - a bar of the accent. Whole: every property its look has (D9). */
+.styled-drop-mark {
+    color: inherit;
+    background-color: var(--fp-accent);
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}
 
-/* drop-mark_landing: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-drop-mark_landing {}
+/* The drop mark as landing in the base layer: where a dragged thing would land - a bar of the accent. Whole: every property its look has (D9). */
+.styled-drop-mark_landing {
+    color: inherit;
+    background-color: var(--fp-accent);
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+}

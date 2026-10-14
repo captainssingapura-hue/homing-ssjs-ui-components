@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.design.color.ColorScale;
 import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Fixed;
+import hue.captains.singapura.js.homing.design.color.Ink;
 import hue.captains.singapura.js.homing.design.color.L1_ColorBranch;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorSource;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * The house's colour tree (RFC 0067, appendix Semantic Colours and Flavours, D16; appendix Two Classes per Leaf): every
  * colour a house leaf's file names, each named for what it is for, in the base scheme. Grown family by family as the
- * leaves move onto files - the buttons first, then the ways, the text, the inputs, the tracks, the handles, the selectors and the items.
+ * leaves move onto files - the buttons first, then the ways, the text, the inputs, the tracks, the handles, the selectors, the items and the marks.
  *
  * <ul>
  *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, the text's ink
@@ -48,7 +49,7 @@ public record HouseColours() implements ColorSource {
     public sealed interface HouseColour permits
             Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft,
             Text, TextFaded, OnInverted, OnAccent, WayHovered, HeadingInk, KickerInk,
-            Border, GrooveEdge,
+            Border, GrooveEdge, LineHovered,
             Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
             ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, Sheen,
             GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
@@ -105,6 +106,19 @@ public record HouseColours() implements ColorSource {
     public record Border() implements Palettable<Base, Lines>, HouseColour {}
     /** A groove's edge: the text's ink at 45%. */
     public record GrooveEdge() implements Palettable<Base, Lines>, HouseColour {}
+    /** A line under the hand: the accent half into the border - a boundary the hand may move. */
+    public record LineHovered() implements Palettable<Base, Lines>, HouseColour {}
+
+    // ── inks: a share of what the element stands on (D31) ─────────────────
+
+    /** The ink whole: a knot a colour of meaning is mixed into, by the element's degree. */
+    public record Whole() implements Ink<Base, Writing> { @Override public double share() { return 1; } }
+    /** At 70%: words said quietly - a lamp at rest. */
+    public record Quiet() implements Ink<Base, Writing> { @Override public double share() { return 0.70; } }
+    /** At 60%: a small mark's - the sign between a trail's steps, a scale's tick, a detent shown. */
+    public record Muted() implements Ink<Base, Lines> { @Override public double share() { return 0.60; } }
+    /** At 30%: a line between groups - a separator's. */
+    public record Hairline() implements Ink<Base, Lines> { @Override public double share() { return 0.30; } }
 
     // ── attention ─────────────────────────────────────────────────────────
 
@@ -256,6 +270,10 @@ public record HouseColours() implements ColorSource {
         @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new SuccessTint(), -1), new Knot<>(new Clear(), 0), new Knot<>(new WarningTint(), 1)); }
     }
     /** The success button's ground: danger's tint turned the other way, nothing at 0, success's tint at 1. */
+    /** The keys mark's ink: its holder's at rest, the accent carried in by its degree - part of the way on a bar, whole in a tab. */
+    public record KeysMark() implements ColorScale<Base, Scales> {
+        @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new Whole(), -1), new Knot<>(new Whole(), 0), new Knot<>(new Accent(), 1)); }
+    }
     public record SuccessGround() implements ColorScale<Base, Scales> {
         @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new DangerTint(), -1), new Knot<>(new Clear(), 0), new Knot<>(new SuccessTint(), 1)); }
     }
@@ -265,7 +283,8 @@ public record HouseColours() implements ColorSource {
                 new Surfaces(), new Writing(), new Lines(), new Attention(), new Shadows(), new Feedback(), new Scales(),
                 new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new Clear(),
                 new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
-                new Border(), new GrooveEdge(),
+                new Border(), new GrooveEdge(), new LineHovered(),
+                new Whole(), new Quiet(), new Muted(), new Hairline(),
                 new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentWash(), new AccentWashFaint(), new AccentWashLight(), new AccentWashSoft(), new AccentWashStrong(), new KeysCandidate(), new KeysLent(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new Sheen(),
                 new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),
@@ -273,6 +292,6 @@ public record HouseColours() implements ColorSource {
                 new DangerWash(), new WarningWash(), new SuccessWash(),
                 new WarningTint(), new WarningInk(), new SuccessTint(), new SuccessInk(),
                 new PrimaryGround(), new PrimaryInk(), new SecondaryGround(), new DangerGround(), new DangerWriting(),
-                new WarningGround(), new SuccessGround()));
+                new WarningGround(), new SuccessGround(), new KeysMark()));
     }
 }

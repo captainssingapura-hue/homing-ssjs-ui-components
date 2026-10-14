@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Mark;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Track;
@@ -22,12 +23,16 @@ public final class HouseMarks {
     public record Icon() implements Component<Mark> {
         public static final Icon INSTANCE = new Icon();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        /** Its colour, moved by its degree: the keys mark carries the accent part of the way into the ink it stands on. */
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
 
     /** A notch a value may snap to. */
     public record Detent() implements Component<Mark> {
         public static final Detent INSTANCE = new Detent();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        /** Shown while what rests on it is in the hand. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Dragging.INSTANCE); }
     }
 
     /** A scale's tick. */
@@ -50,6 +55,9 @@ public final class HouseMarks {
     public record BoundaryLine() implements Component<Mark> {
         public static final BoundaryLine INSTANCE = new BoundaryLine();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        /** Upright or lying; the pointer over it; the focus on it; in the hand. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Orientation.INSTANCE, HouseStates.Hovered.INSTANCE,
+                HouseStates.Focused.INSTANCE, HouseStates.Dragging.INSTANCE); }
     }
 
     /** A mark between the steps of a run, on one line with them: the sign between a trail's crumbs. */
@@ -62,6 +70,8 @@ public final class HouseMarks {
     public record Lamp() implements Component<Mark> {
         public static final Lamp INSTANCE = new Lamp();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        /** Lit: what it watches is where the user is; broken: what it watches is refused. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.Invalid.INSTANCE); }
     }
 
     /** The brand's mark: a square of its colour, until a site gives a logo. A part of the brand: it is never alone. */

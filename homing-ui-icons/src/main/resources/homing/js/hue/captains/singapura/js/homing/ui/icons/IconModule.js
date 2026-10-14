@@ -8,7 +8,8 @@
 // the words of every module on the classpath that adds its own.
 //
 //   var el = branch.createElement(name, Icon.TAG);
-//   var icon = new Icon(el, { name: "check" });
+//   var icon = new Icon(el, { name: "check" }, role?);   role: what it is to its owner - a symbol, the keys
+//                                                         mark - Standalone unless given: its casting's class worn
 //     icon.el                 the element
 //     icon.name()             the word it shows, or null when blank
 //     icon.set(name)          another word; the same mark, the same width
@@ -25,14 +26,18 @@
 // =============================================================================
 class Icon {
     static TAG = "span";
+    static LEAF = "icon";
     static NAMES = Object.freeze(Object.keys(ICONS));
     static has(name) { return Object.prototype.hasOwnProperty.call(ICONS, name); }
 
-    constructor(el, props) {
+    constructor(el, props, role) {
         if (!el) throw new Error("[Icon] the element is required: mint it with Icon.TAG on your branch");
         this.el = el;
         this._name = null;
+        this.role = role == null ? ROLE.STANDALONE : role;
         css.addClass(el, ic_base);
+        this._look = new Look(Icon, this.role);
+        this._look.wear(el);   // its casting's class: the glyph in the ink it stands on; the keys mark's, the accent carried in by its degree
         el.setAttribute("aria-hidden", "true");
         if (props && props.name != null) this.set(props.name);
     }
@@ -57,6 +62,7 @@ class Icon {
     dispose() {
         this.clear();
         css.removeClass(this.el, ic_base);
+        if (this._look.leaf) css.removeClass(this.el, css.cls(this._look.leaf.styled));   // its casting's class off too
         this.el.removeAttribute("aria-hidden");
     }
 }

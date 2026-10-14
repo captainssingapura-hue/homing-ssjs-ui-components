@@ -10,11 +10,10 @@
 //   ticks: [{ at, label }…] or [at…]; one off the range is dropped
 // =============================================================================
 
-const _SCALE_TICK = Object.freeze({ LEAF: "tick" });
 
 class SliderScale {
     static draw(branch, rail, ticks, o) {
-        var out = { parts: [], texts: [] }, notch = new Look(_SCALE_TICK, ROLE.NOTCH);
+        var out = { parts: [], texts: [] };
         for (var t = 0; t < (ticks || []).length; t++) {
             var at = Number(ticks[t] && ticks[t].at != null ? ticks[t].at : ticks[t]);
             if (!(at >= o.min && at <= o.max)) continue;
@@ -22,10 +21,9 @@ class SliderScale {
             css.addClass(tick, el_slider_tick);
             if (o.vertical) css.addClass(tick, el_slider_tick_vertical);
             tick.style.setProperty("--sl-tick", (o.fraction(at) * 100).toFixed(3) + "%");
-            var line = branch.createElement("tick-" + t + "-line", "div");
+            var line = new Tick(branch.elementMaker("tick-" + t + "-line"), {}, ROLE.NOTCH).el;   // the house's tick, cast as a notch of the scale
             css.addClass(line, el_slider_tick_line);
             if (o.vertical) css.addClass(line, el_slider_tick_line_vertical);
-            notch.wear(line);
             tick.appendChild(line);
             var caption = new Caption(branch.elementMaker("tick-" + t + "-label"),
                     { text: ticks[t] && ticks[t].label != null ? String(ticks[t].label) : o.format(at) }, ROLE.FIGURE);

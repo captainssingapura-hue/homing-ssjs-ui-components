@@ -35,8 +35,6 @@
 // Its own classes only place. `css` is injected with the styles import.
 // =============================================================================
 
-/** A chip's mark's leaf: an icon, cast as the one that says where the keys are - the Icon component wears no look of its own yet. */
-const _KEYS_ICON = Object.freeze({ LEAF: "icon" });
 
 /** A chip's cross pressed: the press kept to the cross, and the chip's holder asked to close its tab. */
 class TabChipClose {
@@ -95,9 +93,8 @@ class TabChip {
         c.appendChild(label);
         // the within mark, after the label: shown only while the keys are in this tab - the house's icon, its word the
         // lexicon's as the style worn writes it, cast as the icon that says where the keys are
-        var mark = new Icon(branch.createElement("mark" + s, Icon.TAG), { name: "within" }).el;
+        var mark = new Icon(branch.createElement("mark" + s, Icon.TAG), { name: "within" }, ROLE.KEYS).el;   // cast as the mark of where the keys are
         css.addClass(mark, mtp_chip_mark);
-        TabChip._looks().keys.wear(mark);
         c._mark = mark;
         c.appendChild(mark);
 
@@ -170,9 +167,9 @@ class TabChip {
         css.toggleClass(chip, mtp_chip_dragging, !!on);
     }
 
-    /** The tab's look and its mark's, made with the first chip: the page's castings are read by then. */
+    /** The tab's look, made with the first chip: the page's castings are read by then. */
     static _looks() {
-        if (!TabChip._worn) TabChip._worn = { tab: new Look(TabChip, ROLE.CHIP), keys: new Look(_KEYS_ICON, ROLE.KEYS) };
+        if (!TabChip._worn) TabChip._worn = { tab: new Look(TabChip, ROLE.CHIP) };
         return TabChip._worn;
     }
 

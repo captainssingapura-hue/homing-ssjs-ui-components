@@ -54,7 +54,7 @@ class HouseStylesTest {
             for (Component<?> b : HouseFamilies.BUTTONS)
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(b)), s.token() + " draws " + b.token());
             assertEquals(StylingRes.CssContent.INSTANCE, s.style(go), s.token() + " draws the primary button as Go too, a class of its own");
-            assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.Lamp.INSTANCE)), s.token() + ": a lamp is Base's, for now");
+            assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.BoundaryLine.INSTANCE)), s.token() + ": a boundary is Base's, every style's alike");
             for (Component<?> t : HouseFamilies.TRACKS)
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(t)), s.token() + " draws " + t.token());
             for (Component<?> h : HouseFamilies.HANDLES)
@@ -76,6 +76,7 @@ class HouseStylesTest {
         assertEquals(2, HouseFamilies.SELECTORS.size());
         assertEquals(2, HouseFamilies.CARDS.size());
         assertEquals(3, HouseFamilies.ITEMS.size());
+        assertEquals(4, HouseFamilies.MARKS.size());
     }
 
     @Test
@@ -83,7 +84,7 @@ class HouseStylesTest {
         var tree = HouseColours.TREE;
         for (ColorPalette<ColorScheme.Base> p : HouseStyles.PALETTES) {
             assertEquals(List.of(), tree.check(p), p.token());
-            assertEquals(47, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge, the keys' marks, a groove's edge, a tab's washes and shadows, an item's current and pointed among them");
+            assertEquals(48, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the text's faded, a heading's and a kicker's inks, the washes under code, a pill and a badge, the keys' marks, a groove's edge, a tab's washes and shadows, an item's current and pointed among them");
         }
         assertEquals(8, HouseStyles.PALETTES.size());
     }

@@ -79,10 +79,6 @@
 // =============================================================================
 
 const _gridOwner = Object.freeze({ toString: () => "splitGrid" });
-/** The line where two cells meet: the house's boundary line, which nothing realizes on its own - the grid draws it here. */
-const _BOUNDARY_LINE = Object.freeze({ LEAF: "boundary-line" });
-/** What the handle brings to the line - its cursor, the press kept from selecting - and the line's look leaves to it. */
-const _SIZINGS = Object.freeze({ except: ["affordance-cursor", "affordance-select"] });
 
 class SplitGrid {
     constructor(branch, opts) {
@@ -92,7 +88,6 @@ class SplitGrid {
         this._branch = branch;
         this._minPx = opts.minCellPx == null ? 40 : Math.max(0, opts.minCellPx | 0);
         this._resizable = !!opts.resizable;
-        this._line = new Look(_BOUNDARY_LINE, this._resizable ? ROLE.SPLITTER : ROLE.SEAM);
         this._sink = typeof opts.onEvent === "function" ? opts.onEvent : null;
         this._cells = new Map();         // id → the cell element, kept for the grid's life
         this._splits = new Map();        // path → { el, orientation, children: [{ el, node }], lines: [el] }
@@ -161,13 +156,14 @@ class SplitGrid {
         var entry = { el: el, orientation: node.orientation, children: [], lines: [] };
         for (var i = 0; i < node.children.length; i++) {
             if (i > 0) {
-                var line = branch.createElement("line-" + name + "-" + i, "div");
+                // the house's boundary line, cast as a splitter where the grid is resizable and as a seam where it is not:
+                // upright between cells side by side; its cursor and its reach the handle's
+                var boundary = new BoundaryLine(branch.elementMaker("line-" + name + "-" + i), { orientation: horizontal ? "vertical" : "horizontal" },
+                                                this._resizable ? ROLE.SPLITTER : ROLE.SEAM);
+                var line = boundary.el;
                 css.addClass(line, sg_line);
                 if (!this._resizable) css.addClass(line, sg_line_fixed);
-                this._line.wear(line, _SIZINGS);
-                line.setAttribute("role", "separator");
-                line.setAttribute("aria-orientation", horizontal ? "vertical" : "horizontal");
-                if (this._resizable) this._handles.push(this._handle(line, path, i - 1, horizontal));
+                if (this._resizable) this._handles.push(this._handle(boundary, path, i - 1, horizontal));
                 entry.lines.push(line);
                 el.appendChild(line);
             }
@@ -184,9 +180,10 @@ class SplitGrid {
     }
 
     /** Sizing's handle on a line: the rail its split keeps, measured as laid out, laid out again as it moves. */
-    _handle(line, path, index, horizontal) {
+    _handle(boundary, path, index, horizontal) {
         var self = this;
-        return new SizingHandle(line, {
+        return new SizingHandle(boundary.el, {
+            onGrip: function (on) { boundary.dragging = on; },   // the line in the hand from the press to the release
             axis: horizontal ? "horizontal" : "vertical",
             index: index,
             rail: function () { return self._rails.get(path); },

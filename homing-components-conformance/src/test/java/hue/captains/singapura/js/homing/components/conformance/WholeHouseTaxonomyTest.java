@@ -51,8 +51,8 @@ class WholeHouseTaxonomyTest {
         assertEquals(24, HOUSE.branches().size(), "the headings a branch of the text; the input, the way and the selector under the control, the surface, the cluster and the chooser under the container, each heading a family");
         assertEquals(110, HOUSE.components().size(), "the summary card ditched: the card plain or clickable, the summary a view of its own; the slider's rail, knob and groove and the toggle's parts of their own; the brand's mark a part of its own; the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents; the ground, the site bar, the title bar and the panel's bar added, and a text box and a checkbox; the heading a leaf per level; prose a leaf per element");
         assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree");
-        assertEquals(115, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the overview's separators between its settings; the slider's rail and the brand's mark among them; the preferences' view laid out by a split grid among them, and the grid's line in two roles; a panel's bar and its body; a table's header and data cells");
-        assertEquals(47, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts - the slider's knob none: its mark the slider's symbol");
+        assertEquals(116, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the overview's separators between its settings; the steward monitor's lamp; the slider's rail and the brand's mark among them; the preferences' view laid out by a split grid among them, and the grid's line in two roles; a panel's bar and its body; a table's header and data cells");
+        assertEquals(48, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the components that have parts - the steward monitor among them, its lamp; the slider's knob none: its mark the slider's symbol");
     }
 
     /** Every node of the whole house a stateless functional object, as jOntology judges one: the extensions' too. */

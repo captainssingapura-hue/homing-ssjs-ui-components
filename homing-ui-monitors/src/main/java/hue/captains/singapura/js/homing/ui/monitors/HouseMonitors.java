@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 
@@ -41,6 +42,9 @@ public record HouseMonitors() implements TaxonomyExtension {
     /** Where the keyboard's steward has the focus, as one lamp. */
     public record StewardMonitor() implements Component<HouseBranches.View> {
         public static final StewardMonitor INSTANCE = new StewardMonitor();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
+        /** Its body one lamp: quiet, lit while the keys are held or lent, broken while the steward's invariants are. */
+        @Override public List<Slot<?>> parts() { return List.of(DSL.part(HouseMarks.Lamp.INSTANCE).as(HouseShaping.Body.INSTANCE).one()); }
     }
 }

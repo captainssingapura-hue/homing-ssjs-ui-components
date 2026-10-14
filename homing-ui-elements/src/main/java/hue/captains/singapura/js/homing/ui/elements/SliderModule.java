@@ -80,6 +80,7 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
                         new ElementStyles.el_slider_off()
                 ), ElementStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DetentModule.Detent()), DetentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .build();
     }

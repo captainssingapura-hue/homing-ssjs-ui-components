@@ -58,8 +58,16 @@ public final class HouseFamilies {
     /** The items: a menu's, a list's row, a choice's option - flat, tinted under the hand, filled while picked, each its own measure. */
     public static final Set<Component<?>> ITEMS = Set.of(HouseItems.MenuItem.INSTANCE, HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards and the items. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS);
+    /**
+     * The marks each style draws its own way: a separator's weight, a lamp's corner, a detent's and a tick's measure. The
+     * others - an icon, the sign between steps, an indicator, where a dragged thing lands, a boundary - are Base's
+     * alone, every style's alike, their colours the palette's or the ink they stand on.
+     */
+    public static final Set<Component<?>> MARKS = Set.of(HouseMarks.Separator.INSTANCE, HouseMarks.Lamp.INSTANCE,
+            HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items and the marks. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

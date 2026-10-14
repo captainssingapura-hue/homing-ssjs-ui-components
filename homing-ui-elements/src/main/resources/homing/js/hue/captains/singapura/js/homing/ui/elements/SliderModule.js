@@ -58,8 +58,6 @@
 const _sliderOwner = Object.freeze({ toString: () => "slider" });
 var _BITE = 0.6;   // of a step, either side of a detent
 
-/** The detent, which nothing realizes on its own yet: its token, for the look it wears as the slider casts it - its family moves in turn. */
-const _DETENT = Object.freeze({ LEAF: "detent" });
 
 class Slider {
     static LEAF = "slider";
@@ -125,11 +123,13 @@ class Slider {
         track.appendChild(this._fill);
         rail.appendChild(track);
         this._detent = null;
+        this._detentMark = null;
         if (this._detents.length) {
-            this._detent = branch.createElement("detent", "div");
+            // the house's detent, cast as where the slider rests: placed by it, shown while the knob is in the hand
+            this._detentMark = new Detent(branch.elementMaker("detent"), {}, ROLE.REST);
+            this._detent = this._detentMark.el;
             css.addClass(this._detent, el_slider_detent);
             if (vertical) css.addClass(this._detent, el_slider_detent_vertical);
-            new Look(_DETENT, ROLE.REST).wear(this._detent);
             rail.appendChild(this._detent);
         }
         // the scale: a tick at each value named, its caption beside it - its own code, drawn into the rail
@@ -147,7 +147,7 @@ class Slider {
         knob.setAttribute("aria-valuemax", String(this._max));
         if (p.label != null) knob.setAttribute("aria-label", String(p.label));
         this._knob = knob;
-        this._mark = new Icon(branch.createElement("mark", Icon.TAG), null);
+        this._mark = new Icon(branch.createElement("mark", Icon.TAG), null, ROLE.SYMBOL);   // the knob's mark, the slider's symbol
         css.addClass(this._mark.el, vertical ? el_slider_cap_mark : el_slider_mark);
         knob.appendChild(this._mark.el);
         this.icon(p.icon === undefined ? "grip" : p.icon);
@@ -161,7 +161,6 @@ class Slider {
         this._parts = [root, this._mark.el].concat(this._ticks);
         if (this._detent) this._parts.push(this._detent);
         this._sized = [this._railPart, this._groove, this._thumb];   // its parts that grow by its size, each by its own
-        this._dragged = this._detent ? [this._detent] : [];   // the detent, shown only while the knob is dragged
 
         this._value = this._snap(p.value == null ? this._rest() : Number(p.value), false);
         this._draw();
@@ -246,7 +245,7 @@ class Slider {
     /** The hand on the knob, or off it: the knob dragging, and the detent shown only now. */
     _drag(on) {
         this._thumb.dragging = !!on;
-        this._dragged.forEach(function (el) { if (on) el.setAttribute("data-dragging", ""); else el.removeAttribute("data-dragging"); });
+        if (this._detentMark) this._detentMark.dragging = !!on;   // the detent shown only now
     }
     _release() {
         var rail = this._rail;

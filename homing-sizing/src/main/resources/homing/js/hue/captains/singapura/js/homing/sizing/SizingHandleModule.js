@@ -9,7 +9,7 @@
 // cursor, the reach of the hand a little past the line either way, the hand
 // and the keys, and the rail's arithmetic.
 //
-//   new SizingHandle(el, { axis, index, rail, measure, onMove, onDone, step?, leap? })
+//   new SizingHandle(el, { axis, index, rail, measure, onMove, onDone, onGrip?, step?, leap? })
 //     el        the boundary's line, made and worn by its layout
 //     axis      the rail's: "horizontal" - the line moves along x - or "vertical"
 //     index     the boundary after box `index` of the rail
@@ -18,6 +18,8 @@
 //               and each box's least - read when a move begins
 //     onMove(rail)  a new rail while it moves: its layout lays it out
 //     onDone(rail)  the rail it was left at, once, when a move ends having changed it
+//     onGrip(on)    the line taken by the hand, true, and let go, false: its layout holds the line's
+//                   Dragging state by it - the handle writes data-dragging, and no class
 //     step      the keys' step in px, 16 unless said; leap, with Shift, 64
 //
 //   handle.key(ev)      a keydown handed in by whoever holds the keys: the arrows
@@ -52,6 +54,7 @@ class SizingHandle {
         this._measure = opts.measure;
         this._onMove = typeof opts.onMove === "function" ? opts.onMove : function () {};
         this._onDone = typeof opts.onDone === "function" ? opts.onDone : function () {};
+        this._onGrip = typeof opts.onGrip === "function" ? opts.onGrip : function () {};
         this._step = opts.step == null ? 16 : Math.max(1, +opts.step);
         this._leap = opts.leap == null ? 64 : Math.max(1, +opts.leap);
         this._on = true;
@@ -69,6 +72,7 @@ class SizingHandle {
         var self = this, el = this.el;
         var m = this._measure(), from = this._rail(), last = from, start = this._along(down);
         el.setAttribute("data-dragging", "");
+        this._onGrip(true);
         try { el.setPointerCapture(down.pointerId); } catch (err) {}
         function onMove(ev) {
             var r = Rail.move(from, self._index, self._along(ev) - start, m.room, m.least);
@@ -82,6 +86,7 @@ class SizingHandle {
             el.removeEventListener("pointerup", onEnd);
             el.removeEventListener("pointercancel", onEnd);
             el.removeAttribute("data-dragging");
+            self._onGrip(false);
             try { el.releasePointerCapture(down.pointerId); } catch (err) {}
             self._end = null;
             if (!report) return;

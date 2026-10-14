@@ -111,6 +111,9 @@ class TabStripTest extends JsModuleTestBase {
         js.eval("js", "if (typeof ic_base === 'undefined') globalThis.ic_base = 'ic_base';");   // the house's icon, the chip's within mark
         if (js.eval("js", "typeof Icon === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         loadModule(P + "TabChipModule.js");
+        // where a dragged tab would land: the house's drop mark
+        if (js.eval("js", "typeof MarkBehavior === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/MarkBehaviorModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/DropMarkModule.js");
         loadModule(P + "TabStripModule.js");
         js.eval("js", TextsInJs.withCss(SHIM));
     }

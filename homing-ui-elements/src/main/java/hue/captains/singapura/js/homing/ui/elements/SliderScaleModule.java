@@ -6,7 +6,6 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public record SliderScaleModule() implements DomModule<SliderScaleModule> {
         return ImportsFor.<SliderScaleModule>builder()
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TickModule.Tick()), TickModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_slider_rail_ticked(),
                         new ElementStyles.el_slider_tick(),
