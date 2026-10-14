@@ -38,20 +38,20 @@ public record HousePanes() implements TaxonomyExtension {
     }
 
     /** The thumbnails of the panes one may open. */
-    public record PaneThumbs() implements Component<HouseBranches.Container> {
+    public record PaneThumbs() implements Component<HouseBranches.Chooser> {
         public static final PaneThumbs INSTANCE = new PaneThumbs();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
         }
     }
 
     /** The way to add a tab: where, off a picture of the panes; what, off the kinds; how it arrives; and go. */
-    public record AddTab() implements Component<HouseBranches.Container> {
+    public record AddTab() implements Component<HouseBranches.Chooser> {
         public static final AddTab INSTANCE = new AddTab();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(PaneThumbs.INSTANCE).as(HouseDoing.Where.INSTANCE).one(),
                            DSL.part(HouseControls.Select.INSTANCE).as(HouseDoing.What.INSTANCE).one(),
@@ -61,10 +61,10 @@ public record HousePanes() implements TaxonomyExtension {
     }
 
     /** What an empty pane offers to open. */
-    public record TabOpener() implements Component<HouseBranches.Container> {
+    public record TabOpener() implements Component<HouseBranches.Chooser> {
         public static final TabOpener INSTANCE = new TabOpener();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Prompt.INSTANCE).one(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
@@ -72,10 +72,10 @@ public record HousePanes() implements TaxonomyExtension {
     }
 
     /** The list of a pane's tabs, to pick from. */
-    public record TabPicker() implements Component<HouseBranches.Container> {
+    public record TabPicker() implements Component<HouseBranches.Chooser> {
         public static final TabPicker INSTANCE = new TabPicker();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Prompt.INSTANCE).one(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Choice.INSTANCE).any(),

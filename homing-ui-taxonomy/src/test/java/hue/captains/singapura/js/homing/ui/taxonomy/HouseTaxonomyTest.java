@@ -45,7 +45,7 @@ class HouseTaxonomyTest {
 
     @Test
     void theBaseIsReadWhole_withItsCatalogue() {
-        assertEquals(15, HOUSE.branches().size(), "the view, the field and the split have no common leaf: their leaves are the extensions' - a view is a widget, a split the grid's; the headings a branch of the text, a leaf a level");
+        assertEquals(20, HOUSE.branches().size(), "the view, the field, the split and the chooser have no common leaf: their leaves are the extensions' - a view is a widget, a split the grid's; the headings a branch of the text, a leaf a level");
         assertEquals(79, HOUSE.components().size(), "the panel's head among them, a bar of its own; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
         assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
         assertEquals(54, HOUSE.parts().size(), "the slots, each a part once its owner is appended - the site bar's brand and trail among them; the brand's mark its own colour, no icon; the float layer's floats; the panel's head and its body; a table's header cells and its data cells");
@@ -87,8 +87,18 @@ class HouseTaxonomyTest {
             assertFalse(descendants(b).isEmpty(), b.getClass().getSimpleName() + " has no component under it");
         assertEquals(List.of("control", "item", "container", "region", "text", "mark", "track"),
                 HOUSE.children(Root.INSTANCE).stream().map(n -> n.token()).toList(), "level 1, in the order first reached");
-        assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2),
-                HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, eight at level 2 - the headings among them, a branch of the text");
+        assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+                HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, thirteen at level 2 - the headings among them, a branch of the text");
+    }
+
+    @Test
+    void everyComponent_isOfAFamily_headedAtOneLevel() {
+        for (var c : HOUSE.components()) assertTrue(HOUSE.head(c).isPresent(), c.token() + " is of no family");
+        assertEquals(Set.of("button", "handle", "input", "way", "selector", "item", "card", "pane", "menu", "layer", "bar", "surface",
+                        "cluster", "region", "text", "track", "mark"),
+                Set.copyOf(HOUSE.heads().stream().map(ComponentBranch::token).toList()),
+                "the control, the container and the heading head none: the heads are one level, the headings in the text's family");
+        assertEquals(HouseBranches.Text.INSTANCE, HOUSE.head(HouseText.Heading1.INSTANCE).orElseThrow());
     }
 
     @Test
@@ -129,7 +139,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(15 + 79 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
+        assertEquals(20 + 79 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));

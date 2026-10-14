@@ -1,0 +1,47 @@
+/* icon: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-icon {}
+
+/* An icon as a symbol - an icon button's face: the ink of what holds it, whole (D30). */
+.styled-icon_symbol {
+    color: inherit;
+    line-height: 1;
+}
+
+/* icon_keys: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-icon_keys {}
+
+/* icon_disclose: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-icon_disclose {}
+
+/* detent: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-detent {}
+
+/* detent_rest: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-detent_rest {}
+
+/* tick: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-tick {}
+
+/* tick_notch: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-tick_notch {}
+
+/* separator: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-separator {}
+
+/* boundary-line: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-boundary-line {}
+
+/* delimiter: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-delimiter {}
+
+/* lamp: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-lamp {}
+
+/* indicator: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-indicator {}
+
+/* drop-mark: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-drop-mark {}
+
+/* drop-mark_landing: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+.styled-drop-mark_landing {}

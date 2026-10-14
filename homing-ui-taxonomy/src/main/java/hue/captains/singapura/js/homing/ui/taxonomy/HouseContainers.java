@@ -45,10 +45,10 @@ public final class HouseContainers {
     // ── containers ───────────────────────────────────────────────────────
 
     /** Sliders gathered under one header. */
-    public record SliderGroup() implements Component<HouseBranches.Container> {
+    public record SliderGroup() implements Component<HouseBranches.Cluster> {
         public static final SliderGroup INSTANCE = new SliderGroup();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Cluster parent() { return HouseBranches.Cluster.INSTANCE; }
         /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
@@ -61,10 +61,10 @@ public final class HouseContainers {
      * A panel that fills what holds it: a head that names it, and a body - a section of its room, which what is
      * mounted in it fills. Its controls are the caller's, at the end of its head.
      */
-    public record Panel() implements Component<HouseBranches.Container> {
+    public record Panel() implements Component<HouseBranches.Surface> {
         public static final Panel INSTANCE = new Panel();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(PanelBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional(),
                            DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Body.INSTANCE).one());
@@ -72,10 +72,10 @@ public final class HouseContainers {
     }
 
     /** A floating pane over a scrim, with a bar of actions. Its title and close are the pane's, its content the caller's. */
-    public record Dialog() implements Component<HouseBranches.Container> {
+    public record Dialog() implements Component<HouseBranches.Pane> {
         public static final Dialog INSTANCE = new Dialog();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(Scrim.INSTANCE).as(HouseShaping.Veil.INSTANCE).optional(),
                            DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Window.INSTANCE).one(),
@@ -164,9 +164,9 @@ public final class HouseContainers {
      * The surface a page stands on: its ground, the ink and the face of what is written on it, and its
      * scrollbar. One to a document, worn on its own element: everything on the page stands on it.
      */
-    public record Ground() implements Component<HouseBranches.Container> {
+    public record Ground() implements Component<HouseBranches.Surface> {
         public static final Ground INSTANCE = new Ground();
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
     }
 
     /** Heads a site's pages: its brand, the way to where the user is, and what its owner hands it at its end, in the ink written on it. */

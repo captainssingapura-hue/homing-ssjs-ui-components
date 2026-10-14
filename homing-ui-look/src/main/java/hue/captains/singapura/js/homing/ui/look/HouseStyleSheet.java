@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * The house's style-aware sheet, per style (RFC 0067, appendix Two Classes per Leaf): every house leaf's one class, the
- * style's own file or Base's, flattened the first time the style is asked for. The same in every palette, so the theme's
+ * The house's style-aware sheet, per style (RFC 0067, appendix Two Classes per Leaf): every house casting's one class,
+ * the style's own rule or Base's, from their families' files, flattened the first time the style is asked for. The same in every palette, so the theme's
  * owner fetches it again only when the style changes; Editorial unless the address or a pick says otherwise.
  */
 public record HouseStyleSheet() implements DerivedCss<HouseStyleSheet>, SelfRenderedCss {

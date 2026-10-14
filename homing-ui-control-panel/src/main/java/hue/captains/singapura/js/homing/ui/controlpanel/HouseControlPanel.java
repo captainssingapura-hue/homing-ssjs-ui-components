@@ -30,10 +30,10 @@ public record HouseControlPanel() implements TaxonomyExtension {
     }
 
     /** The controls for a set of options: the degrees in one group of sliders, a button for each switch, one for each action and question. */
-    public record ControlPanel() implements Component<HouseBranches.Container> {
+    public record ControlPanel() implements Component<HouseBranches.Cluster> {
         public static final ControlPanel INSTANCE = new ControlPanel();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Cluster parent() { return HouseBranches.Cluster.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseContainers.SliderGroup.INSTANCE).as(HouseDoing.Adjust.INSTANCE).optional(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Toggle.INSTANCE).any(),

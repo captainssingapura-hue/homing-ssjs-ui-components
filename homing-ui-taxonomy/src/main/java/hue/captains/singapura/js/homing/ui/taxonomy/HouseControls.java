@@ -7,8 +7,10 @@ import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Button;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Control;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Handle;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Input;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Selector;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Way;
 
 import java.util.List;
 
@@ -141,59 +143,59 @@ public final class HouseControls {
     // ── other controls ───────────────────────────────────────────────────
 
     /** A way to somewhere else. */
-    public record Link() implements Component<Control> {
+    public record Link() implements Component<Way> {
         public static final Link INSTANCE = new Link();
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Way parent() { return Way.INSTANCE; }
         @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
     /** One step of a trail back. */
-    public record Crumb() implements Component<Control> {
+    public record Crumb() implements Component<Way> {
         public static final Crumb INSTANCE = new Crumb();
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Way parent() { return Way.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_CRUMB; }
         @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
     /** A value picked along a scale. */
-    public record Range() implements Component<Control> {
+    public record Range() implements Component<Input> {
         public static final Range INSTANCE = new Range();
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Input parent() { return Input.INSTANCE; }
     }
 
     /** A value picked from a list that drops down. */
-    public record Select() implements Component<Control> {
+    public record Select() implements Component<Input> {
         public static final Select INSTANCE = new Select();
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Input parent() { return Input.INSTANCE; }
     }
 
     /** Words the user types: a line of them, or as many as they write - the browser's own editing. */
-    public record TextBox() implements Component<Control> {
+    public record TextBox() implements Component<Input> {
         public static final TextBox INSTANCE = new TextBox();
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Input parent() { return Input.INSTANCE; }
     }
 
     /** One thing on or off, by a mark in a box - the browser's own. */
-    public record Checkbox() implements Component<Control> {
+    public record Checkbox() implements Component<Input> {
         public static final Checkbox INSTANCE = new Checkbox();
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Input parent() { return Input.INSTANCE; }
     }
 
     /** A pane, picked by a small picture of where it is, with its name: a thumbnail's, a grid's mirror's. */
-    public record PaneThumb() implements Component<Control> {
+    public record PaneThumb() implements Component<Selector> {
         public static final PaneThumb INSTANCE = new PaneThumb();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Selector parent() { return Selector.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
         }
     }
 
     /** One tab of a strip: what a pane holds, picked. Its label and its icon slot are its own. */
-    public record Tab() implements Component<Control> {
+    public record Tab() implements Component<Selector> {
         public static final Tab INSTANCE = new Tab();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Selector parent() { return Selector.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Keys.INSTANCE).one(),
@@ -202,20 +204,20 @@ public final class HouseControls {
     }
 
     /** A site's mark and name, a way home. */
-    public record Brand() implements Component<Control> {
+    public record Brand() implements Component<Way> {
         public static final Brand INSTANCE = new Brand();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Way parent() { return Way.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Wordmark.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
         }
     }
 
     /** The button that opens a site's preferences in a dialog, a slot its page: what is shown there is a widget, the site's. */
-    public record PreferencesButton() implements Component<Control> {
+    public record PreferencesButton() implements Component<Button> {
         public static final PreferencesButton INSTANCE = new PreferencesButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
                            DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional(),
@@ -224,10 +226,10 @@ public final class HouseControls {
     }
 
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
-    public record Switch() implements Component<Control> {
+    public record Switch() implements Component<Input> {
         public static final Switch INSTANCE = new Switch();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Input parent() { return Input.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Groove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
                            DSL.part(Knob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one());
@@ -235,10 +237,10 @@ public final class HouseControls {
     }
 
     /** A value picked along a track, with its label, its scale and its readout. The rail is its own. */
-    public record Slider() implements Component<Control> {
+    public record Slider() implements Component<Input> {
         public static final Slider INSTANCE = new Slider();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Control parent() { return Control.INSTANCE; }
+        @Override public Input parent() { return Input.INSTANCE; }
         /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {

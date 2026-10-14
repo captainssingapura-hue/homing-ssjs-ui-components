@@ -50,10 +50,10 @@ public record HouseSplitGrid() implements TaxonomyExtension {
      * A split grid's shape, drawn small: a control - it takes the keys, and its cursor picks a pane -
      * whose cells are pictures of the panes, each with its name, as a pane's thumbnail is.
      */
-    public record SplitGridMirror() implements Component<HouseBranches.Control> {
+    public record SplitGridMirror() implements Component<HouseBranches.Selector> {
         public static final SplitGridMirror INSTANCE = new SplitGridMirror();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Control parent() { return HouseBranches.Control.INSTANCE; }
+        @Override public HouseBranches.Selector parent() { return HouseBranches.Selector.INSTANCE; }
         /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {

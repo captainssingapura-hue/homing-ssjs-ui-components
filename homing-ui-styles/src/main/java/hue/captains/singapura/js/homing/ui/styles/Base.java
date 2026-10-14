@@ -12,10 +12,11 @@ import java.util.List;
 
 /**
  * The house's base layer (RFC 0067, appendix Two Classes per Leaf): neutral, a look of no style of its own, and the
- * look every house style's absence lands on. It answers content for every leaf (D26): a whole file for each, at
- * {@code styles/hue/captains/singapura/js/homing/ui/styles/base/<leaf>.css} - a module that adds leaves gives Base's
- * file for each from its own jar. What every house style says alike is said here, so a style's file says only what
- * makes it itself - and says the rest again, whole, where it draws a leaf at all (D9).
+ * look every house style's absence lands on. It answers content for every casting (D26): a whole rule for each, in
+ * its family's file, {@code styles/hue/captains/singapura/js/homing/ui/styles/base/<family>.css} - a module that adds
+ * castings gives Base's rules for them from its own jar, in {@code base/<family>.<module>.css} (D30). What every house
+ * style says alike is said here, so a style's rule says only what makes it itself - and says the rest again, whole,
+ * where it draws a casting at all (D9).
  */
 public record Base() implements DesignStyle<ColorScheme.Base> {
 
