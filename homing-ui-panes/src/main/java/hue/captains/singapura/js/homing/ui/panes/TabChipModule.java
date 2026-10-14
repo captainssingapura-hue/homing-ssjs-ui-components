@@ -9,6 +9,7 @@ import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.elements.CloseButtonModule;
+import hue.captains.singapura.js.homing.ui.icons.IconModule;
 
 import java.util.List;
 
@@ -22,6 +23,9 @@ import java.util.List;
  *
  * <p>Split out of the strip when the tab-pane came (RFC 0066 E3, appendix
  * "tab-panes"): a chip that travels cannot be the strip's to make.</p>
+ *
+ * <p>It wears the tab's look, but implements no leaf: static helpers on the chip's element, not a
+ * class named {@code Tab}, which the tab's leaf asks of its module. Its turning into one is still to come.</p>
  */
 public record TabChipModule() implements DomModule<TabChipModule> {
 
@@ -33,7 +37,8 @@ public record TabChipModule() implements DomModule<TabChipModule> {
     @Override
     public ImportsFor<TabChipModule> imports() {
         return ImportsFor.<TabChipModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton()), CloseButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))

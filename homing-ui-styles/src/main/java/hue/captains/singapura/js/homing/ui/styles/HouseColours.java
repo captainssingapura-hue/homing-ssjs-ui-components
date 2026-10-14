@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * The house's colour tree (RFC 0067, appendix Semantic Colours and Flavours, D16; appendix Two Classes per Leaf): every
  * colour a house leaf's file names, each named for what it is for, in the base scheme. Grown family by family as the
- * leaves move onto files - the buttons first, then the ways, the text, the inputs, the tracks and the handles.
+ * leaves move onto files - the buttons first, then the ways, the text, the inputs, the tracks, the handles and the selectors.
  *
  * <ul>
  *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, the text's ink
@@ -49,9 +49,9 @@ public record HouseColours() implements ColorSource {
             Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft,
             Text, TextFaded, OnInverted, OnAccent, WayHovered, HeadingInk, KickerInk,
             Border, GrooveEdge,
-            Title, Accent, AccentEdge, Ring, AccentTint, AccentWash, KeysCandidate, KeysLent,
-            ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, Sheen,
-            GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowStrong, GlowBright, GlowFull {}
+            Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentWash, AccentWashFaint, AccentWashSoft, KeysCandidate, KeysLent,
+            ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, Sheen,
+            GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
 
     public record Surfaces() implements L1_ColorBranch<Base> {}
     public record Writing() implements L1_ColorBranch<Base> {}
@@ -118,8 +118,14 @@ public record HouseColours() implements ColorSource {
     public record Ring() implements Palettable<Base, Attention>, HouseColour {}
     /** The accent's tint on a raised face: a toggle that is on. */
     public record AccentTint() implements Palettable<Base, Attention>, HouseColour {}
+    /** The accent's faint tint on a raised face, 12%: a pane's thumbnail the cursor is at. */
+    public record AccentTintFaint() implements Palettable<Base, Attention>, HouseColour {}
     /** The accent washed thin, at 18%: a badge's ground. */
     public record AccentWash() implements Palettable<Base, Attention>, HouseColour {}
+    /** The accent washed fainter, 8%: a tab's ground. */
+    public record AccentWashFaint() implements Palettable<Base, Attention>, HouseColour {}
+    /** At 15%: a tab under the hand. */
+    public record AccentWashSoft() implements Palettable<Base, Attention>, HouseColour {}
     /** The keys' mark on a candidate for them: the accent at 45%. */
     public record KeysCandidate() implements Palettable<Base, Attention>, HouseColour {}
     /** The keys' mark where they are lent: the accent at 25%. */
@@ -137,6 +143,12 @@ public record HouseColours() implements ColorSource {
     public record ShadeMedium() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 16%: a moulded box's dark side. */
     public record ShadeFirm() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 18%: a tab in use, set on the row. */
+    public record ShadeStrong() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 20%: a tab in the hand. */
+    public record ShadeDeep() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 22%: a glass tab in the hand. */
+    public record ShadeHeavy() implements Palettable<Base, Shadows>, HouseColour {}
     /** The raised layer's sheen, at 60%: a glass edge lit from above. */
     public record Sheen() implements Palettable<Base, Shadows>, HouseColour {}
     /** The house colour glowing faintly - 14% - a fine line of light. */
@@ -147,12 +159,16 @@ public record HouseColours() implements ColorSource {
     public record GlowSoft() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 40%. */
     public record GlowMedium() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 45%. */
+    public record GlowWarm() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 55%. */
     public record GlowStrong() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 60%. */
     public record GlowBright() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 70%: a neon edge. */
     public record GlowFull() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 80%: a neon tab in the hand. */
+    public record GlowFlare() implements Palettable<Base, Shadows>, HouseColour {}
 
     // ── feedback: the same in every house palette ─────────────────────────
 
@@ -246,9 +262,9 @@ public record HouseColours() implements ColorSource {
                 new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new Clear(),
                 new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
                 new Border(), new GrooveEdge(),
-                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentWash(), new KeysCandidate(), new KeysLent(),
-                new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new Sheen(),
-                new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowStrong(), new GlowBright(), new GlowFull(),
+                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentWash(), new AccentWashFaint(), new AccentWashSoft(), new KeysCandidate(), new KeysLent(),
+                new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new Sheen(),
+                new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),
                 new Danger(), new DangerPressed(), new OnDanger(), new DangerTint(), new DangerEdge(), new DangerInk(),
                 new DangerWash(), new WarningWash(), new SuccessWash(),
                 new WarningTint(), new WarningInk(), new SuccessTint(), new SuccessInk(),

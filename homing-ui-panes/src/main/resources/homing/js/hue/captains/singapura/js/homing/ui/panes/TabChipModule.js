@@ -26,16 +26,16 @@
 // native focus itself. Pinned tabs and tabs that cannot be
 // closed have no cross.
 //
-// Its look is the house's: a chip wears the tab's casting - the chip a
-// tab-pane carries, a role that only places it - and the design draws it at
-// rest, under the hand, selected (aria-selected) and dragging (data-dragging):
-// the owner of its morphism, its cross flat. Its mark is the within icon's
-// picture, in the colour of an icon that says where the keys are. Its own
-// classes only place. `css` is injected with the styles import.
+// Its look is the house's: a chip is the tab's leaf, wearing the tab's casting -
+// the chip a tab-pane carries, a role that only places it - and the design draws
+// it at rest, under the hand, selected and dragging, each state held as its class
+// (TabChip.select, TabChip.grip; aria-selected and data-dragging written with
+// them): the owner of its morphism, its cross flat. Its mark is the house's Icon,
+// the within word, wearing the casting of an icon that says where the keys are.
+// Its own classes only place. `css` is injected with the styles import.
 // =============================================================================
 
-/** A chip's leaf - a tab, cast as the chip a tab-pane carries - and its mark's: an icon, cast as the one that says where the keys are. */
-const _TAB = Object.freeze({ LEAF: "tab" });
+/** A chip's mark's leaf: an icon, cast as the one that says where the keys are - the Icon component wears no look of its own yet. */
 const _KEYS_ICON = Object.freeze({ LEAF: "icon" });
 
 /** A chip's cross pressed: the press kept to the cross, and the chip's holder asked to close its tab. */
@@ -46,6 +46,24 @@ class TabChipClose {
 }
 
 class TabChip {
+    /** The tab's leaf: a chip is a tab, cast as the chip a tab-pane carries. */
+    static LEAF = "tab";
+    /** Its states, held as their classes while they hold: the one in use, and in the hand. */
+    static AXES = Object.freeze({
+        selected: Object.freeze({
+            values: Object.freeze([false, true]),
+            rest: false,
+            reflect: function (el, on) { el.setAttribute("aria-selected", on ? "true" : "false"); },
+            state: STATE.SELECTED
+        }),
+        dragging: Object.freeze({
+            values: Object.freeze([false, true]),
+            rest: false,
+            reflect: function (el, on) { if (on) el.setAttribute("data-dragging", ""); else el.removeAttribute("data-dragging"); },
+            state: STATE.DRAGGING
+        })
+    });
+
     /** How much of the colour a chip's mark carries while the cursor is on the bar: part of the way, towards what the tab in use carries at full. */
     static ON_THE_BAR = 0.45;
 
@@ -56,7 +74,8 @@ class TabChip {
         css.addClass(c, mtp_chip);
         TabChip._looks().tab.wear(c);
         c.setAttribute("role", "tab");
-        c.setAttribute("aria-selected", "false");
+        c._state = { selected: false, dragging: false };
+        TabChip._looks().tab.show(c, c._state);
         c.title = tab.title == null ? "" : String(tab.title);
 
         // The icon's slot, always there and shown only when there is an icon:
@@ -74,11 +93,11 @@ class TabChip {
         label.textContent = tab.title == null ? tab.id : String(tab.title);
         c._label = label;
         c.appendChild(label);
-        var mark = branch.createElement("mark" + s, "span");   // the within mark, after the label: shown only while the keys are in this tab
+        // the within mark, after the label: shown only while the keys are in this tab - the house's icon, its word the
+        // lexicon's as the style worn writes it, cast as the icon that says where the keys are
+        var mark = new Icon(branch.createElement("mark" + s, Icon.TAG), { name: "within" }).el;
         css.addClass(mark, mtp_chip_mark);
-        TabChip._looks().keys.wear(mark, { only: ["color-ink"] });   // its colour the look's
-        TabChip._looks().keys.mark(mark, "within");                    // its picture the lexicon's word, as the style worn writes it
-        mark.setAttribute("aria-hidden", "true");
+        TabChip._looks().keys.wear(mark);
         c._mark = mark;
         c.appendChild(mark);
 
@@ -135,16 +154,25 @@ class TabChip {
         css.extent(chip._mark, on ? (state === "held" ? TabChip.ON_THE_BAR : 1) : null);
     }
 
+    /** The chip in use, or not: its Selected state, held as its class. */
+    static select(chip, on) { TabChip._hold(chip, "selected", !!on); }
+
+    /** One of its states, now: written, and its class held while it holds. */
+    static _hold(chip, axis, value) {
+        chip._state = Object.assign({}, chip._state || { selected: false, dragging: false });
+        chip._state[axis] = value;
+        TabChip._looks().tab.show(chip, chip._state);
+    }
+
     /** The chip in the hand, or set down: the design's word for a thing dragged while it is, and lifted over the row along it. */
     static grip(chip, on) {
-        if (on) chip.setAttribute("data-dragging", "");
-        else chip.removeAttribute("data-dragging");
+        TabChip._hold(chip, "dragging", !!on);
         css.toggleClass(chip, mtp_chip_dragging, !!on);
     }
 
     /** The tab's look and its mark's, made with the first chip: the page's castings are read by then. */
     static _looks() {
-        if (!TabChip._worn) TabChip._worn = { tab: new Look(_TAB, ROLE.CHIP), keys: new Look(_KEYS_ICON, ROLE.KEYS) };
+        if (!TabChip._worn) TabChip._worn = { tab: new Look(TabChip, ROLE.CHIP), keys: new Look(_KEYS_ICON, ROLE.KEYS) };
         return TabChip._worn;
     }
 

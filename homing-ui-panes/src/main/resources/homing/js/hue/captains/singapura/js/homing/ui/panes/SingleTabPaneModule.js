@@ -94,7 +94,7 @@ class SingleTabPane {
         this._strip = {
             adopt: function (c) { css.size(c, null); css.aspect(c, null); bar.appendChild(c); return c; },
             remove: function (c) {
-                c.setAttribute("aria-selected", "false");
+                TabChip.select(c, false);
                 if (c._mark) { css.toggleClass(c._mark, mtp_chip_mark_on, false); css.extent(c._mark, null); }
                 if (c.parentNode === bar) bar.removeChild(c);
             }
@@ -135,7 +135,7 @@ class SingleTabPane {
         this._activeId = id;
         var e = this._tabs[0];
         if (!e) return;
-        e.chip.setAttribute("aria-selected", "true");
+        TabChip.select(e.chip, true);
         css.toggleClass(e.panel, mtp_tab_content_hidden, false);
         this._marks();
     }

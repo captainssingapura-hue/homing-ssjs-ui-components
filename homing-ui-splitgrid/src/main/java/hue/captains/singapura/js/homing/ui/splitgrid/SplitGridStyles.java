@@ -157,21 +157,10 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
         }
     }
 
-    /** A cell's name, placed: on one line, cut short where the cell is narrower than it. */
-    public record sgm_name() implements CssClass<SplitGridStyles> {
-        @Override public String body() { return """
-            max-width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            """;
-        }
-    }
-
     @Override
     public List<CssClass<SplitGridStyles>> cssClasses() {
         return List.of(new sg_root(), new sg_split(), new sg_split_h(), new sg_split_v(), new sg_child(), new sg_child_h(), new sg_child_v(),
                        new sg_cell(), new sg_line(), new sg_line_fixed(),
-                       new sgm_root(), new sgm_cell(), new sgm_name());
+                       new sgm_root(), new sgm_cell());
     }
 }

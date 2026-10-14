@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.PaneThumbModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
 import java.util.List;
 
@@ -49,11 +49,10 @@ public record SplitGridMirrorModule() implements DomModule<SplitGridMirrorModule
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneThumbModule.PaneThumb()), PaneThumbModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new SplitGridStyles.sgm_root(),
-                        new SplitGridStyles.sgm_cell(),
-                        new SplitGridStyles.sgm_name()
+                        new SplitGridStyles.sgm_cell()
                 ), SplitGridStyles.INSTANCE))
                 .build();
     }

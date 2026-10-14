@@ -180,6 +180,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule(FIT);
         loadModule(WINDOW);
         loadModule(HAND);
+        js.eval("js", "if (typeof ic_base === 'undefined') globalThis.ic_base = 'ic_base';");   // the house's icon, the chip's within mark
+        if (js.eval("js", "typeof Icon === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabChipModule.js");
         loadModule(STRIP);
         loadModule(KEYS);

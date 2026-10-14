@@ -120,6 +120,8 @@ class TabPaneTest extends JsModuleTestBase {
         for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
             loadModule(ELEMENTS + m);
         loadModule(P + "PaneKeysModule.js");
+        js.eval("js", "if (typeof ic_base === 'undefined') globalThis.ic_base = 'ic_base';");   // the house's icon, the chip's within mark
+        if (js.eval("js", "typeof Icon === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         loadModule(P + "TabChipModule.js");
         loadModule(P + "TabPaneModule.js");
         loadModule(P + "TabRegisterModule.js");

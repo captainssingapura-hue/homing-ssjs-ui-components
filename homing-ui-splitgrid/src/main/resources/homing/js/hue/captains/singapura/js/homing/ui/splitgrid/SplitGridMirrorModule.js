@@ -31,15 +31,13 @@
 // — the active pane, the one to switch to — and marks the real cell itself.
 //
 // Its look is the house's: the mirror wears its own casting, and each cell is a
-// pane's thumbnail - the picture of a pane to pick it by, cast as a choice -
-// with its name in a kicker. Its own classes place, and paint nothing: where
+// pane's thumbnail - the house's PaneThumb, cast as a choice, its name its own
+// kicker, the cursor's cell its Current state. Its own classes place, and paint nothing: where
 // a cell is and how large, from the geometry, as variables the drawing sets.
 // `css` is injected with the styles import.
 // =============================================================================
 
 const _mirrorOwner = Object.freeze({ toString: () => "splitGridMirror" });
-/** A cell's leaf: a pane's thumbnail, which nothing realizes on its own - the mirror draws it here. */
-const _PANE_THUMB = Object.freeze({ LEAF: "pane-thumb" });
 var _KEYS = Object.freeze({ ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down" });
 
 class SplitGridMirror {
@@ -55,12 +53,11 @@ class SplitGridMirror {
         this._scale = opts.scale == null ? 0.25 : Math.max(0.05, Math.min(1, Number(opts.scale) || 0.25));
         this._opts = { dividerPx: opts.dividerPx, minPx: opts.minPx };
         this._labelOf = typeof opts.labelOf === "function" ? opts.labelOf : function (id) { return id; };
-        this._thumb = new Look(_PANE_THUMB, ROLE.CHOICE);
         this._layout = null;
         this._box = { w: 0, h: 0 };
         this._rects = { cells: {}, dividers: [] };
         this._cursor = null;
-        this._cells = new Map();          // id → the drawn box
+        this._cells = new Map();          // id → its thumbnail
         this._n = 0;
         this._drawing = null;             // the sub-branch the boxes are minted on; dissolved on every redraw
 
@@ -142,21 +139,18 @@ class SplitGridMirror {
         var s = this._scale;
         Object.keys(this._rects.cells).forEach(function (id, i) {
             var r = self._rects.cells[id];
-            var box = self._drawing.createElement("cell-" + i, "div");   // the drawing's own name, from a count: two ids of one safe spelling are two boxes
+            // the drawing's own name, from a count: two ids of one safe spelling are two cells
+            var thumb = new PaneThumb(self._drawing.createBranch("cell-" + i), { name: String(self._labelOf(id)), current: id === self._cursor }, ROLE.CHOICE);
+            var box = thumb.root;
             css.addClass(box, sgm_cell);
-            self._thumb.wear(box);
             box.setAttribute("data-cell", id);
-            SplitGridMirror._mark(box, id === self._cursor);
-            var name = new Kicker(self._drawing.elementMaker("cell-" + i + "-name"), { text: String(self._labelOf(id)) }, ROLE.NAME);
-            css.addClass(name.el, sgm_name);
-            box.appendChild(name.el);
             box.style.setProperty("--sgm-x", Math.round(r.x * s) + "px");
             box.style.setProperty("--sgm-y", Math.round(r.y * s) + "px");
             box.style.setProperty("--sgm-w", Math.max(1, Math.round(r.w * s)) + "px");
             box.style.setProperty("--sgm-h", Math.max(1, Math.round(r.h * s)) + "px");
             box.addEventListener("pointerdown", function (e) { if (e.button === 0) { self.el.focus(); self._moveCursor(id, "pointer"); } });
             self.el.appendChild(box);
-            self._cells.set(id, box);
+            self._cells.set(id, thumb);
         });
         if (old) { try { old.dissolve(); } catch (e) {} }
     }
@@ -165,14 +159,8 @@ class SplitGridMirror {
         if (id === this._cursor) return;
         var self = this;
         this._cursor = id;
-        this._cells.forEach(function (box, cellId) { SplitGridMirror._mark(box, cellId === id); });
+        this._cells.forEach(function (thumb, cellId) { thumb.current = cellId === id; });
         if (id !== null) this._fire(SplitGridEvents.CursorMoved(id, by));
-    }
-
-    /** The cell the cursor is at says so - aria-current, which its look is current by - and no other says anything. */
-    static _mark(box, current) {
-        if (current) box.setAttribute("aria-current", "true");
-        else box.removeAttribute("aria-current");
     }
 
     _fire(ev) {

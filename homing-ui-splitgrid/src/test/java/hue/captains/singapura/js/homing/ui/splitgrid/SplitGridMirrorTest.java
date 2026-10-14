@@ -55,7 +55,7 @@ class SplitGridMirrorTest extends JsModuleTestBase {
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); } };
-        var sgm_root = "sgm_root", sgm_cell = "sgm_cell", sgm_name = "sgm_name";
+        var sgm_root = "sgm_root", sgm_cell = "sgm_cell", el_pane_thumb_name = "el_pane_thumb_name";
         var console = { error: function (m) { log.push("error:" + m); } };
         var host = el("div"), branch = fakeBranch("page");
         var LAYOUT = { kind: "split", orientation: "horizontal", children: [
@@ -78,6 +78,8 @@ class SplitGridMirrorTest extends JsModuleTestBase {
         loadModule("/homing/js/hue/captains/singapura/js/homing/sizing/RailModule.js");
         loadModule(P + "SplitGridGeometryModule.js");
         TextsInJs.load(js, this::loadModule);   // the look, and the kicker each cell's name is
+        for (String m : new String[] {"MarkBehaviorModule.js", "PaneThumbModule.js"})
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);   // each cell the house's pane thumbnail
         loadModule(P + "SplitGridMirrorModule.js");
         js.eval("js", TextsInJs.withCss(SHIM));
     }
@@ -124,12 +126,11 @@ class SplitGridMirrorTest extends JsModuleTestBase {
         assertTrue(eval("mirror.el.has('sgm_root') && mirror.el.has('styled-split-grid-mirror')").asBoolean(),
                 "placed by its own class, and worn as itself: its leaf's class");
         var cell = "mirror.el.children[1]";
-        // a cell is a pane's thumbnail played as a choice, its name a kicker played as the name: parts, worn by their leaves
-        // when the split grid's family moves onto files and each owner names the part it hands (RFC 0067, phase 5; D10)
-        assertTrue(eval(cell + ".has('sgm_cell') && !" + cell + ".has('pane-thumb_choice__color-background')").asBoolean(),
-                "a cell is placed by its own class; the old look's classes, gone");
+        // a cell is the house's pane thumbnail cast as a choice, its name its own kicker cast as its name (RFC 0067, phase 5)
+        assertTrue(eval(cell + ".has('sgm_cell') && " + cell + ".has('styled-pane-thumb_choice')").asBoolean(),
+                "a cell placed by the mirror's class, worn as its casting");
         assertEquals("nav demo explain", eval("mirror.el.children.map(function (b) { return b.children[0].textContent; }).join(' ')").asString(), "named by its id, unless said");
-        assertTrue(eval(cell + ".children[0].has('sgm_name')").asBoolean(), "its name placed on one line");
+        assertTrue(eval(cell + ".children[0].has('el_pane_thumb_name') && " + cell + ".children[0].has('styled-kicker_name')").asBoolean(), "its name its own, on one line");
         eval("var named = new SplitGridMirror(branch.createBranch('named'), { host: host, labelOf: function (id) { return id.toUpperCase(); } }); named.reflect(LAYOUT, { w: 1007, h: 607 });");
         assertEquals("NAV DEMO EXPLAIN", eval("named.el.children.map(function (b) { return b.children[0].textContent; }).join(' ')").asString(), "named as its owner says");
     }

@@ -47,8 +47,11 @@ public final class HouseFamilies {
     public static final Set<Component<?>> HANDLES = Set.of(
             HouseControls.SliderKnob.INSTANCE, HouseControls.ToggleKnob.INSTANCE, HouseControls.Grip.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks and the handles. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES);
+    /** The selectors: a tab, a pane's thumbnail - each style's own ground, lift and shadow on them; the grid's mirror Base's. */
+    public static final Set<Component<?>> SELECTORS = Set.of(HouseControls.Tab.INSTANCE, HouseControls.PaneThumb.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles and the selectors. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

@@ -36,6 +36,14 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.TextFaded;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.HeadingInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KickerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWash;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashFaint;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashSoft;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentTintFaint;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeStrong;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeDeep;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeHeavy;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowWarm;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowFlare;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KeysCandidate;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KeysLent;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GrooveEdge;
@@ -81,7 +89,10 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case AccentEdge c -> seed(s.accentEdge());
             case Ring c -> mix(seed(s.accent()), 0.55, seed(s.border()));
             case AccentTint c -> mix(seed(s.accent()), 0.22, seed(s.raised()));
+            case AccentTintFaint c -> mix(seed(s.accent()), 0.12, seed(s.raised()));
             case AccentWash c -> mix(seed(s.accent()), 0.18, CLEAR);
+            case AccentWashFaint c -> mix(seed(s.accent()), 0.08, CLEAR);
+            case AccentWashSoft c -> mix(seed(s.accent()), 0.15, CLEAR);
             case KeysCandidate c -> mix(seed(s.accent()), 0.45, CLEAR);
             case KeysLent c -> mix(seed(s.accent()), 0.25, CLEAR);
             case ShadeFaint c -> mix(seed(s.inverted()), 0.04, CLEAR);
@@ -89,14 +100,19 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case ShadeSoft c -> mix(seed(s.inverted()), 0.10, CLEAR);
             case ShadeMedium c -> mix(seed(s.inverted()), 0.12, CLEAR);
             case ShadeFirm c -> mix(seed(s.inverted()), 0.16, CLEAR);
+            case ShadeStrong c -> mix(seed(s.inverted()), 0.18, CLEAR);
+            case ShadeDeep c -> mix(seed(s.inverted()), 0.20, CLEAR);
+            case ShadeHeavy c -> mix(seed(s.inverted()), 0.22, CLEAR);
             case Sheen c -> mix(seed(s.raised()), 0.60, CLEAR);
             case GlowFaint c -> mix(seed(s.title()), 0.14, CLEAR);
             case GlowDim c -> mix(seed(s.title()), 0.25, CLEAR);
             case GlowSoft c -> mix(seed(s.title()), 0.30, CLEAR);
             case GlowMedium c -> mix(seed(s.title()), 0.40, CLEAR);
+            case GlowWarm c -> mix(seed(s.title()), 0.45, CLEAR);
             case GlowStrong c -> mix(seed(s.title()), 0.55, CLEAR);
             case GlowBright c -> mix(seed(s.title()), 0.60, CLEAR);
             case GlowFull c -> mix(seed(s.title()), 0.70, CLEAR);
+            case GlowFlare c -> mix(seed(s.title()), 0.80, CLEAR);
         };
     }
 

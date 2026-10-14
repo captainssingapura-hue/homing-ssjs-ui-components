@@ -264,7 +264,7 @@ class TabStrip {
         this._window.forget(c);
         this._pinned.delete(c);
         this._hand.disarm(c);
-        c.setAttribute("aria-selected", "false");
+        TabChip.select(c, false);
         TabChip.keys(c, null);
         if (c.parentNode === this._rail) this._rail.removeChild(c);
     }
@@ -281,7 +281,7 @@ class TabStrip {
     }
 
     select(chips, active) {
-        for (var i = 0; i < chips.length; i++) chips[i].setAttribute("aria-selected", chips[i] === active ? "true" : "false");
+        for (var i = 0; i < chips.length; i++) TabChip.select(chips[i], chips[i] === active);
         this._active = active || null;
         this._window.reveal(this._active);
     }

@@ -1,0 +1,28 @@
+/* The pane thumb as choice in glassmorphism: a pane picked by a small picture of where it is - raised, and tinted where the cursor is. Whole: every property its look has (D9). */
+.styled-pane-thumb_choice {
+    color: inherit;
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 1px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: pointer;
+
+    &.styled-pane-thumb_choice--current {
+        background-color: var(--fp-accent-tint-faint);
+        border-color: var(--fp-accent);
+    }
+}

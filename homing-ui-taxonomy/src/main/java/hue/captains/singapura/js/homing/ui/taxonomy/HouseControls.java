@@ -223,6 +223,8 @@ public final class HouseControls {
         public static final PaneThumb INSTANCE = new PaneThumb();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Selector parent() { return Selector.INSTANCE; }
+        /** The one its owner's cursor is at. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
         }
@@ -233,6 +235,9 @@ public final class HouseControls {
         public static final Tab INSTANCE = new Tab();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Selector parent() { return Selector.INSTANCE; }
+        /** The pointer over it; the one in use; in the hand; the hand down on it. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Selected.INSTANCE,
+                HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE); }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Keys.INSTANCE).one(),
