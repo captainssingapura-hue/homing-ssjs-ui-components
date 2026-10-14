@@ -103,6 +103,8 @@ public record Base() implements DesignStyle<ColorScheme.Base> {
     @Override public List<ColorImports<ColorScheme.Base>> colorImports() { return IMPORTS; }
 
     private static final List<ColorImports<ColorScheme.Base>> IMPORTS = List.of(
+            // the muted words (D17)
+            new ColorImports<>(HouseText.Muted.INSTANCE, new TextFaded()),
             // button
             new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
             new ColorImports<>(HouseControls.PrimaryButton.INSTANCE, new Title(), new Ring(), new PrimaryGround(), new PrimaryInk()),

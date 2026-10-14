@@ -186,6 +186,24 @@ public final class HouseContainers {
         @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
     }
 
+    /**
+     * A document table's cell that heads its column, or its row: a container, room for the words that say what its
+     * column holds - never the table's lines, which are the table's, nor the look of its words, which wear their own.
+     */
+    public record HeaderCell() implements Component<HouseBranches.Surface> {
+        public static final HeaderCell INSTANCE = new HeaderCell();
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+    }
+
+    /**
+     * A document table's cell that holds one fact: a container, room for what it holds - never the table's lines, which
+     * are the table's, nor the look of its words, which wear their own.
+     */
+    public record DataCell() implements Component<HouseBranches.Surface> {
+        public static final DataCell INSTANCE = new DataCell();
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+    }
+
     /** Heads a site's pages: its brand, the way to where the user is, and what its owner hands it at its end, in the ink written on it. */
     public record SiteBar() implements Component<HouseBranches.Bar> {
         public static final SiteBar INSTANCE = new SiteBar();

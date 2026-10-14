@@ -27,7 +27,7 @@ public final class HouseRegions {
         public static final WidgetSlot INSTANCE = new WidgetSlot();
         @Override public Region parent() { return Region.INSTANCE; }
     }
-    // ── a document's blocks: a quote, a block of code, a table - its header cells and its data cells ──
+    // ── a document's blocks: a quote, a block of code, a table - its cells are containers (HouseContainers) ──
 
     /** Words quoted from elsewhere, set off from the text round them. */
     public record Quote() implements Component<HouseBranches.Region> {
@@ -47,21 +47,9 @@ public final class HouseRegions {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Region parent() { return HouseBranches.Region.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HeaderCell.INSTANCE).as(HouseShaping.Column.INSTANCE).any(),
-                           DSL.part(DataCell.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
+            return List.of(DSL.part(HouseContainers.HeaderCell.INSTANCE).as(HouseShaping.Column.INSTANCE).any(),
+                           DSL.part(HouseContainers.DataCell.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
         }
-    }
-
-    /** A table's cell that heads its column, or its row. */
-    public record HeaderCell() implements Component<HouseBranches.Region> {
-        public static final HeaderCell INSTANCE = new HeaderCell();
-        @Override public HouseBranches.Region parent() { return HouseBranches.Region.INSTANCE; }
-    }
-
-    /** A table's cell that holds one fact. */
-    public record DataCell() implements Component<HouseBranches.Region> {
-        public static final DataCell INSTANCE = new DataCell();
-        @Override public HouseBranches.Region parent() { return HouseBranches.Region.INSTANCE; }
     }
 
 }

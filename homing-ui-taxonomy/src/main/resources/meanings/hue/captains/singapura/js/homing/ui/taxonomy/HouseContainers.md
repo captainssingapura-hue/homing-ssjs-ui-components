@@ -79,3 +79,11 @@ Shows the way from the site's home to where the user is, each step a way back.
 
 Lines up a pane's tabs, says how many are out of sight, and lets the user add one, close the pane,
 and drop a tab into place.
+
+## HeaderCell
+
+Heads a document table's column, or its row: room for the words that say what the column holds.
+
+## DataCell
+
+Holds one fact of a document's table, where its row and its column meet: room for what it holds.

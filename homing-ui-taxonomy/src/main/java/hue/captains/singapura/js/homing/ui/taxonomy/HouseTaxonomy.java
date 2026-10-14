@@ -46,16 +46,16 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseContainers.Panel.INSTANCE, HouseContainers.Dialog.INSTANCE, HouseContainers.FloatingPane.INSTANCE,
                 HouseContainers.ContextMenu.INSTANCE, HouseContainers.Scrim.INSTANCE,
                 HouseContainers.EdgeStrip.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseContainers.Trail.INSTANCE,
-                HouseContainers.TabStrip.INSTANCE, HouseContainers.Ground.INSTANCE, HouseContainers.SiteBar.INSTANCE, HouseContainers.TitleBar.INSTANCE, HouseContainers.PanelBar.INSTANCE, HouseContainers.FloatLayer.INSTANCE,
+                HouseContainers.TabStrip.INSTANCE, HouseContainers.Ground.INSTANCE, HouseContainers.HeaderCell.INSTANCE, HouseContainers.DataCell.INSTANCE, HouseContainers.SiteBar.INSTANCE, HouseContainers.TitleBar.INSTANCE, HouseContainers.PanelBar.INSTANCE, HouseContainers.FloatLayer.INSTANCE,
                 // regions
                 HouseRegions.Section.INSTANCE, HouseRegions.WidgetSlot.INSTANCE,
                 // text
                 HouseText.Label.INSTANCE, HouseText.Heading1.INSTANCE, HouseText.Heading2.INSTANCE, HouseText.Heading3.INSTANCE,
                 HouseText.Heading4.INSTANCE, HouseText.Heading5.INSTANCE, HouseText.Heading6.INSTANCE,
                 HouseText.Code.INSTANCE, HouseText.SuccessBadge.INSTANCE, HouseText.WarningBadge.INSTANCE, HouseText.DangerBadge.INSTANCE,
-                HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE, HouseRegions.Table.INSTANCE, HouseRegions.HeaderCell.INSTANCE, HouseRegions.DataCell.INSTANCE, HouseText.Kicker.INSTANCE, HouseText.Caption.INSTANCE,
+                HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE, HouseRegions.Table.INSTANCE, HouseText.Kicker.INSTANCE, HouseText.Caption.INSTANCE,
                 HouseText.Lede.INSTANCE, HouseText.Readout.INSTANCE, HouseText.Badge.INSTANCE, HouseText.Pill.INSTANCE,
-                HouseText.Wordmark.INSTANCE,
+                HouseText.Wordmark.INSTANCE, HouseText.Strong.INSTANCE, HouseText.Muted.INSTANCE,
                 // marks and tracks
                 HouseMarks.Icon.INSTANCE, HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE, HouseMarks.BoundaryLine.INSTANCE,
                 HouseMarks.Delimiter.INSTANCE, HouseMarks.Lamp.INSTANCE, HouseMarks.BrandMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.DropMark.INSTANCE,

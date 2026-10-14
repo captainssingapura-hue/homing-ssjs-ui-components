@@ -71,3 +71,11 @@ Says in a word that a thing needs a look: in progress, pending, unplaced.
 ## DangerBadge
 
 Says in a word that a thing went wrong: failed, blocked, broken.
+
+## Strong
+
+Words said with weight among the words round them, otherwise as those words are.
+
+## Muted
+
+Words said under the words round them, in the faded ink, otherwise as those words are.

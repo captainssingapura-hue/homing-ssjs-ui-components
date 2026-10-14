@@ -68,6 +68,18 @@ public final class HouseText {
         @Override public Text parent() { return Text.INSTANCE; }
     }
 
+    /** Words said with weight among the words round them: a table's heads, a cell said strongly. */
+    public record Strong() implements Component<Text> {
+        public static final Strong INSTANCE = new Strong();
+        @Override public Text parent() { return Text.INSTANCE; }
+    }
+
+    /** Words said under the words round them, in the faded ink: a cell that matters less. */
+    public record Muted() implements Component<Text> {
+        public static final Muted INSTANCE = new Muted();
+        @Override public Text parent() { return Text.INSTANCE; }
+    }
+
     /** The first words of a body, or its summary. */
     public record Lede() implements Component<Text> {
         public static final Lede INSTANCE = new Lede();

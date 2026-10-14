@@ -375,3 +375,25 @@
     line-height: 1;
     letter-spacing: normal;
 }
+
+/* The strong words in the base layer: said with weight, otherwise as the words round them. Whole: every property its look has (D9). */
+.styled-strong {
+    color: inherit;
+    background-color: transparent;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+}
+
+/* The muted words in the base layer: said under the words round them, in the faded ink. Whole: every property its look has (D9). */
+.styled-muted {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+}

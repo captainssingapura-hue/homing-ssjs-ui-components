@@ -19,11 +19,3 @@ Holds lines of code, or of a log, exactly as written, each line kept.
 ## Table
 
 Sets facts out in rows and columns, so they can be read across and compared down.
-
-## HeaderCell
-
-Heads a table's column, or its row, and says what its cells hold.
-
-## DataCell
-
-Holds one fact of a table, where its row and its column meet.
