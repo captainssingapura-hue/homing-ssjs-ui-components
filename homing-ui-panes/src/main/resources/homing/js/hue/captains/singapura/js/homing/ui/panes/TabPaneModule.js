@@ -63,6 +63,26 @@
 
 const _tabPaneOwner = Object.freeze({ toString: () => "tabPane" });
 
+/** Its tab pressed: the host it is in told to select it. */
+class TabPanePressed {
+    constructor(tp) { this._tp = tp; }
+    canHandle(type) { return type === EVENT.PRESS; }
+    handle() { if (this._tp._host) this._tp._host.select(this._tp); }
+}
+
+/** Its tab's cross: a close asked for - its owner's, if it takes the asking, else the tab-pane's. */
+class TabPaneDismissed {
+    constructor(tp) { this._tp = tp; }
+    canHandle(type) { return type === EVENT.DISMISS; }
+    handle() { if (!this._tp.requestClose()) this._tp.close(); }
+}
+
+/** Its tab's right-click: the host's menu asked for, at a point; nothing with no host. */
+class TabPaneMenu {
+    constructor(tp) { this._tp = tp; }
+    open(at, byKey) { return this._tp._host ? !!this._tp._host.menu(this._tp, at, byKey) : false; }
+}
+
 class TabPane {
     constructor(branch, spec, register) {
         if (!branch) throw new Error("[TabPane] a branch of its own is required: TabRegister.open makes one");
@@ -81,11 +101,11 @@ class TabPane {
         this._closed = false;
         this._title = s.title == null ? s.id : String(s.title);
         this._icon = s.icon || null;
-        this.chip = TabChip.mint(branch, { id: s.id, title: this._title, icon: this._icon, pinned: this.pinned, closable: this.closable }, {
-            onSelect: function () { if (self._host) self._host.select(self); },
-            onClose: function () { if (!self.requestClose()) self.close(); },
-            onMenu: function (at, byKey) { return self._host ? !!self._host.menu(self, at, byKey) : false; }
-        });
+        // its tab, the house's, cast as the chip a tab-pane carries: made once, on a branch of its own, and carried with it
+        this.chip = new Tab(branch.createBranch("chip"), { title: this._title, icon: this._icon, pinned: this.pinned, closable: this.closable }, ROLE.CHIP);
+        this.chip.setOnPress(new TabPanePressed(this));
+        this.chip.setOnDismiss(new TabPaneDismissed(this));
+        this.chip.menu(new TabPaneMenu(this));
         this.pane = branch.createElement("pane", "div");
         css.addClass(this.pane, mtp_tab_content, mtp_tab_content_hidden);
         this.pane.setAttribute("role", "tabpanel");
@@ -139,13 +159,13 @@ class TabPane {
 
     _name(text) {
         this._title = text == null ? "" : String(text);
-        TabChip.retitle(this.chip, this._title);
+        this.chip.title = this._title;
     }
 
     icon(el) {
         if (arguments.length === 0) return this._icon;
         this._icon = el || null;
-        TabChip.reicon(this.chip, this._icon);
+        this.chip.icon = this._icon;
         return this;
     }
 

@@ -28,7 +28,7 @@ class PaneMenus {
             if (i < 0) return false;
             pane.switchTab(tabId);
             var entry = pane._tabs[i];
-            return pane._menus.open(kind, { pane: pane, tab: entry.tab, anchor: entry.chip }, at, { anchor: entry.chip, keyboard: keyboard });
+            return pane._menus.open(kind, { pane: pane, tab: entry.tab, anchor: entry.chip.el }, at, { anchor: entry.chip.el, keyboard: keyboard });
         };
     }
 
@@ -36,7 +36,7 @@ class PaneMenus {
     static byKey(pane) {
         var i = pane.activeTab() === null ? -1 : pane.tabIndexOf(pane.activeTab());
         if (i < 0 || !pane._tabs[i].menu) return false;
-        var r = pane.chipOf(i).getBoundingClientRect();
+        var r = pane.chipOf(i).el.getBoundingClientRect();
         return !!pane._tabs[i].menu({ x: r.left + 12, y: r.bottom - 2 }, true);
     }
 

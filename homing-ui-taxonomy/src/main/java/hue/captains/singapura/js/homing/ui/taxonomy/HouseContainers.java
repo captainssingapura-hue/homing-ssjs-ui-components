@@ -225,7 +225,8 @@ public final class HouseContainers {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
+            return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(),
+                           DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
                            DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
                            DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional());

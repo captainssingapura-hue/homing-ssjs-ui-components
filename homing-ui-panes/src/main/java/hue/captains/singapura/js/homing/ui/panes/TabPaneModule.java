@@ -7,6 +7,8 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -34,7 +36,9 @@ public record TabPaneModule() implements DomModule<TabPaneModule>, ImplFor<House
                         new PaneStyles.mtp_tab_content(),
                         new PaneStyles.mtp_tab_content_hidden()
                 ), PaneStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabChipModule.TabChip()), TabChipModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys()), PaneKeysModule.INSTANCE))
                 .build();
     }

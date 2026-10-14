@@ -58,9 +58,10 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
                         new PaneStyles.mtp_bar_close(),
                         new PaneStyles.mtp_pill(),
                         new PaneStyles.mtp_drop_mark(),
-                        new PaneStyles.mtp_chip_shifted()
+                        new PaneStyles.mtp_chip_shifted(),
+                        new PaneStyles.mtp_chip_dragging()
                 ), PaneStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabChipModule.TabChip()), TabChipModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabHandModule.TabHand()), TabHandModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabDragModule.TabDrag()), TabDragModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabWindowModule.TabWindow()), TabWindowModule.INSTANCE))

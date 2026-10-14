@@ -52,7 +52,6 @@ public record SingleTabPaneModule() implements DomModule<SingleTabPaneModule>, I
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_pane(),
                         new PaneStyles.mtp_strip(),
-                        new PaneStyles.mtp_chip_mark_on(),
                         new PaneStyles.mtp_content(),
                         new PaneStyles.mtp_tab_content_hidden()
                 ), PaneStyles.INSTANCE))

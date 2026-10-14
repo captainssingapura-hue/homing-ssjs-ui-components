@@ -27,7 +27,7 @@
     }
 }
 
-/* The tab in sketchy: one tab of a strip - its ground, its edge, its lift and its shadow at rest, under the hand, in use and in the hand. Whole: every property its look has (D9). */
+/* The tab in sketchy: one tab of a strip - its ground, its edge, its lift and its shadow at rest, under the hand, in use, lifted while the keys are on its strip, and in the hand. Whole: every property its look has (D9). */
 .styled-tab {
     color: var(--fp-text);
     background-color: var(--fp-accent-wash-faint);
@@ -65,6 +65,11 @@
         border-width: 3px;
         border-style: solid;
         transform: rotate(-0.4deg);
+    }
+
+    &.styled-tab--held {
+        translate: 0 -4px;
+        z-index: 1;
     }
 
     &.styled-tab--dragging {

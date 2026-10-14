@@ -44,7 +44,7 @@ class TabStripTest extends JsModuleTestBase {
                 contains: function (c) { return c === this; },
                 getBoundingClientRect: function () { return this.rect; },
                 getAnimations: function () { var self = this; return [{ cancel: function () { self.cancelled++; } }]; },
-                animate: function (frames, opts) { log.push("settle:" + this._label.textContent + ":" + frames[0].translate + "->" + frames[1].translate + "/" + opts.duration); },
+                animate: function (frames, opts) { log.push("settle:" + this.title + ":" + frames[0].translate + "->" + frames[1].translate + "/" + opts.duration); },
                 setPointerCapture: function () {}, releasePointerCapture: function () {},
                 fire: function (t, ev) { var e = ev || {}; e.type = t; e.stopPropagation = e.stopPropagation || function () {}; e.preventDefault = e.preventDefault || function () {}; (this.listeners[t] || []).slice().forEach(function (fn) { fn(e); }); },
                 has: function (c) { return classes.has(c); }, prop: function (k) { return props[k]; } };
@@ -76,15 +76,15 @@ class TabStripTest extends JsModuleTestBase {
         function make(names, pinned) {
             return names.map(function (n, i) {
                 var c = strip.chip({ id: n.toLowerCase(), title: n, pinned: pinned && i === 0 }, { onSelect: function () { log.push("select:" + n); }, onClose: function () {} });
-                c.rect = { left: 40 + 80 * i, top: 0, width: 80, height: 30 };
+                c.el.rect = { left: 40 + 80 * i, top: 0, width: 80, height: 30 };   // a tab's element, where it lies
                 return c;
             });
         }
         var chips = make(["A", "B", "C"], false);
         strip.arrange(chips);
-        var A = chips[0], B = chips[1], C = chips[2];
+        var A = chips[0].el, B = chips[1].el, C = chips[2].el;   // the hand works on the tabs' elements
         function x(c) { return c.prop("--mtp-drag-x") == null ? "-" : c.prop("--mtp-drag-x"); }
-        function shifts() { return chips.map(function (c) { return c.has("mtp_chip_shifted") ? c.prop("--mtp-shift-x") : "."; }).join(" "); }
+        function shifts() { return chips.map(function (t) { var c = t.el; return c.has("mtp_chip_shifted") ? c.prop("--mtp-shift-x") : "."; }).join(" "); }
         // the look's reflection of a thing dragged, and the classes that place it
         function state(c) { return (c.getAttribute("data-dragging") === null ? [] : ["dragging"]).concat(["mtp_chip_dragging", "mtp_chip_shifted"].filter(function (k) { return c.has(k); })).join("+") || "seated"; }
         """;
@@ -110,7 +110,8 @@ class TabStripTest extends JsModuleTestBase {
         loadModule(P + "TabHandModule.js");
         js.eval("js", "if (typeof ic_base === 'undefined') globalThis.ic_base = 'ic_base';");   // the house's icon, the chip's within mark
         if (js.eval("js", "typeof Icon === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
-        loadModule(P + "TabChipModule.js");
+        loadModule(P + "TabBehaviorModule.js");
+        loadModule(P + "TabModule.js");
         // where a dragged tab would land: the house's drop mark
         if (js.eval("js", "typeof MarkBehavior === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/MarkBehaviorModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/DropMarkModule.js");
@@ -120,6 +121,29 @@ class TabStripTest extends JsModuleTestBase {
 
     private Value eval(String src) { return js.eval("js", src); }
     private String log() { return eval("log.join(' ')").asString(); }
+
+    /**
+     * The tab, a component of its own (the owner, 14 Oct 2026): its casting's class and its role; the hand down on it
+     * its Press, which its holder selects it by; the keys said on it as its Keyboard state - lifted by its look while
+     * held, its mark part of the way, at full while lent, gone while away; its cross told from the rest of it.
+     */
+    @Test
+    void aTab_aComponentOfItsOwn_itsStatesItsClasses_itsPress() {
+        assertTrue(eval("A.has('styled-tab') && A.getAttribute('role') === 'tab' && chips[0].el === A").asBoolean(), "the strip holds the tab; its element wears the tab's casting");
+        eval("log.length = 0; A.fire('pointerdown', { button: 0, pointerId: 7, clientX: 60, clientY: 10, target: A }); A.fire('pointerup', { clientX: 60, clientY: 10 });");
+        assertEquals("select:A", log(), "its Press: its holder selects it");
+        eval("strip.select(chips, chips[1])");
+        assertTrue(eval("B.has('styled-tab--selected') && B.getAttribute('aria-selected') === 'true' && !A.has('styled-tab--selected')").asBoolean(), "in use, one at a time");
+        eval("strip.keys(chips[1], 'held')");
+        assertEquals("held 0.45 true", eval("chips[1].keys + ' ' + chips[1]._mark.prop('--extent') + ' ' + B.has('styled-tab--held')").asString(),
+                "the cursor on its strip: lifted by its look, its mark part of the way");
+        eval("strip.keys(chips[1], 'lent')");
+        assertEquals("lent 1 false", eval("chips[1].keys + ' ' + chips[1]._mark.prop('--extent') + ' ' + B.has('styled-tab--held')").asString(),
+                "the keys inside what it holds: down, its mark at full");
+        eval("strip.keys(null, null)");
+        assertTrue(eval("chips[1].keys === 'away' && !chips[1]._mark.has('mtp_chip_mark_on') && B.getAttribute('data-keys') === null").asBoolean(), "away: no mark");
+        assertTrue(eval("chips[0].crosses(chips[0]._close) && !chips[0].crosses(A)").asBoolean(), "its cross told from the rest of it");
+    }
 
     @Test
     void theChipFollowsTheHandAlongTheRail_neverOffIt_theOthersSteppingAsideLive() {
@@ -162,7 +186,7 @@ class TabStripTest extends JsModuleTestBase {
 
     @Test
     void aPinnedChipIsNeitherDraggedNorPassed() {
-        eval("chips = make(['P', 'Q', 'R'], true); strip.arrange(chips); var Pc = chips[0], Q = chips[1]; log.length = 0;");
+        eval("chips = make(['P', 'Q', 'R'], true); strip.arrange(chips); var Pc = chips[0].el, Q = chips[1].el; log.length = 0;");
         eval("Pc.fire('pointerdown', { button: 0, pointerId: 1, clientX: 60, clientY: 10, target: Pc }); Pc.fire('pointermove', { clientX: 200, clientY: 10 }); Pc.fire('pointerup', { clientX: 200, clientY: 10 });");
         assertEquals("select:P", log(), "pinned: selected, never dragged");
         eval("log.length = 0; Q.fire('pointerdown', { button: 0, pointerId: 2, clientX: 140, clientY: 10, target: Q }); Q.fire('pointermove', { clientX: 134, clientY: 10 }); Q.fire('pointermove', { clientX: 0, clientY: 10 });");

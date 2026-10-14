@@ -235,9 +235,11 @@ public final class HouseControls {
         public static final Tab INSTANCE = new Tab();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Selector parent() { return Selector.INSTANCE; }
-        /** The pointer over it; the one in use; in the hand; the hand down on it. */
+        /** The pointer over it; the one in use; where the keys are - held while the cursor is on its strip, lent while what it holds has them; in the hand; the hand down on it. */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Selected.INSTANCE,
-                HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE); }
+                HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE); }
+        /** The hand down on it, not on its cross: what selects it; its cross pressed: it asks to go. */
+        @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE, HouseEvents.Dismiss.INSTANCE); }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Keys.INSTANCE).one(),

@@ -92,11 +92,11 @@ class SingleTabPane {
         this._bar = bar;
         // what PaneTabs asks of a strip: the chip in, at the design's size, and out again at rest
         this._strip = {
-            adopt: function (c) { css.size(c, null); css.aspect(c, null); bar.appendChild(c); return c; },
+            adopt: function (c) { c.size = 0; c.aspect = 0; bar.appendChild(c.el); return c; },
             remove: function (c) {
-                TabChip.select(c, false);
-                if (c._mark) { css.toggleClass(c._mark, mtp_chip_mark_on, false); css.extent(c._mark, null); }
-                if (c.parentNode === bar) bar.removeChild(c);
+                c.selected = false;
+                c.keys = null;
+                if (c.el.parentNode === bar) bar.removeChild(c.el);
             }
         };
 
@@ -135,7 +135,7 @@ class SingleTabPane {
         this._activeId = id;
         var e = this._tabs[0];
         if (!e) return;
-        TabChip.select(e.chip, true);
+        e.chip.selected = true;
         css.toggleClass(e.panel, mtp_tab_content_hidden, false);
         this._marks();
     }
@@ -178,7 +178,7 @@ class SingleTabPane {
     bar() { return this._bar; }
     barGround(target) {
         var e = this._tabs[0];
-        if (e && e.chip._close && e.chip._close.contains(target)) return false;
+        if (e && e.chip.crosses(target)) return false;
         if (this._onChip(target)) return false;   // the chip is the hand's, carried as a chip
         return this._bar.contains(target);
     }
@@ -186,7 +186,7 @@ class SingleTabPane {
     /** A press on the chip — not its cross — while a desk's hand is given. */
     _onChip(target) {
         var e = this._tabs[0];
-        return !!this._handOf && !!e && !!e.tabPane && e.chip.contains(target) && !(e.chip._close && e.chip._close.contains(target));
+        return !!this._handOf && !!e && !!e.tabPane && e.chip.el.contains(target) && !e.chip.crosses(target);
     }
 
     // ── The member: a road to the tab, never a place ──────────────────────
@@ -199,10 +199,7 @@ class SingleTabPane {
     /** The keys inside the tab, said on its chip, lent, and on the bar, lit. */
     _marks() {
         var e = this._tabs[0];
-        if (e && e.chip._mark) {
-            css.toggleClass(e.chip._mark, mtp_chip_mark_on, this._inside);
-            css.extent(e.chip._mark, this._inside ? 1 : null);
-        }
+        if (e) e.chip.keys = this._inside ? "lent" : null;   // the tab's own mark, at full
         if (this._inside) this._bar.setAttribute("aria-current", "true");
         else this._bar.removeAttribute("aria-current");
     }

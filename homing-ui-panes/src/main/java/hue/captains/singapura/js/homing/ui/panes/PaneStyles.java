@@ -66,25 +66,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
             flex: none;
             max-inline-size: var(--chip-fit, none);
             touch-action: none;
-            """;
-        }
-    }
-
-    /**
-     * The chip lifted: the whole operation is lift and shift, so the chip the
-     * cursor is on is picked up off the row, and put down again the moment
-     * the work moves into its tab or leaves the bar. It rides over its
-     * neighbours while it is up.
-     *
-     * <p>The lift is its own translate and not the design's transform: a chip
-     * that is selected already wears the tab's transform at a state, which
-     * nothing plain can out-specify; the tab's look eases it.</p>
-     */
-    public record mtp_chip_lifted() implements CssClass<PaneStyles> {
-        @Override public String body() { return """
             position: relative;
-            z-index: 1;
-            translate: 0 -4px;
             """;
         }
     }
@@ -361,7 +343,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
 
     @Override
     public List<CssClass<PaneStyles>> cssClasses() {
-        return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_lifted(), new mtp_chip_dragging(), new mtp_chip_shifted(),
+        return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_dragging(), new mtp_chip_shifted(),
                        new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(),
                        new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(),

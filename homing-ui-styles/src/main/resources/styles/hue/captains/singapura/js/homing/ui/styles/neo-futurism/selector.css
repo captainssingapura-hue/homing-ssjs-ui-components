@@ -27,7 +27,7 @@
     }
 }
 
-/* The tab in neo-futurism: one tab of a strip - its ground, its edge, its lift and its shadow at rest, under the hand, in use and in the hand. Whole: every property its look has (D9). */
+/* The tab in neo-futurism: one tab of a strip - its ground, its edge, its lift and its shadow at rest, under the hand, in use, lifted while the keys are on its strip, and in the hand. Whole: every property its look has (D9). */
 .styled-tab {
     color: var(--fp-text);
     background-color: var(--fp-accent-wash-faint);
@@ -66,6 +66,11 @@
         border-color: var(--fp-title);
         box-shadow: 0 0 0 1px var(--fp-title), 0 0 36px var(--fp-glow-warm), 0 12px 32px var(--fp-shade-soft);
         transform: translateY(-1px);
+    }
+
+    &.styled-tab--held {
+        translate: 0 -4px;
+        z-index: 1;
     }
 
     &.styled-tab--dragging {

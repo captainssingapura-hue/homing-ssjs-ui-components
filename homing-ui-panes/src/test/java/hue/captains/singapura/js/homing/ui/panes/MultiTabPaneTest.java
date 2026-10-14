@@ -138,9 +138,10 @@ class MultiTabPaneTest extends JsModuleTestBase {
                     case "DetachRequested": log.push("detach?" + ev.slotId + ":" + ev.tabId); break;
                     default: log.push("?" + ev.kind);
                 } } });
-        function chips() { return pane.el.children[0].children[0].children.filter(function (c) { return c.has("mtp_chip"); }).map(function (c) { return c._label.textContent; }).join(","); }
+        function part(c, cls) { return c.children.filter(function (x) { return x.has(cls); })[0]; }
+        function chips() { return pane.el.children[0].children[0].children.filter(function (c) { return c.has("mtp_chip"); }).map(function (c) { return part(c, "mtp_chip_label").textContent; }).join(","); }
         function panels() { return pane.el.children[1].children.filter(function (c) { return c.has("mtp_tab_content"); }).map(function (c) { return c.children[0].tag + (c.has("mtp_tab_content_hidden") ? "-" : "+"); }).join(","); }
-        function selected() { return pane.el.children[0].children[0].children.filter(function (c) { return c.getAttribute("aria-selected") === "true"; }).map(function (c) { return c._label.textContent; }).join(","); }
+        function selected() { return pane.el.children[0].children[0].children.filter(function (c) { return c.getAttribute("aria-selected") === "true"; }).map(function (c) { return part(c, "mtp_chip_label").textContent; }).join(","); }
         """;
 
     @BeforeEach
@@ -182,7 +183,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
         loadModule(HAND);
         js.eval("js", "if (typeof ic_base === 'undefined') globalThis.ic_base = 'ic_base';");   // the house's icon, the chip's within mark
         if (js.eval("js", "typeof Icon === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
-        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabChipModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabBehaviorModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/panes/TabModule.js");
         // where a dragged tab would land: the house's drop mark
         if (js.eval("js", "typeof MarkBehavior === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/MarkBehaviorModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/DropMarkModule.js");
@@ -224,22 +226,22 @@ class MultiTabPaneTest extends JsModuleTestBase {
     void aTabIsNamedByItsHolderWithAnIconAndCanBeRenamed() {
         eval("var fav = el('i'); fav.textContent = 'F'; put('a', { icon: fav }); put('b'); log = []");
         eval("var ca = pane.el.children[0].children[0].children[0], cb = pane.el.children[0].children[0].children[1]");
-        assertTrue(eval("ca._icon.children[0] === fav && ca._icon.has('mtp_chip_icon_on')").asBoolean(), "the holder's icon sits in the chip, shown");
-        assertTrue(eval("cb._icon.children.length === 0 && !cb._icon.has('mtp_chip_icon_on')").asBoolean(), "a tab with no icon shows none");
-        assertEquals(0, eval("ca.children.indexOf(ca._icon)").asInt(), "the icon comes before the label");
+        assertTrue(eval("part(ca, 'mtp_chip_icon').children[0] === fav && part(ca, 'mtp_chip_icon').has('mtp_chip_icon_on')").asBoolean(), "the holder's icon sits in the chip, shown");
+        assertTrue(eval("part(cb, 'mtp_chip_icon').children.length === 0 && !part(cb, 'mtp_chip_icon').has('mtp_chip_icon_on')").asBoolean(), "a tab with no icon shows none");
+        assertEquals(0, eval("ca.children.indexOf(part(ca, 'mtp_chip_icon'))").asInt(), "the icon comes before the label");
 
         eval("pane.retitle('a', 'Report.md')");
         assertEquals("Report.md,B", chips());
         assertEquals("Report.md", eval("ca.title").asString(), "the tooltip says it too");
-        assertEquals("Close Report.md", eval("ca._close.getAttribute('aria-label')").asString(), "and the cross says what it closes");
+        assertEquals("Close Report.md", eval("part(ca, 'mtp_chip_close').getAttribute('aria-label')").asString(), "and the cross says what it closes");
         assertEquals("Report.md", eval("pane.getState().tabs[0].title").asString(), "the pane's state carries the new name");
         assertEquals("renamed:s1:a=Report.md", log(), "a rename is reported, by the host it is in");
         eval("log.length = 0");
 
         eval("var fav2 = el('i'); pane.reicon('b', fav2)");
-        assertTrue(eval("cb._icon.children[0] === fav2 && cb._icon.has('mtp_chip_icon_on')").asBoolean(), "an icon given later is shown");
+        assertTrue(eval("part(cb, 'mtp_chip_icon').children[0] === fav2 && part(cb, 'mtp_chip_icon').has('mtp_chip_icon_on')").asBoolean(), "an icon given later is shown");
         eval("pane.reicon('a', null)");
-        assertTrue(eval("ca._icon.children.length === 0 && !ca._icon.has('mtp_chip_icon_on')").asBoolean(), "and taken away");
+        assertTrue(eval("part(ca, 'mtp_chip_icon').children.length === 0 && !part(ca, 'mtp_chip_icon').has('mtp_chip_icon_on')").asBoolean(), "and taken away");
         assertEquals("", log(), "an icon is the holder's drawing: nothing is reported");
     }
 
@@ -330,7 +332,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
         assertEquals("active:s1:b", log(), "the press selects, before any release");
         eval("log = []; chip.fire('pointerdown', { button: 2, target: chip, clientX: 0, clientY: 0 }); chip.fire('click')");
         assertEquals("", log(), "a secondary button or a bare click is nothing");
-        eval("log = []; pane.el.children[0].children[0].children[1]._close.fire('click')");   // the chip's cross
+        eval("log = []; part(pane.el.children[0].children[0].children[1], 'mtp_chip_close').fire('click')");   // the chip's cross
         assertEquals("b:disposed removed:s1:b@1 active:s1:a", log());
     }
 
@@ -338,7 +340,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
     @Test
     void aCloseAskedFor_goesToItsOwnersHook_andNothingClosesHere() {
         eval("var a = put('a', { onCloseRequested: function (tp) { log.push('asked:' + tp.id); } }); var b = put('b'); log = []");
-        eval("pane.el.children[0].children[0].children[0]._close.fire('click')");
+        eval("part(pane.el.children[0].children[0].children[0], 'mtp_chip_close').fire('click')");
         assertEquals("asked:a", log(), "the cross asks, and that is all");
         assertTrue(eval("pane.has('a') && !a.closed()").asBoolean(), "still here, open");
         assertTrue(eval("a.requestClose()").asBoolean(), "the hook took it");
@@ -393,8 +395,8 @@ class MultiTabPaneTest extends JsModuleTestBase {
         eval("""
             var chips = pane.el.children[0].children[0];   // the rail: the chips live in the window, not on the bar
             function chip(i) { return chips.children[i]; }
-            function look(i) { var c = chip(i), m = c._mark;
-                return (c.has('mtp_chip_lifted') ? 'lifted' : 'down') + '/' + (m.has('mtp_chip_mark_on') ? 'mark' : '-') + '/' + String(m._extent === undefined ? null : m._extent); }
+            function look(i) { var c = chip(i), m = part(c, 'mtp_chip_mark');
+                return (c.has('styled-tab--held') ? 'lifted' : 'down') + '/' + (m.has('mtp_chip_mark_on') ? 'mark' : '-') + '/' + String(m._extent === undefined ? null : m._extent); }
             """);
         assertEquals("down/-/null", eval("look(0)").asString(), "nobody holds: a chip like any other");
         eval("pane.granted()");
@@ -649,7 +651,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
                + "paneBranch.createBranch = function (n) { minted.push(n); return cb.call(this, n); }; log.length = 0;");
             assertEquals(0, eval("pane.take(a)").asInt());
             assertEquals("", eval("minted.join(',')").asString(), "nothing minted on the pane's branch");
-            assertTrue(eval("stripOf(pane).indexOf(a.chip) >= 0 && a.pane.parentNode === pane.el.children[1]").asBoolean(), "its own chip in the strip, its own pane in the content");
+            assertTrue(eval("stripOf(pane).indexOf(a.chip.el) >= 0 && a.pane.parentNode === pane.el.children[1]").asBoolean(), "its own chip in the strip, its own pane in the content");
             assertEquals("A", chips());
             assertEquals("w-a+", panels(), "shown, since nothing was");
             assertEquals("active:s1:a", log(), "an arrival is the desk's to report: the pane says only what it shows");
@@ -680,27 +682,27 @@ class MultiTabPaneTest extends JsModuleTestBase {
             assertTrue(eval("pane.letGo(a) === a").asBoolean());
             assertEquals("active:s1:b", log(), "a neighbour shown; the move itself is the desk's to report");
             assertEquals("B", chips());
-            assertTrue(eval("a.host() === null && a.chip.parentNode === null && a.pane.parentNode === null").asBoolean(), "out, as it is");
-            assertTrue(eval("register.has('a') && a.chip.getAttribute('aria-selected') === 'false' && !a.chip.has('mtp_chip_lifted')").asBoolean(), "not dissolved, and its chip at rest");
+            assertTrue(eval("a.host() === null && a.chip.el.parentNode === null && a.pane.parentNode === null").asBoolean(), "out, as it is");
+            assertTrue(eval("register.has('a') && a.chip.el.getAttribute('aria-selected') === 'false' && !a.chip.el.has('styled-tab--held')").asBoolean(), "not dissolved, and its chip at rest");
             assertTrue(eval("a.widget.focus.in === elsewhere").asBoolean(), "its widget's membership back at rest in the desk's branch");
             assertTrue(eval("pane.letGo(a) === null").asBoolean(), "not here: nothing");
         }
 
         @Test
         void aChipThatTravelsIsArmedOnlyByTheStripItIsIn_atThatStripsSize() {
-            eval("pane.size(0.5); var a = open('a'); var own = a.chip.listeners.pointerdown.length; pane.take(a);");
-            assertEquals(eval("own + 1").asInt(), eval("a.chip.listeners.pointerdown.length").asInt(), "armed for this strip's rail");
+            eval("pane.size(0.5); var a = open('a'); var own = a.chip.el.listeners.pointerdown.length; pane.take(a);");
+            assertEquals(eval("own + 1").asInt(), eval("a.chip.el.listeners.pointerdown.length").asInt(), "armed for this strip's rail");
             eval("pane.letGo(a); other.take(a);");
-            assertEquals(eval("own + 1").asInt(), eval("a.chip.listeners.pointerdown.length").asInt(), "disarmed by the strip it left, armed by the one it is in");
-            assertTrue(eval("a.chip.size == null && stripOf(other).indexOf(a.chip) >= 0").asBoolean(), "at that strip's size, which is none");
-            eval("var p = open('p', { pinned: true }); var pinnedOwn = p.chip.listeners.pointerdown.length; other.take(p);");
-            assertEquals(eval("pinnedOwn").asInt(), eval("p.chip.listeners.pointerdown.length").asInt(), "a pinned chip is not dragged");
+            assertEquals(eval("own + 1").asInt(), eval("a.chip.el.listeners.pointerdown.length").asInt(), "disarmed by the strip it left, armed by the one it is in");
+            assertTrue(eval("a.chip.el.size == null && stripOf(other).indexOf(a.chip.el) >= 0").asBoolean(), "at that strip's size, which is none");
+            eval("var p = open('p', { pinned: true }); var pinnedOwn = p.chip.el.listeners.pointerdown.length; other.take(p);");
+            assertEquals(eval("pinnedOwn").asInt(), eval("p.chip.el.listeners.pointerdown.length").asInt(), "a pinned chip is not dragged");
             assertEquals("p,a", eval("other.tabs().join(',')").asString(), "and sits first");
         }
 
         @Test
         void whatItsChipAsksGoesToThePaneItIsIn() {
-            eval("var a = open('a'), b = open('b'); pane.take(a); pane.take(b); log.length = 0; b.chip.fire('pointerdown', { button: 0, target: b.chip });");
+            eval("var a = open('a'), b = open('b'); pane.take(a); pane.take(b); log.length = 0; b.chip.el.fire('pointerdown', { button: 0, target: b.chip.el });");
             assertEquals("b", eval("pane.activeTab()").asString());
             assertEquals("active:s1:b", log());
             eval("""
@@ -709,7 +711,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
                 var withMenus = new MultiTabPane(branch.createBranch("mtp_s7"), { host: el("div"), slotId: "s7", menus: steward });
                 var c = open('c'); withMenus.take(c);
                 var ev = { clientX: 3, clientY: 4, defaulted: false, preventDefault: function () { this.defaulted = true; }, stopPropagation: function () {} };
-                c.chip.fire("contextmenu", ev);
+                c.chip.el.fire("contextmenu", ev);
                 """);
             assertEquals("tab:c:the-tab-pane:bound", eval("asked.join(' ')").asString(), "the pane's kind of menu, bound to the pane and the tab-pane itself");
             assertTrue(eval("ev.defaulted").asBoolean());
@@ -745,7 +747,7 @@ class MultiTabPaneTest extends JsModuleTestBase {
             eval("cross.fire('click', { stopPropagation: function () {} });");
             assertEquals(1, eval("closed").asInt());
             assertTrue(eval("win.barGround(bar) && win.barGround(bar.children[0]) && win.barGround(tail) && win.barGround(tail.children[0])").asBoolean(), "the bar, the rail, the tail, the count: ground");
-            assertFalse(eval("win.barGround(a.chip) || win.barGround(a.chip._label) || win.barGround(cross) || win.barGround(el('elsewhere'))").asBoolean(), "a chip, a part of one, a control, and what is not on the bar: not ground");
+            assertFalse(eval("win.barGround(a.chip.el) || win.barGround(a.chip._label) || win.barGround(cross) || win.barGround(el('elsewhere'))").asBoolean(), "a chip, a part of one, a control, and what is not on the bar: not ground");
             assertEquals(0, eval("stripOf(pane).length === 0 ? 0 : pane.bar().children[pane.bar().children.length - 1].children.filter(function (c) { return c.has('mtp_bar_close'); }).length").asInt(), "a pane told no onClose has no cross");
         }
 

@@ -27,7 +27,7 @@
     }
 }
 
-/* The tab in neumorphism: one tab of a strip - its ground, its edge, its lift and its shadow at rest, under the hand, in use and in the hand. Whole: every property its look has (D9). */
+/* The tab in neumorphism: one tab of a strip - its ground, its edge, its lift and its shadow at rest, under the hand, in use, lifted while the keys are on its strip, and in the hand. Whole: every property its look has (D9). */
 .styled-tab {
     color: var(--fp-text);
     background-color: var(--fp-accent-wash-faint);
@@ -64,6 +64,11 @@
         background-color: var(--fp-title);
         border-color: var(--fp-title);
         box-shadow: inset 5px 5px 10px var(--fp-shade-firm), inset -5px -5px 10px var(--fp-raised);
+    }
+
+    &.styled-tab--held {
+        translate: 0 -4px;
+        z-index: 1;
     }
 
     &.styled-tab--dragging {

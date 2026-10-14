@@ -122,7 +122,8 @@ class TabPaneTest extends JsModuleTestBase {
         loadModule(P + "PaneKeysModule.js");
         js.eval("js", "if (typeof ic_base === 'undefined') globalThis.ic_base = 'ic_base';");   // the house's icon, the chip's within mark
         if (js.eval("js", "typeof Icon === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
-        loadModule(P + "TabChipModule.js");
+        loadModule(P + "TabBehaviorModule.js");
+        loadModule(P + "TabModule.js");
         loadModule(P + "TabPaneModule.js");
         loadModule(P + "TabRegisterModule.js");
         js.eval("js", SHIM);
@@ -138,8 +139,10 @@ class TabPaneTest extends JsModuleTestBase {
            + "register.open({ id: 'x y', focus: dock, make: widget('w3') });");
         assertEquals("tabpane-u1,tabpane-u2,tabpane-u3", eval("Array.from(register.branch.kids.keys()).join(',')").asString());
         assertEquals("a:b,doc/intro.md,x y", eval("register.ids().join(',')").asString(), "any string, in the order opened");
-        assertEquals("chip,icon,label,mark,close,pane", eval("names(register.get('a:b').branch)").asString(), "the tab and the pane, and nothing named after the id");
-        assertEquals("tabpane-u1", eval("Array.from(register.get('a:b').branch.kids.keys()).join(',')").asString(), "the widget on a sub-branch of the tab-pane's own, named as the tab-pane is");
+        assertEquals("pane", eval("names(register.get('a:b').branch)").asString(), "the pane, and nothing named after the id");
+        assertEquals("tab,icon,label,mark,close", eval("names(register.get('a:b').branch.kids.get('chip'))").asString(), "the tab and its parts, on a branch of its own");
+        assertEquals("chip,tabpane-u1", eval("Array.from(register.get('a:b').branch.kids.keys()).join(',')").asString(),
+                "the tab on a sub-branch of the tab-pane's own, the widget on one named as the tab-pane is");
         assertTrue(eval("handles.w1.branch.parent === register.get('a:b').branch").asBoolean());
         assertTrue(eval("register.get('doc/intro.md').pane.children[0] === register.get('doc/intro.md').widget.root").asBoolean(), "its root in the pane");
         assertEquals("Intro", eval("register.get('doc/intro.md').chip._label.textContent").asString());
@@ -189,7 +192,7 @@ class TabPaneTest extends JsModuleTestBase {
         assertTrue(eval("chip._icon.children[0] === ic && chip._icon.has('mtp_chip_icon_on') && tp.icon() === ic").asBoolean());
         eval("tp.icon(null);");
         assertTrue(eval("chip._icon.children.length === 0 && !chip._icon.has('mtp_chip_icon_on') && tp.icon() === null").asBoolean());
-        assertTrue(eval("tp.chip === chip && tp.pane === pane").asBoolean(), "the same elements throughout");
+        assertTrue(eval("tp.chip === chip && tp.pane === pane").asBoolean(), "the same tab and pane throughout");
         assertTrue(eval("pane.has('mtp_tab_content_hidden')").asBoolean(), "hidden until a host shows it");
         eval("tp.shown(true);");
         assertFalse(eval("pane.has('mtp_tab_content_hidden')").asBoolean());
@@ -200,13 +203,13 @@ class TabPaneTest extends JsModuleTestBase {
     @Test
     void whatTheChipIsAskedGoesToTheHostItIsIn_andTheCrossIsItsOwn() {
         eval("var tp = register.open({ id: 't', focus: dock, make: widget('w1') });");
-        eval("tp.chip.fire('pointerdown', { button: 0, target: tp.chip });");
-        assertFalse(eval("tp.chip.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "no host: nothing asked, the browser's own menu");
+        eval("tp.chip.el.fire('pointerdown', { button: 0, target: tp.chip.el });");
+        assertFalse(eval("tp.chip.el.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "no host: nothing asked, the browser's own menu");
         assertEquals("", log());
         eval("var h = host('h'); tp._hostedBy(h);");
         assertTrue(eval("tp.host() === h").asBoolean());
-        eval("tp.chip.fire('pointerdown', { button: 0, target: tp.chip });");
-        assertTrue(eval("tp.chip.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "the host opened a menu: the browser's is suppressed");
+        eval("tp.chip.el.fire('pointerdown', { button: 0, target: tp.chip.el });");
+        assertTrue(eval("tp.chip.el.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "the host opened a menu: the browser's is suppressed");
         assertEquals("h:select:t h:menu:t", log());
         eval("log.length = 0; tp.chip._close.fire('click', {});");
         assertEquals("w1:disposed h:letGo:t", log(), "the cross closes the tab-pane: the widget disposed, then its host told");
@@ -217,10 +220,10 @@ class TabPaneTest extends JsModuleTestBase {
     @Test
     void closeIsTheOneDissolve_andASecondIsNothing() {
         eval("var tp = register.open({ id: 't', focus: dock, make: widget('w1') }); var strip = el('strip'), content = el('content');"
-           + "strip.appendChild(tp.chip); content.appendChild(tp.pane); var branch = tp.branch;");
+           + "strip.appendChild(tp.chip.el); content.appendChild(tp.pane); var branch = tp.branch;");
         eval("tp.close();");
         assertEquals("w1:disposed", log());
-        assertTrue(eval("branch.dissolved && tp.chip.parentNode === null && tp.pane.parentNode === null").asBoolean(), "the parts out of the document");
+        assertTrue(eval("branch.dissolved && tp.chip.el.parentNode === null && tp.pane.parentNode === null").asBoolean(), "the parts out of the document");
         assertEquals(0, eval("dock.members.length").asInt(), "the membership left");
         assertEquals(0, eval("register.branch.kids.size").asInt());
         eval("tp.close();");

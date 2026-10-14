@@ -27,7 +27,7 @@
     }
 }
 
-/* The tab in neo-brutalism: one tab of a strip - its ground, its edge, its lift and its shadow at rest, under the hand, in use and in the hand. Whole: every property its look has (D9). */
+/* The tab in neo-brutalism: one tab of a strip - its ground, its edge, its lift and its shadow at rest, under the hand, in use, lifted while the keys are on its strip, and in the hand. Whole: every property its look has (D9). */
 .styled-tab {
     color: var(--fp-text);
     background-color: var(--fp-accent-wash-faint);
@@ -66,6 +66,11 @@
         border-color: var(--fp-title);
         box-shadow: 6px 6px 0 var(--fp-inverted);
         transform: translate(-3px, -3px);
+    }
+
+    &.styled-tab--held {
+        translate: 0 -4px;
+        z-index: 1;
     }
 
     &.styled-tab--dragging {

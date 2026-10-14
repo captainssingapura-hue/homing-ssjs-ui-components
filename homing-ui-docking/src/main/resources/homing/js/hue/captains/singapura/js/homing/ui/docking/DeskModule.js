@@ -299,7 +299,7 @@ class Desk {
 
     /** The point a float's bar sits under when a tab is detached where it is: the float's corner at its chip's. */
     static _underChip(tp) {
-        var c = Desk._rect(tp && tp.chip);
+        var c = Desk._rect(tp && tp.chip ? tp.chip.el : null);
         return { x: c.left + _GRIP_X, y: (c.bottom != null ? c.bottom : c.top + (c.height || 0)) + _GRIP_Y };
     }
 
