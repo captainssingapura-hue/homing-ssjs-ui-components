@@ -1,0 +1,43 @@
+/* The plain button as cancel, in neumorphism: a button that does one ordinary thing. Whole: every property its look has (D9). */
+.styled-plain-button_cancel {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 0;
+    border-style: solid;
+    border-radius: 12px;
+    box-shadow: 5px 5px 10px var(--fp-shade-firm), -5px -5px 10px var(--fp-raised);
+    outline: 0 none;
+    padding-block: calc(10px * pow(1.3, var(--size)));
+    padding-inline: calc(20px * pow(1.3, var(--size)));
+    gap: calc(8px * pow(1.3, var(--size)));
+    min-width: calc(64px * pow(1.3, var(--size)));
+    font-family: "Nunito", "Quicksand", "Varela Round", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    transition: box-shadow 180ms ease, transform 180ms ease, background-color 180ms ease, color 120ms ease;
+    transform: none;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 7px 7px 14px var(--fp-shade-firm), -7px -7px 14px var(--fp-raised);
+        transform: translateY(-1px);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--fp-ring);
+        outline-offset: -2px;
+    }
+
+    &.styled-plain-button_cancel--disabled {
+        opacity: .5;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
+
+    &:active {
+        box-shadow: inset 4px 4px 8px var(--fp-shade-firm), inset -4px -4px 8px var(--fp-raised);
+    }
+}

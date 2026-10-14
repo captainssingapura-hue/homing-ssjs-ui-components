@@ -33,8 +33,8 @@ class WholeHouseFilesTest {
 
     @Test
     void baseHasAFileForEveryLeaf_fromTheModuleThatAddsIt() {
-        assertEquals(HOUSE.leaves().size(), StyleFiles.INSTANCE.present(Base.INSTANCE).size(),
-                "one file for each of the whole house's leaves, the house's own and every extension's, across the jars");
-        assertEquals(217, HOUSE.leaves().size());
+        assertEquals(HOUSE.castings().size(), StyleFiles.INSTANCE.present(Base.INSTANCE).size(),
+                "one file for each of the whole house's castings, the house's own and every extension's, across the jars");
+        assertEquals(164, HOUSE.castings().size(), "105 components on their own, 59 in a role");
     }
 }

@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ComponentLeaf;
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
@@ -24,8 +24,8 @@ public record Base() implements DesignStyle<ColorScheme.Base> {
     /** None: its look is in its files; the walk's typed answers retire. */
     @Override public List<Implementation<?>> implementations() { return List.of(); }
 
-    /** Content for every leaf: the base layer is never absent (D26). */
-    @Override public StylingRes style(ComponentLeaf leaf) { return StylingRes.CssContent.INSTANCE; }
+    /** Content for every casting: the base layer is never absent (D26). */
+    @Override public StylingRes style(Casting casting) { return StylingRes.CssContent.INSTANCE; }
 
     /**
      * Every house word, as a style draws it unless it draws it otherwise: a symbol of the text's own font, in

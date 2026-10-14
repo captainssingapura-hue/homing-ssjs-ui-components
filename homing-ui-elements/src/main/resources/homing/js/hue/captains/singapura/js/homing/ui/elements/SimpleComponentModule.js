@@ -46,21 +46,21 @@
 // an accessor for each axis, degree and word, a setter for each event, and its
 // companion beside it: const PrimaryButtonFactory = new SimpleComponentFactory(PrimaryButton).
 //
-//   var b = new PrimaryButton(branch.elementMaker("save"), props, role?, Owner?)
+//   var b = new PrimaryButton(branch.elementMaker("save"), props, role?)
 //     make    the maker its owner's branch issues: it makes the <TAG>, once. An
 //             element its companion made is still taken, the old way, until every
 //             owner hands a maker; a widget may not (widget-draws-only-components)
 //     props   an axis, a degree, a word or a part by its name, and nothing else
-//     role    one of ROLE, Standalone unless given; refused unless the leaf is cast in it
-//     Owner   the owner's class, when the role is a part it plays: the element wears
-//             the part's leaf - Owner.LEAF + "-" + role - alone (RFC 0067, D10)
+//     role    one of ROLE, Standalone unless given, passed in by its owner; refused unless
+//             the leaf is cast in it. The leaf and the role, locked here, are its casting,
+//             whose one class it wears (RFC 0067, appendix Two Classes per Leaf)
 //   .el  .role
 // =============================================================================
 
 var _COMPONENT_DEGREE_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
 
 class SimpleComponent {
-    constructor(make, props, role, Owner) {
+    constructor(make, props, role) {
         var Leaf = new.target, self = this;
         if (!Leaf.LEAF || !Leaf.BEHAVIOR) throw new Error("[" + Leaf.name + "] is no leaf: a simple component is made as one of its leaves");
         var el = make;   // an element its companion made: the old way, until every owner hands a maker
@@ -80,7 +80,7 @@ class SimpleComponent {
         for (var a in axes) this._state[a] = a in p ? SimpleComponent._value(Leaf, a, p[a]) : axes[a].rest;
         this._handlers = new Map();
         this._degrees = {};
-        this._look = new Look(Leaf, this.role, Owner);
+        this._look = new Look(Leaf, this.role);
         this._look.wear(el);
         if (Leaf.MARK) this._look.mark(el, Leaf.MARK);   // its face a word of the lexicon, as the style worn writes it
         this._look.show(el, this._state);

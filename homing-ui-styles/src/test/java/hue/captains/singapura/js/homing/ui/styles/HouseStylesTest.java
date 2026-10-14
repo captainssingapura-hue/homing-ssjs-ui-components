@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ComponentLeaf;
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
@@ -44,12 +45,15 @@ class HouseStylesTest {
     }
 
     @Test
-    void base_answersContentForEveryLeaf_andEachStyleDrawsTheButtons_absentElsewhere() {
-        for (ComponentLeaf leaf : TAXONOMY.leaves())
-            assertEquals(StylingRes.CssContent.INSTANCE, Base.INSTANCE.style(leaf), leaf.token() + ": the base layer is never absent (D26)");
+    void base_answersContentForEveryCasting_andEachStyleDrawsTheButtons_inEveryRole_absentElsewhere() {
+        for (Casting c : TAXONOMY.castings())
+            assertEquals(StylingRes.CssContent.INSTANCE, Base.INSTANCE.style(c), c.token() + ": the base layer is never absent (D26)");
+        var go = TAXONOMY.castings().stream().filter(c -> c.token().equals("primary-button_go")).findFirst().orElseThrow();
         for (DesignStyle<?> s : HouseStyles.STYLES) {
-            for (ComponentLeaf b : HouseFamilies.BUTTONS) assertEquals(StylingRes.CssContent.INSTANCE, s.style(b), s.token() + " draws " + b.token());
-            assertEquals(StylingRes.Absence.INSTANCE, s.style(HouseControls.Knob.INSTANCE), s.token() + ": a knob is Base's, for now");
+            for (Component<?> b : HouseFamilies.BUTTONS)
+                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(b)), s.token() + " draws " + b.token());
+            assertEquals(StylingRes.CssContent.INSTANCE, s.style(go), s.token() + " draws the primary button as Go too, a class of its own");
+            assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseControls.Knob.INSTANCE)), s.token() + ": a knob is Base's, for now");
         }
         assertEquals(9, HouseFamilies.BUTTONS.size());
     }

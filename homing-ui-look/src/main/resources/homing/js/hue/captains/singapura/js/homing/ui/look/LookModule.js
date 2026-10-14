@@ -1,19 +1,21 @@
 // =============================================================================
-// Look — how a component wears its leaf's style-aware classes (RFC 0067,
-// appendix Two Classes per Leaf), through core's StyledLeaf: its leaf's class -
-// its own on its own, the part's when it plays one, which its owner names (D10)
-// - and the class of each application state its leaf lists, while the state
-// holds (D12). The browser draws the pseudo states itself. The names are the
-// leaves' as Java generates them (LEAVES); the rules are the style worn's, in
-// its sheet (HouseStyleSheet), its colours the palette worn's (HousePaletteSheet),
-// each swapped on its own by the theme's owner. Nothing is resolved here.
+// Look — how a component wears its casting's style-aware classes (RFC 0067,
+// appendix Two Classes per Leaf), through core's StyledLeaf. Its component and
+// its role are locked in its constructor, the role passed in by its owner and
+// checked there; the pair is its casting - a leaf for its class, never one of
+// the taxonomy's tree, the owner never in it - and names the one class it wears:
+// styled-<component> on its own, styled-<component>_<role> in a role. And the
+// class of each application state its component lists, while the state holds
+// (D12); the browser draws the pseudo states itself. The names are Java's
+// (LEAVES); the rules the style worn's, in its sheet (HouseStyleSheet), its
+// colours the palette worn's (HousePaletteSheet), each swapped on its own by the
+// theme's owner. Nothing is resolved here.
 //
-//   var look = new Look(Leaf, role, Owner)   the leaf worn: Leaf's own on its own
-//                                            (ROLE.STANDALONE), the part Owner
-//                                            names - Owner.LEAF + "-" + role.token
-//                                            - when it plays one
-//     .token                            the leaf's token, or null while no owner names the part it plays
-//     .leaf                             the leaf's description, or null
+//   var look = new Look(Leaf, role)     the casting worn: Leaf on its own (ROLE.STANDALONE,
+//                                       or a role that only places it), else Leaf in its role;
+//                                       refused for a pair the taxonomy never casts
+//     .token                            the casting's token: primary-button_go
+//     .leaf                             the casting's description
 //     .wear(el)                         the leaf's class on the element
 //     .show(el, state)                  each axis's reflection written, and each state the leaf lists held
 //     .keys()                           its keys' marks for Keys.claimOn: its leaf and its Keyboard state
@@ -23,10 +25,9 @@
 //                                       class, which the lexicon's sheet draws on the element's ::before
 //                                       as the style worn writes it
 //
-// While the house moves onto files (phase 5), two things wear nothing styled and
-// say so once on the console, each until its family moves: a part played with no
-// owner named - an owner hands its own Leaf as the third argument - and a slice of
-// the old look, wear(el, { only | except }), each slice now a leaf of its own (D17).
+// While the house moves onto files (phase 5), a slice of the old look - wear(el,
+// { only | except }) - wears nothing styled and says so once on the console,
+// until its family moves and the slice is a leaf of its own (D17).
 // =============================================================================
 
 var _LOOK_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
@@ -39,20 +40,14 @@ function _lookSay(said) {
 }
 
 class Look {
-    constructor(Leaf, role, Owner) {
+    constructor(Leaf, role) {
         if (!Leaf || !Leaf.LEAF) throw new Error("[Look] a leaf with its token is required");
         if (!role || typeof role.token !== "string") throw new Error("[Look] a role is one of ROLE, not " + role);
         this.component = Leaf;
         this.role = role;
-        if (role.token === "standalone") this.token = Leaf.LEAF;
-        else if (Owner && Owner.LEAF) this.token = Owner.LEAF + "-" + role.token;
-        else if (role.functional) this.token = Leaf.LEAF;
-        else {
-            this.token = null;
-            _lookSay(Leaf.LEAF + " plays " + role.token + " for an owner not named: it wears nothing styled until its owner hands itself (D10)");
-        }
-        this.leaf = this.token == null ? null : LEAVES[this.token] || null;
-        if (this.token != null && !this.leaf) throw new Error("[Look] '" + this.token + "' is no leaf of the taxonomy");
+        this.token = role.token === "standalone" || role.functional ? Leaf.LEAF : Leaf.LEAF + "_" + role.token;
+        this.leaf = LEAVES[this.token] || null;
+        if (!this.leaf) throw new Error("[Look] '" + this.token + "' is no casting of the taxonomy: " + Leaf.LEAF + " is never cast as " + role.token);
         void style_sheet; void palette_sheet;   // the sheets its classes are ruled in: imported, so they load
     }
 
@@ -76,7 +71,7 @@ class Look {
 
     /**
      * Its keys' marks, for Keys.claimOn: its leaf and the house's Keyboard state of it, which the steward holds on the
-     * root it enrols while the root holds a mark (D12). None while its leaf is not named; refused when its leaf lists no
+     * root it enrols while the root holds a mark (D12); refused when its casting lists no
      * Keyboard state, its marks then never to show.
      */
     keys() {

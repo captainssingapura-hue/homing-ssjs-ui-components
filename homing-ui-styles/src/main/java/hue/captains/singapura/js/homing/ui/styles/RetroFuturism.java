@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ComponentLeaf;
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
@@ -16,8 +17,8 @@ public record RetroFuturism() implements Derives<ColorScheme.Base, Base> {
 
     public static final RetroFuturism INSTANCE = new RetroFuturism();
 
-    /** The leaves it draws its own way, each in a whole file of its own; every other leaf is Base's. */
-    private static final Set<ComponentLeaf> DRAWN = HouseFamilies.BUTTONS;
+    /** The components it draws its own way, on their own and in every role they are cast in, each casting a whole file; every other casting is Base's. */
+    private static final Set<Component<?>> DRAWN = HouseFamilies.BUTTONS;
 
     @Override public String group() { return "Expressive"; }
 
@@ -28,8 +29,8 @@ public record RetroFuturism() implements Derives<ColorScheme.Base, Base> {
     /** None: its look is in its files (RFC 0067, appendix Two Classes per Leaf); the walk's typed answers retire. */
     @Override public List<Implementation<?>> implementations() { return List.of(); }
 
-    @Override public StylingRes style(ComponentLeaf leaf) {
-        return DRAWN.contains(leaf) ? StylingRes.CssContent.INSTANCE : StylingRes.Absence.INSTANCE;
+    @Override public StylingRes style(Casting casting) {
+        return DRAWN.contains(casting.cast()) ? StylingRes.CssContent.INSTANCE : StylingRes.Absence.INSTANCE;
     }
 
     @Override public List<Writing> writings() { return WRITINGS; }
