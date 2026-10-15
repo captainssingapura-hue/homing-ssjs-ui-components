@@ -1,2 +1,2 @@
-/* preferences-view: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The preferences view in the base layer: no look of its own - the widgets it lays out draw; every style's alike. */
 .styled-preferences-view {}

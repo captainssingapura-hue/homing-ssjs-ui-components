@@ -1,17 +1,17 @@
-/* pane-thumbs: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The pane thumbnails in the base layer: no look of its own - its thumbnails draw; every style's alike. */
 .styled-pane-thumbs {}
 
-/* pane-thumbs_where: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The pane thumbnails, cast as where in the base layer: no look of its own - its thumbnails draw; every style's alike. */
 .styled-pane-thumbs_where {}
 
-/* add-tab: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The add-a-tab chooser in the base layer: no look of its own - its button and its choices draw; every style's alike. */
 .styled-add-tab {}
 
-/* tab-opener: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The tab opener in the base layer: no look of its own - its choices draw; every style's alike. */
 .styled-tab-opener {}
 
-/* tab-picker: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The tab picker in the base layer: no look of its own - its choices draw; every style's alike. */
 .styled-tab-picker {}
 
-/* tab-picker_picker: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The tab picker, cast as a picker in the base layer: no look of its own - its choices draw; every style's alike. */
 .styled-tab-picker_picker {}

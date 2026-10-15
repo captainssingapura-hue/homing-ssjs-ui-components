@@ -1,2 +1,2 @@
-/* theme-widget: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The theme widget in the base layer: no look of its own - a widget draws only components: its choices draw; every style's alike. */
 .styled-theme-widget {}

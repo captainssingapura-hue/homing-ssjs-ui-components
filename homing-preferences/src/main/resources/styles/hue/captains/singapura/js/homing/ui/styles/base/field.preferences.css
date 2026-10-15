@@ -1,17 +1,17 @@
-/* preference-field: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The preference's field in the base layer: no look of its own - its label, its control and its note draw; every style's alike. */
 .styled-preference-field {}
 
-/* choice-widget: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The choice widget in the base layer: no look of its own - a widget draws only components: its options draw; every style's alike. */
 .styled-choice-widget {}
 
-/* scale-widget: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The scale widget in the base layer: no look of its own - a widget draws only components: its range and its readout draw; every style's alike. */
 .styled-scale-widget {}
 
-/* toggle-widget: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The toggle widget in the base layer: no look of its own - a widget draws only components: its switch draws; every style's alike. */
 .styled-toggle-widget {}
 
-/* list-master-widget: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The list widget in the base layer: no look of its own - a widget draws only components: its rows draw; every style's alike. */
 .styled-list-master-widget {}
 
-/* overview-widget: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The overview widget in the base layer: no look of its own - a widget draws only components: its rows and the lines between them draw; every style's alike. */
 .styled-overview-widget {}
