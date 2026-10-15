@@ -1,0 +1,5 @@
+/* An icon as a symbol - an icon button's face: the colour of what holds it, whole (D30). */
+$casting {
+    color: inherit;
+    line-height: 1;
+}
