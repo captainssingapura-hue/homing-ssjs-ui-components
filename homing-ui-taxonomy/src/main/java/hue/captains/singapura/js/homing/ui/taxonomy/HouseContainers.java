@@ -131,6 +131,8 @@ public final class HouseContainers {
         public static final TitleBar INSTANCE = new TitleBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        /** In the hand while its pane is moved by it (D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Dragging.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Title.INSTANCE).optional(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
@@ -175,7 +177,7 @@ public final class HouseContainers {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Reveal.INSTANCE).one());
+            return List.of(DSL.part(HouseControls.Lip.INSTANCE).as(HouseShaping.Reveal.INSTANCE).one());
         }
     }
 
@@ -244,9 +246,12 @@ public final class HouseContainers {
         public static final TabStrip INSTANCE = new TabStrip();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        /** Lit while its pane is the one being worked in (D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(),
                            DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
+                           DSL.part(HouseRegions.StripTail.INSTANCE).as(HouseShaping.Foot.INSTANCE).one(),
                            DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
                            DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional());

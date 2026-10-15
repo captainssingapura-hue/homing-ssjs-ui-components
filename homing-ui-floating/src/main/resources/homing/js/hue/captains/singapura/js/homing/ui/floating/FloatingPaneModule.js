@@ -65,8 +65,9 @@ class FloatingPaneClose {
 var _MIN_W = 160, _MIN_H = 96;
 var _KEEP = 48;          // how much of the head must stay within the desk, inline
 
-/** A floating pane's head: the house's title bar, which nothing realizes on its own - the pane draws it here. */
-const _TITLE_BAR = Object.freeze({ LEAF: "title-bar" });
+/** A floating pane's head: the house's title bar, which nothing realizes on its own - the pane draws it here; in the hand while the pane is moved by it. */
+const _TITLE_BAR = Object.freeze({ LEAF: "title-bar", AXES: Object.freeze({ dragging: Object.freeze({ values: Object.freeze([false, true]), rest: false,
+    reflect: function (el, on) { FloatingPane._reflect(el, "data-dragging", on); }, state: STATE.DRAGGING }) }) });
 
 class FloatingPane {
     static LEAF = "floating-pane";
@@ -125,7 +126,7 @@ class FloatingPane {
     _mintHead(branch, opts) {
         var self = this, head = branch.createElement("head", "header");
         css.addClass(head, fp_head);
-        new Look(_TITLE_BAR, ROLE.STANDALONE).wear(head);   // its head, the house's title bar
+        (this._headLook = new Look(_TITLE_BAR, ROLE.STANDALONE)).wear(head);   // its head, the house's title bar
         this._icon = branch.createElement("icon", "span");
         css.addClass(this._icon, fp_icon);
         this._icon.setAttribute("aria-hidden", "true");
@@ -275,7 +276,7 @@ class FloatingPane {
         var x0 = this._x, y0 = this._y, cx = down.clientX, cy = down.clientY, moved = false;
         this._held = true;
         this._lift();
-        if (lit) FloatingPane._reflect(head, "data-dragging", true);
+        if (lit) this._headLook.show(head, { dragging: true });
         try { head.setPointerCapture(down.pointerId); } catch (err) {}
         function onMove(e) {
             var nx = x0 + (e.clientX - cx), ny = y0 + (e.clientY - cy);
@@ -289,7 +290,7 @@ class FloatingPane {
             head.removeEventListener("pointercancel", onEnd);
             self._held = false;
             self._lift();
-            if (lit) FloatingPane._reflect(head, "data-dragging", false);
+            if (lit) self._headLook.show(head, { dragging: false });
             try { head.releasePointerCapture(down.pointerId); } catch (err) {}
             var ok = e.type === "pointerup";
             if (!ok) self._set(x0, y0, self._w, self._h, false);

@@ -79,8 +79,15 @@ public final class HouseFamilies {
      */
     public static final Set<Component<?>> SURFACES = Set.of(HouseContainers.Panel.INSTANCE, HouseContainers.Ground.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks, the regions and the surfaces. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS, SURFACES);
+    /**
+     * The bars each style draws its own way: a site's bar, a floating pane's head, a panel's head, a row of actions, a strip
+     * of tabs, a strip along an edge. A trail never differed between them, and is Base's.
+     */
+    public static final Set<Component<?>> BARS = Set.of(HouseContainers.SiteBar.INSTANCE, HouseContainers.TitleBar.INSTANCE,
+            HouseContainers.PanelBar.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseContainers.TabStrip.INSTANCE, HouseContainers.EdgeStrip.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks, the regions, the surfaces and the bars. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS, SURFACES, BARS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

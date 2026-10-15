@@ -1,0 +1,84 @@
+/* The edge strip in sketchy: a strip along an edge, shown when its lip is reached - raised, ruled along the edge it comes from, casting nothing. It shows no state of its own. Whole: every property its look has (D9). */
+.styled-edge-strip {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    box-shadow: none;
+    padding-block: 8px;
+    padding-inline: 14px;
+    gap: 8px;
+}
+
+/* The action bar in sketchy: a row of actions at the foot of what it ends - raised, capped off by a rule along its top. Whole: every property its look has (D9). */
+.styled-action-bar {
+    color: inherit;
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 2px 0 0 0;
+    border-style: solid;
+    padding-block: 8px;
+    padding-inline: 12px;
+    gap: 8px;
+}
+
+/* The tab strip in sketchy: a pane's tabs in a row - raised, ruled along its foot in the accent, as tall as a tab and its room, the hint of the accent across it while its pane is the one worked in. Its room is its tail's. Whole: every property its look has (D9). */
+.styled-tab-strip {
+    color: inherit;
+    background-color: var(--fp-raised);
+    border-color: var(--fp-accent);
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    min-height: calc(calc(calc(160px * pow(1.3, var(--size))) / (5 * pow(1.5, var(--aspect, 0)))) + 8px);
+    user-select: none;
+
+    &.styled-tab-strip--current {
+        background-color: var(--fp-accent-tint-hint);
+    }
+}
+
+/* The site bar in sketchy: heads a site's pages - the inverted layer, the page's ground written on it, ruled along its foot in the accent. Whole: every property its look has (D9). */
+.styled-site-bar {
+    color: var(--fp-on-bar);
+    background-color: var(--fp-inverted);
+    border-color: var(--fp-accent);
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    padding-block: 12px;
+    padding-inline: 28px;
+    gap: 20px;
+}
+
+/* The title bar in sketchy: heads a pane that floats - the inverted layer, the page's ground written on it in the style's face, ruled along its foot; where the hand takes it, and in the house's colour while the hand has it. Whole: every property its look has (D9). */
+.styled-title-bar {
+    color: var(--fp-on-bar);
+    background-color: var(--fp-inverted);
+    border-color: var(--fp-border);
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    padding-block: 5px;
+    padding-inline: 12px;
+    gap: 8px;
+    font-family: "Cabin Sketch", "Segoe Print", "Bradley Hand", "Chalkboard SE", cursive;
+    cursor: grab;
+    user-select: none;
+
+    &.styled-title-bar--dragging {
+        color: var(--fp-on-inverted);
+        background-color: var(--fp-title);
+        cursor: grabbing;
+    }
+}
+
+/* The panel bar in sketchy: heads a panel - its room round its title and its controls, ruled under it in the accent; nothing of its own ground. Whole: every property its look has (D9). */
+.styled-panel-bar {
+    color: inherit;
+    background-color: transparent;
+    border-color: var(--fp-accent);
+    border-width: 0 0 3px 0;
+    border-style: double;
+    padding-block: 10px;
+    padding-inline: 16px;
+    gap: 10px;
+}

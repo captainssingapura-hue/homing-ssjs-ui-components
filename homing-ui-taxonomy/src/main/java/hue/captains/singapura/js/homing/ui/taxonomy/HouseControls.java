@@ -167,6 +167,12 @@ public final class HouseControls {
         @Override public List<StateType<?>> states() { return AN_INPUT; }
     }
 
+    /** The thin band at an edge the hand comes to: reaching it shows the strip it belongs to. */
+    public record Lip() implements Component<Handle> {
+        public static final Lip INSTANCE = new Lip();
+        @Override public Handle parent() { return Handle.INSTANCE; }
+    }
+
 
     // ── other controls ───────────────────────────────────────────────────
 

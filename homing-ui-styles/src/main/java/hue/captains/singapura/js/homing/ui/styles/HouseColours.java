@@ -52,10 +52,10 @@ public record HouseColours() implements ColorSource {
     /** Every palettable colour of the house: one sealed set, so a palette's switch over it is exhaustive. */
     public sealed interface HouseColour permits
             Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft, ScrollThumb,
-            Text, TextFaded, OnInverted, OnAccent, OnDanger, WayHovered, HeadingInk, KickerInk, DangerInk, WarningInk, SuccessInk,
+            Text, TextFaded, OnInverted, OnBar, OnAccent, OnDanger, WayHovered, HeadingInk, KickerInk, DangerInk, WarningInk, SuccessInk,
             Border, GrooveEdge, LineHovered,
-            Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
-            ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeModerate, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, ShadeDense, ShadeDark, ShadeDarkest, SheenSoft, Sheen,
+            Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentTintHint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
+            ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeModerate, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, ShadeSolid, ShadeThick, ShadeDense, ShadeDark, ShadeDarker, ShadeDarkest, SheenSoft, Sheen,
             GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
 
     public record Surfaces() implements L1_ColorBranch<Base> {}
@@ -98,6 +98,8 @@ public record HouseColours() implements ColorSource {
     public record TextFaded() implements Palettable<Base, Inks>, HouseColour {}
     /** The ink written on the house's own colour and on inverted: the primary button's, the chosen tab's. */
     public record OnInverted() implements Palettable<Base, Inks>, HouseColour {}
+    /** What is written on a bar laid in the inverted layer - a site's bar, a floating pane's head: the page's ground, on the dark. */
+    public record OnBar() implements Palettable<Base, Inks>, HouseColour {}
     /** The ink written on the accent. */
     public record OnAccent() implements Palettable<Base, Inks>, HouseColour {}
     /** A way somewhere under the hand: the house's own colour leaning half into the faded text a way is written in. */
@@ -130,6 +132,8 @@ public record HouseColours() implements ColorSource {
     public record Whole() implements CurrentColor<Base, Current> { @Override public double share() { return 1; } }
     /** At 70%: a lamp at rest. */
     public record Quiet() implements CurrentColor<Base, Current> { @Override public double share() { return 0.70; } }
+    /** At 80%: a trail's words, softer than what they are written on, whichever ink that is. */
+    public record Soft() implements CurrentColor<Base, Current> { @Override public double share() { return 0.80; } }
     /** At 60%: a small mark's - the sign between a trail's steps, a scale's tick, a detent shown. */
     public record Muted() implements CurrentColor<Base, Current> { @Override public double share() { return 0.60; } }
     /** At 30%: a line between groups - a separator's. */
@@ -149,6 +153,8 @@ public record HouseColours() implements ColorSource {
     public record AccentTint() implements Palettable<Base, Attention>, HouseColour {}
     /** The accent's faint tint on a raised face, 12%: a pane's thumbnail the cursor is at. */
     public record AccentTintFaint() implements Palettable<Base, Attention>, HouseColour {}
+    /** A hint of the accent on a raised face, at 7%: a strip of tabs lit while its pane is worked in. */
+    public record AccentTintHint() implements Palettable<Base, Attention>, HouseColour {}
     /** The accent washed thin, at 18%: a badge's ground. */
     public record AccentWash() implements Palettable<Base, Attention>, HouseColour {}
     /** The accent washed fainter, 8%: a tab's ground. */
@@ -184,10 +190,16 @@ public record HouseColours() implements ColorSource {
     public record ShadeDeep() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 22%: a glass tab in the hand. */
     public record ShadeHeavy() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 30%: an edge strip's near shadow. */
+    public record ShadeSolid() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 35%: an edge strip lifted off the page. */
+    public record ShadeThick() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 45%: a panel lifted, cast hard. */
     public record ShadeDense() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 55%: a panel set in, cast hard. */
     public record ShadeDark() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 60%: an edge strip cast deep below its glow. */
+    public record ShadeDarker() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 70%: a panel set deep into the page. */
     public record ShadeDarkest() implements Palettable<Base, Shadows>, HouseColour {}
     /** The raised layer's sheen at 45%: a glass panel's top edge lit. */
@@ -291,12 +303,12 @@ public record HouseColours() implements ColorSource {
         return ReadColors.INSTANCE.read(HouseColours.class, List.of(
                 new Surfaces(), new Inks(), new Lines(), new Current(), new Attention(), new Shadows(), new Feedback(), new Scales(),
                 new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new ScrollThumb(), new Clear(),
-                new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
+                new Text(), new TextFaded(), new OnInverted(), new OnBar(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
                 new OnDanger(), new DangerInk(), new WarningInk(), new SuccessInk(),
                 new Border(), new GrooveEdge(), new LineHovered(),
-                new Whole(), new Quiet(), new Muted(), new Hairline(),
-                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentWash(), new AccentWashFaint(), new AccentWashLight(), new AccentWashSoft(), new AccentWashStrong(), new KeysCandidate(), new KeysLent(),
-                new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeModerate(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new ShadeDense(), new ShadeDark(), new ShadeDarkest(), new SheenSoft(), new Sheen(),
+                new Whole(), new Soft(), new Quiet(), new Muted(), new Hairline(),
+                new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentTintHint(), new AccentWash(), new AccentWashFaint(), new AccentWashLight(), new AccentWashSoft(), new AccentWashStrong(), new KeysCandidate(), new KeysLent(),
+                new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeModerate(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new ShadeSolid(), new ShadeThick(), new ShadeDense(), new ShadeDark(), new ShadeDarker(), new ShadeDarkest(), new SheenSoft(), new Sheen(),
                 new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),
                 new Danger(), new DangerPressed(), new DangerTint(), new DangerEdge(),
                 new DangerWash(), new WarningWash(), new SuccessWash(),

@@ -35,6 +35,9 @@ const _stripOwner = Object.freeze({ toString: () => "edgeStrip" });
 /** How long the hand may be off both before the strip goes: long enough to cross from the lip onto it. */
 var _EDGE_STRIP_GRACE = 250;
 
+/** Its lip: the band the hand comes to, which shows the strip - realized inline, in its own look. */
+const _EDGE_LIP = Object.freeze({ LEAF: "lip" });
+
 class EdgeStrip {
     static LEAF = "edge-strip";
 
@@ -52,7 +55,7 @@ class EdgeStrip {
         var look = new Look(EdgeStrip, ROLE.STANDALONE);
         var lip = branch.createElement("lip", "div");
         css.addClass(lip, el_strip_lip);
-        look.wear(lip, { only: ["color-background"] });   // the strip's edge, showing
+        new Look(_EDGE_LIP, ROLE.REVEAL).wear(lip);   // the lip: the strip's edge, showing - a handle of its own
         var strip = branch.createElement("strip", "div");
         css.addClass(strip, el_strip);
         look.wear(strip);

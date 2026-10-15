@@ -5,6 +5,13 @@
     gap: 0;
 }
 
+/* The strip's tail in the base layer: the end of a strip of tabs - the room its count and its close sit in, round them and between; every style's alike. Whole: every property its look has (D9). */
+.styled-strip-tail {
+    padding-block: 0;
+    padding-inline: 8px;
+    gap: 8px;
+}
+
 /* The widget slot in the base layer: no look of its own - what it holds draws; every style's alike. */
 .styled-widget-slot {}
 

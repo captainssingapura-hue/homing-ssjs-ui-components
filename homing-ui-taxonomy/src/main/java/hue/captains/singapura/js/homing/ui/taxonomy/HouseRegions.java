@@ -23,6 +23,12 @@ public final class HouseRegions {
     }
 
     /** A stretch of a view a widget is held in. */
+    /** The end of a strip of tabs: the room its count and its close sit in. */
+    public record StripTail() implements Component<Region> {
+        public static final StripTail INSTANCE = new StripTail();
+        @Override public Region parent() { return Region.INSTANCE; }
+    }
+
     public record WidgetSlot() implements Component<Region> {
         public static final WidgetSlot INSTANCE = new WidgetSlot();
         @Override public Region parent() { return Region.INSTANCE; }

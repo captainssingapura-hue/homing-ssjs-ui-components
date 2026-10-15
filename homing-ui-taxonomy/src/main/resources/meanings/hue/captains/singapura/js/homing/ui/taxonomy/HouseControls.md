@@ -50,6 +50,10 @@ What shows which way a switch stands, sliding in its groove as it is turned.
 
 What the user takes hold of to move the thing it is on.
 
+## Lip
+
+The thin band at an edge the user's hand comes to, which shows the strip it belongs to.
+
 ## Link
 
 Takes the user somewhere else, and says where.

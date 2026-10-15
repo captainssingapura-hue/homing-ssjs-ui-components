@@ -92,7 +92,7 @@ class Panel {
         if (p.title != null) {
             var head = branch.createElement("head", "header");
             css.addClass(head, el_panel_head);
-            new Look(_PANEL_HEAD, ROLE.HEAD).wear(head, { only: ["size-inset", "size-gap", "shape-border", "color-border"] });   // its room, and the line under it
+            new Look(_PANEL_HEAD, ROLE.HEAD).wear(head);   // its bar's look, whole: its room, and the line under it
             // its title is the house's kicker, cast as its title: placed by the panel, looking as a kicker does
             var title = new Kicker(KickerFactory.create(branch, "title"), { text: String(p.title) }, ROLE.TITLE);
             css.addClass(title.el, el_panel_title);

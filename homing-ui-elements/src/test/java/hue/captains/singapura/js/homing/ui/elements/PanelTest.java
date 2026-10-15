@@ -99,8 +99,7 @@ class PanelTest extends JsModuleTestBase {
 
     /**
      * Its look: the panel's casting whole on its root (RFC 0067, Two Classes per Leaf, phase 5); a body that holds content
-     * a section, whole - its room round what it holds; a filled body flush. Its head, a slice of the bars' old look, wears
-     * nothing styled until the bars move onto files (D17).
+     * a section, whole - its room round what it holds; a filled body flush; its head its bar's, whole.
      */
     @Test
     void itWearsItsLook_aReadingBodyASection_aFilledOneFlush() {
@@ -109,7 +108,7 @@ class PanelTest extends JsModuleTestBase {
         assertFalse(root.contains("styled-panel--"), "at rest: flat, and not the current one - " + root);
         assertTrue(eval("reading.body.classes()").asString().contains("styled-section"), "a body that holds content: a section");
         assertFalse(eval("panel.body.classes()").asString().contains("styled-"), "a filled body: flush, no room of its own");
-        assertFalse(eval("reading.head.classes()").asString().contains("styled-"), "the head: a slice of the bars' old look, nothing styled yet");
+        assertTrue(eval("reading.head.classes()").asString().contains("styled-panel-bar"), "the head: its bar's look, whole");
     }
 
     /** The size is an element's, not inherited, so the panel carries it to every part it minted - and not to a body that wears no length. */

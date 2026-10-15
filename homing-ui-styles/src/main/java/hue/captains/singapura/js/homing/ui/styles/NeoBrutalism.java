@@ -12,6 +12,7 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.Accent;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentEdge;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentTint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentTintFaint;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentTintHint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWash;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashFaint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashLight;
@@ -35,6 +36,7 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.KeysLent;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KickerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Muted;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.OnAccent;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.OnBar;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.OnDanger;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.OnInverted;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.PrimaryGround;
@@ -168,5 +170,12 @@ public record NeoBrutalism() implements Derives<ColorScheme.Base, Base> {
             new ColorImports<>(HouseRegions.CodeBlock.INSTANCE, new Text(), new Recessed(), new Border()),
             // surface
             new ColorImports<>(HouseContainers.Panel.INSTANCE, new Raised(), new Inverted(), new Text(), new Border(), new Accent()),
-            new ColorImports<>(HouseContainers.Ground.INSTANCE, new Ground(), new ScrollThumb(), new Text()));
+            new ColorImports<>(HouseContainers.Ground.INSTANCE, new Ground(), new ScrollThumb(), new Text()),
+            // bar
+            new ColorImports<>(HouseContainers.EdgeStrip.INSTANCE, new Raised(), new Inverted(), new Text(), new Border()),
+            new ColorImports<>(HouseContainers.ActionBar.INSTANCE, new Raised(), new Border()),
+            new ColorImports<>(HouseContainers.TabStrip.INSTANCE, new Raised(), new Accent(), new AccentTintHint()),
+            new ColorImports<>(HouseContainers.SiteBar.INSTANCE, new Inverted(), new OnBar(), new Accent()),
+            new ColorImports<>(HouseContainers.TitleBar.INSTANCE, new Inverted(), new OnInverted(), new OnBar(), new Border(), new Title()),
+            new ColorImports<>(HouseContainers.PanelBar.INSTANCE, new Accent()));
 }

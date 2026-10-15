@@ -35,7 +35,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseControls.PlainButton.INSTANCE, HouseControls.PrimaryButton.INSTANCE, HouseControls.SecondaryButton.INSTANCE,
                 HouseControls.DangerButton.INSTANCE, HouseControls.WarningButton.INSTANCE, HouseControls.SuccessButton.INSTANCE,
                 HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE,
-                HouseControls.SliderKnob.INSTANCE, HouseControls.ToggleKnob.INSTANCE, HouseControls.Grip.INSTANCE,
+                HouseControls.SliderKnob.INSTANCE, HouseControls.ToggleKnob.INSTANCE, HouseControls.Grip.INSTANCE, HouseControls.Lip.INSTANCE,
                 HouseControls.Link.INSTANCE, HouseControls.Crumb.INSTANCE, HouseControls.Range.INSTANCE, HouseControls.TextBox.INSTANCE, HouseControls.Checkbox.INSTANCE,
                 HouseControls.Switch.INSTANCE, HouseControls.Slider.INSTANCE, HouseControls.Select.INSTANCE,
                 HouseControls.PaneThumb.INSTANCE, HouseControls.Tab.INSTANCE, HouseControls.Brand.INSTANCE, HouseControls.PreferencesButton.INSTANCE,
@@ -48,7 +48,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 HouseContainers.EdgeStrip.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseContainers.Trail.INSTANCE,
                 HouseContainers.TabStrip.INSTANCE, HouseContainers.Ground.INSTANCE, HouseContainers.HeaderCell.INSTANCE, HouseContainers.DataCell.INSTANCE, HouseContainers.SiteBar.INSTANCE, HouseContainers.TitleBar.INSTANCE, HouseContainers.PanelBar.INSTANCE, HouseContainers.FloatLayer.INSTANCE,
                 // regions
-                HouseRegions.Section.INSTANCE, HouseRegions.WidgetSlot.INSTANCE,
+                HouseRegions.Section.INSTANCE, HouseRegions.StripTail.INSTANCE, HouseRegions.WidgetSlot.INSTANCE,
                 // text
                 HouseText.Label.INSTANCE, HouseText.Heading1.INSTANCE, HouseText.Heading2.INSTANCE, HouseText.Heading3.INSTANCE,
                 HouseText.Heading4.INSTANCE, HouseText.Heading5.INSTANCE, HouseText.Heading6.INSTANCE,

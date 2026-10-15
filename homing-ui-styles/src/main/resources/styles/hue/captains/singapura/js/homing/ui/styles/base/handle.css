@@ -166,3 +166,8 @@
         cursor: default;
     }
 }
+
+/* The lip in the base layer: the thin band at an edge the hand comes to - the strip it shows, its raised ground, showing; every style's alike. Whole: every property its look has (D9). */
+.styled-lip {
+    background-color: var(--fp-raised);
+}

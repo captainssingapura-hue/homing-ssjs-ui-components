@@ -20,6 +20,8 @@ class PanZoomPress {
 }
 
 class PanZoomBar {
+    static LEAF = "pan-zoom-bar";
+
     constructor(branch, view) {
         if (!branch) throw new Error("[PanZoomBar] a branch of its own is required");
         if (!view || typeof view.zoomIn !== "function" || typeof view.onChange !== "function") {
@@ -30,6 +32,7 @@ class PanZoomBar {
         this.branch = branch;
         var root = branch.createElement("bar", "div");
         css.addClass(root, pz_bar);
+        new Look(PanZoomBar, ROLE.STANDALONE).wear(root);   // its casting: no look of its own, its row the layout's
         root.setAttribute("role", "group");
         root.setAttribute("aria-label", "Zoom");
         this._out = this._button(root, "out", "−", "Zoom out", ROLE.ZOOM_OUT, new PanZoomPress(view, "zoomOut"));

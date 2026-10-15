@@ -49,10 +49,18 @@
 // =============================================================================
 
 const _singleOwner = Object.freeze({ toString: () => "singleTabPane" });
-/** Its bar's leaf: a tab strip, as a pane of many has one - drawn here, with its one chip. */
-const _TAB_STRIP = Object.freeze({ LEAF: "tab-strip" });
-/** What of a strip's look its tail wears - the strip's room - which a bar with no tail leaves off. */
-const _NO_TAIL = Object.freeze(["size-gap", "size-inset"]);
+/** Its bar's leaf: a tab strip, as a pane of many has one - drawn here, with its one chip and no tail; lit, as a strip is, while the keys are in its tab. */
+const _TAB_STRIP = Object.freeze({
+    LEAF: "tab-strip",
+    AXES: Object.freeze({
+        current: Object.freeze({
+            values: Object.freeze([false, true]),
+            rest: false,
+            reflect: function (el, on) { if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); },
+            state: STATE.CURRENT
+        })
+    })
+});
 
 class SingleTabPane {
     static LEAF = "single-tab-pane";
@@ -82,7 +90,8 @@ class SingleTabPane {
         // the bar: the dock's strip, holding the chip alone. A press on it moves no native focus by the browser's default
         var bar = branch.createElement("bar", "div");
         css.addClass(bar, mtp_strip);
-        new Look(_TAB_STRIP, ROLE.TABS).wear(bar, { except: _NO_TAIL });   // a pane's tabs, as a pane of many has them
+        this._barLook = new Look(_TAB_STRIP, ROLE.TABS);   // a pane's tabs, as a pane of many has them
+        this._barLook.wear(bar);
         bar.setAttribute("role", "tablist");
         bar.style.setProperty("--chip-fit", "100%");   // the chip never wider than its window: the label ellipsises, the cross stays
         bar.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
@@ -200,8 +209,7 @@ class SingleTabPane {
     _marks() {
         var e = this._tabs[0];
         if (e) e.chip.keys = this._inside ? "lent" : null;   // the tab's own mark, at full
-        if (this._inside) this._bar.setAttribute("aria-current", "true");
-        else this._bar.removeAttribute("aria-current");
+        this._barLook.show(this._bar, { current: this._inside });
     }
 
     dispose() {
