@@ -10,11 +10,11 @@ import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 import java.util.List;
 
 /**
- * The house's taxonomy: its common components - the base tree, which every deployment of the house
- * has - then those of every module on the classpath that extends it (a {@link
- * hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension TaxonomyExtension}): the
- * panes, the dock, the preferences and the rest, each declared beside its code, in the tree if and
- * only if its module is there. A downstream extends the house the same way. All are read into one
+ * The house's taxonomy: its common components - the base tree - and its modules' - the panes, the preferences,
+ * the site's chrome and the rest - all defined here, whether or not a module's implementation is on the classpath; the
+ * implementation of each, and Base's look of it, live in its own jar (RFC 0067, appendix The Style Jars, D40). A
+ * downstream extends the house with a {@link hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension
+ * TaxonomyExtension}, in the tree if and only if it is on the classpath. All are read into one
  * levelled tree. The branches need no listing - they are reached through the components' parents.
  * Every component is listed, those that play a role in another and those that stand alone; each
  * declares its parts as slots over the {@link HouseRoleCatalogue}.
@@ -28,7 +28,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
 
     public static final HouseTaxonomy INSTANCE = new HouseTaxonomy();
 
-    /** The house's common components, family by family: the base tree. */
+    /** The house's components, family by family: the base tree, then the modules'. */
     public List<Component<?>> common() {
         return List.of(
                 // controls: the buttons, the handles, the rest
@@ -59,10 +59,22 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 // marks and tracks
                 HouseMarks.Icon.INSTANCE, HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE, HouseMarks.Separator.INSTANCE, HouseMarks.BoundaryLine.INSTANCE,
                 HouseMarks.Delimiter.INSTANCE, HouseMarks.Lamp.INSTANCE, HouseMarks.BrandMark.INSTANCE, HouseMarks.Indicator.INSTANCE, HouseMarks.DropMark.INSTANCE,
-                HouseMarks.SliderRail.INSTANCE, HouseMarks.SliderGroove.INSTANCE, HouseMarks.ToggleGroove.INSTANCE, HouseMarks.Fill.INSTANCE);
+                HouseMarks.SliderRail.INSTANCE, HouseMarks.SliderGroove.INSTANCE, HouseMarks.ToggleGroove.INSTANCE, HouseMarks.Fill.INSTANCE,
+                // the modules' components: defined here, each implemented - and drawn by Base - in its own jar (D40)
+                HouseSite.MpaChrome.INSTANCE, HouseSite.ThemeWidget.INSTANCE,
+                HousePreferences.PreferenceField.INSTANCE, HousePreferences.ChoiceWidget.INSTANCE, HousePreferences.ScaleWidget.INSTANCE,
+                HousePreferences.ToggleWidget.INSTANCE, HousePreferences.ListMasterWidget.INSTANCE,
+                HousePreferences.OverviewWidget.INSTANCE, HousePreferences.PreferencesView.INSTANCE, HousePreferences.SettingRow.INSTANCE,
+                HousePanes.PaneThumbs.INSTANCE, HousePanes.AddTab.INSTANCE, HousePanes.TabOpener.INSTANCE, HousePanes.TabPicker.INSTANCE,
+                HousePanes.MultiTabPane.INSTANCE, HousePanes.SingleTabPane.INSTANCE, HousePanes.TabPane.INSTANCE,
+                HouseSplitGrid.SplitGrid.INSTANCE, HouseSplitGrid.SplitGridMirror.INSTANCE, HouseSplitGrid.GridCell.INSTANCE,
+                HouseControlPanel.ControlPanel.INSTANCE,
+                HousePanZoom.SvgPanZoom.INSTANCE, HousePanZoom.PanZoomBar.INSTANCE,
+                HouseMenus.ContextMenuSteward.INSTANCE,
+                HouseMonitors.FocusMonitor.INSTANCE, HouseMonitors.StewardMonitor.INSTANCE);
     }
 
-    /** Every component the house declares on this classpath: the common ones, then each extension's. */
+    /** Every component of the house, then each downstream extension's on this classpath. */
     public List<Component<?>> components() { return TaxonomyExtensions.INSTANCE.components(HouseTaxonomy.class, common()); }
 
     /**

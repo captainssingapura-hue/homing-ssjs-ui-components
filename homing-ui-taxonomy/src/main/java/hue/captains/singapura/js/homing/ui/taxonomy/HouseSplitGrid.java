@@ -1,35 +1,20 @@
-package hue.captains.singapura.js.homing.ui.splitgrid;
+package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 
 import java.util.List;
 
 /**
- * The house's split grid, as this module adds it to the house's taxonomy: the grid, its shape
- * drawn small, and a cell of it. In the tree if and only if this module is on the classpath.
+ * The house's split grid: the grid, its shape drawn small, and a cell of it. Defined here, with the house's other
+ * components, whether or not its implementation is on the classpath; implemented - and drawn by Base - in {@code
+ * homing-ui-splitgrid} (RFC 0067, appendix The Style Jars, D40).
  */
-public record HouseSplitGrid() implements TaxonomyExtension {
+public final class HouseSplitGrid {
 
-    public static final HouseSplitGrid INSTANCE = new HouseSplitGrid();
-
-    @Override public Class<? extends TaxonomySource> extending() { return HouseTaxonomy.class; }
-
-    /** Every component this module declares. */
-    @Override public List<Component<?>> components() {
-        return List.of(SplitGrid.INSTANCE, SplitGridMirror.INSTANCE, GridCell.INSTANCE);
-    }
+    private HouseSplitGrid() {}
 
     /**
      * A grid of cells split in both directions, a boundary line where two meet - the grid's part, in the

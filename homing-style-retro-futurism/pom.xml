@@ -20,7 +20,7 @@
     </description>
 
     <dependencies>
-        <!-- Its record's base layer (Base), the components it refines, the colours its classes import. -->
+        <!-- Its record's base layer (Base); the components it refines, definitions alone (the taxonomy); the colours its classes import. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-style-base</artifactId>
@@ -40,32 +40,6 @@
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-semantic-class</artifactId>
             <version>${homing.core.version}</version>
-        </dependency>
-        <!-- The jars whose castings it refines: the roles their parts add (plain button as go, choice option as palette, ...). -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-panes</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-preferences</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-site-mpa-standard</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-control-panel</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-panzoom</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

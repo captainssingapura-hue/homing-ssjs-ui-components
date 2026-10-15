@@ -1,9 +1,10 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
+import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.WidgetSlotModule;

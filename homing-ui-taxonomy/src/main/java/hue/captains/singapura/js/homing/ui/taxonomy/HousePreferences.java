@@ -1,41 +1,19 @@
-package hue.captains.singapura.js.homing.preferences;
+package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
-import hue.captains.singapura.js.homing.ui.splitgrid.HouseSplitGrid;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
 import java.util.List;
 
 /**
- * The house's preferences, as this module adds them to the house's taxonomy: the view of them,
- * a field for one setting, the widgets that edit a setting, the overview of a group and its rows.
- * In the tree if and only if this module is on the classpath.
+ * The house's preferences: the view of them, a field for one setting, the widgets that edit a setting, the overview of
+ * a group and its rows. Defined here, with the house's other components, whether or not its implementation is on the
+ * classpath; implemented - and drawn by Base - in {@code homing-preferences} (RFC 0067, appendix The Style Jars, D40).
  */
-public record HousePreferences() implements TaxonomyExtension {
+public final class HousePreferences {
 
-    public static final HousePreferences INSTANCE = new HousePreferences();
-
-    @Override public Class<? extends TaxonomySource> extending() { return HouseTaxonomy.class; }
-
-    /** Every component this module declares. */
-    @Override public List<Component<?>> components() {
-        return List.of(PreferenceField.INSTANCE, ChoiceWidget.INSTANCE, ScaleWidget.INSTANCE, ToggleWidget.INSTANCE,
-                       ListMasterWidget.INSTANCE, OverviewWidget.INSTANCE, PreferencesView.INSTANCE,
-                       SettingRow.INSTANCE);
-    }
+    private HousePreferences() {}
 
     /** One setting: what it is filed under, its title and summary, a note on it, and a way back to the default. Its body is the widget's. */
     public record PreferenceField() implements Component<HouseBranches.Field> {

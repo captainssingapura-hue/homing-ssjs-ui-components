@@ -79,14 +79,14 @@ class HouseRoleCatalogueTest {
     }
 
     /**
-     * Read with the base tree alone, a role only an extension's parts are named in goes unnamed: the
-     * catalogue is the house's whole vocabulary, and the whole house names every word of it but
-     * one - held by the components conformance, where every extension is.
+     * The catalogue is the house's whole vocabulary, ahead of its components: read with every component of the house -
+     * the modules' defined here too (D40) - the words no component says yet are these, each named by none.
      */
     @Test
-    void readWithTheBase_theWordsOnlyTheExtensionsSay_goUnnamed() {
-        var findings = HouseTaxonomy.INSTANCE.read().findings();
-        assertEquals(50, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
-                "twenty-nine the extensions name - Editor the slider's rail's now, in the base; Chip the strip's tabs', in the base; a split's seam and its splitter among them, the split grid's alone; the site's home and path the site bar's, in the base, its preferences the chrome's; a float the float layer's, in the base - twenty no component says yet (a panel's body, a table's column and its cells, a strip's foot said now), and Host - a floater's, not in the first cut");
+    void theWholeHouse_leavesTheseWordsUnnamed_theCatalogueAheadOfIt() {
+        var unnamed = HouseTaxonomy.INSTANCE.read().findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
+                .map(f -> f.says().replace(" is named by no component", "")).toList();
+        assertEquals(List.of("Placeholder", "Error", "Check", "Query", "Skip", "Increase", "Decrease", "Clear", "Remove", "Previous",
+                "Next", "First", "Last", "More", "Host", "Media", "Fallback", "Dock", "Group", "Opener", "Pull", "Scroll"), unnamed);
     }
 }

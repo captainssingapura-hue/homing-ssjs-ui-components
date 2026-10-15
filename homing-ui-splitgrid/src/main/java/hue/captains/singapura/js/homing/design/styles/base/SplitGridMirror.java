@@ -4,9 +4,9 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
-import hue.captains.singapura.js.homing.ui.splitgrid.HouseSplitGrid;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSplitGrid;
 
 /**
  * The grid's mirror in the base layer: its shape drawn small, a control holding the keys - its cells the panes'

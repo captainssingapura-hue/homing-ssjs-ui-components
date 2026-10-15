@@ -4,8 +4,8 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
-import hue.captains.singapura.js.homing.preferences.HousePreferences;
 import hue.captains.singapura.js.homing.ui.styles.Base;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 /**
  * The setting row in the base layer: one setting of a group, listed with its value - a list row's measure, still; the

@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.splitgrid;
 import hue.captains.singapura.js.homing.ui.controllability.ControlTypeAt;
 import hue.captains.singapura.js.homing.ui.controllability.ControllabilityExtension;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControllability;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSplitGrid;
 
 import java.util.List;
 

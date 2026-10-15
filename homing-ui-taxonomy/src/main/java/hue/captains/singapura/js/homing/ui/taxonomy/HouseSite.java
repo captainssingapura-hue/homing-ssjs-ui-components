@@ -1,40 +1,20 @@
-package hue.captains.singapura.js.homing.site.mpa;
+package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
-import hue.captains.singapura.js.homing.preferences.HousePreferences;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.List;
 
 /**
- * The house's standard site, as this module adds it to the house's taxonomy: the chrome and the
- * theme chosen. The site's brand and the button to its preferences are the common tree's, so the
- * styles can answer them. In the tree if and only if
- * this module is on the classpath.
+ * The house's standard site: the chrome and the theme chosen. The site's brand and the button to its preferences are
+ * the common tree's, so the styles can answer them. Defined here, with the house's other components, whether or not its
+ * implementation is on the classpath; implemented - and drawn by Base - in {@code homing-site-mpa-standard} (RFC 0067,
+ * appendix The Style Jars, D40).
  */
-public record HouseSite() implements TaxonomyExtension {
+public final class HouseSite {
 
-    public static final HouseSite INSTANCE = new HouseSite();
-
-    @Override public Class<? extends TaxonomySource> extending() { return HouseTaxonomy.class; }
-
-    /** Every component this module declares. */
-    @Override public List<Component<?>> components() {
-        return List.of(MpaChrome.INSTANCE, ThemeWidget.INSTANCE);
-    }
+    private HouseSite() {}
 
     /**
      * The site's chrome: a widget, with no design of its own - the site's bar at its head, its preferences

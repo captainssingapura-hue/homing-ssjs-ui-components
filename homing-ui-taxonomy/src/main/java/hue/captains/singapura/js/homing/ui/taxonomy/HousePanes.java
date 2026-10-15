@@ -1,41 +1,21 @@
-package hue.captains.singapura.js.homing.ui.panes;
+package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.List;
 
 /**
- * The house's tabbed panes, as this module adds them to the house's taxonomy: the panes of
- * many tabs and of one, a tab whole, the thumbnails of the panes and the ways to open a tab. The tab,
- * the strip it sits in and where a dragged tab would land are the common tree's, so the styles can
- * answer them. In the tree if and
- * only if this module is on the classpath.
+ * The house's tabbed panes: the panes of many tabs and of one, a tab whole, the thumbnails of the panes and the ways to
+ * open a tab. The tab, the strip it sits in and where a dragged tab would land are the common tree's, so the styles can
+ * answer them. Defined here, with the house's other components, whether or not its implementation is on the classpath;
+ * implemented - and drawn by Base - in {@code homing-ui-panes} (RFC 0067, appendix The Style Jars, D40).
  */
-public record HousePanes() implements TaxonomyExtension {
+public final class HousePanes {
 
-    public static final HousePanes INSTANCE = new HousePanes();
-
-    @Override public Class<? extends TaxonomySource> extending() { return HouseTaxonomy.class; }
-
-    /** Every component this module declares. */
-    @Override public List<Component<?>> components() {
-        return List.of(PaneThumbs.INSTANCE, AddTab.INSTANCE, TabOpener.INSTANCE,
-                       TabPicker.INSTANCE, MultiTabPane.INSTANCE, SingleTabPane.INSTANCE, TabPane.INSTANCE);
-    }
+    private HousePanes() {}
 
     /** The thumbnails of the panes one may open: each a cell of the picture it draws, the house's thumbnail on its own. */
     public record PaneThumbs() implements Component<HouseBranches.Chooser> {

@@ -10,6 +10,7 @@ import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
 import hue.captains.singapura.js.homing.ui.elements.MarkBehaviorModule;
 import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 import java.util.List;
 

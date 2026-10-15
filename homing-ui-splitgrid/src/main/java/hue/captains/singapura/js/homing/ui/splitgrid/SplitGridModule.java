@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.splitgrid;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSplitGrid;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -9,8 +10,8 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.sizing.RailModule;
 import hue.captains.singapura.js.homing.sizing.SizingHandleModule;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.BoundaryLineModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import java.util.List;
 
 /**

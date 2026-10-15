@@ -4,10 +4,9 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtensions;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControllability;
-import hue.captains.singapura.js.homing.ui.panes.HousePanes;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.tao.ontology.enforcer.OntologyEnforcer;
 import org.junit.jupiter.api.Test;
@@ -20,10 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The whole house: the base tree and every module that extends it, read where every module is.
- * Each module that ships components declares its own leaves beside them, and they are in the tree
- * because the module is on the classpath; together they are the house's taxonomy as it was before
- * it was cut, refused nothing. Every node stateless; every role of the catalogue named but one;
+ * The whole house, read where every module is: the base tree and the modules' components, all defined in the
+ * house's taxonomy (D40), each module's implementation in its own jar; together the house's taxonomy as it was
+ * before it was cut, refused nothing. Every node stateless; every role of the catalogue named but one;
  * every node means something; every leaf a control type, its module's own where it has one.
  */
 class WholeHouseTaxonomyTest {
@@ -31,19 +29,18 @@ class WholeHouseTaxonomyTest {
     private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read();
 
     @Test
-    void everyModuleThatShipsComponents_extendsTheHouse_withItsOwnLeaves() {
-        var extensions = TaxonomyExtensions.INSTANCE.of(HouseTaxonomy.class);
-        assertEquals(List.of("HousePreferences", "HouseSite", "HouseControlPanel", "HouseMenus", "HouseMonitors",
-                             "HousePanes", "HousePanZoom", "HouseSplitGrid"),
-                extensions.stream().map(e -> e.getClass().getSimpleName()).toList(), "in the order of their class names");
+    void everyModulesComponents_areDefinedInTheHousesTaxonomy_noneByAnExtension() {
+        assertEquals(List.of(), TaxonomyExtensions.INSTANCE.of(HouseTaxonomy.class).stream().map(e -> e.getClass().getSimpleName()).toList(),
+                "no house module extends the house: its components are defined in the taxonomy, its implementation in its jar (D40)");
+        var holders = List.of("HouseSite", "HousePreferences", "HousePanes", "HouseSplitGrid", "HouseControlPanel", "HousePanZoom",
+                              "HouseMenus", "HouseMonitors");
         var leaves = new LinkedHashMap<String, Integer>();
-        for (TaxonomyExtension e : extensions) {
-            for (Component<?> c : e.components())
-                assertEquals(e.getClass(), c.getClass().getEnclosingClass(), c + " is declared by the module that lists it");
-            leaves.put(e.getClass().getSimpleName(), e.components().size());
+        for (Component<?> c : HouseTaxonomy.INSTANCE.common()) {
+            String holder = c.getClass().getEnclosingClass().getSimpleName();
+            if (holders.contains(holder)) leaves.merge(holder, 1, Integer::sum);
         }
-        assertEquals(26, leaves.values().stream().mapToInt(Integer::intValue).sum(), "26 leaves the modules add - the dock grid retired, its docks a split grid's residents; the float layer common now: " + leaves);
-        assertEquals(89, HouseTaxonomy.INSTANCE.common().size(), "to the 89 common ones - the edge strip's lip, the tab strip's tail and the slider group's rack, the card plain or clickable and the summary's view, the slider's rail, knob and groove apart from the toggle's, the brand's mark and a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on; a panel's bar; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
+        assertEquals(26, leaves.values().stream().mapToInt(Integer::intValue).sum(), "26 leaves the modules' components are - the dock grid retired, its docks a split grid's residents; the float layer common now: " + leaves);
+        assertEquals(115, HouseTaxonomy.INSTANCE.common().size(), "with the 89 common ones - the edge strip's lip, the tab strip's tail and the slider group's rack, the card plain or clickable and the summary's view, the slider's rail, knob and groove apart from the toggle's, the brand's mark and a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on; a panel's bar; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
     }
 
     @Test

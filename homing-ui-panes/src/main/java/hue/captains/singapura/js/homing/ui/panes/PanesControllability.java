@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.panes;
 import hue.captains.singapura.js.homing.ui.controllability.ControlTypeAt;
 import hue.captains.singapura.js.homing.ui.controllability.ControllabilityExtension;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControllability;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
 import java.util.List;
 
