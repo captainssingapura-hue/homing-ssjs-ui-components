@@ -18,7 +18,7 @@ package hue.captains.singapura.js.homing.ui.styles;
  * @param recessed   a layer pressed below the page: the desk panes float over
  *
  * <p>Public to read, so a design outside the styles - a design of a design branch, such as the house's
- * design of the grid's frame - draws in a palette's colours ({@link HouseStyles#seeds}); a palette is
+ * design of the grid's frame - draws in a palette's colours; a palette is
  * still written only here.</p>
  */
 public record Seeds(String raised, String inverted, String text, String onInverted, String title, String accent, String accentEdge,

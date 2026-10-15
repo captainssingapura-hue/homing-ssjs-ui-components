@@ -25,6 +25,17 @@
             <artifactId>homing-ui-taxonomy</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- The colour tree and the palettes, jars of their own (The Style Jars). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-colours</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-palettes-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-semantic-class</artifactId>

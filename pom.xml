@@ -32,6 +32,8 @@
         <module>homing-layout</module>
         <module>homing-sizing</module>
         <module>homing-ui-taxonomy</module>
+        <module>homing-ui-colours</module>
+        <module>homing-ui-palettes-base</module>
         <module>homing-ui-styles</module>
         <module>homing-ui-look</module>
         <module>homing-ui-controllability</module>
