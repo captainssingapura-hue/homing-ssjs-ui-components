@@ -138,6 +138,8 @@ public record HouseColours() implements ColorSource {
     public record Muted() implements CurrentColor<Base, Current> { @Override public double share() { return 0.60; } }
     /** At 30%: a line between groups - a separator's. */
     public record Hairline() implements CurrentColor<Base, Current> { @Override public double share() { return 0.30; } }
+    /** At 12%: a wash under the hand in the colour of whatever holds it - a preferences button on its bar. */
+    public record Faint() implements CurrentColor<Base, Current> { @Override public double share() { return 0.12; } }
 
     // ── attention ─────────────────────────────────────────────────────────
 
@@ -314,7 +316,7 @@ public record HouseColours() implements ColorSource {
                 new Text(), new TextFaded(), new OnInverted(), new OnBar(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
                 new OnDanger(), new DangerInk(), new WarningInk(), new SuccessInk(),
                 new Border(), new GrooveEdge(), new LineHovered(),
-                new Whole(), new Soft(), new Quiet(), new Muted(), new Hairline(),
+                new Whole(), new Soft(), new Quiet(), new Muted(), new Hairline(), new Faint(),
                 new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentTintHint(), new AccentWash(), new AccentWashFaint(), new AccentWashLight(), new AccentWashSoft(), new AccentWashStrong(), new KeysCandidate(), new KeysLent(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeModerate(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new ShadeSolid(), new ShadeThick(), new ShadeDense(), new ShadeDark(), new ShadeDarker(), new ShadeDarkest(), new SheenSoft(), new Sheen(),
                 new GlowTrace(), new GlowFaint(), new GlowLow(), new GlowDim(), new GlowGentle(), new GlowSoft(), new GlowMild(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),

@@ -12,6 +12,11 @@
     gap: 8px;
 }
 
+/* The slider rack in the base layer: a slider group's sliders, stacked or side by side - the room between them, its group's. Whole: every property its look has (D9). */
+.styled-slider-rack {
+    gap: 8px;
+}
+
 /* The widget slot in the base layer: no look of its own - what it holds draws; every style's alike. */
 .styled-widget-slot {}
 

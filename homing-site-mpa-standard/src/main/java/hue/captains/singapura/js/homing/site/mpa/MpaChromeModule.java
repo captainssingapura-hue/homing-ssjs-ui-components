@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.SiteBarModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 
 import java.util.List;
 
@@ -45,6 +46,7 @@ public record MpaChromeModule() implements Widget<MpaChromeModule.Chrome, MpaChr
                 .add(new ModuleImports<>(List.of(new ChromeLayoutModule.ChromeLayout()), ChromeLayoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SiteBarModule.SiteBar()), SiteBarModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesButtonModule.PreferencesButton()), PreferencesButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeyboardStewardModule.KeyboardStewardInstance()), KeyboardStewardModule.INSTANCE))
                 .build();
     }

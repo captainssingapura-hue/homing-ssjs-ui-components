@@ -70,6 +70,7 @@ public final class HouseContainers {
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
+                           DSL.part(HouseRegions.SliderRack.INSTANCE).as(HouseShaping.Body.INSTANCE).one(),
                            DSL.part(HouseControls.Slider.INSTANCE).as(HouseShaping.Member.INSTANCE).any());
         }
     }

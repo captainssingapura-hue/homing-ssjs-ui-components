@@ -2,10 +2,11 @@
 // PreferencesButton — the button on the bar, and the dialog it opens. A
 // branch component: the chrome makes a sub-branch for it and hands it in.
 //
-//   new PreferencesButton(branch, chrome, keyboard)
+//   new PreferencesButton(branch, chrome, keyboard, role?)
 //     keyboard  the page's KeyboardSteward, the chrome's: the dialog claims the keys
 //               on open and hands them to the view, which hands them to the master
 //               or the detail widget by where the focus is
+//     role      the job its owner gives it - the chrome's: ROLE.PREFERENCES; on its own unless said
 //     .el      the button's wrap, for its owner - the site's bar - to place
 //     .open()  what the button does
 //
@@ -48,7 +49,14 @@ function _loadView(entry) {
 }
 
 class PreferencesButton {
-    constructor(branch, chrome, keyboard) {
+    static LEAF = "preferences-button";
+    /** It may be off - a site with no preferences to show: reflected natively, and its class. */
+    static AXES = Object.freeze({
+        enabled: Object.freeze({ values: Object.freeze([true, false]), rest: true, state: STATE.ENABLED,
+            reflect: function (el, on) { el.disabled = !on; } })
+    });
+
+    constructor(branch, chrome, keyboard, role) {
         if (!branch) throw new Error("[PreferencesButton] a branch of its own is required");
         this._keyboard = keyboard || null;
         var self = this;
@@ -62,7 +70,8 @@ class PreferencesButton {
         var btn = branch.createElement("prefsBtn", "button");
         btn.type = "button";
         css.addClass(btn, mpa_prefs_btn);
-        new Look(Object.freeze({ LEAF: "preferences-button" }), ROLE.STANDALONE).wear(btn);   // outlined in the colour of the bar that holds it
+        this._look = new Look(PreferencesButton, role || ROLE.STANDALONE);   // outlined in the colour of the bar that holds it
+        this._look.wear(btn);
         btn.setAttribute("aria-haspopup", "dialog");
         var mark = branch.createElement("prefsBtnMark", "span");
         mark.setAttribute("aria-hidden", "true");
@@ -77,7 +86,7 @@ class PreferencesButton {
         this._btn = btn;
 
         this._entry = chrome && chrome.preferences;
-        if (!this._entry || !this._entry.module || !this._entry.view) { btn.disabled = true; return; }
+        if (!this._entry || !this._entry.module || !this._entry.view) { this._look.show(btn, { enabled: false }); return; }
         btn.addEventListener("click", function () { self.open(); });
     }
 

@@ -270,6 +270,7 @@ public final class HouseControls {
         public static final PreferencesButton INSTANCE = new PreferencesButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
                            DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional(),

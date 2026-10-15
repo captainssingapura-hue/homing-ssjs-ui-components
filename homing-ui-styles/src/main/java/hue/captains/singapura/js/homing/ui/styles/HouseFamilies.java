@@ -23,7 +23,8 @@ public final class HouseFamilies {
     public static final Set<Component<?>> BUTTONS = Set.of(
             HouseControls.PlainButton.INSTANCE, HouseControls.PrimaryButton.INSTANCE, HouseControls.SecondaryButton.INSTANCE,
             HouseControls.DangerButton.INSTANCE, HouseControls.WarningButton.INSTANCE, HouseControls.SuccessButton.INSTANCE,
-            HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE);
+            HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE,
+            HouseControls.PreferencesButton.INSTANCE);
 
     /** The ways: a link, a crumb, the brand - each style's own focus ring on them, and its own hand. The brand's mark is Base's. */
     public static final Set<Component<?>> WAYS = Set.of(
@@ -71,7 +72,7 @@ public final class HouseFamilies {
      * The regions each style draws its own way: a section's room, a quote's rule, a block of code's corner. A widget slot,
      * a table and a grid's cell have no look of their own, and are Base's.
      */
-    public static final Set<Component<?>> REGIONS = Set.of(HouseRegions.Section.INSTANCE, HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE);
+    public static final Set<Component<?>> REGIONS = Set.of(HouseRegions.Section.INSTANCE, HouseRegions.SliderRack.INSTANCE, HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE);
 
     /**
      * The surfaces each style draws its own way: a panel's frame, corner and depth, the page's ground and its face. A
@@ -95,8 +96,11 @@ public final class HouseFamilies {
     /** The menus each style draws its own way: the context menu's frame. */
     public static final Set<Component<?>> MENUS = Set.of(HouseContainers.ContextMenu.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks, the regions, the surfaces, the bars, the panes, the layers and the menus. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS, SURFACES, BARS, PANES, LAYERS, MENUS);
+    /** The clusters each style draws its own way: a slider group. A control panel has no look of its own. */
+    public static final Set<Component<?>> CLUSTERS = Set.of(HouseContainers.SliderGroup.INSTANCE);
+
+    /** What every house style draws its own way so far: every family but the module's own leaves - the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks, the regions, the surfaces, the bars, the panes, the layers, the menus and the clusters. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS, SURFACES, BARS, PANES, LAYERS, MENUS, CLUSTERS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

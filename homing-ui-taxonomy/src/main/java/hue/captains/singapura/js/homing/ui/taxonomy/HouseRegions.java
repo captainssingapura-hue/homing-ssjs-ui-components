@@ -29,6 +29,12 @@ public final class HouseRegions {
         @Override public Region parent() { return Region.INSTANCE; }
     }
 
+    /** A slider group's sliders, stacked or side by side: the room between them. */
+    public record SliderRack() implements Component<Region> {
+        public static final SliderRack INSTANCE = new SliderRack();
+        @Override public Region parent() { return Region.INSTANCE; }
+    }
+
     public record WidgetSlot() implements Component<Region> {
         public static final WidgetSlot INSTANCE = new WidgetSlot();
         @Override public Region parent() { return Region.INSTANCE; }

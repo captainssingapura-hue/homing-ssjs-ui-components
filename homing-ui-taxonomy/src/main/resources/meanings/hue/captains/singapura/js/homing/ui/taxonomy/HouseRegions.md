@@ -8,6 +8,10 @@ A stretch of a container's room given one job: its head, its body, its foot.
 
 The end of a strip of tabs, where its count and its close sit.
 
+## SliderRack
+
+A slider group's sliders, stacked or side by side, and the room between them.
+
 ## WidgetSlot
 
 A stretch of a view where a widget is held, loaded when it is needed.

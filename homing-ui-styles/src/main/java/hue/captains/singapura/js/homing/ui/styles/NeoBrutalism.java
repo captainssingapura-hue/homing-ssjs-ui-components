@@ -26,6 +26,7 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerPressed;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWash;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWriting;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.Faint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GrooveEdge;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Ground;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Hairline;
@@ -114,6 +115,7 @@ public record NeoBrutalism() implements Derives<ColorScheme.Base, Base> {
             new ColorImports<>(HouseControls.ToggleButton.INSTANCE, new Raised(), new Inverted(), new Text(), new Border(), new AccentEdge(), new Ring(), new AccentTint()),
             new ColorImports<>(HouseControls.IconButton.INSTANCE, new Wash(), new Border(), new Ring()),
             new ColorImports<>(HouseControls.CloseButton.INSTANCE, new OnDanger(), new Border(), new Ring(), new Danger(), new DangerPressed()),
+            new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
             // handle
             new ColorImports<>(HouseControls.SliderKnob.INSTANCE, new Raised(), new Accent(), new Ring()),
             new ColorImports<>(HouseControls.ToggleKnob.INSTANCE, new Raised()),
@@ -183,5 +185,7 @@ public record NeoBrutalism() implements Derives<ColorScheme.Base, Base> {
             // layer
             new ColorImports<>(HouseContainers.FloatLayer.INSTANCE, new Recessed()),
             // menu
-            new ColorImports<>(HouseContainers.ContextMenu.INSTANCE, new Raised(), new Inverted(), new Text(), new Border()));
+            new ColorImports<>(HouseContainers.ContextMenu.INSTANCE, new Raised(), new Inverted(), new Text(), new Border()),
+            // cluster
+            new ColorImports<>(HouseContainers.SliderGroup.INSTANCE, new Raised(), new Border(), new Accent(), new KeysCandidate(), new KeysLent()));
 }

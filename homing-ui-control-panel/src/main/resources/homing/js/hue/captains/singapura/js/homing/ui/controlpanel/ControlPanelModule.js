@@ -84,7 +84,7 @@ class ControlPanel {
     _degrees(names) {
         if (!names.length) return;
         var self = this;
-        this._group = new SliderGroup(this.branch.createBranch("degrees"), { title: "Varies by degree" });
+        this._group = new SliderGroup(this.branch.createBranch("degrees"), { title: "Varies by degree" }, ROLE.ADJUST);   // its group, cast as what adjusts
         names.forEach(function (n) {
             var o = Controls.option(n);
             self._sliders[n] = self._group.add(n, { label: o.label, icon: n === "colour" ? "extent" : n,

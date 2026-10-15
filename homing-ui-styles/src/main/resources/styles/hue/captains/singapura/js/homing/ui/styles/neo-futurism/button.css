@@ -615,3 +615,41 @@
         color: var(--fp-on-danger);
     }
 }
+
+/* The preferences button in neo-futurism: opens a site's preferences - outlined in the colour of the bar that holds it, its words in it, in the style's face; washed in that colour under the hand, ringed by the focus, faded while it is off. Whole: every property its look has (D9). */
+.styled-preferences-button {
+    --current-faint: color-mix(in oklab, currentColor 12%, transparent);
+
+    color: inherit;
+    background-color: transparent;
+    border-color: currentColor;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    padding-block: 5px;
+    padding-inline: 12px;
+    gap: 8px;
+    font-family: "Segoe UI Variable Text", "Segoe UI", "Inter", system-ui, sans-serif;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--current-faint);
+    }
+
+    &:focus-visible {
+        outline-color: var(--fp-ring);
+        outline-width: 1px;
+        outline-style: solid;
+        outline-offset: -1px;
+    }
+
+    &.styled-preferences-button--disabled {
+        opacity: .4;
+        cursor: not-allowed;
+    }
+}

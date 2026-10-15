@@ -67,7 +67,7 @@ class HouseStylesTest {
             for (Component<?> t : HouseFamilies.TEXTS)
                 assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(t)), s.token() + " draws " + t.token() + ": its own faces");
         }
-        assertEquals(9, HouseFamilies.BUTTONS.size());
+        assertEquals(10, HouseFamilies.BUTTONS.size(), "the preferences button among them");
         assertEquals(3, HouseFamilies.WAYS.size());
         assertEquals(18, HouseFamilies.TEXTS.size());
         assertEquals(6, HouseFamilies.INPUTS.size());

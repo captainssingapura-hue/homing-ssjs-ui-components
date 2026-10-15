@@ -38,7 +38,7 @@ class MpaChrome {
         this._stamped = p.crumbs || [];
         var bar = new SiteBar(branch.createBranch("bar"), { brand: p.brand || {}, crumbs: this._stamped });
         this._trail = bar.trail;
-        this.preferences = new PreferencesButton(branch.createBranch("prefs"), p, this.keyboard);
+        this.preferences = new PreferencesButton(branch.createBranch("prefs"), p, this.keyboard, ROLE.PREFERENCES);   // its button, cast as what opens the preferences
         bar.end(this.preferences);
         layout.head(bar);
         this.root = layout.root;

@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentWashSoft;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Border;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.Faint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KickerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.OnInverted;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Ring;
@@ -17,6 +18,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
@@ -35,41 +37,57 @@ public record SiteColorImports() implements ColorImportsExtension {
 
     private static final List<StyleImports<?>> IMPORTS = List.of(
             new StyleImports<>(Base.class,
+                    // button
+                    new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
                     // item
                     new ColorImports<>(HouseItems.ChoiceOption.INSTANCE, new OnInverted(), new Border(), new Title(), new Ring(), new AccentWashSoft()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(Editorial.class,
+                    // button
+                    new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
                     // item
                     new ColorImports<>(HouseItems.ChoiceOption.INSTANCE, new OnInverted(), new Border(), new Title(), new Ring(), new AccentWashSoft()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(NeoBrutalism.class,
+                    // button
+                    new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
                     // item
                     new ColorImports<>(HouseItems.ChoiceOption.INSTANCE, new OnInverted(), new Border(), new Title(), new Ring(), new AccentWashSoft()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(NeoFuturism.class,
+                    // button
+                    new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
                     // item
                     new ColorImports<>(HouseItems.ChoiceOption.INSTANCE, new OnInverted(), new Border(), new Title(), new Ring(), new AccentWashSoft()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(Neumorphism.class,
+                    // button
+                    new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
                     // item
                     new ColorImports<>(HouseItems.ChoiceOption.INSTANCE, new OnInverted(), new Border(), new Title(), new Ring(), new AccentWashSoft()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(Glassmorphism.class,
+                    // button
+                    new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
                     // item
                     new ColorImports<>(HouseItems.ChoiceOption.INSTANCE, new OnInverted(), new Border(), new Title(), new Ring(), new AccentWashSoft()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(RetroFuturism.class,
+                    // button
+                    new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
                     // item
                     new ColorImports<>(HouseItems.ChoiceOption.INSTANCE, new OnInverted(), new Border(), new Title(), new Ring(), new AccentWashSoft()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(Sketchy.class,
+                    // button
+                    new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
                     // item
                     new ColorImports<>(HouseItems.ChoiceOption.INSTANCE, new OnInverted(), new Border(), new Title(), new Ring(), new AccentWashSoft()),
                     // text

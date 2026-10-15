@@ -5,12 +5,13 @@
 // of its own, without a steward of their own — the group holds the keys and
 // hands them to the current slider. A header with the title, then the body.
 //
-//   var g = new SliderGroup(branch.createBranch("mixer"), { title: "Mixer", keyboard: steward, across: true });
+//   var g = new SliderGroup(branch.createBranch("mixer"), { title: "Mixer", keyboard: steward, across: true }, role?);
 //   var ch1 = g.add("ch1", { label: "Ch 1", vertical: true, … });   // a slider's properties: built inside
 //     title                    the header's title
 //     keyboard, keyboardId     the page's KeyboardSteward: the group joins the party as keyboardId (its
 //                              branch's name, unless said); without, the group has no keys
 //     across: true             the sliders side by side, as faders; stacked unless said
+//     role                     the job its owner gives it (a control panel's: ROLE.ADJUST); on its own unless said
 //   SliderGroup:
 //     .root
 //     .add(name, props)        → Slider, built on a sub-branch of the body with a slider's
@@ -31,11 +32,13 @@
 // =============================================================================
 
 const _groupOwner = Object.freeze({ toString: () => "slider-group" });
+/** Its rack: the sliders and the room between them - realized inline, in its own look. */
+const _SLIDER_RACK = Object.freeze({ LEAF: "slider-rack" });
 
 class SliderGroup {
     static LEAF = "slider-group";
 
-    constructor(branch, props) {
+    constructor(branch, props, role) {
         if (!branch) throw new Error("[SliderGroup] a branch of its own is required");
         var self = this;
         var p = props || {};
@@ -47,13 +50,12 @@ class SliderGroup {
 
         var root = branch.createElement("group", "div");
         css.addClass(root, el_slider_group);
-        var look = new Look(SliderGroup, ROLE.STANDALONE);   // framed as a card is; ringed while it holds the keys (the steward's data-keys)
-        look.wear(root);   // its root its leaf whole (RFC 0067, D17); its head and body leaves of their own when the family moves
+        var look = new Look(SliderGroup, role || ROLE.STANDALONE);   // framed; ringed while it holds the keys (its Keyboard state's class)
+        look.wear(root);   // its casting whole; its head points as the group does, its rack a leaf of its own
         root.setAttribute("role", "group");
         this.root = root;
         var header = branch.createElement("header", "div");
         css.addClass(header, el_slider_group_header);
-        look.wear(header, { only: ["size-gap", "affordance-cursor"] });   // its head points: a press there makes the group the holder
         var title = new Heading4(Heading4Factory.create(branch, "title"), { text: p.title == null ? "" : String(p.title) }, ROLE.TITLE);
         css.addClass(title.el, el_slider_group_title);
         if (p.title != null) root.setAttribute("aria-label", String(p.title));
@@ -61,7 +63,7 @@ class SliderGroup {
         root.appendChild(header);
         var body = branch.createElement("body", "div");
         css.addClass(body, el_slider_group_body);
-        look.wear(body, { only: ["size-gap"] });
+        new Look(_SLIDER_RACK, ROLE.BODY).wear(body);   // the room between the sliders
         if (p.across) css.addClass(body, el_slider_group_body_across);
         root.appendChild(body);
         this._header = header; this._title = title; this._body = body;
@@ -75,7 +77,7 @@ class SliderGroup {
                 granted: function () { self._held = true; },   // its ring is the steward's mark on the root
                 taken: function () { self._held = false; }
             });
-            this._offKeys = Keys.claimOn(root, this._kb, this._kbId, new Look(SliderGroup, ROLE.STANDALONE).keys());
+            this._offKeys = Keys.claimOn(root, this._kb, this._kbId, look.keys());
         }
         // the header: a press makes the group the holder (the convention's, on the root) and
         // puts the focus on the current knob; the default kept off so the press does not blur it

@@ -26,6 +26,7 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerPressed;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWash;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWriting;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.Faint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowDim;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowFlare;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowFull;
@@ -124,6 +125,7 @@ public record RetroFuturism() implements Derives<ColorScheme.Base, Base> {
             new ColorImports<>(HouseControls.ToggleButton.INSTANCE, new Raised(), new Text(), new Border(), new AccentEdge(), new Ring(), new AccentTint(), new GlowDim(), new GlowMedium(), new GlowStrong(), new GlowFull()),
             new ColorImports<>(HouseControls.IconButton.INSTANCE, new Wash(), new Border(), new Ring()),
             new ColorImports<>(HouseControls.CloseButton.INSTANCE, new OnDanger(), new Border(), new Ring(), new Danger(), new DangerPressed()),
+            new ColorImports<>(HouseControls.PreferencesButton.INSTANCE, new Faint(), new Ring()),
             // handle
             new ColorImports<>(HouseControls.SliderKnob.INSTANCE, new Ring()),
             new ColorImports<>(HouseControls.ToggleKnob.INSTANCE, new Raised()),
@@ -193,5 +195,7 @@ public record RetroFuturism() implements Derives<ColorScheme.Base, Base> {
             // layer
             new ColorImports<>(HouseContainers.FloatLayer.INSTANCE, new Recessed()),
             // menu
-            new ColorImports<>(HouseContainers.ContextMenu.INSTANCE, new Raised(), new Text(), new Border(), new ShadeDarker(), new GlowWarm()));
+            new ColorImports<>(HouseContainers.ContextMenu.INSTANCE, new Raised(), new Text(), new Border(), new ShadeDarker(), new GlowWarm()),
+            // cluster
+            new ColorImports<>(HouseContainers.SliderGroup.INSTANCE, new Raised(), new Border(), new Accent(), new KeysCandidate(), new KeysLent()));
 }
