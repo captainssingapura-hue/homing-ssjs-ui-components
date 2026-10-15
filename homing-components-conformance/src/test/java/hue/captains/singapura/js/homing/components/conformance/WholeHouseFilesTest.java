@@ -35,9 +35,9 @@ class WholeHouseFilesTest {
     void baseRulesEveryCasting_inItsFamilysFiles_fromTheModuleThatAddsIt() {
         assertEquals(HOUSE.castings().size(), StyleFiles.INSTANCE.written(HOUSE, Base.INSTANCE).size(),
                 "a rule for each of the whole house's castings, the house's own and every extension's, across the jars");
-        assertEquals(174, HOUSE.castings().size(), "112 components on their own - the card plain or clickable, the summary a view of its own, a document table's cells and their words strong or muted - 62 in a role - the brand's mark as its symbol among them; the slider's rail on its own, its role only placing it");
+        assertEquals(173, HOUSE.castings().size(), "112 components on their own - the card plain or clickable, the summary a view of its own, a document table's cells and their words strong or muted - 61 in a role, the pane thumbnail a cell of its owners, no choice - the brand's mark as its symbol among them; the slider's rail on its own, its role only placing it");
         assertEquals(21, HOUSE.heads().size(), "the families, each headed at one level");
-        assertEquals(46, StyleFiles.INSTANCE.present(Base.INSTANCE).size(), "a file per family the house draws, and one per module adding to it - the view's own now, its summary");
+        assertEquals(45, StyleFiles.INSTANCE.present(Base.INSTANCE).size(), "a file per family the house draws, and one per module adding to it - the view's own now, its summary; the panes' selector file gone, the thumbnail the house's own");
         assertEquals(List.of(), StyleFiles.INSTANCE.twice(Base.INSTANCE), "no file given twice, one hiding the other");
     }
 

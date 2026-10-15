@@ -6,7 +6,7 @@
 // owner's placement; whether it is the one its owner's cursor is at, its
 // Current state, held as its class while it holds (aria-current written with it).
 //
-//   var t = new PaneThumb(branch.createBranch("cell-0"), { name: "Editor", current: true }, ROLE.CHOICE);
+//   var t = new PaneThumb(branch.createBranch("cell-0"), { name: "Editor", current: true }, ROLE.CELL);
 //   t.root  t.name  t.current
 //   t.setOnCurrentChanged(handler)
 // =============================================================================

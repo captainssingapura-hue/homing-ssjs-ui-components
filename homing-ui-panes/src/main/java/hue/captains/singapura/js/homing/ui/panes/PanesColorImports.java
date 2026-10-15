@@ -54,8 +54,6 @@ public record PanesColorImports() implements ColorImportsExtension {
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
                     // input
                     new ColorImports<>(HouseControls.Select.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
-                    // selector
-                    new ColorImports<>(HouseControls.PaneThumb.INSTANCE, new Raised(), new Border(), new Accent(), new AccentTintFaint()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(Editorial.class,
@@ -63,8 +61,6 @@ public record PanesColorImports() implements ColorImportsExtension {
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring(), new ShadeFaint(), new ShadeLight(), new ShadeMedium()),
                     // input
                     new ColorImports<>(HouseControls.Select.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
-                    // selector
-                    new ColorImports<>(HouseControls.PaneThumb.INSTANCE, new Raised(), new Border(), new Accent(), new AccentTintFaint()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(NeoBrutalism.class,
@@ -72,8 +68,6 @@ public record PanesColorImports() implements ColorImportsExtension {
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Inverted(), new Text(), new Border(), new Ring()),
                     // input
                     new ColorImports<>(HouseControls.Select.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
-                    // selector
-                    new ColorImports<>(HouseControls.PaneThumb.INSTANCE, new Raised(), new Border(), new Accent(), new AccentTintFaint()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(NeoFuturism.class,
@@ -81,8 +75,6 @@ public record PanesColorImports() implements ColorImportsExtension {
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring(), new ShadeSoft(), new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowBright()),
                     // input
                     new ColorImports<>(HouseControls.Select.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
-                    // selector
-                    new ColorImports<>(HouseControls.PaneThumb.INSTANCE, new Raised(), new Border(), new Accent(), new AccentTintFaint()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(Neumorphism.class,
@@ -90,8 +82,6 @@ public record PanesColorImports() implements ColorImportsExtension {
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring(), new ShadeFirm()),
                     // input
                     new ColorImports<>(HouseControls.Select.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
-                    // selector
-                    new ColorImports<>(HouseControls.PaneThumb.INSTANCE, new Raised(), new Border(), new Accent(), new AccentTintFaint()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(Glassmorphism.class,
@@ -99,8 +89,6 @@ public record PanesColorImports() implements ColorImportsExtension {
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring(), new ShadeSoft(), new ShadeFirm(), new Sheen()),
                     // input
                     new ColorImports<>(HouseControls.Select.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
-                    // selector
-                    new ColorImports<>(HouseControls.PaneThumb.INSTANCE, new Raised(), new Border(), new Accent(), new AccentTintFaint()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(RetroFuturism.class,
@@ -108,8 +96,6 @@ public record PanesColorImports() implements ColorImportsExtension {
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring(), new GlowDim(), new GlowMedium(), new GlowStrong(), new GlowFull()),
                     // input
                     new ColorImports<>(HouseControls.Select.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
-                    // selector
-                    new ColorImports<>(HouseControls.PaneThumb.INSTANCE, new Raised(), new Border(), new Accent(), new AccentTintFaint()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())),
             new StyleImports<>(Sketchy.class,
@@ -117,8 +103,6 @@ public record PanesColorImports() implements ColorImportsExtension {
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
                     // input
                     new ColorImports<>(HouseControls.Select.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
-                    // selector
-                    new ColorImports<>(HouseControls.PaneThumb.INSTANCE, new Raised(), new Border(), new Accent(), new AccentTintFaint()),
                     // text
                     new ColorImports<>(HouseText.Kicker.INSTANCE, new KickerInk())));
 }

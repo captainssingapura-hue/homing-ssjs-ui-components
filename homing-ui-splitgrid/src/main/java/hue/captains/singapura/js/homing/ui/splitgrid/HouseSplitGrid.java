@@ -57,7 +57,7 @@ public record HouseSplitGrid() implements TaxonomyExtension {
         /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
+            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
         }
     }
 

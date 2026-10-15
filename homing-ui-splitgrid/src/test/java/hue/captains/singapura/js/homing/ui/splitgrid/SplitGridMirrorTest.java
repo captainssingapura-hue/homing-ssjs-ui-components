@@ -126,8 +126,8 @@ class SplitGridMirrorTest extends JsModuleTestBase {
         assertTrue(eval("mirror.el.has('sgm_root') && mirror.el.has('styled-split-grid-mirror')").asBoolean(),
                 "placed by its own class, and worn as itself: its leaf's class");
         var cell = "mirror.el.children[1]";
-        // a cell is the house's pane thumbnail cast as a choice, its name its own kicker cast as its name (RFC 0067, phase 5)
-        assertTrue(eval(cell + ".has('sgm_cell') && " + cell + ".has('styled-pane-thumb_choice')").asBoolean(),
+        // a cell is the house's pane thumbnail on its own - a cell, a functional role - its name its own kicker cast as its name (RFC 0067, phase 5)
+        assertTrue(eval(cell + ".has('sgm_cell') && " + cell + ".has('styled-pane-thumb')").asBoolean(),
                 "a cell placed by the mirror's class, worn as its casting");
         assertEquals("nav demo explain", eval("mirror.el.children.map(function (b) { return b.children[0].textContent; }).join(' ')").asString(), "named by its id, unless said");
         assertTrue(eval(cell + ".children[0].has('el_pane_thumb_name') && " + cell + ".children[0].has('styled-kicker_name')").asBoolean(), "its name its own, on one line");

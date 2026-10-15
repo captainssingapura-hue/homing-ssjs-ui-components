@@ -140,7 +140,7 @@ class SplitGridMirror {
         Object.keys(this._rects.cells).forEach(function (id, i) {
             var r = self._rects.cells[id];
             // the drawing's own name, from a count: two ids of one safe spelling are two cells
-            var thumb = new PaneThumb(self._drawing.createBranch("cell-" + i), { name: String(self._labelOf(id)), current: id === self._cursor }, ROLE.CHOICE);
+            var thumb = new PaneThumb(self._drawing.createBranch("cell-" + i), { name: String(self._labelOf(id)), current: id === self._cursor }, ROLE.CELL);   // a cell of the mirror: the house's thumbnail on its own
             var box = thumb.root;
             css.addClass(box, sgm_cell);
             box.setAttribute("data-cell", id);

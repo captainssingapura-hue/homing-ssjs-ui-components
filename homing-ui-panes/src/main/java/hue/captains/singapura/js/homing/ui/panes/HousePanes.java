@@ -37,13 +37,13 @@ public record HousePanes() implements TaxonomyExtension {
                        TabPicker.INSTANCE, MultiTabPane.INSTANCE, SingleTabPane.INSTANCE, TabPane.INSTANCE);
     }
 
-    /** The thumbnails of the panes one may open. */
+    /** The thumbnails of the panes one may open: each a cell of the picture it draws, the house's thumbnail on its own. */
     public record PaneThumbs() implements Component<HouseBranches.Chooser> {
         public static final PaneThumbs INSTANCE = new PaneThumbs();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
+            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
         }
     }
 
