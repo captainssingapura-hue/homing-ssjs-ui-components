@@ -15,15 +15,15 @@
     <description>
         RFC 0067, appendix The Style Jars - the NeoBrutalism style: a class and a CSS file for each casting it refines, in
         hue.captains.singapura.js.homing.design.styles.neobrutalism, a role drawn as its component on its own a
-        delegation; its declaration, held alone in its test. Its record stays in homing-ui-styles until the serving reads
-        the installed manager.
+        delegation; its declaration, held alone in its test; its record - its token, its label, its inspiration, its
+        words - over Base.
     </description>
 
     <dependencies>
-        <!-- Its record (for now), the components it refines, the colours its classes import. -->
+        <!-- Its record's base layer (Base), the components it refines, the colours its classes import. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-styles</artifactId>
+            <artifactId>homing-style-base</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

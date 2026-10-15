@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.core.DerivedCss;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.SelfRenderedCss;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The house's palette sheet, per palette (RFC 0067, appendix Two Classes per Leaf): every palettable colour of the
  * house's tree as its {@code --fp-} variable, written once per palette. The same under every style, so the theme's owner
- * fetches it again only when the palette changes; Harbour unless the address or a pick says otherwise.
+ * fetches it again only when the palette changes; the installed styling's default palette unless the address or a pick
+ * says otherwise.
  */
 public record HousePaletteSheet() implements DerivedCss<HousePaletteSheet>, SelfRenderedCss {
 
@@ -28,7 +30,7 @@ public record HousePaletteSheet() implements DerivedCss<HousePaletteSheet>, Self
 
     @Override public VariesWith variesWith() { return VariesWith.PALETTE; }
 
-    @Override public Optional<String> fallback() { return Optional.of(HouseStyling.STYLING.defaultPalette().token()); }
+    @Override public Optional<String> fallback() { return InstalledStyling.installed().map(s -> s.defaultPalette().token()); }
 
-    @Override public String css(String palette) { return SHEETS.computeIfAbsent(palette, HouseStyling.STYLING::paletteSheet); }
+    @Override public String css(String palette) { return SHEETS.computeIfAbsent(palette, InstalledStyling.get()::paletteSheet); }
 }

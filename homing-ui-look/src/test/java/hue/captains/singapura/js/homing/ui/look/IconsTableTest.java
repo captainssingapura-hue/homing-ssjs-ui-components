@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The table and the sheet are the lexicon's: the table names every word the house has on this
- * classpath by its token, each to the class that shows it, and imports the sheet with it; the sheet
- * draws every word in the style a theme names - the same in every palette of a style.
+ * The table is the lexicon's: it names every word the house has on this classpath by its token, each
+ * to the class that shows it, and imports the sheet with it. The sheet - every word in the style a
+ * theme names - is the installed styling's, and held where the house's styles are (HouseLexiconSheetTest).
  */
 class IconsTableTest {
 
@@ -27,16 +26,5 @@ class IconsTableTest {
         var imported = IconsModule.INSTANCE.imports().getAllImports().values().stream().flatMap(mi -> mi.allImports().stream())
                 .map(e -> e.getClass().getSimpleName()).toList();
         assertEquals(List.of("lexicon_sheet"), imported);
-    }
-
-    @Test
-    void theSheetDrawsEveryWord_inTheStyleTheThemeNames() {
-        String editorial = LexiconSheet.INSTANCE.css("editorial");
-        assertTrue(editorial.contains("/* from base */\n.word-close::before {\n    content: \"✕\";\n}\n"), editorial);
-        String brutal = LexiconSheet.INSTANCE.css("neo-brutalism");
-        assertTrue(brutal.contains(".word-close::before {\n    content: \"╳\";\n}\n"), "its own cross, written by the style itself");
-        assertEquals(LexiconSheet.INSTANCE.css("sketchy"), LexiconSheet.INSTANCE.css("sketchy_forest"), "a word is the style's, never the palette's");
-        assertEquals(15, editorial.split("::before \\{").length - 1, "every word, once");
-        assertEquals(LexiconSheet.INSTANCE.css("editorial"), LexiconSheet.INSTANCE.css(null), "no theme named: the house's default");
     }
 }

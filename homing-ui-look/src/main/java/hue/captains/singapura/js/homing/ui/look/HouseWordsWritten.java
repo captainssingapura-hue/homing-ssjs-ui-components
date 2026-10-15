@@ -3,15 +3,15 @@ package hue.captains.singapura.js.homing.ui.look;
 import hue.captains.singapura.js.homing.component.taxonomy.Lexicon;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.FlattenLexicon;
-import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseLexicon;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * The house's lexicon as this classpath has it, read once, and each house style's writing of it,
- * flattened the first time a theme of the style is asked for: what {@link LexiconSheet} serves and
+ * The house's lexicon as this classpath has it, read once, and each style's writing of it - each style
+ * the installed styling serves - flattened the first time a theme of the style is asked for: what {@link LexiconSheet} serves and
  * {@link IconsModule} tables.
  */
 final class HouseWordsWritten {
@@ -26,7 +26,7 @@ final class HouseWordsWritten {
 
     /** The sheet for the theme a page is worn in, by its slug: its style's writing of every word. */
     static String sheet(String themeSlug) {
-        DesignStyle<?> style = HouseStyles.INSTANCE.dressed(themeSlug).style();
+        DesignStyle<?> style = InstalledStyling.get().dressed(themeSlug).style();
         return SHEETS.computeIfAbsent(style.token(), t -> FlattenLexicon.INSTANCE.flatten(LEXICON, style, t + " - the house's lexicon").css());
     }
 }

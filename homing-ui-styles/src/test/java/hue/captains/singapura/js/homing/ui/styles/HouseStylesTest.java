@@ -9,9 +9,10 @@ import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.FlattenLexicon;
-import hue.captains.singapura.js.homing.design.semantic.StylingRes;
 import hue.captains.singapura.js.homing.design.semantic.WriteWord;
 import hue.captains.singapura.js.homing.design.styling.PaletteSheet;
+import hue.captains.singapura.js.homing.design.styling.StyleManager;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.HouseColour;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseLexicon;
@@ -27,8 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The house's styles and palettes on files (RFC 0067, appendix Two Classes per Leaf): seven styles over Base, Base the
- * base layer answering content for every leaf, each style drawing the buttons its own way; the house's colour tree, every
+ * The house's styles and palettes (RFC 0067, appendix The Style Jars): seven styles over Base, the house's instance held to
+ * the central rules - Base implementing every casting, each style drawing the buttons its own way, each sheet whole; the house's colour tree, every
  * palette whole over it, each tint worked out from the palette's seeds; and a page worn in the style and palette its
  * slug names.
  */
@@ -46,38 +47,38 @@ class HouseStylesTest {
     }
 
     @Test
-    void base_answersContentForEveryCasting_andEachStyleDrawsTheButtons_inEveryRole_absentElsewhere() {
-        for (Casting c : TAXONOMY.castings())
-            assertEquals(StylingRes.CssContent.INSTANCE, Base.INSTANCE.style(c), c.token() + ": the base layer is never absent (D26)");
+    void theHousesInstance_holdsToTheRules_baseImplementsEveryCasting_eachStyleDrawsTheButtons_inEveryRole() {
+        StyleManager manager = HouseStyles.INSTANCE.styling().manager();
+        assertEquals(TAXONOMY.castings().size(), manager.implementations(Base.INSTANCE).size(), "the base layer is never absent (D26)");
         var go = TAXONOMY.castings().stream().filter(c -> c.token().equals("primary-button_go")).findFirst().orElseThrow();
         for (DesignStyle<?> s : HouseStyles.STYLES) {
-            for (Component<?> b : HouseFamilies.BUTTONS)
-                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(b)), s.token() + " draws " + b.token());
-            assertEquals(StylingRes.CssContent.INSTANCE, s.style(go), s.token() + " draws the primary button as Go too, a class of its own");
-            assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.BoundaryLine.INSTANCE)), s.token() + ": a boundary is Base's, every style's alike");
-            for (Component<?> t : HouseFamilies.TRACKS)
-                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(t)), s.token() + " draws " + t.token());
-            for (Component<?> h : HouseFamilies.HANDLES)
-                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(h)), s.token() + " draws " + h.token());
-            for (Component<?> w : HouseFamilies.WAYS)
-                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(w)), s.token() + " draws " + w.token() + ": its own focus ring on it");
-            assertEquals(StylingRes.Absence.INSTANCE, s.style(new Casting(HouseMarks.BrandMark.INSTANCE)), s.token() + ": the brand's mark is Base's, alike in every style");
-            for (Component<?> i : HouseFamilies.INPUTS)
-                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(i)), s.token() + " draws " + i.token() + ": its own frame and ring");
-            for (Component<?> t : HouseFamilies.TEXTS)
-                assertEquals(StylingRes.CssContent.INSTANCE, s.style(new Casting(t)), s.token() + " draws " + t.token() + ": its own faces");
+            assertEquals(124, manager.implementations(s).size(), s.token() + ": what it refines, its own and the modules' castings");
+            for (Component<?> b : BUTTONS)
+                assertEquals(s.token() + "'s own", manager.resolve(s, new Casting(b)).says(), s.token() + " draws " + b.token());
+            assertTrue(manager.resolve(s, go).says().startsWith(s.token() + "'s own"), s.token() + " draws the primary button as Go too");
+            assertTrue(manager.resolve(s, new Casting(HouseMarks.BoundaryLine.INSTANCE)).says().startsWith("base's"),
+                    s.token() + ": a boundary is Base's, every style's alike");
+            assertTrue(manager.resolve(s, new Casting(HouseMarks.BrandMark.INSTANCE)).says().startsWith("base's"),
+                    s.token() + ": the brand's mark is Base's, alike in every style");
         }
-        assertEquals(10, HouseFamilies.BUTTONS.size(), "the preferences button among them");
-        assertEquals(3, HouseFamilies.WAYS.size());
-        assertEquals(18, HouseFamilies.TEXTS.size());
-        assertEquals(6, HouseFamilies.INPUTS.size());
-        assertEquals(4, HouseFamilies.TRACKS.size());
-        assertEquals(3, HouseFamilies.HANDLES.size());
-        assertEquals(2, HouseFamilies.SELECTORS.size());
-        assertEquals(2, HouseFamilies.CARDS.size());
-        assertEquals(3, HouseFamilies.ITEMS.size());
-        assertEquals(4, HouseFamilies.MARKS.size());
     }
+
+    @Test
+    void aStylesSheet_aClassForEveryCasting_everyMarkFilledIn() {
+        Styling styling = HouseStyles.INSTANCE.styling();
+        for (DesignStyle<?> s : HouseStyles.STYLES) {
+            String sheet = styling.styleSheet(s.token());
+            assertTrue(!sheet.contains("$"), s.token() + ": every mark filled in");
+            for (Casting c : TAXONOMY.castings()) assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
+        }
+    }
+
+    /** The buttons every house style draws its own way. */
+    private static final List<Component<?>> BUTTONS = List.of(
+            HouseControls.PlainButton.INSTANCE, HouseControls.PrimaryButton.INSTANCE, HouseControls.SecondaryButton.INSTANCE,
+            HouseControls.DangerButton.INSTANCE, HouseControls.WarningButton.INSTANCE, HouseControls.SuccessButton.INSTANCE,
+            HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE,
+            HouseControls.PreferencesButton.INSTANCE);
 
     @Test
     void theHouseColourTree_reads_andEveryPaletteIsWholeOverIt() {
@@ -116,7 +117,7 @@ class HouseStylesTest {
             assertEquals(List.of(), write.problems(lexicon, s), s.token());
             var sheet = FlattenLexicon.INSTANCE.flatten(lexicon, s, s.token());
             assertEquals(List.of(), sheet.unwritten(), s.token());
-            assertEquals(15, sheet.written(), s.token());
+            assertEquals(lexicon.words().size(), sheet.written(), s.token() + ": the house's words and every extension's on the classpath");
         }
         assertEquals(List.of(), write.problems(lexicon, Base.INSTANCE), "Base writes them all");
         var crosses = new java.util.LinkedHashMap<String, String>();
@@ -127,7 +128,7 @@ class HouseStylesTest {
 
     @Test
     void aPageIsWornInTheStyleAndPaletteItsSlugNames_theStylesOwnOtherwise() {
-        var styles = HouseStyles.INSTANCE;
+        Styling styles = HouseStyles.INSTANCE.styling();
         assertEquals("sketchy in marker", styles.dressed("sketchy").toString(), "a style alone is worn in its own palette");
         assertEquals("glassmorphism in frost", styles.dressed("glassmorphism").toString());
         assertEquals("sketchy in forest", styles.dressed("sketchy_forest").toString());
@@ -136,9 +137,7 @@ class HouseStylesTest {
         assertEquals("editorial in harbour", styles.dressed("flat-morphism").toString(), "retired: the default");
         assertEquals("editorial in harbour", styles.dressed(null).toString());
         assertEquals("neumorphism", styles.slug(styles.dressed("neumorphism_clay")), "a style in its own palette is named alone");
-        assertEquals(56, HouseStyles.THEMES.size(), "seven styles, each in eight palettes");
-        assertEquals("sketchy in forest", styles.switchTo(styles.dressed("editorial_forest"), Sketchy.INSTANCE).toString(),
-                "a change of style keeps the palette worn: every house palette is of the base, as every house style (D22)");
+        assertEquals(56, styles.themes().size(), "seven styles, each in eight palettes: every house palette is of the base, as every house style (D22)");
         for (DesignStyle<?> s : HouseStyles.STYLES)
             assertTrue(HouseStyles.PALETTES.contains(styles.own(s)), s.token() + " has a palette of its own among the house's");
     }

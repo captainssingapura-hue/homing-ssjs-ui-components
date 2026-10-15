@@ -1,6 +1,0 @@
-/* The summary's view in the base layer: one thing summed up, laid out whole - a view with no frame of its own, shown on whatever
-   holds it. Its texts and its link wear their own looks; its layout is its own, the same in every style. Whole: every
-   property its look has (D9). */
-.styled-summary-view {
-    color: inherit;
-}

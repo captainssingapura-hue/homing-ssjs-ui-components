@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.core.DerivedCss;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.SelfRenderedCss;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public record LexiconSheet() implements DerivedCss<LexiconSheet>, SelfRenderedCs
     /** A word is the style's, never the palette's: the sheet varies with the style alone. */
     @Override public VariesWith variesWith() { return VariesWith.STYLE; }
 
-    @Override public Optional<String> fallback() { return Optional.of(HouseStyling.STYLING.defaultStyle().token()); }
+    @Override public Optional<String> fallback() { return InstalledStyling.installed().map(s -> s.defaultStyle().token()); }
 
     @Override public String css(String style) { return HouseWordsWritten.sheet(style); }
 }

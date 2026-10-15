@@ -1,5 +1,0 @@
-/* The focus monitor in the base layer: no look of its own - a widget draws only components: its rows and marks draw; every style's alike. */
-.styled-focus-monitor {}
-
-/* The steward monitor in the base layer: no look of its own - a widget draws only components: its lamp and its rows draw; every style's alike. */
-.styled-steward-monitor {}

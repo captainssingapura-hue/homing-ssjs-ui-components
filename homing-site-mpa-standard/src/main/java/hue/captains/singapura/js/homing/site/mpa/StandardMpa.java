@@ -6,6 +6,8 @@ import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.SimpleAppResolver;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.preferences.PreferencesRegistry;
 import hue.captains.singapura.js.homing.server.AppMeta;
 import hue.captains.singapura.js.homing.server.HomingActionRegistry;
@@ -82,6 +84,27 @@ public final class StandardMpa implements Mpa {
      */
     public static StandardMpa of(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, Crate... crates) {
         return new StandardMpa(brand, themes, preferences, List.of(crates));
+    }
+
+    /**
+     * A site's MPA over its styling (RFC 0067, appendix The Style Jars): the brand on the bar, the styling - the styles
+     * and palettes the instance includes, registered in their two stages - and the crates whose modules it serves; the
+     * default preferences. The styling is installed here, at bootstrap, for every served sheet to read, and the themes
+     * the picker offers are its.
+     */
+    public static StandardMpa of(Brand brand, Styling styling, Crate... crates) {
+        return new StandardMpa(brand, installed(styling), null, List.of(crates));
+    }
+
+    /** As {@link #of(Brand, Styling, Crate...)}, with the site's own preferences. */
+    public static StandardMpa of(Brand brand, Styling styling, PreferencesRegistry preferences, Crate... crates) {
+        return new StandardMpa(brand, installed(styling), preferences, List.of(crates));
+    }
+
+    /** The styling installed, and its themes. */
+    private static ThemeRegistry installed(Styling styling) {
+        InstalledStyling.install(styling);
+        return new StylingThemes(styling);
     }
 
     @Override public Brand brand() { return brand; }

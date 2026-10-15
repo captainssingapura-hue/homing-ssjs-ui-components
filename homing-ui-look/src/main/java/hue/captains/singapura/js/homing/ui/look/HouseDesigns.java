@@ -6,7 +6,7 @@ import hue.captains.singapura.js.homing.design.semantic.DesignRead;
 import hue.captains.singapura.js.homing.design.semantic.Dressed;
 import hue.captains.singapura.js.homing.design.semantic.FlattenDesign;
 import hue.captains.singapura.js.homing.design.semantic.ReadDesigns;
-import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The designs of the house's design branches, as a page has them (RFC 0067, appendix Virtual Leaves and Designs):
- * every design on the classpath, read once over the house's taxonomy and judged in every house theme, and for each
+ * every design on the classpath, read once over the installed styling's taxonomy and judged in every theme it serves, and for each
  * what its module serves - its sheet in the theme a page is worn in, flattened the first time it is asked for, and
  * its object. A design that is not complete in every house theme refuses them all, as a refused taxonomy does.
  */
@@ -34,8 +34,8 @@ public record HouseDesigns() implements StatelessFunctionalObject {
 
     /** A design's sheet in the theme a page is worn in, by its slug. */
     public String sheet(Design<?, ?> design, String themeSlug) {
-        Dressed theme = HouseStyles.INSTANCE.dressed(themeSlug);
-        String slug = HouseStyles.INSTANCE.slug(theme);
+        Dressed theme = InstalledStyling.get().dressed(themeSlug);
+        String slug = InstalledStyling.get().slug(theme);
         return SHEETS.computeIfAbsent(design.token() + "/" + slug,
                 k -> FlattenDesign.INSTANCE.flatten(of(design), theme, design.token() + " in " + slug).css());
     }
@@ -50,6 +50,6 @@ public record HouseDesigns() implements StatelessFunctionalObject {
     private static final class Read {
         private Read() {}
         static final List<DesignRead> ALL =
-                ReadDesigns.INSTANCE.read(HouseStyling.STYLING.taxonomy(), HouseStyles.THEMES.values(), HouseDesigns.class.getClassLoader());
+                ReadDesigns.INSTANCE.read(InstalledStyling.get().taxonomy(), InstalledStyling.get().themes().values(), HouseDesigns.class.getClassLoader());
     }
 }

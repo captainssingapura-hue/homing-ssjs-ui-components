@@ -36,12 +36,6 @@
             <artifactId>homing-ui-taxonomy</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!-- The house styles over Base, in their palettes: what the looks and the words are flattened from. -->
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-styles</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
         <!-- The semantic classes: the flattening of a theme's answers into a sheet. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
