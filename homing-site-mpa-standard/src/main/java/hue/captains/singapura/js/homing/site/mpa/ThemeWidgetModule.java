@@ -20,11 +20,13 @@ import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import java.util.List;
 
 /**
- * The theme as a preference widget: the designs the site offers, then the
- * colours the chosen design is offered in, from {@code /themes}; a pick is
- * written through the field like any other setting, and the CSS manager
- * follows the store as it always has. Built on the generic field, so the
- * header, the note and the reset are the same as every other setting's.
+ * The theme as a preference widget, its two preferences each its own - the
+ * style and the palette (RFC 0067, appendix Two Classes per Leaf): the styles
+ * the site offers, then the palettes the chosen one is offered in, from
+ * {@code /themes}; each pick written through its own field like any other
+ * setting, and the page's sheets follow the store, the style's and the
+ * palette's apart. Built on the generic field, so the header, the note and the
+ * reset are the same as every other setting's.
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 13,
         reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own, writes attributes, writes text of its own and touches components' elements: it waits for the designed containers, the widget slot and the content components to draw only components.")
