@@ -52,6 +52,13 @@
         <!-- The MPA's implementation: StandardMpa, its chrome, its preferences. -->
         <module>homing-site-mpa-standard</module>
         <module>homing-ui-control-panel</module>
+        <module>homing-style-editorial</module>
+        <module>homing-style-glassmorphism</module>
+        <module>homing-style-neo-brutalism</module>
+        <module>homing-style-neo-futurism</module>
+        <module>homing-style-neumorphism</module>
+        <module>homing-style-retro-futurism</module>
+        <module>homing-style-sketchy</module>
         <module>homing-components-conformance</module>
     </modules>
 

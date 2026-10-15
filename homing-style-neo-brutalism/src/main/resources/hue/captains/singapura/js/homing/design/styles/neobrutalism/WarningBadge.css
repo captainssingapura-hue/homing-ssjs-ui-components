@@ -1,0 +1,15 @@
+/* The warning badge in neo-brutalism: a warning said by a badge, its ink on its wash. Whole: every property its look has (D9). */
+$casting {
+    --fixed-warning-wash: rgb(202 138 4 / 0.16);
+    color: var(--fp-warning-ink);
+    background-color: var(--fixed-warning-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}

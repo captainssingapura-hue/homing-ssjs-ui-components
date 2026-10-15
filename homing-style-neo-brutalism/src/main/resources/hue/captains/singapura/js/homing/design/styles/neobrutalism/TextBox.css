@@ -1,0 +1,41 @@
+/* The text box in neo-brutalism: words the user types, set into the page. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-recessed);
+    border-color: var(--fp-border);
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 3px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: calc(4px * pow(1.25, var(--size)));
+    padding-inline: calc(8px * pow(1.25, var(--size)));
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    text-decoration-line: none;
+    transition: border-color 140ms ease, outline-color 140ms ease;
+    cursor: text;
+
+    &::placeholder {
+        color: var(--fp-text-faded);
+    }
+
+    &:focus-visible {
+        outline-color: var(--fp-ring);
+        outline-width: 3px;
+        outline-style: solid;
+        outline-offset: -3px;
+    }
+
+    &$disabled {
+        box-shadow: none;
+        transform: none;
+        opacity: .4;
+        cursor: not-allowed;
+    }
+}

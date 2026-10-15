@@ -1,0 +1,6 @@
+/* The section in glassmorphism: a stretch of a container's room given one job - a panel's body - its room round what it holds. Whole: every property its look has (D9). */
+$casting {
+    padding-block: 16px;
+    padding-inline: 18px;
+    gap: 10px;
+}

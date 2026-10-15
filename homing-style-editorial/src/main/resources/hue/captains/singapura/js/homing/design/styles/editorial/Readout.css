@@ -1,0 +1,12 @@
+/* The readout in editorial: a figure read off, its digits even. Whole: every property its look has (D9). */
+$casting {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Georgia", serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+    font-variant-numeric: tabular-nums;
+}
