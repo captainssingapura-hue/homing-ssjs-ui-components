@@ -4,12 +4,8 @@
 // pane's tab, a page — and brings nothing else. It measures nothing: what
 // holds it decides how big it is, and it fills that.
 //
-//   new Panel(branch, { title, bare, fills, size, host }) — on a sub-branch the caller made:
+//   new Panel(branch, { title, fills, size, host }) — on a sub-branch the caller made:
 //     title                 the name in the head; without one there is no head
-//     bare: true            no frame and no corner: for a panel whose CONTAINER
-//                           draws the lines — a cell of a grid that already
-//                           draws its seams and marks the room being worked in.
-//                           A sheet draws its own edge; a room's floor does not.
 //     fills: true           what is mounted fills the body: no air, and no
 //                           scroll of its own (a dock, a grid). Off, the body
 //                           has the design's air and scrolls — for content.
@@ -26,11 +22,13 @@
 //     .title(text?)         read, or set
 //     .size(s)              the size, live, on the panel and its parts
 //     .elevation(e)         "elevated", "sunken", or null for flat: how far off
-//                           its own plane the design sits it. WHAT A REGISTER
-//                           MEANS IS THE APP'S: the panel links it to nothing.
+//                           its own plane the design sits it - its Elevation
+//                           state's class. WHAT A REGISTER MEANS IS THE APP'S:
+//                           the panel links it to nothing.
 //     .highlight(on) .isHighlighted()   the current one, said in colour alone —
-//                           the other axis, orthogonal to the depth, and the
-//                           one a design without depth can still answer
+//                           its Current state's class: the other axis,
+//                           orthogonal to the depth, and the one a design
+//                           without depth can still answer
 //     .watch(component|el, onWithin)  follow what is mounted and SAY so:
 //                           onWithin(true|false) as the keys come and go. It
 //                           decides nothing. .isWithin() reads it. .unwatch() stops.
@@ -49,11 +47,24 @@ const _panelOwner = Object.freeze({ toString: () => "panel" });
 /** Its head - the bar that names it - and its body - a section of its room: each realized inline, in its own look. */
 const _PANEL_HEAD = Object.freeze({ LEAF: "panel-bar" });
 const _PANEL_BODY = Object.freeze({ LEAF: "section" });
-/** What a panel's own placement says, which its look leaves to it: its least size, so it fills what holds it and no more. */
-const _PANEL_PLACED = Object.freeze(["size-extent"]);
 
 class Panel {
     static LEAF = "panel";
+    /** Its two states, each the app's to say: how far off its plane it sits, and whether it is the current one - each reflected, each its class. */
+    static AXES = Object.freeze({
+        elevation: Object.freeze({
+            values: Object.freeze(["flat", "elevated", "sunken"]),
+            rest: "flat",
+            reflect: function (el, e) { css.elevation(el, e === "flat" ? null : e); },
+            state: STATE.ELEVATION
+        }),
+        current: Object.freeze({
+            values: Object.freeze([false, true]),
+            rest: false,
+            reflect: function (el, on) { if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); },   // said by its reflection, never false
+            state: STATE.CURRENT
+        })
+    });
 
     /** On a sub-branch the caller made, with its properties. */
     constructor(branch, props) {
@@ -70,9 +81,9 @@ class Panel {
 
         var root = branch.createElement("panel", "section");
         css.addClass(root, el_panel);
-        // its look: raised, framed as a card is - unless its container draws the lines - lifted or set in as the app says;
-        // its least size its placement's, so it fills what holds it
-        new Look(Panel, ROLE.STANDALONE).wear(root, { except: p.bare ? _PANEL_PLACED.concat(["shape-corner", "shape-border"]) : _PANEL_PLACED });
+        // its look, whole: raised, framed, its corner the style's; lifted or set in, and the current one, as the app says
+        this._look = new Look(Panel, ROLE.STANDALONE);
+        this._look.wear(root);
         this._parts = [root];
 
         this.head = null;
@@ -99,9 +110,9 @@ class Panel {
 
         var body = branch.createElement("body", "div");
         css.addClass(body, el_panel_body);
-        if (!p.fills) {   // content: the style's room round it, and a scroll of its own; filled, the body is flush
+        if (!p.fills) {   // content: a section, the style's room round what it holds, and a scroll of its own; filled, the body is flush
             css.addClass(body, el_panel_body_air);
-            new Look(_PANEL_BODY, ROLE.BODY).wear(body, { only: ["size-inset", "size-gap"] });
+            new Look(_PANEL_BODY, ROLE.BODY).wear(body);
             this._parts.push(body);
         }
         root.appendChild(body);
@@ -140,7 +151,7 @@ class Panel {
      */
     elevation(e) {
         this._elevation = e === "elevated" || e === "sunken" ? e : null;
-        css.elevation(this.root, this._elevation);
+        this._show();
         return this;
     }
     elevationOf() { return this._elevation; }
@@ -150,11 +161,13 @@ class Panel {
         var want = !!on;
         if (want !== this._highlight) {
             this._highlight = want;
-            if (want) this.root.setAttribute("aria-current", "true");   // said by its reflection: the look draws it
-            else this.root.removeAttribute("aria-current");
+            this._show();
         }
         return this;
     }
+
+    /** Its states as the app last said them: each reflected on its root, each its class there (D12). */
+    _show() { this._look.show(this.root, { elevation: this._elevation || "flat", current: this._highlight }); }
     isHighlighted() { return this._highlight; }
 
     /** Whether the keys are anywhere in what is mounted, as the last watch read it. */

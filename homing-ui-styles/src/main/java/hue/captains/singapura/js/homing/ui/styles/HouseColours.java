@@ -20,7 +20,8 @@ import java.util.List;
  *
  * <ul>
  *   <li><b>surfaces</b> - what things stand on: raised, the page's ground, recessed below it, inverted, the text's ink
- *       washed thin at each strength - under the hand for a mark alone, under code, under a pill - and clear;</li>
+ *       washed thin at each strength - under the hand for a mark alone, under code, under a pill - the scrollbar's
+ *       thumb on the ground, and clear;</li>
  *   <li><b>inks</b> - what is written and drawn in, each the palette's, one for each purpose: the text's, and faded;
  *       on inverted, on the accent, on danger; a way's under the hand; a heading's, a kicker's; danger's, warning's and
  *       success's (D32);</li>
@@ -50,11 +51,11 @@ public record HouseColours() implements ColorSource {
 
     /** Every palettable colour of the house: one sealed set, so a palette's switch over it is exhaustive. */
     public sealed interface HouseColour permits
-            Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft,
+            Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft, ScrollThumb,
             Text, TextFaded, OnInverted, OnAccent, OnDanger, WayHovered, HeadingInk, KickerInk, DangerInk, WarningInk, SuccessInk,
             Border, GrooveEdge, LineHovered,
             Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
-            ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, Sheen,
+            ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeModerate, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, ShadeDense, ShadeDark, ShadeDarkest, SheenSoft, Sheen,
             GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
 
     public record Surfaces() implements L1_ColorBranch<Base> {}
@@ -82,6 +83,8 @@ public record HouseColours() implements ColorSource {
     public record WashFaint() implements Palettable<Base, Surfaces>, HouseColour {}
     /** At 10%: a pill's ground. */
     public record WashSoft() implements Palettable<Base, Surfaces>, HouseColour {}
+    /** The scrollbar's thumb on the page's ground: the text's ink, 55% into the ground. */
+    public record ScrollThumb() implements Palettable<Base, Surfaces>, HouseColour {}
     /** Nothing drawn: the same in every palette. */
     public record Clear() implements Fixed<Base, Surfaces> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("transparent"); }
@@ -171,6 +174,8 @@ public record HouseColours() implements ColorSource {
     public record ShadeSoft() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 12%: a box lifted under the hand. */
     public record ShadeMedium() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 14%: a panel lifted off the page, its far shadow. */
+    public record ShadeModerate() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 16%: a moulded box's dark side. */
     public record ShadeFirm() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 18%: a tab in use, set on the row. */
@@ -179,6 +184,14 @@ public record HouseColours() implements ColorSource {
     public record ShadeDeep() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 22%: a glass tab in the hand. */
     public record ShadeHeavy() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 45%: a panel lifted, cast hard. */
+    public record ShadeDense() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 55%: a panel set in, cast hard. */
+    public record ShadeDark() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 70%: a panel set deep into the page. */
+    public record ShadeDarkest() implements Palettable<Base, Shadows>, HouseColour {}
+    /** The raised layer's sheen at 45%: a glass panel's top edge lit. */
+    public record SheenSoft() implements Palettable<Base, Shadows>, HouseColour {}
     /** The raised layer's sheen, at 60%: a glass edge lit from above. */
     public record Sheen() implements Palettable<Base, Shadows>, HouseColour {}
     /** The house colour glowing faintly - 14% - a fine line of light. */
@@ -277,13 +290,13 @@ public record HouseColours() implements ColorSource {
     @Override public ColorTree read() {
         return ReadColors.INSTANCE.read(HouseColours.class, List.of(
                 new Surfaces(), new Inks(), new Lines(), new Current(), new Attention(), new Shadows(), new Feedback(), new Scales(),
-                new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new Clear(),
+                new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new ScrollThumb(), new Clear(),
                 new Text(), new TextFaded(), new OnInverted(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
                 new OnDanger(), new DangerInk(), new WarningInk(), new SuccessInk(),
                 new Border(), new GrooveEdge(), new LineHovered(),
                 new Whole(), new Quiet(), new Muted(), new Hairline(),
                 new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentWash(), new AccentWashFaint(), new AccentWashLight(), new AccentWashSoft(), new AccentWashStrong(), new KeysCandidate(), new KeysLent(),
-                new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new Sheen(),
+                new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeModerate(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new ShadeDense(), new ShadeDark(), new ShadeDarkest(), new SheenSoft(), new Sheen(),
                 new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),
                 new Danger(), new DangerPressed(), new DangerTint(), new DangerEdge(),
                 new DangerWash(), new WarningWash(), new SuccessWash(),

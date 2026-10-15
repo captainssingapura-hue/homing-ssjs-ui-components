@@ -98,17 +98,18 @@ class PanelTest extends JsModuleTestBase {
     }
 
     /**
-     * Its look: the panel's on the panel - framed as a card is unless it is bare, its least size left to its
-     * placement - its head's room and the line under it on the head, the body's room on a body that holds content.
+     * Its look: the panel's casting whole on its root (RFC 0067, Two Classes per Leaf, phase 5); a body that holds content
+     * a section, whole - its room round what it holds; a filled body flush. Its head, a slice of the bars' old look, wears
+     * nothing styled until the bars move onto files (D17).
      */
     @Test
-    void itWearsItsLook_theHeadAndTheBodyTheirs_aBarePanelNoFrame() {
-        // its look: its leaf's class on its root; its head and body, slices of the old look, wear nothing styled until the
-        // panel's family moves onto files and each is a leaf of its own (RFC 0067, Two Classes per Leaf, phase 5; D17)
+    void itWearsItsLook_aReadingBodyASection_aFilledOneFlush() {
         String root = eval("reading.root.classes()").asString();
-        assertFalse(root.contains("styled-panel"), "its root, worn by a slice of the old look: nothing styled yet (D17) - " + root);
-        assertFalse(root.contains("panel__color-background"), "the old look's classes, gone - " + root);
-        assertFalse(eval("reading.head.classes()").asString().contains("styled-"), "the head: a slice, nothing styled yet");
+        assertTrue(root.contains("styled-panel"), "its root wears its casting - " + root);
+        assertFalse(root.contains("styled-panel--"), "at rest: flat, and not the current one - " + root);
+        assertTrue(eval("reading.body.classes()").asString().contains("styled-section"), "a body that holds content: a section");
+        assertFalse(eval("panel.body.classes()").asString().contains("styled-"), "a filled body: flush, no room of its own");
+        assertFalse(eval("reading.head.classes()").asString().contains("styled-"), "the head: a slice of the bars' old look, nothing styled yet");
     }
 
     /** The size is an element's, not inherited, so the panel carries it to every part it minted - and not to a body that wears no length. */
@@ -131,20 +132,27 @@ class PanelTest extends JsModuleTestBase {
         assertTrue(eval("panel.elevationOf() === null").asBoolean(), "flat, and no default was ever chosen for it");
         eval("lifted = []; panel.elevation(\"elevated\")");
         assertEquals("panel:elevated", eval("lifted.join(' ')").asString());
+        assertTrue(eval("panel.root.classes()").asString().contains("styled-panel--elevated"), "its state's class: the style draws the lift");
         eval("lifted = []; panel.elevation(\"sunken\")");
         assertEquals("panel:sunken", eval("lifted.join(' ')").asString(), "the other register");
+        assertTrue(eval("panel.root.classes()").asString().contains("styled-panel--sunken"));
+        assertFalse(eval("panel.root.classes()").asString().contains("styled-panel--elevated"), "one register at a time");
         eval("lifted = []; panel.elevation(\"lofty\")");
         assertEquals("panel:null", eval("lifted.join(' ')").asString(), "two registers and flat; anything else is flat");
+        assertFalse(eval("panel.root.classes()").asString().contains("styled-panel--"), "flat: no class at all");
         eval("lifted = []; panel.elevation(null)");
         assertEquals("panel:null", eval("lifted.join(' ')").asString(), "flat says nothing at all: the design rests it where it rests it");
         assertFalse(eval("panel.isHighlighted()").asBoolean());
         assertFalse(eval("panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean());
         eval("panel.highlight(true)");
-        assertTrue(eval("panel.isHighlighted() && panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean(), "said by its reflection: the look draws the current one");
+        assertTrue(eval("panel.isHighlighted() && panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean(), "said by its reflection");
+        assertTrue(eval("panel.root.classes()").asString().contains("styled-panel--current"), "and its state's class: the style draws the current one");
         eval("lifted = []; panel.elevation(\"elevated\")");
         assertTrue(eval("panel.isHighlighted() && panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean(), "orthogonal: the depth does not touch the colour");
         eval("panel.highlight(false)");
         assertEquals("null", eval("String(panel.root.getAttribute(\"aria-current\"))").asString(), "no longer current: the reflection taken away, never said false");
+        assertFalse(eval("panel.root.classes()").asString().contains("styled-panel--current"), "its class taken off");
+        assertTrue(eval("panel.root.classes()").asString().contains("styled-panel--elevated"), "the depth's kept");
         assertEquals("elevated", eval("panel.elevationOf()").asString(), "nor the colour the depth");
     }
 

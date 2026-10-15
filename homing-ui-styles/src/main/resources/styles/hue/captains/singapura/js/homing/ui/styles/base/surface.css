@@ -1,8 +1,27 @@
-/* panel: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-panel {}
+/* The panel in the base layer: a named region that fills what holds it - raised, framed, its corner square; flat at every elevation, Base drawing no depth; its edge in the accent while it is the current one. Whole: every property its look has (D9). */
+.styled-panel {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0;
+    box-shadow: none;
+    gap: 0;
+    transition: none;
 
-/* ground: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-ground {}
+    &.styled-panel--current {
+        border-color: var(--fp-accent);
+    }
+}
+
+/* The ground in the base layer: the surface a page stands on - its ground, the ink and the face of what is written on it (the system's own face: Base names none of a style's), and its scrollbar, its thumb the ink half into the ground. Whole: every property its look has (D9). */
+.styled-ground {
+    color: var(--fp-text);
+    background-color: var(--fp-ground);
+    scrollbar-color: var(--fp-scroll-thumb) var(--fp-ground);
+    font-family: system-ui, sans-serif;
+}
 
 /* The header cell in the base layer: a document table's cell heading its column, a container - its room, and nothing of the table's lines nor of its words' look. Whole: every property its look has (D9). */
 .styled-header-cell {

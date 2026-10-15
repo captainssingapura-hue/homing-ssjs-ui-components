@@ -26,6 +26,7 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerPressed;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWash;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWriting;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GrooveEdge;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.Ground;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Hairline;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.HeadingInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KeysCandidate;
@@ -41,6 +42,7 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.Quiet;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Raised;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Recessed;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Ring;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.ScrollThumb;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.SecondaryGround;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeFirm;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.SuccessGround;
@@ -166,5 +168,8 @@ public record Neumorphism() implements Derives<ColorScheme.Base, Base> {
             new ColorImports<>(HouseMarks.Fill.INSTANCE, new Accent()),
             // region
             new ColorImports<>(HouseRegions.Quote.INSTANCE, new TextFaded(), new Border()),
-            new ColorImports<>(HouseRegions.CodeBlock.INSTANCE, new Text(), new Recessed(), new Border()));
+            new ColorImports<>(HouseRegions.CodeBlock.INSTANCE, new Text(), new Recessed(), new Border()),
+            // surface
+            new ColorImports<>(HouseContainers.Panel.INSTANCE, new Raised(), new Text(), new Border(), new Accent(), new ShadeFirm()),
+            new ColorImports<>(HouseContainers.Ground.INSTANCE, new Ground(), new ScrollThumb(), new Text()));
 }

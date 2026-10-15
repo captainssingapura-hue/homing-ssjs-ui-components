@@ -82,6 +82,8 @@ public final class HouseContainers {
         public static final Panel INSTANCE = new Panel();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+        /** How far off its plane the app sits it, and whether it is the current one - each said by the app, neither meaning anything by itself (D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Elevation.INSTANCE, HouseStates.Current.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(PanelBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional(),
                            DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Body.INSTANCE).one());

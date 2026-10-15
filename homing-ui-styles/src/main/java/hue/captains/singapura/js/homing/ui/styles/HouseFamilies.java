@@ -73,8 +73,14 @@ public final class HouseFamilies {
      */
     public static final Set<Component<?>> REGIONS = Set.of(HouseRegions.Section.INSTANCE, HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks and the regions. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS);
+    /**
+     * The surfaces each style draws its own way: a panel's frame, corner and depth, the page's ground and its face. A
+     * document table's cells are rooms alone (D34), and Base's.
+     */
+    public static final Set<Component<?>> SURFACES = Set.of(HouseContainers.Panel.INSTANCE, HouseContainers.Ground.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks, the regions and the surfaces. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS, SURFACES);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

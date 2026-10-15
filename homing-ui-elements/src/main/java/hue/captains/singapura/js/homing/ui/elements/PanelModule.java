@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.elements;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
@@ -45,6 +46,7 @@ public record PanelModule() implements DomModule<PanelModule>, ImplFor<HouseCont
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_panel(),
                         new ElementStyles.el_panel_head(),
