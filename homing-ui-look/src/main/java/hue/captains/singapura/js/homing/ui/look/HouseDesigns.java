@@ -7,11 +7,13 @@ import hue.captains.singapura.js.homing.design.semantic.Dressed;
 import hue.captains.singapura.js.homing.design.semantic.FlattenDesign;
 import hue.captains.singapura.js.homing.design.semantic.ReadDesigns;
 import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The designs of the house's design branches, as a page has them (RFC 0067, appendix Virtual Leaves and Designs):
@@ -24,11 +26,11 @@ public record HouseDesigns() implements StatelessFunctionalObject {
     public static final HouseDesigns INSTANCE = new HouseDesigns();
 
     /** Every design on the classpath of the house's branches. */
-    public List<DesignRead> all() { return Read.ALL; }
+    public List<DesignRead> all() { return read(); }
 
     /** A design as read. */
     public DesignRead of(Design<?, ?> design) {
-        for (DesignRead d : Read.ALL) if (d.design().equals(design)) return d;
+        for (DesignRead d : read()) if (d.design().equals(design)) return d;
         throw new IllegalArgumentException(design.token() + " is no design on the classpath of the house's branches");
     }
 
@@ -46,10 +48,14 @@ public record HouseDesigns() implements StatelessFunctionalObject {
     /** Each design's sheet in each theme, flattened the first time it is asked for. */
     private static final Map<String, String> SHEETS = new ConcurrentHashMap<>();
 
-    /** The designs, read the first time any is asked for. */
-    private static final class Read {
-        private Read() {}
-        static final List<DesignRead> ALL =
-                ReadDesigns.INSTANCE.read(InstalledStyling.get().taxonomy(), InstalledStyling.get().themes().values(), HouseDesigns.class.getClassLoader());
+    /** The designs, read the first time any is asked for once a styling is installed - asked before, refused, and read when asked again. */
+    private static final AtomicReference<List<DesignRead>> READ = new AtomicReference<>();
+
+    private static List<DesignRead> read() {
+        List<DesignRead> all = READ.get();
+        if (all != null) return all;
+        Styling styling = InstalledStyling.get();
+        READ.compareAndSet(null, ReadDesigns.INSTANCE.read(styling.taxonomy(), styling.themes().values(), HouseDesigns.class.getClassLoader()));
+        return READ.get();
     }
 }
