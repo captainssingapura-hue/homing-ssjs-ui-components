@@ -1,2 +1,2 @@
-/* grid-cell: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The grid's cell in the base layer: no look of its own - what it holds draws, its place the split grid's; every style's alike. */
 .styled-grid-cell {}

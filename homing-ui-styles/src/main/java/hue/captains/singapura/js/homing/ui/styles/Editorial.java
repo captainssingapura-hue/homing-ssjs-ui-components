@@ -64,6 +64,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.List;
@@ -157,5 +158,8 @@ public record Editorial() implements Derives<ColorScheme.Base, Base> {
             // track
             new ColorImports<>(HouseMarks.SliderGroove.INSTANCE, new WashSoft(), new GrooveEdge()),
             new ColorImports<>(HouseMarks.ToggleGroove.INSTANCE, new WashSoft(), new GrooveEdge(), new Accent()),
-            new ColorImports<>(HouseMarks.Fill.INSTANCE, new Accent()));
+            new ColorImports<>(HouseMarks.Fill.INSTANCE, new Accent()),
+            // region
+            new ColorImports<>(HouseRegions.Quote.INSTANCE, new TextFaded(), new Border()),
+            new ColorImports<>(HouseRegions.CodeBlock.INSTANCE, new Text(), new Recessed(), new Border()));
 }

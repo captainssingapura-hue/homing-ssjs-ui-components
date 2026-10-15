@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.Set;
@@ -66,8 +67,14 @@ public final class HouseFamilies {
     public static final Set<Component<?>> MARKS = Set.of(HouseMarks.Separator.INSTANCE, HouseMarks.Lamp.INSTANCE,
             HouseMarks.Detent.INSTANCE, HouseMarks.Tick.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items and the marks. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS);
+    /**
+     * The regions each style draws its own way: a section's room, a quote's rule, a block of code's corner. A widget slot,
+     * a table and a grid's cell have no look of their own, and are Base's.
+     */
+    public static final Set<Component<?>> REGIONS = Set.of(HouseRegions.Section.INSTANCE, HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks and the regions. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {
