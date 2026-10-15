@@ -86,8 +86,17 @@ public final class HouseFamilies {
     public static final Set<Component<?>> BARS = Set.of(HouseContainers.SiteBar.INSTANCE, HouseContainers.TitleBar.INSTANCE,
             HouseContainers.PanelBar.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseContainers.TabStrip.INSTANCE, HouseContainers.EdgeStrip.INSTANCE);
 
-    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks, the regions, the surfaces and the bars. */
-    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS, SURFACES, BARS);
+    /** The panes each style draws its own way: a floating pane. A dialog has no look of its own, and is Base's. */
+    public static final Set<Component<?>> PANES = Set.of(HouseContainers.FloatingPane.INSTANCE);
+
+    /** The layers each style draws its own way: the scrim's veil, the float layer's desk. */
+    public static final Set<Component<?>> LAYERS = Set.of(HouseContainers.Scrim.INSTANCE, HouseContainers.FloatLayer.INSTANCE);
+
+    /** The menus each style draws its own way: the context menu's frame. */
+    public static final Set<Component<?>> MENUS = Set.of(HouseContainers.ContextMenu.INSTANCE);
+
+    /** What every house style draws its own way so far: the buttons, the ways, the text, the inputs, the tracks, the handles, the selectors, the cards, the items, the marks, the regions, the surfaces, the bars, the panes, the layers and the menus. */
+    public static final Set<Component<?>> DRAWN = union(BUTTONS, WAYS, TEXTS, INPUTS, TRACKS, HANDLES, SELECTORS, CARDS, ITEMS, MARKS, REGIONS, SURFACES, BARS, PANES, LAYERS, MENUS);
 
     @SafeVarargs
     private static Set<Component<?>> union(Set<Component<?>>... families) {

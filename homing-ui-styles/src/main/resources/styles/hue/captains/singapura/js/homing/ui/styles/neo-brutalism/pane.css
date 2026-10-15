@@ -1,0 +1,27 @@
+/* The floating pane in neo-brutalism: a pane over the page - raised, framed, its corner the style's, casting its shadow; the current one ringed; lit and lifted under the hand through its head, lifted further while in it. Whole: every property its look has (D9). */
+.styled-floating-pane {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 0;
+    box-shadow: 12px 12px 0 var(--fp-inverted);
+    transform: none;
+    transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
+
+    &.styled-floating-pane--current {
+        border-color: var(--fp-ring);
+        box-shadow: 12px 12px 0 var(--fp-inverted), 0 0 0 4px var(--fp-title);
+    }
+
+    &.styled-floating-pane--highlighted {
+        box-shadow: 8px 8px 0 var(--fp-inverted);
+        transform: translate(-2px, -2px);
+    }
+
+    &.styled-floating-pane--dragging {
+        box-shadow: 10px 10px 0 var(--fp-inverted);
+        transform: translate(-4px, -4px);
+    }
+}

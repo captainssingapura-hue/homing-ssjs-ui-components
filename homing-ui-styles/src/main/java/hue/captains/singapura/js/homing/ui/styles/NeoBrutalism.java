@@ -177,5 +177,11 @@ public record NeoBrutalism() implements Derives<ColorScheme.Base, Base> {
             new ColorImports<>(HouseContainers.TabStrip.INSTANCE, new Raised(), new Accent(), new AccentTintHint()),
             new ColorImports<>(HouseContainers.SiteBar.INSTANCE, new Inverted(), new OnBar(), new Accent()),
             new ColorImports<>(HouseContainers.TitleBar.INSTANCE, new Inverted(), new OnInverted(), new OnBar(), new Border(), new Title()),
-            new ColorImports<>(HouseContainers.PanelBar.INSTANCE, new Accent()));
+            new ColorImports<>(HouseContainers.PanelBar.INSTANCE, new Accent()),
+            // pane
+            new ColorImports<>(HouseContainers.FloatingPane.INSTANCE, new Raised(), new Inverted(), new Text(), new Border(), new Title(), new Ring()),
+            // layer
+            new ColorImports<>(HouseContainers.FloatLayer.INSTANCE, new Recessed()),
+            // menu
+            new ColorImports<>(HouseContainers.ContextMenu.INSTANCE, new Raised(), new Inverted(), new Text(), new Border()));
 }

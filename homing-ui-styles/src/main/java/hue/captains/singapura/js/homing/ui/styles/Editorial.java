@@ -25,6 +25,10 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerPressed;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWash;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWriting;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowGentle;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowLow;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowSoft;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowTrace;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GrooveEdge;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Ground;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Hairline;
@@ -180,5 +184,11 @@ public record Editorial() implements Derives<ColorScheme.Base, Base> {
             new ColorImports<>(HouseContainers.TabStrip.INSTANCE, new Raised(), new Accent(), new AccentTintHint()),
             new ColorImports<>(HouseContainers.SiteBar.INSTANCE, new Inverted(), new OnBar(), new Accent()),
             new ColorImports<>(HouseContainers.TitleBar.INSTANCE, new Inverted(), new OnInverted(), new OnBar(), new Border(), new Title()),
-            new ColorImports<>(HouseContainers.PanelBar.INSTANCE, new Accent()));
+            new ColorImports<>(HouseContainers.PanelBar.INSTANCE, new Accent()),
+            // pane
+            new ColorImports<>(HouseContainers.FloatingPane.INSTANCE, new Raised(), new Text(), new Border(), new Ring(), new ShadeSolid(), new ShadeDense(), new GlowTrace(), new GlowLow(), new GlowGentle(), new GlowSoft()),
+            // layer
+            new ColorImports<>(HouseContainers.FloatLayer.INSTANCE, new Recessed()),
+            // menu
+            new ColorImports<>(HouseContainers.ContextMenu.INSTANCE, new Raised(), new Text(), new Border(), new ShadeSolid(), new ShadeDense()));
 }

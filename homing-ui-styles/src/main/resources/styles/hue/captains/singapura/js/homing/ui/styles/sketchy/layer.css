@@ -1,0 +1,12 @@
+/* The scrim in sketchy: the veil over the page behind a dialog - nothing of its own drawn, what is behind it left as it is. Whole: every property its look has (D9). */
+.styled-scrim {
+    color: inherit;
+    background-color: transparent;
+    backdrop-filter: none;
+}
+
+/* The float layer in sketchy: the desk floating panes are stacked on - recessed below the page. The keys' marks on it draw nothing, as before. Whole: every property its look has (D9). */
+.styled-float-layer {
+    color: inherit;
+    background-color: var(--fp-recessed);
+}

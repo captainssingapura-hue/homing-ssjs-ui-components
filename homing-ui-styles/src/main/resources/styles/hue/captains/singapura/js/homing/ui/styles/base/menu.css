@@ -1,2 +1,15 @@
-/* context-menu: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-context-menu {}
+/* The context menu in the base layer: a menu opened where it is asked - raised, framed, its corner square, casting nothing, in the face it is opened on; its items and their lines its parts'. Whole: every property its look has (D9). */
+.styled-context-menu {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0;
+    box-shadow: none;
+    padding-block: 6px;
+    gap: 2px;
+    min-width: 200px;
+    font-family: inherit;
+    user-select: none;
+}

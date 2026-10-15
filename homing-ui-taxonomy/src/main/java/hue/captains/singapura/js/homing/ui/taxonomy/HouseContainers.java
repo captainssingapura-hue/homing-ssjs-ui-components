@@ -109,6 +109,8 @@ public final class HouseContainers {
         public static final FloatingPane INSTANCE = new FloatingPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
+        /** The current one, lit under the hand through its head, and in the hand - each its script's to say (D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.Highlighted.INSTANCE, HouseStates.Dragging.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(TitleBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional());
         }

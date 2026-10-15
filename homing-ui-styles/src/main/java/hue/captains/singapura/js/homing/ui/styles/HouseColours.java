@@ -56,7 +56,7 @@ public record HouseColours() implements ColorSource {
             Border, GrooveEdge, LineHovered,
             Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentTintHint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
             ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeModerate, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, ShadeSolid, ShadeThick, ShadeDense, ShadeDark, ShadeDarker, ShadeDarkest, SheenSoft, Sheen,
-            GlowFaint, GlowDim, GlowSoft, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
+            GlowTrace, GlowFaint, GlowLow, GlowDim, GlowGentle, GlowSoft, GlowMild, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
 
     public record Surfaces() implements L1_ColorBranch<Base> {}
     public record Inks() implements L1_ColorBranch<Base> {}
@@ -206,12 +206,20 @@ public record HouseColours() implements ColorSource {
     public record SheenSoft() implements Palettable<Base, Shadows>, HouseColour {}
     /** The raised layer's sheen, at 60%: a glass edge lit from above. */
     public record Sheen() implements Palettable<Base, Shadows>, HouseColour {}
+    /** The house colour glowing at 12%: a pane lit under the hand. */
+    public record GlowTrace() implements Palettable<Base, Shadows>, HouseColour {}
     /** The house colour glowing faintly - 14% - a fine line of light. */
     public record GlowFaint() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 20%: a pane in the hand. */
+    public record GlowLow() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 25%. */
     public record GlowDim() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 28%: the current pane's fine ring. */
+    public record GlowGentle() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 30%. */
     public record GlowSoft() implements Palettable<Base, Shadows>, HouseColour {}
+    /** At 35%: the current pane's ring, moulded. */
+    public record GlowMild() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 40%. */
     public record GlowMedium() implements Palettable<Base, Shadows>, HouseColour {}
     /** At 45%. */
@@ -309,7 +317,7 @@ public record HouseColours() implements ColorSource {
                 new Whole(), new Soft(), new Quiet(), new Muted(), new Hairline(),
                 new Title(), new Accent(), new AccentEdge(), new Ring(), new AccentTint(), new AccentTintFaint(), new AccentTintHint(), new AccentWash(), new AccentWashFaint(), new AccentWashLight(), new AccentWashSoft(), new AccentWashStrong(), new KeysCandidate(), new KeysLent(),
                 new ShadeFaint(), new ShadeLight(), new ShadeSoft(), new ShadeMedium(), new ShadeModerate(), new ShadeFirm(), new ShadeStrong(), new ShadeDeep(), new ShadeHeavy(), new ShadeSolid(), new ShadeThick(), new ShadeDense(), new ShadeDark(), new ShadeDarker(), new ShadeDarkest(), new SheenSoft(), new Sheen(),
-                new GlowFaint(), new GlowDim(), new GlowSoft(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),
+                new GlowTrace(), new GlowFaint(), new GlowLow(), new GlowDim(), new GlowGentle(), new GlowSoft(), new GlowMild(), new GlowMedium(), new GlowWarm(), new GlowStrong(), new GlowBright(), new GlowFull(), new GlowFlare(),
                 new Danger(), new DangerPressed(), new DangerTint(), new DangerEdge(),
                 new DangerWash(), new WarningWash(), new SuccessWash(),
                 new WarningTint(), new SuccessTint(),

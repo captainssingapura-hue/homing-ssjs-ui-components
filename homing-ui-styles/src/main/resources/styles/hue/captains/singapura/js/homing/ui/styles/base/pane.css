@@ -1,5 +1,19 @@
-/* dialog: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The dialog in the base layer: no look of its own - its veil, its window and its row of actions draw; every style's alike. */
 .styled-dialog {}
 
-/* floating-pane: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
-.styled-floating-pane {}
+/* The floating pane in the base layer: a pane over the page - raised, framed, its corner square, casting nothing; the current one ringed. Whole: every property its look has (D9). */
+.styled-floating-pane {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    transition: none;
+
+    &.styled-floating-pane--current {
+        border-color: var(--fp-ring);
+    }
+}

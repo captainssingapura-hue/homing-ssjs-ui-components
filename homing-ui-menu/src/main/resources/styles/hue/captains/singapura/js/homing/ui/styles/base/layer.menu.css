@@ -1,2 +1,2 @@
-/* context-menu-steward: not yet drawn on files (RFC 0067, appendix Two Classes per Leaf, phase 5) - its family moves here in turn. */
+/* The menus' steward in the base layer: no look of its own - the layer its menus open on, which they draw; every style's alike. */
 .styled-context-menu-steward {}

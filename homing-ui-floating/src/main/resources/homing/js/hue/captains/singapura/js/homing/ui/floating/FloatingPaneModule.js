@@ -65,12 +65,16 @@ class FloatingPaneClose {
 var _MIN_W = 160, _MIN_H = 96;
 var _KEEP = 48;          // how much of the head must stay within the desk, inline
 
+/** A flag of the pane's or its head's: reflected by its attribute, and its state's class (D12). */
+function _fpFlag(name, value, state) { return Object.freeze({ values: Object.freeze([false, true]), rest: false, state: state,
+    reflect: function (el, on) { if (on) el.setAttribute(name, value); else el.removeAttribute(name); } }); }
 /** A floating pane's head: the house's title bar, which nothing realizes on its own - the pane draws it here; in the hand while the pane is moved by it. */
-const _TITLE_BAR = Object.freeze({ LEAF: "title-bar", AXES: Object.freeze({ dragging: Object.freeze({ values: Object.freeze([false, true]), rest: false,
-    reflect: function (el, on) { FloatingPane._reflect(el, "data-dragging", on); }, state: STATE.DRAGGING }) }) });
+const _TITLE_BAR = Object.freeze({ LEAF: "title-bar", AXES: Object.freeze({ dragging: _fpFlag("data-dragging", "", STATE.DRAGGING) }) });
 
 class FloatingPane {
     static LEAF = "floating-pane";
+    static AXES = Object.freeze({ current: _fpFlag("aria-current", "true", STATE.CURRENT), highlighted: _fpFlag("data-highlighted", "", STATE.HIGHLIGHTED),
+                                  dragging: _fpFlag("data-dragging", "", STATE.DRAGGING) });
 
     constructor(branch, opts) {
         if (!branch) throw new Error("[FloatingPane] a branch of its own is required");
@@ -87,13 +91,13 @@ class FloatingPane {
         this._minH = opts.minH == null ? _MIN_H : Math.max(24, opts.minH | 0);
         this._x = 0; this._y = 0; this._w = this._minW; this._h = this._minH;
         this._size = 0;
-        this._over = false; this._held = false;
+        this._over = false; this._held = false; this._active = false;
         this._label = "";
         this._handle = null;   // an element of the holder's that moves the frame, when there is no head
 
         var frame = branch.createElement("frame", "section");
         css.addClass(frame, fp_frame);
-        new Look(FloatingPane, ROLE.STANDALONE).wear(frame);   // a pane that floats - a dialog's window is one - in the house's look
+        (this._look = new Look(FloatingPane, ROLE.STANDALONE)).wear(frame);   // a pane that floats - a dialog's window is one - in the house's look
         frame.setAttribute("role", "region");
 
         this._icon = null; this._title = null; this._close = null; this._closer = null;
@@ -203,7 +207,7 @@ class FloatingPane {
         return this;
     }
 
-    setActive(on) { if (on) this.root.setAttribute("aria-current", "true"); else this.root.removeAttribute("aria-current"); return this; }
+    setActive(on) { this._active = !!on; this._lift(); return this; }
 
     size(s) {
         var n = Math.max(-1, Math.min(1, Number(s)));
@@ -254,11 +258,9 @@ class FloatingPane {
     }
 
     // ── the hand on the head: move ──────────────────────────────────────────
-    _lift() {   // in the hand: dragging; under the hand, through its head: lit from there; else nothing
-        FloatingPane._reflect(this.root, "data-dragging", this._held);
-        FloatingPane._reflect(this.root, "data-highlighted", this._over && !this._held);
+    _lift() {   // in the hand: dragging; under the hand, through its head: lit from there; the current one ringed
+        this._look.show(this.root, { current: this._active, highlighted: this._over && !this._held, dragging: this._held });
     }
-    static _reflect(el, name, on) { if (on) el.setAttribute(name, ""); else el.removeAttribute(name); }
     _armMove(el, accept) {
         var self = this;
         el.addEventListener("pointerenter", function () { self._over = true; self._lift(); });

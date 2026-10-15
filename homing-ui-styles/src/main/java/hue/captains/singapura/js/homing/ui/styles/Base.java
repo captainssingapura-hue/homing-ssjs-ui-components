@@ -192,5 +192,11 @@ public record Base() implements DesignStyle<ColorScheme.Base> {
             new ColorImports<>(HouseContainers.SiteBar.INSTANCE, new Inverted(), new OnBar(), new Accent()),
             new ColorImports<>(HouseContainers.TitleBar.INSTANCE, new Inverted(), new OnInverted(), new OnBar(), new Border(), new Title()),
             new ColorImports<>(HouseContainers.PanelBar.INSTANCE, new Accent()),
-            new ColorImports<>(HouseControls.Lip.INSTANCE, new Raised()));
+            new ColorImports<>(HouseControls.Lip.INSTANCE, new Raised()),
+            // pane
+            new ColorImports<>(HouseContainers.FloatingPane.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
+            // layer
+            new ColorImports<>(HouseContainers.FloatLayer.INSTANCE, new Recessed()),
+            // menu
+            new ColorImports<>(HouseContainers.ContextMenu.INSTANCE, new Raised(), new Text(), new Border()));
 }

@@ -17,6 +17,8 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowMedium;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowSoft;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowStrong;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Inverted;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.KeysCandidate;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.KeysLent;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.KickerInk;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Raised;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.Ring;
@@ -50,6 +52,9 @@ public record PanesColorImports() implements ColorImportsExtension {
 
     private static final List<StyleImports<?>> IMPORTS = List.of(
             new StyleImports<>(Base.class,
+                    // pane
+                    new ColorImports<>(HousePanes.MultiTabPane.INSTANCE, new Raised(), new Text(), new Accent(), new KeysCandidate(), new KeysLent()),
+                    new ColorImports<>(HousePanes.SingleTabPane.INSTANCE, new Raised(), new Text(), new Accent(), new KeysCandidate(), new KeysLent()),
                     // button
                     new ColorImports<>(HouseControls.PlainButton.INSTANCE, new Raised(), new Text(), new Border(), new Ring()),
                     // input

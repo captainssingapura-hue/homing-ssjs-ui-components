@@ -29,6 +29,7 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.DangerWriting;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowBright;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowDim;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowFaint;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowMild;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowSoft;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowStrong;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.GlowWarm;
@@ -187,5 +188,11 @@ public record NeoFuturism() implements Derives<ColorScheme.Base, Base> {
             new ColorImports<>(HouseContainers.TabStrip.INSTANCE, new Raised(), new Accent(), new AccentTintHint()),
             new ColorImports<>(HouseContainers.SiteBar.INSTANCE, new Inverted(), new OnBar(), new Accent()),
             new ColorImports<>(HouseContainers.TitleBar.INSTANCE, new Inverted(), new OnInverted(), new OnBar(), new Border(), new Title()),
-            new ColorImports<>(HouseContainers.PanelBar.INSTANCE, new Accent()));
+            new ColorImports<>(HouseContainers.PanelBar.INSTANCE, new Accent()),
+            // pane
+            new ColorImports<>(HouseContainers.FloatingPane.INSTANCE, new Raised(), new Text(), new Border(), new Title(), new Ring(), new ShadeSoft(), new ShadeThick(), new GlowSoft(), new GlowMild(), new GlowStrong(), new GlowBright()),
+            // layer
+            new ColorImports<>(HouseContainers.FloatLayer.INSTANCE, new Recessed()),
+            // menu
+            new ColorImports<>(HouseContainers.ContextMenu.INSTANCE, new Raised(), new Text(), new Border(), new ShadeThick(), new GlowSoft()));
 }
