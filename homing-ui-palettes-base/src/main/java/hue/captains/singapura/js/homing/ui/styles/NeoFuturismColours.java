@@ -19,6 +19,8 @@ import java.util.Optional;
  */
 public record NeoFuturismColours() implements ColorPalette<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final NeoFuturismColours INSTANCE = new NeoFuturismColours();
 
     @Override public String inspiration() { return "Deep space and one electric cyan, every edge a filament."; }

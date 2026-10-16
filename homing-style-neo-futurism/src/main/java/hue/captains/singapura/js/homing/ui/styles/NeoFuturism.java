@@ -10,6 +10,8 @@ import java.util.List;
 /** Neo-futurism: a hairline, a lit rim that glows under the hand, a long eased glide. */
 public record NeoFuturism() implements Derives<BaseScheme, Base> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final NeoFuturism INSTANCE = new NeoFuturism();
 
     @Override public String group() { return "Expressive"; }

@@ -13,6 +13,8 @@ import java.util.List;
  */
 public record Sketchy() implements Derives<BaseScheme, Base> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Sketchy INSTANCE = new Sketchy();
 
     @Override public String group() { return "Expressive"; }

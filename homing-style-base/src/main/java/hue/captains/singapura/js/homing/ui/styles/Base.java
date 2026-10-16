@@ -17,6 +17,8 @@ import java.util.List;
  */
 public record Base() implements DesignStyle<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Base INSTANCE = new Base();
 
     /** None: its look is in its classes (appendix The Style Jars); the walk's typed answers retire. */

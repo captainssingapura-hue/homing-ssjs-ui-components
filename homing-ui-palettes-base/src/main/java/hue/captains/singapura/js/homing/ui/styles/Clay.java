@@ -19,6 +19,8 @@ import java.util.Optional;
  */
 public record Clay() implements ColorPalette<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Clay INSTANCE = new Clay();
 
     @Override public String inspiration() { return "One grey-blue clay, the raised layer the same colour as the page."; }

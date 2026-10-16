@@ -8,6 +8,8 @@ import java.util.List;
 /** Editorial, the house's own: a serif voice, a fine rule, a soft lift under the hand. */
 public record Editorial() implements Derives<BaseScheme, Base> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Editorial INSTANCE = new Editorial();
 
     @Override public String group() { return "Neutral"; }

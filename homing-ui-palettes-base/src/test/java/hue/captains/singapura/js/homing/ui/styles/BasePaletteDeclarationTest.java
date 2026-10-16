@@ -1,6 +1,8 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
+import hue.captains.singapura.js.homing.design.semantic.CheckScheme;
+import hue.captains.singapura.js.homing.design.semantic.SchemeRegistry;
 import hue.captains.singapura.js.homing.design.styling.PaletteRegistry;
 import org.junit.jupiter.api.Test;
 
@@ -25,13 +27,14 @@ class BasePaletteDeclarationTest {
         for (ColorPalette<?> p : palettes) {
             assertTrue(names.add(p.token()), p.token() + " declared twice");
             assertEquals(List.of(), BaseColours.TREE.check(p), p.token() + ": whole over the base, sitting on nothing");
+            assertEquals(List.of(), CheckScheme.INSTANCE.says(p), p.token() + ": saying the scheme its type names (D49)");
         }
     }
 
     @Test
-    void theJar_aSubRegistryOfItsOwn_itsSchemeReadByTheReaderFoundByName() {
-        PaletteRegistry registry = PaletteRegistry.of(List.of(BasePaletteDeclaration.INSTANCE));
-        assertEquals(List.of(BaseScheme.class), List.copyOf(registry.trees().keySet()), "BaseScheme, read by BaseColours beside it (D47)");
+    void theJar_aSubRegistryOfItsOwn_overTheRegisteredBase() {
+        PaletteRegistry registry = PaletteRegistry.of(List.of(BasePaletteDeclaration.INSTANCE), SchemeRegistry.of(List.of(BaseColours.INSTANCE)));
+        assertEquals(List.of(BaseScheme.class), List.copyOf(registry.trees().keySet()), "BaseScheme, declared by BaseColours (D49)");
         assertEquals(BaseColours.TREE.nodes(), registry.tree(Harbour.INSTANCE).nodes());
     }
 }

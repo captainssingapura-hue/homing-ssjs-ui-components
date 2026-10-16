@@ -19,6 +19,8 @@ import java.util.Optional;
  */
 public record Frost() implements ColorPalette<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Frost INSTANCE = new Frost();
 
     @Override public String inspiration() { return "An aurora behind plates of frosted glass — white at a fraction, rimmed in light."; }

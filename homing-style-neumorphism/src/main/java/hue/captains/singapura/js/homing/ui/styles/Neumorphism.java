@@ -13,6 +13,8 @@ import java.util.List;
  */
 public record Neumorphism() implements Derives<BaseScheme, Base> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Neumorphism INSTANCE = new Neumorphism();
 
     @Override public String group() { return "Expressive"; }

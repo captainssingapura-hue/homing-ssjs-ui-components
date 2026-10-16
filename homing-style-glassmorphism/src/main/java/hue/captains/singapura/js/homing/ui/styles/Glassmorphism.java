@@ -10,6 +10,8 @@ import java.util.List;
 /** Glassmorphism: a rounded pane with a lit top edge, floating on a wide soft shadow. */
 public record Glassmorphism() implements Derives<BaseScheme, Base> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Glassmorphism INSTANCE = new Glassmorphism();
 
     @Override public String group() { return "Expressive"; }

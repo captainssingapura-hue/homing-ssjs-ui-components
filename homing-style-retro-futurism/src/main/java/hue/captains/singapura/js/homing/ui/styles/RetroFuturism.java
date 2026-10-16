@@ -10,6 +10,8 @@ import java.util.List;
 /** Retro-futurism: a neon ring that flares under the hand, and motion in steps, as a screen of the period moved. */
 public record RetroFuturism() implements Derives<BaseScheme, Base> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final RetroFuturism INSTANCE = new RetroFuturism();
 
     @Override public String group() { return "Expressive"; }

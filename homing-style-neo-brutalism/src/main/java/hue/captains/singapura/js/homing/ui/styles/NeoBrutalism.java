@@ -10,6 +10,8 @@ import java.util.List;
 /** Neo-brutalism: square, a heavy rule, a hard offset shadow, and a press that drops into it. */
 public record NeoBrutalism() implements Derives<BaseScheme, Base> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final NeoBrutalism INSTANCE = new NeoBrutalism();
 
     @Override public String group() { return "Expressive"; }

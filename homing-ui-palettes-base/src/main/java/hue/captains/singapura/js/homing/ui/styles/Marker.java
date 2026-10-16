@@ -14,6 +14,8 @@ import java.util.Optional;
  */
 public record Marker() implements ColorPalette<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Marker INSTANCE = new Marker();
 
     @Override public String inspiration() { return "Black marker on white paper, and a red pen for what is being pointed at."; }

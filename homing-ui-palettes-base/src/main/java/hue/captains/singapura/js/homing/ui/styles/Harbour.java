@@ -15,6 +15,8 @@ import java.util.Optional;
  */
 public record Harbour() implements ColorPalette<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Harbour INSTANCE = new Harbour();
 
     @Override public String inspiration() { return "The house colours — navy and gold on a cool white page."; }

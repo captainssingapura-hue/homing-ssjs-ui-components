@@ -15,6 +15,8 @@ import java.util.Optional;
  */
 public record Forest() implements ColorPalette<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Forest INSTANCE = new Forest();
 
     @Override public String inspiration() { return "Green and earth tones, with honey for the accents."; }

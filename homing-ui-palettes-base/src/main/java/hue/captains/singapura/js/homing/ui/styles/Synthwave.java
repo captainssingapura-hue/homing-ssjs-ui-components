@@ -17,6 +17,8 @@ import java.util.Optional;
  */
 public record Synthwave() implements ColorPalette<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final Synthwave INSTANCE = new Synthwave();
 
     @Override public String inspiration() { return "A magenta sun over a cyan grid — the colours of a 1984 that never happened."; }

@@ -23,6 +23,8 @@ import java.util.Optional;
  */
 public record NeoBrutalismColours() implements ColorPalette<BaseScheme> {
 
+    @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
+
     public static final NeoBrutalismColours INSTANCE = new NeoBrutalismColours();
 
     @Override public String inspiration() { return "A riso-print order form — ink on newsprint, one loud yellow."; }
