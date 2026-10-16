@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.ui.styles;
 
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
+import hue.captains.singapura.js.homing.design.styles.PaletteDeclaration;
 import hue.captains.singapura.js.homing.design.styles.StyleDeclaration;
 import hue.captains.singapura.js.homing.design.styles.editorial.EditorialStyleDeclaration;
 import hue.captains.singapura.js.homing.design.styles.glassmorphism.GlassmorphismStyleDeclaration;
@@ -42,8 +43,9 @@ import java.util.Map;
  * Semantic Colours and Flavours, D22) - a pairing neither a style nor a palette may know.
  *
  * <p>A site whose own jars bring castings of their own, or implement a style for the house's components, hands their
- * declarations in ({@link #styling(List)}): each joins the registration of every style it provides for. A site hands
- * the styling to its MPA, which installs it at bootstrap.</p>
+ * declarations in ({@link #styling(List)}): each joins the registration of every style it provides for. A site with a
+ * jar of palettes of its own hands its declaration in too ({@link #styling(List, List)}), registered after the house's.
+ * A site hands the styling to its MPA, which installs it at bootstrap.</p>
  *
  * <p>Its jar carries the house's family files, for reading: written when it is built (WriteStyleFamilies), served by a
  * deployed site from the classpath (StyleFamilies).</p>
@@ -84,21 +86,24 @@ public record HouseStyles() implements StylingInstance {
             RetroFuturism.INSTANCE, Synthwave.INSTANCE,
             Sketchy.INSTANCE, Marker.INSTANCE);
 
-    /** The palettes: the styles' own in the styles' order, then those that are no style's own. */
-    public static final List<ColorPalette<BaseScheme>> PALETTES = List.of(
-            Harbour.INSTANCE, NeoBrutalismColours.INSTANCE, NeoFuturismColours.INSTANCE, Clay.INSTANCE,
-            Frost.INSTANCE, Synthwave.INSTANCE, Marker.INSTANCE, Forest.INSTANCE);
+    /** The house's jars of palettes, each by its declaration: the base scheme's eight, Harbour first and so the default. */
+    public static final List<PaletteDeclaration> PALETTE_JARS = List.of(BasePaletteDeclaration.INSTANCE);
 
     /** The house's own instance, nothing a site adds: registered the first time it is asked for, and the same after. */
     @Override public Styling styling() { return House.STYLING; }
 
     /** The house's instance with a site's own jars: each joins the registration of every style it provides for. */
-    public Styling styling(List<StyleDeclaration> more) {
+    public Styling styling(List<StyleDeclaration> more) { return styling(more, List.of()); }
+
+    /** As {@link #styling(List)}, with a site's own jars of palettes, each registered by its declaration after the house's. */
+    public Styling styling(List<StyleDeclaration> more, List<PaletteDeclaration> morePalettes) {
         var registrations = new ArrayList<StyleRegistration>();
         registrations.add(registration(Base.INSTANCE, BASE_JARS, more));
         for (DesignStyle<BaseScheme> s : STYLES) registrations.add(registration(s, List.of(STYLE_JARS.get(s)), more));
         StyleManager manager = StyleManager.of(HouseTaxonomy.INSTANCE.read(), List.of(HouseColours.INSTANCE), registrations);
-        return new Styling(manager, List.copyOf(STYLES), List.copyOf(PALETTES), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
+        var palettes = new ArrayList<PaletteDeclaration>(PALETTE_JARS);
+        palettes.addAll(morePalettes);
+        return new Styling(manager, List.copyOf(STYLES), palettes, new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
     }
 
     private static StyleRegistration registration(DesignStyle<?> style, List<StyleDeclaration> jars, List<StyleDeclaration> more) {

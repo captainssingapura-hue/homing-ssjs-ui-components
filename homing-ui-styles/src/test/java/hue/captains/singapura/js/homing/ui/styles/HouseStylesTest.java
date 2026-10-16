@@ -82,11 +82,11 @@ class HouseStylesTest {
     @Test
     void theHouseColourTree_reads_andEveryPaletteIsWholeOverIt() {
         var tree = HouseColours.TREE;
-        for (ColorPalette<BaseScheme> p : HouseStyles.PALETTES) {
+        for (ColorPalette<?> p : HouseStyles.INSTANCE.styling().palettes()) {
             assertEquals(List.of(), tree.check(p), p.token());
             assertEquals(69, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the primary's and the secondary's neutral grounds (D41), a floating pane's glows, the ink on a dark bar, a hint of the accent, an edge strip's shades, the inks among them, danger's, warning's, success's and the one on danger the palette's (D32), the text's faded, a heading's and a kicker's, the washes under code, a pill and a badge, the keys' marks, a groove's edge, a tab's washes and shadows, an item's current and pointed, the scrollbar's thumb, a panel's shades and sheen among them");
         }
-        assertEquals(8, HouseStyles.PALETTES.size());
+        assertEquals(8, HouseStyles.INSTANCE.styling().palettes().size(), "the base scheme's jar of palettes, by its declaration");
     }
 
     @Test
@@ -138,6 +138,6 @@ class HouseStylesTest {
         assertEquals("neumorphism", styles.slug(styles.dressed("neumorphism_clay")), "a style in its own palette is named alone");
         assertEquals(56, styles.themes().size(), "seven styles, each in eight palettes: every house palette is of the base, as every house style (D22)");
         for (DesignStyle<?> s : HouseStyles.STYLES)
-            assertTrue(HouseStyles.PALETTES.contains(styles.own(s)), s.token() + " has a palette of its own among the house's");
+            assertTrue(styles.palettes().contains(styles.own(s)), s.token() + " has a palette of its own among the house's");
     }
 }
