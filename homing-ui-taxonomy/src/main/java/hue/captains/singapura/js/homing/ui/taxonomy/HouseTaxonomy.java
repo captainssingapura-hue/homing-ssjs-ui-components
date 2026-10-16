@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ReadTaxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
+import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtensions;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
@@ -88,5 +89,15 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
                 extensions.roles(HouseTaxonomy.class, HouseRoleCatalogue.INSTANCE.roles()),
                 extensions.states(HouseTaxonomy.class, HouseStates.ALL),
                 extensions.events(HouseTaxonomy.class, HouseEvents.ALL));
+    }
+
+    /**
+     * The house's taxonomy with the extensions an instance registers, explicitly and in the order registered - each
+     * declaring its own components, roles, states and events - and nothing found on the classpath. Refused when an
+     * extension extends another taxonomy, is registered twice, or declares what the tree cannot read.
+     */
+    public Taxonomy read(List<? extends TaxonomyExtension> extensions) {
+        return TaxonomyExtensions.INSTANCE.read(HouseTaxonomy.class, common(), HouseRoleCatalogue.INSTANCE.roles(),
+                HouseStates.ALL, HouseEvents.ALL, extensions);
     }
 }
