@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.styles.StyleDeclaration;
@@ -61,12 +60,12 @@ public record HouseStyles() implements StylingInstance {
             UiPreferencesStyleDeclaration.INSTANCE, MpaStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE);
 
     /** The styles, the house's own first: it is the default. */
-    public static final List<DesignStyle<ColorScheme.Base>> STYLES = List.of(
+    public static final List<DesignStyle<BaseScheme>> STYLES = List.of(
             Editorial.INSTANCE, NeoBrutalism.INSTANCE, NeoFuturism.INSTANCE, Neumorphism.INSTANCE,
             Glassmorphism.INSTANCE, RetroFuturism.INSTANCE, Sketchy.INSTANCE);
 
     /** Each style's own jar. */
-    public static final Map<DesignStyle<ColorScheme.Base>, StyleDeclaration> STYLE_JARS = Map.of(
+    public static final Map<DesignStyle<BaseScheme>, StyleDeclaration> STYLE_JARS = Map.of(
             Editorial.INSTANCE, EditorialStyleDeclaration.INSTANCE,
             NeoBrutalism.INSTANCE, NeoBrutalismStyleDeclaration.INSTANCE,
             NeoFuturism.INSTANCE, NeoFuturismStyleDeclaration.INSTANCE,
@@ -76,7 +75,7 @@ public record HouseStyles() implements StylingInstance {
             Sketchy.INSTANCE, SketchyStyleDeclaration.INSTANCE);
 
     /** Each style's own palette, the one it is worn in unless another is asked for - the old designs' own colours. */
-    public static final Map<DesignStyle<ColorScheme.Base>, ColorPalette<ColorScheme.Base>> OWN = Map.of(
+    public static final Map<DesignStyle<BaseScheme>, ColorPalette<BaseScheme>> OWN = Map.of(
             Editorial.INSTANCE, Harbour.INSTANCE,
             NeoBrutalism.INSTANCE, NeoBrutalismColours.INSTANCE,
             NeoFuturism.INSTANCE, NeoFuturismColours.INSTANCE,
@@ -86,7 +85,7 @@ public record HouseStyles() implements StylingInstance {
             Sketchy.INSTANCE, Marker.INSTANCE);
 
     /** The palettes: the styles' own in the styles' order, then those that are no style's own. */
-    public static final List<ColorPalette<ColorScheme.Base>> PALETTES = List.of(
+    public static final List<ColorPalette<BaseScheme>> PALETTES = List.of(
             Harbour.INSTANCE, NeoBrutalismColours.INSTANCE, NeoFuturismColours.INSTANCE, Clay.INSTANCE,
             Frost.INSTANCE, Synthwave.INSTANCE, Marker.INSTANCE, Forest.INSTANCE);
 
@@ -97,8 +96,8 @@ public record HouseStyles() implements StylingInstance {
     public Styling styling(List<StyleDeclaration> more) {
         var registrations = new ArrayList<StyleRegistration>();
         registrations.add(registration(Base.INSTANCE, BASE_JARS, more));
-        for (DesignStyle<ColorScheme.Base> s : STYLES) registrations.add(registration(s, List.of(STYLE_JARS.get(s)), more));
-        StyleManager manager = StyleManager.of(HouseTaxonomy.INSTANCE.read(), HouseColours.TREE, registrations);
+        for (DesignStyle<BaseScheme> s : STYLES) registrations.add(registration(s, List.of(STYLE_JARS.get(s)), more));
+        StyleManager manager = StyleManager.of(HouseTaxonomy.INSTANCE.read(), List.of(HouseColours.INSTANCE), registrations);
         return new Styling(manager, List.copyOf(STYLES), List.copyOf(PALETTES), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
     }
 

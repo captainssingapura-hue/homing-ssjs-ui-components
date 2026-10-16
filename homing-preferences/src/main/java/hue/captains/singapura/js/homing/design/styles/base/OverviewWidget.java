@@ -1,10 +1,10 @@
 package hue.captains.singapura.js.homing.design.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 /**
@@ -12,8 +12,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
  * between them draw; every style's alike.
  */
 public record OverviewWidget()
-        implements CastingStyle<ColorScheme.Base, Base, HousePreferences.OverviewWidget, RoleRoot> {
-    @Override public StylingRes<ColorScheme.Base, HousePreferences.OverviewWidget> style() {
+        implements CastingStyle<BaseScheme, Base, HousePreferences.OverviewWidget, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HousePreferences.OverviewWidget> style() {
         return new StylingRes.CssContent<>();
     }
 }

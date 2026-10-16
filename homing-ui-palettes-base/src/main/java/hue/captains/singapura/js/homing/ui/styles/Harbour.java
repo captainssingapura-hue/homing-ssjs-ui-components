@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
@@ -14,7 +13,7 @@ import java.util.Optional;
  * ring is gold. Editorial's own; flat and quiet enough for the moulded, the drawn and the chromed,
  * as the old Harbour said - so it suits Neumorphism, Sketchy and Neo-futurism too.
  */
-public record Harbour() implements ColorPalette<Base> {
+public record Harbour() implements ColorPalette<BaseScheme> {
 
     public static final Harbour INSTANCE = new Harbour();
 

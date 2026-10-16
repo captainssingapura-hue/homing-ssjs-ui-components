@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
@@ -22,7 +21,7 @@ import java.util.Optional;
  * design set it black - legible (4.7:1 on the paper), and a question for the rule, not the
  * palette.</p>
  */
-public record NeoBrutalismColours() implements ColorPalette<Base> {
+public record NeoBrutalismColours() implements ColorPalette<BaseScheme> {
 
     public static final NeoBrutalismColours INSTANCE = new NeoBrutalismColours();
 

@@ -1,16 +1,16 @@
 package hue.captains.singapura.js.homing.design.styles.retrofuturism;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 
 /** RetroFuturism's list row choice: as its list row on its own, by delegation. */
 public record ListRowChoice()
-        implements CastingStyle<ColorScheme.Base, RetroFuturism, HouseItems.ListRow, HouseDoing.Choice> {
-    @Override public StylingRes<ColorScheme.Base, HouseItems.ListRow> style() {
+        implements CastingStyle<BaseScheme, RetroFuturism, HouseItems.ListRow, HouseDoing.Choice> {
+    @Override public StylingRes<BaseScheme, HouseItems.ListRow> style() {
         return new StylingRes.Delegation<>(new ListRow());
     }
 }

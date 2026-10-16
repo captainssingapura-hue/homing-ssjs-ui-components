@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.design.styles.base;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
@@ -13,8 +13,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
  * accent carried in by its degree, part of the way on a bar and whole in a tab; every style's alike. Whole: every
  * property its look has (D9).
  */
-public record IconKeys() implements CastingStyle<ColorScheme.Base, Base, HouseMarks.Icon, HouseSaying.Keys> {
-    @Override public StylingRes<ColorScheme.Base, HouseMarks.Icon> style() {
+public record IconKeys() implements CastingStyle<BaseScheme, Base, HouseMarks.Icon, HouseSaying.Keys> {
+    @Override public StylingRes<BaseScheme, HouseMarks.Icon> style() {
         return new StylingRes.CssContent<>(new HouseColours.KeysMark());
     }
 }

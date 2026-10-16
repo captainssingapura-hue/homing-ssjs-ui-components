@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.design.semantic.Writing;
@@ -9,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 import java.util.List;
 
 /** Neo-futurism: a hairline, a lit rim that glows under the hand, a long eased glide. */
-public record NeoFuturism() implements Derives<ColorScheme.Base, Base> {
+public record NeoFuturism() implements Derives<BaseScheme, Base> {
 
     public static final NeoFuturism INSTANCE = new NeoFuturism();
 

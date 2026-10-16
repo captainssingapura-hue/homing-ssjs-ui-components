@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.design.styles.editorial;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
@@ -13,8 +13,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
  * shadow, in the style's face; its items and their lines its parts'. Whole: every property its look has (D9).
  */
 public record ContextMenu()
-        implements CastingStyle<ColorScheme.Base, Editorial, HouseContainers.ContextMenu, RoleRoot> {
-    @Override public StylingRes<ColorScheme.Base, HouseContainers.ContextMenu> style() {
+        implements CastingStyle<BaseScheme, Editorial, HouseContainers.ContextMenu, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseContainers.ContextMenu> style() {
         return new StylingRes.CssContent<>(
                 new HouseColours.Raised(), new HouseColours.Text(), new HouseColours.Border(),
                 new HouseColours.ShadeSolid(), new HouseColours.ShadeDense());

@@ -1,13 +1,12 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 
 import java.util.List;
 
 /** Editorial, the house's own: a serif voice, a fine rule, a soft lift under the hand. */
-public record Editorial() implements Derives<ColorScheme.Base, Base> {
+public record Editorial() implements Derives<BaseScheme, Base> {
 
     public static final Editorial INSTANCE = new Editorial();
 

@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
@@ -14,7 +13,7 @@ import java.util.Optional;
  * ring is honey. No style's own: written for Editorial with the house rule, and opaque and flat, so
  * it suits Neumorphism, Sketchy and Neo-brutalism too, as the old Forest said.
  */
-public record Forest() implements ColorPalette<Base> {
+public record Forest() implements ColorPalette<BaseScheme> {
 
     public static final Forest INSTANCE = new Forest();
 

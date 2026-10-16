@@ -1,16 +1,16 @@
 package hue.captains.singapura.js.homing.design.styles.retrofuturism;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 /** RetroFuturism's kicker status: as its kicker on its own, by delegation. */
 public record KickerStatus()
-        implements CastingStyle<ColorScheme.Base, RetroFuturism, HouseText.Kicker, HouseSaying.Status> {
-    @Override public StylingRes<ColorScheme.Base, HouseText.Kicker> style() {
+        implements CastingStyle<BaseScheme, RetroFuturism, HouseText.Kicker, HouseSaying.Status> {
+    @Override public StylingRes<BaseScheme, HouseText.Kicker> style() {
         return new StylingRes.Delegation<>(new Kicker());
     }
 }

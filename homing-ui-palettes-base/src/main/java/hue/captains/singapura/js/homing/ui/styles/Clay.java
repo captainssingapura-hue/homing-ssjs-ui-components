@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
@@ -18,7 +17,7 @@ import java.util.Optional;
  * old Neumorphism shaded with the page mixed toward black, the house's with the cast at a few
  * percent; and the ink on the title colour - the primary button's - is white.</p>
  */
-public record Clay() implements ColorPalette<Base> {
+public record Clay() implements ColorPalette<BaseScheme> {
 
     public static final Clay INSTANCE = new Clay();
 

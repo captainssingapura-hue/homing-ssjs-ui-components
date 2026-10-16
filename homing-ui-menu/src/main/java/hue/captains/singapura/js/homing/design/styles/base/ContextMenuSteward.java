@@ -1,10 +1,10 @@
 package hue.captains.singapura.js.homing.design.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMenus;
 
 /**
@@ -12,8 +12,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMenus;
  * style's alike.
  */
 public record ContextMenuSteward()
-        implements CastingStyle<ColorScheme.Base, Base, HouseMenus.ContextMenuSteward, RoleRoot> {
-    @Override public StylingRes<ColorScheme.Base, HouseMenus.ContextMenuSteward> style() {
+        implements CastingStyle<BaseScheme, Base, HouseMenus.ContextMenuSteward, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseMenus.ContextMenuSteward> style() {
         return new StylingRes.CssContent<>();
     }
 }

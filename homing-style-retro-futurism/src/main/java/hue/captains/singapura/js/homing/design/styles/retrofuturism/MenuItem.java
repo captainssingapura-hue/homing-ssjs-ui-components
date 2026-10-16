@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.design.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
@@ -12,8 +12,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
  * The menu item in retro-futurism: one choice of a menu - flat, tinted under the hand and where the menu's cursor is,
  * faded while off. Whole: every property its look has (D9).
  */
-public record MenuItem() implements CastingStyle<ColorScheme.Base, RetroFuturism, HouseItems.MenuItem, RoleRoot> {
-    @Override public StylingRes<ColorScheme.Base, HouseItems.MenuItem> style() {
+public record MenuItem() implements CastingStyle<BaseScheme, RetroFuturism, HouseItems.MenuItem, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseItems.MenuItem> style() {
         return new StylingRes.CssContent<>(
                 new HouseColours.Border(), new HouseColours.Accent(), new HouseColours.AccentWashSoft(),
                 new HouseColours.AccentWashStrong());

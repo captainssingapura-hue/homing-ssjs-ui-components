@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.design.semantic.Writing;
@@ -16,7 +15,7 @@ import java.util.List;
  * every house style says alike is said here, so a style's class says only what makes it itself - and says the rest
  * again, whole, where it draws a casting at all (D9). This jar holds its record alone: its token, its scheme, its words.
  */
-public record Base() implements DesignStyle<ColorScheme.Base> {
+public record Base() implements DesignStyle<BaseScheme> {
 
     public static final Base INSTANCE = new Base();
 

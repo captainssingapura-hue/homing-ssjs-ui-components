@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
@@ -18,7 +17,7 @@ import java.util.Optional;
  * house's own colour - the primary button's ground - the cyan, the near-black on it; the accent the
  * violet, the pale ink on it; a hairline its border.</p>
  */
-public record NeoFuturismColours() implements ColorPalette<Base> {
+public record NeoFuturismColours() implements ColorPalette<BaseScheme> {
 
     public static final NeoFuturismColours INSTANCE = new NeoFuturismColours();
 

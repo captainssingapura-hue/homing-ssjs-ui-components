@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
@@ -13,7 +12,7 @@ import java.util.Optional;
  * its every colour worked out by the house's rule for palettes ({@link HousePalettes}) from the old Marker's seeds. Sketchy's own - and black on white
  * is the classic brutalism, so it suits Neo-brutalism, and Editorial, too.
  */
-public record Marker() implements ColorPalette<Base> {
+public record Marker() implements ColorPalette<BaseScheme> {
 
     public static final Marker INSTANCE = new Marker();
 

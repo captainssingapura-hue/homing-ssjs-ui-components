@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.design.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
@@ -13,8 +13,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
  * while picked. Whole: every property its look has (D9).
  */
 public record ChoiceOption()
-        implements CastingStyle<ColorScheme.Base, RetroFuturism, HouseItems.ChoiceOption, RoleRoot> {
-    @Override public StylingRes<ColorScheme.Base, HouseItems.ChoiceOption> style() {
+        implements CastingStyle<BaseScheme, RetroFuturism, HouseItems.ChoiceOption, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseItems.ChoiceOption> style() {
         return new StylingRes.CssContent<>(
                 new HouseColours.OnInverted(), new HouseColours.Border(), new HouseColours.Title(),
                 new HouseColours.Ring(), new HouseColours.AccentWashSoft());

@@ -1,10 +1,10 @@
 package hue.captains.singapura.js.homing.design.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 /**
@@ -12,8 +12,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
  * whatever holds it. Its texts and its link wear their own looks; its layout is its own, the same in every style.
  * Whole: every property its look has (D9).
  */
-public record SummaryView() implements CastingStyle<ColorScheme.Base, Base, HouseContainers.SummaryView, RoleRoot> {
-    @Override public StylingRes<ColorScheme.Base, HouseContainers.SummaryView> style() {
+public record SummaryView() implements CastingStyle<BaseScheme, Base, HouseContainers.SummaryView, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseContainers.SummaryView> style() {
         return new StylingRes.CssContent<>();
     }
 }

@@ -1,16 +1,16 @@
 package hue.captains.singapura.js.homing.design.styles.neobrutalism;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 
 /** NeoBrutalism's menu item choice: as its menu item on its own, by delegation. */
 public record MenuItemChoice()
-        implements CastingStyle<ColorScheme.Base, NeoBrutalism, HouseItems.MenuItem, HouseDoing.Choice> {
-    @Override public StylingRes<ColorScheme.Base, HouseItems.MenuItem> style() {
+        implements CastingStyle<BaseScheme, NeoBrutalism, HouseItems.MenuItem, HouseDoing.Choice> {
+    @Override public StylingRes<BaseScheme, HouseItems.MenuItem> style() {
         return new StylingRes.Delegation<>(new MenuItem());
     }
 }

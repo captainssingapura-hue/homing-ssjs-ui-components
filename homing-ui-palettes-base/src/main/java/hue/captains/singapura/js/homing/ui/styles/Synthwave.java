@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme.Base;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
@@ -16,7 +15,7 @@ import java.util.Optional;
  * void's violet; the house's own colour its magenta, white on it; the accent its cyan, deep ink on
  * it; a hairline the magenta, faint.</p>
  */
-public record Synthwave() implements ColorPalette<Base> {
+public record Synthwave() implements ColorPalette<BaseScheme> {
 
     public static final Synthwave INSTANCE = new Synthwave();
 

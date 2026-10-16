@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.design.semantic.Writing;
@@ -12,7 +11,7 @@ import java.util.List;
  * Neumorphism: moulded out of the page's own clay - no rule, its depth all in light and shade,
  * pressed in when pressed. It draws no line, so says nothing of the rule: the base's is none.
  */
-public record Neumorphism() implements Derives<ColorScheme.Base, Base> {
+public record Neumorphism() implements Derives<BaseScheme, Base> {
 
     public static final Neumorphism INSTANCE = new Neumorphism();
 

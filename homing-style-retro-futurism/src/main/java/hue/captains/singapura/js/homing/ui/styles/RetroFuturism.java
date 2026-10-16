@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.design.semantic.Writing;
@@ -9,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 import java.util.List;
 
 /** Retro-futurism: a neon ring that flares under the hand, and motion in steps, as a screen of the period moved. */
-public record RetroFuturism() implements Derives<ColorScheme.Base, Base> {
+public record RetroFuturism() implements Derives<BaseScheme, Base> {
 
     public static final RetroFuturism INSTANCE = new RetroFuturism();
 

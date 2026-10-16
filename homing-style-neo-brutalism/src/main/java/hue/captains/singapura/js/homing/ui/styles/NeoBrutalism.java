@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.design.semantic.Writing;
@@ -9,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 import java.util.List;
 
 /** Neo-brutalism: square, a heavy rule, a hard offset shadow, and a press that drops into it. */
-public record NeoBrutalism() implements Derives<ColorScheme.Base, Base> {
+public record NeoBrutalism() implements Derives<BaseScheme, Base> {
 
     public static final NeoBrutalism INSTANCE = new NeoBrutalism();
 

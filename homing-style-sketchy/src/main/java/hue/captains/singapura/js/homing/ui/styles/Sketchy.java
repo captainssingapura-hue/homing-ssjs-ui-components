@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.Implementation;
 import hue.captains.singapura.js.homing.design.semantic.Writing;
@@ -12,7 +11,7 @@ import java.util.List;
  * Sketchy: drawn by hand - a wobbling outline, a marker's rule, a tilt under the hand. Ink casts no
  * shadow, so it says nothing of the shadow: the base's is none.
  */
-public record Sketchy() implements Derives<ColorScheme.Base, Base> {
+public record Sketchy() implements Derives<BaseScheme, Base> {
 
     public static final Sketchy INSTANCE = new Sketchy();
 

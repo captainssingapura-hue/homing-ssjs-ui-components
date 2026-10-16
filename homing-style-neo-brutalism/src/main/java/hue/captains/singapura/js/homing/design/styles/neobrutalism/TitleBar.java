@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.design.styles.neobrutalism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
@@ -13,8 +13,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
  * style's face, ruled along its foot; where the hand takes it, and in the house's colour while the hand has it. Whole:
  * every property its look has (D9).
  */
-public record TitleBar() implements CastingStyle<ColorScheme.Base, NeoBrutalism, HouseContainers.TitleBar, RoleRoot> {
-    @Override public StylingRes<ColorScheme.Base, HouseContainers.TitleBar> style() {
+public record TitleBar() implements CastingStyle<BaseScheme, NeoBrutalism, HouseContainers.TitleBar, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseContainers.TitleBar> style() {
         return new StylingRes.CssContent<>(
                 new HouseColours.Inverted(), new HouseColours.OnInverted(), new HouseColours.OnBar(),
                 new HouseColours.Border(), new HouseColours.Title());
