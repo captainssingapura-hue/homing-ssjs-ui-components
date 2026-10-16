@@ -60,6 +60,7 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(CaptionModule.INSTANCE),
                 CrateEntry.of(LedeModule.INSTANCE),
                 CrateEntry.of(LabelModule.INSTANCE),
+                CrateEntry.of(TextCellModule.INSTANCE),
                 CrateEntry.of(ReadoutModule.INSTANCE),
                 CrateEntry.of(BadgeModule.INSTANCE),
                 CrateEntry.of(PillModule.INSTANCE),

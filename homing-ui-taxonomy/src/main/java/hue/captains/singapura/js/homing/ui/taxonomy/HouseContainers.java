@@ -199,7 +199,10 @@ public final class HouseContainers {
      */
     public record HeaderCell() implements Component<HouseBranches.Surface> {
         public static final HeaderCell INSTANCE = new HeaderCell();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+        /** Its words, a text cell naming the column or the row it heads (D42). */
+        @Override public List<Slot<?>> parts() { return List.of(DSL.part(HouseText.TextCell.INSTANCE).as(HouseSaying.Title.INSTANCE).optional()); }
     }
 
     /**
@@ -208,7 +211,10 @@ public final class HouseContainers {
      */
     public record DataCell() implements Component<HouseBranches.Surface> {
         public static final DataCell INSTANCE = new DataCell();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+        /** Its words, a text cell stating the fact it holds (D42). */
+        @Override public List<Slot<?>> parts() { return List.of(DSL.part(HouseText.TextCell.INSTANCE).as(HouseSaying.Value.INSTANCE).optional()); }
     }
 
     /** Heads a site's pages: its brand, the way to where the user is, and what its owner hands it at its end, in the ink written on it. */

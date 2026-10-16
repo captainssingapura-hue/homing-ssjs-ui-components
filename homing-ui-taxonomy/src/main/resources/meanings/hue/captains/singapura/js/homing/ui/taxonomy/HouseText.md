@@ -44,6 +44,10 @@ The first words of a body, saying what follows in brief.
 
 A value read out exactly, as it stands now.
 
+## TextCell
+
+The words a table's cell holds: plain text, set in its cell - a fact in its row, or the name heading its column.
+
 ## Badge
 
 A short word that sorts or flags what it is beside.

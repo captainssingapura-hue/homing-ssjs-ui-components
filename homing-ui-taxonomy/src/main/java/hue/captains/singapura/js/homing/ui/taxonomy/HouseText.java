@@ -92,6 +92,12 @@ public final class HouseText {
         @Override public Text parent() { return Text.INSTANCE; }
     }
 
+    /** A table cell's words: plain text, set in its cell - a fact where a row and a column meet, or the name heading a column (D42). */
+    public record TextCell() implements Component<Text> {
+        public static final TextCell INSTANCE = new TextCell();
+        @Override public Text parent() { return Text.INSTANCE; }
+    }
+
     /** A short tag beside a heading. */
     public record Badge() implements Component<Text> {
         public static final Badge INSTANCE = new Badge();

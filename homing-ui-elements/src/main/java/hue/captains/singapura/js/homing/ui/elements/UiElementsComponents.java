@@ -34,6 +34,7 @@ public record UiElementsComponents() implements C0_Components<UiElementsComponen
                 ComponentEntry.of(this, new CaptionModule.Caption()),
                 ComponentEntry.of(this, new LedeModule.Lede()),
                 ComponentEntry.of(this, new LabelModule.Label()),
+                ComponentEntry.of(this, new TextCellModule.TextCell()),
                 ComponentEntry.of(this, new ReadoutModule.Readout()),
                 ComponentEntry.of(this, new BadgeModule.Badge()),
                 ComponentEntry.of(this, new PillModule.Pill()),

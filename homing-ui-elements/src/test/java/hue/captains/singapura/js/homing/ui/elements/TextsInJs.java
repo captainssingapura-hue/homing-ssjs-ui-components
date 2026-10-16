@@ -42,7 +42,7 @@ final class TextsInJs {
         if (js.eval("js", "typeof Look === 'undefined'").asBoolean())   // the look, the design's: beside the elements, not one of them
             loadModule.accept("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");
         for (String m : new String[] {"SimpleComponentModule.js", "TextBehaviorModule.js", "TextModule.js",
-                                      "HeadingModule.js", "Heading1Module.js", "Heading2Module.js", "Heading3Module.js", "Heading4Module.js", "Heading5Module.js", "Heading6Module.js", "KickerModule.js", "CaptionModule.js", "LedeModule.js", "LabelModule.js",
+                                      "HeadingModule.js", "Heading1Module.js", "Heading2Module.js", "Heading3Module.js", "Heading4Module.js", "Heading5Module.js", "Heading6Module.js", "KickerModule.js", "CaptionModule.js", "LedeModule.js", "LabelModule.js", "TextCellModule.js",
                                       "ReadoutModule.js", "BadgeModule.js", "PillModule.js", "WordmarkModule.js"})
             if (js.eval("js", "typeof " + m.replace("Module.js", "") + " === 'undefined'").asBoolean())
                 loadModule.accept(DIR + m);
