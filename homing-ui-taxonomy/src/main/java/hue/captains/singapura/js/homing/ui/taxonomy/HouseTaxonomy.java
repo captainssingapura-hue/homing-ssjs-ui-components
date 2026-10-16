@@ -1,9 +1,10 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentModules;
 import hue.captains.singapura.js.homing.component.taxonomy.ReadTaxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtensions;
 import hue.captains.singapura.js.homing.component.taxonomy.TaxonomySource;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
@@ -92,12 +93,11 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
     }
 
     /**
-     * The house's taxonomy with the extensions an instance registers, explicitly and in the order registered - each
-     * declaring its own components, roles, states and events - and nothing found on the classpath. Refused when an
-     * extension extends another taxonomy, is registered twice, or declares what the tree cannot read.
+     * The house's components taxonomy as an instance registers it: the components of the component modules it names,
+     * a flat list, explicitly - each jar's - their parts with them, transitively; the house's catalogue of roles and its
+     * trees of states and events, whole. Nothing found on the classpath.
      */
-    public Taxonomy read(List<? extends TaxonomyExtension> extensions) {
-        return TaxonomyExtensions.INSTANCE.read(HouseTaxonomy.class, common(), HouseRoleCatalogue.INSTANCE.roles(),
-                HouseStates.ALL, HouseEvents.ALL, extensions);
+    public Taxonomy read(List<? extends ComponentModule> modules) {
+        return ComponentModules.INSTANCE.read(modules, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL, HouseEvents.ALL);
     }
 }
