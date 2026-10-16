@@ -85,7 +85,7 @@ class HouseStylesTest {
         var tree = HouseColours.TREE;
         for (ColorPalette<ColorScheme.Base> p : HouseStyles.PALETTES) {
             assertEquals(List.of(), tree.check(p), p.token());
-            assertEquals(67, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - a floating pane's glows, the ink on a dark bar, a hint of the accent, an edge strip's shades, the inks among them, danger's, warning's, success's and the one on danger the palette's (D32), the text's faded, a heading's and a kicker's, the washes under code, a pill and a badge, the keys' marks, a groove's edge, a tab's washes and shadows, an item's current and pointed, the scrollbar's thumb, a panel's shades and sheen among them");
+            assertEquals(69, PaletteSheet.INSTANCE.write(tree, p).variables().size(), p.token() + ": every palettable colour of the house - the primary's and the secondary's neutral grounds (D41), a floating pane's glows, the ink on a dark bar, a hint of the accent, an edge strip's shades, the inks among them, danger's, warning's, success's and the one on danger the palette's (D32), the text's faded, a heading's and a kicker's, the washes under code, a pill and a badge, the keys' marks, a groove's edge, a tab's washes and shadows, an item's current and pointed, the scrollbar's thumb, a panel's shades and sheen among them");
         }
         assertEquals(8, HouseStyles.PALETTES.size());
     }

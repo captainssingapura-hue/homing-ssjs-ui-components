@@ -51,7 +51,7 @@ public record HouseColours() implements ColorSource {
 
     /** Every palettable colour of the house: one sealed set, so a palette's switch over it is exhaustive. */
     public sealed interface HouseColour permits
-            Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft, ScrollThumb,
+            Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft, ScrollThumb, PrimaryNeutral, SecondaryNeutral,
             Text, TextFaded, OnInverted, OnBar, OnAccent, OnDanger, WayHovered, HeadingInk, KickerInk, DangerInk, WarningInk, SuccessInk,
             Border, GrooveEdge, LineHovered,
             Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentTintHint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
@@ -85,6 +85,10 @@ public record HouseColours() implements ColorSource {
     public record WashSoft() implements Palettable<Base, Surfaces>, HouseColour {}
     /** The scrollbar's thumb on the page's ground: the text's ink, 55% into the ground. */
     public record ScrollThumb() implements Palettable<Base, Surfaces>, HouseColour {}
+    /** The primary button's ground at its neutral degree: the house colour at a fifth over the raised face, each palette's own (D41). */
+    public record PrimaryNeutral() implements Palettable<Base, Surfaces>, HouseColour {}
+    /** The secondary button's ground at its neutral degree: the accent at a fifth over the raised face, each palette's own (D41). */
+    public record SecondaryNeutral() implements Palettable<Base, Surfaces>, HouseColour {}
     /** Nothing drawn: the same in every palette. */
     public record Clear() implements Fixed<Base, Surfaces> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("transparent"); }
@@ -274,20 +278,8 @@ public record HouseColours() implements ColorSource {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("rgba(34, 139, 34, .14)"); }
     }
 
-    // ── scales: a coloured button's ground and ink, by its degree ──────────
+    // ── scales: a coloured button's ground and ink, by its degree - the primary's and the secondary's each style's own (D41) ──
 
-    /** The primary button's ground: nothing at -1, the hairline at 0, the house colour at 1. */
-    public record PrimaryGround() implements ColorScale<Base, Scales> {
-        @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new Clear(), -1), new Knot<>(new Border(), 0), new Knot<>(new Title(), 1)); }
-    }
-    /** The primary button's ink: the text's below 0, the ink on the house colour at 1. */
-    public record PrimaryInk() implements ColorScale<Base, Scales> {
-        @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new Text(), -1), new Knot<>(new Text(), 0), new Knot<>(new OnInverted(), 1)); }
-    }
-    /** The secondary button's ground: nothing at -1, the hairline at 0, the accent at 1. */
-    public record SecondaryGround() implements ColorScale<Base, Scales> {
-        @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new Clear(), -1), new Knot<>(new Border(), 0), new Knot<>(new Accent(), 1)); }
-    }
     /** The danger button's ground: success's tint turned the other way, nothing at 0, danger's tint at 1. */
     public record DangerGround() implements ColorScale<Base, Scales> {
         @Override public List<Knot<Base>> knots() { return List.of(new Knot<>(new SuccessTint(), -1), new Knot<>(new Clear(), 0), new Knot<>(new DangerTint(), 1)); }
@@ -312,7 +304,7 @@ public record HouseColours() implements ColorSource {
     @Override public ColorTree read() {
         return ReadColors.INSTANCE.read(HouseColours.class, List.of(
                 new Surfaces(), new Inks(), new Lines(), new Current(), new Attention(), new Shadows(), new Feedback(), new Scales(),
-                new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new ScrollThumb(), new Clear(),
+                new Raised(), new Ground(), new Recessed(), new Inverted(), new Wash(), new WashFaint(), new WashSoft(), new ScrollThumb(), new PrimaryNeutral(), new SecondaryNeutral(), new Clear(),
                 new Text(), new TextFaded(), new OnInverted(), new OnBar(), new OnAccent(), new WayHovered(), new HeadingInk(), new KickerInk(),
                 new OnDanger(), new DangerInk(), new WarningInk(), new SuccessInk(),
                 new Border(), new GrooveEdge(), new LineHovered(),
@@ -323,7 +315,7 @@ public record HouseColours() implements ColorSource {
                 new Danger(), new DangerPressed(), new DangerTint(), new DangerEdge(),
                 new DangerWash(), new WarningWash(), new SuccessWash(),
                 new WarningTint(), new SuccessTint(),
-                new PrimaryGround(), new PrimaryInk(), new SecondaryGround(), new DangerGround(), new DangerWriting(),
+                new DangerGround(), new DangerWriting(),
                 new WarningGround(), new SuccessGround(), new KeysMark()));
     }
 }

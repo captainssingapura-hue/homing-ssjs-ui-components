@@ -59,7 +59,9 @@ import hue.captains.singapura.js.homing.ui.styles.HouseColours.AccentTintHint;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeSolid;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeThick;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeDarker;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.PrimaryNeutral;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ScrollThumb;
+import hue.captains.singapura.js.homing.ui.styles.HouseColours.SecondaryNeutral;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeModerate;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeDense;
 import hue.captains.singapura.js.homing.ui.styles.HouseColours.ShadeDark;
@@ -98,6 +100,8 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case WashFaint c -> mix(seed(s.text()), 0.08, CLEAR);
             case WashSoft c -> mix(seed(s.text()), 0.10, CLEAR);
             case ScrollThumb c -> mix(seed(s.text()), 0.55, seed(s.ground()));
+            case PrimaryNeutral c -> mix(seed(s.title()), 0.20, seed(s.raised()));
+            case SecondaryNeutral c -> mix(seed(s.accent()), 0.20, seed(s.raised()));
             case Text c -> seed(s.text());
             case TextFaded c -> mix(seed(s.text()), 0.80, CLEAR);
             case OnInverted c -> seed(s.onInverted());

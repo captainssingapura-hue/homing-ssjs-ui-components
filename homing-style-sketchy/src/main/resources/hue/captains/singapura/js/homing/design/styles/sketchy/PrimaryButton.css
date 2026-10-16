@@ -1,11 +1,11 @@
 /* The primary button in sketchy: the one action a view leads with, in the house's own colour as far as its degree. Whole: every property its look has (D9). */
 $casting {
     --fixed-clear: transparent;
-    --along-primary-ground: color-mix(in oklab, var(--fp-title) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--fp-border) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--fixed-clear)));
-    --along-primary-ink: color-mix(in oklab, var(--fp-on-inverted) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--fp-text) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--fp-text)));
+    --along-button-ground: color-mix(in oklab, var(--fp-title) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--fp-primary-neutral) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--fixed-clear)));
+    --along-button-label: color-mix(in oklab, var(--fp-on-inverted) calc(clamp(0, (var(--extent) - 0.6) / 0.4, 1) * 100%), color-mix(in oklab, var(--fp-on-inverted) calc(clamp(0, (var(--extent) - 0.4) / 0.2, 1) * 100%), color-mix(in oklab, var(--fp-text) calc(clamp(0, (var(--extent) + 1) / 1.4, 1) * 100%), var(--fp-text))));
 
-    color: var(--along-primary-ink);
-    background-color: var(--along-primary-ground);
+    color: var(--along-button-label);
+    background-color: var(--along-button-ground);
     border-color: var(--fp-title);
     border-width: 2px;
     border-style: solid;
