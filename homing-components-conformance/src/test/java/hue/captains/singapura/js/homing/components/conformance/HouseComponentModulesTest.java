@@ -8,29 +8,29 @@ import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
-import hue.captains.singapura.js.homing.preferences.UiPreferencesComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiPreferencesComponentModule;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
-import hue.captains.singapura.js.homing.site.mpa.MpaComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.MpaComponentModule;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
-import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiControlPanelComponentModule;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
-import hue.captains.singapura.js.homing.ui.dialog.UiDialogComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiDialogComponentModule;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
-import hue.captains.singapura.js.homing.ui.elements.UiElementsComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiElementsComponentModule;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
-import hue.captains.singapura.js.homing.ui.floating.UiFloatingComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiFloatingComponentModule;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
-import hue.captains.singapura.js.homing.ui.icons.UiIconsComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
-import hue.captains.singapura.js.homing.ui.menu.UiMenuComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiMenuComponentModule;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
-import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiMonitorsComponentModule;
 import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsCrate;
-import hue.captains.singapura.js.homing.ui.panes.UiPanesComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiPanesComponentModule;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
-import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiPanZoomComponentModule;
 import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomCrate;
-import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiSplitGridComponentModule;
 import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import org.junit.jupiter.api.Test;
@@ -71,8 +71,13 @@ class HouseComponentModulesTest {
         return out;
     }
 
-    /** The flat list an instance of the whole house registers at bootstrap. */
-    private static final List<ComponentModule> HOUSE = List.copyOf(JARS.values());
+    /** The flat list an instance of the whole house registers at bootstrap: the taxonomy's, each jar's in its turn. */
+    private static final List<ComponentModule> HOUSE = HouseTaxonomy.MODULES;
+
+    @Test
+    void theHousesList_isEachJarsModule_inTheJarsOrder() {
+        assertEquals(List.copyOf(JARS.values()), HOUSE, "each module defined in the taxonomy, one for each jar that implements it");
+    }
 
     @Test
     void theTwelveModules_readTheHouseWhole() {

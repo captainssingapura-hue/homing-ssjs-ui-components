@@ -30,6 +30,16 @@ public record HouseTaxonomy() implements StatelessFunctionalObject, TaxonomySour
 
     public static final HouseTaxonomy INSTANCE = new HouseTaxonomy();
 
+    /**
+     * The house's jars' component modules, each defined here beside the components it lists: the flat list an instance
+     * of the whole house registers at bootstrap, and all a style jar's check needs of the house's components.
+     */
+    public static final List<ComponentModule> MODULES = List.of(
+            UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiDialogComponentModule.INSTANCE,
+            UiFloatingComponentModule.INSTANCE, UiMenuComponentModule.INSTANCE, UiMonitorsComponentModule.INSTANCE,
+            UiPanesComponentModule.INSTANCE, UiPanZoomComponentModule.INSTANCE, UiSplitGridComponentModule.INSTANCE,
+            UiPreferencesComponentModule.INSTANCE, MpaComponentModule.INSTANCE, UiControlPanelComponentModule.INSTANCE);
+
     /** The house's components, family by family: the base tree, then the modules'. */
     public List<Component<?>> common() {
         return List.of(

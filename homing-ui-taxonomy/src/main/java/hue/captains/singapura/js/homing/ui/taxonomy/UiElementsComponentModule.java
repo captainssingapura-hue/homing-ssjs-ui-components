@@ -1,19 +1,14 @@
-package hue.captains.singapura.js.homing.ui.elements;
+package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.List;
 
 /**
- * This jar's components, for the components taxonomy an instance registers at bootstrap: those it implements, then those
- * its owners realize inline and it gives its look to - a flat list; their parts come in with them.
+ * homing-ui-elements's component module, defined beside the components it lists (D40, D46): those the jar implements, then
+ * those its owners realize inline and it gives its look to - a flat list; their parts come in with them.
+ * A definition alone - what a style jar's check needs of the jar - while the jar keeps the implementation.
  */
 public record UiElementsComponentModule() implements ComponentModule {
 
