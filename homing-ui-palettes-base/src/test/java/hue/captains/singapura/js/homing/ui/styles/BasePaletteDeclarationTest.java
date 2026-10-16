@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
 import hue.captains.singapura.js.homing.design.semantic.CheckScheme;
 import hue.captains.singapura.js.homing.design.semantic.SchemeRegistry;
 import hue.captains.singapura.js.homing.design.styling.PaletteRegistry;
+import hue.captains.singapura.js.homing.design.styling.RegisteredPalettes;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -33,8 +34,8 @@ class BasePaletteDeclarationTest {
 
     @Test
     void theJar_aSubRegistryOfItsOwn_overTheRegisteredBase() {
-        PaletteRegistry registry = PaletteRegistry.of(List.of(BasePaletteDeclaration.INSTANCE), new SchemeRegistry(List.of(BaseColours.INSTANCE)));
-        assertEquals(List.of(BaseScheme.class), List.copyOf(registry.trees().keySet()), "BaseScheme, declared by BaseColours (D49)");
-        assertEquals(BaseColours.TREE.nodes(), registry.tree(Harbour.INSTANCE).nodes());
+        PaletteRegistry registry = new PaletteRegistry(List.of(BasePaletteDeclaration.INSTANCE), new SchemeRegistry(List.of(BaseColours.INSTANCE)));
+        assertEquals(List.of(BaseScheme.class), List.copyOf(RegisteredPalettes.INSTANCE.trees(registry).keySet()), "BaseScheme, declared by BaseColours (D49)");
+        assertEquals(BaseColours.TREE, RegisteredPalettes.INSTANCE.tree(registry, Harbour.INSTANCE));
     }
 }

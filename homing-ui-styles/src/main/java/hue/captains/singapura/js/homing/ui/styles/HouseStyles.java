@@ -112,7 +112,7 @@ public record HouseStyles() implements StylingInstance {
         StyleManager manager = StyleManager.of(HouseTaxonomy.INSTANCE.read(), schemes, registrations);
         var palettes = new ArrayList<PaletteDeclaration>(PALETTE_JARS);
         palettes.addAll(morePalettes);
-        return new Styling(manager, List.copyOf(STYLES), PaletteRegistry.of(palettes, schemes), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
+        return new Styling(manager, List.copyOf(STYLES), new PaletteRegistry(palettes, schemes), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
     }
 
     private static StyleRegistration registration(DesignStyle<?> style, List<StyleDeclaration> jars, List<StyleDeclaration> more) {
