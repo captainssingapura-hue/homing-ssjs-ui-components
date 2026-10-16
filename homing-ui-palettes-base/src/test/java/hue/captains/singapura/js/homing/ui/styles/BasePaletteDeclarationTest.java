@@ -33,7 +33,7 @@ class BasePaletteDeclarationTest {
 
     @Test
     void theJar_aSubRegistryOfItsOwn_overTheRegisteredBase() {
-        PaletteRegistry registry = PaletteRegistry.of(List.of(BasePaletteDeclaration.INSTANCE), SchemeRegistry.of(List.of(BaseColours.INSTANCE)));
+        PaletteRegistry registry = PaletteRegistry.of(List.of(BasePaletteDeclaration.INSTANCE), new SchemeRegistry(List.of(BaseColours.INSTANCE)));
         assertEquals(List.of(BaseScheme.class), List.copyOf(registry.trees().keySet()), "BaseScheme, declared by BaseColours (D49)");
         assertEquals(BaseColours.TREE.nodes(), registry.tree(Harbour.INSTANCE).nodes());
     }

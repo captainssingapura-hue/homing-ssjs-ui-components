@@ -108,7 +108,7 @@ public record HouseStyles() implements StylingInstance {
         var registrations = new ArrayList<StyleRegistration>();
         registrations.add(registration(Base.INSTANCE, BASE_JARS, more));
         for (DesignStyle<BaseScheme> s : STYLES) registrations.add(registration(s, List.of(STYLE_JARS.get(s)), more));
-        SchemeRegistry schemes = SchemeRegistry.of(SCHEME_JARS);
+        SchemeRegistry schemes = new SchemeRegistry(SCHEME_JARS);
         StyleManager manager = StyleManager.of(HouseTaxonomy.INSTANCE.read(), schemes, registrations);
         var palettes = new ArrayList<PaletteDeclaration>(PALETTE_JARS);
         palettes.addAll(morePalettes);

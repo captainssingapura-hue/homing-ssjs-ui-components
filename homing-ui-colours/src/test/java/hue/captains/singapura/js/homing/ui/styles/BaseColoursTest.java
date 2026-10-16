@@ -1,5 +1,7 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
+import hue.captains.singapura.js.homing.design.semantic.SchemeTrees;
+
 import hue.captains.singapura.js.homing.design.semantic.CheckScheme;
 import hue.captains.singapura.js.homing.design.semantic.SchemeRegistry;
 import org.junit.jupiter.api.Test;
@@ -17,8 +19,8 @@ class BaseColoursTest {
 
     @Test
     void theHousesScheme_andItsDeclaration_sayWhatTheirTypesName() {
-        SchemeRegistry house = SchemeRegistry.of(List.of(BaseColours.INSTANCE));
+        SchemeRegistry house = new SchemeRegistry(List.of(BaseColours.INSTANCE));
         assertEquals(List.of(), CheckScheme.INSTANCE.check(BaseColours.INSTANCE, house));
-        assertEquals(BaseColours.TREE.nodes(), house.tree(BaseScheme.INSTANCE).nodes(), "the jar's own tree, as the registry reads it");
+        assertEquals(BaseColours.TREE, SchemeTrees.INSTANCE.tree(house, BaseScheme.INSTANCE), "the jar's own tree, as the registry reads it");
     }
 }
