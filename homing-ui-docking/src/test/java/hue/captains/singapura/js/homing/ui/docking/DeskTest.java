@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.docking;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import hue.captains.singapura.js.homing.ui.look.IconsModule;
@@ -26,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * own ground moves the window and lands nowhere. Every step is data on one sink, in order. The fake party holds the
  * real one's rule for a name.
  */
-class DeskTest extends JsModuleTestBase {
+class DeskTest extends UiDockingJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/";
 

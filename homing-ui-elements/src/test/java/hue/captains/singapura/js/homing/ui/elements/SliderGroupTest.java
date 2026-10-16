@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * the current knob; the focus arriving on a knob makes its slider current;
  * held and current are worn; dispose leaves and disposes the sliders.
  */
-class SliderGroupTest extends JsModuleTestBase {
+class SliderGroupTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/";
 

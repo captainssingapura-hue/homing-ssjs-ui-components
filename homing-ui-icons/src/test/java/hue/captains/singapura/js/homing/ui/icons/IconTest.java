@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.icons;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** The Icon component over a fake element: the box and the word's class it wears and takes off, the names it refuses, the table it reads. */
-class IconTest extends JsModuleTestBase {
+class IconTest extends UiIconsJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/icons/";
 
@@ -67,8 +66,6 @@ class IconTest extends JsModuleTestBase {
         assertEquals("ic_base styled-icon", eval("e.classes()").asString(), "blank at its width");
         assertTrue(eval("icon.name() === null").asBoolean());
         eval("new Icon(el())");
-        assertEquals("ic_base styled-icon_keys word-check", eval("var k = el(); new Icon(k, { name: 'check' }, ROLE.KEYS); k.classes()").asString(),
-                "cast by its owner as the keys mark");
         eval("icon.set('pin'); icon.dispose();");
         assertEquals("", eval("e.classes()").asString(), "disposed: nothing of the icon's left on the caller's element");
         assertTrue(eval("e.attr('aria-hidden') === undefined").asBoolean());

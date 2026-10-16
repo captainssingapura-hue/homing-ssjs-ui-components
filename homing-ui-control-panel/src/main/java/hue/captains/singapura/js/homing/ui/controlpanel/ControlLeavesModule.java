@@ -15,7 +15,7 @@ import hue.captains.singapura.js.homing.ui.controllability.ControlType;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControllability;
 import hue.captains.singapura.js.homing.ui.controllability.WithExtent;
 import hue.captains.singapura.js.homing.ui.controllability.WithSwitch;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +47,7 @@ public record ControlLeavesModule() implements EsModule<ControlLeavesModule>, Se
     @Override
     public List<String> selfContent(ModuleNameResolver resolver) {
         var house = HouseControllability.INSTANCE;
-        Taxonomy taxonomy = HouseTaxonomy.INSTANCE.read();
+        Taxonomy taxonomy = InstalledStyling.get().taxonomy();
         List<Component<?>> leaves = taxonomy.components().stream().filter(c -> !(c instanceof VirtualComponent<?>)).toList();   // a design draws a virtual leaf; nothing controls it
         String typeOf = leaves.stream()
                 .map((Component<?> c) -> quoted(c.token()) + ": " + quoted(house.findControlType(taxonomy, c).name()))

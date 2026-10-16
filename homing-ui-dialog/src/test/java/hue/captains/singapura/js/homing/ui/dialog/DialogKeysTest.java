@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.dialog;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * before, when still a member, and not when someone else took them; Modality
  * only makes the rest inert and captures nothing.
  */
-class DialogKeysTest extends JsModuleTestBase {
+class DialogKeysTest extends UiDialogJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/dialog/";
 

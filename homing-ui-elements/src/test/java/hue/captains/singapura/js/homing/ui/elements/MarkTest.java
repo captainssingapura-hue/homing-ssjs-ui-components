@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * wearing its casting's class and holding its states as their classes - the lamp lit and broken, the detent shown, the
  * boundary line upright and in the hand; a drop mark and a tick, seen and never said.
  */
-class MarkTest extends JsModuleTestBase {
+class MarkTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 

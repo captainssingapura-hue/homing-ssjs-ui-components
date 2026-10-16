@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import org.graalvm.polyglot.Value;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * chips it passes step aside and step back; let go, it lands on the slot
  * it is nearest and the strip says so; every step is taken back at once.
  */
-class TabStripTest extends JsModuleTestBase {
+class TabStripTest extends UiPanesJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/panes/";
     private static final String ELEMENTS = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";

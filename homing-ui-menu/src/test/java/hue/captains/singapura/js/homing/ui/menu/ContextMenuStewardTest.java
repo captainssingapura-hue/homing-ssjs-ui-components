@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.menu;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * appendix, one method each where a fake can hold it; the tree three levels
  * deep, the marks as icons, the specimen.
  */
-class ContextMenuStewardTest extends JsModuleTestBase {
+class ContextMenuStewardTest extends UiMenuJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/menu/";
 

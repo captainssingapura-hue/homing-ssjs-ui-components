@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.splitgrid;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
@@ -26,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * a cell back under a gone one's id, or under an id of the same safe spelling
  * as another's, is a new cell and not a refused name.
  */
-class SplitGridTest extends JsModuleTestBase {
+class SplitGridTest extends UiSplitGridJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/splitgrid/";
 

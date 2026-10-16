@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.monitors;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
  * below it. A widget, shown in a slot as its holders show it: disposed by the
  * slot, it stops listening, and the slot takes it out and dissolves its branch.
  */
-class FocusMonitorTest extends JsModuleTestBase {
+class FocusMonitorTest extends UiMonitorsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/";
 

@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * code and the badge of each tone among them - each wearing its casting's one class, on its own or in the role its
  * owner passes, refused in a role the taxonomy never casts it in.
  */
-class TextTest extends JsModuleTestBase {
+class TextTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 

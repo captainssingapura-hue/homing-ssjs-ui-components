@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * in - named, never a design word; its behaviour told after; its degrees and its words; its
  * castings, refused when the taxonomy has no slot for them.
  */
-class ButtonTest extends JsModuleTestBase {
+class ButtonTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 
@@ -48,7 +47,7 @@ class ButtonTest extends JsModuleTestBase {
         class Told { constructor(tag) { this.tag = tag; }
                      canHandle(t) { return t === EVENT.CLICK || t === STATE.ENABLED.changed || t === STATE.PRESSED.changed; }
                      handle(e) { log.push(this.tag + ":" + e.type + (e instanceof StateChange ? " was " + e.previous + (e.raw ? " by a press" : " by a setter") : "")); } }
-        var go = new PrimaryButton(PrimaryButtonFactory.create({ createElement: function (n, tag) { return el(tag); } }, "go"), { label: "Save" }, ROLE.GO);
+        var go = new PrimaryButton(PrimaryButtonFactory.create({ createElement: function (n, tag) { return el(tag); } }, "go"), { label: "Save" });
         go.setOnClick(new Saved());
         var plain = new PlainButton(el("button"), { label: "Open", size: -1 });
         """;
@@ -78,11 +77,9 @@ class ButtonTest extends JsModuleTestBase {
     private boolean has(String el, String cls) { return eval(el + ".el.classList.contains('" + cls + "')").asBoolean(); }
 
     @Test
-    void wornAtOnce_itsLeafsClassAlone_aPartsLeafWhenItsOwnerNamesIt() {
+    void wornAtOnce_itsLeafsClassAlone() {
         assertEquals("styled-plain-button", str("plain.el.classes()"), "its leaf's style-aware class, and nothing else: no class per target");
         assertEquals("standalone", str("plain.role"), "Standalone unless given");
-        assertEquals("styled-primary-button_go", str("go.el.classes()"),
-                "in a role its owner passed in: its casting's class alone - the component and the role, the owner never in it");
         assertEquals("button", str("go.el.type"), "a button inside a form does not submit it");
         assertEquals("Save", str("go.label"));
     }
@@ -138,8 +135,6 @@ class ButtonTest extends JsModuleTestBase {
 
     @Test
     void castings_onlyThoseTheTaxonomyHasASlotFor_aFunctionalRoleLookingAsTheLeafOnItsOwn() {
-        eval("var action = new PlainButton(el('button'), {}, ROLE.ACTION);");
-        assertEquals("styled-plain-button_action", str("action.el.classes()"), "the plain button as Action: its casting's class, whichever owner made it");
         var e = assertThrows(PolyglotException.class, () -> eval("new DangerButton(el('button'), {}, ROLE.GO)"));
         assertTrue(e.getMessage().contains("is never cast as go: only as standalone"), e.getMessage());
         assertThrows(PolyglotException.class, () -> eval("new PlainButton(el('button'), {}, 'go')"), "a role is one of ROLE");
@@ -175,8 +170,6 @@ class ButtonTest extends JsModuleTestBase {
         eval("c.label = 'Close the dialog'");
         assertEquals("Close the dialog", str("c.label"));
         assertEquals("Close the dialog", str("c.el.getAttribute('title')"), "the tooltip follows its name");
-        eval("var closing = new CloseButton(el('button'), {}, ROLE.CLOSE);");
-        assertTrue(has("closing", "styled-close-button_close"), "cast as what closes its owner: the close button as Close");
     }
 
     /** The icon button: holds whatever icon it is handed - which icon is the icon's business - and is named for whoever cannot see it. */

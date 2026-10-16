@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.monitors;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
@@ -20,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * disposed by the slot, it stops listening. The steward was made before
  * this document, so the tests tell it the focus moved as its listener would.
  */
-class StewardMonitorTest extends JsModuleTestBase {
+class StewardMonitorTest extends UiMonitorsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/";
 

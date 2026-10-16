@@ -31,9 +31,9 @@ class HouseModulesTest {
     private static final HouseModules MODULES = HouseModules.INSTANCE;
 
     @Test
-    void aBaseModule_forEachHouseComponentModule_nothingDownstreamOnThisClasspath() {
+    void aBaseModule_forEachHouseComponentModule() {
         List<BaseModule<BaseScheme, Base>> base = MODULES.base();
-        assertEquals(HouseTaxonomy.MODULES, MODULES.definitions(), "no extension of the house here");
+        assertEquals(HouseTaxonomy.MODULES, MODULES.definitions(), "the house's jars' modules: nothing found on the classpath (D51)");
         assertEquals(HouseTaxonomy.MODULES, base.stream().map(BaseModule::components).toList(), "one for each, in order");
         for (BaseModule<BaseScheme, Base> m : base) {
             assertEquals(Base.INSTANCE, m.style());
@@ -61,7 +61,7 @@ class HouseModulesTest {
                 .style(Editorial.INSTANCE, MODULES.style(Editorial.INSTANCE))
                 .style(Sketchy.INSTANCE, MODULES.style(Sketchy.INSTANCE))
                 .build();
-        var house = HouseTaxonomy.INSTANCE.read();
+        var house = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
         assertEquals(new HashSet<>(house.components()), new HashSet<>(styles.taxonomy().components()));
         assertEquals(new HashSet<>(house.castings()), new HashSet<>(styles.taxonomy().castings()));
         assertEquals(house.roles(), styles.taxonomy().roles(), "the catalogue whole, in its order");

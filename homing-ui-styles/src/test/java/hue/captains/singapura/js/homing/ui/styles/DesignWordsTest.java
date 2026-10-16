@@ -28,7 +28,7 @@ class DesignWordsTest {
     /** Every value but the rest, by its word: {@code disabled -> enabled(false)}. */
     private static Map<String, String> words() {
         var out = new LinkedHashMap<String, String>();
-        for (StateType<?> t : HouseTaxonomy.INSTANCE.read().states().types()) {
+        for (StateType<?> t : HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).states().types()) {
             List<StateValue> values = t.values();
             for (StateValue v : values.subList(1, values.size())) out.put(t.word(v), t.name().value() + "(" + v + ")");
         }

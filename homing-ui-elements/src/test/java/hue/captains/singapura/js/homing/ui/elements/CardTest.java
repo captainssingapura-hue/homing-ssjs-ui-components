@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * by the hand or by Enter or Space through the keyboard party, never a keydown listener of its own. The summary is a
  * view of its own, its texts and its link the house's in their roles, shown on any container.
  */
-class CardTest extends JsModuleTestBase {
+class CardTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 

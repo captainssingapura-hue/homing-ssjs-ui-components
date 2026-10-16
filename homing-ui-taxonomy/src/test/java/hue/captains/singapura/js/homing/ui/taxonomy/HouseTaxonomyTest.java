@@ -6,7 +6,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtensions;
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentModules;
 import hue.captains.singapura.tao.ontology.enforcer.OntologyEnforcer;
 import org.junit.jupiter.api.Test;
 
@@ -30,18 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class HouseTaxonomyTest {
 
-    private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read();
+    private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
 
     /** The common components ui-components ships today, by their class names; its Button is realized by the button leaves, its Card by PlainCard and ClickableCard. */
     private static final Set<String> SHIPPED = Set.of(
             "PlainCard", "ClickableCard", "SummaryView", "Slider", "SliderGroup", "Panel", "EdgeStrip", "Dialog", "FloatingPane", "Icon", "ContextMenu",
             "Link", "Crumb", "Scrim", "Separator", "Delimiter", "Label", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6", "Caption", "Readout");
-
-    @Test
-    void theBase_aloneOnThisClasspath() {
-        assertEquals(List.of(), TaxonomyExtensions.INSTANCE.of(HouseTaxonomy.class), "no module that extends the house is here");
-        assertEquals(HouseTaxonomy.INSTANCE.common(), HouseTaxonomy.INSTANCE.components());
-    }
 
     @Test
     void theHouseIsReadWhole_withItsCatalogue() {
@@ -77,16 +71,16 @@ class HouseTaxonomyTest {
 
     @Test
     void everythingReached_isDeclared() {
-        assertEquals(Set.copyOf(HouseTaxonomy.INSTANCE.components()), Set.copyOf(HOUSE.components()),
-                "no component is reached without being declared in the house");
+        assertEquals(Set.copyOf(HOUSE.components()), ComponentModules.INSTANCE.bringers(HouseTaxonomy.MODULES, HOUSE).keySet(),
+                "no component is reached but through a module: listed by it, or a part of one it lists");
     }
 
     @Test
     void theBranches_levelled_eachWithAComponentUnderIt() {
         for (ComponentBranch b : HOUSE.branches())
             assertFalse(descendants(b).isEmpty(), b.getClass().getSimpleName() + " has no component under it");
-        assertEquals(List.of("control", "item", "container", "region", "text", "mark", "track"),
-                HOUSE.children(Root.INSTANCE).stream().map(n -> n.token()).toList(), "level 1, in the order first reached");
+        assertEquals(List.of("control", "text", "container", "mark", "item", "track", "region"),
+                HOUSE.children(Root.INSTANCE).stream().map(n -> n.token()).toList(), "level 1, in the order first reached - through the modules, in theirs");
         assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
                 HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, seventeen at level 2 - the headings, a branch of the text, the field, the split and the chooser among them");
     }

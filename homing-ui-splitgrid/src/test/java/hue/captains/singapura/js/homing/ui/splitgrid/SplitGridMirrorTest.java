@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.splitgrid;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * wears the house's look: its own casting, and each cell a pane's thumbnail
  * cast as a choice, named in a kicker, current by aria-current alone.
  */
-class SplitGridMirrorTest extends JsModuleTestBase {
+class SplitGridMirrorTest extends UiSplitGridJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/splitgrid/";
 

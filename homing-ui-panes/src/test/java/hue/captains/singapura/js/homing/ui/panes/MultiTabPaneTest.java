@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import hue.captains.singapura.js.homing.ui.look.IconsModule;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * mutation the pane makes is reported with the studio pane's names and
  * shapes, in order.
  */
-class MultiTabPaneTest extends JsModuleTestBase {
+class MultiTabPaneTest extends UiPanesJsTest {
 
     private static final String EVENTS = "/homing/js/hue/captains/singapura/js/homing/ui/panes/PaneEventsModule.js";
     private static final String DRAG   = "/homing/js/hue/captains/singapura/js/homing/ui/panes/TabDragModule.js";

@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * resting at a detent within the hand's bite — the hand on the rail, the
  * keys on the knob, the two events, the aria, the size on every part.
  */
-class SliderTest extends JsModuleTestBase {
+class SliderTest extends UiElementsJsTest {
 
     private static final String MODULE = "/homing/js/hue/captains/singapura/js/homing/ui/elements/SliderModule.js";
 

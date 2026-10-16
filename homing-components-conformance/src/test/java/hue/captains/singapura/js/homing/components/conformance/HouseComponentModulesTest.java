@@ -46,8 +46,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The house's components taxonomy read from its jars' component modules (the components taxonomy by module): a flat
- * list of twelve, registered explicitly, reads the house whole - the same components, branches, parts and castings as
- * the house's own list - each jar's module listing every component its crate implements, the rest coming in as parts.
+ * list of twelve, registered explicitly, reads the house whole - each jar's module listing every component its crate
+ * implements, the rest coming in as parts. There is no other list of the house's components (D51).
  */
 class HouseComponentModulesTest {
 
@@ -82,11 +82,6 @@ class HouseComponentModulesTest {
     @Test
     void theTwelveModules_readTheHouseWhole() {
         Taxonomy byModules = HouseTaxonomy.INSTANCE.read(HOUSE);
-        Taxonomy house = HouseTaxonomy.INSTANCE.read();
-        assertEquals(Set.copyOf(house.components()), Set.copyOf(byModules.components()), "the same components");
-        assertEquals(Set.copyOf(house.branches()), Set.copyOf(byModules.branches()), "the same branches");
-        assertEquals(Set.copyOf(house.parts()), Set.copyOf(byModules.parts()), "the same parts");
-        assertEquals(Set.copyOf(house.castings()), Set.copyOf(byModules.castings()), "the same castings");
         int listed = HOUSE.stream().mapToInt(m -> m.components().size()).sum();
         assertEquals(116, byModules.components().size());
         assertEquals(105, listed, "a hundred and five listed - ninety-seven implemented, eight realized inline by their owners");

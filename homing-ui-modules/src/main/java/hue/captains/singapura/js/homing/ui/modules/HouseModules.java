@@ -1,11 +1,9 @@
 package hue.captains.singapura.js.homing.ui.modules;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
-import hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtensions;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.styles.StyleDeclaration;
 import hue.captains.singapura.js.homing.design.styles.editorial.EditorialStyleDeclaration;
@@ -45,7 +43,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -54,12 +51,8 @@ import java.util.Map;
  * gathered from the jars as they stand - the files stay where they are, each jar's style declaration as it is. The base
  * modules: each house component module with its components' looks in Base, from every house jar's declaration, each look
  * in the bundle of the component whose design it is of; then each house style's module, from its own jar. Beside them
- * the house's words - its role catalogue and its trees of states and events, whole.
- *
- * <p>A downstream that extends the house's taxonomy on the classpath (a {@link
- * hue.captains.singapura.js.homing.component.taxonomy.TaxonomyExtension TaxonomyExtension}) comes in as one more base
- * module, its words with the house's: so the grid's frame is in the house's taxonomy wherever the grid is, as it was
- * before modules - until each downstream jar is a module of its own, which the instance registers by name.</p>
+ * the house's words - its role catalogue and its trees of states and events, whole. Nothing is found on the classpath
+ * (D51): a downstream's base modules are registered by the instance beside these.
  */
 public record HouseModules() implements StatelessFunctionalObject {
 
@@ -82,12 +75,8 @@ public record HouseModules() implements StatelessFunctionalObject {
             RetroFuturism.INSTANCE, RetroFuturismStyleDeclaration.INSTANCE,
             Sketchy.INSTANCE, SketchyStyleDeclaration.INSTANCE);
 
-    /** The component modules the house registers: its own, then the downstream extensions on the classpath, as one. */
-    public List<ComponentModule> definitions() {
-        var out = new ArrayList<ComponentModule>(HouseTaxonomy.MODULES);
-        if (!Extensions.INSTANCE.components().isEmpty()) out.add(Extensions.INSTANCE);
-        return List.copyOf(out);
-    }
+    /** The component modules the house registers: its jars', as the house defines them. */
+    public List<ComponentModule> definitions() { return HouseTaxonomy.MODULES; }
 
     /** The base modules: each component module with its components' looks in Base, from every house jar's declaration. */
     public List<BaseModule<BaseScheme, Base>> base() { return CollectModules.INSTANCE.base(Base.INSTANCE, definitions(), BASE_JARS); }
@@ -99,20 +88,12 @@ public record HouseModules() implements StatelessFunctionalObject {
         return CollectModules.INSTANCE.style(style, definitions(), List.of(jar));
     }
 
-    /** The house's catalogue of roles, whole, each extension's on the classpath after it. */
-    public List<Role<?>> roles() { return TaxonomyExtensions.INSTANCE.roles(HouseTaxonomy.class, HouseRoleCatalogue.INSTANCE.roles()); }
+    /** The house's catalogue of roles, whole. */
+    public List<Role<?>> roles() { return HouseRoleCatalogue.INSTANCE.roles(); }
 
-    /** The house's tree of states, whole, each extension's on the classpath after it. */
-    public List<StateType<?>> states() { return TaxonomyExtensions.INSTANCE.states(HouseTaxonomy.class, HouseStates.ALL); }
+    /** The house's tree of states, whole. */
+    public List<StateType<?>> states() { return HouseStates.ALL; }
 
-    /** The house's tree of events, whole, each extension's on the classpath after it. */
-    public List<EventType<?>> events() { return TaxonomyExtensions.INSTANCE.events(HouseTaxonomy.class, HouseEvents.ALL); }
-
-    /** The downstream extensions of the house on the classpath, their components as one module. */
-    public record Extensions() implements ComponentModule {
-
-        public static final Extensions INSTANCE = new Extensions();
-
-        @Override public List<? extends Component<?>> components() { return TaxonomyExtensions.INSTANCE.components(HouseTaxonomy.class, List.of()); }
-    }
+    /** The house's tree of events, whole. */
+    public List<EventType<?>> events() { return HouseEvents.ALL; }
 }

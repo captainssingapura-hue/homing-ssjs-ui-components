@@ -9,7 +9,6 @@ import hue.captains.singapura.js.homing.core.DerivedCss;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.SelfContent;
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  * simple component is a leaf's module exporting its companion; the check reads the JavaScript as a
  * page runs it.
  */
-class SimpleComponentsDeclaredTest extends JsModuleTestBase {
+class SimpleComponentsDeclaredTest extends UiElementsJsTest {
 
     /** The crate's simple components: each leaf's module that exports its companion, in the crate's order. */
     private static final List<EsModule<?>> SIMPLE = UiElementsCrate.INSTANCE.entries().stream().map(CrateEntry::module)

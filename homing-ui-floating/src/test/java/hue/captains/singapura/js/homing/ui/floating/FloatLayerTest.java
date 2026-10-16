@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.floating;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * named fresh at every opening; its id, the holder's, may be any string. The
  * fake party holds the real one's rule for a name.
  */
-class FloatLayerTest extends JsModuleTestBase {
+class FloatLayerTest extends UiFloatingJsTest {
 
     private static final String EVENTS = "/homing/js/hue/captains/singapura/js/homing/ui/floating/FloatEventsModule.js";
     private static final String PANE   = "/homing/js/hue/captains/singapura/js/homing/ui/floating/FloatingPaneModule.js";

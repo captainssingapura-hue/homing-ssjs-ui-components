@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import org.graalvm.polyglot.PolyglotException;
@@ -24,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * the one dissolve. The fake party holds the real one's rule for a name, and
  * dissolves as it does: its elements out of the document, its name free.
  */
-class TabPaneTest extends JsModuleTestBase {
+class TabPaneTest extends UiPanesJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/panes/";
     private static final String ELEMENTS = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";

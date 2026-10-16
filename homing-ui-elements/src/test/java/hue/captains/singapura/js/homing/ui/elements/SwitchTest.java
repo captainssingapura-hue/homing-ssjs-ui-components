@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * groove and knob - parts of their own, apart from the slider's - each wearing its casting's class; its state riding on
  * its button, a press turning it and its groove with it, dressed as its Commit.
  */
-class SwitchTest extends JsModuleTestBase {
+class SwitchTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 

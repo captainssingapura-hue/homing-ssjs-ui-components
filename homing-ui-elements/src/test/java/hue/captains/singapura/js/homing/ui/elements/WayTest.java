@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * while it is the page; the brand wearing its casting whole, its mark a brand mark of its own cast as its symbol, no
  * slice of a look anywhere.
  */
-class WayTest extends JsModuleTestBase {
+class WayTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 

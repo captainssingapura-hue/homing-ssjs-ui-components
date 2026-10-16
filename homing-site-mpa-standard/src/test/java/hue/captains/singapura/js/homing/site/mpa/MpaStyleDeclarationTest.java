@@ -20,7 +20,7 @@ class MpaStyleDeclarationTest {
     @TestFactory
     Stream<DynamicTest> theJar_andEachImplementation_heldAlone() {
         CheckDeclaration.Checked checked = CheckDeclaration.INSTANCE.check(
-                MpaStyleDeclaration.INSTANCE, HouseTaxonomy.INSTANCE.read(), BaseColours.TREE);
+                MpaStyleDeclaration.INSTANCE, HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES), BaseColours.TREE);
         return Stream.concat(
                 Stream.of(DynamicTest.dynamicTest("the jar", () -> assertEquals(List.of(), checked.problems()))),
                 checked.implementations().stream()

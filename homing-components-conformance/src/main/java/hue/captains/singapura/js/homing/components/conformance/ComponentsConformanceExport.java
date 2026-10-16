@@ -4,6 +4,8 @@ import hue.captains.singapura.js.homing.conformance.engine.ConformanceEngine;
 import hue.captains.singapura.js.homing.conformance.engine.ServedModuleRenderer;
 import hue.captains.singapura.js.homing.conformance.export.ConformanceReportWriter;
 import hue.captains.singapura.js.homing.conformance.rules.report.ConformanceRun;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,7 +17,8 @@ import java.nio.file.Paths;
  * served studio. Run by the Maven {@code exec} plugin at
  * {@code process-classes}, so a report is produced on every build. Exported
  * warn-mode ({@code allowPreExisting = true}) so every finding keeps its
- * disposition for the studio to show; the gate is the test.
+ * disposition for the studio to show; the gate is the test. It serves the house as the house's own instance would:
+ * that instance installed first, what is made from its taxonomy made from it (D51).
  */
 public final class ComponentsConformanceExport {
 
@@ -24,6 +27,7 @@ public final class ComponentsConformanceExport {
     public static void main(String[] args) throws IOException {
         if (args.length != 1) throw new IllegalArgumentException("Usage: ComponentsConformanceExport <output-directory>");
         Path dir = Paths.get(args[0]);
+        InstalledStyling.install(HouseStyles.INSTANCE.styling());
         ConformanceRun run = new ConformanceEngine(ComponentsConformance.POLICY, new ServedModuleRenderer())
                 .assemble(ComponentsConformance.TOP_LEVEL, ComponentsConformance.grader(true));
         new ConformanceReportWriter().write(dir, run);

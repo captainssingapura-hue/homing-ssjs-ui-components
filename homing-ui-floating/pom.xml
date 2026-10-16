@@ -77,6 +77,13 @@
             <version>${homing.core.version}</version>
         </dependency>
 
+        <!-- The jar's own instance, which its JS tests install (D51). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-jar-instance</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * a component of its own wearing its casting's class and holding its states as their classes; one behaviour for the
  * three - a press while usable is the click, the pointer coming onto an item that can be pointed at points at it.
  */
-class ItemTest extends JsModuleTestBase {
+class ItemTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 
@@ -43,8 +42,8 @@ class ItemTest extends JsModuleTestBase {
         class Told { constructor(tag, type) { this.tag = tag; this.type = type; } canHandle(t) { return t === this.type; }
                      handle(e) { log.push(this.tag + (e.raw ? " by " + e.raw.type : " by a setter")); } }
         var page = fakeBranch("page");
-        var item = new MenuItem(page.createBranch("rotate"), { label: "Rotate", icon: "rotate", hint: "a quarter turn" }, ROLE.CHOICE);
-        var opener = new MenuItem(page.createBranch("animal"), { label: "Animal", expanded: false }, ROLE.CHOICE);
+        var item = new MenuItem(page.createBranch("rotate"), { label: "Rotate", icon: "rotate", hint: "a quarter turn" });
+        var opener = new MenuItem(page.createBranch("animal"), { label: "Animal", expanded: false });
         var row = new ListRow(page.elementMaker("row"), { text: "Appearance" });   // on its own: cast as a choice only where the preferences are
         var option = new ChoiceOption(page.createBranch("dark"), { label: "Dark", note: "for the night" });
         """;
@@ -66,14 +65,14 @@ class ItemTest extends JsModuleTestBase {
 
     @Test
     void theMenusItem_itsPartsTheHouses_andThePointerPointsAtIt() {
-        assertTrue(is("item.el.has('styled-menu-item_choice') && item.el.has('el_menu_item') && item.el.getAttribute('role') === 'menuitem'"));
+        assertTrue(is("item.el.has('el_menu_item') && item.el.getAttribute('role') === 'menuitem'"));
         assertTrue(is("item.el.children[0] === item.mark.el && item.mark.name() === 'rotate'"), "its glyph first, the house's icon");
         assertTrue(is("item.el.children[2].has('styled-caption_hint') && item.el.children[2].has('el_menu_item_hint')"), "its hint, a caption cast as a hint");
         assertEquals("Rotate,null", str("[item.label, String(item.el.getAttribute('aria-haspopup'))]"), "it opens nothing");
         assertEquals("menu false", str("opener.el.getAttribute('aria-haspopup') + ' ' + opener.el.getAttribute('aria-expanded')"));
         assertTrue(is("opener.el.children[opener.el.children.length - 1].has('el_menu_item_disclose')"), "one that opens rows ends in the disclose mark");
         eval("item.setOnPointedChanged(new Told('pointed', STATE.POINTED.changed)); item.el.fire('pointerenter')");
-        assertTrue(is("item.pointed && item.el.has('styled-menu-item_choice--pointed') && item.el.getAttribute('data-highlighted') === 'true'"));
+        assertTrue(is("item.pointed && item.el.getAttribute('data-highlighted') === 'true'"));
         assertEquals("pointed by pointerenter", str("log.join()"), "the pointer's own event, so its menu can tell it from its own setter");
         eval("log = []; item.pointed = false");
         assertEquals("pointed by a setter", str("log.join()"));
@@ -85,7 +84,7 @@ class ItemTest extends JsModuleTestBase {
         assertEquals("picked by click", str("log.join()"));
         eval("log = []; item.enabled = false; item.el.fire('click')");
         assertEquals("", str("log.join()"), "off, a press does nothing");
-        assertTrue(is("item.el.has('styled-menu-item_choice--disabled') && item.el.getAttribute('aria-disabled') === 'true'"));
+        assertTrue(is("item.el.getAttribute('aria-disabled') === 'true'"));
         eval("item.checked = true");
         assertEquals("true", str("item.el.getAttribute('aria-checked')"));
         eval("item.checked = null");

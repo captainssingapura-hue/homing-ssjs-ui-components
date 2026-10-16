@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * the owner never holds a bare element. The element is the component's tag, the branch's under the
  * owner's name; a function made anywhere else is refused, whatever it would return.
  */
-class ElementMakerTest extends JsModuleTestBase {
+class ElementMakerTest extends UiElementsJsTest {
 
     private static final String CORE = "/homing/js/hue/captains/singapura/js/homing/core/js/";
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";

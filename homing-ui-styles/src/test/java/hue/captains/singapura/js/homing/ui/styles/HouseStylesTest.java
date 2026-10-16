@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class HouseStylesTest {
 
-    private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read();
+    private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
 
     @Test
     void theStyles_areSeven_eachOverBase_andBaseOverNothing() {

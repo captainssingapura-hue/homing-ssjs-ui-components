@@ -17,6 +17,9 @@ import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.tree.TreeLevel;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -46,6 +49,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The export and the served studio grade by the same configuration.
  */
 class ComponentsConformanceTest {
+
+    /** The house's own instance, installed as a site installs its own: what is made from its taxonomy is served (D51). */
+    @BeforeAll
+    static void theHousesInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling()); }
 
     private static final boolean ALLOW_PRE_EXISTING =
             Boolean.parseBoolean(System.getProperty("conformance.allowPreExisting", "true"));
@@ -144,7 +151,7 @@ class ComponentsConformanceTest {
      */
     @Test
     void everyImplementationIsAnchored_andComposedAsItsLeafDeclares() {
-        List<String> problems = Implementations.INSTANCE.validate(HouseTaxonomy.INSTANCE.read(), ComponentsConformance.TOP_LEVEL);
+        List<String> problems = Implementations.INSTANCE.validate(HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES), ComponentsConformance.TOP_LEVEL);
         assertEquals(COMPOSITION_LEDGER, problems, () -> "implementations against the taxonomy (" + problems.size() + "):\n" + String.join("\n", problems));
     }
 

@@ -10,7 +10,7 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.SelfContent;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ public record StatesAndEventsModule() implements EsModule<StatesAndEventsModule>
 
     @Override
     public List<String> selfContent(ModuleNameResolver resolver) {
-        Taxonomy house = HouseTaxonomy.INSTANCE.read();
+        Taxonomy house = InstalledStyling.get().taxonomy();
         var states = new ArrayList<String>();
         for (StateType<?> s : house.states().types()) {
             String token = s.name().value();

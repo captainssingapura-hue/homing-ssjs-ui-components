@@ -12,6 +12,13 @@ import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiElementsComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.UiControlPanelComponentModule;
+import hue.captains.singapura.js.homing.ui.elements.UiElementsStyleDeclaration;
+import hue.captains.singapura.js.homing.ui.icons.UiIconsStyleDeclaration;
+import hue.captains.singapura.js.homing.ui.jarinstance.JarInstance;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -26,6 +33,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * generated - every option with its means, rest and method, every type, every leaf's type.
  */
 class UiControlPanelCrateConformanceTest {
+
+    /** The jar's own instance (D51): the catalogue a page has is made from its taxonomy. */
+    @BeforeAll
+    static void theJarsInstance_installed() {
+        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiControlPanelComponentModule.INSTANCE),
+                List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE));
+    }
 
     @Test
     void everyServedModuleIsCrated() {
@@ -74,7 +88,6 @@ class UiControlPanelCrateConformanceTest {
         assertTrue(js.contains("\"ask\": Object.freeze({ category: \"asking\", means: \"question\", rest: null, method: \"ask\", label: \"What does it show?\" })"), js);
         assertTrue(js.contains("\"modal-overlay\": Object.freeze([\"open-modal\", \"open\", \"close\"])"), js);
         assertTrue(js.contains("\"plain\": Object.freeze([])"), js);
-        assertTrue(js.contains("\"dialog\": \"modal-overlay\""), js);
         assertTrue(js.contains("\"danger-button\": \"switchable\""), js);
         assertTrue(js.contains("\"heading4\": \"plain\""), js);
         assertTrue(js.contains("\"danger-button\": Object.freeze([\"colour\", \"size\", \"enabled\"])"), js);

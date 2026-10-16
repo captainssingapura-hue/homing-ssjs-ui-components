@@ -35,6 +35,7 @@
         <module>homing-ui-colours</module>
         <module>homing-ui-palettes-base</module>
         <module>homing-style-base</module>
+        <module>homing-ui-jar-instance</module>
         <module>homing-ui-styles</module>
         <module>homing-ui-look</module>
         <module>homing-ui-controllability</module>
