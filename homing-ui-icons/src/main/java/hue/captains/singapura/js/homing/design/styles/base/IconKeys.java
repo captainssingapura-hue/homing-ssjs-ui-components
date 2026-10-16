@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
@@ -15,6 +15,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
  */
 public record IconKeys() implements CastingStyle<BaseScheme, Base, HouseMarks.Icon, HouseSaying.Keys> {
     @Override public StylingRes<BaseScheme, HouseMarks.Icon> style() {
-        return new StylingRes.CssContent<>(new HouseColours.KeysMark());
+        return new StylingRes.CssContent<>(new BaseColours.KeysMark());
     }
 }

@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSplitGrid;
 
 /**
@@ -17,6 +17,6 @@ public record SplitGridMirror()
         implements CastingStyle<BaseScheme, Base, HouseSplitGrid.SplitGridMirror, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseSplitGrid.SplitGridMirror> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Accent(), new HouseColours.KeysCandidate(), new HouseColours.KeysLent());
+                new BaseColours.Accent(), new BaseColours.KeysCandidate(), new BaseColours.KeysLent());
     }
 }

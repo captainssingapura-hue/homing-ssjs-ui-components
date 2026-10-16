@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
+import hue.captains.singapura.js.homing.design.styling.PaletteRegistry;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -23,7 +24,14 @@ class BasePaletteDeclarationTest {
         var names = new HashSet<String>();
         for (ColorPalette<?> p : palettes) {
             assertTrue(names.add(p.token()), p.token() + " declared twice");
-            assertEquals(List.of(), HouseColours.TREE.check(p), p.token() + ": whole over the base, sitting on nothing");
+            assertEquals(List.of(), BaseColours.TREE.check(p), p.token() + ": whole over the base, sitting on nothing");
         }
+    }
+
+    @Test
+    void theJar_aSubRegistryOfItsOwn_itsSchemeReadByTheReaderFoundByName() {
+        PaletteRegistry registry = PaletteRegistry.of(List.of(BasePaletteDeclaration.INSTANCE));
+        assertEquals(List.of(BaseScheme.class), List.copyOf(registry.trees().keySet()), "BaseScheme, read by BaseColours beside it (D47)");
+        assertEquals(BaseColours.TREE.nodes(), registry.tree(Harbour.INSTANCE).nodes());
     }
 }

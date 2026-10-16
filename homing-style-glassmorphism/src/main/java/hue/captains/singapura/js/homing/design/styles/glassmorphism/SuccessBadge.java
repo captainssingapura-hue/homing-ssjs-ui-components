@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 /**
@@ -15,6 +15,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 public record SuccessBadge()
         implements CastingStyle<BaseScheme, Glassmorphism, HouseText.SuccessBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseText.SuccessBadge> style() {
-        return new StylingRes.CssContent<>(new HouseColours.SuccessInk(), new HouseColours.SuccessWash());
+        return new StylingRes.CssContent<>(new BaseColours.SuccessInk(), new BaseColours.SuccessWash());
     }
 }

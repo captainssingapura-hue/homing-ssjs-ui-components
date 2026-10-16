@@ -6,7 +6,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
@@ -18,25 +18,25 @@ import java.util.List;
 public record PrimaryButton()
         implements CastingStyle<BaseScheme, Editorial, HouseControls.PrimaryButton, RoleRoot> {
     /** Its ground along the degree: nothing at -1, each palette's neutral at 0, the house colour at 1 (D41). */
-    public record ButtonGround() implements ColorScale<BaseScheme, HouseColours.Scales> {
+    public record ButtonGround() implements ColorScale<BaseScheme, BaseColours.Scales> {
         @Override public List<Knot<BaseScheme>> knots() {
-            return List.of(new Knot<>(new HouseColours.Clear(), -1), new Knot<>(new HouseColours.PrimaryNeutral(), 0),
-                           new Knot<>(new HouseColours.Title(), 1));
+            return List.of(new Knot<>(new BaseColours.Clear(), -1), new Knot<>(new BaseColours.PrimaryNeutral(), 0),
+                           new Knot<>(new BaseColours.Title(), 1));
         }
     }
 
     /** Its label along the degree: the text's to 0.4, the ink on the house colour from 0.6 - turned where its ground turns (D41). */
-    public record ButtonLabel() implements ColorScale<BaseScheme, HouseColours.Scales> {
+    public record ButtonLabel() implements ColorScale<BaseScheme, BaseColours.Scales> {
         @Override public List<Knot<BaseScheme>> knots() {
-            return List.of(new Knot<>(new HouseColours.Text(), -1), new Knot<>(new HouseColours.Text(), 0.4),
-                           new Knot<>(new HouseColours.OnInverted(), 0.6), new Knot<>(new HouseColours.OnInverted(), 1));
+            return List.of(new Knot<>(new BaseColours.Text(), -1), new Knot<>(new BaseColours.Text(), 0.4),
+                           new Knot<>(new BaseColours.OnInverted(), 0.6), new Knot<>(new BaseColours.OnInverted(), 1));
         }
     }
 
     @Override public StylingRes<BaseScheme, HouseControls.PrimaryButton> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Title(), new HouseColours.Ring(), new HouseColours.ShadeFaint(),
-                new HouseColours.ShadeLight(), new HouseColours.ShadeMedium(), new ButtonGround(),
+                new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.ShadeFaint(),
+                new BaseColours.ShadeLight(), new BaseColours.ShadeMedium(), new ButtonGround(),
                 new ButtonLabel());
     }
 }

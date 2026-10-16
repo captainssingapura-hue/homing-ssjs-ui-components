@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 /**
@@ -13,6 +13,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
  */
 public record DangerBadge() implements CastingStyle<BaseScheme, Editorial, HouseText.DangerBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseText.DangerBadge> style() {
-        return new StylingRes.CssContent<>(new HouseColours.DangerInk(), new HouseColours.DangerWash());
+        return new StylingRes.CssContent<>(new BaseColours.DangerInk(), new BaseColours.DangerWash());
     }
 }

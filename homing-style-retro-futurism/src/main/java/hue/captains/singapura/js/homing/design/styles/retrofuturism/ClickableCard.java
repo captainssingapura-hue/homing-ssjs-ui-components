@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
@@ -16,8 +16,8 @@ public record ClickableCard()
         implements CastingStyle<BaseScheme, RetroFuturism, HouseContainers.ClickableCard, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.ClickableCard> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Border(), new HouseColours.Accent(), new HouseColours.Ring(),
-                new HouseColours.KeysCandidate(), new HouseColours.KeysLent(), new HouseColours.GlowDim(),
-                new HouseColours.GlowMedium(), new HouseColours.GlowStrong(), new HouseColours.GlowFull());
+                new BaseColours.Raised(), new BaseColours.Border(), new BaseColours.Accent(), new BaseColours.Ring(),
+                new BaseColours.KeysCandidate(), new BaseColours.KeysLent(), new BaseColours.GlowDim(),
+                new BaseColours.GlowMedium(), new BaseColours.GlowStrong(), new BaseColours.GlowFull());
     }
 }

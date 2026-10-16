@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
@@ -15,6 +15,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 public record SiteBar() implements CastingStyle<BaseScheme, RetroFuturism, HouseContainers.SiteBar, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.SiteBar> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Inverted(), new HouseColours.OnBar(), new HouseColours.Accent());
+                new BaseColours.Inverted(), new BaseColours.OnBar(), new BaseColours.Accent());
     }
 }

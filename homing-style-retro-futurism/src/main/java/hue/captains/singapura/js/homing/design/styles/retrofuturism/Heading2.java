@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
@@ -13,6 +13,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
  */
 public record Heading2() implements CastingStyle<BaseScheme, RetroFuturism, HouseText.Heading2, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseText.Heading2> style() {
-        return new StylingRes.CssContent<>(new HouseColours.HeadingInk());
+        return new StylingRes.CssContent<>(new BaseColours.HeadingInk());
     }
 }

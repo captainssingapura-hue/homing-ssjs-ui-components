@@ -3,7 +3,7 @@ package hue.captains.singapura.js.homing.ui.styles;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours.HouseColour;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours.BaseColour;
 
 import java.util.Optional;
 
@@ -27,6 +27,6 @@ public record Frost() implements ColorPalette<BaseScheme> {
                                          "rgba(27, 35, 64, 0.12)", "#DDE7F5", "rgba(255, 255, 255, 0.18)");
 
     @Override public Optional<ConcreteColor> color(Palettable<?, ?> color) {
-        return color instanceof HouseColour c ? Optional.of(HousePalettes.INSTANCE.of(SEEDS, c)) : Optional.empty();
+        return color instanceof BaseColour c ? Optional.of(HousePalettes.INSTANCE.of(SEEDS, c)) : Optional.empty();
     }
 }

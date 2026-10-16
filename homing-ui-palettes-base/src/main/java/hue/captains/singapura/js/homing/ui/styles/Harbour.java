@@ -3,7 +3,7 @@ package hue.captains.singapura.js.homing.ui.styles;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours.HouseColour;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours.BaseColour;
 
 import java.util.Optional;
 
@@ -22,6 +22,6 @@ public record Harbour() implements ColorPalette<BaseScheme> {
     static final Seeds SEEDS = new Seeds("#FFFFFF", "#111936", "#3B4A6B", "#FFFFFF", "#1E2761", "#F4B942", "#C8921E", "#111936", "#E2E8F0", "#FAFBFD", "#F1F4F9");
 
     @Override public Optional<ConcreteColor> color(Palettable<?, ?> color) {
-        return color instanceof HouseColour c ? Optional.of(HousePalettes.INSTANCE.of(SEEDS, c)) : Optional.empty();
+        return color instanceof BaseColour c ? Optional.of(HousePalettes.INSTANCE.of(SEEDS, c)) : Optional.empty();
     }
 }

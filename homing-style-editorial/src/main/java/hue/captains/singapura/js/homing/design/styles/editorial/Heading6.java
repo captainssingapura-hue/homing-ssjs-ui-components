@@ -5,12 +5,12 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 /** The heading 6 in editorial: a heading at the sixth level. Whole: every property its look has (D9). */
 public record Heading6() implements CastingStyle<BaseScheme, Editorial, HouseText.Heading6, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseText.Heading6> style() {
-        return new StylingRes.CssContent<>(new HouseColours.HeadingInk());
+        return new StylingRes.CssContent<>(new BaseColours.HeadingInk());
     }
 }

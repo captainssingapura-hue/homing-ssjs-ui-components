@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 
 /**
@@ -16,7 +16,7 @@ public record ChoiceOption()
         implements CastingStyle<BaseScheme, Glassmorphism, HouseItems.ChoiceOption, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseItems.ChoiceOption> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.OnInverted(), new HouseColours.Border(), new HouseColours.Title(),
-                new HouseColours.Ring(), new HouseColours.AccentWashSoft());
+                new BaseColours.OnInverted(), new BaseColours.Border(), new BaseColours.Title(),
+                new BaseColours.Ring(), new BaseColours.AccentWashSoft());
     }
 }

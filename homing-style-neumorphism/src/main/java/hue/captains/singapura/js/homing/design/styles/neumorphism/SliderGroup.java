@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
@@ -17,7 +17,7 @@ public record SliderGroup()
         implements CastingStyle<BaseScheme, Neumorphism, HouseContainers.SliderGroup, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.SliderGroup> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Border(), new HouseColours.Accent(),
-                new HouseColours.KeysCandidate(), new HouseColours.KeysLent());
+                new BaseColours.Raised(), new BaseColours.Border(), new BaseColours.Accent(),
+                new BaseColours.KeysCandidate(), new BaseColours.KeysLent());
     }
 }

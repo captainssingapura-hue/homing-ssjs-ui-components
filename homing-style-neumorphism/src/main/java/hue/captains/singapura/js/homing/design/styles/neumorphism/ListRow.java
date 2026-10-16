@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 
@@ -15,8 +15,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 public record ListRow() implements CastingStyle<BaseScheme, Neumorphism, HouseItems.ListRow, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseItems.ListRow> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.OnInverted(), new HouseColours.Border(), new HouseColours.Title(),
-                new HouseColours.Accent(), new HouseColours.AccentWashLight(), new HouseColours.AccentWashSoft(),
-                new HouseColours.KeysCandidate(), new HouseColours.KeysLent());
+                new BaseColours.OnInverted(), new BaseColours.Border(), new BaseColours.Title(),
+                new BaseColours.Accent(), new BaseColours.AccentWashLight(), new BaseColours.AccentWashSoft(),
+                new BaseColours.KeysCandidate(), new BaseColours.KeysLent());
     }
 }

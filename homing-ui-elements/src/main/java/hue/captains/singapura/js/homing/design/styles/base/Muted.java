@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 /**
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
  */
 public record Muted() implements CastingStyle<BaseScheme, Base, HouseText.Muted, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseText.Muted> style() {
-        return new StylingRes.CssContent<>(new HouseColours.TextFaded());
+        return new StylingRes.CssContent<>(new BaseColours.TextFaded());
     }
 }

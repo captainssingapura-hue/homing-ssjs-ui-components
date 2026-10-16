@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
@@ -17,8 +17,8 @@ public record FloatingPane()
         implements CastingStyle<BaseScheme, RetroFuturism, HouseContainers.FloatingPane, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.FloatingPane> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Text(), new HouseColours.Border(), new HouseColours.Ring(),
-                new HouseColours.ShadeSolid(), new HouseColours.ShadeDarker(), new HouseColours.GlowWarm(),
-                new HouseColours.GlowStrong(), new HouseColours.GlowFull(), new HouseColours.GlowFlare());
+                new BaseColours.Raised(), new BaseColours.Text(), new BaseColours.Border(), new BaseColours.Ring(),
+                new BaseColours.ShadeSolid(), new BaseColours.ShadeDarker(), new BaseColours.GlowWarm(),
+                new BaseColours.GlowStrong(), new BaseColours.GlowFull(), new BaseColours.GlowFlare());
     }
 }

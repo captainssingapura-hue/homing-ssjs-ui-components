@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 /**
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
  */
 public record IconButton() implements CastingStyle<BaseScheme, Base, HouseControls.IconButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.IconButton> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Wash(), new HouseColours.Border(), new HouseColours.Ring());
+        return new StylingRes.CssContent<>(new BaseColours.Wash(), new BaseColours.Border(), new BaseColours.Ring());
     }
 }

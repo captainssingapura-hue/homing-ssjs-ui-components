@@ -3,7 +3,7 @@ package hue.captains.singapura.js.homing.ui.styles;
 import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours.HouseColour;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours.BaseColour;
 
 import java.util.Optional;
 
@@ -25,6 +25,6 @@ public record Synthwave() implements ColorPalette<BaseScheme> {
                                          "rgba(230, 0, 126, 0.18)", "#F6EFFF", "#EFE6FF");
 
     @Override public Optional<ConcreteColor> color(Palettable<?, ?> color) {
-        return color instanceof HouseColour c ? Optional.of(HousePalettes.INSTANCE.of(SEEDS, c)) : Optional.empty();
+        return color instanceof BaseColour c ? Optional.of(HousePalettes.INSTANCE.of(SEEDS, c)) : Optional.empty();
     }
 }

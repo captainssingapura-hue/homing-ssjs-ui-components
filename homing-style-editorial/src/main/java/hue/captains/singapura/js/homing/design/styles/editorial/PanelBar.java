@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 /**
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
  */
 public record PanelBar() implements CastingStyle<BaseScheme, Editorial, HouseContainers.PanelBar, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.PanelBar> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Accent());
+        return new StylingRes.CssContent<>(new BaseColours.Accent());
     }
 }

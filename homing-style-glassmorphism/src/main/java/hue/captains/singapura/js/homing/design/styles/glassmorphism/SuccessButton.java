@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 /**
@@ -15,8 +15,8 @@ public record SuccessButton()
         implements CastingStyle<BaseScheme, Glassmorphism, HouseControls.SuccessButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.SuccessButton> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.SuccessInk(), new HouseColours.Border(), new HouseColours.Ring(),
-                new HouseColours.ShadeSoft(), new HouseColours.ShadeFirm(), new HouseColours.Sheen(),
-                new HouseColours.SuccessGround());
+                new BaseColours.SuccessInk(), new BaseColours.Border(), new BaseColours.Ring(),
+                new BaseColours.ShadeSoft(), new BaseColours.ShadeFirm(), new BaseColours.Sheen(),
+                new BaseColours.SuccessGround());
     }
 }

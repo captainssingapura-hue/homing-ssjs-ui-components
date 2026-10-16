@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
@@ -15,6 +15,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 public record ToggleGroove() implements CastingStyle<BaseScheme, NeoFuturism, HouseMarks.ToggleGroove, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseMarks.ToggleGroove> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.WashSoft(), new HouseColours.GrooveEdge(), new HouseColours.Accent());
+                new BaseColours.WashSoft(), new BaseColours.GrooveEdge(), new BaseColours.Accent());
     }
 }

@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 /**
@@ -17,7 +17,7 @@ public record EdgeStrip()
         implements CastingStyle<BaseScheme, Glassmorphism, HouseContainers.EdgeStrip, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.EdgeStrip> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Text(), new HouseColours.Border(),
-                new HouseColours.ShadeThick());
+                new BaseColours.Raised(), new BaseColours.Text(), new BaseColours.Border(),
+                new BaseColours.ShadeThick());
     }
 }

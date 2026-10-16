@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 /**
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
  */
 public record ToggleKnob() implements CastingStyle<BaseScheme, Base, HouseControls.ToggleKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.ToggleKnob> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Raised());
+        return new StylingRes.CssContent<>(new BaseColours.Raised());
     }
 }

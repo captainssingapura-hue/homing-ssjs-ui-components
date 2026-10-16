@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
 /**
@@ -15,6 +15,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 public record BoundaryLine() implements CastingStyle<BaseScheme, Base, HouseMarks.BoundaryLine, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseMarks.BoundaryLine> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Border(), new HouseColours.LineHovered(), new HouseColours.Accent());
+                new BaseColours.Border(), new BaseColours.LineHovered(), new BaseColours.Accent());
     }
 }

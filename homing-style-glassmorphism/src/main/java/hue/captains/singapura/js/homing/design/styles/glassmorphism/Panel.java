@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 /**
@@ -16,7 +16,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 public record Panel() implements CastingStyle<BaseScheme, Glassmorphism, HouseContainers.Panel, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.Panel> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Text(), new HouseColours.Border(), new HouseColours.Accent(),
-                new HouseColours.ShadeStrong(), new HouseColours.ShadeDeep(), new HouseColours.SheenSoft());
+                new BaseColours.Raised(), new BaseColours.Text(), new BaseColours.Border(), new BaseColours.Accent(),
+                new BaseColours.ShadeStrong(), new BaseColours.ShadeDeep(), new BaseColours.SheenSoft());
     }
 }

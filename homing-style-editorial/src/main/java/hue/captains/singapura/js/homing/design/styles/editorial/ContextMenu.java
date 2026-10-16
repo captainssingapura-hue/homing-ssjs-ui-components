@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 /**
@@ -16,7 +16,7 @@ public record ContextMenu()
         implements CastingStyle<BaseScheme, Editorial, HouseContainers.ContextMenu, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.ContextMenu> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Text(), new HouseColours.Border(),
-                new HouseColours.ShadeSolid(), new HouseColours.ShadeDense());
+                new BaseColours.Raised(), new BaseColours.Text(), new BaseColours.Border(),
+                new BaseColours.ShadeSolid(), new BaseColours.ShadeDense());
     }
 }

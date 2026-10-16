@@ -38,18 +38,18 @@ import java.util.List;
  *       1, neutral at 0, the meaning turned the other way at -1.</li>
  * </ul>
  *
- * Every palettable colour is a {@link HouseColour}, one sealed set, so every house palette answers every one of them by
+ * Every palettable colour is a {@link BaseColour}, one sealed set, so every house palette answers every one of them by
  * the compiler (D14).
  */
-public record HouseColours() implements SchemeTreeReader<BaseScheme> {
+public record BaseColours() implements SchemeTreeReader<BaseScheme> {
 
-    public static final HouseColours INSTANCE = new HouseColours();
+    public static final BaseColours INSTANCE = new BaseColours();
 
     /** The tree, read once. */
     public static final ColorTree TREE = INSTANCE.read();
 
     /** Every palettable colour of the house: one sealed set, so a palette's switch over it is exhaustive. */
-    public sealed interface HouseColour permits
+    public sealed interface BaseColour permits
             Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft, ScrollThumb, PrimaryNeutral, SecondaryNeutral,
             Text, TextFaded, OnInverted, OnBar, OnAccent, OnDanger, WayHovered, HeadingInk, KickerInk, DangerInk, WarningInk, SuccessInk,
             Border, GrooveEdge, LineHovered,
@@ -69,25 +69,25 @@ public record HouseColours() implements SchemeTreeReader<BaseScheme> {
     // ── surfaces ──────────────────────────────────────────────────────────
 
     /** A layer lifted off the page: a button's face, and the lit side of a shadow. */
-    public record Raised() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record Raised() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** The page's ground: what everything on a page stands on. */
-    public record Ground() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record Ground() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** A layer pressed below the page: the desk panes float over, a text box set into it. */
-    public record Recessed() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record Recessed() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** The darkest layer: a bar the page's ground is written on, and what a box casts. */
-    public record Inverted() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record Inverted() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** A wash under the hand for a mark alone - an icon button's - that shows on a raised face or the page's ground. */
-    public record Wash() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record Wash() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** The text's ink washed fainter, at 8%: the ground code is set on. */
-    public record WashFaint() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record WashFaint() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** At 10%: a pill's ground. */
-    public record WashSoft() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record WashSoft() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** The scrollbar's thumb on the page's ground: the text's ink, 55% into the ground. */
-    public record ScrollThumb() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record ScrollThumb() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** The primary button's ground at its neutral degree: the house colour at a fifth over the raised face, each palette's own (D41). */
-    public record PrimaryNeutral() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record PrimaryNeutral() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** The secondary button's ground at its neutral degree: the accent at a fifth over the raised face, each palette's own (D41). */
-    public record SecondaryNeutral() implements Palettable<BaseScheme, Surfaces>, HouseColour {}
+    public record SecondaryNeutral() implements Palettable<BaseScheme, Surfaces>, BaseColour {}
     /** Nothing drawn: the same in every palette. */
     public record Clear() implements Fixed<BaseScheme, Surfaces> {
         @Override public ConcreteColor color() { return new ConcreteColor.Srgb("transparent"); }
@@ -96,38 +96,38 @@ public record HouseColours() implements SchemeTreeReader<BaseScheme> {
     // ── inks: what is written and drawn in, each the palette's (D32) ──────
 
     /** The ink of what is written. */
-    public record Text() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record Text() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** The text's ink, a fifth faded into what it stands on: a quieter line - a caption, a lede - and a way somewhere. */
-    public record TextFaded() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record TextFaded() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** The ink written on the house's own colour and on inverted: the primary button's, the chosen tab's. */
-    public record OnInverted() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record OnInverted() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** What is written on a bar laid in the inverted layer - a site's bar, a floating pane's head: the page's ground, on the dark. */
-    public record OnBar() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record OnBar() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** The ink written on the accent. */
-    public record OnAccent() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record OnAccent() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** A way somewhere under the hand: the house's own colour leaning half into the faded text a way is written in. */
-    public record WayHovered() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record WayHovered() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** A heading's ink: the house's own colour leaning half into the text's. */
-    public record HeadingInk() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record HeadingInk() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** A kicker's ink: the accent's edge leaning half into the text's. */
-    public record KickerInk() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record KickerInk() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** The ink written on danger. */
-    public record OnDanger() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record OnDanger() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** Danger's ink: words that warn of a loss. */
-    public record DangerInk() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record DangerInk() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** Warning's ink. */
-    public record WarningInk() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record WarningInk() implements Palettable<BaseScheme, Inks>, BaseColour {}
     /** Success's ink. */
-    public record SuccessInk() implements Palettable<BaseScheme, Inks>, HouseColour {}
+    public record SuccessInk() implements Palettable<BaseScheme, Inks>, BaseColour {}
 
     // ── lines ─────────────────────────────────────────────────────────────
 
     /** The hairline: a button's border, and where a coloured button's ground ends at 0. */
-    public record Border() implements Palettable<BaseScheme, Lines>, HouseColour {}
+    public record Border() implements Palettable<BaseScheme, Lines>, BaseColour {}
     /** A groove's edge: the text's ink at 45%. */
-    public record GrooveEdge() implements Palettable<BaseScheme, Lines>, HouseColour {}
+    public record GrooveEdge() implements Palettable<BaseScheme, Lines>, BaseColour {}
     /** A line under the hand: the accent half into the border - a boundary the hand may move. */
-    public record LineHovered() implements Palettable<BaseScheme, Lines>, HouseColour {}
+    public record LineHovered() implements Palettable<BaseScheme, Lines>, BaseColour {}
 
     // ── current: CSS's currentColor at a share, for what does not care (D31, D32) ──
 
@@ -147,96 +147,96 @@ public record HouseColours() implements SchemeTreeReader<BaseScheme> {
     // ── attention ─────────────────────────────────────────────────────────
 
     /** The house's own colour: the primary button's ground, and the glow. */
-    public record Title() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record Title() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The accent: the secondary button's ground. */
-    public record Accent() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record Accent() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The accent's edge: the secondary button's border, a toggle's that is on. */
-    public record AccentEdge() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentEdge() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The ring a control wears while its focus is shown: the accent leaning into the hairline. */
-    public record Ring() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record Ring() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The accent's tint on a raised face: a toggle that is on. */
-    public record AccentTint() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentTint() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The accent's faint tint on a raised face, 12%: a pane's thumbnail the cursor is at. */
-    public record AccentTintFaint() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentTintFaint() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** A hint of the accent on a raised face, at 7%: a strip of tabs lit while its pane is worked in. */
-    public record AccentTintHint() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentTintHint() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The accent washed thin, at 18%: a badge's ground. */
-    public record AccentWash() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentWash() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The accent washed fainter, 8%: a tab's ground. */
-    public record AccentWashFaint() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentWashFaint() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** At 12%: the one that is current, among items. */
-    public record AccentWashLight() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentWashLight() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** At 15%: a tab under the hand. */
-    public record AccentWashSoft() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentWashSoft() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** At 28%: where a menu's cursor is. */
-    public record AccentWashStrong() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record AccentWashStrong() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The keys' mark on a candidate for them: the accent at 45%. */
-    public record KeysCandidate() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record KeysCandidate() implements Palettable<BaseScheme, Attention>, BaseColour {}
     /** The keys' mark where they are lent: the accent at 25%. */
-    public record KeysLent() implements Palettable<BaseScheme, Attention>, HouseColour {}
+    public record KeysLent() implements Palettable<BaseScheme, Attention>, BaseColour {}
 
     // ── shadows: the inverted layer's shade, the raised one's sheen, the house colour's glow, at each strength ──
 
     /** The inverted layer cast faintly - 4% - a whisper of lift. */
-    public record ShadeFaint() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeFaint() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 8%: a box set down. */
-    public record ShadeLight() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeLight() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 10%: a soft lift. */
-    public record ShadeSoft() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeSoft() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 12%: a box lifted under the hand. */
-    public record ShadeMedium() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeMedium() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 14%: a panel lifted off the page, its far shadow. */
-    public record ShadeModerate() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeModerate() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 16%: a moulded box's dark side. */
-    public record ShadeFirm() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeFirm() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 18%: a tab in use, set on the row. */
-    public record ShadeStrong() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeStrong() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 20%: a tab in the hand. */
-    public record ShadeDeep() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeDeep() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 22%: a glass tab in the hand. */
-    public record ShadeHeavy() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeHeavy() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 30%: an edge strip's near shadow. */
-    public record ShadeSolid() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeSolid() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 35%: an edge strip lifted off the page. */
-    public record ShadeThick() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeThick() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 45%: a panel lifted, cast hard. */
-    public record ShadeDense() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeDense() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 55%: a panel set in, cast hard. */
-    public record ShadeDark() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeDark() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 60%: an edge strip cast deep below its glow. */
-    public record ShadeDarker() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeDarker() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 70%: a panel set deep into the page. */
-    public record ShadeDarkest() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record ShadeDarkest() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** The raised layer's sheen at 45%: a glass panel's top edge lit. */
-    public record SheenSoft() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record SheenSoft() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** The raised layer's sheen, at 60%: a glass edge lit from above. */
-    public record Sheen() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record Sheen() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** The house colour glowing at 12%: a pane lit under the hand. */
-    public record GlowTrace() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowTrace() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** The house colour glowing faintly - 14% - a fine line of light. */
-    public record GlowFaint() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowFaint() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 20%: a pane in the hand. */
-    public record GlowLow() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowLow() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 25%. */
-    public record GlowDim() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowDim() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 28%: the current pane's fine ring. */
-    public record GlowGentle() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowGentle() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 30%. */
-    public record GlowSoft() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowSoft() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 35%: the current pane's ring, moulded. */
-    public record GlowMild() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowMild() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 40%. */
-    public record GlowMedium() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowMedium() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 45%. */
-    public record GlowWarm() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowWarm() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 55%. */
-    public record GlowStrong() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowStrong() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 60%. */
-    public record GlowBright() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowBright() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 70%: a neon edge. */
-    public record GlowFull() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowFull() implements Palettable<BaseScheme, Shadows>, BaseColour {}
     /** At 80%: a neon tab in the hand. */
-    public record GlowFlare() implements Palettable<BaseScheme, Shadows>, HouseColour {}
+    public record GlowFlare() implements Palettable<BaseScheme, Shadows>, BaseColour {}
 
     // ── feedback: the same in every house palette ─────────────────────────
 

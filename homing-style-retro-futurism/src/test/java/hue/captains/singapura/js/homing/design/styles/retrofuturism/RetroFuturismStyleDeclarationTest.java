@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.design.styling.CheckDeclaration;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -20,7 +20,7 @@ class RetroFuturismStyleDeclarationTest {
     @TestFactory
     Stream<DynamicTest> theJar_andEachImplementation_heldAlone() {
         CheckDeclaration.Checked checked = CheckDeclaration.INSTANCE.check(
-                RetroFuturismStyleDeclaration.INSTANCE, HouseTaxonomy.INSTANCE.read(), HouseColours.TREE);
+                RetroFuturismStyleDeclaration.INSTANCE, HouseTaxonomy.INSTANCE.read(), BaseColours.TREE);
         return Stream.concat(
                 Stream.of(DynamicTest.dynamicTest("the jar", () -> assertEquals(List.of(), checked.problems()))),
                 checked.implementations().stream()

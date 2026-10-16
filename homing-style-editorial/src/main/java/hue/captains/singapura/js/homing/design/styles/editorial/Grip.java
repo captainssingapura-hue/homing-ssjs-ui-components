@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 /**
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
  */
 public record Grip() implements CastingStyle<BaseScheme, Editorial, HouseControls.Grip, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.Grip> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Ring());
+        return new StylingRes.CssContent<>(new BaseColours.Ring());
     }
 }

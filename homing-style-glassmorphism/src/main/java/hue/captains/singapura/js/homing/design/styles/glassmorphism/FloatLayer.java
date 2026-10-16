@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 /**
@@ -15,6 +15,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 public record FloatLayer()
         implements CastingStyle<BaseScheme, Glassmorphism, HouseContainers.FloatLayer, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.FloatLayer> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Recessed());
+        return new StylingRes.CssContent<>(new BaseColours.Recessed());
     }
 }

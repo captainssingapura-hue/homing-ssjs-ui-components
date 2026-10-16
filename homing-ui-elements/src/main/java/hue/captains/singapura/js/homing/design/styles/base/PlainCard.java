@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 /**
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
  */
 public record PlainCard() implements CastingStyle<BaseScheme, Base, HouseContainers.PlainCard, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.PlainCard> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Raised(), new HouseColours.Border());
+        return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Border());
     }
 }

@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
 /**
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
  */
 public record DropMark() implements CastingStyle<BaseScheme, Base, HouseMarks.DropMark, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseMarks.DropMark> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Accent());
+        return new StylingRes.CssContent<>(new BaseColours.Accent());
     }
 }

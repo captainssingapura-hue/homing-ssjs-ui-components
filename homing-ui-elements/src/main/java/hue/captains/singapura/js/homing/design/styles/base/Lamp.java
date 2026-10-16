@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
 /**
@@ -15,7 +15,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 public record Lamp() implements CastingStyle<BaseScheme, Base, HouseMarks.Lamp, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseMarks.Lamp> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Text(), new HouseColours.OnDanger(), new HouseColours.Quiet(),
-                new HouseColours.Accent(), new HouseColours.AccentWashLight(), new HouseColours.Danger());
+                new BaseColours.Text(), new BaseColours.OnDanger(), new BaseColours.Quiet(),
+                new BaseColours.Accent(), new BaseColours.AccentWashLight(), new BaseColours.Danger());
     }
 }

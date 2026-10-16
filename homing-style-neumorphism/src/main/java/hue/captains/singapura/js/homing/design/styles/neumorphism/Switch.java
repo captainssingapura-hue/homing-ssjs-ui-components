@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
  */
 public record Switch() implements CastingStyle<BaseScheme, Neumorphism, HouseControls.Switch, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.Switch> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Ring());
+        return new StylingRes.CssContent<>(new BaseColours.Ring());
     }
 }

@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
@@ -16,6 +16,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 public record TabStrip() implements CastingStyle<BaseScheme, Neumorphism, HouseContainers.TabStrip, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseContainers.TabStrip> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Accent(), new HouseColours.AccentTintHint());
+                new BaseColours.Raised(), new BaseColours.Accent(), new BaseColours.AccentTintHint());
     }
 }

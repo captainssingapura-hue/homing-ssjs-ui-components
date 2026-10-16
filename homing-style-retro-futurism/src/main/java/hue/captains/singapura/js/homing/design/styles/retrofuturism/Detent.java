@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
@@ -14,6 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
  */
 public record Detent() implements CastingStyle<BaseScheme, RetroFuturism, HouseMarks.Detent, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseMarks.Detent> style() {
-        return new StylingRes.CssContent<>(new HouseColours.Muted());
+        return new StylingRes.CssContent<>(new BaseColours.Muted());
     }
 }

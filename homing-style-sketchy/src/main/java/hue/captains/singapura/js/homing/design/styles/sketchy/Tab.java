@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
@@ -15,7 +15,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 public record Tab() implements CastingStyle<BaseScheme, Sketchy, HouseControls.Tab, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.Tab> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Text(), new HouseColours.OnInverted(), new HouseColours.Border(),
-                new HouseColours.Title(), new HouseColours.AccentWashFaint(), new HouseColours.AccentWashSoft());
+                new BaseColours.Text(), new BaseColours.OnInverted(), new BaseColours.Border(),
+                new BaseColours.Title(), new BaseColours.AccentWashFaint(), new BaseColours.AccentWashSoft());
     }
 }

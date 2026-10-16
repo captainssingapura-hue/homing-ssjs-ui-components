@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.design.styles.neofuturism.NeoFuturismSty
 import hue.captains.singapura.js.homing.design.styles.neumorphism.NeumorphismStyleDeclaration;
 import hue.captains.singapura.js.homing.design.styles.retrofuturism.RetroFuturismStyleDeclaration;
 import hue.captains.singapura.js.homing.design.styles.sketchy.SketchyStyleDeclaration;
+import hue.captains.singapura.js.homing.design.styling.PaletteRegistry;
 import hue.captains.singapura.js.homing.design.styling.StyleManager;
 import hue.captains.singapura.js.homing.design.styling.StyleRegistration;
 import hue.captains.singapura.js.homing.design.styling.Styling;
@@ -40,12 +41,14 @@ import java.util.Map;
  * castings into being, each house style with its own jar. The second, the instance: the seven styles served over Base,
  * Editorial first and so the default; the palettes, every one of the base scheme, so any style may be worn in any of
  * them; and each style's own palette, the one it is worn in unless another is asked for, chosen by hand (appendix
- * Semantic Colours and Flavours, D22) - a pairing neither a style nor a palette may know.
+ * Semantic Colours and Flavours, D22) - a pairing neither a style nor a palette may know. The styles' scheme, the
+ * base's, is read by the reader found by its name, BaseColours (D47); the palettes are the instance's registry of them,
+ * apart from the styles.
  *
  * <p>A site whose own jars bring castings of their own, or implement a style for the house's components, hands their
  * declarations in ({@link #styling(List)}): each joins the registration of every style it provides for. A site with a
- * jar of palettes of its own hands its declaration in too ({@link #styling(List, List)}), registered after the house's.
- * A site hands the styling to its MPA, which installs it at bootstrap.</p>
+ * jar of palettes of its own hands its declaration in too ({@link #styling(List, List)}), registered after the house's:
+ * a sub-registry of the instance's palettes. A site hands the styling to its MPA, which installs it at bootstrap.</p>
  *
  * <p>Its jar carries the house's family files, for reading: written when it is built (WriteStyleFamilies), served by a
  * deployed site from the classpath (StyleFamilies).</p>
@@ -100,10 +103,10 @@ public record HouseStyles() implements StylingInstance {
         var registrations = new ArrayList<StyleRegistration>();
         registrations.add(registration(Base.INSTANCE, BASE_JARS, more));
         for (DesignStyle<BaseScheme> s : STYLES) registrations.add(registration(s, List.of(STYLE_JARS.get(s)), more));
-        StyleManager manager = StyleManager.of(HouseTaxonomy.INSTANCE.read(), List.of(HouseColours.INSTANCE), registrations);
+        StyleManager manager = StyleManager.of(HouseTaxonomy.INSTANCE.read(), registrations);
         var palettes = new ArrayList<PaletteDeclaration>(PALETTE_JARS);
         palettes.addAll(morePalettes);
-        return new Styling(manager, List.copyOf(STYLES), palettes, new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
+        return new Styling(manager, List.copyOf(STYLES), PaletteRegistry.of(palettes), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
     }
 
     private static StyleRegistration registration(DesignStyle<?> style, List<StyleDeclaration> jars, List<StyleDeclaration> more) {

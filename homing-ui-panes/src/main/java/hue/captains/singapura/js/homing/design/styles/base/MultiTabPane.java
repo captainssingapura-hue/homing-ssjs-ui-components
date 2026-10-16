@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
 /**
@@ -16,7 +16,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 public record MultiTabPane() implements CastingStyle<BaseScheme, Base, HousePanes.MultiTabPane, RoleRoot> {
     @Override public StylingRes<BaseScheme, HousePanes.MultiTabPane> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Text(), new HouseColours.Accent(),
-                new HouseColours.KeysCandidate(), new HouseColours.KeysLent());
+                new BaseColours.Raised(), new BaseColours.Text(), new BaseColours.Accent(),
+                new BaseColours.KeysCandidate(), new BaseColours.KeysLent());
     }
 }

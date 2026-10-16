@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 /**
@@ -15,7 +15,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 public record PaneThumb() implements CastingStyle<BaseScheme, Editorial, HouseControls.PaneThumb, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.PaneThumb> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.Raised(), new HouseColours.Border(), new HouseColours.Accent(),
-                new HouseColours.AccentTintFaint());
+                new BaseColours.Raised(), new BaseColours.Border(), new BaseColours.Accent(),
+                new BaseColours.AccentTintFaint());
     }
 }

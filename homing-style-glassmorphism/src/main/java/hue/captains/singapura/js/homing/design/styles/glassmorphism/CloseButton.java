@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
-import hue.captains.singapura.js.homing.ui.styles.HouseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 /**
@@ -16,7 +16,7 @@ public record CloseButton()
         implements CastingStyle<BaseScheme, Glassmorphism, HouseControls.CloseButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.CloseButton> style() {
         return new StylingRes.CssContent<>(
-                new HouseColours.OnDanger(), new HouseColours.Border(), new HouseColours.Ring(),
-                new HouseColours.Danger(), new HouseColours.DangerPressed());
+                new BaseColours.OnDanger(), new BaseColours.Border(), new BaseColours.Ring(),
+                new BaseColours.Danger(), new BaseColours.DangerPressed());
     }
 }
