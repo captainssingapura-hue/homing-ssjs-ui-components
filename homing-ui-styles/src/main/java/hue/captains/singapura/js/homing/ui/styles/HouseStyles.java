@@ -14,6 +14,7 @@ import hue.captains.singapura.js.homing.design.styles.sketchy.SketchyStyleDeclar
 import hue.captains.singapura.js.homing.design.styling.StyleManager;
 import hue.captains.singapura.js.homing.design.styling.StyleRegistration;
 import hue.captains.singapura.js.homing.design.styling.Styling;
+import hue.captains.singapura.js.homing.design.styling.StylingInstance;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesStyleDeclaration;
 import hue.captains.singapura.js.homing.site.mpa.MpaStyleDeclaration;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelStyleDeclaration;
@@ -44,8 +45,11 @@ import java.util.Map;
  * <p>A site whose own jars bring castings of their own, or implement a style for the house's components, hands their
  * declarations in ({@link #styling(List)}): each joins the registration of every style it provides for. A site hands
  * the styling to its MPA, which installs it at bootstrap.</p>
+ *
+ * <p>Its jar carries the house's family files, for reading: written when it is built (WriteStyleFamilies), served by a
+ * deployed site from the classpath (StyleFamilies).</p>
  */
-public record HouseStyles() {
+public record HouseStyles() implements StylingInstance {
 
     public static final HouseStyles INSTANCE = new HouseStyles();
 
@@ -87,7 +91,7 @@ public record HouseStyles() {
             Frost.INSTANCE, Synthwave.INSTANCE, Marker.INSTANCE, Forest.INSTANCE);
 
     /** The house's own instance, nothing a site adds: registered the first time it is asked for, and the same after. */
-    public Styling styling() { return House.STYLING; }
+    @Override public Styling styling() { return House.STYLING; }
 
     /** The house's instance with a site's own jars: each joins the registration of every style it provides for. */
     public Styling styling(List<StyleDeclaration> more) {

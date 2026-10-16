@@ -54,6 +54,7 @@ public final class StandardMpa implements Mpa {
     private final ModuleNameResolver names;
     private final HomingActionRegistry framework;
     private final ThemesGetAction themesAction;
+    private final StyleFamiliesGetAction familiesAction;
 
     private StandardMpa(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, List<Crate> crates) {
         this.brand  = Objects.requireNonNull(brand, "StandardMpa.brand");
@@ -67,9 +68,11 @@ public final class StandardMpa implements Mpa {
         for (EsModule<?> m : ServedModules.of(this.crates).byName().values()) {
             if (m instanceof AppModule<?, ?> a) apps.add(a);
         }
-        this.framework = new HomingActionRegistry(names, new SimpleAppResolver(apps), ResourceReader.INSTANCE,
+        // the modules' scripts, like the family files: in dev mode from the source folders homing.devRoot names, else from the jars
+        this.framework = new HomingActionRegistry(names, new SimpleAppResolver(apps), ResourceReader.fromSystemProperty(),
                                                   this.themes, new AppMeta(brand.label()), this.crates);
         this.themesAction = new ThemesGetAction(this.themes);
+        this.familiesAction = new StyleFamiliesGetAction();
     }
 
     /** A site's MPA: the brand on the bar, the themes it offers, the crates whose modules it serves; the default preferences. */
@@ -153,6 +156,7 @@ public final class StandardMpa implements Mpa {
         var gets = new LinkedHashMap<String, GetAction<RoutingContext, ?, ?, ?>>();
         gets.putAll(framework.getActions());
         gets.put(ThemesGetAction.ROUTE, themesAction);
+        if (InstalledStyling.installed().isPresent()) gets.put(StyleFamiliesGetAction.ROUTE, familiesAction);   // a styling's family files, for reading
         siteActions.forEach((route, action) -> { if (!route.equals(SiteGetAction.ROUTE)) gets.put(route, action); });
         gets.put(SiteGetAction.ROUTE, siteActions.get(SiteGetAction.ROUTE));
         var posts = Map.copyOf(framework.postActions());
