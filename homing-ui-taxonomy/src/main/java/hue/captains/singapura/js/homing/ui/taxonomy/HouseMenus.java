@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public final class HouseMenus {
     private HouseMenus() {}
 
     /** The one keeper of the page's context menus: one open at a time, and a specimen of each kind. Its layer is its own. */
-    public record ContextMenuSteward() implements Component<HouseBranches.Layer> {
+    public record ContextMenuSteward() implements Composite<HouseBranches.Layer> {
         public static final ContextMenuSteward INSTANCE = new ContextMenuSteward();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }

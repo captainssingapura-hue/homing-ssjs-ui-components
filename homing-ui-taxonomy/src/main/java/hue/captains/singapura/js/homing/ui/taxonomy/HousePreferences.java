@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public final class HousePreferences {
     private HousePreferences() {}
 
     /** One setting: what it is filed under, its title and summary, a note on it, and a way back to the default. Its body is the widget's. */
-    public record PreferenceField() implements Component<HouseBranches.Field> {
+    public record PreferenceField() implements Composite<HouseBranches.Field> {
         public static final PreferenceField INSTANCE = new PreferenceField();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
@@ -30,7 +30,7 @@ public final class HousePreferences {
     }
 
     /** A setting chosen from a few options. */
-    public record ChoiceWidget() implements Component<HouseBranches.Field> {
+    public record ChoiceWidget() implements Composite<HouseBranches.Field> {
         public static final ChoiceWidget INSTANCE = new ChoiceWidget();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
@@ -41,7 +41,7 @@ public final class HousePreferences {
     }
 
     /** A setting picked along a scale, read out. */
-    public record ScaleWidget() implements Component<HouseBranches.Field> {
+    public record ScaleWidget() implements Composite<HouseBranches.Field> {
         public static final ScaleWidget INSTANCE = new ScaleWidget();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
@@ -53,7 +53,7 @@ public final class HousePreferences {
     }
 
     /** A setting that is on or off. */
-    public record ToggleWidget() implements Component<HouseBranches.Field> {
+    public record ToggleWidget() implements Composite<HouseBranches.Field> {
         public static final ToggleWidget INSTANCE = new ToggleWidget();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
@@ -64,7 +64,7 @@ public final class HousePreferences {
     }
 
     /** The settings' tree as a flat list, depth as indentation: choosing a row is choosing what is shown beside it. */
-    public record ListMasterWidget() implements Component<HouseBranches.Field> {
+    public record ListMasterWidget() implements Composite<HouseBranches.Field> {
         public static final ListMasterWidget INSTANCE = new ListMasterWidget();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
@@ -74,7 +74,7 @@ public final class HousePreferences {
     }
 
     /** A group of settings: its head, its children listed with their values, and a way back to the defaults. */
-    public record OverviewWidget() implements Component<HouseBranches.Field> {
+    public record OverviewWidget() implements Composite<HouseBranches.Field> {
         public static final OverviewWidget INSTANCE = new OverviewWidget();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
@@ -92,7 +92,7 @@ public final class HousePreferences {
      * The site's preferences, a widget: the index of its settings and the one chosen, side by side. A split grid lays
      * them out, fixed, so the line between them is the grid's; the widgets are held in the slots.
      */
-    public record PreferencesView() implements Component<HouseBranches.View> {
+    public record PreferencesView() implements Composite<HouseBranches.View> {
         public static final PreferencesView INSTANCE = new PreferencesView();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
@@ -104,7 +104,7 @@ public final class HousePreferences {
     }
 
     /** One setting of a group, listed with its value. Its name is its own. */
-    public record SettingRow() implements Component<HouseBranches.Item> {
+    public record SettingRow() implements Composite<HouseBranches.Item> {
         public static final SettingRow INSTANCE = new SettingRow();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Item parent() { return HouseBranches.Item.INSTANCE; }

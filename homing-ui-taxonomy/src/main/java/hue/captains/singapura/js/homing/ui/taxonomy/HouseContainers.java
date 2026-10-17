@@ -1,9 +1,10 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
+import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 
@@ -23,13 +24,13 @@ public final class HouseContainers {
     // ── cards ────────────────────────────────────────────────────────────
 
     /** The basic card: a frame the caller fills, no part fixed - raised, of its own measure, still under the hand. */
-    public record PlainCard() implements Component<HouseBranches.Card> {
+    public record PlainCard() implements Leaf<HouseBranches.Card> {
         public static final PlainCard INSTANCE = new PlainCard();
         @Override public HouseBranches.Card parent() { return HouseBranches.Card.INSTANCE; }
     }
 
     /** A card that is a button: pressed - by the hand, or Enter or Space - it does its one thing. What is in it is its caller's, as in the plain card. */
-    public record ClickableCard() implements Component<HouseBranches.Card> {
+    public record ClickableCard() implements Leaf<HouseBranches.Card> {
         public static final ClickableCard INSTANCE = new ClickableCard();
         @Override public HouseBranches.Card parent() { return HouseBranches.Card.INSTANCE; }
         /** The pointer over it; the focus on it; where the page's keys are, held by the steward on its root (D12); the hand down on it. */
@@ -46,7 +47,7 @@ public final class HouseContainers {
      * thing. No frame of its own: shown on whatever holds it - a card, a pane, a dialog. Its texts
      * sized together.
      */
-    public record SummaryView() implements Component<HouseBranches.View> {
+    public record SummaryView() implements Composite<HouseBranches.View> {
         public static final SummaryView INSTANCE = new SummaryView();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
@@ -62,7 +63,7 @@ public final class HouseContainers {
     // ── containers ───────────────────────────────────────────────────────
 
     /** Sliders gathered under one header. */
-    public record SliderGroup() implements Component<HouseBranches.Cluster> {
+    public record SliderGroup() implements Composite<HouseBranches.Cluster> {
         public static final SliderGroup INSTANCE = new SliderGroup();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Cluster parent() { return HouseBranches.Cluster.INSTANCE; }
@@ -79,7 +80,7 @@ public final class HouseContainers {
      * A panel that fills what holds it: a head that names it, and a body - a section of its room, which what is
      * mounted in it fills. Its controls are the caller's, at the end of its head.
      */
-    public record Panel() implements Component<HouseBranches.Surface> {
+    public record Panel() implements Composite<HouseBranches.Surface> {
         public static final Panel INSTANCE = new Panel();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
@@ -92,7 +93,7 @@ public final class HouseContainers {
     }
 
     /** A floating pane over a scrim, with a bar of actions. Its title and close are the pane's, its content the caller's. */
-    public record Dialog() implements Component<HouseBranches.Pane> {
+    public record Dialog() implements Composite<HouseBranches.Pane> {
         public static final Dialog INSTANCE = new Dialog();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
@@ -106,7 +107,7 @@ public final class HouseContainers {
     // ── panes ────────────────────────────────────────────────────────────
 
     /** A pane that floats: a head with a title and a close. Its glyph slot, its body and its grip are its own. */
-    public record FloatingPane() implements Component<HouseBranches.Pane> {
+    public record FloatingPane() implements Composite<HouseBranches.Pane> {
         public static final FloatingPane INSTANCE = new FloatingPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
@@ -118,7 +119,7 @@ public final class HouseContainers {
     }
 
     /** The layer floating panes are stacked on: a desk of its own, recessed, or laid over what it is on. */
-    public record FloatLayer() implements Component<HouseBranches.Layer> {
+    public record FloatLayer() implements Composite<HouseBranches.Layer> {
         public static final FloatLayer INSTANCE = new FloatLayer();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
@@ -130,7 +131,7 @@ public final class HouseContainers {
     }
 
     /** Heads a pane that floats: its title and its close, and where the hand takes it to move it. */
-    public record TitleBar() implements Component<HouseBranches.Bar> {
+    public record TitleBar() implements Composite<HouseBranches.Bar> {
         public static final TitleBar INSTANCE = new TitleBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
@@ -143,7 +144,7 @@ public final class HouseContainers {
     }
 
     /** Heads a panel: its title, and at its end what acts on the panel - the caller's. */
-    public record PanelBar() implements Component<HouseBranches.Bar> {
+    public record PanelBar() implements Composite<HouseBranches.Bar> {
         public static final PanelBar INSTANCE = new PanelBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
@@ -155,7 +156,7 @@ public final class HouseContainers {
     // ── menus and layers ─────────────────────────────────────────────────
 
     /** A menu opened where it is asked: its items, and the lines between groups of them. Submenus are its own frames. */
-    public record ContextMenu() implements Component<HouseBranches.Menu> {
+    public record ContextMenu() implements Composite<HouseBranches.Menu> {
         public static final ContextMenu INSTANCE = new ContextMenu();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Menu parent() { return HouseBranches.Menu.INSTANCE; }
@@ -166,7 +167,7 @@ public final class HouseContainers {
     }
 
     /** The veil over the page behind a dialog. */
-    public record Scrim() implements Component<HouseBranches.Layer> {
+    public record Scrim() implements Leaf<HouseBranches.Layer> {
         public static final Scrim INSTANCE = new Scrim();
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
         @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE); }
@@ -175,7 +176,7 @@ public final class HouseContainers {
     // ── bars ─────────────────────────────────────────────────────────────
 
     /** A strip along an edge, revealed by its lip. Its controls are the caller's. */
-    public record EdgeStrip() implements Component<HouseBranches.Bar> {
+    public record EdgeStrip() implements Composite<HouseBranches.Bar> {
         public static final EdgeStrip INSTANCE = new EdgeStrip();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
@@ -188,7 +189,7 @@ public final class HouseContainers {
      * The surface a page stands on: its ground, the ink and the face of what is written on it, and its
      * scrollbar. One to a document, worn on its own element: everything on the page stands on it.
      */
-    public record Ground() implements Component<HouseBranches.Surface> {
+    public record Ground() implements Leaf<HouseBranches.Surface> {
         public static final Ground INSTANCE = new Ground();
         @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
     }
@@ -197,7 +198,7 @@ public final class HouseContainers {
      * A document table's cell that heads its column, or its row: a container, room for the words that say what its
      * column holds - never the table's lines, which are the table's, nor the look of its words, which wear their own.
      */
-    public record HeaderCell() implements Component<HouseBranches.Surface> {
+    public record HeaderCell() implements Composite<HouseBranches.Surface> {
         public static final HeaderCell INSTANCE = new HeaderCell();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
@@ -209,7 +210,7 @@ public final class HouseContainers {
      * A document table's cell that holds one fact: a container, room for what it holds - never the table's lines, which
      * are the table's, nor the look of its words, which wear their own.
      */
-    public record DataCell() implements Component<HouseBranches.Surface> {
+    public record DataCell() implements Composite<HouseBranches.Surface> {
         public static final DataCell INSTANCE = new DataCell();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
@@ -218,7 +219,7 @@ public final class HouseContainers {
     }
 
     /** Heads a site's pages: its brand, the way to where the user is, and what its owner hands it at its end, in the ink written on it. */
-    public record SiteBar() implements Component<HouseBranches.Bar> {
+    public record SiteBar() implements Composite<HouseBranches.Bar> {
         public static final SiteBar INSTANCE = new SiteBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
@@ -229,7 +230,7 @@ public final class HouseContainers {
     }
 
     /** A row of actions, at the foot of a dialog or a view. */
-    public record ActionBar() implements Component<HouseBranches.Bar> {
+    public record ActionBar() implements Composite<HouseBranches.Bar> {
         public static final ActionBar INSTANCE = new ActionBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
@@ -240,7 +241,7 @@ public final class HouseContainers {
     }
 
     /** The way back, crumb by crumb. */
-    public record Trail() implements Component<HouseBranches.Bar> {
+    public record Trail() implements Composite<HouseBranches.Bar> {
         public static final Trail INSTANCE = new Trail();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
@@ -251,7 +252,7 @@ public final class HouseContainers {
     }
 
     /** A pane's tabs in a row, with a way to add one, to close the pane, a count of the hidden, and where a dragged tab would land. */
-    public record TabStrip() implements Component<HouseBranches.Bar> {
+    public record TabStrip() implements Composite<HouseBranches.Bar> {
         public static final TabStrip INSTANCE = new TabStrip();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }

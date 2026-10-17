@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public final class HouseSite {
      * a layout of its own. It stands on the
      * page's ground, which the page wears.
      */
-    public record MpaChrome() implements Component<HouseBranches.View> {
+    public record MpaChrome() implements Composite<HouseBranches.View> {
         public static final MpaChrome INSTANCE = new MpaChrome();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
@@ -34,7 +34,7 @@ public final class HouseSite {
     }
 
     /** The theme chosen: a style, and a palette for it. */
-    public record ThemeWidget() implements Component<HouseBranches.Field> {
+    public record ThemeWidget() implements Composite<HouseBranches.Field> {
         public static final ThemeWidget INSTANCE = new ThemeWidget();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }

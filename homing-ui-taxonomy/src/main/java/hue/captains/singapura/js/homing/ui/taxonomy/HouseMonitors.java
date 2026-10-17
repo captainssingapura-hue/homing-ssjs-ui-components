@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public final class HouseMonitors {
     private HouseMonitors() {}
 
     /** Where focus is on the page, as a tree. */
-    public record FocusMonitor() implements Component<HouseBranches.View> {
+    public record FocusMonitor() implements Composite<HouseBranches.View> {
         public static final FocusMonitor INSTANCE = new FocusMonitor();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
@@ -26,7 +26,7 @@ public final class HouseMonitors {
     }
 
     /** Where the keyboard's steward has the focus, as one lamp. */
-    public record StewardMonitor() implements Component<HouseBranches.View> {
+    public record StewardMonitor() implements Composite<HouseBranches.View> {
         public static final StewardMonitor INSTANCE = new StewardMonitor();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }

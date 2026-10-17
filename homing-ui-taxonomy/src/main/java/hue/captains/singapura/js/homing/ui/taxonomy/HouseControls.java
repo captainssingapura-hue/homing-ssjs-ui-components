@@ -1,9 +1,10 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
+import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Button;
@@ -65,7 +66,7 @@ public final class HouseControls {
     // ── buttons ──────────────────────────────────────────────────────────
 
     /** A button with no emphasis. */
-    public record PlainButton() implements Component<Button> {
+    public record PlainButton() implements Leaf<Button> {
         public static final PlainButton INSTANCE = new PlainButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
@@ -73,7 +74,7 @@ public final class HouseControls {
     }
 
     /** The one action a view leads with. */
-    public record PrimaryButton() implements Component<Button> {
+    public record PrimaryButton() implements Leaf<Button> {
         public static final PrimaryButton INSTANCE = new PrimaryButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
@@ -82,7 +83,7 @@ public final class HouseControls {
     }
 
     /** An action beside the primary one. */
-    public record SecondaryButton() implements Component<Button> {
+    public record SecondaryButton() implements Leaf<Button> {
         public static final SecondaryButton INSTANCE = new SecondaryButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
@@ -91,7 +92,7 @@ public final class HouseControls {
     }
 
     /** An action that destroys or cannot be undone. */
-    public record DangerButton() implements Component<Button> {
+    public record DangerButton() implements Leaf<Button> {
         public static final DangerButton INSTANCE = new DangerButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
@@ -100,7 +101,7 @@ public final class HouseControls {
     }
 
     /** An action that needs a second thought. */
-    public record WarningButton() implements Component<Button> {
+    public record WarningButton() implements Leaf<Button> {
         public static final WarningButton INSTANCE = new WarningButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
@@ -109,7 +110,7 @@ public final class HouseControls {
     }
 
     /** An action that confirms what went well. */
-    public record SuccessButton() implements Component<Button> {
+    public record SuccessButton() implements Leaf<Button> {
         public static final SuccessButton INSTANCE = new SuccessButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
@@ -118,7 +119,7 @@ public final class HouseControls {
     }
 
     /** A button that is on or off. */
-    public record ToggleButton() implements Component<Button> {
+    public record ToggleButton() implements Leaf<Button> {
         public static final ToggleButton INSTANCE = new ToggleButton();
         @Override public List<StateType<?>> states() { return A_TOGGLE; }
         @Override public List<EventType<?>> events() { return CLICKED; }
@@ -126,7 +127,7 @@ public final class HouseControls {
     }
 
     /** A button that is an icon alone: the icon its part, whichever icon it is. */
-    public record IconButton() implements Component<Button> {
+    public record IconButton() implements Composite<Button> {
         public static final IconButton INSTANCE = new IconButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
@@ -138,7 +139,7 @@ public final class HouseControls {
     }
 
     /** The button that closes what holds it. */
-    public record CloseButton() implements Component<Button> {
+    public record CloseButton() implements Composite<Button> {
         public static final CloseButton INSTANCE = new CloseButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public List<StateType<?>> states() { return A_BUTTON; }
@@ -151,27 +152,27 @@ public final class HouseControls {
     // ── handles ──────────────────────────────────────────────────────────
 
     /** The slider's knob: what is grabbed to move its value along its groove; upright it is a cap. Never alone: a slider's part. */
-    public record SliderKnob() implements Component<Handle> {
+    public record SliderKnob() implements Leaf<Handle> {
         public static final SliderKnob INSTANCE = new SliderKnob();
         @Override public Handle parent() { return Handle.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_SLIDER_KNOB; }
     }
 
     /** The toggle's knob: what shows which way a switch stands, sliding in its groove. Never alone: a switch's part. */
-    public record ToggleKnob() implements Component<Handle> {
+    public record ToggleKnob() implements Leaf<Handle> {
         public static final ToggleKnob INSTANCE = new ToggleKnob();
         @Override public Handle parent() { return Handle.INSTANCE; }
     }
 
     /** What is grabbed to move the thing it is on. */
-    public record Grip() implements Component<Handle> {
+    public record Grip() implements Leaf<Handle> {
         public static final Grip INSTANCE = new Grip();
         @Override public Handle parent() { return Handle.INSTANCE; }
         @Override public List<StateType<?>> states() { return AN_INPUT; }
     }
 
     /** The thin band at an edge the hand comes to: reaching it shows the strip it belongs to. */
-    public record Lip() implements Component<Handle> {
+    public record Lip() implements Leaf<Handle> {
         public static final Lip INSTANCE = new Lip();
         @Override public Handle parent() { return Handle.INSTANCE; }
     }
@@ -180,7 +181,7 @@ public final class HouseControls {
     // ── other controls ───────────────────────────────────────────────────
 
     /** A way to somewhere else. */
-    public record Link() implements Component<Way> {
+    public record Link() implements Leaf<Way> {
         public static final Link INSTANCE = new Link();
         @Override public Way parent() { return Way.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_WAY; }
@@ -188,7 +189,7 @@ public final class HouseControls {
     }
 
     /** One step of a trail back. */
-    public record Crumb() implements Component<Way> {
+    public record Crumb() implements Leaf<Way> {
         public static final Crumb INSTANCE = new Crumb();
         @Override public Way parent() { return Way.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_CRUMB; }
@@ -196,7 +197,7 @@ public final class HouseControls {
     }
 
     /** A value picked along a scale. */
-    public record Range() implements Component<Input> {
+    public record Range() implements Leaf<Input> {
         public static final Range INSTANCE = new Range();
         @Override public List<StateType<?>> states() { return AN_INPUT; }
         @Override public List<EventType<?>> events() { return EDITED; }
@@ -204,7 +205,7 @@ public final class HouseControls {
     }
 
     /** A value picked from a list that drops down. */
-    public record Select() implements Component<Input> {
+    public record Select() implements Leaf<Input> {
         public static final Select INSTANCE = new Select();
         @Override public List<StateType<?>> states() { return AN_INPUT; }
         @Override public List<EventType<?>> events() { return COMMITTED; }
@@ -212,7 +213,7 @@ public final class HouseControls {
     }
 
     /** Words the user types: a line of them, or as many as they write - the browser's own editing. */
-    public record TextBox() implements Component<Input> {
+    public record TextBox() implements Leaf<Input> {
         public static final TextBox INSTANCE = new TextBox();
         @Override public List<StateType<?>> states() { return AN_INPUT; }
         @Override public List<EventType<?>> events() { return EDITED; }
@@ -220,7 +221,7 @@ public final class HouseControls {
     }
 
     /** One thing on or off, by a mark in a box - the browser's own. */
-    public record Checkbox() implements Component<Input> {
+    public record Checkbox() implements Leaf<Input> {
         public static final Checkbox INSTANCE = new Checkbox();
         @Override public List<StateType<?>> states() { return A_CHECK; }
         @Override public List<EventType<?>> events() { return COMMITTED; }
@@ -228,7 +229,7 @@ public final class HouseControls {
     }
 
     /** A pane, picked by a small picture of where it is, with its name: a thumbnail's, a grid's mirror's. */
-    public record PaneThumb() implements Component<Selector> {
+    public record PaneThumb() implements Composite<Selector> {
         public static final PaneThumb INSTANCE = new PaneThumb();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Selector parent() { return Selector.INSTANCE; }
@@ -240,7 +241,7 @@ public final class HouseControls {
     }
 
     /** One tab of a strip: what a pane holds, picked. Its label and its icon slot are its own. */
-    public record Tab() implements Component<Selector> {
+    public record Tab() implements Composite<Selector> {
         public static final Tab INSTANCE = new Tab();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Selector parent() { return Selector.INSTANCE; }
@@ -257,7 +258,7 @@ public final class HouseControls {
     }
 
     /** A site's mark and name, a way home. */
-    public record Brand() implements Component<Way> {
+    public record Brand() implements Composite<Way> {
         public static final Brand INSTANCE = new Brand();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Way parent() { return Way.INSTANCE; }
@@ -269,7 +270,7 @@ public final class HouseControls {
     }
 
     /** The button that opens a site's preferences in a dialog, a slot its page: what is shown there is a widget, the site's. */
-    public record PreferencesButton() implements Component<Button> {
+    public record PreferencesButton() implements Composite<Button> {
         public static final PreferencesButton INSTANCE = new PreferencesButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
@@ -282,7 +283,7 @@ public final class HouseControls {
     }
 
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
-    public record Switch() implements Component<Input> {
+    public record Switch() implements Composite<Input> {
         public static final Switch INSTANCE = new Switch();
         @Override public List<StateType<?>> states() { return A_CHECK; }
         @Override public List<EventType<?>> events() { return COMMITTED; }
@@ -295,7 +296,7 @@ public final class HouseControls {
     }
 
     /** A value picked along a track, with its label, its scale and its readout. The rail is its own. */
-    public record Slider() implements Component<Input> {
+    public record Slider() implements Composite<Input> {
         public static final Slider INSTANCE = new Slider();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Input parent() { return Input.INSTANCE; }

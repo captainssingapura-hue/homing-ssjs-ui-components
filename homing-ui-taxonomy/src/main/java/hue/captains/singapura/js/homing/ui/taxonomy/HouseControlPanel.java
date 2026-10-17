@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public final class HouseControlPanel {
     private HouseControlPanel() {}
 
     /** The controls for a set of options: the degrees in one group of sliders, a button for each switch, one for each action and question. */
-    public record ControlPanel() implements Component<HouseBranches.Cluster> {
+    public record ControlPanel() implements Composite<HouseBranches.Cluster> {
         public static final ControlPanel INSTANCE = new ControlPanel();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Cluster parent() { return HouseBranches.Cluster.INSTANCE; }

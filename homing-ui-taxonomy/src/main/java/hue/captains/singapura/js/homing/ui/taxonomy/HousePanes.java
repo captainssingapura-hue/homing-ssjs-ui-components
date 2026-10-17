@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 
@@ -18,7 +18,7 @@ public final class HousePanes {
     private HousePanes() {}
 
     /** The thumbnails of the panes one may open: each a cell of the picture it draws, the house's thumbnail on its own. */
-    public record PaneThumbs() implements Component<HouseBranches.Chooser> {
+    public record PaneThumbs() implements Composite<HouseBranches.Chooser> {
         public static final PaneThumbs INSTANCE = new PaneThumbs();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
@@ -28,7 +28,7 @@ public final class HousePanes {
     }
 
     /** The way to add a tab: where, off a picture of the panes; what, off the kinds; how it arrives; and go. */
-    public record AddTab() implements Component<HouseBranches.Chooser> {
+    public record AddTab() implements Composite<HouseBranches.Chooser> {
         public static final AddTab INSTANCE = new AddTab();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
@@ -41,7 +41,7 @@ public final class HousePanes {
     }
 
     /** What an empty pane offers to open. */
-    public record TabOpener() implements Component<HouseBranches.Chooser> {
+    public record TabOpener() implements Composite<HouseBranches.Chooser> {
         public static final TabOpener INSTANCE = new TabOpener();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
@@ -52,7 +52,7 @@ public final class HousePanes {
     }
 
     /** The list of a pane's tabs, to pick from. */
-    public record TabPicker() implements Component<HouseBranches.Chooser> {
+    public record TabPicker() implements Composite<HouseBranches.Chooser> {
         public static final TabPicker INSTANCE = new TabPicker();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
@@ -64,7 +64,7 @@ public final class HousePanes {
     }
 
     /** A pane of many tabs: its strip, its picker, a note when it holds none. It holds its pages. */
-    public record MultiTabPane() implements Component<HouseBranches.Pane> {
+    public record MultiTabPane() implements Composite<HouseBranches.Pane> {
         public static final MultiTabPane INSTANCE = new MultiTabPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
@@ -78,7 +78,7 @@ public final class HousePanes {
     }
 
     /** A pane of one tab: its strip, and the one page it holds. */
-    public record SingleTabPane() implements Component<HouseBranches.Pane> {
+    public record SingleTabPane() implements Composite<HouseBranches.Pane> {
         public static final SingleTabPane INSTANCE = new SingleTabPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
@@ -90,7 +90,7 @@ public final class HousePanes {
     }
 
     /** One open tab, whole: the chip that names it on a strip. Its panel and its widget are its own. */
-    public record TabPane() implements Component<HouseBranches.Pane> {
+    public record TabPane() implements Composite<HouseBranches.Pane> {
         public static final TabPane INSTANCE = new TabPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
