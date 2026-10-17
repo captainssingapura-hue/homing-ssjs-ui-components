@@ -92,7 +92,51 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
     }
 
     /** The implementation with CSS of its own an element wears in a style. */
-    public CastingStylePerRole<?, ?, ?, ?> wears(DesignStyle<?> style, ElementPath element) { return css(impl(style, element)); }
+    public CastingStylePerRole<?, ?, ?, ?> wears(DesignStyle<?> style, ElementPath element) { return worn(style, element).impl(); }
+
+    /**
+     * What an element wears in a style, with the layer it is of - found by walking, never off its type.
+     *
+     * @param layer the style the implementation is of: the style worn, or one below
+     * @param impl  the implementation with CSS of its own
+     */
+    public record Worn(DesignStyle<?> layer, CastingStylePerRole<?, ?, ?, ?> impl) implements ValueObject {}
+
+    /** What an element wears in a style, and its layer. */
+    public Worn worn(DesignStyle<?> style, ElementPath element) {
+        DesignStyle<?> layer = standaloneLayer(style, element.top());
+        Target<?, ?, ?, ?> at = standalones.get(layer).get(element.top());
+        for (Casting slot : element.parts()) {
+            if (!(at instanceof Target.Declared<?, ?, ?, ?> d))
+                throw new IllegalArgumentException(element.token() + ": a leaf has no slot " + slot.token());
+            PartSpec<?, ?, ?> p = d.declaration().parts().of(slot).orElseThrow(() -> new IllegalArgumentException(
+                    d.declaration().getClass().getName() + " points no " + slot.token() + ", on the way to " + element.token()));
+            switch (p) {
+                case PartSpec.SameRole<?, ?, ?, ?, ?> s -> at = s.to();
+                case PartSpec.Standalone<?, ?, ?, ?, ?> s -> {
+                    layer = standaloneLayer(style, s.part());
+                    at = standalones.get(layer).get(s.part());
+                }
+            }
+        }
+        CastingStylePerRole<?, ?, ?, ?> impl = switch (at) {
+            case Target.Impl<?, ?, ?, ?> i -> i.impl();
+            case Target.Declared<?, ?, ?, ?> d -> d.declaration().own();
+        };
+        var passed = new HashSet<Class<?>>();
+        while (true) {
+            if (!passed.add(impl.getClass())) throw new IllegalArgumentException(element.token() + " delegates round");
+            switch (impl.style()) {
+                case StylingRes.CssContent<?, ?, ?, ?> c -> { return new Worn(layer, impl); }
+                case StylingRes.Delegation<?, ?, ?, ?> d -> impl = d.to();
+                case StylingRes.RootDelegation<?, ?, ?, ?> r -> impl = r.to();
+                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> q -> {
+                    impl = q.to();
+                    layer = parent(layer).orElseThrow();
+                }
+            }
+        }
+    }
 
     /** Every element: each top-level component, and every slot down from it - placed parts too - a part met again on its path not walked twice. */
     public List<ElementPath> elements() {

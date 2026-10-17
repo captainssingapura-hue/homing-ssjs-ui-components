@@ -37,6 +37,13 @@ public record ElementPath(Component<?> top, List<Casting> parts) implements Valu
         return new ElementPath(top, out);
     }
 
+    /** Its handle, as a page's code holds it: the top-level component, then each slot - {@code dialog/action-bar_actions/plain-button_action}. */
+    public String handle() {
+        var out = new StringBuilder(top.token());
+        for (Casting c : parts) out.append('/').append(c.token());
+        return out.toString();
+    }
+
     /** {@code dialog > action-bar > plain-button_action}. */
     public String token() {
         var out = new StringBuilder(top.token());
