@@ -118,7 +118,7 @@ class WholeHouseTaxonomyTest {
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));
         assertEquals(expected, actual);
-        assertEquals(9 + 8, HouseControllability.INSTANCE.classification().declared().size(), "the common nine, and eight the modules declare - the split grid's mirror, a control, arranged as the grid is");
+        assertEquals(8 + 8, HouseControllability.INSTANCE.classification().declared().size(), "the common eight, and eight the modules declare - the split grid's mirror, a control, arranged as the grid is");
         for (Component<?> leaf : HOUSE.components())
             assertTrue(HouseControllability.INSTANCE.findControlType(HOUSE, leaf) != null, leaf + " has a type");
     }

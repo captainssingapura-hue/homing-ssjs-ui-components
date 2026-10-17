@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Ask;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Aspect;
-import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Clear;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Close;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Colour;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Current;
@@ -12,9 +11,7 @@ import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.E
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.EvenOut;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Fit;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Held;
-import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Missing;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Move;
-import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Next;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Open;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.OpenModal;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Raised;
@@ -65,8 +62,6 @@ public record HouseControllability() implements StatelessFunctionalObject {
     public static final ControlType ARRANGEABLE = new ControlType("arrangeable", List.of(Split.INSTANCE, Remove.INSTANCE, EvenOut.INSTANCE, ResetLayout.INSTANCE));
     /** Moved, sized and ringed by call; opened again once closed. */
     public static final ControlType PLACEABLE = new ControlType("placeable", List.of(Move.INSTANCE, Resize.INSTANCE, Ring.INSTANCE, Open.INSTANCE));
-    /** What it shows changed: the next, none, one it lacks. */
-    public static final ControlType CONTENT = new ControlType("content", List.of(Next.INSTANCE, Clear.INSTANCE, Missing.INSTANCE));
     /** Asked what it shows now. */
     public static final ControlType MONITOR = new ControlType("monitor", List.of(Ask.INSTANCE));
 
@@ -79,7 +74,6 @@ public record HouseControllability() implements StatelessFunctionalObject {
                 ZoomIn.INSTANCE, ZoomOut.INSTANCE, Fit.INSTANCE,
                 Split.INSTANCE, Remove.INSTANCE, EvenOut.INSTANCE, ResetLayout.INSTANCE,
                 Move.INSTANCE, Resize.INSTANCE, Ring.INSTANCE,
-                Next.INSTANCE, Clear.INSTANCE, Missing.INSTANCE,
                 Ask.INSTANCE);
     }
 
@@ -100,8 +94,7 @@ public record HouseControllability() implements StatelessFunctionalObject {
                 new ControlTypeAt(HouseContainers.Dialog.INSTANCE, MODAL_OVERLAY),
                 new ControlTypeAt(HouseContainers.ContextMenu.INSTANCE, OVERLAY),
                 new ControlTypeAt(HouseBranches.Split.INSTANCE, ARRANGEABLE),
-                new ControlTypeAt(HouseContainers.FloatingPane.INSTANCE, PLACEABLE),
-                new ControlTypeAt(HouseBranches.Icon.INSTANCE, CONTENT)));
+                new ControlTypeAt(HouseContainers.FloatingPane.INSTANCE, PLACEABLE)));   // an icon a part only, plain: nothing to control but its colour (D52)
         var extensions = new ArrayList<ControllabilityExtension>();
         ServiceLoader.load(ControllabilityExtension.class, HouseControllability.class.getClassLoader()).forEach(extensions::add);
         extensions.sort(Comparator.comparing(e -> e.getClass().getName()));

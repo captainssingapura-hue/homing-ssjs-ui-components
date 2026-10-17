@@ -28,7 +28,7 @@ class HouseControllabilityTest {
     private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
 
     @Test
-    void eightCategories_twentyFourOptions_eachInItsCategory() {
+    void sevenCategories_twentyOneOptions_eachInItsCategory() {
         var expected = new LinkedHashMap<String, List<String>>();
         expected.put("degrees", List.of("colour", "size", "aspect"));
         expected.put("states", List.of("enabled", "current", "raised", "held"));
@@ -36,13 +36,12 @@ class HouseControllabilityTest {
         expected.put("viewing", List.of("zoom-in", "zoom-out", "fit"));
         expected.put("arranging", List.of("split", "remove", "even-out", "reset-layout"));
         expected.put("placing", List.of("move", "resize", "ring"));
-        expected.put("content", List.of("next", "clear", "missing"));
         expected.put("asking", List.of("ask"));
         var actual = new LinkedHashMap<String, List<String>>();
         for (ControlNode b : CATALOGUE.children(ControlRoot.INSTANCE))
             actual.put(b.name().value(), CATALOGUE.children((ControlBranch) b).stream().map(n -> n.name().value()).toList());
         assertEquals(expected, actual);
-        assertEquals(24, CATALOGUE.options().size());
+        assertEquals(21, CATALOGUE.options().size());
     }
 
     @Test
@@ -60,7 +59,7 @@ class HouseControllabilityTest {
         var means = new LinkedHashMap<String, String>();
         var methods = new LinkedHashMap<String, String>();
         for (ControlOption<?> o : CATALOGUE.options()) { means.put(o.name().value(), o.means()); methods.put(o.name().value(), o.method()); }
-        assertEquals(Map.of("extent", 3L, "switch", 4L, "action", 16L, "question", 1L),
+        assertEquals(Map.of("extent", 3L, "switch", 4L, "action", 13L, "question", 1L),
                 means.values().stream().collect(java.util.stream.Collectors.groupingBy(m -> m, java.util.stream.Collectors.counting())));
         // where the house's components already answer by a method, the option names it
         assertEquals("extent", methods.get("colour"));
@@ -82,7 +81,7 @@ class HouseControllabilityTest {
 
     @Test
     void theCommonLeavesAlone_onThisClasspath() {
-        assertEquals(9, HouseControllability.INSTANCE.classification().declared().size(),
+        assertEquals(8, HouseControllability.INSTANCE.classification().declared().size(),
                 "no module that extends the house is here: the types of its leaves are declared beside them, and read where they are");
     }
 
@@ -96,7 +95,7 @@ class HouseControllabilityTest {
         expected.put("dialog", "modal-overlay");
         expected.put("context-menu", "overlay");
         expected.put("floating-pane", "placeable");
-        expected.put("close-icon", "content");   // under the Icon branch, declared on the branch (D52)
+        expected.put("close-icon", "plain");   // a part only, shown in what holds it: nothing to control but its colour (D52)
         for (String p : List.of("plain-card", "clickable-card", "summary-view", "slider-group")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));

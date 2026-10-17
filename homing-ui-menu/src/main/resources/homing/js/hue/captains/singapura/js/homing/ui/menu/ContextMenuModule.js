@@ -30,8 +30,8 @@
 // wrapping; the pointer coming onto a row points at it, and the menu follows.
 // A row with rows opens them beside it when pointed at, on Enter and on
 // ArrowRight; pointing at another row of the same frame closes them,
-// ArrowLeft steps back a level. A row's glyph is its own word, or the check
-// when the row is checked; a divider sits where the section changes. Every
+// ArrowLeft steps back a level. A row leads with its own icon, or the check
+// while the row is checked - the menu's to say, as an owner mounts one of several; a divider sits where the section changes. Every
 // frame wears the menu's casting - lifted over the page as its style casts
 // it. A row off (its Enabled false) is faded by its look. The menu's own
 // classes only place. `css` is injected with the styles import.

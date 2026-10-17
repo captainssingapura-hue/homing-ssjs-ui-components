@@ -4,8 +4,8 @@ import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 
 /**
  * The house's control options, filed by what each does to a component: set it by degree, change
- * its state, show it, view it, arrange it, place it, change what it shows, ask it. Eight categories
- * and twenty-four options. Each names the method on what is controlled that applies it, the
+ * its state, show it, view it, arrange it, place it, ask it. Seven categories and twenty-one
+ * options. Each names the method on what is controlled that applies it, the
  * method the house's components already answer by where they have one - a button is switched by
  * {@code setOn}, a panel made current by {@code highlight}, a strip held shown by {@code hold}.
  */
@@ -194,33 +194,6 @@ public final class HouseControlOptions {
     public record Ring() implements WithAction<Placing> {
         public static final Ring INSTANCE = new Ring();
         @Override public Placing parent() { return Placing.INSTANCE; }
-    }
-
-    // ── Content — what it shows ───────────────────────────────────────────
-
-    /** What it shows, changed. */
-    public record Content() implements L1_ControlBranch<ControlRoot> {
-        public static final Content INSTANCE = new Content();
-        @Override public ControlRoot parent() { return ControlRoot.INSTANCE; }
-    }
-
-    /** The next of what it can show. */
-    public record Next() implements WithAction<Content> {
-        public static final Next INSTANCE = new Next();
-        @Override public Content parent() { return Content.INSTANCE; }
-    }
-
-    /** Nothing shown. */
-    public record Clear() implements WithAction<Content> {
-        public static final Clear INSTANCE = new Clear();
-        @Override public Content parent() { return Content.INSTANCE; }
-    }
-
-    /** Something it lacks, so what it shows in its place is seen. */
-    public record Missing() implements WithAction<Content> {
-        public static final Missing INSTANCE = new Missing();
-        @Override public Content parent() { return Content.INSTANCE; }
-        @Override public String label() { return "One it lacks"; }
     }
 
     // ── Asking — what it shows now, in words ──────────────────────────────
