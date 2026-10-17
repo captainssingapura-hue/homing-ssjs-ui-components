@@ -7,6 +7,14 @@
 
 const _overviewOwner = Object.freeze({ toString: () => "overviewWidget" });
 
+/** The reset pressed: every setting the overview shows goes back to the site's default. */
+
+class OverviewReset {
+    constructor(settings) { this._settings = settings; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._settings.forEach(function (s) { PreferenceStewardInstance.forget(s.name); }); }
+}
+
 class OverviewWidget {
     constructor(branch, params) {
         branch.activate(_overviewOwner);
@@ -14,44 +22,37 @@ class OverviewWidget {
         var settings = (params && params.settings) || [];
 
         var root = branch.createElement("root", "div");
-        var kicker = branch.createElement("kicker", "div");
-        css.addClass(kicker, pv_kicker);
-        kicker.textContent = "group";
-        root.appendChild(kicker);
-        var title = branch.createElement("title", "h2");
-        css.addClass(title, pv_title);
-        title.textContent = params.label || "";
-        root.appendChild(title);
+        // its texts are the house's, each cast as what it is to the overview: placed by it, looking as they are
+        var kicker = new Kicker(KickerFactory.create(branch, "kicker"), { text: "group" }, ROLE.CATEGORY);
+        css.addClass(kicker.el, pv_kicker);
+        root.appendChild(kicker.el);
+        var title = new Heading4(Heading4Factory.create(branch, "title"), { text: params.label || "" }, ROLE.TITLE);
+        css.addClass(title.el, pv_title);
+        root.appendChild(title.el);
         if (params.summary) {
-            var summary = branch.createElement("summary", "p");
-            css.addClass(summary, pv_summary);
-            summary.textContent = params.summary;
-            root.appendChild(summary);
+            var summary = new Lede(LedeFactory.create(branch, "summary"), { text: params.summary }, ROLE.SUMMARY);
+            css.addClass(summary.el, pv_summary);
+            root.appendChild(summary.el);
         }
 
-        var list = branch.createElement("settings", "ul");
+        var list = branch.createElement("settings", "div");
         css.addClass(list, pv_children);
+        list.setAttribute("role", "list");
         this._values = [];
         settings.forEach(function (s, i) {
-            var li = branch.createElement("s-" + i, "li");
-            css.addClass(li, pv_child);
-            var label = branch.createElement("s-" + i + "-label", "span");
-            label.textContent = s.label || s.name;
-            var value = branch.createElement("s-" + i + "-value", "span");
-            css.addClass(value, pv_option_note);
-            li.appendChild(label);
-            li.appendChild(value);
-            list.appendChild(li);
-            self._values.push({ name: s.name, el: value });
+            // the line between two settings, the house's separator cast as a break: the list's own part, never a row's
+            if (i > 0) list.appendChild(new Separator(branch.elementMaker("rule-" + i), {}, ROLE.BREAK).el);
+            // each setting the preferences' setting row, as an entry of the list: its name and its value its own
+            var row = new SettingRow(branch.createBranch("s-" + i), { label: s.label || s.name }, ROLE.ENTRY);
+            list.appendChild(row.el);
+            self._values.push({ name: s.name, row: row });
         });
         root.appendChild(list);
 
         var actions = branch.createElement("actions", "div");
         css.addClass(actions, pv_actions);
-        var reset = new ButtonBuilder().label("Use the site's defaults for all of these").plain().onClick(function () {
-            settings.forEach(function (s) { PreferenceStewardInstance.forget(s.name); });
-        });
-        this._reset = reset.build(branch.createElement("reset", reset.tag));
+        this._reset = new PlainButton(PlainButtonFactory.create(branch, "reset"), { label: "Use the site's defaults for all of these" }, ROLE.RESET);
+        this._reset.setOnClick(new OverviewReset(settings));
         actions.appendChild(this._reset.el);
         root.appendChild(actions);
         this.root = root;
@@ -64,10 +65,10 @@ class OverviewWidget {
         var any = false;
         this._values.forEach(function (v) {
             var stored = PreferenceViewInstance.preferred(v.name), pinned = PreferenceViewInstance.override(v.name);
-            v.el.textContent = pinned ? pinned + " (pinned)" : stored ? stored : "default";
+            v.row.value = pinned ? pinned + " (pinned)" : stored ? stored : "default";
             if (stored) any = true;
         });
-        this._reset.setOn(any);
+        this._reset.enabled = any;
     }
 
     dispose() { this._stop(); }

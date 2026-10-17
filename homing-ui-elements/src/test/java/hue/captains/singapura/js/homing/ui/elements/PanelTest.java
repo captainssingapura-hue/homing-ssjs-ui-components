@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * content has both. It listens to nothing and takes no keys, and its branch
  * goes with it.
  */
-class PanelTest extends JsModuleTestBase {
+class PanelTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/";
 
@@ -41,7 +40,7 @@ class PanelTest extends JsModuleTestBase {
                     size: function (e, v) { sized.push(e.name + ":" + v); }, extent: function () {}, aspect: function () {},
                     elevation: function (e, v) { lifted.push(e.name + ":" + v); } };
         var lifted = [];
-        ["el_panel", "el_panel_head", "el_panel_title", "el_panel_slot", "el_panel_body", "el_panel_body_air", "el_panel_current", "el_panel_framed"].forEach(function (c) { globalThis[c] = c; });
+        ["el_panel", "el_panel_head", "el_panel_title", "el_panel_slot", "el_panel_body", "el_panel_body_air"].forEach(function (c) { globalThis[c] = c; });
         var observers = [];
         function MutationObserver(fn) { this.fn = fn; this.el = null; observers.push(this); }
         MutationObserver.prototype.observe = function (el, opts) { this.el = el; this.opts = opts; el._observer = this; };
@@ -51,16 +50,17 @@ class PanelTest extends JsModuleTestBase {
         function unkeys(el) { el.removeAttribute("data-keys"); for (var x = el; x; x = x.parentNode) if (x._observer) { x._observer.saw(el); return; } }
         var page = fakeBranch("page");
         var host = el("div");
-        var panel = new PanelBuilder().title("Dock A").fills().host(host).build(page.createBranch("dock-a"));
-        var reading = new PanelBuilder().title("Notes").build(page.createBranch("notes"));
-        var bare = new PanelBuilder().build(page.createBranch("bare"));
+        var panel = new Panel(page.createBranch("dock-a"), { title: "Dock A", fills: true, host: host });
+        var reading = new Panel(page.createBranch("notes"), { title: "Notes" });
+        var bare = new Panel(page.createBranch("bare"), {});
         """;
 
     @BeforeEach
     void load() {
         js = buildContext();
+        TextsInJs.load(js, this::loadModule);   // its texts are the house's
         loadModule(DIR + "ui/elements/PanelModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }
@@ -72,7 +72,7 @@ class PanelTest extends JsModuleTestBase {
         assertEquals("Dock A", eval("panel.title()").asString());
         assertEquals("Dock A", eval("panel.root.getAttribute('aria-label')").asString(), "the region is named for whoever cannot see it");
         assertEquals("header,div", eval("panel.root.children.map(function (c) { return c.tag; }).join()").asString(), "the head over the body");
-        assertEquals("h2,div", eval("panel.head.children.map(function (c) { return c.tag; }).join()").asString(), "the name, then the slot");
+        assertEquals("span,div", eval("panel.head.children.map(function (c) { return c.tag; }).join()").asString(), "the name - the house's kicker - then the slot");
         assertTrue(eval("panel.controls === panel.head.children[1]").asBoolean(), "the slot is the caller's to fill");
         assertTrue(eval("host.children[0] === panel.root").asBoolean(), "appended to the host it was given");
         assertEquals("Dock B", eval("panel.title('Dock B'); panel.title()").asString());
@@ -96,13 +96,27 @@ class PanelTest extends JsModuleTestBase {
         assertFalse(eval("panel.body.classes().indexOf('el_panel_body_air') >= 0").asBoolean());
     }
 
+    /**
+     * Its look: the panel's casting whole on its root (RFC 0067, Two Classes per Leaf, phase 5); a body that holds content
+     * a section, whole - its room round what it holds; a filled body flush; its head its bar's, whole.
+     */
+    @Test
+    void itWearsItsLook_aReadingBodyASection_aFilledOneFlush() {
+        String root = eval("reading.root.classes()").asString();
+        assertTrue(root.contains("styled-panel"), "its root wears its casting - " + root);
+        assertFalse(root.contains("styled-panel--"), "at rest: flat, and not the current one - " + root);
+        assertTrue(eval("reading.body.classes()").asString().contains("styled-section"), "a body that holds content: a section");
+        assertFalse(eval("panel.body.classes()").asString().contains("styled-"), "a filled body: flush, no room of its own");
+        assertTrue(eval("reading.head.classes()").asString().contains("styled-panel-bar"), "the head: its bar's look, whole");
+    }
+
     /** The size is an element's, not inherited, so the panel carries it to every part it minted - and not to a body that wears no length. */
     @Test
     void theSizeReachesEveryPartThePanelMinted() {
         eval("sized = []; reading.size(0.5)");
-        assertEquals("panel:0.5 head:0.5 title:0.5 controls:0.5 body:0.5", eval("sized.join(' ')").asString());
+        assertEquals("panel:0.5 head:0.5 controls:0.5 body:0.5 title:0.5", eval("sized.join(' ')").asString(), "its title by its own size, after the parts it minted");
         eval("sized = []; panel.size(0)");
-        assertEquals("panel:null head:null title:null controls:null", eval("sized.join(' ')").asString(), "a filled body wears no length to grow");
+        assertEquals("panel:null head:null controls:null title:null", eval("sized.join(' ')").asString(), "a filled body wears no length to grow");
     }
 
 /**
@@ -116,20 +130,27 @@ class PanelTest extends JsModuleTestBase {
         assertTrue(eval("panel.elevationOf() === null").asBoolean(), "flat, and no default was ever chosen for it");
         eval("lifted = []; panel.elevation(\"elevated\")");
         assertEquals("panel:elevated", eval("lifted.join(' ')").asString());
+        assertTrue(eval("panel.root.classes()").asString().contains("styled-panel--elevated"), "its state's class: the style draws the lift");
         eval("lifted = []; panel.elevation(\"sunken\")");
         assertEquals("panel:sunken", eval("lifted.join(' ')").asString(), "the other register");
+        assertTrue(eval("panel.root.classes()").asString().contains("styled-panel--sunken"));
+        assertFalse(eval("panel.root.classes()").asString().contains("styled-panel--elevated"), "one register at a time");
         eval("lifted = []; panel.elevation(\"lofty\")");
         assertEquals("panel:null", eval("lifted.join(' ')").asString(), "two registers and flat; anything else is flat");
+        assertFalse(eval("panel.root.classes()").asString().contains("styled-panel--"), "flat: no class at all");
         eval("lifted = []; panel.elevation(null)");
         assertEquals("panel:null", eval("lifted.join(' ')").asString(), "flat says nothing at all: the design rests it where it rests it");
         assertFalse(eval("panel.isHighlighted()").asBoolean());
-        assertFalse(eval("panel.root.classes().indexOf(\"el_panel_current\") >= 0").asBoolean());
+        assertFalse(eval("panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean());
         eval("panel.highlight(true)");
-        assertTrue(eval("panel.isHighlighted() && panel.root.classes().indexOf(\"el_panel_current\") >= 0").asBoolean());
+        assertTrue(eval("panel.isHighlighted() && panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean(), "said by its reflection");
+        assertTrue(eval("panel.root.classes()").asString().contains("styled-panel--current"), "and its state's class: the style draws the current one");
         eval("lifted = []; panel.elevation(\"elevated\")");
-        assertTrue(eval("panel.isHighlighted() && panel.root.classes().indexOf(\"el_panel_current\") >= 0").asBoolean(), "orthogonal: the depth does not touch the colour");
+        assertTrue(eval("panel.isHighlighted() && panel.root.getAttribute(\"aria-current\") === \"true\"").asBoolean(), "orthogonal: the depth does not touch the colour");
         eval("panel.highlight(false)");
-        assertFalse(eval("panel.root.classes().indexOf(\"el_panel_current\") >= 0").asBoolean());
+        assertEquals("null", eval("String(panel.root.getAttribute(\"aria-current\"))").asString(), "no longer current: the reflection taken away, never said false");
+        assertFalse(eval("panel.root.classes()").asString().contains("styled-panel--current"), "its class taken off");
+        assertTrue(eval("panel.root.classes()").asString().contains("styled-panel--elevated"), "the depth's kept");
         assertEquals("elevated", eval("panel.elevationOf()").asString(), "nor the colour the depth");
     }
 
@@ -159,7 +180,7 @@ class PanelTest extends JsModuleTestBase {
         assertTrue(eval("panel.isWithin()").asBoolean(), "unwatched: it keeps what it says");
         assertEquals(0, eval("dock.root.listening(\"keydown\") + dock.root.listening(\"pointerdown\")").asInt(), "the mounted thing is told nothing and given nothing");
         assertEquals("true false true false true false true", eval("said.join(' ')").asString(), "it said each turn once, and only on a change");
-        assertFalse(eval("panel.root.classes().indexOf(\"el_panel_current\") >= 0 || panel.elevationOf() !== null").asBoolean(),
+        assertFalse(eval("panel.root.getAttribute(\"aria-current\") !== null || panel.elevationOf() !== null").asBoolean(),
                     "and decided nothing by it: no colour, no depth, until an app says what it means");
         assertTrue(eval("panel.watch(dock.root) === panel").asBoolean(), "an element does as well as a component");
         assertFalse(eval("panel.isWithin()").asBoolean(), "read afresh on watching: candidate is not held");

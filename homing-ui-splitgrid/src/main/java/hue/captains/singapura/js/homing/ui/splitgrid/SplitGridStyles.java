@@ -3,35 +3,18 @@ package hue.captains.singapura.js.homing.ui.splitgrid;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Box.Control;
-import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
-import static hue.captains.singapura.js.homing.design.Interaction.Current;
-import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Layer.Recessed;
-import static hue.captains.singapura.js.homing.design.Structure.Hairline;
-import static hue.captains.singapura.js.homing.design.Structure.Divider;
-import static hue.captains.singapura.js.homing.design.Structure.Spine;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-
 /**
- * The split grid's classes. A split is a flex row or column; each child takes
- * its share — its track — through {@code --sg-ratio}, set at runtime and read
- * here; a cell is a box its owner fills, and the grid never knows with what.
- * The divider between two side-by-side cells is a spine — the design's line
- * along the leading edge of a column — and between two stacked cells a
- * divider, its rule between things; the handle around the line is layout,
- * and shows the primary surface by extent as it is hovered and held. The
- * bodies hold nothing that could be a value.
+ * The split grid's classes, every one of them placement. A split is a flex row or column; each
+ * child takes its share - its track - through {@code --sg-ratio}, and keeps its least through
+ * {@code --sg-least}, both set at runtime and read here; a cell is a box its owner fills, and the
+ * grid never knows with what. The line where two cells meet is the grid's part in the house's look
+ * - a boundary line, its thickness and its colour the theme's - so all that is said of it here is
+ * where it goes; on a resizable grid the handle sizing arms on it brings its cursor and its reach.
+ * The bodies hold nothing that could be a value.
  */
 public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
 
@@ -39,7 +22,7 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
 
     /**
      * The root: fills its host by growing and stretching, so the host is a
-     * flex box — a column or a row — and the splitter is its item. Never a
+     * flex box — a column or a row — and the grid is its item. Never a
      * percentage height, which a flex host cannot resolve and which would
      * keep the root from stretching. {@code --sg-min} is the smallest a cell
      * may be, set once here.
@@ -77,9 +60,9 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
         @Override public String body() { return "flex-direction: column;"; }
     }
 
-    /** A child of a split: its share of the space is its ratio, and no less than the minimum. */
+    /** A child of a split: its share of the space is its ratio, and no less than its least. */
     public record sg_child() implements CssClass<SplitGridStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-ratio"), new CssVar("--sg-min")); }
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-ratio")); }
         @Override public String body() { return """
             display: flex;
             flex: var(--sg-ratio, 1) 1 0%;
@@ -90,14 +73,16 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
         }
     }
 
+    /** Along a row: its least is its width - a cell's, or the cells a split in it holds across it. */
     public record sg_child_h() implements CssClass<SplitGridStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-min")); }
-        @Override public String body() { return "min-width: var(--sg-min, 40px);"; }
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-least"), new CssVar("--sg-min")); }
+        @Override public String body() { return "min-width: var(--sg-least, var(--sg-min, 40px));"; }
     }
 
+    /** Along a column: its least is its height. */
     public record sg_child_v() implements CssClass<SplitGridStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-min")); }
-        @Override public String body() { return "min-height: var(--sg-min, 40px);"; }
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-least"), new CssVar("--sg-min")); }
+        @Override public String body() { return "min-height: var(--sg-least, var(--sg-min, 40px));"; }
     }
 
     /** A cell: the box the owner fills. It scrolls nothing itself; what is put in it decides. */
@@ -114,149 +99,32 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
         }
     }
 
-    /** The handle between two neighbours: a few pixels to grab, the design's line along one edge; nothing of its own at rest. */
-    public record sg_divider() implements CssClass<SplitGridStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Interactive.class, Motion.Ease.class)); }
+    /**
+     * The line where two cells meet, placed: between them, never shrinking or growing, as long as the
+     * split is across it. How thick it is and what colour - or whether it shows - is its look's.
+     */
+    public record sg_line() implements CssClass<SplitGridStyles> {
         @Override public String body() { return """
             flex: 0 0 auto;
+            align-self: stretch;
             box-sizing: border-box;
-            position: relative;
-            z-index: 1;
-            touch-action: none;
-            user-select: none;
             """;
         }
     }
 
-    /**
-      * Between side-by-side rooms: THE LINE ITSELF, as thick as the grid says
-      * — one line shared by both, with a room flush against each side, and no
-      * gutter at all. The hand reaches past it either way, by a constant, so
-      * a line of one pixel is still seven pixels to grab: the splitter that
-      * is seen and the splitter that is taken hold of are two different
-      * widths, which is the whole trick.
-      */
-    public record sg_divider_h() implements CssClass<SplitGridStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-line")); }
-        @Override public String body() { return """
-            width: var(--sg-line, 1px);
-            cursor: col-resize;
-            &::before { content: ""; position: absolute; inset: 0 -3px; }
-            """;
-        }
-    }
-
-    /**
-      * The handle lit: the primary surface by extent, worn while the pointer
-      * is over it or holds it — part of the way from the design's neutral
-      * when found, at full while held. The splitter sets the number and takes
-      * the class off at rest; the design owns the anchors.
-      *
-      * <p>This is the whole of what a design says about a splitter, and it is
-      * one colour. A splitter is the JOINT between two rooms, not a thing in
-      * one: it is neither above nor below, so depth on it reads as a fault in
-      * the surface; seven pixels cannot carry a methodology, since a bevel, a
-      * blur or a wobble at that size is a smudge; and it is the one part of
-      * the room the hand works directly, so it must not have to be re-learnt
-      * per theme. It therefore wears no shape word at all — there is nothing
-      * left for a design to make un-flat — and its geometry is the
-      * component's. What the design still chooses is the hue.</p>
-      */
-    public record sg_divider_lit() implements CssClass<SplitGridStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class)); }
-        @Override public List<? extends Wearable> extents() { return List.of(of(Primary.class, Color.Surface.class)); }
-        @Override public String body() { return ""; }
-    }
-
-    /**
-      * Whether the lattice is DRAWN: one line, one word, one width, wherever a
-      * line falls in this grid. A joint has no presence of its own — that is
-      * what a joint is — but a grid whose rooms bring no edges of their own
-      * cannot show where one ends and the next begins, and then the line is
-      * not the splitter showing off: it is the ROOM's edge, drawn on the only
-      * thing that lies between them. A grid whose cells carry their own frames
-      * wants none of it.
-      *
-      * <p>READ, not worn: the line is FILLED rather than bordered, because its
-      * thickness is the grid's and a border of the design's width would paint
-      * one pixel of a six-pixel line and leave the rest a gutter — which is
-      * the very thing the splitter stopped being. The grid owns the width, the
-      * design owns the colour. One word for every line, and the HAIRLINE is
-      * it: the quiet line between things, which every design colours exactly
-      * as it colours the spine, so the distinction bought nothing and cost a
-      * reader a moment.</p>
-      */
-    public record sg_divider_seam() implements CssClass<SplitGridStyles> {
-        @Override public List<? extends Wearable> reads() { return List.of(of(Hairline.class, Color.Edge.class)); }
-        @Override public String body() { return "background-color: var(--hairline-color-edge-border-color);"; }
-    }
-
-    /**
-      * The grid's OWN edge, in the same line: so that every side of every room
-      * is the same width and the same colour, whether what lies beyond it is
-      * another room or the end of the workspace. A room at the edge of the
-      * grid should not be able to tell — and a holder that drew its own frame
-      * round the grid would give it away, being a line of the design's width
-      * rather than the one being dialled.
-      */
-    public record sg_root_seam() implements CssClass<SplitGridStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-line")); }
-        @Override public List<? extends Wearable> reads() { return List.of(of(Hairline.class, Color.Edge.class)); }
-        @Override public String body() { return """
-            border-style: solid;
-            border-width: var(--sg-line, 1px);
-            border-color: var(--hairline-color-edge-border-color);
-            """;
-        }
-    }
-
-    /**
-      * The two rooms a held splitter re-shares, ringed for as long as it is
-      * held: what the drag is actually trading, which is not a line moving
-      * but two areas swapping room. One pane each side where the splitter is
-      * theirs alone; a whole group where the divider is shared — so a drag
-      * says, in passing, which kind of splitter this is. The ring is drawn
-      * over the rooms rather than under them, since what a cell holds is the
-      * owner's and opaque; flat, like the handle, and gone on release.
-      */
-    public record sg_child_lit() implements CssClass<SplitGridStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Ink.class)); }
-        @Override public List<? extends Wearable> extents() { return List.of(of(Primary.class, Color.Ink.class)); }
-        @Override public String body() { return """
-            position: relative;
-            &::after {
-                content: "";
-                position: absolute;
-                inset: 0;
-                z-index: 2;
-                pointer-events: none;
-                box-shadow: inset 0 0 0 2px currentColor;
-            }
-            """;
-        }
-    }
-
-    /** Between stacked rooms: the same line, lying the other way. */
-    public record sg_divider_v() implements CssClass<SplitGridStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sg-line")); }
-        @Override public String body() { return """
-            height: var(--sg-line, 1px);
-            cursor: row-resize;
-            &::before { content: ""; position: absolute; inset: -3px 0; }
-            """;
-        }
+    /** A line no hand moves - the grid is not resizable: it takes no pointer, so nothing over it answers one. */
+    public record sg_line_fixed() implements CssClass<SplitGridStyles> {
+        @Override public String body() { return "pointer-events: none;"; }
     }
 
     // ── The mirror ────────────────────────────────────────────────────────
 
     /**
-     * The mirror's box: a recessed floor the grid's size at scale ({@code --sgm-w},
-     * {@code --sgm-h}), a control to the keyboard — its rule carries the ring on
-     * focus — with the cells drawn on it.
+     * The mirror's box, placed: the grid's size at scale ({@code --sgm-w}, {@code --sgm-h}),
+     * the cells drawn in it. It paints nothing - its look is the house's, its casting's.
      */
     public record sgm_root() implements CssClass<SplitGridStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sgm-w"), new CssVar("--sgm-h")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Recessed.class, Color.Surface.class), of(Control.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Control.class, Color.Edge.class), of(Raised.class, Color.Edge.class)); }
         @Override public String body() { return """
             position: relative;
             box-sizing: content-box;
@@ -267,10 +135,13 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
         }
     }
 
-    /** A cell in the mirror: a raised box at the cell's place and measure, scaled ({@code --sgm-x}, {@code --sgm-y}, {@code --sgm-w}, {@code --sgm-h}). */
+    /**
+     * A cell in the mirror, placed: at the cell's place and measure, scaled ({@code --sgm-x},
+     * {@code --sgm-y}, {@code --sgm-w}, {@code --sgm-h}), its name in the middle. It paints nothing -
+     * a cell is a pane's thumbnail, and wears that look; current is its aria-current.
+     */
     public record sgm_cell() implements CssClass<SplitGridStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sgm-x"), new CssVar("--sgm-y"), new CssVar("--sgm-w"), new CssVar("--sgm-h")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Raised.class, Shape.Rule.class), of(Interactive.class, Affordance.Cursor.class), of(Interactive.class, Motion.Ease.class)); }
         @Override public String body() { return """
             position: absolute;
             box-sizing: border-box;
@@ -278,21 +149,18 @@ public record SplitGridStyles() implements CssGroup<SplitGridStyles> {
             top: var(--sgm-y);
             width: var(--sgm-w);
             height: var(--sgm-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
             """;
         }
-    }
-
-    /** The cell the cursor is at: the current one. */
-    public record sgm_cell_current() implements CssClass<SplitGridStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Current.class, Color.Surface.class), of(Current.class, Color.Edge.class)); }
-        @Override public String body() { return ""; }
     }
 
     @Override
     public List<CssClass<SplitGridStyles>> cssClasses() {
         return List.of(new sg_root(), new sg_split(), new sg_split_h(), new sg_split_v(), new sg_child(), new sg_child_h(), new sg_child_v(),
-                       new sg_cell(), new sg_divider(), new sg_divider_h(), new sg_divider_v(), new sg_divider_lit(), new sg_child_lit(),
-                       new sg_divider_seam(), new sg_root_seam(),
-                       new sgm_root(), new sgm_cell(), new sgm_cell_current());
+                       new sg_cell(), new sg_line(), new sg_line_fixed(),
+                       new sgm_root(), new sgm_cell());
     }
 }

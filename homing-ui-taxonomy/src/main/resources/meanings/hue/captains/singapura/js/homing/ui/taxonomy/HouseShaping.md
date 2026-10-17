@@ -21,6 +21,10 @@ The band of the owner's actions, where a decision is ended.
 
 The band of the owner's tabs, through which the user moves between what it holds.
 
+## Foot
+
+The band at the owner's bottom that closes it: its last word, its totals, its actions.
+
 ## Layers
 
 What the owner shows over or under the page, apart from the flow of it.
@@ -39,7 +43,8 @@ A pane floating over the owner, free of its layout.
 
 ## Popup
 
-A menu shown where it was asked for, for as long as the user needs it.
+What the owner shows over the page where it was asked for, for as long as the user needs it: a
+menu, the list a select drops, a popover, a tooltip.
 
 ## Contents
 
@@ -74,6 +79,25 @@ default.
 
 Lays the owner's regions out, and keeps them laid out as they change.
 
+## Body
+
+What the owner holds between its head and its foot: the content it is there for.
+
+## Media
+
+A picture or a film that stands for the owner or shows it: a card's cover, an item's thumbnail, a
+person's photo.
+
+## Fallback
+
+Stands in for the owner's media when it cannot be shown: a person's initials where their photo
+would be.
+
+## Editor
+
+Takes the owner's value from the user: the control a field's label, hint and message are
+gathered round.
+
 ## Members
 
 One of many the owner holds alike.
@@ -94,13 +118,24 @@ One tabbed pane, in one region of the owner.
 
 One region of a grid, drawn to show its place.
 
+## Group
+
+A run of the owner's members gathered under a heading of their own: a group of a menu, a section
+of a command palette, a group of a sidebar.
+
+## Column
+
+Heads one column of the owner's cells and says what they hold: a table's column header, where
+sorting begins.
+
 ## Dividers
 
 What separates the owner's regions or members.
 
 ## Seam
 
-The line between two regions, moved by hand to give one more room.
+Where two of the owner's regions meet: the line between them, and nothing the hand takes - a boundary the hand
+moves is a splitter.
 
 ## Break
 
@@ -117,3 +152,40 @@ Brings the owner into view when the pointer reaches the edge it waits at.
 ## Chip
 
 Carries the owner into a strip, where it is picked, moved and closed.
+
+## Opener
+
+Opens what the owner shows over the page, and says whether it is open: the trigger of a select,
+a popover, a date picker.
+
+## Pull
+
+Is pulled to bring the owner in or send it away: the handle of a drawer.
+
+## Scroll
+
+Moves the user through what the owner holds, and shows where they are in it: a scroll bar.
+
+## Picturing
+
+Where the owner shows a picture: an icon, placed, its look its own whatever it is to the owner.
+
+## Face
+
+The picture the owner is: the icon a button shows instead of words.
+
+## Leading
+
+The picture before the owner's words, so a row is known at a glance.
+
+## Measure
+
+The picture on the owner's knob: a grip to take it by, or what it measures - a size, an aspect, an extent, a level.
+
+## Keys
+
+Shows that the keyboard is with the owner: what the user types goes there.
+
+## Disclose
+
+Shows that a choice leads to further choices, rather than doing something at once.

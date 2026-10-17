@@ -5,9 +5,10 @@ import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
+import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public final class UiPreferencesCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-preferences"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, CoreJsCrate.INSTANCE, DesignCrate.INSTANCE, UiElementsCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, CoreJsCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE, UiSplitGridCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiPreferencesComponents.INSTANCE; }
@@ -37,6 +38,7 @@ public final class UiPreferencesCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(ChoiceWidgetModule.INSTANCE),
                 CrateEntry.of(ToggleWidgetModule.INSTANCE),
                 CrateEntry.of(ScaleWidgetModule.INSTANCE),
+                CrateEntry.of(SettingRowModule.INSTANCE),
                 CrateEntry.of(OverviewWidgetModule.INSTANCE),
                 CrateEntry.of(ListMasterWidgetModule.INSTANCE),
                 CrateEntry.of(PreferencesStyles.INSTANCE));

@@ -1,11 +1,13 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.core.AppModule;
+import hue.captains.singapura.js.homing.preferences.PreferencesViewModule;
 import hue.captains.singapura.js.homing.core.ParamCodec;
 import hue.captains.singapura.js.homing.core.QueryString;
 import hue.captains.singapura.js.homing.core.StampedParams;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.server.HtmlPageContent;
+import hue.captains.singapura.js.homing.ui.elements.GroundModule;
 import hue.captains.singapura.js.homing.site.Html;
 import hue.captains.singapura.js.homing.site.Placed;
 import hue.captains.singapura.js.homing.site.Query;
@@ -40,13 +42,20 @@ import java.util.Objects;
  * @param <M> the app
  */
 public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
-        M app, P params, StandardMpa mpa) implements Placed {
+        M app, P params, StandardMpa mpa, PageFill fill) implements Placed {
 
     public AppPage {
         Objects.requireNonNull(app, "AppPage.app");
         Objects.requireNonNull(params, "AppPage.params (AppModule._None.INSTANCE for a paramless app)");
         Objects.requireNonNull(mpa, "AppPage.mpa");
+        Objects.requireNonNull(fill, "AppPage.fill");
     }
+
+    /** A page in a reading column: the standard setting. */
+    public AppPage(M app, P params, StandardMpa mpa) { this(app, params, mpa, PageFill.COLUMN); }
+
+    /** The same page, filling the viewport: for an app that lays itself out - a workspace, a shell of panes. */
+    public AppPage<P, M> filling() { return new AppPage<>(app, params, mpa, PageFill.VIEWPORT); }
 
     @Override
     public HtmlPageContent html(Trail trail, Query query) {
@@ -55,7 +64,8 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
         String crumbs  = stampCrumbs(trail);
         String brand   = "Object.freeze({label:" + StampedParams.jsString(mpa.brand().label())
                        + ",home:" + StampedParams.jsString(mpa.brand().home()) + "})";
-        String prefs   = "Object.freeze({module:" + StampedParams.jsString(mpa.moduleUrl(mpa.preferences())) + "})";
+        String prefs   = "Object.freeze({module:" + StampedParams.jsString(mpa.moduleUrl(mpa.preferences()))
+                       + ",view:" + StampedParams.jsString(mpa.moduleUrl(PreferencesViewModule.INSTANCE)) + "})";
 
         return new HtmlPageContent("""
                 <!DOCTYPE html>
@@ -72,23 +82,34 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
                         // A module's URL is its class alone: the theme the page wears is the
                         // client's to resolve (address, then store, then the default), and it
                         // rides on the sheets, never on the modules.
-                        const chrome = Object.freeze({ brand: %s, crumbs: %s, preferences: %s });
+                        const chrome = Object.freeze({ brand: %s, crumbs: %s, preferences: %s, fill: %s });
                         %s
                         const { domOpsParty } = await import(%s);
+                        // The page's ground, on the document's own element: everything on the page stands on it.
+                        const { Ground } = await import(%s);
+                        new Ground(document.documentElement);
+                        // The chrome, a widget: attached here, the app mounted in its slot.
                         const { MpaChrome } = await import(%s);
-                        const page = new MpaChrome(domOpsParty.createBranch("mpaChrome"), document.getElementById("app"), chrome);
+                        const page = new MpaChrome(domOpsParty.createBranch("mpaChrome"), chrome);
+                        document.getElementById("app").replaceChildren(page.root);
                         const { appMain } = await import(%s);
+                        // The trail carried on: the chrome draws it, the page titles the document by its last step.
+                        const trail = Object.freeze({ extend: function (more) {
+                            const all = page.trail.extend(more);
+                            if (all.length) document.title = all[all.length - 1].text + " · " + chrome.brand.label;
+                        } });
                         // The page adds to the app's params what is the page's: the keyboard steward, one per
                         // document, and the trail - the app's to carry on past where the server's knowledge ends.
-                        appMain(page.main, Object.freeze(Object.assign({}, %s, { keyboard: page.keyboard, trail: page.trail })));
+                        appMain(page.main, Object.freeze(Object.assign({}, %s, { keyboard: page.keyboard, trail: trail })));
                     </script>
                 </body>
                 </html>
                 """.formatted(
                         Html.escape(title + " · " + mpa.brand().label()),
-                        brand, crumbs, prefs,
+                        brand, crumbs, prefs, fill == PageFill.VIEWPORT ? "true" : "false",
                         stamped == null ? "" : "const params = " + stamped + ";",
                         StampedParams.jsString(mpa.moduleUrl(DomOpsPartyModule.INSTANCE)),
+                        StampedParams.jsString(mpa.moduleUrl(GroundModule.INSTANCE)),
                         StampedParams.jsString(mpa.moduleUrl(MpaChromeModule.INSTANCE)),
                         StampedParams.jsString(mpa.moduleUrl(app)),
                         stamped == null ? "{}" : "params"));

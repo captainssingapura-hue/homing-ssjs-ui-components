@@ -1,13 +1,19 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
-import hue.captains.singapura.js.homing.component.keyboard.Modifier;
-import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
+import hue.captains.singapura.js.homing.component.keyboard.Modifier;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -47,13 +53,13 @@ import java.util.Set;
  * log or a checkpoint as it is. The strip, its chips and the drag that
  * reorders are {@link TabStrip}'s.</p>
  */
-public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule> {
+public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, ImplFor<HousePanes.MultiTabPane> {
 
     /** The class. */
     public record MultiTabPane() implements BranchComponent<MultiTabPaneModule>, NeedContextMenu, NeedKeyboard {
         @Override public String summary() { return "Tabs in a strip over one panel each; a press selects, a drag reorders along the rail, a right-click offers the tab's menu."; }
         /** The tab menu: opened on a chip when the pane is given a steward ({@code menus}); the site serving the pane serves the kind. */
-        @Override public Set<ContextMenuKind<?>> required() { return Set.of(TabMenu.INSTANCE); }
+        @Override public Set<ContextMenuKind<?>> required() { return Set.of(TabMenu.INSTANCE, SplitMenu.INSTANCE); }
         /** The container's own, while the pane holds the keys: the tabs walked, reordered and detached; the widget entered; the pane yielded; the menu. */
         @Override public List<KeyBinding> keys() {
             return List.of(
@@ -81,6 +87,9 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule> {
     @Override
     public ImportsFor<MultiTabPaneModule> imports() {
         return ImportsFor.<MultiTabPaneModule>builder()
+                .add(new ModuleImports<>(List.of(new CaptionModule.Caption(), new CaptionModule.CaptionFactory()), CaptionModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripModule.TabStrip()), TabStripModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys(), new PaneKeysModule.PaneSchemes()), PaneKeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneMenusModule.PaneMenus()), PaneMenusModule.INSTANCE))
@@ -93,8 +102,7 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule> {
                         new PaneStyles.mtp_pane(),
                         new PaneStyles.mtp_content(),
                         new PaneStyles.mtp_tab_content_hidden(),
-                        new PaneStyles.mtp_empty(),
-                        new PaneStyles.mtp_dock_target()
+                        new PaneStyles.mtp_empty()
                 ), PaneStyles.INSTANCE))
                 .build();
     }

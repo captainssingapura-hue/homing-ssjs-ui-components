@@ -31,6 +31,75 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-layout</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-sizing</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The resolution of semantic classes over the house taxonomy, and its command line. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <!-- The taxonomy the implementations are read against. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The house's own instance (The Style Jars): Base's record, and every house style's jar. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-editorial</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-glassmorphism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-neo-brutalism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-neo-futurism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-neumorphism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-retro-futurism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-sketchy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The house styles over Base, in their palette: the themes the house cases are walked in. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-styles</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- THE CHECK - UI-agnostic, and held so by CheckIsUiAgnosticTest: the
              rules, the engine that grades a run, and the export that writes the
              report. Headless, and declared here so the check never reaches them
@@ -50,13 +119,12 @@
             <artifactId>homing-conformance-export</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
-        <!-- The designs the components are held to: the framework's, nothing legacy. -->
+        <!-- The top level: every fresh crate. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-designs</artifactId>
-            <version>${homing.core.version}</version>
+            <artifactId>homing-ui-look</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
-        <!-- The top level: every fresh crate. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-elements</artifactId>
@@ -70,11 +138,6 @@
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-preferences</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-split</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -109,7 +172,7 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-ui-focus</artifactId>
+            <artifactId>homing-ui-monitors</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
@@ -134,6 +197,13 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- Every node of the whole house stateless, as jOntology judges one: held here, where every extension is. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.lang.ontology</groupId>
+            <artifactId>enforcer</artifactId>
+            <version>0.0.1</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

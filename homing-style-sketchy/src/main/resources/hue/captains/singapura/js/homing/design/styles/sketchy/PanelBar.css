@@ -1,0 +1,11 @@
+/* The panel bar in sketchy: heads a panel - its room round its title and its controls, ruled under it in the accent; nothing of its own ground. Whole: every property its look has (D9). */
+$casting {
+    color: inherit;
+    background-color: transparent;
+    border-color: var(--fp-accent);
+    border-width: 0 0 3px 0;
+    border-style: double;
+    padding-block: 10px;
+    padding-inline: 16px;
+    gap: 10px;
+}

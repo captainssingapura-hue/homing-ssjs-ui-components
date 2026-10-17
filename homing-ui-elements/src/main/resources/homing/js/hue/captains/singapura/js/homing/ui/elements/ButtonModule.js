@@ -1,0 +1,56 @@
+// =============================================================================
+// Button — what the button leaves share, as declarations: the element they
+// take, the state they have, the event they offer, the degree and the words,
+// and the behaviour that is theirs (ButtonBehavior). A simple component
+// (SimpleComponent); never made on its own - a button is one of its leaves,
+// made on the element its leaf's companion makes, and wears its leaf's look in
+// its role (Look):
+//
+//   var b = new DangerButton(DangerButtonFactory.create(branch, "delete"),
+//                            { label: "Delete", extent: 0.6 }, ROLE.STANDALONE);
+//   b.setOnClick(handler)          a press, while it is enabled: handler.handle(ComponentEvent)
+//   b.setOnEnabledChanged(handler) its enabled changed: handler.handle(StateChange), previous the old value
+//   b.enabled = false    off: inert, and it says so - the element disabled, which
+//                        the look's disabled treatments are shown by
+//   b.size = -1          −1 the smallest … 1 the biggest; 0 regular, the rest
+//   b.label = "Delete"   the words on it
+//   b.extent = 0.6       a coloured leaf's: how much of its word it wears, −1 the
+//                        meaning turned the other way; the plain button has none
+//
+// A handler is an object of a class: canHandle(type) says it handles the event,
+// handle(event) handles it. Set once, it stays.
+//
+// What a button looks like is its theme's answer for its casting, never a word
+// it names: the leaf declares what it is, and Look wears the classes for it.
+// =============================================================================
+
+class Button extends SimpleComponent {
+    static TAG = "button";
+    static AXES = Object.freeze({
+        enabled: Object.freeze({
+            values: Object.freeze([true, false]),
+            rest: true,
+            reflect: function (el, on) { el.disabled = !on; },
+            state: STATE.ENABLED
+        })
+    });
+    static EVENTS = Object.freeze([EVENT.CLICK]);
+    static DEGREES = Object.freeze(["size"]);
+    static WORDS = Object.freeze(["label"]);
+    static BEHAVIOR = ButtonBehavior;
+
+    get enabled() { return this._get("enabled"); }
+    set enabled(on) { this._set("enabled", !!on); }
+
+    get size() { return this._degrees.size; }
+    set size(s) { this._degree("size", s); }
+
+    get label() { return this.el.textContent; }
+    set label(words) { this._look.text(this.el, words == null ? "" : String(words)); }
+
+    /** A press, while it is enabled. */
+    setOnClick(handler) { this._setOn(EVENT.CLICK, handler); }
+
+    /** Its enabled changed - by a setter, or by nothing else a button has. */
+    setOnEnabledChanged(handler) { this._setOn(STATE.ENABLED.changed, handler); }
+}

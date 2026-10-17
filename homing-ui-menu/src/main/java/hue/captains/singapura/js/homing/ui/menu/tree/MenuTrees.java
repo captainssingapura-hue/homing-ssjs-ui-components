@@ -87,7 +87,6 @@ public final class MenuTrees {
                 problems.add(kind + ": " + id + " is listed under " + parent.id() + " but names " + (row.parent() == null ? "no parent" : row.parent().id()));
             if (!ids.add(id)) problems.add(kind + ": row id repeated: " + id);
             if (row.label() == null || row.label().isBlank()) problems.add(kind + ": " + id + " has no label");
-            if (row.icon() != null && !row.icon().isRecord()) problems.add(kind + ": " + id + " names " + row.icon().getSimpleName() + " as its icon, which is not a word");
             check(kind, row, row.children(), depth + 1, ids, problems);
         }
     }

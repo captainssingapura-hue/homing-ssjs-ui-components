@@ -32,6 +32,23 @@
     </properties>
 
     <dependencies>
+        <!-- What it provides for styles (The Style Jars): the style's record, and the colour tree its implementations import. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-colours</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The taxonomy its components are anchored at: each module ImplFor its leaf. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <!-- The definitions this implements. -->
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
@@ -60,6 +77,23 @@
         </dependency>
         <!-- The preferences dialog on the bar: the dialog, and the preferences component
              whose view it holds; the theme widget lives here because /themes is read here. -->
+        <!-- The icon: the preferences button's symbol. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-icons</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-elements</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The semantic classes: the styling a site is made of, installed at bootstrap, and the themes it offers. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-dialog</artifactId>
@@ -74,6 +108,20 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- Its scripts run in a test: the theme widget's picks. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ssjs-test-fixtures</artifactId>
+            <version>${homing.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- The rules its widgets owe a debt to, declared on their classes: compile-time only. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-conformance-rules</artifactId>
+            <version>${homing.core.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+        <artifactId>homing-components</artifactId>
+        <version>LOCAL-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>homing-ui-look</artifactId>
+    <description>
+        The house's look, as a page wears it - the design's, with no component and
+        no behaviour. Look names a leaf's classes for a casting and puts them on;
+        what it wears by is generated from the taxonomy and the styles: the
+        castings (ROLE, CASTINGS), the trees of states and events (STATE, EVENT),
+        the look's manifest (LOOK_TARGETS, TREATED) and its derived sheet; and the
+        lexicon a mark is a word of (ICONS, and the sheet each style writes the
+        words in). The components depend on it for their look; so may any code
+        that dresses an element of its own - a grid's cells - and takes nothing
+        else of the ui.
+    </description>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- The taxonomy the castings, the states and the words are read from. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The semantic classes: the flattening of a theme's answers into a sheet. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-core</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-core-js</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-component-base</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-design-core</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-conformance-rules</artifactId>
+            <version>${homing.core.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

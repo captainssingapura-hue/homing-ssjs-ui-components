@@ -25,10 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HouseControllabilityTest {
 
     private static final ControlCatalogue CATALOGUE = HouseControllability.INSTANCE.catalogue();
-    private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read();
+    private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
 
     @Test
-    void eightCategories_twentyFourOptions_eachInItsCategory() {
+    void sevenCategories_twentyOneOptions_eachInItsCategory() {
         var expected = new LinkedHashMap<String, List<String>>();
         expected.put("degrees", List.of("colour", "size", "aspect"));
         expected.put("states", List.of("enabled", "current", "raised", "held"));
@@ -36,13 +36,12 @@ class HouseControllabilityTest {
         expected.put("viewing", List.of("zoom-in", "zoom-out", "fit"));
         expected.put("arranging", List.of("split", "remove", "even-out", "reset-layout"));
         expected.put("placing", List.of("move", "resize", "ring"));
-        expected.put("content", List.of("next", "clear", "missing"));
         expected.put("asking", List.of("ask"));
         var actual = new LinkedHashMap<String, List<String>>();
         for (ControlNode b : CATALOGUE.children(ControlRoot.INSTANCE))
             actual.put(b.name().value(), CATALOGUE.children((ControlBranch) b).stream().map(n -> n.name().value()).toList());
         assertEquals(expected, actual);
-        assertEquals(24, CATALOGUE.options().size());
+        assertEquals(21, CATALOGUE.options().size());
     }
 
     @Test
@@ -60,7 +59,7 @@ class HouseControllabilityTest {
         var means = new LinkedHashMap<String, String>();
         var methods = new LinkedHashMap<String, String>();
         for (ControlOption<?> o : CATALOGUE.options()) { means.put(o.name().value(), o.means()); methods.put(o.name().value(), o.method()); }
-        assertEquals(Map.of("extent", 3L, "switch", 4L, "action", 16L, "question", 1L),
+        assertEquals(Map.of("extent", 3L, "switch", 4L, "action", 13L, "question", 1L),
                 means.values().stream().collect(java.util.stream.Collectors.groupingBy(m -> m, java.util.stream.Collectors.counting())));
         // where the house's components already answer by a method, the option names it
         assertEquals("extent", methods.get("colour"));
@@ -81,6 +80,12 @@ class HouseControllabilityTest {
     }
 
     @Test
+    void theCommonLeavesAlone_onThisClasspath() {
+        assertEquals(8, HouseControllability.INSTANCE.classification().declared().size(),
+                "no module that extends the house is here: the types of its leaves are declared beside them, and read where they are");
+    }
+
+    @Test
     void theDemoedLeaves_areClassifiedByType() {
         var expected = new LinkedHashMap<String, String>();
         for (String b : List.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "slider"))
@@ -88,13 +93,10 @@ class HouseControllabilityTest {
         expected.put("panel", "emphasised");
         expected.put("edge-strip", "holdable");
         expected.put("dialog", "modal-overlay");
-        for (String o : List.of("context-menu", "float-layer", "tab-opener")) expected.put(o, "overlay");
-        expected.put("svg-pan-zoom", "zoomable");
-        for (String a : List.of("split-pane", "split-grid", "split-grid-mirror", "pane-thumbs")) expected.put(a, "arrangeable");
+        expected.put("context-menu", "overlay");
         expected.put("floating-pane", "placeable");
-        expected.put("icon", "content");
-        for (String m : List.of("focus-monitor", "steward-monitor", "context-menu-steward")) expected.put(m, "monitor");
-        for (String p : List.of("summary-card", "slider-group", "list-master-widget", "add-tab", "pan-zoom-bar")) expected.put(p, "plain");
+        expected.put("close-icon", "plain");   // a part only, shown in what holds it: nothing to control but its colour (D52)
+        for (String p : List.of("plain-card", "clickable-card", "summary-view", "slider-group")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));
         assertEquals(expected, actual);
@@ -103,8 +105,7 @@ class HouseControllabilityTest {
     @Test
     void aBranchClassifiesEveryLeafUnderIt_andANodeWithNothingOnItsLineageIsPlain() {
         assertEquals("switchable", typeOf("toggle-button"), "under the Button branch, declared on the branch");
-        assertEquals("arrangeable", typeOf("dock-grid"), "under the Split branch, declared on the branch");
-        assertEquals("plain", typeOf("heading"));
+        assertEquals("plain", typeOf("heading4"), "a heading: nothing on its lineage to control");
         for (Component<?> leaf : TAXONOMY.components())
             assertTrue(HouseControllability.INSTANCE.findControlType(TAXONOMY, leaf) != null, leaf + " has a type");
     }
@@ -112,7 +113,8 @@ class HouseControllabilityTest {
     @Test
     void aLeafIsControlledBy_itsAxesDegrees_thenItsTypesOptions() {
         assertEquals(List.of("colour", "size", "enabled"), optionsOf("danger-button"));
-        assertEquals(List.of("size", "aspect"), optionsOf("summary-card"));
+        assertEquals(List.of("size", "aspect"), optionsOf("clickable-card"));
+        assertEquals(List.of("size"), optionsOf("summary-view"));
         assertEquals(List.of("open-modal", "open", "close"), optionsOf("dialog").subList(optionsOf("dialog").size() - 3, optionsOf("dialog").size()));
     }
 

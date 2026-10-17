@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.panzoom;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanZoom;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -16,7 +19,7 @@ import java.util.List;
  * (with Ctrl or Cmd in the flow of a page), a drag once zoomed in, a double press; and its own
  * keys while it has the focus. Zoomed, the viewport scrolls natively - its bars, a trackpad, a touch.
  */
-public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule> {
+public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule>, ImplFor<HousePanZoom.SvgPanZoom> {
 
     public static final SvgPanZoomModule INSTANCE = new SvgPanZoomModule();
 

@@ -1,0 +1,16 @@
+package hue.captains.singapura.js.homing.design.styles.glassmorphism;
+
+import hue.captains.singapura.js.homing.design.styles.CastingStyle;
+import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
+import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
+
+/** Glassmorphism's wordmark name: as its wordmark on its own, by delegation. */
+public record WordmarkName()
+        implements CastingStyle<BaseScheme, Glassmorphism, HouseText.Wordmark, HouseSaying.Name> {
+    @Override public StylingRes<BaseScheme, HouseText.Wordmark> style() {
+        return new StylingRes.Delegation<>(new Wordmark());
+    }
+}

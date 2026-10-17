@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+        <artifactId>homing-components</artifactId>
+        <version>LOCAL-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>homing-ui-styles</artifactId>
+
+    <description>
+        RFC 0067, appendix The Style Jars - the house's styles ready-made (HouseStyles): the house's own instance,
+        both stages of its registration - Base with every house jar that brings castings into being, each house style
+        with its own jar; the seven styles served, the eight palettes, each style's own palette - for a site to hand
+        its MPA, and to add its own jars to. The house's effects beside them, for now.
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The colour tree, the palettes and Base's record (The Style Jars). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-colours</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-palettes-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- Each house style's jar: its record and its implementations. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-editorial</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-glassmorphism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-neo-brutalism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-neo-futurism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-neumorphism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-retro-futurism</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-sketchy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The house's modules, collected (D50): its base modules and each style's, every house jar with them. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-modules</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-design-core</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- The house's family files, for reading (RFC 0067, appendix The Style Jars): written into the jar, so a
+                 deployed site serves them from the classpath; a site in dev mode makes them afresh instead. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>write-style-families</id>
+                        <phase>process-classes</phase>
+                        <goals><goal>java</goal></goals>
+                        <configuration>
+                            <mainClass>hue.captains.singapura.js.homing.design.styling.WriteStyleFamilies</mainClass>
+                            <classpathScope>compile</classpathScope>
+                            <arguments>
+                                <argument>${project.build.outputDirectory}</argument>
+                                <argument>hue.captains.singapura.js.homing.ui.styles.HouseStyles</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

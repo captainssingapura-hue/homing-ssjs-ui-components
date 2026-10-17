@@ -1,22 +1,18 @@
 // =============================================================================
 // SplitGridGeometry — the arrangement resolved into rectangles, and the rules
 // that read them. No element in sight: what the browser's flex computes for
-// the grid, computed here to the pixel, so a mirror draws the same picture,
-// a drag's delta becomes ratios without the DOM, and "the cell beside this
-// one" is a rule that can be tested.
+// the grid, computed here to the pixel, so a mirror draws the same picture
+// and "the cell beside this one" is a rule that can be tested. Each split is
+// laid out by sizing's one solver, the rail's lay.
 //
 //   SplitGridGeometry.rects(tree, box, opts?)
 //       tree   SplitGridTree's, ratios normalised;  box { w, h } in px
 //       opts   { dividerPx: 1, minPx: 40 }  the line's thickness — the splitter IS the
 //              line — and the least a cell may be
 //       → { cells: { id: { x, y, w, h } }, dividers: [ { path, index, orientation, x, y, w, h } ] }
-//     A split shares its axis as flex does: each child ratio × the room left
-//     after the dividers, and a child under the minimum is held there while
-//     the rest re-share — frozen one by one until none is under.
-//   SplitGridGeometry.shares(ratios, available, minPx)  → the sizes, in px
-//   SplitGridGeometry.reshare(a0, b0, deltaPx, sizePx, minPx)  → [a, b]
-//       two neighbours re-shared by a divider moved deltaPx along a split sizePx
-//       long, each kept at the minimum — the drag's arithmetic
+//     A split shares its axis as flex does - Rail.lay: each child ratio × the
+//     room left after the dividers, and a child under the minimum held there
+//     while the rest re-share.
 //   SplitGridGeometry.neighbour(rects, fromId, direction, opts?)  → id or null
 //       the cell beside one — "left", "right", "up", "down" — by the workspace's
 //       rule: a candidate's edge lies beyond the cell's on that side, with
@@ -41,7 +37,9 @@ class SplitGridGeometry {
         var along = horizontal ? w : h;
         var ratios = [];
         for (var i = 0; i < n; i++) ratios.push(node.children[i].ratio);
-        var sizes = SplitGridGeometry.shares(ratios, along - (n - 1) * o.dividerPx, o.minPx);
+        var least = [];
+        for (var k = 0; k < n; k++) least.push(o.minPx);
+        var sizes = Rail.lay(Rail.of(ratios), along - (n - 1) * o.dividerPx, least);
         var at = 0;
         for (var j = 0; j < n; j++) {
             if (j > 0) {
@@ -54,35 +52,6 @@ class SplitGridGeometry {
             else SplitGridGeometry._place(node.children[j].node, x, y + at, w, sizes[j], childPath, out, o);
             at += sizes[j];
         }
-    }
-
-    /** Flex with a minimum: ratio × available each, then the ones under the minimum held there while the rest re-share, until none is under. */
-    static shares(ratios, available, minPx) {
-        var n = ratios.length, sizes = new Array(n), frozen = new Array(n), room = Math.max(0, available), sumFree;
-        for (var i = 0; i < n; i++) frozen[i] = false;
-        for (var pass = 0; pass <= n; pass++) {
-            sumFree = 0;
-            for (var a = 0; a < n; a++) if (!frozen[a]) sumFree += ratios[a];
-            var under = -1;
-            for (var b = 0; b < n; b++) {
-                if (frozen[b]) continue;
-                sizes[b] = sumFree > 0 ? ratios[b] / sumFree * room : 0;
-                if (sizes[b] < minPx && under < 0) under = b;
-            }
-            if (under < 0) break;
-            frozen[under] = true;
-            sizes[under] = minPx;
-            room = Math.max(0, room - minPx);
-        }
-        return sizes;
-    }
-
-    /** The drag's arithmetic: a0 and b0 share what they shared, moved by delta over the split's size, each kept at the minimum. */
-    static reshare(a0, b0, deltaPx, sizePx, minPx) {
-        if (!(sizePx > 0)) return [a0, b0];
-        var minShare = Math.min(minPx / sizePx, (a0 + b0) / 2);
-        var a = Math.min(Math.max(a0 + deltaPx / sizePx, minShare), a0 + b0 - minShare);
-        return [a, a0 + b0 - a];
     }
 
     static _overlap(a0, a1, b0, b1) { return Math.min(a1, b1) - Math.max(a0, b0); }

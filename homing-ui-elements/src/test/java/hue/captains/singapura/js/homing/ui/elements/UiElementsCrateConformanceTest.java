@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.ui.elements;
 import hue.captains.singapura.js.homing.conformance.rules.CrateDependencyRule;
 import hue.captains.singapura.js.homing.conformance.rules.OrphanCheck;
 import hue.captains.singapura.js.homing.core.CssClass;
-import hue.captains.singapura.js.homing.design.Deployment;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,8 +26,6 @@ class UiElementsCrateConformanceTest {
 
     @Test
     void theElementsPaintNothingOfTheirOwn() {
-        var worn = Deployment.wornBy(List.of(ElementStyles.INSTANCE));
-        assertTrue(worn.size() >= 20, "eight classes wear over twenty pairs; found " + worn.size());
         for (CssClass<ElementStyles> c : ElementStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid"),

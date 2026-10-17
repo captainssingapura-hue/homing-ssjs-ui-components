@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * focused from the keyboard keeps it shown, a press does not, and a holder
  * keeps it shown whatever the hand does. It listens for no keys.
  */
-class EdgeStripTest extends JsModuleTestBase {
+class EdgeStripTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/";
 
@@ -48,7 +47,7 @@ class EdgeStripTest extends JsModuleTestBase {
         var page = fakeBranch("page");
         var host = el("div");
         var button = el("button");
-        var strip = new EdgeStripBuilder().label("Workspace").host(host).build(page.createBranch("strip"));
+        var strip = new EdgeStrip(page.createBranch("strip"), { label: "Workspace", host: host });
         strip.root.appendChild(button);
         function hidden() { return strip.root.classList.contains("el_strip_hidden"); }
         """;
@@ -56,8 +55,9 @@ class EdgeStripTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        TextsInJs.load(js, this::loadModule);   // its look the house's
         loadModule(DIR + "ui/elements/EdgeStripModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }
@@ -67,6 +67,9 @@ class EdgeStripTest extends JsModuleTestBase {
     void aLipAtTheFoot_andAStripOverIt_hiddenUntilAskedFor() {
         assertEquals("lip,strip", eval("host.children.map(function (c) { return c.name; }).join()").asString(), "the lip in the host's flow, the strip after it");
         assertTrue(eval("strip.lip.classList.contains('el_strip_lip') && strip.root.classList.contains('el_strip')").asBoolean());
+        assertTrue(eval("strip.root.classList.contains('styled-edge-strip')").asBoolean(), "the strip wears its leaf's class");
+        assertTrue(eval("!strip.lip.classList.contains('styled-edge-strip')").asBoolean(),
+                "the lip, a slice of the old look, wears nothing styled until it is a leaf of its own (D17)");
         assertEquals("group", eval("strip.root.getAttribute('role')").asString());
         assertEquals("Workspace", eval("strip.root.getAttribute('aria-label')").asString(), "named for whoever cannot see it");
         assertTrue(eval("hidden() && !strip.isShown()").asBoolean(), "not there until the hand comes to the edge");

@@ -1,0 +1,20 @@
+package hue.captains.singapura.js.homing.design.styles.editorial;
+
+import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.styles.CastingStyle;
+import hue.captains.singapura.js.homing.design.styles.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
+import hue.captains.singapura.js.homing.ui.styles.Editorial;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
+/**
+ * The site bar in editorial: heads a site's pages - the inverted layer, the page's ground written on it, ruled along
+ * its foot in the accent. Whole: every property its look has (D9).
+ */
+public record SiteBar() implements CastingStyle<BaseScheme, Editorial, HouseContainers.SiteBar, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseContainers.SiteBar> style() {
+        return new StylingRes.CssContent<>(
+                new BaseColours.Inverted(), new BaseColours.OnBar(), new BaseColours.Accent());
+    }
+}

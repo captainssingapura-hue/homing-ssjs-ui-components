@@ -38,12 +38,33 @@
 //   pane.dispose()   refused while it holds its tab, which is its desk's
 //
 // Its reports are MultiTabPane's, on one sink: TabActivated, TabRenamed, and
-// TabRemoved when its tab closes. `css` is injected with the styles import.
+// TabRemoved when its tab closes. Its bar wears a tab strip's look, as a pane
+// of many does, lit (aria-current) while the keys are in its tab. `css` is
+// injected with the styles import.
+//
+// Its frame wears the house's pane - the page's ground, the text's ink, and a
+// ring inside its edge while the keys are on it (the steward's data-keys) - and
+// no more of the look: the look's room and measure would undo the frame's place
+// in its host.
 // =============================================================================
 
 const _singleOwner = Object.freeze({ toString: () => "singleTabPane" });
+/** Its bar's leaf: a tab strip, as a pane of many has one - drawn here, with its one chip and no tail; lit, as a strip is, while the keys are in its tab. */
+const _TAB_STRIP = Object.freeze({
+    LEAF: "tab-strip",
+    AXES: Object.freeze({
+        current: Object.freeze({
+            values: Object.freeze([false, true]),
+            rest: false,
+            reflect: function (el, on) { if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); },
+            state: STATE.CURRENT
+        })
+    })
+});
 
 class SingleTabPane {
+    static LEAF = "single-tab-pane";
+
     /** The kind a chip's menu is asked for: the Java TabMenu's, the dock's own. */
     static MENU = "tab";
 
@@ -63,11 +84,14 @@ class SingleTabPane {
 
         var root = branch.createElement("pane", "div");
         css.addClass(root, mtp_pane);
+        new Look(SingleTabPane, ROLE.STANDALONE).wear(root);   // its root its leaf whole (RFC 0067, D17)
         this.el = root;
 
         // the bar: the dock's strip, holding the chip alone. A press on it moves no native focus by the browser's default
         var bar = branch.createElement("bar", "div");
         css.addClass(bar, mtp_strip);
+        this._barLook = new Look(_TAB_STRIP, ROLE.TABS);   // a pane's tabs, as a pane of many has them
+        this._barLook.wear(bar);
         bar.setAttribute("role", "tablist");
         bar.style.setProperty("--chip-fit", "100%");   // the chip never wider than its window: the label ellipsises, the cross stays
         bar.addEventListener("mousedown", function (ev) { ev.preventDefault(); });
@@ -77,17 +101,17 @@ class SingleTabPane {
         this._bar = bar;
         // what PaneTabs asks of a strip: the chip in, at the design's size, and out again at rest
         this._strip = {
-            adopt: function (c) { css.size(c, null); css.aspect(c, null); bar.appendChild(c); return c; },
+            adopt: function (c) { c.size = 0; c.aspect = 0; bar.appendChild(c.el); return c; },
             remove: function (c) {
-                c.setAttribute("aria-selected", "false");
-                if (c._mark) { css.toggleClass(c._mark, mtp_chip_mark_on, false); css.extent(c._mark, null); }
-                if (c.parentNode === bar) bar.removeChild(c);
+                c.selected = false;
+                c.keys = null;
+                if (c.el.parentNode === bar) bar.removeChild(c.el);
             }
         };
 
         var above = opts.focus || focusParty.root;
         this.focus = above.createBranch(opts.focusName != null ? String(opts.focusName) : branch.name, this);
-        this._offKeys = Keys.claimOn(root, this.focus.owner);
+        this._offKeys = Keys.claimOn(root, this.focus.owner, new Look(SingleTabPane, ROLE.STANDALONE).keys());
 
         this._content = branch.createElement("content", "div");
         css.addClass(this._content, mtp_content);
@@ -120,7 +144,7 @@ class SingleTabPane {
         this._activeId = id;
         var e = this._tabs[0];
         if (!e) return;
-        e.chip.setAttribute("aria-selected", "true");
+        e.chip.selected = true;
         css.toggleClass(e.panel, mtp_tab_content_hidden, false);
         this._marks();
     }
@@ -163,7 +187,7 @@ class SingleTabPane {
     bar() { return this._bar; }
     barGround(target) {
         var e = this._tabs[0];
-        if (e && e.chip._close && e.chip._close.contains(target)) return false;
+        if (e && e.chip.crosses(target)) return false;
         if (this._onChip(target)) return false;   // the chip is the hand's, carried as a chip
         return this._bar.contains(target);
     }
@@ -171,7 +195,7 @@ class SingleTabPane {
     /** A press on the chip — not its cross — while a desk's hand is given. */
     _onChip(target) {
         var e = this._tabs[0];
-        return !!this._handOf && !!e && !!e.tabPane && e.chip.contains(target) && !(e.chip._close && e.chip._close.contains(target));
+        return !!this._handOf && !!e && !!e.tabPane && e.chip.el.contains(target) && !e.chip.crosses(target);
     }
 
     // ── The member: a road to the tab, never a place ──────────────────────
@@ -184,11 +208,8 @@ class SingleTabPane {
     /** The keys inside the tab, said on its chip, lent, and on the bar, lit. */
     _marks() {
         var e = this._tabs[0];
-        if (e && e.chip._mark) {
-            css.toggleClass(e.chip._mark, mtp_chip_mark_on, this._inside);
-            css.extent(e.chip._mark, this._inside ? 1 : null);
-        }
-        css.toggleClass(this._bar, mtp_strip_current, this._inside);
+        if (e) e.chip.keys = this._inside ? "lent" : null;   // the tab's own mark, at full
+        this._barLook.show(this._bar, { current: this._inside });
     }
 
     dispose() {

@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Ask;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Aspect;
-import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Clear;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Close;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Colour;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Current;
@@ -12,9 +11,7 @@ import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.E
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.EvenOut;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Fit;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Held;
-import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Missing;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Move;
-import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Next;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Open;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.OpenModal;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Raised;
@@ -29,10 +26,12 @@ import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Z
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.ServiceLoader;
 
 /**
  * The house's controllability: its control options, the control types they make up, and every leaf
@@ -63,8 +62,6 @@ public record HouseControllability() implements StatelessFunctionalObject {
     public static final ControlType ARRANGEABLE = new ControlType("arrangeable", List.of(Split.INSTANCE, Remove.INSTANCE, EvenOut.INSTANCE, ResetLayout.INSTANCE));
     /** Moved, sized and ringed by call; opened again once closed. */
     public static final ControlType PLACEABLE = new ControlType("placeable", List.of(Move.INSTANCE, Resize.INSTANCE, Ring.INSTANCE, Open.INSTANCE));
-    /** What it shows changed: the next, none, one it lacks. */
-    public static final ControlType CONTENT = new ControlType("content", List.of(Next.INSTANCE, Clear.INSTANCE, Missing.INSTANCE));
     /** Asked what it shows now. */
     public static final ControlType MONITOR = new ControlType("monitor", List.of(Ask.INSTANCE));
 
@@ -77,33 +74,32 @@ public record HouseControllability() implements StatelessFunctionalObject {
                 ZoomIn.INSTANCE, ZoomOut.INSTANCE, Fit.INSTANCE,
                 Split.INSTANCE, Remove.INSTANCE, EvenOut.INSTANCE, ResetLayout.INSTANCE,
                 Move.INSTANCE, Resize.INSTANCE, Ring.INSTANCE,
-                Next.INSTANCE, Clear.INSTANCE, Missing.INSTANCE,
                 Ask.INSTANCE);
     }
 
     /** The catalogue, read - or refused with every problem in it. */
     public ControlCatalogue catalogue() { return ReadControls.INSTANCE.read(options()); }
 
-    /** The house's leaves classified: on a branch for every leaf under it, on a leaf for itself; plain otherwise. */
+    /**
+     * The house's leaves classified: on a branch for every leaf under it, on a leaf for itself; plain
+     * otherwise. The common leaves here, then those of every module on the classpath that extends
+     * the house ({@link ControllabilityExtension}), in the order of their class names.
+     */
     public ControlClassification classification() {
-        return new ControlClassification(List.of(
+        var declared = new ArrayList<>(List.of(
                 new ControlTypeAt(HouseBranches.Button.INSTANCE, SWITCHABLE),
                 new ControlTypeAt(HouseControls.Slider.INSTANCE, SWITCHABLE),
                 new ControlTypeAt(HouseContainers.Panel.INSTANCE, EMPHASISED),
                 new ControlTypeAt(HouseContainers.EdgeStrip.INSTANCE, HOLDABLE),
                 new ControlTypeAt(HouseContainers.Dialog.INSTANCE, MODAL_OVERLAY),
                 new ControlTypeAt(HouseContainers.ContextMenu.INSTANCE, OVERLAY),
-                new ControlTypeAt(HouseContainers.FloatLayer.INSTANCE, OVERLAY),
-                new ControlTypeAt(HouseContainers.TabOpener.INSTANCE, OVERLAY),
-                new ControlTypeAt(HouseContainers.SvgPanZoom.INSTANCE, ZOOMABLE),
                 new ControlTypeAt(HouseBranches.Split.INSTANCE, ARRANGEABLE),
-                new ControlTypeAt(HouseContainers.PaneThumbs.INSTANCE, ARRANGEABLE),
-                new ControlTypeAt(HouseContainers.FloatingPane.INSTANCE, PLACEABLE),
-                new ControlTypeAt(HouseMarks.Icon.INSTANCE, CONTENT),
-                new ControlTypeAt(HouseContainers.FocusMonitor.INSTANCE, MONITOR),
-                new ControlTypeAt(HouseContainers.StewardMonitor.INSTANCE, MONITOR),
-                new ControlTypeAt(HouseContainers.ContextMenuSteward.INSTANCE, MONITOR)),
-                PLAIN);
+                new ControlTypeAt(HouseContainers.FloatingPane.INSTANCE, PLACEABLE)));   // an icon a part only, plain: nothing to control but its colour (D52)
+        var extensions = new ArrayList<ControllabilityExtension>();
+        ServiceLoader.load(ControllabilityExtension.class, HouseControllability.class.getClassLoader()).forEach(extensions::add);
+        extensions.sort(Comparator.comparing(e -> e.getClass().getName()));
+        for (ControllabilityExtension e : extensions) declared.addAll(e.classification());
+        return new ControlClassification(declared, PLAIN);
     }
 
     /** {@code controlType = findControlType(component)}, in the house's taxonomy as read. */

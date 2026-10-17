@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * the current knob; the focus arriving on a knob makes its slider current;
  * held and current are worn; dispose leaves and disposes the sliders.
  */
-class SliderGroupTest extends JsModuleTestBase {
+class SliderGroupTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/";
 
@@ -45,7 +44,12 @@ class SliderGroupTest extends JsModuleTestBase {
                 has: function (c) { return classes.has(c); }, attr: function (k) { return attrs[k]; }, listening: function (t) { return (this.listeners[t] || []).length; } };
             return node;
         }
-        function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = name + "/" + n; return e; }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function (o) { this.owner = String(o); } }; }
+        // a maker is single-use, and known for one: the texts are made by their own makers
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
+        function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = name + "/" + n; return e; },
+                                             elementMaker: function (n) { var self = this, mk = function (tag) { makers.delete(mk); return self.createElement(n, tag); }; makers.add(mk); return mk; },
+                                             createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function (o) { this.owner = String(o); } }; }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); }, size: function () {}, extent: function () {}, aspect: function () {} };
@@ -59,10 +63,10 @@ class SliderGroupTest extends JsModuleTestBase {
         var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; kbLog.push("leave:" + id); },
                    claim: function (id) { kbLog.push("claim:" + id); }, release: function (id) { kbLog.push("release:" + id); } };
         var page = fakeBranch("page");
-        var g = new SliderGroupBuilder().title("Mixer").keyboard(kb).across().build(page.createBranch("mixer"));
-        var a = g.add("a", new SliderBuilder().label("A").axis().onChange(function (v) { log.push("a:" + v); }));
-        var b = g.add("b", new SliderBuilder().label("B").axis().onChange(function (v) { log.push("b:" + v); }));
-        var c = g.add("c", new SliderBuilder().label("C").axis().onChange(function (v) { log.push("c:" + v); }));
+        var g = new SliderGroup(page.createBranch("mixer"), { title: "Mixer", keyboard: kb, across: true });
+        var a = g.add("a", { label: "A", axis: true, onChange: function (v) { log.push("a:" + v); } });
+        var b = g.add("b", { label: "B", axis: true, onChange: function (v) { log.push("b:" + v); } });
+        var c = g.add("c", { label: "C", axis: true, onChange: function (v) { log.push("c:" + v); } });
         function knobOf(s) { var rail = s.root.children[1]; return rail.children[rail.children.length - 1]; }
         var header = g.root.children[0], body = g.root.children[1];
         """;
@@ -70,12 +74,18 @@ class SliderGroupTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        TextsInJs.load(js, this::loadModule);   // its texts are the house's
         js.eval("js", "var ic_base = 'ic_base', ICONS = { grip: 'ic_grip', size: 'ic_size', aspect: 'ic_aspect', extent: 'ic_extent', level: 'ic_level' };");
         loadModule(DIR + "ui/icons/IconModule.js");
         loadModule(DIR + "component/keyboard/KeysModule.js");
+        for (String m : new String[] {"MarkBehaviorModule.js", "DetentModule.js", "TickModule.js"})   // the slider's detent and its scale's ticks, the house's marks
+            loadModule(DIR + "ui/elements/" + m);
+        loadModule(DIR + "ui/elements/SliderScaleModule.js");
+        for (String m : new String[] {"SliderRailModule.js", "SliderGrooveModule.js", "FillModule.js", "SliderKnobModule.js"})
+            loadModule(DIR + "ui/elements/" + m);   // the slider's parts, each a component
         loadModule(DIR + "ui/elements/SliderModule.js");
         loadModule(DIR + "ui/elements/SliderGroupModule.js");
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }
@@ -87,7 +97,7 @@ class SliderGroupTest extends JsModuleTestBase {
     void oneMemberForAllTheSliders_theFirstCurrent_theSlidersInside() {
         assertEquals("join:mixer", kbLog(), "the group joined as its branch's name; the sliders did not");
         assertEquals("A", currentLabel());
-        assertEquals("true,false,false", eval("[a, b, c].map(function (s) { return knobOf(s).has('el_slider_knob_current'); }).join()").asString());
+        assertEquals("true,false,false", eval("[a, b, c].map(function (s) { return knobOf(s).attr('aria-current') === 'true'; }).join()").asString(), "the current one's knob ringed, by its aria-current");
         assertEquals("3", eval("String(body.children.length)").asString(), "the sliders' roots in the body");
         assertEquals("A,B,C", eval("g.sliders().map(function (s) { return s.label(); }).join()").asString());
         assertEquals("Mixer", eval("header.children[0].textContent").asString());
@@ -106,7 +116,7 @@ class SliderGroupTest extends JsModuleTestBase {
         assertEquals("A", currentLabel(), "wrapped");
         eval("members.mixer.keyDown({ key: 'Tab', shiftKey: true })");
         assertEquals("C", currentLabel(), "and back, wrapping");
-        assertEquals("false,false,true", eval("[a, b, c].map(function (s) { return knobOf(s).has('el_slider_knob_current'); }).join()").asString(), "the ring moved");
+        assertEquals("false,false,true", eval("[a, b, c].map(function (s) { return knobOf(s).attr('aria-current') === 'true'; }).join()").asString(), "the ring moved");
     }
 
     @Test
@@ -129,12 +139,13 @@ class SliderGroupTest extends JsModuleTestBase {
     }
 
     @Test
-    void heldIsWornWhileTheGroupHoldsTheKeys() {
-        assertFalse(eval("g.root.has('el_slider_group_held')").asBoolean());
+    void heldIsTheGroupsToKnow_andItsRingTheStewards() {
+        assertFalse(eval("g._held").asBoolean());
         eval("members.mixer.granted()");
-        assertTrue(eval("g.root.has('el_slider_group_held')").asBoolean());
+        assertTrue(eval("g._held").asBoolean(), "the group knows it holds the keys");
+        assertFalse(eval("g.root.has('el_slider_group_held')").asBoolean(), "and writes nothing for it: the ring is the steward's mark, which the look answers");
         eval("members.mixer.taken('other')");
-        assertFalse(eval("g.root.has('el_slider_group_held')").asBoolean());
+        assertFalse(eval("g._held").asBoolean());
     }
 
     @Test
@@ -162,8 +173,8 @@ class SliderGroupTest extends JsModuleTestBase {
         assertEquals("C", currentLabel());
         eval("g.current(1)");
         assertEquals("B", currentLabel());
-        assertThrows(PolyglotException.class, () -> eval("g.current(new SliderBuilder().axis().build(page.createBranch('x')))"));
-        assertThrows(PolyglotException.class, () -> eval("g.add('d', {})"), "add wants a builder");
+        assertThrows(PolyglotException.class, () -> eval("g.current(new Slider(page.createBranch('x'), { axis: true }))"));
+        assertThrows(PolyglotException.class, () -> eval("g.add('d', 'loose words')"), "add wants a slider's properties");
     }
 
     @Test

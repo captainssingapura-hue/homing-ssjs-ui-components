@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.floating;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * named fresh at every opening; its id, the holder's, may be any string. The
  * fake party holds the real one's rule for a name.
  */
-class FloatLayerTest extends JsModuleTestBase {
+class FloatLayerTest extends UiFloatingJsTest {
 
     private static final String EVENTS = "/homing/js/hue/captains/singapura/js/homing/ui/floating/FloatEventsModule.js";
     private static final String PANE   = "/homing/js/hue/captains/singapura/js/homing/ui/floating/FloatingPaneModule.js";
@@ -32,7 +31,7 @@ class FloatLayerTest extends JsModuleTestBase {
         var log = [];
         function el(tag) {
             var classes = new Set(), attrs = {}, props = {};
-            var node = { tag: tag, children: [], parentNode: null, listeners: {}, textContent: "",
+            var node = { tag: tag, tagName: String(tag).toUpperCase(), children: [], parentNode: null, listeners: {}, textContent: "",
                 style: { setProperty: function (k, v) { props[k] = v; }, removeProperty: function (k) { delete props[k]; }, getPropertyValue: function (k) { return props[k] == null ? "" : props[k]; } },
                 classList: { add: function () { for (var i = 0; i < arguments.length; i++) classes.add(arguments[i]); },
                              remove: function () { for (var i = 0; i < arguments.length; i++) classes.delete(arguments[i]); },
@@ -41,6 +40,7 @@ class FloatLayerTest extends JsModuleTestBase {
                 appendChild: function (c) { if (c.parentNode) c.parentNode.removeChild(c); this.children.push(c); c.parentNode = this; return c; },
                 removeChild: function (c) { var i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); c.parentNode = null; return c; },
                 setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; },
+                removeAttribute: function (k) { delete attrs[k]; }, hasAttribute: function (k) { return k in attrs; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 removeEventListener: function (t, fn) { var l = this.listeners[t] || []; var i = l.indexOf(fn); if (i >= 0) l.splice(i, 1); },
                 contains: function (c) { return c === this; },
@@ -55,11 +55,13 @@ class FloatLayerTest extends JsModuleTestBase {
             return { name: name, dissolved: [], kids: new Map(), names: new Set(),
                 createElement: function (n, tag) { if (!VALID.test(n) || this.names.has(n)) throw new RangeError('createElement: "' + n + '" is not a free, valid name'); this.names.add(n); return el(tag); },
                 createBranch: function (n) { if (!VALID.test(n) || this.kids.has(n)) throw new RangeError('createBranch: "' + n + '" is not a free, valid name'); var b = fakeBranch(n); b.parent = this; this.kids.set(n, b); return b; },
+                elementMaker: function (n) { var self = this; return function (tag) { return self.createElement(n, tag); }; },
                 dissolve: function () { this.dissolved.push(name); log.push("dissolved:" + name); if (this.parent) this.parent.kids.delete(name); },
                 activate: function (owner) { this.owner = String(owner); } };
         }
         var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };   // in order, so a test can name them
-        var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
+        var css = { cls: function (n) { return n; },
+                    addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); },
                     hasClass: function (e, c) { return e.classList.contains(c); },
@@ -91,7 +93,7 @@ class FloatLayerTest extends JsModuleTestBase {
                 default: log.push("?" + ev.kind);
             } } });
         desk.root.clientWidth = 800; desk.root.clientHeight = 600;
-        function frames() { return desk.root.children.map(function (f) { return f.getAttribute("aria-label") + (f.has("fp_active") ? "*" : "") + "@z" + f.prop("--fp-z"); }).join(","); }
+        function frames() { return desk.root.children.map(function (f) { return f.getAttribute("aria-label") + (f.getAttribute("aria-current") === "true" ? "*" : "") + "@z" + f.prop("--fp-z"); }).join(","); }
         function headOf(id) { return desk.pane(id).root.children[0]; }
         function gripOf(id) { return desk.pane(id).root.children[2]; }
         """;
@@ -100,10 +102,19 @@ class FloatLayerTest extends JsModuleTestBase {
     void load() {
         js = buildContext();
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
+        // the close button its head holds: the house's, on the new sheet
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
+        for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
+        TextsInJs.load(js, this::loadModule);   // and the label that is its title
         loadModule(EVENTS);
         loadModule(PANE);
         loadModule(DESK);
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }
@@ -178,20 +189,19 @@ class FloatLayerTest extends JsModuleTestBase {
     void aDragOnTheHeadMoves_clampedToTheDesk_reportedOnceWhenTheHandLetsGo() {
         eval("desk.open({ id: 'a', title: 'A' }); log.length = 0;");
         String head = "headOf('a')";
-        String lift = "var f = desk.pane('a').root; f.has('fp_held') ? 'held' + (f.has('fp_hoverable') ? '+hover' : '') : f.has('fp_hoverable') ? 'hoverable' : 'rest'";
+        String lift = "var f = desk.pane('a').root; f.hasAttribute('data-dragging') ? 'held' + (f.hasAttribute('data-highlighted') ? '+lit' : '') : f.hasAttribute('data-highlighted') ? 'lit' : 'rest'";
         eval(head + ".fire('pointerenter', {});");
-        assertEquals("hoverable", eval(lift).asString(), "over the head: the frame wears the interactive word");
+        assertEquals("lit", eval(lift).asString(), "over the head: the frame lit from there");
         eval(head + ".fire('pointerdown', { button: 0, pointerId: 1, clientX: 100, clientY: 100 });");
-        assertTrue(eval(head + ".has('fp_head_held')").asBoolean(), "held while the hand is on it");
-        assertEquals("held", eval(lift).asString(), "in the hand: the frame wears Dragging, not Interactive");
-        assertEquals("0.6", eval(head + ".prop('--extent')").asString());
+        assertTrue(eval(head + ".hasAttribute('data-dragging')").asBoolean(), "held while the hand is on it");
+        assertEquals("held", eval(lift).asString(), "in the hand: the frame dragging, not lit");
         eval(head + ".fire('pointermove', { clientX: 150, clientY: 130 }); " + head + ".fire('pointermove', { clientX: 2000, clientY: 2000 });");
         assertEquals("", log(), "nothing per pixel");
         assertEquals("752,552", eval("var b = desk.pane('a').bounds(); b.x + ',' + b.y").asString(), "clamped: 48px of the head stays on the desk");
         eval(head + ".fire('pointerup', { clientX: 2000, clientY: 2000 });");
         assertEquals("moved:a@752,552", log());
-        assertFalse(eval(head + ".has('fp_head_held')").asBoolean());
-        assertEquals("hoverable", eval(lift).asString(), "let go, still over the head: back to hover");
+        assertFalse(eval(head + ".hasAttribute('data-dragging')").asBoolean());
+        assertEquals("lit", eval(lift).asString(), "let go, still over the head: lit again");
         eval(head + ".fire('pointerleave', {});");
         assertEquals("rest", eval(lift).asString(), "off the head: nothing");
         assertEquals("752px", eval("desk.pane('a').root.prop('--fp-x')").asString());
@@ -221,15 +231,15 @@ class FloatLayerTest extends JsModuleTestBase {
         eval("var ic = el('i'); f.icon(ic);");
         assertTrue(eval("f.icon() === ic").asBoolean(), "an icon is kept, and shown nowhere");
         eval("bar.fire('pointerenter', {});");
-        assertTrue(eval("f.root.has('fp_hoverable')").asBoolean(), "over the handle, the frame lifts as over a head");
+        assertTrue(eval("f.root.hasAttribute('data-highlighted')").asBoolean(), "over the handle, the frame lit as over a head");
         eval("bar.fire('pointerdown', { button: 0, pointerId: 1, clientX: 100, clientY: 100, target: knob });");
-        assertFalse(eval("f.root.has('fp_held')").asBoolean(), "a press the holder says no to moves nothing");
+        assertFalse(eval("f.root.hasAttribute('data-dragging')").asBoolean(), "a press the holder says no to moves nothing");
         eval("bar.fire('pointerdown', { button: 0, pointerId: 1, clientX: 100, clientY: 100, target: bar });");
-        assertTrue(eval("f.root.has('fp_held')").asBoolean());
+        assertTrue(eval("f.root.hasAttribute('data-dragging')").asBoolean());
         eval("bar.fire('pointermove', { clientX: 150, clientY: 130 }); bar.fire('pointerup', { type: 'pointerup', clientX: 150, clientY: 130 });");
         assertEquals("moved:h@74,54", log(), "moved by the handle, reported once");
         eval("bar.fire('pointerleave', {});");
-        assertFalse(eval("f.root.has('fp_hoverable') || f.root.has('fp_held')").asBoolean());
+        assertFalse(eval("f.root.hasAttribute('data-highlighted') || f.root.hasAttribute('data-dragging')").asBoolean());
     }
 
     /** A frame that is not one tab — a float of many — is never offered: its drags are not the holder's to watch. */

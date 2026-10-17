@@ -3,21 +3,10 @@ package hue.captains.singapura.js.homing.ui.panzoom;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
 
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.Box.Control;
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Interaction.Dragging;
-import static hue.captains.singapura.js.homing.design.Structure.Hairline;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
 
 /**
  * The sheet of a pan-zoom view, in the design's words and nothing of its own but layout: the
@@ -37,9 +26,6 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
      * selected the drawing's words would paint them over as it went.
      */
     public record pz_view() implements CssClass<PanZoomStyles> {
-        @Override public List<? extends Wearable> wears() {
-            return List.of(of(Control.class, Shape.Rule.class), of(Control.class, Color.Edge.class), of(Hairline.class, Color.Edge.class));
-        }
         @Override public String body() { return "display: flex;\nflex-direction: column;\noverflow: auto;\nmin-width: 0;\n-webkit-user-select: none;\nuser-select: none;\n"; }
     }
 
@@ -75,7 +61,6 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
 
     /** Zoomed in, with somewhere to pan: the hand grabs. */
     public record pz_pannable() implements CssClass<PanZoomStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Dragging.class, Affordance.Cursor.class)); }
         @Override public String body() { return ""; }
     }
 
@@ -86,8 +71,8 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
 
     /** The zoom, said: a share of fit, in figures that keep their width. */
     public record pz_readout() implements CssClass<PanZoomStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Caption.class, Type.Scale.class), of(Muted.class, Color.Ink.class)); }
-        @Override public String body() { return "min-width: 3.5em;\ntext-align: center;\nfont-variant-numeric: tabular-nums;\n"; }
+        // its width a flex basis, not a min-width: how small a text may be, and its figures, are its look's
+        @Override public String body() { return "flex: 0 0 3.5em;\ntext-align: center;\n"; }
     }
 
     @Override

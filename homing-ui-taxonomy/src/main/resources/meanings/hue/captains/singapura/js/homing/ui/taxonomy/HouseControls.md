@@ -38,17 +38,21 @@ Does one thing named by a glyph alone, where the glyph is known well enough to n
 
 Closes what it is on.
 
-## Knob
+## SliderKnob
 
-What the user takes hold of to move a value along a track.
+What the user takes hold of to move a slider's value along its groove.
+
+## ToggleKnob
+
+What shows which way a switch stands, sliding in its groove as it is turned.
 
 ## Grip
 
 What the user takes hold of to move the thing it is on.
 
-## Divider
+## Lip
 
-What the user takes hold of to move the line between two regions, giving one more room.
+The thin band at an edge the user's hand comes to, which shows the strip it belongs to.
 
 ## Link
 
@@ -58,10 +62,6 @@ Takes the user somewhere else, and says where.
 
 Takes the user back to one place on the way they came.
 
-## Tab
-
-Brings forward one of the things a pane holds, and stands for it among the others.
-
 ## Range
 
 Sets a number along a scale, natively, with no more than the scale itself.
@@ -70,13 +70,21 @@ Sets a number along a scale, natively, with no more than the scale itself.
 
 Sets one value from a list that opens when asked and closes once picked.
 
-## Switch
+## TextBox
 
-Sets a setting on or off, in one movement, and shows which it is.
+Takes the words the user types - a line, or as many as they write - and lets them edit them where they stand.
+
+## Checkbox
+
+Sets one thing on or off by a mark in a box, and shows which it is.
 
 ## PaneThumb
 
 Picks one pane by a small picture of where it is.
+
+## Tab
+
+Brings forward one of the things a pane holds, and stands for it among the others.
 
 ## Brand
 
@@ -85,6 +93,10 @@ Says whose site this is, and takes the user home.
 ## PreferencesButton
 
 Opens the site's preferences, where the user sets how the site behaves for them.
+
+## Switch
+
+Sets a setting on or off, in one movement, and shows which it is.
 
 ## Slider
 

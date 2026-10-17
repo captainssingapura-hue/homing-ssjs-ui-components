@@ -44,7 +44,7 @@ class DeskHand {
 
     press(tp, ev, host) {
         if (this._g || ev.button !== 0) return false;
-        var self = this, f = this._desk._floaters.get(host) || null, x = ev.clientX, y = ev.clientY, r = DeskHand._rect(tp.chip);
+        var self = this, f = this._desk._floaters.get(host) || null, x = ev.clientX, y = ev.clientY, r = DeskHand._rect(tp.chip.el);
         var g = this._g = { tp: tp, host: f ? null : host, float: null, pid: ev.pointerId, start: { x: x, y: y }, hand: { x: x, y: y }, moved: false, run: null,
                             grip: { x: x - r.left, y: y - r.top }, centre: { dx: r.left + r.width / 2 - x, dy: r.top + r.height / 2 - y } };
         if (f) this._carry(f);
@@ -129,7 +129,7 @@ class DeskHand {
 
     /** A float in the hand: where its frame is held from — the grip on the chip, and the chip's place in the frame — and where it was. */
     _carry(f) {
-        var g = this._g, fr = DeskHand._rect(f.frame.root), cr = DeskHand._rect(g.tp.chip), lr = DeskHand._rect(this._desk.layer.root);
+        var g = this._g, fr = DeskHand._rect(f.frame.root), cr = DeskHand._rect(g.tp.chip.el), lr = DeskHand._rect(this._desk.layer.root);
         g.float = f;
         g.from = f.frame.bounds();
         g.frameGrip = { x: g.grip.x + cr.left - fr.left, y: g.grip.y + cr.top - fr.top };

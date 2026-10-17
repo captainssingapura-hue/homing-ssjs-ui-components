@@ -26,13 +26,13 @@ class HouseRoleCatalogueTest {
     private static final RoleCatalogue CATALOGUE = HouseRoleCatalogue.INSTANCE.read();
 
     @Test
-    void threeTopBranches_eighteenBeneath_sixtySevenRoles() {
+    void threeTopBranches_nineteenBeneath_ninetyFiveRoles() {
         assertEquals(List.of(HouseSaying.Saying.INSTANCE, HouseDoing.Doing.INSTANCE, HouseShaping.Shaping.INSTANCE),
                 CATALOGUE.children(RoleRoot.INSTANCE));
-        assertEquals(21, CATALOGUE.branches().size());
-        assertEquals(18, CATALOGUE.branches().stream().filter(b -> b.level() == 2).count());
-        assertEquals(67, CATALOGUE.roles().size());
-        assertEquals(67, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
+        assertEquals(22, CATALOGUE.branches().size());
+        assertEquals(19, CATALOGUE.branches().stream().filter(b -> b.level() == 2).count());
+        assertEquals(95, CATALOGUE.roles().size());
+        assertEquals(95, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
     }
 
     @Test
@@ -40,22 +40,23 @@ class HouseRoleCatalogueTest {
         var expected = new LinkedHashMap<String, List<String>>();
         expected.put("naming", List.of("title", "subtitle", "name", "category", "symbol"));
         expected.put("describing", List.of("summary", "note", "tag"));
-        expected.put("guiding", List.of("hint", "prompt"));
-        expected.put("reporting", List.of("value", "level", "count", "status"));
-        expected.put("signalling", List.of("keys", "landing", "disclose"));
+        expected.put("guiding", List.of("hint", "prompt", "placeholder"));
+        expected.put("reporting", List.of("value", "level", "count", "status", "error"));
+        expected.put("signalling", List.of("landing", "check"));
         expected.put("scaling", List.of("span", "rest", "notch", "figure"));
-        expected.put("choosing", List.of("choice", "style", "palette", "what", "how", "where", "picker"));
-        expected.put("committing", List.of("go", "cancel", "action"));
-        expected.put("changing", List.of("toggle", "adjust", "thumb", "reset"));
+        expected.put("choosing", List.of("choice", "style", "palette", "what", "how", "where", "picker", "query"));
+        expected.put("committing", List.of("go", "cancel", "action", "skip"));
+        expected.put("changing", List.of("toggle", "adjust", "thumb", "splitter", "reset", "increase", "decrease", "clear"));
         expected.put("viewing", List.of("zoom-in", "zoom-out", "fit"));
-        expected.put("managing", List.of("close", "add"));
-        expected.put("going", List.of("open", "home", "preferences", "path", "step"));
-        expected.put("bands", List.of("head", "actions", "tabs"));
+        expected.put("managing", List.of("close", "add", "remove"));
+        expected.put("going", List.of("open", "home", "preferences", "path", "step", "previous", "next", "first", "last", "more"));
+        expected.put("bands", List.of("head", "actions", "tabs", "foot"));
         expected.put("layers", List.of("window", "veil", "float", "popup"));
-        expected.put("contents", List.of("page", "host", "index", "detail", "specimen", "setting", "layout"));
-        expected.put("members", List.of("member", "entry", "dock", "cell"));
+        expected.put("contents", List.of("page", "host", "index", "detail", "specimen", "setting", "layout", "body", "media", "fallback", "editor"));
+        expected.put("members", List.of("member", "entry", "dock", "cell", "group", "column"));
         expected.put("dividers", List.of("seam", "break"));
-        expected.put("handles", List.of("reveal", "chip"));
+        expected.put("handles", List.of("reveal", "chip", "opener", "pull", "scroll"));
+        expected.put("picturing", List.of("face", "leading", "measure", "keys", "disclose"));   // where an icon sits on its owner (D52)
         var actual = new LinkedHashMap<String, List<String>>();
         for (RoleBranch b : CATALOGUE.branches())
             if (b.level() == 2) actual.put(b.name().value(), CATALOGUE.children(b).stream().map(RoleNode::name).map(n -> n.value()).toList());
@@ -70,7 +71,7 @@ class HouseRoleCatalogueTest {
             assertEquals(2, branch.level(), r + " is filed at level 2");
             perTop.merge(CATALOGUE.parent(branch).name().value(), 1L, Long::sum);
         }
-        assertEquals(Map.of("saying", 21L, "doing", 24L, "shaping", 22L), perTop);
+        assertEquals(Map.of("saying", 22L, "doing", 36L, "shaping", 37L), perTop);
     }
 
     @Test
@@ -78,10 +79,15 @@ class HouseRoleCatalogueTest {
         assertEquals(List.of(), new CatalogueNames().clashes(CATALOGUE.branches(), CATALOGUE.roles()));
     }
 
+    /**
+     * The catalogue is the house's whole vocabulary, ahead of its components: read with every component of the house -
+     * the modules' defined here too (D40) - the words no component says yet are these, each named by none.
+     */
     @Test
-    void readWithTheHouse_everyRoleNamedButOne() {
-        var findings = HouseTaxonomy.INSTANCE.read().findings();
-        assertEquals(1, findings.stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED).count(),
-                "only Host, a floater's - and the floater is not in the first cut");
+    void theWholeHouse_leavesTheseWordsUnnamed_theCatalogueAheadOfIt() {
+        var unnamed = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
+                .map(f -> f.says().replace(" is named by no component", "")).toList();
+        assertEquals(List.of("Placeholder", "Error", "Check", "Query", "Skip", "Increase", "Decrease", "Clear", "Remove", "Previous",
+                "Next", "First", "Last", "More", "Host", "Media", "Fallback", "Dock", "Group", "Opener", "Pull", "Scroll"), unnamed);
     }
 }

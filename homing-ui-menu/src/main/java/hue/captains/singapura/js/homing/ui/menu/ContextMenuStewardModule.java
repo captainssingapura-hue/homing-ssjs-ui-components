@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.ui.menu;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseMenus;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -20,7 +23,7 @@ import java.util.List;
  * nothing listened to while no menu is open. The press that closes a menu
  * is swallowed whole. A primitive, owning the layer on its branch.
  */
-public record ContextMenuStewardModule() implements DomModule<ContextMenuStewardModule> {
+public record ContextMenuStewardModule() implements DomModule<ContextMenuStewardModule>, ImplFor<HouseMenus.ContextMenuSteward> {
 
     /** The class. */
     public record ContextMenuSteward() implements BranchComponent<ContextMenuStewardModule>, NeedKeyboard {

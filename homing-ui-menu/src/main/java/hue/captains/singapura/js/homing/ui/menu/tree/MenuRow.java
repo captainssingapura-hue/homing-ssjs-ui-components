@@ -1,10 +1,11 @@
 package hue.captains.singapura.js.homing.ui.menu.tree;
 
-import hue.captains.singapura.js.homing.design.Icon;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 
 /**
  * A row of a context menu: what is constant about it — its label, the
- * icon word it shows, a hint, and the section it sits in. Rows are listed
+ * icon shown before it, a hint, and the section it sits in. Rows are listed
  * in order, and a divider is drawn where the section changes from one row
  * to the next. What varies with the object the menu is opened for —
  * disabled, checked, hidden — is the handler's, asked at bind, never the
@@ -21,8 +22,8 @@ public sealed interface MenuRow<P extends MenuNode<P>, Self extends MenuRow<P, S
     /** The text of the row. */
     String label();
 
-    /** The icon word shown before the label, or null for none: the design draws it. */
-    default Class<? extends Icon> icon() { return null; }
+    /** The icon shown before its label, one of the Icon branch's (D52), or null for none: its picture its look, the style worn's. */
+    default Component<HouseBranches.Icon> icon() { return null; }
 
     /** A hint after the label — a shortcut, a note — or null. */
     default String hint() { return null; }

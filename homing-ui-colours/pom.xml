@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+        <artifactId>homing-components</artifactId>
+        <version>LOCAL-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>homing-ui-colours</artifactId>
+
+    <description>
+        RFC 0067, appendix The Style Jars - the house's colour tree and its schemes, defined on their own: the
+        words a style's implementation of a casting imports, each named for what it is for. No value: the palettes
+        give those, in jars of their own.
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-semantic-class</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-design-core</artifactId>
+            <version>${homing.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

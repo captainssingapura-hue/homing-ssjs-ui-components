@@ -59,6 +59,11 @@ Tells the user a faster way to the same thing, such as a shortcut.
 
 Asks the user what to do next, when the owner waits on them.
 
+## Placeholder
+
+Suggests what the user might put in the owner while it holds nothing, and goes as soon as they
+start: an example, or the kind of thing wanted.
+
 ## Reporting
 
 Says how the owner is now, as it changes.
@@ -79,21 +84,23 @@ Says how many the owner holds, where they cannot all be seen.
 
 Says how the owner is doing: loading, ready, failed.
 
+## Error
+
+Says what is wrong with what the user gave the owner, and how to put it right, beside the thing
+that is wrong.
+
 ## Signalling
 
 Shows a state or a place by a mark rather than by words.
-
-## Keys
-
-Shows that the keyboard is with the owner: what the user types goes there.
 
 ## Landing
 
 Shows where a dragged thing would land if it were let go now.
 
-## Disclose
+## Check
 
-Shows that a choice leads to further choices, rather than doing something at once.
+Shows by a mark that the owner is chosen: the tick in a box, the dot in a radio, the check beside
+an item of a menu.
 
 ## Scaling
 

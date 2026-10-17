@@ -22,6 +22,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <!-- What it provides for styles (The Style Jars): the style's record, and the colour tree its implementations import. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-colours</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The taxonomy its components are anchored at: each module ImplFor its leaf. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-core</artifactId>
@@ -32,6 +49,12 @@
             <artifactId>homing-core-js</artifactId>
             <version>${homing.core.version}</version>
         </dependency>
+        <!-- The house's look - the design's: what every component is worn in. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-look</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-component-base</artifactId>
@@ -39,13 +62,15 @@
         </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
-            <artifactId>homing-design-core</artifactId>
-            <version>${homing.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-ui-icons</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The jar's own instance, which its JS tests install (D51). -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-jar-instance</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

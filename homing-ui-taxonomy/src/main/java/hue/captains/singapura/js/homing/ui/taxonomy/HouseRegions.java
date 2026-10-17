@@ -1,12 +1,16 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Region;
+
+import java.util.List;
 
 /**
  * The house's regions: stretches of a container's room with no frame of their own - a panel's
- * head is played by a {@link Section}, a split grid mirror's cells by a {@link GridCell}, the
- * preferences' index and detail each by a {@link WidgetSlot}.
+ * body is played by a {@link Section}, the preferences' index and detail each by a {@link
+ * WidgetSlot}.
  */
 public final class HouseRegions {
 
@@ -18,15 +22,46 @@ public final class HouseRegions {
         @Override public Region parent() { return Region.INSTANCE; }
     }
 
-    /** One cell of a grid. */
-    public record GridCell() implements Component<Region> {
-        public static final GridCell INSTANCE = new GridCell();
+    /** A stretch of a view a widget is held in. */
+    /** The end of a strip of tabs: the room its count and its close sit in. */
+    public record StripTail() implements Component<Region> {
+        public static final StripTail INSTANCE = new StripTail();
         @Override public Region parent() { return Region.INSTANCE; }
     }
 
-    /** A stretch of a view a widget is held in. */
+    /** A slider group's sliders, stacked or side by side: the room between them. */
+    public record SliderRack() implements Component<Region> {
+        public static final SliderRack INSTANCE = new SliderRack();
+        @Override public Region parent() { return Region.INSTANCE; }
+    }
+
     public record WidgetSlot() implements Component<Region> {
         public static final WidgetSlot INSTANCE = new WidgetSlot();
         @Override public Region parent() { return Region.INSTANCE; }
     }
+    // ── a document's blocks: a quote, a block of code, a table - its cells are containers (HouseContainers) ──
+
+    /** Words quoted from elsewhere, set off from the text round them. */
+    public record Quote() implements Component<HouseBranches.Region> {
+        public static final Quote INSTANCE = new Quote();
+        @Override public HouseBranches.Region parent() { return HouseBranches.Region.INSTANCE; }
+    }
+
+    /** Lines of code, or of a log, kept as they are written. */
+    public record CodeBlock() implements Component<HouseBranches.Region> {
+        public static final CodeBlock INSTANCE = new CodeBlock();
+        @Override public HouseBranches.Region parent() { return HouseBranches.Region.INSTANCE; }
+    }
+
+    /** Facts set out in rows and columns, each column headed. */
+    public record Table() implements Component<HouseBranches.Region> {
+        public static final Table INSTANCE = new Table();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Region parent() { return HouseBranches.Region.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseContainers.HeaderCell.INSTANCE).as(HouseShaping.Column.INSTANCE).any(),
+                           DSL.part(HouseContainers.DataCell.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
+        }
+    }
+
 }

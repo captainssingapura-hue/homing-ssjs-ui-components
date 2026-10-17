@@ -2,19 +2,21 @@
 // PreferencesButton — the button on the bar, and the dialog it opens. A
 // branch component: the chrome makes a sub-branch for it and hands it in.
 //
-//   new PreferencesButton(branch, bar, chrome, keyboard)
+//   new PreferencesButton(branch, chrome, keyboard, role?)
 //     keyboard  the page's KeyboardSteward, the chrome's: the dialog claims the keys
 //               on open and hands them to the view, which hands them to the master
 //               or the detail widget by where the focus is
-//     .el      the button's wrap, appended to the bar
+//     role      the job its owner gives it - the chrome's: ROLE.PREFERENCES; on its own unless said
+//     .el      the button's wrap, for its owner - the site's bar - to place
 //     .open()  what the button does
 //
-// chrome.preferences names the site's registry module: { module }. On the
-// first open it is imported — a module's URL is its class alone, so this is
-// the page's own instance — and its PREFERENCES constant is handed to the view, which
-// loads each node's widget as the node is chosen. The dialog's content is
-// the view; closing the dialog disposes the view first, then the dialog's
-// branch, and the next open builds it again from what the registry says.
+// chrome.preferences names the site's registry module and the view's: { module, view }.
+// On the first open both are imported — a module's URL is its class alone, so this is
+// the page's own instance — and its PREFERENCES constant is the view's params; the
+// view loads each node's widget as the node is chosen. The dialog's content is
+// the view, a widget shown in a slot over the dialog's body; closing the dialog
+// disposes the view first, then the dialog's branch, and the next open builds
+// it again from what the registry says.
 //
 // Done is a plain action, not the primary, so Enter stays the tree's and
 // the widgets'; Escape closes. Nothing is written here: every widget writes
@@ -24,6 +26,7 @@
 
 const _prefsOwner = Object.freeze({ toString: () => "preferencesButton" });
 var _registry = null;   // Promise<PREFERENCES>, once per page
+var _view = null;       // Promise<the view's class>, once per page
 
 function _loadRegistry(entry) {
     if (!_registry) {
@@ -35,8 +38,25 @@ function _loadRegistry(entry) {
     return _registry;
 }
 
+function _loadView(entry) {
+    if (!_view) {
+        _view = import(entry.view).then(function (m) {
+            if (typeof m.PreferencesView !== "function") throw new Error("[preferences] " + entry.view + " exports no PreferencesView");
+            return m.PreferencesView;
+        });
+    }
+    return _view;
+}
+
 class PreferencesButton {
-    constructor(branch, bar, chrome, keyboard) {
+    static LEAF = "preferences-button";
+    /** It may be off - a site with no preferences to show: reflected natively, and its class. */
+    static AXES = Object.freeze({
+        enabled: Object.freeze({ values: Object.freeze([true, false]), rest: true, state: STATE.ENABLED,
+            reflect: function (el, on) { el.disabled = !on; } })
+    });
+
+    constructor(branch, chrome, keyboard, role) {
         if (!branch) throw new Error("[PreferencesButton] a branch of its own is required");
         this._keyboard = keyboard || null;
         var self = this;
@@ -50,22 +70,23 @@ class PreferencesButton {
         var btn = branch.createElement("prefsBtn", "button");
         btn.type = "button";
         css.addClass(btn, mpa_prefs_btn);
+        this._look = new Look(PreferencesButton, role || ROLE.STANDALONE);   // outlined in the colour of the bar that holds it
+        this._look.wear(btn);
         btn.setAttribute("aria-haspopup", "dialog");
         var mark = branch.createElement("prefsBtnMark", "span");
-        css.addClass(mark, mpa_prefs_btn_label);
-        mark.textContent = "⚙";
         mark.setAttribute("aria-hidden", "true");
+        this._symbol = new Icon(branch.createElement("prefsBtnSymbol", Icon.TAG), ICON.SETTINGS_ICON, ROLE.FACE);   // its face, the settings icon
+        mark.appendChild(this._symbol.el);
         var word = branch.createElement("prefsBtnWord", "span");
         word.textContent = "Preferences";
         btn.appendChild(mark);
         btn.appendChild(word);
         wrap.appendChild(btn);
-        bar.appendChild(wrap);
         this.el = wrap;
         this._btn = btn;
 
         this._entry = chrome && chrome.preferences;
-        if (!this._entry || !this._entry.module) { btn.disabled = true; return; }
+        if (!this._entry || !this._entry.module || !this._entry.view) { this._look.show(btn, { enabled: false }); return; }
         btn.addEventListener("click", function () { self.open(); });
     }
 
@@ -77,14 +98,17 @@ class PreferencesButton {
             size: { w: 880, h: 580 },
             keyboard: this._keyboard, keyboardId: "preferences",
             content: function (b, body) {
-                _loadRegistry(self._entry).then(function (reg) {
+                var views = b.createBranch("view");
+                views.activate(_prefsOwner);
+                var slot = new WidgetSlot({ branch: views, host: body });
+                Promise.all([_loadView(self._entry), _loadRegistry(self._entry)]).then(function (got) {
                     if (!self._open) return null;
-                    view = new PreferencesView(b.createBranch("view"), body, reg);
+                    view = slot.show("preferences", got[0], got[1]);
                     return view.ready;
                 }).then(function (master) {
                     if (master && typeof master.setActive === "function") master.setActive(true);
                 }).catch(function (e) { console.error("[preferences] could not open", e); });
-                return { onKeydown: function (ev) { return !!(view && view.key(ev)); }, dispose: function () { if (view) view.dispose(); view = null; } };
+                return { onKeydown: function (ev) { return !!(view && view.key(ev)); }, dispose: function () { slot.disposeAll(); view = null; } };
             },
             actions: [{ id: "done", label: "Done", onClick: function (d) { d.close(); } }],
             onClose: function () { self._open = null; self._btn.focus(); }

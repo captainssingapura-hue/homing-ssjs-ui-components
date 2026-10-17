@@ -1,11 +1,23 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.Widget;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.server.PreferenceSteward;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
+import hue.captains.singapura.js.homing.ui.elements.Heading4Module;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.elements.LedeModule;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.SeparatorModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 import java.util.List;
 
@@ -15,7 +27,9 @@ import java.util.List;
  * {@code label, summary?, settings: [{name, label}]} — the settings below
  * the group, flattened by the site when it declares the tree.
  */
-public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule> {
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 21,
+        reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
+public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule>, ImplFor<HousePreferences.OverviewWidget> {
 
     /** The class. */
     public record OverviewWidget() implements Widget._Class<Widget._None, OverviewWidgetModule> {}
@@ -27,18 +41,23 @@ public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWid
     @Override
     public ImportsFor<OverviewWidgetModule> imports() {
         return ImportsFor.<OverviewWidgetModule>builder()
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading4Module.Heading4(), new Heading4Module.Heading4Factory()), Heading4Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SeparatorModule.Separator()), SeparatorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SettingRowModule.SettingRow()), SettingRowModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferenceSteward.PreferenceStewardInstance(),
                         new PreferenceSteward.PreferenceViewInstance()
                 ), PreferenceSteward.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_kicker(),
                         new PreferencesStyles.pv_title(),
                         new PreferencesStyles.pv_summary(),
                         new PreferencesStyles.pv_children(),
-                        new PreferencesStyles.pv_child(),
-                        new PreferencesStyles.pv_option_note(),
                         new PreferencesStyles.pv_actions()
                 ), PreferencesStyles.INSTANCE))
                 .build();

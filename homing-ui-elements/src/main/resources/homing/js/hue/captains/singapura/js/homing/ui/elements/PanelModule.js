@@ -4,19 +4,14 @@
 // pane's tab, a page — and brings nothing else. It measures nothing: what
 // holds it decides how big it is, and it fills that.
 //
-//   PanelBuilder — the properties, set progressively, each returning the builder:
-//     .title(text)          the name in the head; without one there is no head
-//     .bare(on)             no frame and no corner: for a panel whose CONTAINER
-//                           draws the lines — a cell of a grid that already
-//                           draws its seams and marks the room being worked in.
-//                           A sheet draws its own edge; a room's floor does not.
-//     .fills(on)            what is mounted fills the body: no air, and no
+//   new Panel(branch, { title, fills, size, host }) — on a sub-branch the caller made:
+//     title                 the name in the head; without one there is no head
+//     fills: true           what is mounted fills the body: no air, and no
 //                           scroll of its own (a dock, a grid). Off, the body
 //                           has the design's air and scrolls — for content.
-//     .size(s)              -1 to 1: every length the design gives the panel
+//     size                  -1 to 1: every length the design gives the panel
 //                           grown by its own ratio to the power of it
-//     .host(el)             appended there on build
-//     .build(branch)        the Panel, on a sub-branch the caller made
+//     host                  appended there once made
 //
 //   Panel — the instance:
 //     .root                 the element, appended to the host when one was given
@@ -27,11 +22,13 @@
 //     .title(text?)         read, or set
 //     .size(s)              the size, live, on the panel and its parts
 //     .elevation(e)         "elevated", "sunken", or null for flat: how far off
-//                           its own plane the design sits it. WHAT A REGISTER
-//                           MEANS IS THE APP'S: the panel links it to nothing.
+//                           its own plane the design sits it - its Elevation
+//                           state's class. WHAT A REGISTER MEANS IS THE APP'S:
+//                           the panel links it to nothing.
 //     .highlight(on) .isHighlighted()   the current one, said in colour alone —
-//                           the other axis, orthogonal to the depth, and the
-//                           one a design without depth can still answer
+//                           its Current state's class: the other axis,
+//                           orthogonal to the depth, and the one a design
+//                           without depth can still answer
 //     .watch(component|el, onWithin)  follow what is mounted and SAY so:
 //                           onWithin(true|false) as the keys come and go. It
 //                           decides nothing. .isWithin() reads it. .unwatch() stops.
@@ -47,9 +44,29 @@
 // =============================================================================
 
 const _panelOwner = Object.freeze({ toString: () => "panel" });
+/** Its head - the bar that names it - and its body - a section of its room: each realized inline, in its own look. */
+const _PANEL_HEAD = Object.freeze({ LEAF: "panel-bar" });
+const _PANEL_BODY = Object.freeze({ LEAF: "section" });
 
 class Panel {
-    /** The builder's; a caller makes a panel through PanelBuilder. */
+    static LEAF = "panel";
+    /** Its two states, each the app's to say: how far off its plane it sits, and whether it is the current one - each reflected, each its class. */
+    static AXES = Object.freeze({
+        elevation: Object.freeze({
+            values: Object.freeze(["flat", "elevated", "sunken"]),
+            rest: "flat",
+            reflect: function (el, e) { css.elevation(el, e === "flat" ? null : e); },
+            state: STATE.ELEVATION
+        }),
+        current: Object.freeze({
+            values: Object.freeze([false, true]),
+            rest: false,
+            reflect: function (el, on) { if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); },   // said by its reflection, never false
+            state: STATE.CURRENT
+        })
+    });
+
+    /** On a sub-branch the caller made, with its properties. */
     constructor(branch, props) {
         if (!branch) throw new Error("[Panel] a branch of its own is required");
         var p = props || {};
@@ -64,6 +81,9 @@ class Panel {
 
         var root = branch.createElement("panel", "section");
         css.addClass(root, el_panel);
+        // its look, whole: raised, framed, its corner the style's; lifted or set in, and the current one, as the app says
+        this._look = new Look(Panel, ROLE.STANDALONE);
+        this._look.wear(root);
         this._parts = [root];
 
         this.head = null;
@@ -72,10 +92,11 @@ class Panel {
         if (p.title != null) {
             var head = branch.createElement("head", "header");
             css.addClass(head, el_panel_head);
-            var title = branch.createElement("title", "h2");
-            css.addClass(title, el_panel_title);
-            title.textContent = String(p.title);
-            head.appendChild(title);
+            new Look(_PANEL_HEAD, ROLE.HEAD).wear(head);   // its bar's look, whole: its room, and the line under it
+            // its title is the house's kicker, cast as its title: placed by the panel, looking as a kicker does
+            var title = new Kicker(KickerFactory.create(branch, "title"), { text: String(p.title) }, ROLE.TITLE);
+            css.addClass(title.el, el_panel_title);
+            head.appendChild(title.el);
             var slot = branch.createElement("controls", "div");
             css.addClass(slot, el_panel_slot);
             head.appendChild(slot);
@@ -84,13 +105,16 @@ class Panel {
             this.head = head;
             this.controls = slot;
             this._title = title;
-            this._parts.push(head, title, slot);
+            this._parts.push(head, slot);
         }
 
         var body = branch.createElement("body", "div");
         css.addClass(body, el_panel_body);
-        if (!p.bare) css.addClass(root, el_panel_framed);   // the frame is a class, not an override: a bare panel never wears it
-        if (!p.fills) { css.addClass(body, el_panel_body_air); this._parts.push(body); }
+        if (!p.fills) {   // content: a section, the style's room round what it holds, and a scroll of its own; filled, the body is flush
+            css.addClass(body, el_panel_body_air);
+            new Look(_PANEL_BODY, ROLE.BODY).wear(body);
+            this._parts.push(body);
+        }
         root.appendChild(body);
         this.body = body;
 
@@ -102,8 +126,8 @@ class Panel {
     /** The name in the head, read or set; a panel built without one has no head to name. */
     title(text) {
         if (!this._title) return null;
-        if (text !== undefined) { this._title.textContent = String(text); this.root.setAttribute("aria-label", String(text)); }
-        return this._title.textContent;
+        if (text !== undefined) { this._title.text = String(text); this.root.setAttribute("aria-label", String(text)); }
+        return this._title.text;
     }
 
     /** The size, on the panel and on every part it minted: the size is an element's, not inherited. */
@@ -112,6 +136,7 @@ class Panel {
         this._size = Number.isFinite(n) ? n : 0;
         var v = this._size === 0 ? null : this._size;
         this._parts.forEach(function (el) { css.size(el, v); });
+        if (this._title) this._title.size = this._size == null ? 0 : this._size;   // its title, by its own size
         return this;
     }
 
@@ -126,7 +151,7 @@ class Panel {
      */
     elevation(e) {
         this._elevation = e === "elevated" || e === "sunken" ? e : null;
-        css.elevation(this.root, this._elevation);
+        this._show();
         return this;
     }
     elevationOf() { return this._elevation; }
@@ -136,11 +161,13 @@ class Panel {
         var want = !!on;
         if (want !== this._highlight) {
             this._highlight = want;
-            if (want) css.addClass(this.root, el_panel_current);
-            else css.removeClass(this.root, el_panel_current);
+            this._show();
         }
         return this;
     }
+
+    /** Its states as the app last said them: each reflected on its root, each its class there (D12). */
+    _show() { this._look.show(this.root, { elevation: this._elevation || "flat", current: this._highlight }); }
     isHighlighted() { return this._highlight; }
 
     /** Whether the keys are anywhere in what is mounted, as the last watch read it. */
@@ -211,18 +238,5 @@ class Panel {
         this.unwatch();
         if (this.root.parentNode) this.root.parentNode.removeChild(this.root);
         try { this.branch.dissolve(); } catch (e) {}
-    }
-}
-
-class PanelBuilder {
-    constructor() { this._props = {}; }
-    title(text)  { this._props.title = text; return this; }
-    fills(on)    { this._props.fills = on === undefined ? true : !!on; return this; }
-    bare(on)     { this._props.bare  = on === undefined ? true : !!on; return this; }
-    size(s)      { this._props.size = s; return this; }
-    host(el)     { this._props.host = el; return this; }
-    build(branch) {
-        if (!branch) throw new Error("[PanelBuilder] build wants the sub-branch the caller made for the panel");
-        return new Panel(branch, this._props);
     }
 }

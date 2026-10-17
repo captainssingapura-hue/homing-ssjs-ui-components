@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.ui.dialog;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * before, when still a member, and not when someone else took them; Modality
  * only makes the rest inert and captures nothing.
  */
-class DialogKeysTest extends JsModuleTestBase {
+class DialogKeysTest extends UiDialogJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/dialog/";
 
@@ -42,15 +42,24 @@ class DialogKeysTest extends JsModuleTestBase {
         var page = el("div"); document.body.appendChild(page); document.activeElement = page;
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function () {}, size: function () {}, extent: function () {} };
         ["dl_scrim", "dl_layer", "dl_float", "dl_actions"].forEach(function (c) { globalThis[c] = c; });
-        // a pane that is a frame with a body; a button builder that makes a button element
+        // a pane that is a frame with a body; the buttons, each dressing the element it is handed
         class FloatingPane { constructor(branch, o) { this.root = el("frame"); this.body = el("body"); this.root.appendChild(this.body); this._o = o; } setActive() {} title() { return this._o.title; } }
-        class ButtonBuilder { label(l) { this._l = l; return this; } colour() { return this; } onClick(fn) { this._fn = fn; return this; } get tag() { return "button"; } build(e) { var fn = this._fn; e.addEventListener("click", fn); return { el: e, click: fn }; } }
+        class PlainButton { static TAG = "button"; constructor(e, p) { this.el = e; this.enabled = true; }
+                            setOnClick(h) { var self = this; this.el.addEventListener("click", function (ev) { h.handle({ type: EVENT.CLICK, source: self, raw: ev }); }); } }
+        class PrimaryButton extends PlainButton {}
+        var PlainButtonFactory = { create: function (b, n) { return b.createElement(n, "button"); } }, PrimaryButtonFactory = PlainButtonFactory;
+        // the veil, a press on it handed to its handler
+        class Scrim { static TAG = "div"; constructor(e, p) { this.el = e; }
+                      setOnPress(h) { var self = this; this.el.addEventListener("mousedown", function (ev) { h.handle({ type: EVENT.PRESS, source: self, raw: ev }); }); } }
+        var ScrimFactory = { create: function (b, n) { return b.createElement(n, "div"); } };
         function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function () {} }; }
         var members = {}, kbLog = [], holder = null;
         var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; if (holder === id) holder = null; kbLog.push("leave:" + id); },
                    claim: function (id) { if (!members[id]) throw new Error("no member " + id); kbLog.push("claim:" + id); holder = id; }, release: function () {}, holder: function () { return holder; }, has: function (id) { return !!members[id]; } };
         members.slider = {}; holder = "slider";   // the page's slider holds before the dialog opens
         var content = { onKeydown: function (ev) { log.push("content:" + ev.key); return ev.key === "ArrowUp"; }, focusEl: null };
+        // the action bar's look: put on by name, which is all the keys ask of it here
+        class Look { constructor(Leaf) { this.casting = Leaf.LEAF; } wear(e) { if (e.classList) e.classList.add(this.casting); } }
         function open(o) {
             return new Dialog(fakeBranch("dialog"), Object.assign({ title: "T", keyboard: kb, content: function () { return content; },
                 actions: [{ id: "ok", label: "OK", primary: true, onClick: function () { log.push("ok"); } }], onClose: function () { log.push("closed"); } }, o || {}));
@@ -61,6 +70,8 @@ class DialogKeysTest extends JsModuleTestBase {
     void load() {
         js = buildContext();
         js.eval("js", "var console = { error: function (m) { throw new Error(m); } };");
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));   // the roles the dialog casts its buttons in
+        js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
         loadModule(DIR + "ModalityModule.js");
         loadModule(DIR + "DialogModule.js");
         js.eval("js", SHIM);

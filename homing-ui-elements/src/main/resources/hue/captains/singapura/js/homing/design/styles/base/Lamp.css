@@ -1,0 +1,38 @@
+/* The lamp in the base layer: a light that says how something is - quiet at rest, lit in the accent, broken in danger's colour. Whole: every property its look has (D9). */
+$casting {
+    --current-quiet: color-mix(in oklab, currentColor 70%, transparent);
+    --fixed-danger: #dc2626;
+
+    color: var(--current-quiet);
+    background-color: transparent;
+    border-color: transparent;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 1px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 4px;
+    padding-inline: 8px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    transition: none;
+    transform: none;
+    cursor: auto;
+
+    &$current {
+        color: var(--fp-text);
+        background-color: var(--fp-accent-wash-light);
+        border-color: var(--fp-accent);
+    }
+
+    &$invalid {
+        color: var(--fp-on-danger);
+        background-color: var(--fixed-danger);
+        border-color: var(--fixed-danger);
+    }
+}

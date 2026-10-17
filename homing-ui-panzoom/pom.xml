@@ -26,6 +26,29 @@
     </properties>
 
     <dependencies>
+        <!-- What it provides for styles (The Style Jars): the style's record, and the colour tree its implementations import. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-colours</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The taxonomy its components are anchored at: each module ImplFor its leaf. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- How its leaves are controlled: declared beside them, as they are. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-controllability</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-core</artifactId>

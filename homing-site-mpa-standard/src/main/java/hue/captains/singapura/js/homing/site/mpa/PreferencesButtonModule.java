@@ -1,12 +1,20 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.WidgetSlotModule;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.preferences.PreferencesViewModule;
+import hue.captains.singapura.js.homing.ui.icons.IconModule;
 import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -22,7 +30,7 @@ import java.util.List;
  * writes through the steward, and the page follows the store as it always
  * has, so a theme picked in the dialog is worn behind it as it is picked.</p>
  */
-public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule> {
+public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule>, ImplFor<HouseControls.PreferencesButton> {
 
     /** The class. */
     public record PreferencesButton() implements BranchComponent<PreferencesButtonModule> {
@@ -34,12 +42,16 @@ public record PreferencesButtonModule() implements DomModule<PreferencesButtonMo
     @Override
     public ImportsFor<PreferencesButtonModule> imports() {
         return ImportsFor.<PreferencesButtonModule>builder()
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PreferencesViewModule.PreferencesView()), PreferencesViewModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new MpaStyles.mpa_prefs(),
-                        new MpaStyles.mpa_prefs_btn(),
-                        new MpaStyles.mpa_prefs_btn_label()
+                        new MpaStyles.mpa_prefs_btn()
                 ), MpaStyles.INSTANCE))
                 .build();
     }

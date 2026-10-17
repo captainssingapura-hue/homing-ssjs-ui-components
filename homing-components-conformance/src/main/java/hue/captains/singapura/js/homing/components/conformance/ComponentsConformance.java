@@ -1,28 +1,28 @@
 package hue.captains.singapura.js.homing.components.conformance;
 
 import hue.captains.singapura.js.homing.conformance.rules.Allowance;
+import hue.captains.singapura.js.homing.layout.LayoutCrate;
+import hue.captains.singapura.js.homing.sizing.SizingCrate;
 import hue.captains.singapura.js.homing.conformance.rules.Baseline;
 import hue.captains.singapura.js.homing.conformance.rules.CrateClosure;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
 import hue.captains.singapura.js.homing.core.Crate;
-import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
-import hue.captains.singapura.js.homing.designs.HomingDesigns;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
 import hue.captains.singapura.js.homing.ui.docking.UiDockingCrate;
 import hue.captains.singapura.js.homing.ui.splitgrid.UiSplitGridCrate;
-import hue.captains.singapura.js.homing.ui.focus.UiFocusCrate;
+import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
 import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomCrate;
-import hue.captains.singapura.js.homing.ui.split.UiSplitCrate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,37 +57,38 @@ public final class ComponentsConformance {
 
     /** The fresh crates: what the gate grades and the studio browses. */
     public static final List<Crate> TOP_LEVEL = List.of(
+            LayoutCrate.INSTANCE,
+            SizingCrate.INSTANCE,
+            UiLookCrate.INSTANCE,
             UiElementsCrate.INSTANCE,
             UiDialogCrate.INSTANCE,
             UiPreferencesCrate.INSTANCE,
-            UiSplitCrate.INSTANCE,
             UiPanZoomCrate.INSTANCE,
             UiPanesCrate.INSTANCE,
             UiFloatingCrate.INSTANCE,
             UiDockingCrate.INSTANCE,
             UiSplitGridCrate.INSTANCE,
             UiIconsCrate.INSTANCE,
-            UiFocusCrate.INSTANCE,
+            UiMonitorsCrate.INSTANCE,
             UiMenuCrate.INSTANCE,
             MpaCrate.INSTANCE,
             UiControlPanelCrate.INSTANCE);
 
     /** One class per Maven module, for the coverage check: nothing served from these modules may be uncrated. */
     public static final List<Class<?>> ANCHORS = List.of(
-            UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
-            UiSplitCrate.class, UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiFocusCrate.class, UiMenuCrate.class, MpaCrate.class,
+            LayoutCrate.class, SizingCrate.class, UiLookCrate.class, UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
+            UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiMonitorsCrate.class, UiMenuCrate.class, MpaCrate.class,
             UiControlPanelCrate.class);
 
     /** The framework's policy, unextended: the components declare no types of their own. */
     public static final JsRulePolicy POLICY = DefaultJsRulePolicy.INSTANCE;
 
-    /** Documented, intentional exceptions: none. */
+    /**
+     * Documented, intentional exceptions: none. The look puts its classes on and off through the css manager, as every
+     * component does - a derived sheet's class is the manager's to put on an element, whatever sheet rules it; the
+     * manager only loads the provided ones (RFC 0064, D25) - so nothing here is excused.
+     */
     public static final List<Allowance> ALLOWANCES = List.of();
-
-    /** Every look the framework's designs offer — each design in each palette that fits it; each must bind every pair a class wears. */
-    public static List<Design> designs() {
-        return HomingDesigns.REGISTRY.themes().stream().map(t -> (Design) t).toList();
-    }
 
     /** The top level and everything it requires, transitively. */
     public static Collection<Crate> closure() {
@@ -113,7 +114,7 @@ public final class ComponentsConformance {
         }
     }
 
-    /** The framework-strict grader with the components' (empty) allowances and baseline. */
+    /** The framework-strict grader with the components' allowances and (empty) baseline; a module's declared debts honoured. */
     public static FindingGrader grader(boolean allowPreExisting) {
         return FindingGrader.STRICT
                 .withAllowlist(ALLOWANCES)

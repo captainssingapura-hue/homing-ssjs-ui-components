@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 /**
  * The house's role catalogue, its second top branch: what a part lets the user do to its owner -
  * choose, commit, change its value, change how it is seen, manage what it holds, go elsewhere.
- * Twenty-four roles under six branches.
+ * Thirty-six roles under six branches.
  */
 public final class HouseDoing {
 
@@ -42,6 +42,8 @@ public final class HouseDoing {
     public record Where() implements Role<Choosing> { public static final Where INSTANCE = new Where(); @Override public Choosing parent() { return Choosing.INSTANCE; } }
     /** Asks which kind of tab to open. */
     public record Picker() implements Role<Choosing> { public static final Picker INSTANCE = new Picker(); @Override public Choosing parent() { return Choosing.INSTANCE; } }
+    /** Takes what the user types to narrow the owner's choices. */
+    public record Query() implements Role<Choosing> { public static final Query INSTANCE = new Query(); @Override public Choosing parent() { return Choosing.INSTANCE; } }
 
     // ── Committing — ends a decision ─────────────────────────────────────
 
@@ -57,6 +59,8 @@ public final class HouseDoing {
     public record Cancel() implements Role<Committing> { public static final Cancel INSTANCE = new Cancel(); @Override public Committing parent() { return Committing.INSTANCE; } }
     /** One action the owner offers. */
     public record Action() implements Role<Committing> { public static final Action INSTANCE = new Action(); @Override public Committing parent() { return Committing.INSTANCE; } }
+    /** Passes the step the owner is at, choosing nothing. */
+    public record Skip() implements Role<Committing> { public static final Skip INSTANCE = new Skip(); @Override public Committing parent() { return Committing.INSTANCE; } }
 
     // ── Changing — changes the owner's value ─────────────────────────────
 
@@ -72,8 +76,16 @@ public final class HouseDoing {
     public record Adjust() implements Role<Changing> { public static final Adjust INSTANCE = new Adjust(); @Override public Changing parent() { return Changing.INSTANCE; } }
     /** Takes the hand to set the value. */
     public record Thumb() implements Role<Changing> { public static final Thumb INSTANCE = new Thumb(); @Override public Changing parent() { return Changing.INSTANCE; } }
+    /** Takes the hand at a boundary, so the room moves from the region on one side of it to the other. */
+    public record Splitter() implements Role<Changing> { public static final Splitter INSTANCE = new Splitter(); @Override public Changing parent() { return Changing.INSTANCE; } }
     /** Puts the owner's value back to its default. */
     public record Reset() implements Role<Changing> { public static final Reset INSTANCE = new Reset(); @Override public Changing parent() { return Changing.INSTANCE; } }
+    /** Raises the owner's value by one step. */
+    public record Increase() implements Role<Changing> { public static final Increase INSTANCE = new Increase(); @Override public Changing parent() { return Changing.INSTANCE; } }
+    /** Lowers the owner's value by one step. */
+    public record Decrease() implements Role<Changing> { public static final Decrease INSTANCE = new Decrease(); @Override public Changing parent() { return Changing.INSTANCE; } }
+    /** Empties what the user gave the owner. */
+    public record Clear() implements Role<Changing> { public static final Clear INSTANCE = new Clear(); @Override public Changing parent() { return Changing.INSTANCE; } }
 
     // ── Viewing — changes how the owner is seen ──────────────────────────
 
@@ -102,6 +114,8 @@ public final class HouseDoing {
     public record Close() implements Role<Managing> { public static final Close INSTANCE = new Close(); @Override public Managing parent() { return Managing.INSTANCE; } }
     /** Adds a member. */
     public record Add() implements Role<Managing> { public static final Add INSTANCE = new Add(); @Override public Managing parent() { return Managing.INSTANCE; } }
+    /** Takes the owner, or one of its things, away. */
+    public record Remove() implements Role<Managing> { public static final Remove INSTANCE = new Remove(); @Override public Managing parent() { return Managing.INSTANCE; } }
 
     // ── Going — takes the user elsewhere ─────────────────────────────────
 
@@ -121,4 +135,14 @@ public final class HouseDoing {
     public record Path() implements Role<Going> { public static final Path INSTANCE = new Path(); @Override public Going parent() { return Going.INSTANCE; } }
     /** One step of the way back. */
     public record Step() implements Role<Going> { public static final Step INSTANCE = new Step(); @Override public Going parent() { return Going.INSTANCE; } }
+    /** Goes to the one before, among things in order. */
+    public record Previous() implements Role<Going> { public static final Previous INSTANCE = new Previous(); @Override public Going parent() { return Going.INSTANCE; } }
+    /** Goes to the one after, among things in order. */
+    public record Next() implements Role<Going> { public static final Next INSTANCE = new Next(); @Override public Going parent() { return Going.INSTANCE; } }
+    /** Goes to the first of things in order. */
+    public record First() implements Role<Going> { public static final First INSTANCE = new First(); @Override public Going parent() { return Going.INSTANCE; } }
+    /** Goes to the last of things in order. */
+    public record Last() implements Role<Going> { public static final Last INSTANCE = new Last(); @Override public Going parent() { return Going.INSTANCE; } }
+    /** Shows the steps the owner has folded away. */
+    public record More() implements Role<Going> { public static final More INSTANCE = new More(); @Override public Going parent() { return Going.INSTANCE; } }
 }

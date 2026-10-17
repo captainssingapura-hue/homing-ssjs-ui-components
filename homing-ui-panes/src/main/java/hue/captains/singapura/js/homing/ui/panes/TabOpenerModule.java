@@ -1,5 +1,9 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -9,6 +13,9 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -24,9 +31,8 @@ import java.util.List;
  * thing inside itself would be a tab that is always an opener wearing somebody
  * else's name. Giving the tab up and asking the {@link
  * TabSourceModule.TabSource} for a fresh one costs three calls and leaves
- * nothing of the opener behind — and it is the same minting rule {@link
- * AddTabModule.AddTab} uses, so a tab opened here and a tab added there are
- * the same kind of thing.</p>
+ * nothing of the opener behind — and it is the source's one minting rule, so a
+ * tab opened here and a tab added from code are the same kind of thing.</p>
  *
  * <p>Its choices are native buttons inside a logical member: the widget holds
  * the keys for the dock, the focused button holds them for the widget — said
@@ -34,7 +40,7 @@ import java.util.List;
  * widget rather than out of the room. That seam is wired here once, so a page
  * need not wire it.</p>
  */
-public record TabOpenerModule() implements DomModule<TabOpenerModule> {
+public record TabOpenerModule() implements DomModule<TabOpenerModule>, ImplFor<HousePanes.TabOpener> {
 
     /** The class. */
     public record TabOpener() implements BranchComponent<TabOpenerModule>, NeedKeyboard {
@@ -58,12 +64,15 @@ public record TabOpenerModule() implements DomModule<TabOpenerModule> {
     @Override
     public ImportsFor<TabOpenerModule> imports() {
         return ImportsFor.<TabOpenerModule>builder()
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),
                         new PaneStyles.mtp_opener_note(),
-                        new PaneStyles.mtp_opener_grid(),
-                        new PaneStyles.mtp_opener_pick()
+                        new PaneStyles.mtp_opener_grid()
                 ), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .build();
     }

@@ -1,5 +1,11 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -11,20 +17,22 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.icons.IconModule;
+import hue.captains.singapura.js.homing.ui.icons.IconRoomModule;
+
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 
 import java.util.List;
 
 /**
- * The slider and its builder: a number set by a knob on a track, every part
+ * The slider: a number set by a knob on a track, every part
  * a real element wearing a design word — the track sunk, the fill from the
  * detent to the value, the knob raised and focusable, with a mark on it: a
  * grip, or the word for what the slider sets — so a design draws the whole
  * of it and the browser's own slider is nowhere in it.
  */
-public record SliderModule() implements DomModule<SliderModule> {
+public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseControls.Slider> {
 
-    /** A branch component, made through its builder: a label, the rail with its detent, a readout; value, setOn, size, label, dispose. */
+    /** A branch component, on a sub-branch the caller made, with its properties: a label, the rail with its detent, a readout; value, setOn, size, label, dispose. */
     public record Slider() implements BranchComponent<SliderModule>, NeedKeyboard {
         @Override public String summary() { return "A number set by a knob on a track: a label, the rail with its detent, a readout; the hand and the keys alike."; }
 
@@ -38,14 +46,23 @@ public record SliderModule() implements DomModule<SliderModule> {
                 KeyBinding.of(Key.HOME, "the minimum"), KeyBinding.of(Key.END, "the maximum"));
         @Override public List<KeyBinding> keys() { return KEYS; }
     }
-    /** The builder: {@code new SliderBuilder()}; label, range or axis, value, detent, format, onInput, onChange, size set progressively; {@code build(branch)} on a sub-branch of the caller's. */
-    public record SliderBuilder() implements Exportable._Constant<SliderModule> {}
 
     public static final SliderModule INSTANCE = new SliderModule();
 
     @Override
     public ImportsFor<SliderModule> imports() {
         return ImportsFor.<SliderModule>builder()
+                .add(new ModuleImports<>(List.of(new LabelModule.Label()), LabelModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderScaleModule.SliderScale()), SliderScaleModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderRailModule.SliderRail()), SliderRailModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderGrooveModule.SliderGroove()), SliderGrooveModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FillModule.Fill()), FillModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderKnobModule.SliderKnob()), SliderKnobModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_slider(),
                         new ElementStyles.el_slider_label(),
@@ -54,35 +71,25 @@ public record SliderModule() implements DomModule<SliderModule> {
                         new ElementStyles.el_slider_fill(),
                         new ElementStyles.el_slider_detent(),
                         new ElementStyles.el_slider_knob(),
-                        new ElementStyles.el_slider_face(),
                         new ElementStyles.el_slider_mark(),
-                        new ElementStyles.el_slider_held(),
-                        new ElementStyles.el_slider_face_held(),
-                        new ElementStyles.el_slider_knob_current(),
                         new ElementStyles.el_slider_readout(),
                         new ElementStyles.el_slider_vertical(),
                         new ElementStyles.el_slider_rail_vertical(),
-                        new ElementStyles.el_slider_rail_ticked(),
                         new ElementStyles.el_slider_track_vertical(),
                         new ElementStyles.el_slider_fill_vertical(),
                         new ElementStyles.el_slider_detent_vertical(),
                         new ElementStyles.el_slider_cap(),
-                        new ElementStyles.el_slider_cap_face(),
                         new ElementStyles.el_slider_cap_mark(),
-                        new ElementStyles.el_slider_tick(),
-                        new ElementStyles.el_slider_tick_vertical(),
-                        new ElementStyles.el_slider_tick_line(),
-                        new ElementStyles.el_slider_tick_line_vertical(),
-                        new ElementStyles.el_slider_tick_label(),
                         new ElementStyles.el_slider_off()
                 ), ElementStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconRoomModule.IconRoom()), IconRoomModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DetentModule.Detent()), DetentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<SliderModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Slider(), new SliderBuilder()));
+        return new ExportsOf<>(INSTANCE, List.of(new Slider()));
     }
 }

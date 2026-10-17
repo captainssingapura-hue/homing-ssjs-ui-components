@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.conformance.rules.ServedModule;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.core.CssClass;
-import hue.captains.singapura.js.homing.design.Deployment;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -31,8 +30,6 @@ class UiPanesCrateConformanceTest {
 
     @Test
     void thePanePaintsNothingOfItsOwn() {
-        var worn = Deployment.wornBy(List.of(PaneStyles.INSTANCE));
-        assertTrue(worn.size() >= 30, "the pane's classes wear over thirty distinct pairs; found " + worn.size());
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color"),
@@ -53,14 +50,14 @@ class UiPanesCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(21, checked, "the pane, the single-tab pane, its tabs' parts, the strip, the chip, the tab-pane, the register, the hand, the window, the thumbs, the add control, the opener and the picker, the events, the drag, the tear, the fit, the keys, the menus, the merge and the source");
+        assertEquals(20, checked, "the pane, the single-tab pane, its tabs' parts, the strip, the tab and what it does, the tab-pane, the register, the hand, the window, the opener and the picker, the events, the drag, the tear, the fit, the keys, the menus, the merge and the source");
     }
 
     @Test
     void thePaneAndTheStripImportEveryClassDeclared() {
         var imported = java.util.stream.Stream.of(MultiTabPaneModule.INSTANCE.imports(), PaneTabsModule.INSTANCE.imports(), TabStripModule.INSTANCE.imports(),
-                                                  PaneThumbsModule.INSTANCE.imports(), AddTabModule.INSTANCE.imports(), TabOpenerModule.INSTANCE.imports(), TabPickerModule.INSTANCE.imports(),
-                                                  TabChipModule.INSTANCE.imports(), TabPaneModule.INSTANCE.imports())
+                                                  TabOpenerModule.INSTANCE.imports(), TabPickerModule.INSTANCE.imports(),
+                                                  TabModule.INSTANCE.imports(), TabPaneModule.INSTANCE.imports())
                 .flatMap(im -> im.getAllImports().values().stream())
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses())

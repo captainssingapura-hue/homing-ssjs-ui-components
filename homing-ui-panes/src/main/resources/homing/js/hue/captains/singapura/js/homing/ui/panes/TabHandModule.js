@@ -49,26 +49,27 @@ class TabHand {
 
     disarm(c) {
         var press = this._armed.get(c);
-        if (press) { c.removeEventListener("pointerdown", press); this._armed.delete(c); }
+        if (press) { c.el.removeEventListener("pointerdown", press); this._armed.delete(c); }
     }
 
-    arm(c, closeBtn) {
+    arm(c) {
         var self = this, strip = this._strip;
         if (this._armed.has(c)) return;
         var press = function (down) {
             if (down.button !== 0 || self._held) return;
-            if (closeBtn && closeBtn.contains(down.target)) return;
+            if (c.crosses(down.target)) return;
             if (strip._takeover && strip._takeover(c, down)) return;   // a desk's gesture: it drives the slide by call
             var startX = down.clientX, run = null;
             var win = typeof window !== "undefined" ? window : null;
-            try { c.setPointerCapture(down.pointerId); } catch (err) {}
+            var el = c.el;
+            try { el.setPointerCapture(down.pointerId); } catch (err) {}
             function letGo() {
-                c.removeEventListener("pointermove", onMove);
-                c.removeEventListener("pointerup", onEnd);
-                c.removeEventListener("pointercancel", onEnd);
-                c.removeEventListener("lostpointercapture", onEnd);
+                el.removeEventListener("pointermove", onMove);
+                el.removeEventListener("pointerup", onEnd);
+                el.removeEventListener("pointercancel", onEnd);
+                el.removeEventListener("lostpointercapture", onEnd);
                 if (win) { win.removeEventListener("pointerup", onEnd); win.removeEventListener("pointercancel", onEnd); win.removeEventListener("blur", onEnd); }
-                if (run) try { c.releasePointerCapture(down.pointerId); } catch (err) {}
+                if (run) try { el.releasePointerCapture(down.pointerId); } catch (err) {}
             }
             function onMove(e) {
                 if (!run) {
@@ -81,20 +82,20 @@ class TabHand {
                 letGo();
                 if (run) run.end(e.type === "pointerup");
             }
-            c.addEventListener("pointermove", onMove);
-            c.addEventListener("pointerup", onEnd);
-            c.addEventListener("pointercancel", onEnd);
-            c.addEventListener("lostpointercapture", onEnd);
+            el.addEventListener("pointermove", onMove);
+            el.addEventListener("pointerup", onEnd);
+            el.addEventListener("pointercancel", onEnd);
+            el.addEventListener("lostpointercapture", onEnd);
             if (win) { win.addEventListener("pointerup", onEnd); win.addEventListener("pointercancel", onEnd); win.addEventListener("blur", onEnd); }
         };
         this._armed.set(c, press);
-        c.addEventListener("pointerdown", press);
+        c.el.addEventListener("pointerdown", press);
     }
 
     /** A slide along the rail, by call: the chip lifted where it lies, under the hand at x, held grabX into it; the others stepping aside. */
     slide(c, x, grabX) {
         var self = this, strip = this._strip;
-        var seated = strip._seated(), slots = seated.map(TabHand._rect), from = seated.indexOf(c);
+        var seated = strip._seated(), slots = seated.map(function (t) { return TabHand._rect(t.el); }), from = seated.indexOf(c);
         if (from < 0) throw new Error("[TabHand] the chip is not on this strip's rail");
         var origin = slots[from], lo = strip._pinned.size, dest = from, left = origin.left, done = false;
         var grab = grabX == null ? x - origin.left : grabX;
@@ -102,7 +103,7 @@ class TabHand {
         strip._grip(c);
         function place(x) {
             left = TabDrag.clamp(x - grab, slots, lo);
-            c.style.setProperty("--mtp-drag-x", (left - origin.left) + "px");
+            c.el.style.setProperty("--mtp-drag-x", (left - origin.left) + "px");
             var d = TabDrag.dest(left, slots, lo);
             if (d !== dest) { dest = d; strip._stepAside(from, dest, TabDrag.pitch(slots)); }
         }
@@ -114,11 +115,11 @@ class TabHand {
                 done = true;
                 var landed = commit && dest !== from, slotLeft = slots[landed ? dest : from].left;
                 self._held = null;
-                c.style.removeProperty("--mtp-drag-x");
+                c.el.style.removeProperty("--mtp-drag-x");
                 strip._stepAside(from, from, 0);
                 strip._release(c);
                 if (landed && strip._onDrop) strip._onDrop(c, dest);
-                if (!leaving) TabHand._settle(c, left - slotLeft);
+                if (!leaving) TabHand._settle(c.el, left - slotLeft);
                 return landed ? dest : from;
             }
         };

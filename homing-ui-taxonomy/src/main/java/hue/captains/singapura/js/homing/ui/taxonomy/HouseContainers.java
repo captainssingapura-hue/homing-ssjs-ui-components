@@ -2,13 +2,16 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
+import hue.captains.singapura.js.homing.component.taxonomy.EventType;
+import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
+import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 
 import java.util.List;
 
 /**
- * The house's containers: what holds other components and gives them their place - cards and
- * panels, panes and layers, splits and bars, the fields and views of the preferences. Each declares
+ * The house's common containers: what holds other components and gives them their place - cards
+ * and panels, a dialog and the pane it floats, a menu, a split, the bars. Each declares
  * its parts as slots over the house's role catalogue ({@link HouseRoleCatalogue}): the role, the
  * independent component that plays it, how many. What a container holds but does not make - the
  * caller's content, a pane's widget - is no part of it.
@@ -19,19 +22,37 @@ public final class HouseContainers {
 
     // ── cards ────────────────────────────────────────────────────────────
 
-    /** The basic card: a frame and a body the caller fills, no part fixed. The cases are built on it. */
+    /** The basic card: a frame the caller fills, no part fixed - raised, of its own measure, still under the hand. */
     public record PlainCard() implements Component<HouseBranches.Card> {
         public static final PlainCard INSTANCE = new PlainCard();
         @Override public HouseBranches.Card parent() { return HouseBranches.Card.INSTANCE; }
     }
 
-    /** A card that sums something up: a title, a tag beside it, a line of summary, a way to the thing. */
-    public record SummaryCard() implements Component<HouseBranches.Card> {
-        public static final SummaryCard INSTANCE = new SummaryCard();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+    /** A card that is a button: pressed - by the hand, or Enter or Space - it does its one thing. What is in it is its caller's, as in the plain card. */
+    public record ClickableCard() implements Component<HouseBranches.Card> {
+        public static final ClickableCard INSTANCE = new ClickableCard();
         @Override public HouseBranches.Card parent() { return HouseBranches.Card.INSTANCE; }
+        /** The pointer over it; the focus on it; where the page's keys are, held by the steward on its root (D12); the hand down on it. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE,
+                HouseStates.Keyboard.INSTANCE, HouseStates.Down.INSTANCE); }
+        /** Pressed and let go: its one thing. */
+        @Override public List<EventType<?>> events() { return List.of(HouseEvents.Click.INSTANCE); }
+    }
+
+    // ── views ────────────────────────────────────────────────────────────
+
+    /**
+     * Sums one thing up, laid out whole: a title, a tag beside it, a line of summary, a way to the
+     * thing. No frame of its own: shown on whatever holds it - a card, a pane, a dialog. Its texts
+     * sized together.
+     */
+    public record SummaryView() implements Component<HouseBranches.View> {
+        public static final SummaryView INSTANCE = new SummaryView();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Heading.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
+            return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
                            DSL.part(HouseText.Badge.INSTANCE).as(HouseSaying.Tag.INSTANCE).optional(),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(),
                            DSL.part(HouseControls.Link.INSTANCE).as(HouseDoing.Open.INSTANCE).optional());
@@ -41,95 +62,44 @@ public final class HouseContainers {
     // ── containers ───────────────────────────────────────────────────────
 
     /** Sliders gathered under one header. */
-    public record SliderGroup() implements Component<HouseBranches.Container> {
+    public record SliderGroup() implements Component<HouseBranches.Cluster> {
         public static final SliderGroup INSTANCE = new SliderGroup();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Cluster parent() { return HouseBranches.Cluster.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Heading.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
+            return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
+                           DSL.part(HouseRegions.SliderRack.INSTANCE).as(HouseShaping.Body.INSTANCE).one(),
                            DSL.part(HouseControls.Slider.INSTANCE).as(HouseShaping.Member.INSTANCE).any());
         }
     }
 
-    /** A panel that fills what holds it: a head with a title, and a body. Its controls are the caller's. */
-    public record Panel() implements Component<HouseBranches.Container> {
+    /**
+     * A panel that fills what holds it: a head that names it, and a body - a section of its room, which what is
+     * mounted in it fills. Its controls are the caller's, at the end of its head.
+     */
+    public record Panel() implements Component<HouseBranches.Surface> {
         public static final Panel INSTANCE = new Panel();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+        /** How far off its plane the app sits it, and whether it is the current one - each said by the app, neither meaning anything by itself (D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Elevation.INSTANCE, HouseStates.Current.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Head.INSTANCE).optional(),
-                           DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Title.INSTANCE).optional());
+            return List.of(DSL.part(PanelBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional(),
+                           DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Body.INSTANCE).one());
         }
     }
 
     /** A floating pane over a scrim, with a bar of actions. Its title and close are the pane's, its content the caller's. */
-    public record Dialog() implements Component<HouseBranches.Container> {
+    public record Dialog() implements Component<HouseBranches.Pane> {
         public static final Dialog INSTANCE = new Dialog();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(Scrim.INSTANCE).as(HouseShaping.Veil.INSTANCE).optional(),
                            DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Window.INSTANCE).one(),
                            DSL.part(ActionBar.INSTANCE).as(HouseShaping.Actions.INSTANCE).optional());
-        }
-    }
-
-    /** The thumbnails of the panes one may open. */
-    public record PaneThumbs() implements Component<HouseBranches.Container> {
-        public static final PaneThumbs INSTANCE = new PaneThumbs();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
-        }
-    }
-
-    /** The way to add a tab: where, off a picture of the panes; what, off the kinds; how it arrives; and go. */
-    public record AddTab() implements Component<HouseBranches.Container> {
-        public static final AddTab INSTANCE = new AddTab();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(PaneThumbs.INSTANCE).as(HouseDoing.Where.INSTANCE).one(),
-                           DSL.part(HouseControls.Select.INSTANCE).as(HouseDoing.What.INSTANCE).one(),
-                           DSL.part(HouseControls.Select.INSTANCE).as(HouseDoing.How.INSTANCE).optional(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Go.INSTANCE).one());
-        }
-    }
-
-    /** What an empty pane offers to open. */
-    public record TabOpener() implements Component<HouseBranches.Container> {
-        public static final TabOpener INSTANCE = new TabOpener();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Prompt.INSTANCE).one(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
-        }
-    }
-
-    /** The list of a pane's tabs, to pick from. */
-    public record TabPicker() implements Component<HouseBranches.Container> {
-        public static final TabPicker INSTANCE = new TabPicker();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Prompt.INSTANCE).one(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Choice.INSTANCE).any(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Cancel.INSTANCE).one());
-        }
-    }
-
-    /** The site's chrome: its brand, its trail, its preferences, and the page's room - which is the app's. */
-    public record MpaChrome() implements Component<HouseBranches.Container> {
-        public static final MpaChrome INSTANCE = new MpaChrome();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Head.INSTANCE).one(),
-                           DSL.part(HouseControls.Brand.INSTANCE).as(HouseDoing.Home.INSTANCE).one(),
-                           DSL.part(Trail.INSTANCE).as(HouseDoing.Path.INSTANCE).one(),
-                           DSL.part(HouseControls.PreferencesButton.INSTANCE).as(HouseDoing.Preferences.INSTANCE).one());
         }
     }
 
@@ -140,42 +110,45 @@ public final class HouseContainers {
         public static final FloatingPane INSTANCE = new FloatingPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
+        /** The current one, lit under the hand through its head, and in the hand - each its script's to say (D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.Highlighted.INSTANCE, HouseStates.Dragging.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Head.INSTANCE).optional(),
-                           DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Title.INSTANCE).optional(),
+            return List.of(DSL.part(TitleBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional());
+        }
+    }
+
+    /** The layer floating panes are stacked on: a desk of its own, recessed, or laid over what it is on. */
+    public record FloatLayer() implements Component<HouseBranches.Layer> {
+        public static final FloatLayer INSTANCE = new FloatLayer();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
+        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Float.INSTANCE).any());
+        }
+    }
+
+    /** Heads a pane that floats: its title and its close, and where the hand takes it to move it. */
+    public record TitleBar() implements Component<HouseBranches.Bar> {
+        public static final TitleBar INSTANCE = new TitleBar();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        /** In the hand while its pane is moved by it (D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Dragging.INSTANCE); }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Title.INSTANCE).optional(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
         }
     }
 
-    /** A pane of many tabs: its strip, its picker, a note when it holds none. It holds its pages. */
-    public record MultiTabPane() implements Component<HouseBranches.Pane> {
-        public static final MultiTabPane INSTANCE = new MultiTabPane();
+    /** Heads a panel: its title, and at its end what acts on the panel - the caller's. */
+    public record PanelBar() implements Component<HouseBranches.Bar> {
+        public static final PanelBar INSTANCE = new PanelBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
+        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one(),
-                           DSL.part(TabPicker.INSTANCE).as(HouseDoing.Picker.INSTANCE).optional(),
-                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).optional());
-        }
-    }
-
-    /** A pane of one tab: its strip, and the one page it holds. */
-    public record SingleTabPane() implements Component<HouseBranches.Pane> {
-        public static final SingleTabPane INSTANCE = new SingleTabPane();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one());
-        }
-    }
-
-    /** One open tab, whole: the chip that names it on a strip. Its panel and its widget are its own. */
-    public record TabPane() implements Component<HouseBranches.Pane> {
-        public static final TabPane INSTANCE = new TabPane();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).one());
+            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Title.INSTANCE).optional());
         }
     }
 
@@ -192,74 +165,11 @@ public final class HouseContainers {
         }
     }
 
-    /** The layer floating panes are stacked on. */
-    public record FloatLayer() implements Component<HouseBranches.Layer> {
-        public static final FloatLayer INSTANCE = new FloatLayer();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Float.INSTANCE).any());
-        }
-    }
-
     /** The veil over the page behind a dialog. */
     public record Scrim() implements Component<HouseBranches.Layer> {
         public static final Scrim INSTANCE = new Scrim();
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
-    }
-
-    /** The one keeper of the page's context menus: one open at a time, and a specimen of each kind. Its layer is its own. */
-    public record ContextMenuSteward() implements Component<HouseBranches.Layer> {
-        public static final ContextMenuSteward INSTANCE = new ContextMenuSteward();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(ContextMenu.INSTANCE).as(HouseShaping.Popup.INSTANCE).any(),
-                           DSL.part(ContextMenu.INSTANCE).as(HouseShaping.Specimen.INSTANCE).any());
-        }
-    }
-
-    // ── splits ───────────────────────────────────────────────────────────
-
-    /** Regions split in a tree, and the dividers between them. Its cells are its own. */
-    public record SplitPane() implements Component<HouseBranches.Split> {
-        public static final SplitPane INSTANCE = new SplitPane();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.Divider.INSTANCE).as(HouseShaping.Seam.INSTANCE).any());
-        }
-    }
-
-    /** A grid of cells split in both directions, its dividers between them. Its cells are its own. */
-    public record SplitGrid() implements Component<HouseBranches.Split> {
-        public static final SplitGrid INSTANCE = new SplitGrid();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.Divider.INSTANCE).as(HouseShaping.Seam.INSTANCE).any());
-        }
-    }
-
-    /** A split grid's shape, drawn small. */
-    public record SplitGridMirror() implements Component<HouseBranches.Split> {
-        public static final SplitGridMirror INSTANCE = new SplitGridMirror();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.GridCell.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
-        }
-    }
-
-    /** A split grid whose cells are tabbed panes: the dock. */
-    public record DockGrid() implements Component<HouseBranches.Split> {
-        public static final DockGrid INSTANCE = new DockGrid();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(SplitGrid.INSTANCE).as(HouseShaping.Layout.INSTANCE).one(),
-                           DSL.part(MultiTabPane.INSTANCE).as(HouseShaping.Dock.INSTANCE).atLeast(1));
-        }
+        @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE); }
     }
 
     // ── bars ─────────────────────────────────────────────────────────────
@@ -270,33 +180,51 @@ public final class HouseContainers {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Reveal.INSTANCE).one());
+            return List.of(DSL.part(HouseControls.Lip.INSTANCE).as(HouseShaping.Reveal.INSTANCE).one());
         }
     }
 
-    /** A pane's tabs in a row, with a way to add one, to close the pane, a count of the hidden, and where a dragged tab would land. */
-    public record TabStrip() implements Component<HouseBranches.Bar> {
-        public static final TabStrip INSTANCE = new TabStrip();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
-                           DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
-                           DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
-                           DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional());
-        }
+    /**
+     * The surface a page stands on: its ground, the ink and the face of what is written on it, and its
+     * scrollbar. One to a document, worn on its own element: everything on the page stands on it.
+     */
+    public record Ground() implements Component<HouseBranches.Surface> {
+        public static final Ground INSTANCE = new Ground();
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
     }
 
-    /** A picture's zoom, read out, with buttons to change it. It drives a view it is given. */
-    public record PanZoomBar() implements Component<HouseBranches.Bar> {
-        public static final PanZoomBar INSTANCE = new PanZoomBar();
+    /**
+     * A document table's cell that heads its column, or its row: a container, room for the words that say what its
+     * column holds - never the table's lines, which are the table's, nor the look of its words, which wear their own.
+     */
+    public record HeaderCell() implements Component<HouseBranches.Surface> {
+        public static final HeaderCell INSTANCE = new HeaderCell();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+        /** Its words, a text cell naming the column or the row it heads (D42). */
+        @Override public List<Slot<?>> parts() { return List.of(DSL.part(HouseText.TextCell.INSTANCE).as(HouseSaying.Title.INSTANCE).optional()); }
+    }
+
+    /**
+     * A document table's cell that holds one fact: a container, room for what it holds - never the table's lines, which
+     * are the table's, nor the look of its words, which wear their own.
+     */
+    public record DataCell() implements Component<HouseBranches.Surface> {
+        public static final DataCell INSTANCE = new DataCell();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+        /** Its words, a text cell stating the fact it holds (D42). */
+        @Override public List<Slot<?>> parts() { return List.of(DSL.part(HouseText.TextCell.INSTANCE).as(HouseSaying.Value.INSTANCE).optional()); }
+    }
+
+    /** Heads a site's pages: its brand, the way to where the user is, and what its owner hands it at its end, in the ink written on it. */
+    public record SiteBar() implements Component<HouseBranches.Bar> {
+        public static final SiteBar INSTANCE = new SiteBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.ZoomOut.INSTANCE).one(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.ZoomIn.INSTANCE).one(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Fit.INSTANCE).one(),
-                           DSL.part(HouseText.Readout.INSTANCE).as(HouseSaying.Value.INSTANCE).one());
+            return List.of(DSL.part(HouseControls.Brand.INSTANCE).as(HouseDoing.Home.INSTANCE).one(),
+                           DSL.part(Trail.INSTANCE).as(HouseDoing.Path.INSTANCE).one());
         }
     }
 
@@ -306,7 +234,8 @@ public final class HouseContainers {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Action.INSTANCE).atLeast(1));
+            return List.of(DSL.part(HouseControls.PrimaryButton.INSTANCE).as(HouseDoing.Go.INSTANCE).optional(),
+                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Action.INSTANCE).atLeast(1));
         }
     }
 
@@ -317,130 +246,24 @@ public final class HouseContainers {
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Crumb.INSTANCE).as(HouseDoing.Step.INSTANCE).any(),
-                           DSL.part(HouseMarks.Separator.INSTANCE).as(HouseShaping.Break.INSTANCE).any());
+                           DSL.part(HouseMarks.Delimiter.INSTANCE).as(HouseShaping.Break.INSTANCE).any());
         }
     }
 
-    // ── fields ───────────────────────────────────────────────────────────
-
-    /** One setting: what it is filed under, its title and summary, a note on it, and a way back to the default. Its body is the widget's. */
-    public record PreferenceField() implements Component<HouseBranches.Field> {
-        public static final PreferenceField INSTANCE = new PreferenceField();
+    /** A pane's tabs in a row, with a way to add one, to close the pane, a count of the hidden, and where a dragged tab would land. */
+    public record TabStrip() implements Component<HouseBranches.Bar> {
+        public static final TabStrip INSTANCE = new TabStrip();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
+        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        /** Lit while its pane is the one being worked in (D12). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Category.INSTANCE).one(),
-                           DSL.part(HouseText.Heading.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
-                           DSL.part(HouseText.Lede.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(),
-                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).one(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Reset.INSTANCE).one());
+            return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(),
+                           DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
+                           DSL.part(HouseRegions.StripTail.INSTANCE).as(HouseShaping.Foot.INSTANCE).one(),
+                           DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
+                           DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
+                           DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional());
         }
-    }
-
-    /** A setting chosen from a few options. */
-    public record ChoiceWidget() implements Component<HouseBranches.Field> {
-        public static final ChoiceWidget INSTANCE = new ChoiceWidget();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(PreferenceField.INSTANCE).as(HouseShaping.Setting.INSTANCE).one(),
-                           DSL.part(HouseItems.ChoiceOption.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
-        }
-    }
-
-    /** The theme chosen: a style, and a palette for it. */
-    public record ThemeWidget() implements Component<HouseBranches.Field> {
-        public static final ThemeWidget INSTANCE = new ThemeWidget();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(PreferenceField.INSTANCE).as(HouseShaping.Setting.INSTANCE).one(),
-                           DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Status.INSTANCE).optional(),
-                           DSL.part(HouseItems.ChoiceOption.INSTANCE).as(HouseDoing.Style.INSTANCE).any(),
-                           DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Subtitle.INSTANCE).optional(),
-                           DSL.part(HouseItems.ChoiceOption.INSTANCE).as(HouseDoing.Palette.INSTANCE).any());
-        }
-    }
-
-    /** A setting picked along a scale, read out. */
-    public record ScaleWidget() implements Component<HouseBranches.Field> {
-        public static final ScaleWidget INSTANCE = new ScaleWidget();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(PreferenceField.INSTANCE).as(HouseShaping.Setting.INSTANCE).one(),
-                           DSL.part(HouseControls.Range.INSTANCE).as(HouseDoing.Adjust.INSTANCE).one(),
-                           DSL.part(HouseText.Readout.INSTANCE).as(HouseSaying.Value.INSTANCE).one());
-        }
-    }
-
-    /** A setting that is on or off. */
-    public record ToggleWidget() implements Component<HouseBranches.Field> {
-        public static final ToggleWidget INSTANCE = new ToggleWidget();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(PreferenceField.INSTANCE).as(HouseShaping.Setting.INSTANCE).one(),
-                           DSL.part(HouseControls.Switch.INSTANCE).as(HouseDoing.Toggle.INSTANCE).one());
-        }
-    }
-
-    /** The settings' tree as a flat list, depth as indentation: choosing a row is choosing what is shown beside it. */
-    public record ListMasterWidget() implements Component<HouseBranches.Field> {
-        public static final ListMasterWidget INSTANCE = new ListMasterWidget();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseItems.ListRow.INSTANCE).as(HouseDoing.Choice.INSTANCE).atLeast(1));
-        }
-    }
-
-    /** A group of settings: its head, its children listed with their values, and a way back to the defaults. */
-    public record OverviewWidget() implements Component<HouseBranches.Field> {
-        public static final OverviewWidget INSTANCE = new OverviewWidget();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Field parent() { return HouseBranches.Field.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Category.INSTANCE).one(),
-                           DSL.part(HouseText.Heading.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
-                           DSL.part(HouseText.Lede.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(),
-                           DSL.part(HouseItems.SettingRow.INSTANCE).as(HouseShaping.Entry.INSTANCE).any(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Reset.INSTANCE).one());
-        }
-    }
-
-    // ── views ────────────────────────────────────────────────────────────
-
-    /** A picture that pans and zooms. The drawing is the caller's. */
-    public record SvgPanZoom() implements Component<HouseBranches.View> {
-        public static final SvgPanZoom INSTANCE = new SvgPanZoom();
-        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
-    }
-
-    /** The site's preferences: the index of its settings, and the one chosen. The widgets are held in the slots. */
-    public record PreferencesView() implements Component<HouseBranches.View> {
-        public static final PreferencesView INSTANCE = new PreferencesView();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Index.INSTANCE).one(),
-                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Detail.INSTANCE).one());
-        }
-    }
-
-    /** Where focus is on the page, as a tree. */
-    public record FocusMonitor() implements Component<HouseBranches.View> {
-        public static final FocusMonitor INSTANCE = new FocusMonitor();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseItems.ListRow.INSTANCE).as(HouseShaping.Entry.INSTANCE).atLeast(1));
-        }
-    }
-
-    /** Where the keyboard's steward has the focus, as one lamp. */
-    public record StewardMonitor() implements Component<HouseBranches.View> {
-        public static final StewardMonitor INSTANCE = new StewardMonitor();
-        @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
     }
 }

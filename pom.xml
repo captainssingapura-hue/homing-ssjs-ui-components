@@ -29,23 +29,38 @@
     </description>
     <modules>
         <!-- RFC 0067: the house's taxonomy of components - declarations only, on core's taxonomy. -->
+        <module>homing-layout</module>
+        <module>homing-sizing</module>
         <module>homing-ui-taxonomy</module>
+        <module>homing-ui-colours</module>
+        <module>homing-ui-palettes-base</module>
+        <module>homing-style-base</module>
+        <module>homing-ui-jar-instance</module>
+        <module>homing-ui-styles</module>
+        <module>homing-ui-look</module>
         <module>homing-ui-controllability</module>
         <module>homing-ui-elements</module>
         <module>homing-ui-dialog</module>
         <module>homing-preferences</module>
-        <module>homing-ui-split</module>
         <module>homing-ui-panzoom</module>
         <module>homing-ui-floating</module>
         <module>homing-ui-docking</module>
         <module>homing-ui-splitgrid</module>
         <module>homing-ui-icons</module>
-        <module>homing-ui-focus</module>
+        <module>homing-ui-monitors</module>
         <module>homing-ui-menu</module>
         <module>homing-ui-panes</module>
         <!-- The MPA's implementation: StandardMpa, its chrome, its preferences. -->
         <module>homing-site-mpa-standard</module>
         <module>homing-ui-control-panel</module>
+        <module>homing-style-editorial</module>
+        <module>homing-style-glassmorphism</module>
+        <module>homing-style-neo-brutalism</module>
+        <module>homing-style-neo-futurism</module>
+        <module>homing-style-neumorphism</module>
+        <module>homing-style-retro-futurism</module>
+        <module>homing-style-sketchy</module>
+        <module>homing-ui-modules</module>
         <module>homing-components-conformance</module>
     </modules>
 

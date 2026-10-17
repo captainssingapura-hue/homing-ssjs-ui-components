@@ -15,6 +15,20 @@ for.
 
 A control the user takes hold of and moves, so that something moves with it.
 
+## Input
+
+A control by which the user sets a value - words, on or off, a value along a scale or one from a
+list - and sees how it stands.
+
+## Way
+
+A control that takes the user somewhere else: a link, a step of a trail back, the brand home.
+
+## Selector
+
+A control that picks one of several panes, or what a pane holds - a tab, a pane's thumbnail, a
+grid's mirror - and shows which is picked.
+
 ## Item
 
 One of many alike, offered or listed by what holds it; it means something only among the others.
@@ -44,7 +58,7 @@ Holds what is shown over the page, apart from its flow, for as long as it is nee
 
 ## Split
 
-Shares a room between several things, each given its share, and lets the user change the shares.
+Shares a room between several things, each given its share; where it is resizable, the user changes the shares.
 
 ## Bar
 
@@ -58,6 +72,20 @@ Lets the user set one setting, and says what it is and how it stands.
 
 Shows something whole, for the user to look at or look through, rather than to edit.
 
+## Surface
+
+Fills what holds it, with no frame of its own; what stands on it is the point - the page's ground,
+a panel.
+
+## Cluster
+
+Holds a set of controls as one, so the user works them together and the keys pass between them.
+
+## Chooser
+
+Offers the user what to open or pick - the panes, the kinds of tab, a pane's tabs - and takes the
+choice.
+
 ## Region
 
 A stretch of a container's room with a job of its own, but no frame of its own.
@@ -66,6 +94,10 @@ A stretch of a container's room with a job of its own, but no frame of its own.
 
 Words the user reads; they inform and do nothing.
 
+## Heading
+
+Words that say what a container holds, read first - at the level of the page's outline they stand at.
+
 ## Track
 
 A line a value lies along, or fills, so its place can be seen.
@@ -73,3 +105,7 @@ A line a value lies along, or fills, so its place can be seen.
 ## Mark
 
 A small sign the user reads at a glance, in place of words.
+
+## Icon
+
+A picture standing for one idea wherever it is shown: each icon a component of its own, its picture drawn by the style worn.

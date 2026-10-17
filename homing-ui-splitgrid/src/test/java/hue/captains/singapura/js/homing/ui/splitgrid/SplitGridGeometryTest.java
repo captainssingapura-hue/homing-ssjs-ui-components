@@ -10,8 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * The geometry, headless: a tree resolved into rectangles as flex would —
  * dividers taken out of the room first, the minimum held and the rest
- * re-shared — the drag's arithmetic, the workspace's neighbour rule on the
- * rectangles, and the thing under a point.
+ * re-shared, by the rail's lay — the workspace's neighbour rule on the
+ * rectangles, and the thing under a point. The lay and the move are sizing's,
+ * and tested there.
  */
 class SplitGridGeometryTest extends JsModuleTestBase {
 
@@ -33,6 +34,7 @@ class SplitGridGeometryTest extends JsModuleTestBase {
     void load() {
         js = buildContext();
         loadModule(P + "SplitGridTreeModule.js");
+        loadModule("/homing/js/hue/captains/singapura/js/homing/sizing/RailModule.js");
         loadModule(P + "SplitGridGeometryModule.js");
         js.eval("js", SHIM);
     }
@@ -46,26 +48,6 @@ class SplitGridGeometryTest extends JsModuleTestBase {
         assertEquals("257,0,750,450", eval("rect('demo')").asString());
         assertEquals("257,457,750,150", eval("rect('explain')").asString());
         assertEquals("|0:250,0,7,607 1|0:257,450,750,7", eval("R.dividers.map(function (d) { return d.path + '|' + d.index + ':' + [d.x, d.y, d.w, d.h].map(Math.round).join(','); }).join(' ')").asString());
-    }
-
-    @Test
-    void shares_holdTheMinimum_andReShareTheRest() {
-        assertEquals("250,750", eval("SplitGridGeometry.shares([0.25, 0.75], 1000, 40).join(',')").asString());
-        // 100 to share at 1 : 9 would give 10 and 90: the small one is held at 40, the other takes what is left
-        assertEquals("40,60", eval("SplitGridGeometry.shares([0.1, 0.9], 100, 40).join(',')").asString());
-        // three at 1 : 1 : 8 in 200: two are held at 40 one after the other, the third takes what is left
-        assertEquals("40,40,120", eval("SplitGridGeometry.shares([0.1, 0.1, 0.8], 200, 40).join(',')").asString());
-        assertEquals("40,40,40", eval("SplitGridGeometry.shares([0.1, 0.1, 0.8], 100, 40).join(',')").asString(), "three minimums in 100: all held, overflowing as flex would");
-        // no room at all: everything at the minimum, overflowing as flex would
-        assertEquals("40,40", eval("SplitGridGeometry.shares([0.5, 0.5], 20, 40).join(',')").asString());
-    }
-
-    @Test
-    void reshare_movesTheDividerBetweenTwo_eachKeptAtTheMinimum() {
-        assertEquals("0.5,0.5", eval("SplitGridGeometry.reshare(0.25, 0.75, 250, 1000, 40).map(around).join(',')").asString());
-        assertEquals("0.04,0.96", eval("SplitGridGeometry.reshare(0.25, 0.75, -900, 1000, 40).map(around).join(',')").asString(), "held at the minimum, 40 of 1000");
-        assertEquals("0.96,0.04", eval("SplitGridGeometry.reshare(0.25, 0.75, 900, 1000, 40).map(around).join(',')").asString());
-        assertEquals("0.25,0.75", eval("SplitGridGeometry.reshare(0.25, 0.75, 100, 0, 40).map(around).join(',')").asString(), "a split not yet laid out moves nothing");
     }
 
     @Test

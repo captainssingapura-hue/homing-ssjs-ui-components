@@ -1,13 +1,19 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
-import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
+import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.menu.NeedContextMenu;
 import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 
@@ -23,7 +29,7 @@ import java.util.Set;
  * bar is the chip on the dock's strip, and the whole bar is its window's
  * handle. It has no keys of its own: a press in it lands in the tab.
  */
-public record SingleTabPaneModule() implements DomModule<SingleTabPaneModule> {
+public record SingleTabPaneModule() implements DomModule<SingleTabPaneModule>, ImplFor<HousePanes.SingleTabPane> {
 
     /** The class. */
     public record SingleTabPane() implements BranchComponent<SingleTabPaneModule>, NeedContextMenu {
@@ -43,11 +49,12 @@ public record SingleTabPaneModule() implements DomModule<SingleTabPaneModule> {
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneEventsModule.PaneEvents()), PaneEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_pane(),
                         new PaneStyles.mtp_strip(),
-                        new PaneStyles.mtp_strip_current(),
-                        new PaneStyles.mtp_chip_mark_on(),
                         new PaneStyles.mtp_content(),
                         new PaneStyles.mtp_tab_content_hidden()
                 ), PaneStyles.INSTANCE))

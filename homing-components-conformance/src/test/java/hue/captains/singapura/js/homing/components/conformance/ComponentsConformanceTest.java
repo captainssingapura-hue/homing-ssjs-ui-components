@@ -5,17 +5,21 @@ import hue.captains.singapura.js.homing.conformance.engine.ServedModuleRenderer;
 import hue.captains.singapura.js.homing.conformance.rules.CrateConformance;
 import hue.captains.singapura.js.homing.conformance.rules.CrateCoverage;
 import hue.captains.singapura.js.homing.conformance.rules.CssConformance;
+import hue.captains.singapura.js.homing.conformance.rules.DeclaredDebts;
 import hue.captains.singapura.js.homing.conformance.rules.Finding;
 import hue.captains.singapura.js.homing.conformance.rules.GradedFinding;
 import hue.captains.singapura.js.homing.component.ComponentDetails;
 import hue.captains.singapura.js.homing.component.ComponentTrees;
+import hue.captains.singapura.js.homing.component.Implementations;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardRegistry;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.design.Deployment;
-import hue.captains.singapura.js.homing.design.Design;
 import hue.captains.singapura.js.homing.tree.TreeLevel;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
+import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -29,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The components' gate, strict from the first day: the baseline is empty and
- * every finding fails the build. Five checks over the fresh crates —
+ * every finding fails the build. Its checks over the fresh crates —
  * <ol>
  *   <li><b>crate integrity</b>: each declares every served module in its
  *       Maven module and every cross-crate import in {@code requires()};</li>
@@ -38,9 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  *       framework's policy under the role its crate declares;</li>
  *   <li><b>the CSS graph laws</b>: tokens declared, priors are palettes,
  *       nested references declared, crate reach, no literal families;</li>
- *   <li><b>the substrate</b>: every one of the seven designs binds every
- *       pair every class in these crates wears, and anchors what is worn
- *       with an extent.</li>
  *   <li><b>the catalogue</b>: every component a crate exports is listed by
  *       the crate's own catalogue, once, and the composed tree derived from
  *       the closure has no two vertices alike.</li>
@@ -48,6 +49,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The export and the served studio grade by the same configuration.
  */
 class ComponentsConformanceTest {
+
+    /** The house's own instance, installed as a site installs its own: what is made from its taxonomy is served (D51). */
+    @BeforeAll
+    static void theHousesInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling()); }
 
     private static final boolean ALLOW_PRE_EXISTING =
             Boolean.parseBoolean(System.getProperty("conformance.allowPreExisting", "true"));
@@ -73,6 +78,7 @@ class ComponentsConformanceTest {
     void everyServedModuleKeepsItsLane() {
         List<Finding> raw = new ConformanceEngine(ComponentsConformance.POLICY, new ServedModuleRenderer())
                 .checkCrates(ComponentsConformance.TOP_LEVEL);
+        assertEquals(List.of(), DeclaredDebts.INSTANCE.unbalanced(ComponentsConformance.TOP_LEVEL, raw), "a debt not as declared - owed exactly, never more");
         List<GradedFinding> graded = ComponentsConformance.grader(ALLOW_PRE_EXISTING).grade(raw);
         List<GradedFinding> errors = graded.stream().filter(GradedFinding::isError).toList();
         assertEquals(List.of(), errors, () -> "conformance ERRORS (" + errors.size() + "):\n"
@@ -91,27 +97,6 @@ class ComponentsConformanceTest {
                 + errors.stream().map(ComponentsConformanceTest::describe).collect(Collectors.joining("\n")));
     }
 
-    @Test
-    void everyDesignBindsEveryPairTheComponentsWear() {
-        var groups = new ArrayList<CssGroup<?>>();
-        for (Crate c : ComponentsConformance.TOP_LEVEL)
-            for (var e : c.entries()) if (e.module() instanceof CssGroup<?> g) groups.add(g);
-        assertEquals(13, groups.size(), "one style group per crate that has styles; docking has none");
-        var worn = Deployment.wornBy(groups);
-        var scaled = Deployment.scaledBy(groups);
-        var grown = Deployment.grownBy(groups);
-        assertTrue(worn.size() > 50, "the six groups wear many distinct pairs; found " + worn.size());
-        assertTrue(scaled.size() >= 1, "the splitter's lit handle is worn with an extent");
-        assertTrue(grown.get(hue.captains.singapura.js.homing.design.Growth.SIZE).size() >= 1, "the button is worn with a size");
-        assertTrue(grown.get(hue.captains.singapura.js.homing.design.Growth.ASPECT).size() >= 1, "the card is worn with an aspect");
-        List<Design> designs = ComponentsConformance.designs();
-        assertTrue(designs.size() >= 7, "the seven designs, each in the palettes that fit it; found " + designs.size());
-        for (Design d : designs) {
-            var r = Deployment.of(worn, scaled, grown, d).resolve();
-            assertEquals(List.of(), r.findings(), () -> d.slug() + ": " + r.findings());
-        }
-    }
-
     private static String describe(GradedFinding g) {
         Finding f = g.finding();
         return f.moduleClass() + " [" + f.rule().value() + "] " + f.message()
@@ -128,14 +113,14 @@ class ComponentsConformanceTest {
         assertEquals(List.of(), ComponentTrees.validate(ComponentsConformance.TOP_LEVEL));
         var composed = ComponentTrees.compose("components", ComponentsConformance.TOP_LEVEL);
         var vehicles = composed.root().children().stream().map(n -> n.segment().value()).toList();
-        assertEquals(List.of("ui-elements", "server", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split", "ui-pan-zoom", "ui-panes", "ui-docking", "ui-split-grid", "ui-focus", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the elements require the base (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate; docking catalogues its dock grid, the desk and the floater being statics; the control panel, controllability on a page, comes last");
+        assertEquals(List.of("server", "ui-elements", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split-grid", "ui-pan-zoom", "ui-panes", "ui-monitors", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the base first, which sizing requires (sizing ships no component); the elements require it too (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate, the preferences the split grid their view is laid out by; docking catalogues nothing - the desk, its hand, its floater and its docking are statics; the control panel, a widget, last");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
-        assertEquals(15, root.vehicleCount());
-        assertEquals(40, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 6 elements (the panel and the edge strip among them), 1 icon, 1 dialog, 7 preferences, 1 split, 2 pan-zoom (the view and its bar), 8 panes (the tab-pane, the single-tab pane a float carries, the thumbs, the new-tab control, the opener and the picker among them), 2 floating, 1 docking (the dock grid), 2 split grid, 2 focus monitors, 2 menus, 3 chrome and 1 control panel");
+        assertEquals(13, root.vehicleCount());
+        assertEquals(98, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 66 elements (the browser's own text box, checkbox, range and select, the switch and its groove and knob, the slider's rail, groove, fill and knob, a grip, nine buttons, nineteen texts - code, a table cell's words (D42) and a badge of each tone among them - a heading for each of six levels among them - a link, a crumb, a scrim, a separator, a delimiter, the brand's mark, a pane's thumbnail, the plain and the clickable card, the summary's view, a menu's item, a list's row and a choice's option, a lamp, a drop mark, a detent, a tick and a boundary line, the slider and its group, the panel and the edge strip, the ground, the site bar, the brand and the trail), 1 icon, 1 dialog, 8 preferences (a setting's row among them), 2 pan-zoom (the view and its bar), 7 panes (the tab, a component of its own now, the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 2 floating, 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
         assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.TOP_LEVEL));
-        assertEquals(List.of("tab", "split"), ContextMenuRegistry.requiredBy(ComponentsConformance.TOP_LEVEL).kinds().stream().map(k -> k.kind()).toList(), "the tab pane opens the tab menu, the dock grid answers a region's ground menu; a site serving them holds them");
+        assertEquals(List.of("split", "tab"), ContextMenuRegistry.requiredBy(ComponentsConformance.TOP_LEVEL).kinds().stream().map(k -> k.kind()).toList(), "the tab pane opens both - a chip's menu, and its strip ground's, which the desk's docking answers - by name; a site serving it holds them");
     }
 
     /**
@@ -148,10 +133,29 @@ class ComponentsConformanceTest {
     void keysComeThroughTheParty_andTheMigrationListOnlyShrinks() {
         assertEquals(List.of(), KeyboardRegistry.validate(ComponentsConformance.TOP_LEVEL));
         var map = KeyboardRegistry.requiredBy(ComponentsConformance.TOP_LEVEL);
-        assertEquals(List.of("Card", "ContextMenuSteward", "Dialog", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup",
+        assertEquals(List.of("ClickableCard", "ContextMenuSteward", "Dialog", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup",
                         "SplitGridMirror", "SvgPanZoom", "TabOpener"),
                 map.byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList(), "the components that take keys: leaves, and the holders that hand keys on to what is inside them");
         assertEquals(7, map.takersOf("ArrowUp").size(), "the slider and its group, the mirror, the list master and the view over it, the menu, the pan-zoom view");
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(ComponentsConformance.TOP_LEVEL), "the ledger is empty: every key comes through the party");
     }
+
+    /**
+     * Every implementation anchored at the house's taxonomy: a component's
+     * module implements its leaf, one leaf one module one class, a shared base
+     * only under its branch; and what a leaf's module imports of other
+     * components is what its parts declare - read through a part nothing
+     * implements, whose own parts its owner realizes inline. The leaves not yet
+     * composed as declared are held in the ledger, so the list only shrinks:
+     * each is a question for the design - the declaration or the code is wrong.
+     */
+    @Test
+    void everyImplementationIsAnchored_andComposedAsItsLeafDeclares() {
+        List<String> problems = Implementations.INSTANCE.validate(HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES), ComponentsConformance.TOP_LEVEL);
+        assertEquals(COMPOSITION_LEDGER, problems, () -> "implementations against the taxonomy (" + problems.size() + "):\n" + String.join("\n", problems));
+    }
+
+    /** Drawn without the component the leaf declares: the chip's keys the design's own, the float's bar its own strip. */
+    private static final List<String> COMPOSITION_LEDGER = List.of(
+            "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for");
 }

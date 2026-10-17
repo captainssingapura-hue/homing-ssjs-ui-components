@@ -2,10 +2,10 @@
 // FloatingPane — one pane raised above the desk: a head that names it and
 // moves it, a body that holds what it shows, a grip that sizes it. A branch
 // component: the desk makes a sub-branch for it and hands it in; dispose()
-// dissolves it. Container.Pane.Floating to the design — a container's corner,
-// rule and ring, the overlay's shadow, the pane's air on its head — and a
-// larger, movable card in the hand: its place and its measure are its user's,
-// carried in --fp-x, --fp-y, --fp-w, --fp-h on the frame, never the design's.
+// dissolves it. In the house's look - a card's frame, a shadow over what it
+// floats on, its head a title bar - and a larger, movable card in the hand:
+// its place and its measure are its user's, carried in --fp-x, --fp-y, --fp-w,
+// --fp-h on the frame, never the design's. A dialog's window is one.
 //
 //   new FloatingPane(branch, { id, title, icon?, head?, x, y, w, h, z, closable?, onEvent?, minW?, minH?,
 //                              onDragMove?(pane, clientX, clientY), onDragEnd?(pane, clientX, clientY, ok) })
@@ -39,10 +39,10 @@
 //                            pulled off a strip — as if the head had been pressed there
 //   pane.dispose()           dissolves the branch
 //
-// The hand: over the head, the whole frame wears the interactive word and
-// lifts as the design has a hovered thing lift; a press on the head and a
-// drag moves it, live, the frame in the hand (Dragging) and the head lit by
-// extent, and reports Moved once when it lets go. A press on the grip and a
+// The hand: over the head, the whole frame is lit from there (data-highlighted)
+// and lifts as the design has it; a press on the head and a drag moves it,
+// live, the frame and its head in the hand (data-dragging), and reports Moved
+// once when it lets go. The active pane is the current one (aria-current). A press on the grip and a
 // drag sizes it, live, and reports Resized once. A press on the cross reports
 // nothing: it asks the desk, through `onClose`, to close it. While a drag is
 // on, onDragMove is told every position and onDragEnd the last, with whether
@@ -52,11 +52,30 @@
 // =============================================================================
 
 const _floatingOwner = Object.freeze({ toString: () => "floatingPane" });
-var _HELD = 0.6;
+
+/** The head's cross pressed: the press kept to the cross, and the pane's holder asked to close it. */
+class FloatingPaneClose {
+    constructor(pane) { this._pane = pane; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle(event) {
+        if (event.raw) event.raw.stopPropagation();
+        if (this._pane._onClose) this._pane._onClose(this._pane);
+    }
+}
 var _MIN_W = 160, _MIN_H = 96;
 var _KEEP = 48;          // how much of the head must stay within the desk, inline
 
+/** A flag of the pane's or its head's: reflected by its attribute, and its state's class (D12). */
+function _fpFlag(name, value, state) { return Object.freeze({ values: Object.freeze([false, true]), rest: false, state: state,
+    reflect: function (el, on) { if (on) el.setAttribute(name, value); else el.removeAttribute(name); } }); }
+/** A floating pane's head: the house's title bar, which nothing realizes on its own - the pane draws it here; in the hand while the pane is moved by it. */
+const _TITLE_BAR = Object.freeze({ LEAF: "title-bar", AXES: Object.freeze({ dragging: _fpFlag("data-dragging", "", STATE.DRAGGING) }) });
+
 class FloatingPane {
+    static LEAF = "floating-pane";
+    static AXES = Object.freeze({ current: _fpFlag("aria-current", "true", STATE.CURRENT), highlighted: _fpFlag("data-highlighted", "", STATE.HIGHLIGHTED),
+                                  dragging: _fpFlag("data-dragging", "", STATE.DRAGGING) });
+
     constructor(branch, opts) {
         if (!branch) throw new Error("[FloatingPane] a branch of its own is required");
         if (!opts || !opts.id) throw new Error("[FloatingPane] opts.id is required");
@@ -72,15 +91,16 @@ class FloatingPane {
         this._minH = opts.minH == null ? _MIN_H : Math.max(24, opts.minH | 0);
         this._x = 0; this._y = 0; this._w = this._minW; this._h = this._minH;
         this._size = 0;
-        this._over = false; this._held = false;
+        this._over = false; this._held = false; this._active = false;
         this._label = "";
         this._handle = null;   // an element of the holder's that moves the frame, when there is no head
 
         var frame = branch.createElement("frame", "section");
         css.addClass(frame, fp_frame);
+        (this._look = new Look(FloatingPane, ROLE.STANDALONE)).wear(frame);   // a pane that floats - a dialog's window is one - in the house's look
         frame.setAttribute("role", "region");
 
-        this._icon = null; this._title = null; this._close = null;
+        this._icon = null; this._title = null; this._close = null; this._closer = null;
         this._iconEl = null;
         var head = opts.head === false ? null : this._mintHead(branch, opts);
         if (head) frame.appendChild(head);
@@ -97,7 +117,7 @@ class FloatingPane {
         this.root = frame;
         this.head = head;
         this.body = body;
-        this._parts = head ? [head, this._title].concat(this._close ? [this._close] : []) : [];
+        this._parts = head ? [head] : [];
         this.title(opts.title == null ? "" : opts.title);
         this.icon(opts.icon || null);
         this.raise(opts.z == null ? 1 : opts.z);
@@ -110,22 +130,22 @@ class FloatingPane {
     _mintHead(branch, opts) {
         var self = this, head = branch.createElement("head", "header");
         css.addClass(head, fp_head);
+        (this._headLook = new Look(_TITLE_BAR, ROLE.STANDALONE)).wear(head);   // its head, the house's title bar
         this._icon = branch.createElement("icon", "span");
         css.addClass(this._icon, fp_icon);
         this._icon.setAttribute("aria-hidden", "true");
         head.appendChild(this._icon);
-        this._title = branch.createElement("title", "span");
-        css.addClass(this._title, fp_title);
-        head.appendChild(this._title);
+        // its title is the house's label, cast as its title: placed by the pane, looking as a label does
+        this._title = new Label(LabelFactory.create(branch, "title"), {}, ROLE.TITLE);
+        css.addClass(this._title.el, fp_title);
+        head.appendChild(this._title.el);
         if (opts.closable !== false) {
-            var x = branch.createElement("close", "button");
-            x.type = "button";
-            css.addClass(x, fp_close);
-            x.textContent = "×";
-            x.setAttribute("aria-label", "Close");
-            x.addEventListener("click", function (e) { e.stopPropagation(); if (self._onClose) self._onClose(self); });
-            head.appendChild(x);
-            this._close = x;
+            // the house's close button, cast as what closes its owner: its cross and its frame are the style's
+            var x = new CloseButton(CloseButtonFactory.create(branch, "close"), { face: branch.elementMaker("close-face"), label: "Close" }, ROLE.CLOSE);
+            x.setOnClick(new FloatingPaneClose(self));
+            head.appendChild(x.el);
+            this._close = x.el;
+            this._closer = x;
         }
         return head;
     }
@@ -133,7 +153,7 @@ class FloatingPane {
     title(text) {
         if (text !== undefined) {
             this._label = String(text);
-            if (this._title) this._title.textContent = this._label;
+            if (this._title) this._title.text = this._label;
             this.root.setAttribute("aria-label", this._label);
         }
         return this._label;
@@ -187,13 +207,15 @@ class FloatingPane {
         return this;
     }
 
-    setActive(on) { css.toggleClass(this.root, fp_active, !!on); return this; }
+    setActive(on) { this._active = !!on; this._lift(); return this; }
 
     size(s) {
         var n = Math.max(-1, Math.min(1, Number(s)));
         this._size = Number.isFinite(n) ? n : 0;
         var v = this._size === 0 ? null : this._size;
         this._parts.forEach(function (el) { css.size(el, v); });
+        if (this._title) this._title.size = this._size;     // its title and its cross, by their own size
+        if (this._closer) this._closer.size = this._size;
         return this;
     }
 
@@ -236,9 +258,8 @@ class FloatingPane {
     }
 
     // ── the hand on the head: move ──────────────────────────────────────────
-    _lift() {   // in the hand: Dragging; under the hand: Interactive, the frame being hovered through its head; else nothing
-        css.toggleClass(this.root, fp_held, this._held);
-        css.toggleClass(this.root, fp_hoverable, this._over && !this._held);
+    _lift() {   // in the hand: dragging; under the hand, through its head: lit from there; the current one ringed
+        this._look.show(this.root, { current: this._active, highlighted: this._over && !this._held, dragging: this._held });
     }
     _armMove(el, accept) {
         var self = this;
@@ -257,7 +278,7 @@ class FloatingPane {
         var x0 = this._x, y0 = this._y, cx = down.clientX, cy = down.clientY, moved = false;
         this._held = true;
         this._lift();
-        if (lit) { css.addClass(head, fp_head_held); css.extent(head, _HELD); }
+        if (lit) this._headLook.show(head, { dragging: true });
         try { head.setPointerCapture(down.pointerId); } catch (err) {}
         function onMove(e) {
             var nx = x0 + (e.clientX - cx), ny = y0 + (e.clientY - cy);
@@ -271,7 +292,7 @@ class FloatingPane {
             head.removeEventListener("pointercancel", onEnd);
             self._held = false;
             self._lift();
-            if (lit) { css.removeClass(head, fp_head_held); css.extent(head, null); }
+            if (lit) self._headLook.show(head, { dragging: false });
             try { head.releasePointerCapture(down.pointerId); } catch (err) {}
             var ok = e.type === "pointerup";
             if (!ok) self._set(x0, y0, self._w, self._h, false);

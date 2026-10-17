@@ -1,20 +1,22 @@
 // =============================================================================
 // SliderGroup — sliders that share the keys: ONE member of the keyboard party
-// for all of them, and one of them current. A BRANCH component made through
-// its builder; the sliders are built inside it, on sub-branches of its own,
-// without a steward of their own — the group holds the keys and hands them
-// to the current slider. A header with the title, then the body.
+// for all of them, and one of them current. A BRANCH component, on a
+// sub-branch the caller made; the sliders are built inside it, on sub-branches
+// of its own, without a steward of their own — the group holds the keys and
+// hands them to the current slider. A header with the title, then the body.
 //
-//   var g = new SliderGroupBuilder().title("Mixer").keyboard(steward).across()
-//               .build(branch.createBranch("mixer"));
-//   var ch1 = g.add("ch1", new SliderBuilder().label("Ch 1").vertical()…);  // the BUILDER: built inside
-//     .title(text)             the header's title
-//     .keyboard(steward, id?)  the page's KeyboardSteward: the group joins the party as `id` (its
+//   var g = new SliderGroup(branch.createBranch("mixer"), { title: "Mixer", keyboard: steward, across: true }, role?);
+//   var ch1 = g.add("ch1", { label: "Ch 1", vertical: true, … });   // a slider's properties: built inside
+//     title                    the header's title
+//     keyboard, keyboardId     the page's KeyboardSteward: the group joins the party as keyboardId (its
 //                              branch's name, unless said); without, the group has no keys
-//     .across()                the sliders side by side, as faders; stacked unless said
+//     across: true             the sliders side by side, as faders; stacked unless said
+//     role                     the job its owner gives it (a control panel's: ROLE.ADJUST); on its own unless said
 //   SliderGroup:
 //     .root
-//     .add(name, builder)      → Slider, built on a sub-branch of the body; the first is current
+//     .add(name, props)        → Slider, built on a sub-branch of the body with a slider's
+//                              properties - a steward among them dropped, the group holding the
+//                              keys; the first is current
 //     .sliders()               in order
 //     .current(s?)             read, or set: a slider, or its index; the ring moves, nothing else
 //     .key(ev)                 Tab and Shift+Tab: the next or previous slider is current, wrapping,
@@ -30,10 +32,13 @@
 // =============================================================================
 
 const _groupOwner = Object.freeze({ toString: () => "slider-group" });
+/** Its rack: the sliders and the room between them - realized inline, in its own look. */
+const _SLIDER_RACK = Object.freeze({ LEAF: "slider-rack" });
 
 class SliderGroup {
-    /** The builder's; a caller makes a group through SliderGroupBuilder. */
-    constructor(branch, props) {
+    static LEAF = "slider-group";
+
+    constructor(branch, props, role) {
         if (!branch) throw new Error("[SliderGroup] a branch of its own is required");
         var self = this;
         var p = props || {};
@@ -45,18 +50,20 @@ class SliderGroup {
 
         var root = branch.createElement("group", "div");
         css.addClass(root, el_slider_group);
+        var look = new Look(SliderGroup, role || ROLE.STANDALONE);   // framed; ringed while it holds the keys (its Keyboard state's class)
+        look.wear(root);   // its casting whole; its head points as the group does, its rack a leaf of its own
         root.setAttribute("role", "group");
         this.root = root;
         var header = branch.createElement("header", "div");
         css.addClass(header, el_slider_group_header);
-        var title = branch.createElement("title", "h3");
-        css.addClass(title, el_slider_group_title);
-        title.textContent = p.title == null ? "" : String(p.title);
+        var title = new Heading4(Heading4Factory.create(branch, "title"), { text: p.title == null ? "" : String(p.title) }, ROLE.TITLE);
+        css.addClass(title.el, el_slider_group_title);
         if (p.title != null) root.setAttribute("aria-label", String(p.title));
-        header.appendChild(title);
+        header.appendChild(title.el);
         root.appendChild(header);
         var body = branch.createElement("body", "div");
         css.addClass(body, el_slider_group_body);
+        new Look(_SLIDER_RACK, ROLE.BODY).wear(body);   // the room between the sliders
         if (p.across) css.addClass(body, el_slider_group_body_across);
         root.appendChild(body);
         this._header = header; this._title = title; this._body = body;
@@ -67,10 +74,10 @@ class SliderGroup {
             this._kb = p.keyboard;
             this._kbId = this._kb.join(p.keyboardId != null ? String(p.keyboardId) : branch.name, {
                 keyDown: function (ev) { return self.key(ev); },
-                granted: function () { self._held = true; css.addClass(root, el_slider_group_held); },
-                taken: function () { self._held = false; css.removeClass(root, el_slider_group_held); }
+                granted: function () { self._held = true; },   // its ring is the steward's mark on the root
+                taken: function () { self._held = false; }
             });
-            this._offKeys = Keys.claimOn(root, this._kb, this._kbId);
+            this._offKeys = Keys.claimOn(root, this._kb, this._kbId, look.keys());
         }
         // the header: a press makes the group the holder (the convention's, on the root) and
         // puts the focus on the current knob; the default kept off so the press does not blur it
@@ -87,9 +94,9 @@ class SliderGroup {
 
     // ── the sliders ───────────────────────────────────────────────────────
     /** A slider built inside, on a sub-branch of the body named `name`; the first one is current. */
-    add(name, builder) {
-        if (!builder || typeof builder.build !== "function") throw new Error("[SliderGroup] add wants a SliderBuilder");
-        var s = builder.build(this.branch.createBranch(name));
+    add(name, props) {
+        if (props != null && typeof props !== "object") throw new Error("[SliderGroup] add wants a slider's properties");
+        var s = new Slider(this.branch.createBranch(name), Object.assign({}, props, { keyboard: null, keyboardId: null }));
         this._sliders.push(s);
         this._body.appendChild(s.root);
         if (this._current === null) this.current(s);
@@ -134,16 +141,5 @@ class SliderGroup {
         for (var i = 0; i < this._sliders.length; i++) this._sliders[i].dispose();
         this._sliders = []; this._current = null;
         this.branch.dissolve();
-    }
-}
-
-class SliderGroupBuilder {
-    constructor() { this._props = {}; }
-    title(text)           { this._props.title = text; return this; }
-    keyboard(steward, id) { this._props.keyboard = steward; this._props.keyboardId = id; return this; }
-    across()              { this._props.across = true; return this; }
-    build(branch) {
-        if (!branch) throw new Error("[SliderGroupBuilder] build wants the sub-branch the caller made for the group");
-        return new SliderGroup(branch, this._props);
     }
 }

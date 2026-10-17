@@ -5,11 +5,10 @@
 // the bottom of the host, and the hand off both hides it again. Nothing the
 // host holds is covered until it is asked for.
 //
-//   EdgeStripBuilder — the properties, set progressively, each returning the builder:
-//     .label(text)          what the strip is called, for whoever cannot see it
-//     .host(el)             appended there on build: a POSITIONED box, whose foot
+//   new EdgeStrip(branch, { label, host }) — on a sub-branch the caller made:
+//     label                 what the strip is called, for whoever cannot see it
+//     host                  appended there once made: a POSITIONED box, whose foot
 //                           the lip takes and over whose foot the strip lies
-//     .build(branch)        the EdgeStrip, on a sub-branch the caller made
 //
 //   EdgeStrip — the instance:
 //     .root                 the strip: the caller appends its controls to it
@@ -26,7 +25,9 @@
 // without the strip going: it goes a little after the hand has left both.
 //
 // It takes no keys of its own and claims nothing: what is in it is the
-// caller's, as a panel's slot is.
+// caller's, as a panel's slot is. Its look is the house's edge strip; the lip
+// wears only the strip's ground - the strip's edge, showing. Its own classes
+// only place.
 // =============================================================================
 
 const _stripOwner = Object.freeze({ toString: () => "edgeStrip" });
@@ -34,8 +35,13 @@ const _stripOwner = Object.freeze({ toString: () => "edgeStrip" });
 /** How long the hand may be off both before the strip goes: long enough to cross from the lip onto it. */
 var _EDGE_STRIP_GRACE = 250;
 
+/** Its lip: the band the hand comes to, which shows the strip - realized inline, in its own look. */
+const _EDGE_LIP = Object.freeze({ LEAF: "lip" });
+
 class EdgeStrip {
-    /** The builder's; a caller makes a strip through EdgeStripBuilder. */
+    static LEAF = "edge-strip";
+
+    /** On a sub-branch the caller made, with its properties. */
     constructor(branch, props) {
         if (!branch) throw new Error("[EdgeStrip] a branch of its own is required");
         var p = props || {}, self = this;
@@ -46,10 +52,13 @@ class EdgeStrip {
         this._held = false;
         this._timer = null;
 
+        var look = new Look(EdgeStrip, ROLE.STANDALONE);
         var lip = branch.createElement("lip", "div");
         css.addClass(lip, el_strip_lip);
+        new Look(_EDGE_LIP, ROLE.REVEAL).wear(lip);   // the lip: the strip's edge, showing - a handle of its own
         var strip = branch.createElement("strip", "div");
         css.addClass(strip, el_strip);
+        look.wear(strip);
         strip.setAttribute("role", "group");
         if (p.label != null) strip.setAttribute("aria-label", String(p.label));
         this.lip = lip;
@@ -103,11 +112,4 @@ class EdgeStrip {
         this._cancel();
         this.branch.dissolve();
     }
-}
-
-class EdgeStripBuilder {
-    constructor() { this._props = {}; }
-    label(text)    { this._props.label = text; return this; }
-    host(el)       { this._props.host = el; return this; }
-    build(branch)  { return new EdgeStrip(branch, this._props); }
 }

@@ -58,6 +58,8 @@ const _layerOwner = Object.freeze({ toString: () => "floatLayer" });
 var _CASCADE = 28;
 
 class FloatLayer {
+    static LEAF = "float-layer";
+
     constructor(branch, opts) {
         if (!branch) throw new Error("[FloatLayer] a branch of its own is required");
         if (!opts || !opts.host) throw new Error("[FloatLayer] opts.host is required");
@@ -75,6 +77,7 @@ class FloatLayer {
         this._n = 0;
         var root = branch.createElement("desk", "div");
         css.addClass(root, opts.layer ? fp_desk_layer : fp_desk);
+        if (!opts.layer) new Look(FloatLayer, ROLE.STANDALONE).wear(root);   // a desk of its own: its ground, recessed; laid over another, none
         opts.host.appendChild(root);
         this.root = root;
         // the keys: through the party, when the desk is handed the steward
@@ -83,7 +86,7 @@ class FloatLayer {
             var self = this;
             this._kb = opts.keyboard;
             this._kbId = this._kb.join(opts.keyboardId != null ? String(opts.keyboardId) : branch.name, { keyDown: function (ev) { return self.key(ev); } });
-            this._offKeys = Keys.claimOn(root, this._kb, this._kbId);
+            this._offKeys = Keys.claimOn(root, this._kb, this._kbId, opts.layer ? null : new Look(FloatLayer, ROLE.STANDALONE).keys());   // its marks where it wears its leaf
         }
     }
 

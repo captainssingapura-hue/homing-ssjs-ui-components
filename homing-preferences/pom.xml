@@ -25,6 +25,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+        <!-- What it provides for styles (The Style Jars): the style's record, and the colour tree its implementations import. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-style-base</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-colours</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- The taxonomy its components are anchored at: each module ImplFor its leaf. -->
+        <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-taxonomy</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-core</artifactId>
@@ -61,6 +78,11 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.github.captainssingapura-hue.homing.js</groupId>
+            <artifactId>homing-ui-splitgrid</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
@@ -69,7 +91,7 @@
             <groupId>io.github.captainssingapura-hue.homing.js</groupId>
             <artifactId>homing-conformance-rules</artifactId>
             <version>${homing.core.version}</version>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

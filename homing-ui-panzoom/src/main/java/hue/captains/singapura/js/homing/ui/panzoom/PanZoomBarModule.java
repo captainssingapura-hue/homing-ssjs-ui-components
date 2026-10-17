@@ -1,16 +1,23 @@
 package hue.captains.singapura.js.homing.ui.panzoom;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.elements.ReadoutModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanZoom;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
 /** The controls of a pan-zoom view: out, the zoom said, in, fit - the elements' buttons, following the view they drive. */
-public record PanZoomBarModule() implements DomModule<PanZoomBarModule> {
+public record PanZoomBarModule() implements DomModule<PanZoomBarModule>, ImplFor<HousePanZoom.PanZoomBar> {
 
     public static final PanZoomBarModule INSTANCE = new PanZoomBarModule();
 
@@ -22,7 +29,11 @@ public record PanZoomBarModule() implements DomModule<PanZoomBarModule> {
     @Override
     public ImportsFor<PanZoomBarModule> imports() {
         return ImportsFor.<PanZoomBarModule>builder()
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ReadoutModule.Readout(), new ReadoutModule.ReadoutFactory()), ReadoutModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PanZoomStyles.pz_bar(), new PanZoomStyles.pz_readout()), PanZoomStyles.INSTANCE))
                 .build();
     }

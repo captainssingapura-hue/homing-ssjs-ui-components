@@ -1,5 +1,9 @@
 package hue.captains.singapura.js.homing.ui.dialog;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
@@ -8,7 +12,11 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.elements.Elements;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.PrimaryButtonModule;
+import hue.captains.singapura.js.homing.ui.elements.ScrimModule;
 import hue.captains.singapura.js.homing.ui.floating.FloatingPaneModule;
 
 import java.util.List;
@@ -28,7 +36,7 @@ import java.util.List;
  * onClick(dialog)}, and an instance with {@code close}, {@code actionEl}
  * and {@code setAction}. A caller of the one is a caller of the other.</p>
  */
-public record DialogModule() implements DomModule<DialogModule> {
+public record DialogModule() implements DomModule<DialogModule>, ImplFor<HouseContainers.Dialog> {
 
     /** The class. */
     public record Dialog() implements BranchComponent<DialogModule>, NeedKeyboard {
@@ -44,9 +52,14 @@ public record DialogModule() implements DomModule<DialogModule> {
     @Override
     public ImportsFor<DialogModule> imports() {
         return ImportsFor.<DialogModule>builder()
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ModalityModule.Modality()), ModalityModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Elements.ButtonBuilder()), Elements.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PrimaryButtonModule.PrimaryButton(), new PrimaryButtonModule.PrimaryButtonFactory()), PrimaryButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ScrimModule.Scrim(), new ScrimModule.ScrimFactory()), ScrimModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new DialogStyles.dl_scrim(),
                         new DialogStyles.dl_layer(),

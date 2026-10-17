@@ -15,6 +15,20 @@
 
 const _pickerOwner = Object.freeze({ toString: () => "tabPicker" });
 
+/** A kind's button pressed: the kind picked. */
+class TabPickerPick {
+    constructor(opts, kind) { this._opts = opts; this._kind = kind; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._opts.onPick(this._kind); }
+}
+
+/** The cancel pressed: nothing picked. */
+class TabPickerCancel {
+    constructor(opts) { this._opts = opts; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._opts.onCancel(); }
+}
+
 class TabPicker {
     constructor(branch, opts) {
         var o = opts || {};
@@ -23,20 +37,20 @@ class TabPicker {
         branch.activate(_pickerOwner);
         var root = branch.createElement("picker", "div");
         css.addClass(root, mtp_opener);
-        var note = branch.createElement("note", "p");
-        css.addClass(note, mtp_opener_note);
-        note.textContent = o.prompt == null ? "What should open here?" : String(o.prompt);
-        root.appendChild(note);
+        // what it asks, in the house's kicker, cast as its prompt: placed by it, looking as a kicker does
+        var note = new Kicker(KickerFactory.create(branch, "note"), { text: o.prompt == null ? "What should open here?" : String(o.prompt) }, ROLE.PROMPT);
+        css.addClass(note.el, mtp_opener_note);
+        root.appendChild(note.el);
         var grid = branch.createElement("grid", "div");
         css.addClass(grid, mtp_opener_grid);
         root.appendChild(grid);
         var first = null;
         (o.kinds || []).forEach(function (k, i) {
-            var pick = TabPicker._button(branch, "pick-" + i, k.label == null ? k.id : k.label, function () { o.onPick(k.id); });
+            var pick = TabPicker._button(branch, "pick-" + i, k.label == null ? k.id : k.label, ROLE.CHOICE, new TabPickerPick(o, k.id));
             grid.appendChild(pick);
             if (!first) first = pick;
         });
-        var cancel = TabPicker._button(branch, "cancel", "Cancel", function () { o.onCancel(); });
+        var cancel = TabPicker._button(branch, "cancel", "Cancel", ROLE.CANCEL, new TabPickerCancel(o));
         root.appendChild(cancel);
         this.root = root;
         this._first = first || cancel;
@@ -44,12 +58,9 @@ class TabPicker {
 
     focus() { try { this._first.focus(); } catch (e) {} }
 
-    static _button(branch, name, text, onClick) {
-        var b = branch.createElement(name, "button");
-        css.addClass(b, mtp_opener_pick);
-        b.setAttribute("type", "button");
-        b.textContent = String(text);
-        b.addEventListener("click", onClick);
-        return b;
+    static _button(branch, name, text, role, press) {
+        var button = new PlainButton(PlainButtonFactory.create(branch, name), { label: String(text) }, role);
+        button.setOnClick(press);
+        return button.el;
     }
 }

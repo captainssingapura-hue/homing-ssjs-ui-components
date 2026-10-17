@@ -1,10 +1,17 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.elements.KickerModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -19,7 +26,7 @@ import java.util.List;
  * <p>Its choices are native buttons: the browser's own keys walk and press
  * them, and the first takes the focus when the picker is shown.</p>
  */
-public record TabPickerModule() implements DomModule<TabPickerModule> {
+public record TabPickerModule() implements DomModule<TabPickerModule>, ImplFor<HousePanes.TabPicker> {
 
     /** The class. */
     public record TabPicker() implements BranchComponent<TabPickerModule> {
@@ -31,12 +38,15 @@ public record TabPickerModule() implements DomModule<TabPickerModule> {
     @Override
     public ImportsFor<TabPickerModule> imports() {
         return ImportsFor.<TabPickerModule>builder()
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),
                         new PaneStyles.mtp_opener_note(),
-                        new PaneStyles.mtp_opener_grid(),
-                        new PaneStyles.mtp_opener_pick()
+                        new PaneStyles.mtp_opener_grid()
                 ), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();
     }
 

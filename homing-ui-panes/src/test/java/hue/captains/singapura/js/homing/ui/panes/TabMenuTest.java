@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
-import hue.captains.singapura.js.homing.design.Icon;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import hue.captains.singapura.js.homing.ui.menu.tree.MenuTrees;
 import org.junit.jupiter.api.Test;
@@ -22,21 +22,30 @@ class TabMenuTest {
         assertEquals("tab", TabMenu.INSTANCE.kind());
         assertEquals(List.of(), MenuTrees.validate(TabMenu.INSTANCE));
         assertEquals(List.of("detach", "close"), MenuTrees.rows(TabMenu.INSTANCE).stream().map(r -> r.id()).toList());
-        assertEquals(Icon.Detach.class, TabMenu.Detach.INSTANCE.icon());
-        assertEquals(Icon.Close.class, TabMenu.Close.INSTANCE.icon());
+        assertEquals(HouseIcons.DetachIcon.INSTANCE, TabMenu.Detach.INSTANCE.icon());
+        assertEquals(HouseIcons.CloseIcon.INSTANCE, TabMenu.Close.INSTANCE.icon());
         assertEquals(1, TabMenu.Close.INSTANCE.section(), "a divider before Close");
     }
 
     @Test
+    void theSplitMenu_isSplit_partThenMergeThenClose() {
+        assertEquals("split", SplitMenu.INSTANCE.kind());
+        assertEquals(List.of(), MenuTrees.validate(SplitMenu.INSTANCE));
+        assertEquals(List.of("beside", "below", "merge-left", "merge-right", "merge-up", "merge-down", "merge-into", "close"),
+                MenuTrees.rows(SplitMenu.INSTANCE).stream().map(r -> r.id()).toList());
+    }
+
+    @Test
     void thePaneDeclaresTheNeed_andItsJsOpensTheSameKind() {
-        assertEquals(java.util.Set.of(TabMenu.INSTANCE), new MultiTabPaneModule.MultiTabPane().required());
+        assertEquals(java.util.Set.of(TabMenu.INSTANCE, SplitMenu.INSTANCE), new MultiTabPaneModule.MultiTabPane().required(),
+                "a chip's menu, and its strip's own ground's - the room it sits in, answered by the desk's docking when it resides in a split grid");
         String js = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/MultiTabPaneModule.js"));
         assertTrue(js.contains("static MENU = \"" + TabMenu.INSTANCE.kind() + "\";"), "the JS constant is the Java kind");
         assertTrue(js.contains("PaneMenus.forChip(this, tp.id, MultiTabPane.MENU)"), "the pane names its kind by its constant, never a loose string");
         String menus = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/PaneMenusModule.js"));
         assertTrue(menus.contains("pane._menus.open(kind,"), "and PaneMenus opens the kind it was handed, never one of its own");
         // a site that serves the pane's crate holds the kind, listing nothing
-        assertEquals(List.of("tab"), ContextMenuRegistry.requiredBy(List.of(UiPanesCrate.INSTANCE)).kinds().stream().map(k -> k.kind()).toList());
+        assertEquals(java.util.Set.of("tab", "split"), java.util.Set.copyOf(ContextMenuRegistry.requiredBy(List.of(UiPanesCrate.INSTANCE)).kinds().stream().map(k -> k.kind()).toList()));
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(UiPanesCrate.INSTANCE)));
     }
 }

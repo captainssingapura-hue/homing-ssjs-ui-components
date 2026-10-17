@@ -1,10 +1,18 @@
 package hue.captains.singapura.js.homing.ui.floating;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
+import hue.captains.singapura.js.homing.ui.elements.LabelModule;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookModule;
+import hue.captains.singapura.js.homing.ui.elements.CloseButtonModule;
 import java.util.List;
 
 /**
@@ -14,7 +22,7 @@ import java.util.List;
  * stack; a pane alone knows its place and its measure and reports a move or
  * a resize to whoever gave it a sink.
  */
-public record FloatingPaneModule() implements DomModule<FloatingPaneModule> {
+public record FloatingPaneModule() implements DomModule<FloatingPaneModule>, ImplFor<HouseContainers.FloatingPane> {
 
     /** The class: {@code new FloatingPane(branch, {id, title, x, y, w, h, z, closable?, onEvent?})}. */
     public record FloatingPane() implements BranchComponent<FloatingPaneModule> {
@@ -26,18 +34,18 @@ public record FloatingPaneModule() implements DomModule<FloatingPaneModule> {
     @Override
     public ImportsFor<FloatingPaneModule> imports() {
         return ImportsFor.<FloatingPaneModule>builder()
+                .add(new ModuleImports<>(List.of(new LabelModule.Label(), new LabelModule.LabelFactory()), LabelModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatEventsModule.FloatEvents()), FloatEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton(), new CloseButtonModule.CloseButtonFactory()), CloseButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new FloatingStyles.fp_frame(),
-                        new FloatingStyles.fp_hoverable(),
-                        new FloatingStyles.fp_held(),
-                        new FloatingStyles.fp_active(),
                         new FloatingStyles.fp_head(),
-                        new FloatingStyles.fp_head_held(),
                         new FloatingStyles.fp_icon(),
                         new FloatingStyles.fp_icon_on(),
                         new FloatingStyles.fp_title(),
-                        new FloatingStyles.fp_close(),
                         new FloatingStyles.fp_body(),
                         new FloatingStyles.fp_grip()
                 ), FloatingStyles.INSTANCE))

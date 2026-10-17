@@ -32,6 +32,13 @@
 
 const _openerOwner = Object.freeze({ toString: () => "tabOpener" });
 
+/** A kind's button pressed: the tab opened as that kind. */
+class TabOpenerPick {
+    constructor(opener, kind) { this._opener = opener; this._kind = kind; }
+    canHandle(type) { return type === EVENT.CLICK; }
+    handle() { this._opener.open(this._kind); }
+}
+
 class TabOpener {
     constructor(branch, opts) {
         if (!branch) throw new Error("[TabOpener] a branch of its own is required");
@@ -48,19 +55,17 @@ class TabOpener {
 
         var root = branch.createElement("opener", "div");
         css.addClass(root, mtp_opener);
-        var note = branch.createElement("note", "p");
-        css.addClass(note, mtp_opener_note);
-        note.textContent = o.prompt == null ? "What should this tab hold?" : String(o.prompt);
-        root.appendChild(note);
+        // what it asks, in the house's kicker, cast as its prompt: placed by it, looking as a kicker does
+        var note = new Kicker(KickerFactory.create(branch, "note"), { text: o.prompt == null ? "What should this tab hold?" : String(o.prompt) }, ROLE.PROMPT);
+        css.addClass(note.el, mtp_opener_note);
+        root.appendChild(note.el);
         var grid = branch.createElement("grid", "div");
         css.addClass(grid, mtp_opener_grid);
         root.appendChild(grid);
         this._source.kinds().forEach(function (k) {
-            var pick = branch.createElement("open-" + k.id, "button");
-            css.addClass(pick, mtp_opener_pick);
-            pick.setAttribute("type", "button");
-            pick.textContent = k.label;
-            pick.addEventListener("click", function () { self.open(k.id); });
+            var button = new PlainButton(PlainButtonFactory.create(branch, "open-" + k.id), { label: k.label }, ROLE.CHOICE);
+            button.setOnClick(new TabOpenerPick(self, k.id));
+            var pick = button.el;
             grid.appendChild(pick);
             self._picks.push(pick);
         });

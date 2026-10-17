@@ -19,7 +19,7 @@ class MenuTreeTest extends JsModuleTestBase {
         js = buildContext();
         loadModule(P + "MenuTreeModule.js");
         js.eval("js", """
-            var T = { kind: "animal", nodes: [ { id: "rotate", label: "Rotate", icon: "rotate" }, { id: "flip", label: "Flip" },
+            var T = { kind: "animal", nodes: [ { id: "rotate", label: "Rotate", icon: "rotate-icon" }, { id: "flip", label: "Flip" },
                       { id: "animal", label: "Animal", section: 1, nodes: [ { id: "cat", label: "Cat" }, { id: "dog", label: "Dog", nodes: [ { id: "big", label: "Big" } ] } ] } ] };
             """);
     }

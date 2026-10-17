@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * resting at a detent within the hand's bite — the hand on the rail, the
  * keys on the knob, the two events, the aria, the size on every part.
  */
-class SliderTest extends JsModuleTestBase {
+class SliderTest extends UiElementsJsTest {
 
     private static final String MODULE = "/homing/js/hue/captains/singapura/js/homing/ui/elements/SliderModule.js";
 
@@ -31,7 +30,8 @@ class SliderTest extends JsModuleTestBase {
                              remove: function () { for (var i = 0; i < arguments.length; i++) classes.delete(arguments[i]); },
                              contains: function (c) { return classes.has(c); }, toggle: function (c, f) { if (f) classes.add(c); else classes.delete(c); } },
                 appendChild: function (c) { this.children.push(c); c.parentNode = this; return c; },
-                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; }, removeAttribute: function (k) { delete attrs[k]; },
+                removeChild: function (c) { var i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); return c; },
+                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; }, removeAttribute: function (k) { delete attrs[k]; }, hasAttribute: function (k) { return k in attrs; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 removeEventListener: function (t, fn) { var l = this.listeners[t] || []; var i = l.indexOf(fn); if (i >= 0) l.splice(i, 1); },
                 getBoundingClientRect: function () { return this.rect; },
@@ -41,7 +41,12 @@ class SliderTest extends JsModuleTestBase {
                 has: function (c) { return classes.has(c); }, attr: function (k) { return attrs[k]; }, prop: function (k) { return props[k]; }, listening: function (t) { return (this.listeners[t] || []).length; } };
             return node;
         }
-        function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; }, createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function (o) { this.owner = String(o); } }; }
+        // a maker is single-use, and known for one: the texts are made by their own makers
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
+        function fakeBranch(name) { return { name: name, createElement: function (n, tag) { var e = el(tag); e.name = n; return e; },
+                                             elementMaker: function (n) { var self = this, mk = function (tag) { makers.delete(mk); return self.createElement(n, tag); }; makers.add(mk); return mk; },
+                                             createBranch: function (n) { return fakeBranch(n); }, dissolve: function () { log.push("dissolved:" + name); }, activate: function (o) { this.owner = String(o); } }; }
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); }, size: function (e, s) { e.size = s; }, extent: function () {}, aspect: function () {} };
@@ -51,20 +56,26 @@ class SliderTest extends JsModuleTestBase {
             el_slider_fill_vertical = "el_slider_fill_vertical", el_slider_detent_vertical = "el_slider_detent_vertical", el_slider_cap = "el_slider_cap", el_slider_cap_face = "el_slider_cap_face", el_slider_cap_mark = "el_slider_cap_mark",
             el_slider_tick = "el_slider_tick", el_slider_tick_vertical = "el_slider_tick_vertical", el_slider_tick_line = "el_slider_tick_line", el_slider_tick_line_vertical = "el_slider_tick_line_vertical", el_slider_tick_label = "el_slider_tick_label";
         var page = fakeBranch("page");
-        var s = new SliderBuilder().label("The tabs' size").axis().format(function (v) { return v.toFixed(1); })
-                    .onInput(function (v) { log.push("in:" + v); }).onChange(function (v) { log.push("change:" + v); }).build(page.createBranch("size"));
-        var rail = s.root.children[1], knob = rail.children[rail.children.length - 1], face = knob.children[0], mark = knob.children[1], detent = rail.children[1], readout = s.root.children[2];
+        var s = new Slider(page.createBranch("size"), { label: "The tabs' size", axis: true, format: function (v) { return v.toFixed(1); },
+                    onInput: function (v) { log.push("in:" + v); }, onChange: function (v) { log.push("change:" + v); } });
+        var rail = s.root.children[1], knob = rail.children[rail.children.length - 1], mark = knob.children[0], detent = rail.children[1], readout = s.root.children[2];
         """;
 
     @BeforeEach
     void load() {
         js = buildContext();
-        // the icon component reads ICONS as it loads: the wardrobe's names first, as the served module would import them
-        js.eval("js", "var ic_base = 'ic_base', ICONS = { grip: 'ic_grip', size: 'ic_size', aspect: 'ic_aspect', extent: 'ic_extent', level: 'ic_level' };");
+        TextsInJs.load(js, this::loadModule);   // its texts are the house's
+        // the instance's icons, as the served module would import them, and the icon's box
+        js.eval("js", "var ic_base = 'ic_base';");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
+        for (String m : new String[] {"MarkBehaviorModule.js", "DetentModule.js", "TickModule.js"})   // the slider's detent and its scale's ticks, the house's marks
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/SliderScaleModule.js");
+        for (String m : new String[] {"SliderRailModule.js", "SliderGrooveModule.js", "FillModule.js", "SliderKnobModule.js"})
+            loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);   // its parts, each a component
         loadModule(MODULE);
-        js.eval("js", SHIM);
+        js.eval("js", TextsInJs.withCss(SHIM));
     }
 
     private Value eval(String src) { return js.eval("js", src); }
@@ -80,13 +91,19 @@ class SliderTest extends JsModuleTestBase {
         assertEquals("-1,1,0,0.0,The tabs' size", eval("[knob.attr('aria-valuemin'), knob.attr('aria-valuemax'), knob.attr('aria-valuenow'), knob.attr('aria-valuetext'), knob.attr('aria-label')].join(',')").asString());
         assertEquals("0.0", eval("readout.textContent").asString());
         assertTrue(eval("detent.has('el_slider_detent') && knob.has('el_slider_knob')").asBoolean());
-        assertTrue(eval("mark.has('ic_base') && mark.has('ic_grip')").asBoolean(), "a grip on the knob unless the slider says what it sets");
-        assertEquals("grip", eval("s.icon()").asString());
-        eval("s.icon('size');");
-        assertTrue(eval("mark.has('ic_size') && !mark.has('ic_grip')").asBoolean());
+        // its look: its casting's class on its root; each part a component of its own, its casting's class whole (D17)
+        assertTrue(eval("s.root.has('styled-slider') && !s.root.has('slider__size-inset')").asBoolean(), "its root, its casting whole");
+        assertTrue(eval("rail.has('styled-slider-rail') && rail.children[0].has('styled-slider-groove_span') && rail.children[0].children[0].has('styled-fill_level') && knob.has('styled-slider-knob_thumb')").asBoolean(),
+                "the rail - its role only placing it - the groove as its span, the fill its level, the knob its thumb");
+        assertTrue(eval("mark.has('el_slider_mark') && mark.children[0].has('ic_base') && mark.children[0].has('styled-grip-icon')").asBoolean(),
+                "a grip on the knob unless the slider says what it sets: the knob's room, the icon mounted in it");
+        assertTrue(eval("s.icon() === ICON.GRIP_ICON").asBoolean());
+        eval("s.icon(ICON.SIZE_ICON);");
+        assertTrue(eval("mark.children.length === 1 && mark.children[0].has('styled-size-icon')").asBoolean(), "another of its five mounted in its place");
         eval("s.icon(null);");
-        assertTrue(eval("s.icon() === null && !mark.has('ic_size')").asBoolean(), "a bare knob");
-        assertEquals("aspect", eval("new SliderBuilder().axis().icon('aspect').build(page.createBranch('a')).icon()").asString());
+        assertTrue(eval("s.icon() === null && mark.children.length === 0").asBoolean(), "a bare knob");
+        assertTrue(eval("new Slider(page.createBranch('a'), { axis: true, icon: ICON.ASPECT_ICON }).icon() === ICON.ASPECT_ICON").asBoolean());
+        assertThrows(org.graalvm.polyglot.PolyglotException.class, () -> eval("s.icon(ICON.CLOSE_ICON)"), "not one of its five");
         eval("s.value(-0.7);");
         assertEquals("15.000%,35.000%", eval("rail.prop('--sl-from') + ',' + rail.prop('--sl-span')").asString(), "a value below the detent fills leftwards from it");
         assertEquals("-0.7", eval("String(s.value())").asString());
@@ -100,7 +117,8 @@ class SliderTest extends JsModuleTestBase {
         // the rail is 200px from 100: a press at 250 is three quarters along → 0.5 on the axis
         eval("log = []; var down = rail.fire('pointerdown', { button: 0, pointerId: 3, clientX: 250 });");
         assertEquals("capture:3 in:0.5 focus:div", log(), "captured at the press, the value set live, the knob focused");
-        assertTrue(eval("down.defaulted && knob.has('el_slider_held')").asBoolean());
+        assertTrue(eval("down.defaulted && knob.has('styled-slider-knob_thumb--dragging') && detent.hasAttribute('data-dragging')").asBoolean(),
+                "dragging: the knob's Dragging state, and the detent shown only now");
         assertEquals("75.000%", eval("rail.prop('--sl-value')").asString());
         eval("log = []; rail.fire('pointermove', { clientX: 206 });");
         assertEquals("in:0", log(), "206 is 0.06 on the axis: within the detent's bite of six tenths of a step, so it rests at nought");
@@ -110,7 +128,7 @@ class SliderTest extends JsModuleTestBase {
         assertEquals("", log(), "the same value again is nothing");
         eval("log = []; rail.fire('pointerup', {});");
         assertEquals("change:0.1", log(), "released: the change, once, since the value moved from the press");
-        assertFalse(eval("knob.has('el_slider_held')").asBoolean());
+        assertFalse(eval("knob.has('styled-slider-knob_thumb--dragging') || detent.hasAttribute('data-dragging')").asBoolean(), "let go: the knob not dragging, the detent hidden");
         assertEquals("0", eval("String(rail.listening('pointermove'))").asString(), "the hand's listeners are gone");
         eval("log = []; rail.fire('pointerdown', { button: 0, pointerId: 4, clientX: 220 }); rail.fire('pointermove', { clientX: 220 }); rail.fire('pointerup', {});");
         assertEquals("capture:4 in:0.2 focus:div change:0.2", log());
@@ -141,8 +159,8 @@ class SliderTest extends JsModuleTestBase {
             var members = {}, kbLog = [];
             var kb = { enroll: function (root, id) { root._kb = id; return function () { delete root._kb; }; }, memberAt: function (el) { for (var x = el; x; x = x.parentNode) if (x._kb) return x._kb; return null; }, join: function (id, h) { members[id] = h; kbLog.push("join:" + id); return id; }, leave: function (id) { delete members[id]; kbLog.push("leave:" + id); },
                        claim: function (id) { kbLog.push("claim:" + id); }, release: function (id) { kbLog.push("release:" + id); } };
-            var k = new SliderBuilder().axis().onChange(function (v) { log.push("k:" + v); }).keyboard(kb).build(page.createBranch("keyed"));
-            var k2 = new SliderBuilder().axis().keyboard(kb, "other").build(page.createBranch("keyed2"));
+            var k = new Slider(page.createBranch("keyed"), { axis: true, onChange: function (v) { log.push("k:" + v); }, keyboard: kb });
+            var k2 = new Slider(page.createBranch("keyed2"), { axis: true, keyboard: kb, keyboardId: "other" });
             """);
         assertEquals("join:keyed join:other", eval("kbLog.join(' ')").asString(), "joined as the branch's name, or as said");
         assertEquals("1,0,0", eval("[k.root.listening('pointerdown'), k.root.listening('focusin'), k.root.listening('focusout')].join()").asString(), "the convention on the root: one press");
@@ -163,17 +181,18 @@ class SliderTest extends JsModuleTestBase {
     @Test
     void stoodUp_theValueRisesFromTheBottom_theKnobIsTheCap_theTicksAtTheirHeights() {
         eval("""
-            var f = new SliderBuilder().label("vocals").vertical().range(-60, 10, 1).detent(0).value(0).icon("level")
-                        .ticks([{ at: 10, label: "+10" }, { at: 0, label: "0" }, { at: -20, label: "-20" }, { at: -60, label: "-inf" }, { at: 99, label: "off the scale" }])
-                        .format(function (v) { return v + " dB"; }).onInput(function (v) { log.push("in:" + v); }).build(page.createBranch("vocals"));
+            var f = new Slider(page.createBranch("vocals"), { label: "vocals", vertical: true, min: -60, max: 10, step: 1, detents: [0], value: 0, icon: ICON.LEVEL_ICON,
+                        ticks: [{ at: 10, label: "+10" }, { at: 0, label: "0" }, { at: -20, label: "-20" }, { at: -60, label: "-inf" }, { at: 99, label: "off the scale" }],
+                        format: function (v) { return v + " dB"; }, onInput: function (v) { log.push("in:" + v); } });
             var vr = f.root.children[1]; vr.rect = { left: 100, top: 0, width: 24, height: 200, right: 124, bottom: 200 };
             var vk = vr.children[vr.children.length - 1];
             var vticks = vr.children.filter(function (c) { return c.has("el_slider_tick"); });
             function ins() { return log.filter(function (l) { return l.indexOf("in:") === 0; }).join(" "); }
             """);
         assertTrue(eval("f.root.has('el_slider_vertical') && vr.has('el_slider_rail_vertical') && vr.has('el_slider_rail_ticked')").asBoolean());
-        assertTrue(eval("vk.has('el_slider_cap') && !vk.has('el_slider_knob') && vk.children[0].has('el_slider_cap_face') && vk.children[1].has('el_slider_cap_mark') && vk.children[1].has('ic_level')").asBoolean(), "the cap, its face, its mark");
+        assertTrue(eval("vk.has('el_slider_cap') && !vk.has('el_slider_knob') && vk.children[0].has('el_slider_cap_mark') && vk.children[0].children[0].has('styled-level-icon')").asBoolean(), "the cap, its mark");
         assertEquals("vertical", eval("vk.attr('aria-orientation')").asString());
+        assertTrue(eval("vk.has('styled-slider-knob_thumb--vertical')").asBoolean(), "the cap stood up: its standing a state of its own, its style's size and corner");
         assertEquals("4", eval("String(vticks.length)").asString(), "a tick per value on the scale; one off it is dropped");
         assertEquals("100.000%,85.714%,57.143%,0.000%", eval("vticks.map(function (t) { return t.prop('--sl-tick'); }).join(',')").asString(), "each at its fraction of the length");
         assertTrue(eval("vticks[0].has('el_slider_tick_vertical') && vticks[0].children[0].has('el_slider_tick_line_vertical') && vticks[0].children[1].textContent === '+10'").asBoolean());
@@ -190,7 +209,10 @@ class SliderTest extends JsModuleTestBase {
     @Test
     void offIsInert_theSizeReachesEveryPart_disposeDissolves() {
         eval("s.setOn(false); log = [];");
-        assertTrue(eval("s.root.has('el_slider_off') && knob.attr('aria-disabled') === 'true' && knob.attr('tabindex') === '-1'").asBoolean());
+        assertTrue(eval("s.root.has('el_slider_off') && [s.root, rail, knob].every(function (e) { return e.attr('aria-disabled') === 'true'; }) && knob.attr('tabindex') === '-1'").asBoolean(),
+                "off: the slider, its rail and its knob say so");
+        assertTrue(eval("s.root.has('styled-slider--disabled') && rail.has('styled-slider-rail--disabled') && knob.has('styled-slider-knob_thumb--disabled')").asBoolean(),
+                "and each holds its Enabled state's class, which its look is off by");
         eval("rail.fire('pointerdown', { button: 0, pointerId: 1, clientX: 300 }); knob.fire('keydown', { key: 'End' });");
         assertEquals("", log(), "off: neither the hand nor the keys");
         eval("s.setOn(true); s.size(0.5);");
@@ -205,11 +227,11 @@ class SliderTest extends JsModuleTestBase {
         assertTrue(eval("s.root.children[0].prop('--sl-label') === undefined").asBoolean());
         eval("s.dispose();");
         assertEquals("dissolved:size", log());
-        var plain = eval("new SliderBuilder().label('Volume').range(0, 100, 5).value(42).build(page.createBranch('vol'))");
-        assertEquals("40", eval("String(new SliderBuilder().range(0, 100, 5).value(42).build(page.createBranch('v2')).value())").asString(), "on the step");
-        assertTrue(eval("new SliderBuilder().range(0, 100, 5).value(42).build(page.createBranch('v3')).root.children[1].children.length === 2").asBoolean(), "no detent on a plain range: track and knob only");
-        var ex = assertThrows(PolyglotException.class, () -> eval("new SliderBuilder().range(5, 5).build(page.createBranch('bad'))"));
+        var plain = eval("new Slider(page.createBranch('vol'), { label: 'Volume', min: 0, max: 100, step: 5, value: 42 })");
+        assertEquals("40", eval("String(new Slider(page.createBranch('v2'), { min: 0, max: 100, step: 5, value: 42 }).value())").asString(), "on the step");
+        assertTrue(eval("new Slider(page.createBranch('v3'), { min: 0, max: 100, step: 5, value: 42 }).root.children[1].children.length === 2").asBoolean(), "no detent on a plain range: track and knob only");
+        var ex = assertThrows(PolyglotException.class, () -> eval("new Slider(page.createBranch('bad'), { min: 5, max: 5 })"));
         assertTrue(ex.getMessage().contains("max must be above min"), ex.getMessage());
-        assertThrows(PolyglotException.class, () -> eval("new SliderBuilder().build(null)"));
+        assertThrows(PolyglotException.class, () -> eval("new Slider(null, {})"));
     }
 }

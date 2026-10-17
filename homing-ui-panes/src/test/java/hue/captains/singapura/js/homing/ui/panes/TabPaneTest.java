@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.ssjs.test.JsModuleTestBase;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Value;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,22 +23,23 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * the one dissolve. The fake party holds the real one's rule for a name, and
  * dissolves as it does: its elements out of the document, its name free.
  */
-class TabPaneTest extends JsModuleTestBase {
+class TabPaneTest extends UiPanesJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/panes/";
+    private static final String ELEMENTS = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
 
     private static final String SHIM = """
         var log = [];
         function el(tag) {
             var classes = new Set(), attrs = {};
-            var node = { tag: tag, children: [], parentNode: null, listeners: {}, textContent: "", title: "",
+            var node = { tag: tag, tagName: String(tag).toUpperCase(), children: [], parentNode: null, listeners: {}, textContent: "", title: "",
                 classList: { add: function (c) { classes.add(c); }, remove: function (c) { classes.delete(c); }, contains: function (c) { return classes.has(c); } },
                 get firstChild() { return this.children[0] || null; },
                 appendChild: function (c) { if (c.parentNode) c.parentNode.removeChild(c); this.children.push(c); c.parentNode = this; return c; },
                 removeChild: function (c) { var i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); c.parentNode = null; return c; },
                 remove: function () { if (this.parentNode) this.parentNode.removeChild(this); },
                 contains: function (t) { for (var x = t; x; x = x.parentNode) if (x === this) return true; return false; },
-                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; },
+                setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; }, removeAttribute: function (k) { delete attrs[k]; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 fire: function (t, ev) { var e = ev || {}; e.defaultPrevented = false; e.preventDefault = function () { e.defaultPrevented = true; }; e.stopPropagation = function () {};
                                          (this.listeners[t] || []).slice().forEach(function (fn) { fn(e); }); return e; },
@@ -55,10 +57,22 @@ class TabPaneTest extends JsModuleTestBase {
                 dissolve: function () { Array.from(this.kids.values()).forEach(function (k) { k.dissolve(); }); this.els.forEach(function (e) { e.remove(); }); this.els.clear();
                                         this.dissolved = true; if (this.parent) this.parent.kids.delete(name); } };
         }
+        // a maker is single-use, and known for one: the strip's plus, its count and the crosses are made by their own makers
+        var makers = new Set();
+        var DomOpsParty = { isElementMaker: function (f) { return makers.has(f); } };
+        var _branchOf = fakeBranch;
+        fakeBranch = function () {
+            var b = _branchOf.apply(null, arguments);
+            b.elementMaker = function (n) { var mk = function (tag) { makers.delete(mk); return b.createElement(n, tag); }; makers.add(mk); return mk; };
+            return b;
+        };
         var crypto = { randomUUID: (function () { var n = 0; return function () { return "u" + (++n); }; })() };
         var css = { addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); },
+                    removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { if (f) e.classList.add(c); else e.classList.remove(c); } };
-        var mtp_chip = "mtp_chip", mtp_chip_seated = "mtp_chip_seated", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on",
+        css.cls = function (name) { return name; };   // the new manager names its classes through the old
+        css.extent = function (e, t) { e._extent = t; }; css.size = function (e, s) { e._size = s; }; css.aspect = function (e, a) { e._aspect = a; };   // a button's degrees
+        var mtp_chip = "mtp_chip", mtp_chip_lifted = "mtp_chip_lifted", mtp_chip_mark_on = "mtp_chip_mark_on", mtp_chip_dragging = "mtp_chip_dragging", mtp_chip_icon = "mtp_chip_icon", mtp_chip_icon_on = "mtp_chip_icon_on",
             mtp_chip_label = "mtp_chip_label", mtp_chip_mark = "mtp_chip_mark", mtp_chip_close = "mtp_chip_close",
             mtp_tab_content = "mtp_tab_content", mtp_tab_content_hidden = "mtp_tab_content_hidden";
         var console = { error: function (m) { log.push("error:" + m); } };
@@ -94,8 +108,20 @@ class TabPaneTest extends JsModuleTestBase {
     @BeforeEach
     void load() {
         js = buildContext();
+        // the close button: its castings and its looks, generated, before its declaration is read
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
+        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
+        for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
+            loadModule(ELEMENTS + m);
         loadModule(P + "PaneKeysModule.js");
-        loadModule(P + "TabChipModule.js");
+        js.eval("js", "if (typeof ic_base === 'undefined') globalThis.ic_base = 'ic_base';");   // the house's icon, the chip's within mark
+        if (js.eval("js", "typeof Icon === 'undefined'").asBoolean()) loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
+        loadModule(P + "TabBehaviorModule.js");
+        loadModule(P + "TabModule.js");
         loadModule(P + "TabPaneModule.js");
         loadModule(P + "TabRegisterModule.js");
         js.eval("js", SHIM);
@@ -111,8 +137,10 @@ class TabPaneTest extends JsModuleTestBase {
            + "register.open({ id: 'x y', focus: dock, make: widget('w3') });");
         assertEquals("tabpane-u1,tabpane-u2,tabpane-u3", eval("Array.from(register.branch.kids.keys()).join(',')").asString());
         assertEquals("a:b,doc/intro.md,x y", eval("register.ids().join(',')").asString(), "any string, in the order opened");
-        assertEquals("chip,icon,label,mark,close,pane", eval("names(register.get('a:b').branch)").asString(), "the tab and the pane, and nothing named after the id");
-        assertEquals("tabpane-u1", eval("Array.from(register.get('a:b').branch.kids.keys()).join(',')").asString(), "the widget on a sub-branch of the tab-pane's own, named as the tab-pane is");
+        assertEquals("pane", eval("names(register.get('a:b').branch)").asString(), "the pane, and nothing named after the id");
+        assertEquals("tab,icon,label,mark,close,close-face", eval("names(register.get('a:b').branch.kids.get('chip'))").asString(), "the tab and its parts - the cross's face the close icon - on a branch of its own");
+        assertEquals("chip,tabpane-u1", eval("Array.from(register.get('a:b').branch.kids.keys()).join(',')").asString(),
+                "the tab on a sub-branch of the tab-pane's own, the widget on one named as the tab-pane is");
         assertTrue(eval("handles.w1.branch.parent === register.get('a:b').branch").asBoolean());
         assertTrue(eval("register.get('doc/intro.md').pane.children[0] === register.get('doc/intro.md').widget.root").asBoolean(), "its root in the pane");
         assertEquals("Intro", eval("register.get('doc/intro.md').chip._label.textContent").asString());
@@ -153,7 +181,8 @@ class TabPaneTest extends JsModuleTestBase {
     void theChipAndThePaneAreTheSameElements_theNameAndIconChangedInPlace_byTheHolderOrTheWidget() {
         eval("var tp = register.open({ id: 't', title: 'Old', focus: dock, make: widget('w1') }); var chip = tp.chip, pane = tp.pane;");
         eval("tp.title('New');");
-        assertEquals("New|New|Close New", eval("chip._label.textContent + '|' + chip.title + '|' + chip._close.getAttribute('aria-label')").asString());
+        assertEquals("New|New|Close New|Close New", eval("chip._label.textContent + '|' + chip.title + '|' + chip._close.getAttribute('aria-label') + '|' + chip._close.getAttribute('title')").asString(),
+                "the label, the tooltip, and what the cross says it closes - its name and its own tooltip");
         eval("handles.w1.tab.title('Named by the widget');");
         assertEquals("Named by the widget", eval("chip._label.textContent").asString(), "the widget names itself on its own tab");
         assertEquals("Named by the widget", eval("handles.w1.tab.title() + ''").asString());
@@ -161,7 +190,7 @@ class TabPaneTest extends JsModuleTestBase {
         assertTrue(eval("chip._icon.children[0] === ic && chip._icon.has('mtp_chip_icon_on') && tp.icon() === ic").asBoolean());
         eval("tp.icon(null);");
         assertTrue(eval("chip._icon.children.length === 0 && !chip._icon.has('mtp_chip_icon_on') && tp.icon() === null").asBoolean());
-        assertTrue(eval("tp.chip === chip && tp.pane === pane").asBoolean(), "the same elements throughout");
+        assertTrue(eval("tp.chip === chip && tp.pane === pane").asBoolean(), "the same tab and pane throughout");
         assertTrue(eval("pane.has('mtp_tab_content_hidden')").asBoolean(), "hidden until a host shows it");
         eval("tp.shown(true);");
         assertFalse(eval("pane.has('mtp_tab_content_hidden')").asBoolean());
@@ -172,13 +201,13 @@ class TabPaneTest extends JsModuleTestBase {
     @Test
     void whatTheChipIsAskedGoesToTheHostItIsIn_andTheCrossIsItsOwn() {
         eval("var tp = register.open({ id: 't', focus: dock, make: widget('w1') });");
-        eval("tp.chip.fire('pointerdown', { button: 0, target: tp.chip });");
-        assertFalse(eval("tp.chip.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "no host: nothing asked, the browser's own menu");
+        eval("tp.chip.el.fire('pointerdown', { button: 0, target: tp.chip.el });");
+        assertFalse(eval("tp.chip.el.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "no host: nothing asked, the browser's own menu");
         assertEquals("", log());
         eval("var h = host('h'); tp._hostedBy(h);");
         assertTrue(eval("tp.host() === h").asBoolean());
-        eval("tp.chip.fire('pointerdown', { button: 0, target: tp.chip });");
-        assertTrue(eval("tp.chip.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "the host opened a menu: the browser's is suppressed");
+        eval("tp.chip.el.fire('pointerdown', { button: 0, target: tp.chip.el });");
+        assertTrue(eval("tp.chip.el.fire('contextmenu', { clientX: 5, clientY: 6 }).defaultPrevented").asBoolean(), "the host opened a menu: the browser's is suppressed");
         assertEquals("h:select:t h:menu:t", log());
         eval("log.length = 0; tp.chip._close.fire('click', {});");
         assertEquals("w1:disposed h:letGo:t", log(), "the cross closes the tab-pane: the widget disposed, then its host told");
@@ -189,10 +218,10 @@ class TabPaneTest extends JsModuleTestBase {
     @Test
     void closeIsTheOneDissolve_andASecondIsNothing() {
         eval("var tp = register.open({ id: 't', focus: dock, make: widget('w1') }); var strip = el('strip'), content = el('content');"
-           + "strip.appendChild(tp.chip); content.appendChild(tp.pane); var branch = tp.branch;");
+           + "strip.appendChild(tp.chip.el); content.appendChild(tp.pane); var branch = tp.branch;");
         eval("tp.close();");
         assertEquals("w1:disposed", log());
-        assertTrue(eval("branch.dissolved && tp.chip.parentNode === null && tp.pane.parentNode === null").asBoolean(), "the parts out of the document");
+        assertTrue(eval("branch.dissolved && tp.chip.el.parentNode === null && tp.pane.parentNode === null").asBoolean(), "the parts out of the document");
         assertEquals(0, eval("dock.members.length").asInt(), "the membership left");
         assertEquals(0, eval("register.branch.kids.size").asInt());
         eval("tp.close();");

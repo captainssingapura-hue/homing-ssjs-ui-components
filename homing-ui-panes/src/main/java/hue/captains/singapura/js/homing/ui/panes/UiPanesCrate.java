@@ -5,9 +5,10 @@ import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
+import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public final class UiPanesCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-panes"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiIconsCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, UiIconsCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiPanesComponents.INSTANCE; }
@@ -36,14 +37,13 @@ public final class UiPanesCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(MultiTabPaneModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(SingleTabPaneModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(TabStripModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(TabChipModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(TabBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(TabModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(TabPaneModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(TabRegisterModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(PaneTabsModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(TabHandModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(TabWindowModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(PaneThumbsModule.INSTANCE, StandardJsModuleType.CONSUMER),
-                CrateEntry.of(AddTabModule.INSTANCE, StandardJsModuleType.CONSUMER),
                 CrateEntry.of(TabOpenerModule.INSTANCE, StandardJsModuleType.CONSUMER),
                 CrateEntry.of(TabPickerModule.INSTANCE, StandardJsModuleType.CONSUMER),
                 CrateEntry.of(PaneEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),

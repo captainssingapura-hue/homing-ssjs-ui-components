@@ -3,31 +3,9 @@ package hue.captains.singapura.js.homing.preferences;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
-import hue.captains.singapura.js.homing.core.Wearable;
-
 import java.util.List;
 import java.util.Set;
 
-import static hue.captains.singapura.js.homing.design.DesignClass.of;
-import static hue.captains.singapura.js.homing.design.Box.Control;
-import static hue.captains.singapura.js.homing.design.Box.Inline;
-import static hue.captains.singapura.js.homing.design.Emphasis.Muted;
-import static hue.captains.singapura.js.homing.design.Emphasis.Primary;
-import static hue.captains.singapura.js.homing.design.Interaction.Focus;
-import static hue.captains.singapura.js.homing.design.Interaction.Interactive;
-import static hue.captains.singapura.js.homing.design.Interaction.Selectable;
-import static hue.captains.singapura.js.homing.design.Layer.Raised;
-import static hue.captains.singapura.js.homing.design.Structure.Divider;
-import static hue.captains.singapura.js.homing.design.Target.Affordance;
-import static hue.captains.singapura.js.homing.design.Target.Color;
-import static hue.captains.singapura.js.homing.design.Target.Motion;
-import static hue.captains.singapura.js.homing.design.Target.Shape;
-import static hue.captains.singapura.js.homing.design.Target.Type;
-import static hue.captains.singapura.js.homing.design.Text.Body;
-import static hue.captains.singapura.js.homing.design.Text.Caption;
-import static hue.captains.singapura.js.homing.design.Text.Heading;
-import static hue.captains.singapura.js.homing.design.Text.Kicker;
-import static hue.captains.singapura.js.homing.design.Text.Lede;
 
 /**
  * The view's two panes and the widgets' fields. Words worn, layout in the
@@ -40,20 +18,18 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
     /** Master beside detail; the master as wide as its names, the detail the rest. */
     public record pv_root() implements CssClass<PreferencesStyles> {
         @Override public String body() { return """
-            display: grid;
-            grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
-            gap: 0;
+            display: flex;
             min-height: 360px;
-            align-items: stretch;
+            flex: 1 1 auto;
+            align-self: stretch;
+            min-width: 0;
             """;
         }
     }
 
     /** The master pane: divided from the detail. */
     public record pv_master() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Divider.class, Color.Edge.class), of(Divider.class, Shape.Rule.class)); }
         @Override public String body() { return """
-            border-width: 0 1px 0 0;
             padding: 8px 8px 8px 0;
             min-width: 0;
             overflow: auto;
@@ -76,23 +52,19 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
     // ── A widget's furniture ──────────────────────────────────────────────────
 
     public record pv_kicker() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Kicker.class, Type.Scale.class), of(Kicker.class, Type.Weight.class), of(Kicker.class, Type.Treatment.class), of(Kicker.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 0 0 4px;"; }
     }
 
     public record pv_title() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Type.Weight.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 0 0 6px;"; }
     }
 
     public record pv_summary() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Lede.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return "margin: 0 0 18px;"; }
     }
 
     /** A line about the value: what it is, where it came from. */
     public record pv_note() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return "margin: 12px 0 0;"; }
     }
 
@@ -121,91 +93,24 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
-    /** An option: selectable, marked by aria-selected. */
+    /** An option, across the list; it lays out its name and its note itself - the house's choice option. */
     public record pv_option() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Selectable.class, Color.Surface.class), of(Selectable.class, Color.Ink.class), of(Selectable.class, Color.Edge.class), of(Selectable.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class), of(Body.class, Type.Face.class)); }
-        @Override public String body() { return """
-            font: inherit;
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-            padding: 7px 10px;
-            text-align: left;
-            width: 100%;
-            box-sizing: border-box;
-            """;
-        }
-    }
-
-    public record pv_option_note() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Caption.class, Type.Scale.class)); }
-        @Override public String body() { return """
-            margin-left: auto;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            min-width: 0;
-            """;
-        }
-    }
-
-    // ── Toggle ────────────────────────────────────────────────────────────────
-
-    /** The switch: a control whose track is raised and whose knob is primary when on. */
-    public record pv_switch() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Raised.class, Color.Surface.class), of(Raised.class, Color.Edge.class), of(Control.class, Shape.Rule.class), of(Inline.class, Shape.Corner.class), of(Interactive.class, Affordance.Cursor.class), of(Interactive.class, Motion.Ease.class), of(Control.class, Color.Edge.class)); }
-        @Override public String body() { return """
-            font: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            padding: 6px 10px;
-            """;
-        }
-    }
-
-    public record pv_switch_track() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Muted.class, Color.Ink.class), of(Inline.class, Shape.Corner.class)); }
-        @Override public String body() { return """
-            width: 36px;
-            height: 20px;
-            position: relative;
-            opacity: .35;
-            """;
-        }
-    }
-
-    /** The knob: primary when on, muted when off; it slides. */
-    public record pv_switch_knob() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class), of(Interactive.class, Motion.Ease.class), of(Inline.class, Shape.Corner.class)); }
-        @Override public String body() { return """
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 16px;
-            height: 16px;
-            transition-property: transform, opacity;
-            opacity: .45;
-            [aria-checked="true"] & { transform: translateX(16px); opacity: 1; }
-            """;
-        }
+        @Override public String body() { return "width: 100%;"; }
     }
 
     // ── Scale ─────────────────────────────────────────────────────────────────
 
+    /** The range: as wide as the field allows, drawn in the ink its look sets - the accent - by the browser's own slider. */
     public record pv_range() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Primary.class, Color.Surface.class), of(Interactive.class, Affordance.Cursor.class), of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
         @Override public String body() { return """
             width: 100%;
             max-width: 420px;
-            background: transparent;
             accent-color: currentColor;
             """;
         }
     }
 
     public record pv_readout() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Heading.class, Type.Face.class), of(Heading.class, Type.Scale.class), of(Heading.class, Color.Ink.class)); }
         @Override public String body() { return "margin: 8px 0 0;"; }
     }
 
@@ -213,7 +118,6 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
 
     /** The flat tree: a listbox with a focus ring of its own. */
     public record pv_list() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Focus.class, Shape.Rule.class), of(Focus.class, Color.Edge.class)); }
         @Override public String body() { return """
             display: flex;
             flex-direction: column;
@@ -223,12 +127,11 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
-    /** A row of the flat tree: selectable, indented by its depth, which is data on the row. */
+    /** A row of the flat tree, its words set in by its depth, which is data on the row; its look - a listed row's - is the house's. */
     public record pv_list_row() implements CssClass<PreferencesStyles> {
         @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--pv-depth")); }
-        @Override public List<? extends Wearable> wears() { return List.of(of(Selectable.class, Color.Surface.class), of(Selectable.class, Color.Ink.class), of(Selectable.class, Color.Edge.class), of(Selectable.class, Shape.Rule.class), of(Control.class, Shape.Corner.class), of(Selectable.class, Motion.Ease.class), of(Selectable.class, Affordance.Cursor.class), of(Body.class, Type.Face.class), of(Caption.class, Type.Scale.class)); }
         @Override public String body() { return """
-            padding: 6px 10px 6px calc(10px + var(--pv-depth, 0) * 16px);
+            text-indent: calc(var(--pv-depth, 0) * 16px);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -250,14 +153,22 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
         }
     }
 
-    public record pv_child() implements CssClass<PreferencesStyles> {
-        @Override public List<? extends Wearable> wears() { return List.of(of(Divider.class, Color.Edge.class), of(Divider.class, Shape.Rule.class), of(Body.class, Color.Ink.class)); }
+    /** A setting's row: its name and, at its end, its value, in a row - the setting row's own layout; its look is its leaf's. */
+    public record pv_setting_row() implements CssClass<PreferencesStyles> {
         @Override public String body() { return """
-            border-width: 0 0 1px 0;
-            padding: 6px 0;
             display: flex;
-            gap: 12px;
             align-items: baseline;
+            """;
+        }
+    }
+
+    /** A setting row's value, at its end, cut short where the row ends. */
+    public record pv_setting_row_value() implements CssClass<PreferencesStyles> {
+        @Override public String body() { return """
+            margin-left: auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             """;
         }
     }
@@ -266,10 +177,9 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
     public List<CssClass<PreferencesStyles>> cssClasses() {
         return List.of(new pv_root(), new pv_master(), new pv_detail(),
                        new pv_kicker(), new pv_title(), new pv_summary(), new pv_note(), new pv_actions(),
-                       new pv_options(), new pv_option(), new pv_option_note(),
-                       new pv_switch(), new pv_switch_track(), new pv_switch_knob(),
+                       new pv_options(), new pv_option(),
                        new pv_range(), new pv_readout(),
                        new pv_list(), new pv_list_row(),
-                       new pv_children(), new pv_child());
+                       new pv_children(), new pv_setting_row(), new pv_setting_row_value());
     }
 }

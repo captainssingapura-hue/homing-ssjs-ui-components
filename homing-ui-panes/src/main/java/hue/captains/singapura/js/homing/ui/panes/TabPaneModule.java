@@ -1,10 +1,15 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
+
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -16,7 +21,7 @@ import java.util.List;
  * and so is closing it; what it is asked where it stands — a press, a menu —
  * goes to the host it is in. RFC 0066 E3, appendix "tab-panes".
  */
-public record TabPaneModule() implements DomModule<TabPaneModule> {
+public record TabPaneModule() implements DomModule<TabPaneModule>, ImplFor<HousePanes.TabPane> {
 
     /** The class. */
     public record TabPane() implements BranchComponent<TabPaneModule> {
@@ -32,7 +37,9 @@ public record TabPaneModule() implements DomModule<TabPaneModule> {
                         new PaneStyles.mtp_tab_content(),
                         new PaneStyles.mtp_tab_content_hidden()
                 ), PaneStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabChipModule.TabChip()), TabChipModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys()), PaneKeysModule.INSTANCE))
                 .build();
     }

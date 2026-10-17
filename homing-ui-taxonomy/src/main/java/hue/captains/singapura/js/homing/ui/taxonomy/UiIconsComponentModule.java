@@ -1,0 +1,22 @@
+package hue.captains.singapura.js.homing.ui.taxonomy;
+
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
+
+import java.util.List;
+
+/**
+ * homing-ui-icons's component module, defined beside the components it lists (D40, D46): those the jar implements - a flat list; their parts come in with them.
+ * A definition alone - what a style jar's check needs of the jar - while the jar keeps the implementation.
+ */
+public record UiIconsComponentModule() implements ComponentModule {
+
+    public static final UiIconsComponentModule INSTANCE = new UiIconsComponentModule();
+
+    @Override public List<? extends Component<?>> components() {
+        return List.of(HouseIcons.AddIcon.INSTANCE, HouseIcons.RemoveIcon.INSTANCE, HouseIcons.CloseIcon.INSTANCE, HouseIcons.ResetIcon.INSTANCE,
+                       HouseIcons.RotateIcon.INSTANCE, HouseIcons.FlipIcon.INSTANCE, HouseIcons.PinIcon.INSTANCE, HouseIcons.CheckIcon.INSTANCE,
+                       HouseIcons.GripIcon.INSTANCE, HouseIcons.DiscloseIcon.INSTANCE, HouseIcons.SettingsIcon.INSTANCE, HouseIcons.SizeIcon.INSTANCE,
+                       HouseIcons.AspectIcon.INSTANCE, HouseIcons.ExtentIcon.INSTANCE, HouseIcons.LevelIcon.INSTANCE);
+    }
+}

@@ -1,0 +1,13 @@
+/* The code in retro-futurism: code in a line of words, in a fixed face on a faint wash. Whole: every property its look has (D9). */
+$casting {
+    color: inherit;
+    background-color: var(--fp-wash-faint);
+    border-radius: 2px;
+    padding-block: 0.1em;
+    padding-inline: 0.35em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+    font-weight: inherit;
+    font-size: 0.875em;
+    line-height: inherit;
+    letter-spacing: normal;
+}

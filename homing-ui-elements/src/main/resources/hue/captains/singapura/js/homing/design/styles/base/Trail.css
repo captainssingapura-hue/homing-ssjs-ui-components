@@ -1,0 +1,10 @@
+/* The trail in the base layer: the way back, crumb by crumb - its words softer than what they are written on, whichever ink that is; every style's alike. Whole: every property its look has (D9). */
+$casting {
+    --current-soft: color-mix(in oklab, currentColor 80%, transparent);
+
+    color: var(--current-soft);
+    background-color: transparent;
+    gap: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+}

@@ -5,15 +5,16 @@ import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.core.StandardJsModuleType;
-import hue.captains.singapura.js.homing.design.DesignCrate;
 import hue.captains.singapura.js.homing.server.ServerCrate;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsCrate;
+import hue.captains.singapura.js.homing.ui.look.UiLookCrate;
 
 import java.util.List;
 
 /**
  * The control panel's crate: the house's controllability as a page has it - the generated
- * catalogue and the helper that asks it - and the control panel, which makes each option's control.
+ * catalogue and the helper that asks it - and the control panel, a widget, which makes each
+ * option's control. It ships the panel, so it is a vehicle.
  */
 public final class UiControlPanelCrate implements Crate, ComponentVehicle {
 
@@ -23,15 +24,16 @@ public final class UiControlPanelCrate implements Crate, ComponentVehicle {
 
     @Override public String name() { return "homing-ui-control-panel"; }
 
-    @Override public List<Crate> requires() { return List.of(ServerCrate.INSTANCE, DesignCrate.INSTANCE, UiElementsCrate.INSTANCE); }
+    @Override public List<Crate> requires() { return List.of(ServerCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE); }
 
     @Override public C0_Components<?> components() { return UiControlPanelComponents.INSTANCE; }
 
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(ControlCatalogueModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                CrateEntry.of(ControlLeavesModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(ControlsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(ControlPanelModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(ControlPanelModule.INSTANCE),
                 CrateEntry.of(ControlPanelStyles.INSTANCE));
     }
 }
