@@ -141,6 +141,9 @@ class TabStripTest extends UiPanesJsTest {
         eval("strip.keys(null, null)");
         assertTrue(eval("chips[1].keys === 'away' && !chips[1]._mark.has('mtp_chip_mark_on') && B.getAttribute('data-keys') === null").asBoolean(), "away: no mark");
         assertTrue(eval("chips[0].crosses(chips[0]._close) && !chips[0].crosses(A)").asBoolean(), "its cross told from the rest of it");
+        // the castings the tab makes of its parts, back in the tab's jar (D51), where they are
+        assertTrue(eval("chips[0]._mark.has('styled-within-icon')").asBoolean(), "its keys mark: the icon the tab casts as its keys - a shaping role, so the icon's own class");
+        assertTrue(eval("chips[0]._closer.el.has('styled-close-button_close')").asBoolean(), "its cross: the close button as Close, the casting's class");
     }
 
     @Test

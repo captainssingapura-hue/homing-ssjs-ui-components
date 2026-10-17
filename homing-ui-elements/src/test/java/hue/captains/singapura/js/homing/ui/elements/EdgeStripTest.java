@@ -69,7 +69,7 @@ class EdgeStripTest extends UiElementsJsTest {
         assertTrue(eval("strip.lip.classList.contains('el_strip_lip') && strip.root.classList.contains('el_strip')").asBoolean());
         assertTrue(eval("strip.root.classList.contains('styled-edge-strip')").asBoolean(), "the strip wears its leaf's class");
         assertTrue(eval("!strip.lip.classList.contains('styled-edge-strip')").asBoolean(),
-                "the lip, a slice of the old look, wears nothing styled until it is a leaf of its own (D17)");
+                "the lip wears its own leaf, a handle cast to reveal the strip - never a slice of the strip's (D17)");
         assertEquals("group", eval("strip.root.getAttribute('role')").asString());
         assertEquals("Workspace", eval("strip.root.getAttribute('aria-label')").asString(), "named for whoever cannot see it");
         assertTrue(eval("hidden() && !strip.isShown()").asBoolean(), "not there until the hand comes to the edge");

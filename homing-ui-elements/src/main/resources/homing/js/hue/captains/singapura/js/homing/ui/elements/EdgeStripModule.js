@@ -26,8 +26,7 @@
 //
 // It takes no keys of its own and claims nothing: what is in it is the
 // caller's, as a panel's slot is. Its look is the house's edge strip; the lip
-// wears only the strip's ground - the strip's edge, showing. Its own classes
-// only place.
+// is a handle of its own, cast to reveal the strip. Its own classes only place.
 // =============================================================================
 
 const _stripOwner = Object.freeze({ toString: () => "edgeStrip" });
