@@ -13,10 +13,10 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 import java.util.List;
 
-/** base's look of tab-picker_picker: CSS of its own. */
+/** base's look of tab-picker_picker: as its component on its own, by delegation. */
 public record TabPickerPicker() implements CastingStylePerRole<BaseScheme, Base, HousePanes.TabPicker, HouseDoing.Picker> {
     @Override public StylingRes<BaseScheme, Base, HousePanes.TabPicker, HouseDoing.Picker> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.RootDelegation<>(new TabPicker());
     }
 
     @Override public PartsSpec<BaseScheme, Base, HousePanes.TabPicker> parts() {

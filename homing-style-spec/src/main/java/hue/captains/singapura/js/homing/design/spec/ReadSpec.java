@@ -142,19 +142,22 @@ public record ReadSpec() implements StatelessFunctionalObject {
         for (PartSpec<?, ?, ?> p : parts.parts()) if (expected.containsKey(p.slot())) reach(p.look(), p.casting(), taxonomy, top, reached, problems);
         var passed = new HashSet<Class<?>>(List.of(type));
         CastingStylePerRole<?, ?, ?, ?> at = look;
+        Casting atAs = as;
         while (true) {
             CastingStylePerRole<?, ?, ?, ?> next = switch (at.style()) {
                 case StylingRes.CssContent<?, ?, ?, ?> c -> null;
                 case StylingRes.Delegation<?, ?, ?, ?> d -> d.to();
+                case StylingRes.RootDelegation<?, ?, ?, ?> r -> r.to();
                 case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> p.to();
                 case null -> { problems.add(at.getClass().getName() + " gives nothing: CSS of its own, or a delegation"); yield null; }
             };
             if (next == null) break;
+            if (at.style() instanceof StylingRes.RootDelegation<?, ?, ?, ?>) atAs = atAs.alone();
             if (!passed.add(next.getClass())) {
                 problems.add(type.getName() + " delegates round to " + next.getClass().getName());
                 break;
             }
-            reach(next, as, taxonomy, top, reached, problems);
+            reach(next, atAs, taxonomy, top, reached, problems);
             at = next;
         }
     }

@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
@@ -13,10 +12,10 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 import java.util.List;
 
-/** neo-brutalism's look of choice-option_style: CSS of its own. */
+/** neo-brutalism's look of choice-option_style: as its component on its own, by delegation. */
 public record ChoiceOptionStyle() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseItems.ChoiceOption, HouseDoing.Style> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseItems.ChoiceOption, HouseDoing.Style> style() {
-        return new StylingRes.CssContent<>(new BaseColours.OnInverted(), new BaseColours.Border(), new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.AccentWashSoft());
+        return new StylingRes.RootDelegation<>(new ChoiceOption());
     }
 
     @Override public PartsSpec<BaseScheme, NeoBrutalism, HouseItems.ChoiceOption> parts() {

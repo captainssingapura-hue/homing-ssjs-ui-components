@@ -8,8 +8,9 @@ import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 /**
  * A look of a component in a role in a style (RFC 0067, D53): the role is in its type, as the style and the component
  * are - the role root's for the component on its own. A role means the same everywhere, so a look of one role never
- * stands for another's: it gives CSS of its own, or delegates to the look of the same component in the same role, of its
- * style or the style it is written over ({@link StylingRes}).
+ * stands for another role's: it gives CSS of its own, or delegates to the look of the same component in the same role,
+ * of its style or the style it is written over - or, drawn as its component is, to the component's look on its own in
+ * its style ({@link StylingRes}).
  *
  * <pre>{@code
  * public record PlainButtonAction() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.PlainButton, HouseDoing.Action> {
@@ -27,6 +28,6 @@ import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 public non-sealed interface CastingStylePerRole<Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>, R extends RoleNode>
         extends CastingStyle<Sc, S, C> {
 
-    /** Its CSS, or a delegation to the look of the same component in the same role, of its style or the one it is written over. */
+    /** Its CSS, or a delegation: the same component in the same role, of its style or the one below; or the component on its own, of its style. */
     StylingRes<Sc, S, C, R> style();
 }

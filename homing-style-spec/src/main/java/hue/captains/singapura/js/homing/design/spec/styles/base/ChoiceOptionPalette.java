@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
@@ -13,10 +12,10 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 import java.util.List;
 
-/** base's look of choice-option_palette: CSS of its own. */
+/** base's look of choice-option_palette: as its component on its own, by delegation. */
 public record ChoiceOptionPalette() implements CastingStylePerRole<BaseScheme, Base, HouseItems.ChoiceOption, HouseDoing.Palette> {
     @Override public StylingRes<BaseScheme, Base, HouseItems.ChoiceOption, HouseDoing.Palette> style() {
-        return new StylingRes.CssContent<>(new BaseColours.OnInverted(), new BaseColours.Border(), new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.AccentWashSoft());
+        return new StylingRes.RootDelegation<>(new ChoiceOption());
     }
 
     @Override public PartsSpec<BaseScheme, Base, HouseItems.ChoiceOption> parts() {

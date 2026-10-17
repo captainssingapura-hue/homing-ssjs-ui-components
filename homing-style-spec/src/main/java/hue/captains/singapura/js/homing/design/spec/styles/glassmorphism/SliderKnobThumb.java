@@ -2,15 +2,14 @@ package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** glassmorphism's look of slider-knob_thumb: CSS of its own. */
+/** glassmorphism's look of slider-knob_thumb: as its component on its own, by delegation. */
 public record SliderKnobThumb() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.SliderKnob, HouseDoing.Thumb> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.SliderKnob, HouseDoing.Thumb> style() {
-        return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Accent(), new BaseColours.Ring());
+        return new StylingRes.RootDelegation<>(new SliderKnob());
     }
 }

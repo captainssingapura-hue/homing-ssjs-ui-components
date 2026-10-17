@@ -49,6 +49,7 @@ public record ReadDag() implements StatelessFunctionalObject {
         StyleDag.Gives gives = switch (look.style()) {
             case StylingRes.CssContent<?, ?, ?, ?> c -> StyleDag.Gives.CSS;
             case StylingRes.Delegation<?, ?, ?, ?> d -> StyleDag.Gives.DELEGATION;
+            case StylingRes.RootDelegation<?, ?, ?, ?> r -> StyleDag.Gives.ROOT_DELEGATION;
             case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> StyleDag.Gives.PARENT_DELEGATION;
         };
         nodes.put(id, new StyleDag.Node(id, layer, as, gives, root, look));
@@ -60,6 +61,8 @@ public record ReadDag() implements StatelessFunctionalObject {
             case StylingRes.CssContent<?, ?, ?, ?> c -> { }
             case StylingRes.Delegation<?, ?, ?, ?> d ->
                     edges.add(new StyleDag.Edge(id, visit(spec, d.to(), layer, as, false, nodes, edges), StyleDag.Points.DELEGATION, null));
+            case StylingRes.RootDelegation<?, ?, ?, ?> r ->
+                    edges.add(new StyleDag.Edge(id, visit(spec, r.to(), layer, as.alone(), false, nodes, edges), StyleDag.Points.ROOT_DELEGATION, null));
             case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> {
                 DesignStyle<?> below = spec.parent(layer).orElseThrow(() -> new IllegalStateException(id + " delegates below " + layer.token() + ", which is written over nothing"));
                 edges.add(new StyleDag.Edge(id, visit(spec, p.to(), below, as, false, nodes, edges), StyleDag.Points.PARENT_DELEGATION, null));

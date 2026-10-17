@@ -32,10 +32,10 @@ public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Edge> edges)
     }
 
     /** What a look gives. */
-    public enum Gives { CSS, DELEGATION, PARENT_DELEGATION }
+    public enum Gives { CSS, DELEGATION, ROOT_DELEGATION, PARENT_DELEGATION }
 
     /** What an edge is. */
-    public enum Points { PART, DELEGATION, PARENT_DELEGATION }
+    public enum Points { PART, DELEGATION, ROOT_DELEGATION, PARENT_DELEGATION }
 
     /**
      * A look.

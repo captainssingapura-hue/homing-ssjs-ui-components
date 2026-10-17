@@ -48,7 +48,7 @@ class StyleDagTest {
             for (StyleDag.Edge e : dag.edges()) {
                 StyleDag.Node from = byId.get(e.from()), to = byId.get(e.to());
                 boolean kept = switch (e.points()) {
-                    case PART, DELEGATION -> from.layer().equals(to.layer());
+                    case PART, DELEGATION, ROOT_DELEGATION -> from.layer().equals(to.layer());
                     case PARENT_DELEGATION -> SPEC.parent(from.layer()).map(to.layer()::equals).orElse(false);
                 };
                 if (!kept) problems.add(s.token() + ": " + e.from() + " -" + e.points() + "-> " + e.to() + " leaves its layer");

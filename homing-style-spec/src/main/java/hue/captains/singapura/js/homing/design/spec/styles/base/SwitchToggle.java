@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
@@ -13,10 +12,10 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import java.util.List;
 
-/** base's look of switch_toggle: CSS of its own. */
+/** base's look of switch_toggle: as its component on its own, by delegation. */
 public record SwitchToggle() implements CastingStylePerRole<BaseScheme, Base, HouseControls.Switch, HouseDoing.Toggle> {
     @Override public StylingRes<BaseScheme, Base, HouseControls.Switch, HouseDoing.Toggle> style() {
-        return new StylingRes.CssContent<>(new BaseColours.Ring());
+        return new StylingRes.RootDelegation<>(new Switch());
     }
 
     @Override public PartsSpec<BaseScheme, Base, HouseControls.Switch> parts() {

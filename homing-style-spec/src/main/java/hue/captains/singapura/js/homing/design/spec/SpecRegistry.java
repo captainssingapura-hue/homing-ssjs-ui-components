@@ -73,6 +73,7 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
             switch (at.style()) {
                 case StylingRes.CssContent<?, ?, ?, ?> c -> { return at; }
                 case StylingRes.Delegation<?, ?, ?, ?> d -> at = d.to();
+                case StylingRes.RootDelegation<?, ?, ?, ?> r -> at = r.to();
                 case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> at = p.to();
             }
         }

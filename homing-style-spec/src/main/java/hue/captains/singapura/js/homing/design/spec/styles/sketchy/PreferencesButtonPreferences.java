@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
@@ -13,10 +12,10 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import java.util.List;
 
-/** sketchy's look of preferences-button_preferences: CSS of its own. */
+/** sketchy's look of preferences-button_preferences: as its component on its own, by delegation. */
 public record PreferencesButtonPreferences() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.PreferencesButton, HouseDoing.Preferences> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.PreferencesButton, HouseDoing.Preferences> style() {
-        return new StylingRes.CssContent<>(new BaseColours.Faint(), new BaseColours.Ring());
+        return new StylingRes.RootDelegation<>(new PreferencesButton());
     }
 
     @Override public PartsSpec<BaseScheme, Sketchy, HouseControls.PreferencesButton> parts() {

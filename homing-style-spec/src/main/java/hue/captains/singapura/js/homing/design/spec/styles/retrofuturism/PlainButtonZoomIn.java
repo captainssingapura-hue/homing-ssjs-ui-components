@@ -2,15 +2,14 @@ package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** retro-futurism's look of plain-button_zoom-in: CSS of its own. */
+/** retro-futurism's look of plain-button_zoom-in: as its component on its own, by delegation. */
 public record PlainButtonZoomIn() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.PlainButton, HouseDoing.ZoomIn> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.PlainButton, HouseDoing.ZoomIn> style() {
-        return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Text(), new BaseColours.Border(), new BaseColours.Ring(), new BaseColours.GlowDim(), new BaseColours.GlowMedium(), new BaseColours.GlowStrong(), new BaseColours.GlowFull());
+        return new StylingRes.RootDelegation<>(new PlainButton());
     }
 }

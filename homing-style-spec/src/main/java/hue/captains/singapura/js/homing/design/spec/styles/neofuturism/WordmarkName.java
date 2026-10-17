@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of wordmark_name: CSS of its own. */
+/** neo-futurism's look of wordmark_name: as its component on its own, by delegation. */
 public record WordmarkName() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Wordmark, HouseSaying.Name> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Wordmark, HouseSaying.Name> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.RootDelegation<>(new Wordmark());
     }
 }

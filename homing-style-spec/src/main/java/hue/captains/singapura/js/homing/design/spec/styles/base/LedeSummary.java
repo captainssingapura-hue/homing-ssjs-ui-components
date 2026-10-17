@@ -3,14 +3,13 @@ package hue.captains.singapura.js.homing.design.spec.styles.base;
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's look of lede_summary: CSS of its own. */
+/** base's look of lede_summary: as its component on its own, by delegation. */
 public record LedeSummary() implements CastingStylePerRole<BaseScheme, Base, HouseText.Lede, HouseSaying.Summary> {
     @Override public StylingRes<BaseScheme, Base, HouseText.Lede, HouseSaying.Summary> style() {
-        return new StylingRes.CssContent<>(new BaseColours.TextFaded());
+        return new StylingRes.RootDelegation<>(new Lede());
     }
 }

@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's look of wordmark_name: CSS of its own. */
+/** sketchy's look of wordmark_name: as its component on its own, by delegation. */
 public record WordmarkName() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Wordmark, HouseSaying.Name> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Wordmark, HouseSaying.Name> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.RootDelegation<>(new Wordmark());
     }
 }

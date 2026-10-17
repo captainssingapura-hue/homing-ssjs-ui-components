@@ -2,15 +2,14 @@ package hue.captains.singapura.js.homing.design.spec.styles.neumorphism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neumorphism's look of plain-button_zoom-out: CSS of its own. */
+/** neumorphism's look of plain-button_zoom-out: as its component on its own, by delegation. */
 public record PlainButtonZoomOut() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseControls.PlainButton, HouseDoing.ZoomOut> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseControls.PlainButton, HouseDoing.ZoomOut> style() {
-        return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Text(), new BaseColours.Border(), new BaseColours.Ring(), new BaseColours.ShadeFirm());
+        return new StylingRes.RootDelegation<>(new PlainButton());
     }
 }

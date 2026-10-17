@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of readout_value: CSS of its own. */
+/** neo-futurism's look of readout_value: as its component on its own, by delegation. */
 public record ReadoutValue() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Readout, HouseSaying.Value> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Readout, HouseSaying.Value> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.RootDelegation<>(new Readout());
     }
 }

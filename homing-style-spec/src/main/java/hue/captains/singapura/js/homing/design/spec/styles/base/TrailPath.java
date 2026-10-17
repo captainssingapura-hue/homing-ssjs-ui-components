@@ -5,17 +5,16 @@ import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import java.util.List;
 
-/** base's look of trail_path: CSS of its own. */
+/** base's look of trail_path: as its component on its own, by delegation. */
 public record TrailPath() implements CastingStylePerRole<BaseScheme, Base, HouseContainers.Trail, HouseDoing.Path> {
     @Override public StylingRes<BaseScheme, Base, HouseContainers.Trail, HouseDoing.Path> style() {
-        return new StylingRes.CssContent<>(new BaseColours.Soft());
+        return new StylingRes.RootDelegation<>(new Trail());
     }
 
     @Override public PartsSpec<BaseScheme, Base, HouseContainers.Trail> parts() {

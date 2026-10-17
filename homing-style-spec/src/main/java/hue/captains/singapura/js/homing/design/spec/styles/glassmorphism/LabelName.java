@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of label_name: CSS of its own. */
+/** glassmorphism's look of label_name: as its component on its own, by delegation. */
 public record LabelName() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Label, HouseSaying.Name> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Label, HouseSaying.Name> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.RootDelegation<>(new Label());
     }
 }

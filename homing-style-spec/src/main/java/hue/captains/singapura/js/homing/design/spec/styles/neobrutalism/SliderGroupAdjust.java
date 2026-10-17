@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
-import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
@@ -15,10 +14,10 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 import java.util.List;
 
-/** neo-brutalism's look of slider-group_adjust: CSS of its own. */
+/** neo-brutalism's look of slider-group_adjust: as its component on its own, by delegation. */
 public record SliderGroupAdjust() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseContainers.SliderGroup, HouseDoing.Adjust> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseContainers.SliderGroup, HouseDoing.Adjust> style() {
-        return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Border(), new BaseColours.Accent(), new BaseColours.KeysCandidate(), new BaseColours.KeysLent());
+        return new StylingRes.RootDelegation<>(new SliderGroup());
     }
 
     @Override public PartsSpec<BaseScheme, NeoBrutalism, HouseContainers.SliderGroup> parts() {

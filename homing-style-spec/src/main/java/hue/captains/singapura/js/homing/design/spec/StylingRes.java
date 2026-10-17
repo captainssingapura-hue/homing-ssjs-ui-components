@@ -1,7 +1,9 @@
 package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleNode;
+import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
@@ -14,8 +16,10 @@ import java.util.Objects;
 
 /**
  * What a look gives (RFC 0067, D53): its own CSS, or a delegation - bounded by style, part and role, and by nothing
- * else: the look of the same component in the same role, of the same style or the style it is written over. The bound
- * is in the types, so a delegation to another role, another component or a style it is not written over does not compile.
+ * else: the look of the same component in the same role, of the same style or the style it is written over; or, for a
+ * look of a role, the same component's look on its own, of the same style - a role drawn as its component is. The
+ * bound is in the types, so a delegation to another role, another component or a style it is not written over does not
+ * compile.
  *
  * @param <Sc> the scheme of the style answering
  * @param <S>  the style answering
@@ -23,7 +27,7 @@ import java.util.Objects;
  * @param <R>  the role it is drawn in
  */
 public sealed interface StylingRes<Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>, R extends RoleNode>
-        extends ValueObject permits StylingRes.CssContent, StylingRes.Delegation, StylingRes.ParentDelegation {
+        extends ValueObject permits StylingRes.CssContent, StylingRes.Delegation, StylingRes.RootDelegation, StylingRes.ParentDelegation {
 
     /**
      * Its own CSS - the resource at its class's canonical name - and every colour of the tree that CSS uses, each one the
@@ -54,6 +58,19 @@ public sealed interface StylingRes<Sc extends ColorScheme, S extends DesignStyle
             CastingStylePerRole<Sc, S, C, R> to) implements StylingRes<Sc, S, C, R> {
         public Delegation {
             Objects.requireNonNull(to, "Delegation.to");
+        }
+    }
+
+    /**
+     * A role's look drawn as its component's on its own, in the same style: no CSS of its own. Only a look of a role
+     * delegates so - the component on its own is the role root's, and is never its own target.
+     *
+     * @param to the same component's look on its own, in the same style
+     */
+    record RootDelegation<Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>, R extends Role<?>>(
+            CastingStylePerRole<Sc, S, C, RoleRoot> to) implements StylingRes<Sc, S, C, R> {
+        public RootDelegation {
+            Objects.requireNonNull(to, "RootDelegation.to");
         }
     }
 
