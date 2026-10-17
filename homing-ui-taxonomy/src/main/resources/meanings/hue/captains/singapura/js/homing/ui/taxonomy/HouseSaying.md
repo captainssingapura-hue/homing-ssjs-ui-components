@@ -93,17 +93,9 @@ that is wrong.
 
 Shows a state or a place by a mark rather than by words.
 
-## Keys
-
-Shows that the keyboard is with the owner: what the user types goes there.
-
 ## Landing
 
 Shows where a dragged thing would land if it were let go now.
-
-## Disclose
-
-Shows that a choice leads to further choices, rather than doing something at once.
 
 ## Check
 

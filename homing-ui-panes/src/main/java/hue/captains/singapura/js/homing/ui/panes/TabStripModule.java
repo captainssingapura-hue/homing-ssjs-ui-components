@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.elements.PillModule;
 import hue.captains.singapura.js.homing.ui.elements.DropMarkModule;
@@ -41,6 +42,7 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
     @Override
     public ImportsFor<TabStripModule> imports() {
         return ImportsFor.<TabStripModule>builder()
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PillModule.Pill()), PillModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton()), IconButtonModule.INSTANCE))

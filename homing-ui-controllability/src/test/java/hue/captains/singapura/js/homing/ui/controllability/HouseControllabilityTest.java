@@ -96,7 +96,7 @@ class HouseControllabilityTest {
         expected.put("dialog", "modal-overlay");
         expected.put("context-menu", "overlay");
         expected.put("floating-pane", "placeable");
-        expected.put("icon", "content");
+        expected.put("close-icon", "content");   // under the Icon branch, declared on the branch (D52)
         for (String p : List.of("plain-card", "clickable-card", "summary-view", "slider-group")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));

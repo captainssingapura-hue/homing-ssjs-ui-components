@@ -188,7 +188,7 @@ class TabStrip {
         this._addBtn = null;
         if (opts && typeof opts.onAdd === "function") {
             // the house's icon button, cast as what adds to its owner, holding the add icon: its look is the style's
-            var plus = new Icon(branch.createElement("add-icon", Icon.TAG), { name: "add" }, ROLE.SYMBOL);
+            var plus = new Icon(branch.createElement("add-icon", Icon.TAG), ICON.ADD_ICON, ROLE.FACE);
             this._add = new IconButton(branch.elementMaker("add"), { icon: plus, label: "Add a tab" }, ROLE.ADD);
             this._add.setOnClick(new TabStripAdd(opts));
             var addBtn = this._add.el;
@@ -217,7 +217,7 @@ class TabStrip {
         this._tail.appendChild(this._pill.el);
         if (opts && typeof opts.onClose === "function") {   // the window's cross, at the very end of its one bar
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
-            var closing = new CloseButton(branch.elementMaker("close"), { label: "Close these tabs" }, ROLE.CLOSE);
+            var closing = new CloseButton(branch.elementMaker("close"), { face: branch.elementMaker("close-face"), label: "Close these tabs" }, ROLE.CLOSE);
             closing.setOnClick(new TabStripClose(opts));
             var closeBtn = closing.el;
             css.addClass(closeBtn, mtp_bar_close);   // its place at the bar's end

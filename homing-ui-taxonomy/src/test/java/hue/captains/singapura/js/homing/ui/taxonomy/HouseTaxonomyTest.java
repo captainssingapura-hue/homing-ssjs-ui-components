@@ -34,16 +34,16 @@ class HouseTaxonomyTest {
 
     /** The common components ui-components ships today, by their class names; its Button is realized by the button leaves, its Card by PlainCard and ClickableCard. */
     private static final Set<String> SHIPPED = Set.of(
-            "PlainCard", "ClickableCard", "SummaryView", "Slider", "SliderGroup", "Panel", "EdgeStrip", "Dialog", "FloatingPane", "Icon", "ContextMenu",
+            "PlainCard", "ClickableCard", "SummaryView", "Slider", "SliderGroup", "Panel", "EdgeStrip", "Dialog", "FloatingPane", "CloseIcon", "ContextMenu",
             "Link", "Crumb", "Scrim", "Separator", "Delimiter", "Label", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6", "Caption", "Readout");
 
     @Test
     void theHouseIsReadWhole_withItsCatalogue() {
-        assertEquals(24, HOUSE.branches().size(), "the field, the split and the chooser among them, their leaves the modules' components, defined here (D40); the headings a branch of the text, a leaf a level");
-        assertEquals(116, HOUSE.components().size(), "the common 90 and the modules' 26, all defined here (D40): a table cell's words a text cell (D42); the edge strip's lip a handle of its own, the tab strip's tail and the slider group's rack regions of their own; the card plain or clickable, the summary a view of its own; a document table's cells containers, their words strong or muted, each a leaf of its own; the slider's rail, and its knob and groove apart from the toggle's; the brand's mark a part of its own; the panel's head among them, a bar of its own; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
-        assertEquals(92, HOUSE.roles().size(), "the catalogue beside the tree, whole: the extensions name their parts in its words");
-        assertEquals(121, HOUSE.parts().size(), "a header cell's title and a data cell's value, each a text cell (D42); the slots, each a part once its owner is appended - the modules' components' among them; the strip's tabs, its tail, a slider group's rack, and the slider's rail among them; the edge strip's lip; the site bar's brand and trail; the brand's mark and its name; the float layer's floats; the panel's head and its body; a table's header cells and its data cells");
-        assertEquals(50, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the table's two cells among them; the components that have parts - the modules' among them; the slider's knob none: its mark the slider's symbol");
+        assertEquals(25, HOUSE.branches().size(), "the icon a branch, its pictures its leaves (D52); the field, the split and the chooser among them, their leaves the modules' components, defined here (D40); the headings a branch of the text, a leaf a level");
+        assertEquals(135, HOUSE.components().size(), "the common 104 and the modules' 31 - the icons twenty of them, each a leaf (D52), the house's fifteen and the panes' five; all defined here (D40): a table cell's words a text cell (D42); the edge strip's lip a handle of its own, the tab strip's tail and the slider group's rack regions of their own; the card plain or clickable, the summary a view of its own; a document table's cells containers, their words strong or muted, each a leaf of its own; the slider's rail, and its knob and groove apart from the toggle's; the brand's mark a part of its own; the panel's head among them, a bar of its own; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
+        assertEquals(95, HOUSE.roles().size(), "the catalogue beside the tree, whole - where an icon sits among it (D52): the extensions name their parts in its words");
+        assertEquals(122, HOUSE.parts().size(), "the close button's face, its icon (D52); a header cell's title and a data cell's value, each a text cell (D42); the slots, each a part once its owner is appended - the modules' components' among them; the strip's tabs, its tail, a slider group's rack, and the slider's rail among them; the edge strip's lip; the site bar's brand and trail; the brand's mark and its name; the float layer's floats; the panel's head and its body; a table's header cells and its data cells");
+        assertEquals(51, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the close button among them (D52); the table's two cells among them; the components that have parts - the modules' among them; the slider's knob none: its mark the slider's symbol");
     }
 
     /**
@@ -81,8 +81,8 @@ class HouseTaxonomyTest {
             assertFalse(descendants(b).isEmpty(), b.getClass().getSimpleName() + " has no component under it");
         assertEquals(List.of("control", "text", "container", "mark", "item", "track", "region"),
                 HOUSE.children(Root.INSTANCE).stream().map(n -> n.token()).toList(), "level 1, in the order first reached - through the modules, in theirs");
-        assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
-                HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, seventeen at level 2 - the headings, a branch of the text, the field, the split and the chooser among them");
+        assertEquals(List.of(1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+                HOUSE.branches().stream().map(ComponentBranch::level).toList(), "seven at level 1, eighteen at level 2 - the icon among them (D52), the headings, a branch of the text, the field, the split and the chooser among them");
     }
 
     @Test
@@ -134,7 +134,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(24 + 116 + 21 + 92 + 8 + 22 + 7 + 14, nodes.size());
+        assertEquals(25 + 135 + 22 + 95 + 8 + 22 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
@@ -181,7 +181,7 @@ class HouseTaxonomyTest {
 
     /** A component's parts, each said as its token, how many, and what plays it. */
     private static List<String> said(Component<?> owner) {
-        return HOUSE.partsOf(owner).stream().map(p -> p.token() + " " + p.cardinality().multiplicity() + " " + p.base().token()).toList();
+        return HOUSE.partsOf(owner).stream().map(p -> p.token() + " " + p.cardinality().multiplicity() + " " + String.join(" | ", p.bases().stream().map(Component::token).toList())).toList();
     }
 
     private static List<Component<?>> descendants(ComponentBranch b) {

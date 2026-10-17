@@ -26,13 +26,13 @@ class HouseRoleCatalogueTest {
     private static final RoleCatalogue CATALOGUE = HouseRoleCatalogue.INSTANCE.read();
 
     @Test
-    void threeTopBranches_eighteenBeneath_ninetyTwoRoles() {
+    void threeTopBranches_nineteenBeneath_ninetyFiveRoles() {
         assertEquals(List.of(HouseSaying.Saying.INSTANCE, HouseDoing.Doing.INSTANCE, HouseShaping.Shaping.INSTANCE),
                 CATALOGUE.children(RoleRoot.INSTANCE));
-        assertEquals(21, CATALOGUE.branches().size());
-        assertEquals(18, CATALOGUE.branches().stream().filter(b -> b.level() == 2).count());
-        assertEquals(92, CATALOGUE.roles().size());
-        assertEquals(92, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
+        assertEquals(22, CATALOGUE.branches().size());
+        assertEquals(19, CATALOGUE.branches().stream().filter(b -> b.level() == 2).count());
+        assertEquals(95, CATALOGUE.roles().size());
+        assertEquals(95, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
     }
 
     @Test
@@ -42,7 +42,7 @@ class HouseRoleCatalogueTest {
         expected.put("describing", List.of("summary", "note", "tag"));
         expected.put("guiding", List.of("hint", "prompt", "placeholder"));
         expected.put("reporting", List.of("value", "level", "count", "status", "error"));
-        expected.put("signalling", List.of("keys", "landing", "disclose", "check"));
+        expected.put("signalling", List.of("landing", "check"));
         expected.put("scaling", List.of("span", "rest", "notch", "figure"));
         expected.put("choosing", List.of("choice", "style", "palette", "what", "how", "where", "picker", "query"));
         expected.put("committing", List.of("go", "cancel", "action", "skip"));
@@ -56,6 +56,7 @@ class HouseRoleCatalogueTest {
         expected.put("members", List.of("member", "entry", "dock", "cell", "group", "column"));
         expected.put("dividers", List.of("seam", "break"));
         expected.put("handles", List.of("reveal", "chip", "opener", "pull", "scroll"));
+        expected.put("picturing", List.of("face", "leading", "measure", "keys", "disclose"));   // where an icon sits on its owner (D52)
         var actual = new LinkedHashMap<String, List<String>>();
         for (RoleBranch b : CATALOGUE.branches())
             if (b.level() == 2) actual.put(b.name().value(), CATALOGUE.children(b).stream().map(RoleNode::name).map(n -> n.value()).toList());
@@ -70,7 +71,7 @@ class HouseRoleCatalogueTest {
             assertEquals(2, branch.level(), r + " is filed at level 2");
             perTop.merge(CATALOGUE.parent(branch).name().value(), 1L, Long::sum);
         }
-        assertEquals(Map.of("saying", 24L, "doing", 36L, "shaping", 32L), perTop);
+        assertEquals(Map.of("saying", 22L, "doing", 36L, "shaping", 37L), perTop);
     }
 
     @Test

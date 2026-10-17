@@ -7,9 +7,12 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.icons.IconModule;
+import hue.captains.singapura.js.homing.ui.icons.IconRoomModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
+
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 
 import java.util.List;
 
@@ -31,9 +34,11 @@ public record MenuItemModule() implements DomModule<MenuItemModule>, ImplFor<Hou
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ItemBehaviorModule.ItemBehavior()), ItemBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconRoomModule.IconRoom()), IconRoomModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ElementStyles.el_menu_item(), new ElementStyles.el_menu_item_label(),
-                        new ElementStyles.el_menu_item_hint(), new ElementStyles.el_menu_item_disclose()), ElementStyles.INSTANCE))
+                        new ElementStyles.el_menu_item_hint(), new ElementStyles.el_menu_item_disclose(), new ElementStyles.el_menu_item_lead()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 .build();
     }
 

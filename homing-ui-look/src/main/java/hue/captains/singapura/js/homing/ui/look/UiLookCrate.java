@@ -11,8 +11,8 @@ import java.util.List;
  * The look's crate - the design's, with no component and no behaviour: {@code Look}, which names a leaf's
  * classes for a casting and puts them on; what it wears by, generated from the taxonomy and the styles - the
  * castings ({@code ROLE}, {@code CASTINGS}), the trees of states and events ({@code STATE}, {@code EVENT}), the
- * look's manifest ({@code LOOK_TARGETS}, {@code TREATED}) and its derived sheet; and the lexicon a mark is a
- * word of ({@code ICONS}, and the sheet each style writes the words in). A component's crate requires it for
+ * look's manifest ({@code LOOK_TARGETS}, {@code TREATED}) and its derived sheet; and the icons a page may show
+ * ({@code ICON}, each a leaf of the Icon branch, its picture its look - D52). A component's crate requires it for
  * its look; so does any code that dresses an element of its own - a grid's cells - and takes nothing else.
  */
 public final class UiLookCrate implements Crate {
@@ -34,7 +34,6 @@ public final class UiLookCrate implements Crate {
                 CrateEntry.of(HouseStyleSheet.INSTANCE),
                 CrateEntry.of(HousePaletteSheet.INSTANCE),
                 CrateEntry.of(LookManifestModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(LexiconSheet.INSTANCE),
                 CrateEntry.of(IconsModule.INSTANCE),
                 CrateEntry.of(LookModule.INSTANCE));
     }

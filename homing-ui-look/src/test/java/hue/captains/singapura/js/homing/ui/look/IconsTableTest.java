@@ -1,30 +1,28 @@
 package hue.captains.singapura.js.homing.ui.look;
 
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseLexicon;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The table is the lexicon's: it names every word the house has on this classpath by its token, each
- * to the class that shows it, and imports the sheet with it. The sheet - every word in the style a
- * theme names - is the installed styling's, and held where the house's styles are (HouseLexiconSheetTest).
+ * The icons a page may show are the taxonomy's (RFC 0067, D52): every leaf of the Icon branch, in the order read - the
+ * house's fifteen, then the panes' five where their module is registered. The table itself is made from the installed
+ * instance's taxonomy, and held where an instance is installed (the icons' jar's IconTest).
  */
 class IconsTableTest {
 
     @Test
-    void theTableIsGeneratedFromTheLexicon_byToken() {
-        var body = IconsModule.INSTANCE.selfContent(null);
-        assertEquals("void lexicon_sheet;", body.get(2), "the sheet loads wherever the table does");
-        assertEquals("const ICONS = Object.freeze({ \"add\": \"word-add\", \"remove\": \"word-remove\", \"close\": \"word-close\", \"reset\": \"word-reset\","
-                   + " \"rotate\": \"word-rotate\", \"flip\": \"word-flip\", \"pin\": \"word-pin\", \"check\": \"word-check\", \"grip\": \"word-grip\","
-                   + " \"disclose\": \"word-disclose\", \"settings\": \"word-settings\", \"size\": \"word-size\", \"aspect\": \"word-aspect\","
-                   + " \"extent\": \"word-extent\", \"level\": \"word-level\" });", body.get(3));
-        assertEquals(HouseLexicon.INSTANCE.read().words().stream().map(w -> w.token()).toList(), IconsModule.INSTANCE.names());
-        var imported = IconsModule.INSTANCE.imports().getAllImports().values().stream().flatMap(mi -> mi.allImports().stream())
-                .map(e -> e.getClass().getSimpleName()).toList();
-        assertEquals(List.of("lexicon_sheet"), imported);
+    void theIcons_everyLeafOfTheIconBranch_inTheOrderRead() {
+        List<Component<?>> icons = IconsModule.Icons.INSTANCE.of(HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES));
+        assertEquals(20, icons.size(), "the house's fifteen and the panes' five");
+        assertEquals(HouseIcons.AddIcon.INSTANCE, icons.get(0));
+        assertTrue(icons.contains(HouseIcons.WithinIcon.INSTANCE));
+        assertEquals(List.of(), IconsModule.INSTANCE.imports().getAllImports().keySet().stream().toList(), "the table imports nothing: the pictures are the icons' looks");
     }
 }

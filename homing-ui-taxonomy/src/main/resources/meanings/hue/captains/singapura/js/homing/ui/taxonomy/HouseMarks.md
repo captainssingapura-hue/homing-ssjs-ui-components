@@ -1,9 +1,5 @@
 # The house's marks and tracks
 
-## Icon
-
-A glyph from the house's vocabulary, standing for one idea wherever it is shown.
-
 ## Detent
 
 Marks a value the user's movement may settle on.

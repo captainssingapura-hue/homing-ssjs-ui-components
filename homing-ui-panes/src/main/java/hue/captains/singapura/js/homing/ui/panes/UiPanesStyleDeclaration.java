@@ -34,6 +34,11 @@ public record UiPanesStyleDeclaration() implements StyleDeclaration {
                 new KickerPrompt(),
                 new PlainButtonChoice(),
                 new PlainButtonCancel(),
-                new TabPickerPicker())));
+                new TabPickerPicker(),
+                new ColumnIcon(),
+                new RowIcon(),
+                new MergeIcon(),
+                new DetachIcon(),
+                new WithinIcon())));
     }
 }

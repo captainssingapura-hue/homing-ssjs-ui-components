@@ -48,14 +48,14 @@ class SimpleComponentsDeclaredTest extends UiElementsJsTest {
                 + " size: function () {}, extent: function () {}, aspect: function () {} };");
         js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         // what the simple components need, loaded in the crate's order - icons from their own crate, as handles
-        js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
+        js.eval("js", "var ic_base = { name: 'ic_base' };");   // the icon's box
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         var needed = new LinkedHashSet<EsModule<?>>();
         for (EsModule<?> m : SIMPLE) need(m, needed);
         for (CrateEntry e : NEEDED_FROM) {
             EsModule<?> m = e.module();
-            if (!needed.contains(m) || m == IconsModule.INSTANCE) continue;   // the lexicon's table, given above
+            if (!needed.contains(m) || m == IconsModule.INSTANCE) continue;   // the instance's icons, given above
             if (m instanceof SelfContent sc) js.eval("js", String.join("\n", sc.selfContent(null)));
             else if (m instanceof CssGroup<?> || m instanceof DerivedCss<?>) continue;
             else loadModule("/homing/js/" + m.getClass().getPackageName().replace('.', '/') + "/" + m.getClass().getSimpleName() + ".js");

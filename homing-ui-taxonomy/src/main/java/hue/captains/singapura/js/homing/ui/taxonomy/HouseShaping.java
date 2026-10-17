@@ -22,6 +22,28 @@ public final class HouseShaping {
         @Override public boolean functional() { return true; }
     }
 
+    // ── Picturing — where its icons sit on the owner ─────────────────────
+
+    /**
+     * Where the owner shows a picture (D52): an icon, whose look is its own whatever it is to its owner - the roles here
+     * place it, as every role of the branch places its part.
+     */
+    public record Picturing() implements L2_RoleBranch<Shaping> {
+        public static final Picturing INSTANCE = new Picturing();
+        @Override public Shaping parent() { return Shaping.INSTANCE; }
+    }
+
+    /** The picture the owner is: an icon button's, a close button's, the preferences button's. */
+    public record Face() implements Role<Picturing> { public static final Face INSTANCE = new Face(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
+    /** The picture before the owner's words: a menu item's. */
+    public record Leading() implements Role<Picturing> { public static final Leading INSTANCE = new Leading(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
+    /** The picture on the owner's knob: a grip to take it by, or what it measures - a slider's. */
+    public record Measure() implements Role<Picturing> { public static final Measure INSTANCE = new Measure(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
+    /** Shows that the keyboard is with the owner: what the user types goes there. */
+    public record Keys() implements Role<Picturing> { public static final Keys INSTANCE = new Keys(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
+    /** Shows that a choice leads to further choices, rather than doing something at once. */
+    public record Disclose() implements Role<Picturing> { public static final Disclose INSTANCE = new Disclose(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
+
     // ── Bands — strips of the owner's room ───────────────────────────────
 
     /** Strips of the owner's room. */

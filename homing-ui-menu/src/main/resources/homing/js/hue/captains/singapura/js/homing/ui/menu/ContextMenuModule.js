@@ -98,10 +98,12 @@ class ContextMenu {
         var name = prefix + "row-" + node.id.replace(/[^A-Za-z0-9_-]/g, "_");
         var opens = !!(node.nodes && node.nodes.length);
         // the house's menu item, cast as a choice of its menu: its glyph, its name, its hint and its way on its own; placed by the menu
-        var item = new MenuItem(this._branch.createBranch(name), { label: node.label, icon: node.icon || null, hint: node.hint || null,
+        // the row's icon: one of ICON, or named by its token where the menu comes as data
+        var icon = node.icon == null ? null : (typeof node.icon === "string" ? Icon.of(node.icon) : node.icon);
+        var item = new MenuItem(this._branch.createBranch(name), { label: node.label, icon: icon, hint: node.hint || null,
                                 expanded: opens ? false : null }, ROLE.CHOICE);
         item.el.setAttribute("data-id", node.id);
-        var row = { id: node.id, item: item, el: item.el, mark: item.mark, icon: node.icon || null, sub: null, disabled: false, hidden: false, level: level };
+        var row = { id: node.id, item: item, el: item.el, icon: icon, sub: null, disabled: false, hidden: false, level: level };
         if (opens) row.sub = this._level(name + "-sub", node.label, node.nodes, name + "-", level.depth + 1);
         item.setOnPointedChanged(new MenuRowPointed(this, row));
         item.setOnClick(new MenuRowPressed(this, row));
@@ -125,7 +127,7 @@ class ContextMenu {
             css.toggleClass(r.el, cm_item_hidden, r.hidden);
             r.item.enabled = !r.disabled;
             r.item.checked = s.checked == null ? null : !!s.checked;
-            if (s.checked) r.mark.set("check"); else if (r.icon) r.mark.set(r.icon); else r.mark.clear();
+            r.item.lead(s.checked ? ICON.CHECK_ICON : r.icon);   // the check while it is checked, else its own: which icon leads it is the menu's to say
             if (r.sub) this._apply(r.sub, object, state);
         }
     }

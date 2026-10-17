@@ -29,7 +29,6 @@ import hue.captains.singapura.js.homing.ui.controllability.HouseControlOptions.Z
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
@@ -102,7 +101,7 @@ public record HouseControllability() implements StatelessFunctionalObject {
                 new ControlTypeAt(HouseContainers.ContextMenu.INSTANCE, OVERLAY),
                 new ControlTypeAt(HouseBranches.Split.INSTANCE, ARRANGEABLE),
                 new ControlTypeAt(HouseContainers.FloatingPane.INSTANCE, PLACEABLE),
-                new ControlTypeAt(HouseMarks.Icon.INSTANCE, CONTENT)));
+                new ControlTypeAt(HouseBranches.Icon.INSTANCE, CONTENT)));
         var extensions = new ArrayList<ControllabilityExtension>();
         ServiceLoader.load(ControllabilityExtension.class, HouseControllability.class.getClassLoader()).forEach(extensions::add);
         extensions.sort(Comparator.comparing(e -> e.getClass().getName()));

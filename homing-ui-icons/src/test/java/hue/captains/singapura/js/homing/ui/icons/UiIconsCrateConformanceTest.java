@@ -34,15 +34,12 @@ class UiIconsCrateConformanceTest {
             if (!(entry.declaredType() instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
             String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            // the icon puts on the word's class itself, the lexicon sheet's - derived - as Look puts on its own: the house's allowance
-            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src)).stream()
-                    .filter(f -> !(m.equals(IconModule.class.getName()) && f.rule().value().equals("no-raw-css") && f.message().contains("classList")))
-                    .toList();
+            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src));
             assertEquals(List.of(), findings, () -> m + ": "
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(1, checked, "the component; the styles are a sheet");
+        assertEquals(2, checked, "the component and the room its owners mount it in; the styles are a sheet");
     }
 
     @Test

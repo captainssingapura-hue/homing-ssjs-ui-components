@@ -55,6 +55,7 @@ class FloatLayerTest extends UiFloatingJsTest {
             return { name: name, dissolved: [], kids: new Map(), names: new Set(),
                 createElement: function (n, tag) { if (!VALID.test(n) || this.names.has(n)) throw new RangeError('createElement: "' + n + '" is not a free, valid name'); this.names.add(n); return el(tag); },
                 createBranch: function (n) { if (!VALID.test(n) || this.kids.has(n)) throw new RangeError('createBranch: "' + n + '" is not a free, valid name'); var b = fakeBranch(n); b.parent = this; this.kids.set(n, b); return b; },
+                elementMaker: function (n) { var self = this; return function (tag) { return self.createElement(n, tag); }; },
                 dissolve: function () { this.dissolved.push(name); log.push("dissolved:" + name); if (this.parent) this.parent.kids.delete(name); },
                 activate: function (owner) { this.owner = String(owner); } };
         }

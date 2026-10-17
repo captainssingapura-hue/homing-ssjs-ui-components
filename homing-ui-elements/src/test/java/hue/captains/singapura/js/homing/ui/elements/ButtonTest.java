@@ -60,7 +60,7 @@ class ButtonTest extends UiElementsJsTest {
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         // the icon an icon button holds: the real Icon, its classes handles as the shim's css takes them
-        js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
+        js.eval("js", "var ic_base = { name: 'ic_base' };");   // the icon's box
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         js.eval("js", "var el_icon_button = { name: 'el_icon_button' };");   // the icon button's face, laid out
@@ -159,10 +159,13 @@ class ButtonTest extends UiElementsJsTest {
         assertThrows(PolyglotException.class, () -> eval("new ToggleButton(el('button'), { pressed: 'yes' })"), "pressed is true or false");
     }
 
-    /** The close button: a mark, the style's own cross, never words; its words its name. */
+    /** The close button: its face the close icon - the style's own cross - never words; its words its name. */
     @Test
     void aCloseButton_isAMark_namedForWhoeverCannotSeeIt() {
-        eval("var c = new CloseButton(el('button'), {});");
+        eval("var c = new CloseButton(el('button'), { face: function (tag) { return el(tag); } });");
+        assertTrue(eval("c.face.icon === ICON.CLOSE_ICON && c.el.kids[0] === c.face.el && c.face.el.classList.contains('styled-close-icon')").asBoolean(),
+                "its face the close icon, in it, its look its own");
+        assertThrows(PolyglotException.class, () -> eval("new CloseButton(el('button'), {})"), "its face is made on the room its owner gives it");
         assertEquals("Close", str("c.el.getAttribute('aria-label')"), "Close unless given");
         assertEquals("", str("c.el.textContent"), "no words on its face");
         assertTrue(has("c", "styled-close-button"), "its leaf's class");
@@ -175,13 +178,12 @@ class ButtonTest extends UiElementsJsTest {
     /** The icon button: holds whatever icon it is handed - which icon is the icon's business - and is named for whoever cannot see it. */
     @Test
     void anIconButton_holdsWhicheverIconItIsHanded_andNeverAsksItsName() {
-        eval("var plus = new Icon(el('span'), { name: 'add' }); var b = new IconButton(el('button'), { icon: plus, label: 'Add a tab' });");
+        eval("var plus = new Icon(el('span'), ICON.ADD_ICON, ROLE.FACE); var b = new IconButton(el('button'), { icon: plus, label: 'Add a tab' });");
         assertTrue(eval("b.icon === plus && b.el.kids[0] === plus.el").asBoolean(), "its face: the icon, in it");
         assertEquals("Add a tab", str("b.el.getAttribute('aria-label')"));
         assertEquals("Add a tab", str("b.el.getAttribute('title')"), "its tooltip: the browser's own");
         assertEquals("", str("b.el.textContent"), "no words on its face");
-        eval("b.icon.set('remove')");
-        assertEquals("remove", str("b.icon.name()"), "another icon is the icon's to show; the button is not asked");
+        assertTrue(eval("b.icon.icon === ICON.ADD_ICON").asBoolean(), "which icon is the icon's: the button is not asked");
         assertTrue(has("b", "styled-icon-button"));
         assertTrue(has("b", "el_icon_button"), "its face laid out: the icon centred in its box, whatever the icon");
         assertThrows(PolyglotException.class, () -> eval("new IconButton(el('button'), { label: 'Add' })"), "its face is an icon");
@@ -192,8 +194,8 @@ class ButtonTest extends UiElementsJsTest {
     @Test
     void itsCompanion_makesTheElementItTakes() {
         eval("var made = []; var branch = { createElement: function (n, tag) { made.push(n + ':' + tag); return el(tag); } };"
-           + "var b = new CloseButton(CloseButtonFactory.create(branch, 'x'), {});");
-        assertEquals("x:button", str("made"));
+           + "var b = new CloseButton(CloseButtonFactory.create(branch, 'x'), { face: function (tag) { made.push('face:' + tag); return el(tag); } });");
+        assertEquals("x:button,face:span", str("made"), "its element, then its face's");
         assertEquals("button", str("CloseButtonFactory.tag"));
         assertTrue(eval("Object.isFrozen(PlainButtonFactory) && PlainButtonFactory instanceof SimpleComponentFactory").asBoolean(), "a singleton, beside its class");
     }

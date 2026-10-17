@@ -54,7 +54,7 @@ class ContextMenuStewardTest extends UiMenuJsTest {
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); },
                     toggleClass: function (e, c, f) { e.classList.toggle(c, f); } };
         var cm_layer = "cm_layer", cm_frame = "cm_frame", cm_frame_static = "cm_frame_static", cm_specimen = "cm_specimen", cm_item_hidden = "cm_item_hidden", cm_separator = "cm_separator";
-        var el_menu_item = "el_menu_item", el_menu_item_label = "el_menu_item_label", el_menu_item_hint = "el_menu_item_hint", el_menu_item_disclose = "el_menu_item_disclose";
+        var el_menu_item = "el_menu_item", el_menu_item_lead = "el_menu_item_lead", el_menu_item_label = "el_menu_item_label", el_menu_item_hint = "el_menu_item_hint", el_menu_item_disclose = "el_menu_item_disclose";
         var console = { error: function (m, e) { log.push("error:" + m); } };
         var body = el("body");
         var document = { body: body, activeElement: body, listeners: {},
@@ -79,7 +79,7 @@ class ContextMenuStewardTest extends UiMenuJsTest {
         var page = fakeBranch("page");
         var sink = function (ev) { log.push(ev.kind === "Opened" ? "opened:" + ev.menuKind + "@" + ev.x + "," + ev.y : ev.kind === "Picked" ? "picked:" + ev.menuKind + "/" + ev.itemId : "closed:" + ev.menuKind + "/" + ev.reason); };
         // the record a Java registry stamps: three levels, an icon, a section change, a hint
-        var MENUS = { animal: { kind: "animal", nodes: [ { id: "rotate", label: "Rotate", icon: "rotate", hint: "a quarter turn" },
+        var MENUS = { animal: { kind: "animal", nodes: [ { id: "rotate", label: "Rotate", icon: "rotate-icon", hint: "a quarter turn" },
                                                           { id: "animal", label: "Animal", section: 1, nodes: [ { id: "cat", label: "Cat" }, { id: "dog", label: "Dog", nodes: [ { id: "big", label: "Big" }, { id: "small", label: "Small" } ] } ] } ] } };
         // the page's keyboard steward, faked: members and the holder, and the log of what the menu steward asks of it
         var members = {}, kbLog = [], holder = null;
@@ -97,7 +97,7 @@ class ContextMenuStewardTest extends UiMenuJsTest {
         function frame() { return steward._menus.animal.el; }
         function rows(f) { return (f || frame()).children.filter(function (c) { return c.has("el_menu_item"); }); }
         function row(id, f) { return rows(f).find(function (r) { return r.attr("data-id") === id; }); }
-        function mark(r) { return r.children[0]; }
+        function mark(r) { var room = r.children[0]; return room.children.length ? room.children[0] : room; }   // the icon leading the row, else its empty room
         function sub(i) { return steward._menus.animal._path[i].sub.el; }
         function dividers(f) { return (f || frame()).children.filter(function (c) { return c.has("cm_separator"); }).length; }
         function cursor(f) { var r = rows(f).find(function (r) { return r.attr("data-highlighted") === "true"; }); return r ? r.attr("data-id") : "-"; }
@@ -110,10 +110,7 @@ class ContextMenuStewardTest extends UiMenuJsTest {
         loadModule(P + "MenuEventsModule.js");
         loadModule(P + "MenuGeometryModule.js");
         loadModule(P + "MenuTreeModule.js");
-        // the icon component reads ICONS as it loads: the wardrobe's names first, as the served module would import them
-        js.eval("js", "var ic_base = 'ic_base', ICONS = { check: 'ic_check', disclose: 'ic_disclose', rotate: 'ic_rotate', flip: 'ic_flip', reset: 'ic_reset' };");
-        loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
-        TextsInJs.load(js, this::loadModule);   // the caption that is an item's hint
+        TextsInJs.load(js, this::loadModule);   // the caption that is an item's hint, and the instance's icons a row leads with
         for (String m : new String[] {"MarkBehaviorModule.js", "SeparatorModule.js", "ItemBehaviorModule.js", "MenuItemModule.js"})   // the separator between sections, and each row the house's menu item
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
         loadModule(P + "ContextMenuModule.js");
@@ -191,14 +188,14 @@ class ContextMenuStewardTest extends UiMenuJsTest {
         eval("var sub0 = row('animal'); dispatch(sub0, 'pointerenter', {});");
         assertEquals("true", eval("sub0.attr('aria-expanded')").asString(), "hovered: the submenu is open");
         assertEquals("2", eval("String(menusInDom())").asString(), "the submenu is a second frame in the layer, part of the one menu");
-        assertTrue(eval("mark(row('cat', sub(0))).has('ic_check') && mark(row('cat', sub(0))).has('ic_base')").asBoolean(), "the checked one's mark is the check icon");
-        assertTrue(eval("mark(row('rotate')).has('ic_rotate')").asBoolean(), "a row's own icon on its mark");
-        assertTrue(eval("!mark(row('animal')).has('ic_rotate') && row('animal').children[row('animal').children.length - 1].has('ic_disclose')").asBoolean(), "a row with rows ends in the disclose mark");
+        assertTrue(eval("mark(row('cat', sub(0))).has('styled-check-icon') && mark(row('cat', sub(0))).has('ic_base')").asBoolean(), "the checked one's mark is the check icon");
+        assertTrue(eval("mark(row('rotate')).has('styled-rotate-icon')").asBoolean(), "a row's own icon on its mark");
+        assertTrue(eval("!mark(row('animal')).has('styled-rotate-icon') && row('animal').children[row('animal').children.length - 1].has('styled-disclose-icon')").asBoolean(), "a row with rows ends in the disclose mark");
         assertTrue(eval("row('dog', sub(0)).has('cm_item_hidden')").asBoolean());
         eval("steward.close(); steward.open('animal', { fixed: false, animal: 'dog', noDogs: false }, { x: 10, y: 10 });");
         assertEquals("false", eval("row('rotate').attr('aria-disabled')").asString(), "bound afresh: the state is this object's");
         assertEquals("false", eval("row('animal').attr('aria-expanded')").asString(), "no submenu open after a rebind");
-        assertTrue(eval("!mark(row('cat', steward._menus.animal._root.rows[1].sub.el)).has('ic_check')").asBoolean(), "the check off a row no longer checked");
+        assertTrue(eval("!mark(row('cat', steward._menus.animal._root.rows[1].sub.el)).has('styled-check-icon')").asBoolean(), "the check off a row no longer checked");
     }
 
     @Test
@@ -275,8 +272,8 @@ class ContextMenuStewardTest extends UiMenuJsTest {
         assertTrue(dup.getMessage().contains("row id repeated: x"), dup.getMessage());
         var deep = assertThrows(PolyglotException.class, () -> eval("steward.define('deep').sub('a', 'A', function (a) { a.sub('b', 'B', function (b) { b.sub('c', 'C', function (c) { c.sub('d', 'D', function (d) { d.row('e', 'E'); }); }); }); }).done()"));
         assertTrue(deep.getMessage().contains("last level"), deep.getMessage());
-        assertEquals("animal,card", eval("steward.define('card').row('open', 'Open', { icon: 'reset', hint: 'again' }).done().kinds().sort().join(',')").asString());
-        assertEquals("open,Open,reset,again,0", eval("var n = steward._types.card.nodes[0]; [n.id, n.label, n.icon, n.hint, n.section].join(',')").asString());
+        assertEquals("animal,card", eval("steward.define('card').row('open', 'Open', { icon: 'reset-icon', hint: 'again' }).done().kinds().sort().join(',')").asString());
+        assertEquals("open,Open,reset-icon,again,0", eval("var n = steward._types.card.nodes[0]; [n.id, n.label, n.icon, n.hint, n.section].join(',')").asString());
     }
 
     @Test
@@ -295,7 +292,7 @@ class ContextMenuStewardTest extends UiMenuJsTest {
         assertEquals("3", eval("String(host.children.length)").asString(), "the root and both submenus, all in the host");
         assertTrue(eval("host.children.every(function (f) { return f.has('cm_frame') && f.has('cm_frame_static'); })").asBoolean(), "each frame static: in the host's flow");
         assertTrue(eval("row('animal', host.children[0]).attr('aria-expanded') === 'true' && row('animal', host.children[0]).attr('data-highlighted') === 'true'").asBoolean(), "a row with rows shown open");
-        assertTrue(eval("mark(row('cat', host.children[1])).has('ic_check') && row('rotate', host.children[0]).attr('aria-disabled') === 'true'").asBoolean(), "bound through the kind's handler");
+        assertTrue(eval("mark(row('cat', host.children[1])).has('styled-check-icon') && row('rotate', host.children[0]).attr('aria-disabled') === 'true'").asBoolean(), "bound through the kind's handler");
         eval("dispatch(row('cat', host.children[1]), 'click', {}); dispatch(row('small', host.children[2]), 'pointerenter', {});");
         assertEquals("", log(), "nothing picked, nothing closed");
         assertEquals("small", eval("cursor(host.children[2])").asString(), "hover still moves the cursor: the design's highlighted row on view");

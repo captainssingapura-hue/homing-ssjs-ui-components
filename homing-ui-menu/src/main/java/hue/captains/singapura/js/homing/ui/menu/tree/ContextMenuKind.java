@@ -18,7 +18,7 @@ import java.util.List;
  *         public static final Rotate INSTANCE = new Rotate();
  *         @Override public AnimalMenu parent() { return AnimalMenu.INSTANCE; }
  *         @Override public String label() { return "Rotate"; }
- *         @Override public Word<?> icon() { return HouseWords.Rotate.INSTANCE; }
+ *         @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.RotateIcon.INSTANCE; }
  *     }
  *     …
  * }

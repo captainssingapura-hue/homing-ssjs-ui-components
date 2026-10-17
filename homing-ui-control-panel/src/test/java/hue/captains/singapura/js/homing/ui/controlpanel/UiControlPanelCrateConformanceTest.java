@@ -88,8 +88,9 @@ class UiControlPanelCrateConformanceTest {
         assertTrue(js.contains("\"ask\": Object.freeze({ category: \"asking\", means: \"question\", rest: null, method: \"ask\", label: \"What does it show?\" })"), js);
         assertTrue(js.contains("\"modal-overlay\": Object.freeze([\"open-modal\", \"open\", \"close\"])"), js);
         assertTrue(js.contains("\"plain\": Object.freeze([])"), js);
-        assertTrue(js.contains("\"danger-button\": \"switchable\""), js);
-        assertTrue(js.contains("\"heading4\": \"plain\""), js);
-        assertTrue(js.contains("\"danger-button\": Object.freeze([\"colour\", \"size\", \"enabled\"])"), js);
+        // each leaf in the group of its answer
+        assertTrue(java.util.regex.Pattern.compile("\\[\"switchable\", \\[[^\\]]*\"danger-button\"").matcher(js).find(), js);
+        assertTrue(java.util.regex.Pattern.compile("\\[\"plain\", \\[[^\\]]*\"heading4\"").matcher(js).find(), js);
+        assertTrue(java.util.regex.Pattern.compile("\\[Object\\.freeze\\(\\[\"colour\", \"size\", \"enabled\"\\]\\), \\[[^\\]]*\"danger-button\"").matcher(js).find(), js);
     }
 }

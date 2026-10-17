@@ -1,7 +1,8 @@
 package hue.captains.singapura.js.homing.ui.menu;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Word;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 import hue.captains.singapura.js.homing.ui.menu.tree.M1_Node;
 import hue.captains.singapura.js.homing.ui.menu.tree.M2_Node;
@@ -32,7 +33,7 @@ class ContextMenuRegistryTest {
             public static final Rotate INSTANCE = new Rotate();
             @Override public AnimalMenu parent() { return AnimalMenu.INSTANCE; }
             @Override public String label() { return "Rotate"; }
-            @Override public Word<?> icon() { return HouseWords.Rotate.INSTANCE; }
+            @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.RotateIcon.INSTANCE; }
             @Override public String hint() { return "a quarter turn"; }
         }
         public record Change() implements M1_Node<AnimalMenu, Change> {
@@ -91,7 +92,7 @@ class ContextMenuRegistryTest {
 
     @Test
     void itStampsTheKindsAndTheirRowsAsData_iconsByToken_sectionsWhenSet() {
-        assertEquals("{\"animal\":{\"kind\":\"animal\",\"nodes\":[{\"id\":\"rotate\",\"label\":\"Rotate\",\"icon\":\"rotate\",\"hint\":\"a quarter turn\"},"
+        assertEquals("{\"animal\":{\"kind\":\"animal\",\"nodes\":[{\"id\":\"rotate\",\"label\":\"Rotate\",\"icon\":\"rotate-icon\",\"hint\":\"a quarter turn\"},"
                    + "{\"id\":\"change\",\"label\":\"Animal\",\"section\":1,\"nodes\":[{\"id\":\"cat\",\"label\":\"Cat\"},{\"id\":\"dog\",\"label\":\"Dog\",\"nodes\":[{\"id\":\"big\",\"label\":\"Big\"}]}]}]},"
                    + "\"counter\":{\"kind\":\"counter\",\"nodes\":[{\"id\":\"reset\",\"label\":\"Reset\"}]}}", R.json());
         assertTrue(R.js().get(2).startsWith("const MENUS = Object.freeze({"), R.js().toString());

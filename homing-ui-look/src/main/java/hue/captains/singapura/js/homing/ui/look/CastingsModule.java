@@ -82,7 +82,7 @@ public record CastingsModule() implements EsModule<CastingsModule>, SelfContent 
     private static List<String> castOf(Taxonomy taxonomy, Component<?> c) {
         var out = new LinkedHashSet<String>();
         out.add(quoted("standalone"));
-        for (Part<?, ?> p : taxonomy.parts()) if (p.base().equals(c)) out.add(quoted(p.role().name().value()));
+        for (Part<?, ?> p : taxonomy.parts()) if (p.bases().contains(c)) out.add(quoted(p.role().name().value()));
         return List.copyOf(out);
     }
 

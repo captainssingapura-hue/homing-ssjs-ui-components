@@ -2,14 +2,12 @@ package hue.captains.singapura.js.homing.ui.icons;
 
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
-import hue.captains.singapura.js.homing.ui.look.LexiconSheet;
 
 import java.util.List;
 
 /**
- * The icons' styles: the mark's box, and nothing else. The picture is the lexicon's - the word the
- * icon shows, written by the style worn ({@link LexiconSheet}) - so nothing here is a picture, and the
- * box is the same in every theme.
+ * The icons' styles: the mark's box, and nothing else. The picture is the icon's look - the style worn's, drawn on
+ * its ::before (D52) - so nothing here is a picture, and the box is the same in every theme.
  */
 public record IconStyles() implements CssGroup<IconStyles> {
 

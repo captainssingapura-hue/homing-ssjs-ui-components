@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * homing-style-neo-futurism's declaration of what it provides for styles (RFC 0067, appendix The Style Jars):
- * NeoFuturism's implementations of what it refines - 124, each a class of its own in
+ * NeoFuturism's implementations of what it refines - 125, each a class of its own in
  * hue.captains.singapura.js.homing.design.styles.neofuturism.
  */
 public record NeoFuturismStyleDeclaration() implements StyleDeclaration {
@@ -139,6 +139,7 @@ public record NeoFuturismStyleDeclaration() implements StyleDeclaration {
                 new PlainButtonCancel(),
                 new PlainButtonZoomOut(),
                 new PlainButtonZoomIn(),
-                new PlainButtonFit())));
+                new PlainButtonFit(),
+                new CloseIcon())));
     }
 }

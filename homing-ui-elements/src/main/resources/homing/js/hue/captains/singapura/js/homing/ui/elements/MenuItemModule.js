@@ -2,18 +2,20 @@
 // MenuItem — one choice of a menu: its glyph, its name, its hint, and its way
 // into a submenu. A simple component on a <div role="menuitem">, in the menu
 // item's look, made on the branch its owner hands it with its parts the
-// house's: its glyph an icon - its own word, or the check while it is checked,
-// as its owner says - its hint a caption cast as a hint, and, when it opens
-// rows, the disclose mark at its end. Usable or off (Enabled, aria-disabled);
+// house's: an icon leading it - any icon of the instance's (D52), the one its
+// owner mounts: its own, or the check while it is checked - its hint a caption
+// cast as a hint, and, when it opens rows, the disclose icon at its end. Usable or off (Enabled, aria-disabled);
 // the one its menu's cursor is on (Pointed, data-highlighted) - the pointer
 // coming onto it points at it, fired as its change; checked, or not, or
 // neither (aria-checked); and, for one that opens rows, whether they are open
 // (aria-expanded). A press while it is usable is its click. Where it sits, and
 // whether it is shown, is its menu's.
 //
-//   var item = new MenuItem(branch.createBranch("row-rotate"), { label: "Rotate", icon: "rotate", hint: "a quarter turn", expanded: false? }, ROLE.CHOICE);
+//   var item = new MenuItem(branch.createBranch("row-rotate"), { label: "Rotate", icon: ICON.ROTATE_ICON, hint: "a quarter turn", expanded: false? }, ROLE.CHOICE);
+//     icon       one of ICON, or none: its room kept, so the names beside it align
 //     expanded   null (the rest): it opens nothing; false or true: it opens rows, shut or open
-//   item.el / item.root  item.mark (its icon: set, clear)  item.label
+//   item.el / item.root  item.label
+//   item.lead(icon?)     read, or mount another icon in its leading room - one of ICON, or null for none
 //   item.enabled  item.pointed  item.checked  item.expanded
 //   item.setOnClick(handler)  item.setOnEnabledChanged(handler)  item.setOnPointedChanged(handler)
 // =============================================================================
@@ -65,9 +67,12 @@ class MenuItem extends SimpleComponent {
         css.addClass(this.el, el_menu_item);
         this.el.setAttribute("role", "menuitem");
         this.el.setAttribute("tabindex", "-1");
-        // its glyph, the house's icon: its own word, or none - at its width either way, so the names beside it align
-        this.mark = new Icon(branch.createElement("mark", Icon.TAG), icon ? { name: icon } : null, ROLE.SYMBOL);
-        this.el.appendChild(this.mark.el);
+        // its leading room, at its width whether an icon is mounted or not, so the names beside it align
+        this._leadRoom = branch.createElement("lead", "span");
+        css.addClass(this._leadRoom, el_menu_item_lead);
+        this.el.appendChild(this._leadRoom);
+        this._leads = new IconRoom(this._leadRoom, branch, "lead", ROLE.LEADING);   // any icon of the instance's
+        if (icon != null) this._leads.show(icon);
         this._label = branch.createElement("label", "span");
         css.addClass(this._label, el_menu_item_label);
         this.el.appendChild(this._label);
@@ -77,13 +82,16 @@ class MenuItem extends SimpleComponent {
             this.el.appendChild(this._hint.el);
         }
         if (this._get("expanded") !== null) {   // its way into its rows: the disclose mark, at its end
-            this._disclose = new Icon(branch.createElement("disclose", Icon.TAG), { name: "disclose" }, ROLE.DISCLOSE);
+            this._disclose = new Icon(branch.createElement("disclose", Icon.TAG), ICON.DISCLOSE_ICON, ROLE.DISCLOSE);
             css.addClass(this._disclose.el, el_menu_item_disclose);
             this.el.appendChild(this._disclose.el);
         }
         this.root = this.el;
         if (p.label != null) this.label = p.label;
     }
+
+    /** The icon leading it, or none; given one, it mounts it - any icon of the instance's, the one this item says. */
+    lead(icon) { return icon === undefined ? this._leads.shown : this._leads.show(icon); }
 
     /** Its name, as its label's words. */
     get label() { return this._label ? this._label.textContent : ""; }

@@ -30,6 +30,7 @@ class SliderTest extends UiElementsJsTest {
                              remove: function () { for (var i = 0; i < arguments.length; i++) classes.delete(arguments[i]); },
                              contains: function (c) { return classes.has(c); }, toggle: function (c, f) { if (f) classes.add(c); else classes.delete(c); } },
                 appendChild: function (c) { this.children.push(c); c.parentNode = this; return c; },
+                removeChild: function (c) { var i = this.children.indexOf(c); if (i >= 0) this.children.splice(i, 1); return c; },
                 setAttribute: function (k, v) { attrs[k] = String(v); }, getAttribute: function (k) { return attrs[k] == null ? null : attrs[k]; }, removeAttribute: function (k) { delete attrs[k]; }, hasAttribute: function (k) { return k in attrs; },
                 addEventListener: function (t, fn) { (this.listeners[t] = this.listeners[t] || []).push(fn); },
                 removeEventListener: function (t, fn) { var l = this.listeners[t] || []; var i = l.indexOf(fn); if (i >= 0) l.splice(i, 1); },
@@ -64,8 +65,8 @@ class SliderTest extends UiElementsJsTest {
     void load() {
         js = buildContext();
         TextsInJs.load(js, this::loadModule);   // its texts are the house's
-        // the icon component reads ICONS as it loads: the wardrobe's names first, as the served module would import them
-        js.eval("js", "var ic_base = 'ic_base', ICONS = { grip: 'ic_grip', size: 'ic_size', aspect: 'ic_aspect', extent: 'ic_extent', level: 'ic_level' };");
+        // the instance's icons, as the served module would import them, and the icon's box
+        js.eval("js", "var ic_base = 'ic_base';");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         for (String m : new String[] {"MarkBehaviorModule.js", "DetentModule.js", "TickModule.js"})   // the slider's detent and its scale's ticks, the house's marks
@@ -94,13 +95,15 @@ class SliderTest extends UiElementsJsTest {
         assertTrue(eval("s.root.has('styled-slider') && !s.root.has('slider__size-inset')").asBoolean(), "its root, its casting whole");
         assertTrue(eval("rail.has('styled-slider-rail') && rail.children[0].has('styled-slider-groove_span') && rail.children[0].children[0].has('styled-fill_level') && knob.has('styled-slider-knob_thumb')").asBoolean(),
                 "the rail - its role only placing it - the groove as its span, the fill its level, the knob its thumb");
-        assertTrue(eval("mark.has('ic_base') && mark.has('ic_grip')").asBoolean(), "a grip on the knob unless the slider says what it sets");
-        assertEquals("grip", eval("s.icon()").asString());
-        eval("s.icon('size');");
-        assertTrue(eval("mark.has('ic_size') && !mark.has('ic_grip')").asBoolean());
+        assertTrue(eval("mark.has('el_slider_mark') && mark.children[0].has('ic_base') && mark.children[0].has('styled-grip-icon')").asBoolean(),
+                "a grip on the knob unless the slider says what it sets: the knob's room, the icon mounted in it");
+        assertTrue(eval("s.icon() === ICON.GRIP_ICON").asBoolean());
+        eval("s.icon(ICON.SIZE_ICON);");
+        assertTrue(eval("mark.children.length === 1 && mark.children[0].has('styled-size-icon')").asBoolean(), "another of its five mounted in its place");
         eval("s.icon(null);");
-        assertTrue(eval("s.icon() === null && !mark.has('ic_size')").asBoolean(), "a bare knob");
-        assertEquals("aspect", eval("new Slider(page.createBranch('a'), { axis: true, icon: 'aspect' }).icon()").asString());
+        assertTrue(eval("s.icon() === null && mark.children.length === 0").asBoolean(), "a bare knob");
+        assertTrue(eval("new Slider(page.createBranch('a'), { axis: true, icon: ICON.ASPECT_ICON }).icon() === ICON.ASPECT_ICON").asBoolean());
+        assertThrows(org.graalvm.polyglot.PolyglotException.class, () -> eval("s.icon(ICON.CLOSE_ICON)"), "not one of its five");
         eval("s.value(-0.7);");
         assertEquals("15.000%,35.000%", eval("rail.prop('--sl-from') + ',' + rail.prop('--sl-span')").asString(), "a value below the detent fills leftwards from it");
         assertEquals("-0.7", eval("String(s.value())").asString());
@@ -178,7 +181,7 @@ class SliderTest extends UiElementsJsTest {
     @Test
     void stoodUp_theValueRisesFromTheBottom_theKnobIsTheCap_theTicksAtTheirHeights() {
         eval("""
-            var f = new Slider(page.createBranch("vocals"), { label: "vocals", vertical: true, min: -60, max: 10, step: 1, detents: [0], value: 0, icon: "level",
+            var f = new Slider(page.createBranch("vocals"), { label: "vocals", vertical: true, min: -60, max: 10, step: 1, detents: [0], value: 0, icon: ICON.LEVEL_ICON,
                         ticks: [{ at: 10, label: "+10" }, { at: 0, label: "0" }, { at: -20, label: "-20" }, { at: -60, label: "-inf" }, { at: 99, label: "off the scale" }],
                         format: function (v) { return v + " dB"; }, onInput: function (v) { log.push("in:" + v); } });
             var vr = f.root.children[1]; vr.rect = { left: 100, top: 0, width: 24, height: 200, right: 124, bottom: 200 };
@@ -187,7 +190,7 @@ class SliderTest extends UiElementsJsTest {
             function ins() { return log.filter(function (l) { return l.indexOf("in:") === 0; }).join(" "); }
             """);
         assertTrue(eval("f.root.has('el_slider_vertical') && vr.has('el_slider_rail_vertical') && vr.has('el_slider_rail_ticked')").asBoolean());
-        assertTrue(eval("vk.has('el_slider_cap') && !vk.has('el_slider_knob') && vk.children[0].has('el_slider_cap_mark') && vk.children[0].has('ic_level')").asBoolean(), "the cap, its mark");
+        assertTrue(eval("vk.has('el_slider_cap') && !vk.has('el_slider_knob') && vk.children[0].has('el_slider_cap_mark') && vk.children[0].children[0].has('styled-level-icon')").asBoolean(), "the cap, its mark");
         assertEquals("vertical", eval("vk.attr('aria-orientation')").asString());
         assertTrue(eval("vk.has('styled-slider-knob_thumb--vertical')").asBoolean(), "the cap stood up: its standing a state of its own, its style's size and corner");
         assertEquals("4", eval("String(vticks.length)").asString(), "a tick per value on the scale; one off it is dropped");

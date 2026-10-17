@@ -3,7 +3,7 @@
 // caller makes a sub-branch for it and hands it in, with its properties.
 // A label before the rail, a readout after; the knob runs in a groove, the
 // fill runs from the detent to the value, the knob takes the focus, and
-// carries a mark — an Icon: a grip, or the word for what the slider sets.
+// carries an icon — a grip, or one for what the slider sets (D52).
 // Its look is the house's: the slider wears its own casting, and each part
 // is a component of its own, made as cast - the rail as its editor, the
 // groove its span, the fill its level, the knob its thumb, the texts its
@@ -21,8 +21,8 @@
 //     min, max, step           any range: 0, 100, 1 unless said; axis: true is −1, 1, 0.1 with a
 //                              detent at 0 and the value at 0, each kept where it is said
 //     value, detents: [v…]     where the knob rests: the fill runs from the first detent, else from min
-//     icon                     the mark on the knob: an Icon word — "size", "aspect", "extent", "level" —
-//                              for what the slider sets; "grip" unless said; null for a bare knob
+//     icon                     the icon on the knob: ICON.SIZE_ICON, ASPECT_ICON, EXTENT_ICON, LEVEL_ICON
+//                              for what the slider sets; ICON.GRIP_ICON unless said; null for a bare knob
 //     vertical: true           stood up, as a fader: the value rises upward, the knob is the
 //                              style's cap, the label above, the readout below
 //     ticks: [{ at, label }…]  a scale beside the track: a tick at each value, its caption
@@ -40,7 +40,7 @@
 //     .setOn(on)               off is inert and says so
 //     .size(s)                 live, on the slider and its parts
 //     .label(text?)            read, or set
-//     .icon(name?)             read, or set: the knob's mark
+//     .icon(icon?)             read, or mount another of its five: the knob's icon
 //     .labelWidth(css?)        the label's width: a length, or null for its own
 //     .key(ev)                 a keydown, from whoever holds the keys for it: true when taken
 //     .current(on)             the one of a group: the knob ringed now, its aria-current
@@ -147,10 +147,11 @@ class Slider {
         knob.setAttribute("aria-valuemax", String(this._max));
         if (p.label != null) knob.setAttribute("aria-label", String(p.label));
         this._knob = knob;
-        this._mark = new Icon(branch.createElement("mark", Icon.TAG), null, ROLE.SYMBOL);   // the knob's mark, the slider's symbol
-        css.addClass(this._mark.el, vertical ? el_slider_cap_mark : el_slider_mark);
-        knob.appendChild(this._mark.el);
-        this.icon(p.icon === undefined ? "grip" : p.icon);
+        this._mark = branch.createElement("mark", "span");   // the knob's room for its icon: a grip, or what the slider measures
+        css.addClass(this._mark, vertical ? el_slider_cap_mark : el_slider_mark);
+        knob.appendChild(this._mark);
+        this._marks = new IconRoom(this._mark, branch, "mark", ROLE.MEASURE, [ICON.GRIP_ICON, ICON.SIZE_ICON, ICON.ASPECT_ICON, ICON.EXTENT_ICON, ICON.LEVEL_ICON]);
+        this._marks.show(p.icon === undefined ? ICON.GRIP_ICON : p.icon);
         rail.appendChild(knob);
         root.appendChild(rail);
 
@@ -158,7 +159,7 @@ class Slider {
         css.addClass(this._readout.el, el_slider_readout);
         root.appendChild(this._readout.el);
         this._texts.push(this._readout);
-        this._parts = [root, this._mark.el].concat(this._ticks);
+        this._parts = [root, this._mark].concat(this._ticks);
         if (this._detent) this._parts.push(this._detent);
         this._sized = [this._railPart, this._groove, this._thumb];   // its parts that grow by its size, each by its own
 
@@ -301,10 +302,7 @@ class Slider {
         if (text !== undefined) { this._label.text = String(text); this._knob.setAttribute("aria-label", String(text)); }
         return this._label.text;
     }
-    icon(name) {
-        if (name !== undefined) { if (name == null) this._mark.clear(); else this._mark.set(name); }
-        return this._mark.name();
-    }
+    icon(icon) { return icon === undefined ? this._marks.shown : this._marks.show(icon); }
     labelWidth(w) {
         if (w == null) this._label.el.style.removeProperty("--sl-label"); else this._label.el.style.setProperty("--sl-label", String(w));   // its place: how wide the slider gives it
         return this;

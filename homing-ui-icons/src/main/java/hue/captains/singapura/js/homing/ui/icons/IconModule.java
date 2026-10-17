@@ -1,9 +1,8 @@
 package hue.captains.singapura.js.homing.ui.icons;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplForLeavesOf;
 import hue.captains.singapura.js.homing.ui.look.IconsModule;
-import hue.captains.singapura.js.homing.ui.look.LexiconSheet;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 
 import hue.captains.singapura.js.homing.component.ElementComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -16,19 +15,17 @@ import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import java.util.List;
 
 /**
- * The {@code Icon} element component: {@code new Icon(el, { name? })} dresses
- * an element the caller minted — a span, {@code Icon.TAG} — as a mark that
- * shows the word of the house's lexicon named; {@code set(name)} changes the
- * word, {@code clear()} leaves the mark blank at its width, {@code name()} says
- * which it shows. A name not in {@code ICONS} is refused. The picture is the
- * style's: it writes the word ({@link LexiconSheet}).
+ * The {@code Icon} element component (RFC 0067, D52): {@code new Icon(el, ICON.CLOSE_ICON, role?)} dresses an element
+ * the caller minted - a span, {@code Icon.TAG} - as the icon handed in, one of {@code ICON}: every leaf of the Icon
+ * branch, alike but for their look, so its one class realizes every one ({@link ImplForLeavesOf}). The picture is the icon's look, the style worn's; an icon shows one
+ * picture, and another is another icon, which its owner mounts in its place.
  */
-public record IconModule() implements DomModule<IconModule>, ImplFor<HouseMarks.Icon> {
+public record IconModule() implements DomModule<IconModule>, ImplForLeavesOf<HouseBranches.Icon> {
 
     /** The class. */
     public record Icon() implements ElementComponent<IconModule> {
         @Override public String tag() { return "span"; }
-        @Override public String summary() { return "A mark that shows a word of the house's lexicon; the style worn writes it."; }
+        @Override public String summary() { return "An icon of the house's, one of ICON: its picture its look, the style worn's."; }
     }
 
     public static final IconModule INSTANCE = new IconModule();
@@ -37,7 +34,7 @@ public record IconModule() implements DomModule<IconModule>, ImplFor<HouseMarks.
     public ImportsFor<IconModule> imports() {
         return ImportsFor.<IconModule>builder()
                 .add(new ModuleImports<>(List.of(new IconStyles.ic_base()), IconStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconsModule.ICONS()), IconsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();

@@ -30,7 +30,7 @@ public record HouseRoleCatalogue() implements StatelessFunctionalObject {
                 HouseSaying.Hint.INSTANCE, HouseSaying.Prompt.INSTANCE, HouseSaying.Placeholder.INSTANCE,
                 HouseSaying.Value.INSTANCE, HouseSaying.Level.INSTANCE, HouseSaying.Count.INSTANCE, HouseSaying.Status.INSTANCE,
                 HouseSaying.Error.INSTANCE,
-                HouseSaying.Keys.INSTANCE, HouseSaying.Landing.INSTANCE, HouseSaying.Disclose.INSTANCE, HouseSaying.Check.INSTANCE,
+                HouseSaying.Landing.INSTANCE, HouseSaying.Check.INSTANCE,
                 HouseSaying.Span.INSTANCE, HouseSaying.Rest.INSTANCE, HouseSaying.Notch.INSTANCE, HouseSaying.Figure.INSTANCE,
                 // Doing: choosing, committing, changing, viewing, managing, going
                 HouseDoing.Choice.INSTANCE, HouseDoing.Style.INSTANCE, HouseDoing.Palette.INSTANCE, HouseDoing.What.INSTANCE,
@@ -53,7 +53,9 @@ public record HouseRoleCatalogue() implements StatelessFunctionalObject {
                 HouseShaping.Group.INSTANCE, HouseShaping.Column.INSTANCE,
                 HouseShaping.Seam.INSTANCE, HouseShaping.Break.INSTANCE,
                 HouseShaping.Reveal.INSTANCE, HouseShaping.Chip.INSTANCE, HouseShaping.Opener.INSTANCE, HouseShaping.Pull.INSTANCE,
-                HouseShaping.Scroll.INSTANCE);
+                HouseShaping.Scroll.INSTANCE,
+                HouseShaping.Face.INSTANCE, HouseShaping.Leading.INSTANCE, HouseShaping.Measure.INSTANCE, HouseShaping.Keys.INSTANCE,
+                HouseShaping.Disclose.INSTANCE);
     }
 
     /** The catalogue, read on its own - its branches reached through the roles - or refused with every problem in it. */

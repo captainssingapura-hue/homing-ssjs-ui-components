@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import hue.captains.singapura.js.homing.ui.menu.tree.MenuTrees;
 import org.junit.jupiter.api.Test;
@@ -22,8 +22,8 @@ class TabMenuTest {
         assertEquals("tab", TabMenu.INSTANCE.kind());
         assertEquals(List.of(), MenuTrees.validate(TabMenu.INSTANCE));
         assertEquals(List.of("detach", "close"), MenuTrees.rows(TabMenu.INSTANCE).stream().map(r -> r.id()).toList());
-        assertEquals(PaneWords.Detach.INSTANCE, TabMenu.Detach.INSTANCE.icon());
-        assertEquals(HouseWords.Close.INSTANCE, TabMenu.Close.INSTANCE.icon());
+        assertEquals(HouseIcons.DetachIcon.INSTANCE, TabMenu.Detach.INSTANCE.icon());
+        assertEquals(HouseIcons.CloseIcon.INSTANCE, TabMenu.Close.INSTANCE.icon());
         assertEquals(1, TabMenu.Close.INSTANCE.section(), "a divider before Close");
     }
 

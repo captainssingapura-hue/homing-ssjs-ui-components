@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * homing-style-neumorphism's declaration of what it provides for styles (RFC 0067, appendix The Style Jars):
- * Neumorphism's implementations of what it refines - 124, each a class of its own in
+ * Neumorphism's implementations of what it refines - 125, each a class of its own in
  * hue.captains.singapura.js.homing.design.styles.neumorphism.
  */
 public record NeumorphismStyleDeclaration() implements StyleDeclaration {
@@ -139,6 +139,7 @@ public record NeumorphismStyleDeclaration() implements StyleDeclaration {
                 new PlainButtonCancel(),
                 new PlainButtonZoomOut(),
                 new PlainButtonZoomIn(),
-                new PlainButtonFit())));
+                new PlainButtonFit(),
+                new CloseIcon())));
     }
 }

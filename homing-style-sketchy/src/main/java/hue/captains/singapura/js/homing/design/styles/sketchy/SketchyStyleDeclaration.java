@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * homing-style-sketchy's declaration of what it provides for styles (RFC 0067, appendix The Style Jars): Sketchy's
- * implementations of what it refines - 124, each a class of its own in
+ * implementations of what it refines - 130, each a class of its own in
  * hue.captains.singapura.js.homing.design.styles.sketchy.
  */
 public record SketchyStyleDeclaration() implements StyleDeclaration {
@@ -139,6 +139,12 @@ public record SketchyStyleDeclaration() implements StyleDeclaration {
                 new PlainButtonCancel(),
                 new PlainButtonZoomOut(),
                 new PlainButtonZoomIn(),
-                new PlainButtonFit())));
+                new PlainButtonFit(),
+                new CheckIcon(),
+                new DiscloseIcon(),
+                new CloseIcon(),
+                new PinIcon(),
+                new SettingsIcon(),
+                new GripIcon())));
     }
 }

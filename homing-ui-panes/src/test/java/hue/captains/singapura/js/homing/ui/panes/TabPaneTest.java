@@ -113,7 +113,6 @@ class TabPaneTest extends UiPanesJsTest {
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
         js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
         js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
-        js.eval("js", "var lexicon_sheet = 'lexicon-sheet';");   // the lexicon's table: a mark - the cross, the within mark - is a word of it
         js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
         for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js"})
@@ -139,7 +138,7 @@ class TabPaneTest extends UiPanesJsTest {
         assertEquals("tabpane-u1,tabpane-u2,tabpane-u3", eval("Array.from(register.branch.kids.keys()).join(',')").asString());
         assertEquals("a:b,doc/intro.md,x y", eval("register.ids().join(',')").asString(), "any string, in the order opened");
         assertEquals("pane", eval("names(register.get('a:b').branch)").asString(), "the pane, and nothing named after the id");
-        assertEquals("tab,icon,label,mark,close", eval("names(register.get('a:b').branch.kids.get('chip'))").asString(), "the tab and its parts, on a branch of its own");
+        assertEquals("tab,icon,label,mark,close,close-face", eval("names(register.get('a:b').branch.kids.get('chip'))").asString(), "the tab and its parts - the cross's face the close icon - on a branch of its own");
         assertEquals("chip,tabpane-u1", eval("Array.from(register.get('a:b').branch.kids.keys()).join(',')").asString(),
                 "the tab on a sub-branch of the tab-pane's own, the widget on one named as the tab-pane is");
         assertTrue(eval("handles.w1.branch.parent === register.get('a:b').branch").asBoolean());

@@ -17,7 +17,9 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.icons.IconModule;
+import hue.captains.singapura.js.homing.ui.icons.IconRoomModule;
+
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 
 import java.util.List;
 
@@ -54,6 +56,7 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
                 .add(new ModuleImports<>(List.of(new SliderScaleModule.SliderScale()), SliderScaleModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderRailModule.SliderRail()), SliderRailModule.INSTANCE))
@@ -79,7 +82,7 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
                         new ElementStyles.el_slider_cap_mark(),
                         new ElementStyles.el_slider_off()
                 ), ElementStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconRoomModule.IconRoom()), IconRoomModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DetentModule.Detent()), DetentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .build();

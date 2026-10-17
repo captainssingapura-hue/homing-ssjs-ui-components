@@ -26,9 +26,9 @@ public final class HouseItems {
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Enabled.INSTANCE, HouseStates.Pointed.INSTANCE); }
         @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
+            return List.of(DSL.anyOf(HouseBranches.Icon.INSTANCE).as(HouseShaping.Leading.INSTANCE).optional(),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Hint.INSTANCE).optional(),
-                           DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Disclose.INSTANCE).optional());
+                           DSL.part(HouseIcons.DiscloseIcon.INSTANCE).as(HouseShaping.Disclose.INSTANCE).optional());
         }
     }
 

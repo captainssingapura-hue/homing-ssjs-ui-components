@@ -90,12 +90,7 @@ public final class ComponentsConformance {
                     "hue.captains.singapura.js.homing.ui.look.LookModule",
                     new RuleId("no-raw-css"),
                     "Look IS the look's manager: the classes it puts on are a derived sheet's, the theme's, which the CSS "
-                            + "manager does not handle (RFC 0064, D25) - so its classList calls are where that typed path ends."),
-            new Allowance(
-                    "hue.captains.singapura.js.homing.ui.icons.IconModule",
-                    new RuleId("no-raw-css"),
-                    "Icon IS the lexicon's manager, as Look is the look's: the word's class it puts on is the lexicon sheet's, "
-                            + "derived - each style's writing of the word - which the CSS manager does not handle (RFC 0064, D25)."));
+                            + "manager does not handle (RFC 0064, D25) - so its classList calls are where that typed path ends."));
 
     /** The top level and everything it requires, transitively. */
     public static Collection<Crate> closure() {

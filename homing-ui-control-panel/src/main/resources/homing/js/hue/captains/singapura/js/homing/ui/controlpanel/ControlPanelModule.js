@@ -87,7 +87,7 @@ class ControlPanel {
         this._group = new SliderGroup(this.branch.createBranch("degrees"), { title: "Varies by degree" }, ROLE.ADJUST);   // its group, cast as what adjusts
         names.forEach(function (n) {
             var o = Controls.option(n);
-            self._sliders[n] = self._group.add(n, { label: o.label, icon: n === "colour" ? "extent" : n,
+            self._sliders[n] = self._group.add(n, { label: o.label, icon: ({ size: ICON.SIZE_ICON, aspect: ICON.ASPECT_ICON, extent: ICON.EXTENT_ICON, colour: ICON.EXTENT_ICON })[n] || null,
                 min: -1, max: 1, step: 0.05, detents: [o.rest], value: o.rest,
                 format: function (x) { return x.toFixed(2) + (x === o.rest ? "  at rest" : ""); },
                 onInput: function (x) { self._set(n, x, false); },

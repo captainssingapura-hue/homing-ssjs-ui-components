@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.controlpanel;
 
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
@@ -40,6 +41,7 @@ public record ControlPanelModule() implements Widget<Widget._None, ControlPanelM
     @Override
     public ImportsFor<ControlPanelModule> imports() {
         return ImportsFor.<ControlPanelModule>builder()
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ControlsModule.Controls()), ControlsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderGroupModule.SliderGroup()), SliderGroupModule.INSTANCE))

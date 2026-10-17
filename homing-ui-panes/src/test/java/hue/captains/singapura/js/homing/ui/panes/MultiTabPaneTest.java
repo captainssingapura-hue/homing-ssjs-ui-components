@@ -169,7 +169,7 @@ class MultiTabPaneTest extends UiPanesJsTest {
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/PlainButtonModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/CloseButtonModule.js");
         // the icon the plus holds: the real Icon, its classes handles as the shim's css takes them
-        js.eval("js", "var ic_base = { name: 'ic_base' }, lexicon_sheet = {};");   // the box, and the lexicon's sheet the table imports
+        js.eval("js", "var ic_base = { name: 'ic_base' };");   // the icon's box
         js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
         js.eval("js", "var el_icon_button = 'el_icon_button';");   // the icon button's face, laid out

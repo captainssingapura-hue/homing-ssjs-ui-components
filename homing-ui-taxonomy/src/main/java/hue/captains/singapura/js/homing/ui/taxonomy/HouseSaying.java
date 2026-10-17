@@ -96,12 +96,8 @@ public final class HouseSaying {
         @Override public Saying parent() { return Saying.INSTANCE; }
     }
 
-    /** Shows that the keys are inside the owner. */
-    public record Keys() implements Role<Signalling> { public static final Keys INSTANCE = new Keys(); @Override public Signalling parent() { return Signalling.INSTANCE; } }
     /** Shows where a dragged thing would land. */
     public record Landing() implements Role<Signalling> { public static final Landing INSTANCE = new Landing(); @Override public Signalling parent() { return Signalling.INSTANCE; } }
-    /** Shows that a choice leads further. */
-    public record Disclose() implements Role<Signalling> { public static final Disclose INSTANCE = new Disclose(); @Override public Signalling parent() { return Signalling.INSTANCE; } }
     /** Shows by a mark that the owner is chosen. */
     public record Check() implements Role<Signalling> { public static final Check INSTANCE = new Check(); @Override public Signalling parent() { return Signalling.INSTANCE; } }
 

@@ -15,7 +15,7 @@ import java.util.List;
  * under the wrong parent, and the third level is the last: a context menu
  * is shallow by construction.
  *
- * <p>This package imports nothing of the JS stack — a lexicon's words and
+ * <p>This package imports nothing of the JS stack — the taxonomy's icons and
  * the JDK — so a menu declared here is validated
  * ({@link MenuTrees#validate}) and walked by any stack that renders it;
  * what a pick does is never here, it is the kind's handler at runtime.</p>

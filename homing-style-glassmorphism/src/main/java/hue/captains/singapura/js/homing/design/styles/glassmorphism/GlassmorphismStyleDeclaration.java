@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * homing-style-glassmorphism's declaration of what it provides for styles (RFC 0067, appendix The Style Jars):
- * Glassmorphism's implementations of what it refines - 124, each a class of its own in
+ * Glassmorphism's implementations of what it refines - 125, each a class of its own in
  * hue.captains.singapura.js.homing.design.styles.glassmorphism.
  */
 public record GlassmorphismStyleDeclaration() implements StyleDeclaration {
@@ -139,6 +139,7 @@ public record GlassmorphismStyleDeclaration() implements StyleDeclaration {
                 new PlainButtonCancel(),
                 new PlainButtonZoomOut(),
                 new PlainButtonZoomIn(),
-                new PlainButtonFit())));
+                new PlainButtonFit(),
+                new CloseIcon())));
     }
 }

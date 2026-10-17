@@ -165,3 +165,27 @@ Is pulled to bring the owner in or send it away: the handle of a drawer.
 ## Scroll
 
 Moves the user through what the owner holds, and shows where they are in it: a scroll bar.
+
+## Picturing
+
+Where the owner shows a picture: an icon, placed, its look its own whatever it is to the owner.
+
+## Face
+
+The picture the owner is: the icon a button shows instead of words.
+
+## Leading
+
+The picture before the owner's words, so a row is known at a glance.
+
+## Measure
+
+The picture on the owner's knob: a grip to take it by, or what it measures - a size, an aspect, an extent, a level.
+
+## Keys
+
+Shows that the keyboard is with the owner: what the user types goes there.
+
+## Disclose
+
+Shows that a choice leads to further choices, rather than doing something at once.

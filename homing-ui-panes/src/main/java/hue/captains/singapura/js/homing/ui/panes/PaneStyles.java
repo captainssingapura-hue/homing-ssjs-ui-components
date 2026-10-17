@@ -72,9 +72,9 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
     }
 
     /**
-     * The mark on a chip while the keys are inside its tab: the lexicon's word
-     * within, as the style worn writes it - its colour the look's, an icon that
-     * says where the keys are - placed here, never in the way of the hand. It is there only while the keys are in the tab — the chip says
+     * The mark on a chip while the keys are inside its tab: the within icon,
+     * its picture its look, the style worn's (D52) - an icon that says where
+     * the keys are - placed here, never in the way of the hand. It is there only while the keys are in the tab — the chip says
      * *held* while the bar has them, and *lent* with this mark while what the
      * tab holds has them.
      */

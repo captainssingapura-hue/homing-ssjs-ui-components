@@ -21,9 +21,8 @@
 //     .keys()                           its keys' marks for Keys.claimOn: its leaf and its Keyboard state
 //     .degree(el, name, n)              size, extent or aspect; at rest nothing written
 //     .text(el, words)                  the element's words
-//     .mark(el, word)                   the element's mark: a word of the lexicon - "close" - by its
-//                                       class, which the lexicon's sheet draws on the element's ::before
-//                                       as the style worn writes it
+//
+// A picture is an icon's: a component of its own, its picture its look (D52).
 //
 // While the house moves onto files (phase 5), a slice of the old look - wear(el,
 // { only | except }) - wears nothing styled and says so once on the console,
@@ -87,9 +86,4 @@ class Look {
     }
 
     text(el, words) { el.textContent = words; }
-
-    mark(el, word) {
-        if (!Object.prototype.hasOwnProperty.call(ICONS, word)) throw new Error("[Look] no word '" + word + "' in the lexicon; one of " + Object.keys(ICONS).join(", "));
-        css.addClass(el, css.cls(ICONS[word]));
-    }
 }

@@ -6,10 +6,10 @@
 // cannot see the icon, and shown by the browser to whoever points at it: its
 // tooltip.
 //
-//   var plus = new Icon(branch.createElement("plus", Icon.TAG), { name: "add" });
+//   var plus = new Icon(branch.createElement("plus", Icon.TAG), ICON.ADD_ICON, ROLE.FACE);
 //   var b = new IconButton(IconButtonFactory.create(branch, "add"),
 //                          { icon: plus, label: "Add a tab" }, ROLE.ADD);
-//   b.icon               the Icon it holds; set another name on it, not on the button
+//   b.icon               the Icon it holds: another icon is another Icon, which its caller mounts
 //   b.label = "Add"      its name: aria-label, and its tooltip
 //   b.enabled  b.size
 //   b.setOnClick(handler)  a press, while it is enabled

@@ -19,14 +19,6 @@ public final class HouseMarks {
 
     // ── marks ────────────────────────────────────────────────────────────
 
-    /** A glyph from the house's icon vocabulary. */
-    public record Icon() implements Component<Mark> {
-        public static final Icon INSTANCE = new Icon();
-        @Override public Mark parent() { return Mark.INSTANCE; }
-        /** Its colour, moved by its degree: the keys mark carries the accent part of the way into the colour it is given. */
-        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
-    }
-
     /** A notch a value may snap to. */
     public record Detent() implements Component<Mark> {
         public static final Detent INSTANCE = new Detent();

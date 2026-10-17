@@ -75,7 +75,7 @@ class PreferencesButton {
         btn.setAttribute("aria-haspopup", "dialog");
         var mark = branch.createElement("prefsBtnMark", "span");
         mark.setAttribute("aria-hidden", "true");
-        this._symbol = new Icon(branch.createElement("prefsBtnSymbol", Icon.TAG), { name: "settings" }, ROLE.SYMBOL);   // the button's mark, cast as its symbol
+        this._symbol = new Icon(branch.createElement("prefsBtnSymbol", Icon.TAG), ICON.SETTINGS_ICON, ROLE.FACE);   // its face, the settings icon
         mark.appendChild(this._symbol.el);
         var word = branch.createElement("prefsBtnWord", "span");
         word.textContent = "Preferences";

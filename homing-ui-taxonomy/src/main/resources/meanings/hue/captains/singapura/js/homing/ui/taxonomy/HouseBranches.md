@@ -105,3 +105,7 @@ A line a value lies along, or fills, so its place can be seen.
 ## Mark
 
 A small sign the user reads at a glance, in place of words.
+
+## Icon
+
+A picture standing for one idea wherever it is shown: each icon a component of its own, its picture drawn by the style worn.

@@ -164,4 +164,15 @@ public final class HouseBranches {
         public static final Mark INSTANCE = new Mark();
         @Override public Root parent() { return Root.INSTANCE; }
     }
+
+    /**
+     * A picture standing for one idea wherever it is shown (D52): each icon a leaf of its own ({@link HouseIcons}), its
+     * picture its look. An owner may name the branch for any icon the instance registers.
+     */
+    public record Icon() implements L2_ComponentBranch<Mark> {
+        public static final Icon INSTANCE = new Icon();
+        @Override public Mark parent() { return Mark.INSTANCE; }
+        /** Its colour, moved by its degree: the keys mark carries the accent part of the way into the colour it is given. */
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
+    }
 }

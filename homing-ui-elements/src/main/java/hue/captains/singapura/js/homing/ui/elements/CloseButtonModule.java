@@ -9,9 +9,13 @@ import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
+import hue.captains.singapura.js.homing.ui.icons.IconModule;
+import hue.captains.singapura.js.homing.ui.look.CastingsModule;
+import hue.captains.singapura.js.homing.ui.look.IconsModule;
+
 import java.util.List;
 
-/** The close button: the button's declarations, its face the lexicon's word close - each style's own cross - and its words its name; worn in its own look. */
+/** The close button: the button's declarations, its face the close icon - each style's own cross, its look (D52) - made on the room its owner gives, and its words its name; worn in its own look. */
 public record CloseButtonModule() implements DomModule<CloseButtonModule>, ImplFor<HouseControls.CloseButton> {
 
     /** An element component: {@code new CloseButton(el, { label, size }, role)} on the element its companion makes; {@code setOnClick(handler)}; {@code enabled}, {@code size}, {@code label} - its name. */
@@ -30,6 +34,9 @@ public record CloseButtonModule() implements DomModule<CloseButtonModule>, ImplF
         return ImportsFor.<CloseButtonModule>builder()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();
     }
 

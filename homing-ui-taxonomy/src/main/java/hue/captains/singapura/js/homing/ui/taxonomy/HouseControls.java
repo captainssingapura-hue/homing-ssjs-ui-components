@@ -133,16 +133,19 @@ public final class HouseControls {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one());
+            return List.of(DSL.anyOf(HouseBranches.Icon.INSTANCE).as(HouseShaping.Face.INSTANCE).one());
         }
     }
 
     /** The button that closes what holds it. */
     public record CloseButton() implements Component<Button> {
         public static final CloseButton INSTANCE = new CloseButton();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
+        /** Its face the close icon: the same cross wherever something closes, drawn once in each style. */
+        @Override public List<Slot<?>> parts() { return List.of(DSL.part(HouseIcons.CloseIcon.INSTANCE).as(HouseShaping.Face.INSTANCE).one()); }
     }
 
     // ── handles ──────────────────────────────────────────────────────────
@@ -248,7 +251,7 @@ public final class HouseControls {
         @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE, HouseEvents.Dismiss.INSTANCE); }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Keys.INSTANCE).one(),
+            return List.of(DSL.part(HouseIcons.WithinIcon.INSTANCE).as(HouseShaping.Keys.INSTANCE).one(),
                            DSL.part(CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
         }
     }
@@ -272,7 +275,7 @@ public final class HouseControls {
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
+            return List.of(DSL.part(HouseIcons.SettingsIcon.INSTANCE).as(HouseShaping.Face.INSTANCE).one(),
                            DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional(),
                            DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Page.INSTANCE).optional());
         }
@@ -307,7 +310,8 @@ public final class HouseControls {
                            DSL.part(HouseMarks.Tick.INSTANCE).as(HouseSaying.Notch.INSTANCE).any(),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Figure.INSTANCE).any(),
                            DSL.part(SliderKnob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one(),
-                           DSL.part(HouseMarks.Icon.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
+                           DSL.part(HouseIcons.GripIcon.INSTANCE, HouseIcons.SizeIcon.INSTANCE, HouseIcons.AspectIcon.INSTANCE,
+                                    HouseIcons.ExtentIcon.INSTANCE, HouseIcons.LevelIcon.INSTANCE).as(HouseShaping.Measure.INSTANCE).optional(),
                            DSL.part(HouseText.Readout.INSTANCE).as(HouseSaying.Value.INSTANCE).one());
         }
     }

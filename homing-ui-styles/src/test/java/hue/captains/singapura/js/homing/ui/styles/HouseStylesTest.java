@@ -7,17 +7,15 @@ import hue.captains.singapura.js.homing.design.color.ConcreteColor;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.js.homing.design.semantic.FlattenLexicon;
-import hue.captains.singapura.js.homing.design.semantic.WriteWord;
 import hue.captains.singapura.js.homing.design.styling.PaletteSheet;
 import hue.captains.singapura.js.homing.design.styling.StyleManager;
 import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours.BaseColour;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseLexicon;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -51,7 +49,7 @@ class HouseStylesTest {
         assertEquals(TAXONOMY.castings().size(), manager.implementations(Base.INSTANCE).size(), "the base layer is never absent (D26)");
         var go = TAXONOMY.castings().stream().filter(c -> c.token().equals("primary-button_go")).findFirst().orElseThrow();
         for (DesignStyle<?> s : HouseStyles.STYLES) {
-            assertEquals(124, manager.implementations(s).size(), s.token() + ": what it refines, its own and the modules' castings");
+            assertEquals(124 + OWN_PICTURES.get(s.token()), manager.implementations(s).size(), s.token() + ": what it refines, its own and the modules' castings, and the icons it draws its own way (D52)");
             for (Component<?> b : BUTTONS)
                 assertEquals(s.token() + "'s own", manager.resolve(s, new Casting(b)).says(), s.token() + " draws " + b.token());
             assertTrue(manager.resolve(s, go).says().startsWith(s.token() + "'s own"), s.token() + " draws the primary button as Go too");
@@ -108,21 +106,25 @@ class HouseStylesTest {
                 "a way under the hand: the house's navy leaning half into the way's ink, as the old sheets mixed it");
     }
 
+    /** How many icons each style draws its own way: the cross, in all but Editorial; Sketchy five more. */
+    private static final Map<String, Integer> OWN_PICTURES = Map.of("editorial", 0, "neo-brutalism", 1, "neo-futurism", 1, "neumorphism", 1,
+            "glassmorphism", 1, "retro-futurism", 1, "sketchy", 6);
+
     @Test
-    void everyStyle_writesEveryWord_andItsCrossIsItsOwn() {
-        var lexicon = HouseLexicon.INSTANCE.read();
-        var write = WriteWord.INSTANCE;
-        for (DesignStyle<?> s : HouseStyles.STYLES) {
-            assertEquals(List.of(), write.problems(lexicon, s), s.token());
-            var sheet = FlattenLexicon.INSTANCE.flatten(lexicon, s, s.token());
-            assertEquals(List.of(), sheet.unwritten(), s.token());
-            assertEquals(lexicon.words().size(), sheet.written(), s.token() + ": the house's words and every extension's on the classpath");
-        }
-        assertEquals(List.of(), write.problems(lexicon, Base.INSTANCE), "Base writes them all");
+    void everyStyle_drawsEveryIcon_andItsCrossIsItsOwn() {
+        StyleManager manager = HouseStyles.INSTANCE.styling().manager();
+        var icons = TAXONOMY.components().stream().filter(c -> TAXONOMY.parent(c) == HouseBranches.Icon.INSTANCE).toList();
+        assertEquals(20, icons.size(), "the house's fifteen and the panes' five");
+        for (DesignStyle<?> s : HouseStyles.STYLES)
+            for (Component<?> icon : icons) assertTrue(manager.rule(s, new Casting(icon)).contains("content: \""), s.token() + " draws " + icon.token());
         var crosses = new java.util.LinkedHashMap<String, String>();
-        for (DesignStyle<?> s : HouseStyles.STYLES) crosses.put(s.token(), write.write(s, HouseWords.Close.INSTANCE).orElseThrow().glyph());
+        for (DesignStyle<?> s : HouseStyles.STYLES) {
+            String rule = manager.rule(s, new Casting(HouseIcons.CloseIcon.INSTANCE));
+            int at = rule.indexOf("content: \"") + "content: \"".length();
+            crosses.put(s.token(), rule.substring(at, rule.indexOf('"', at)));
+        }
         assertEquals(Map.of("editorial", "✕", "neo-brutalism", "╳", "neo-futurism", "⨯", "neumorphism", "✗", "glassmorphism", "×",
-                "retro-futurism", "✘", "sketchy", "✖"), crosses, "each style's own cross, the close button's and every close row's alike");
+                "retro-futurism", "✘", "sketchy", "✖"), crosses, "each style's own cross, the close button's and every close row's alike: the close icon's look");
     }
 
     @Test

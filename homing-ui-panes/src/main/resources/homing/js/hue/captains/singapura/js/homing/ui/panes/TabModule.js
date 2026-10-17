@@ -101,7 +101,7 @@ class Tab extends SimpleComponent {
 
         // the mark of where the keys are, after its name: the house's icon, the within word, cast as the keys mark;
         // shown only while the keys are on it or in it
-        this._mark = new Icon(branch.createElement("mark", Icon.TAG), { name: "within" }, ROLE.KEYS).el;
+        this._mark = new Icon(branch.createElement("mark", Icon.TAG), ICON.WITHIN_ICON, ROLE.KEYS).el;
         css.addClass(this._mark, mtp_chip_mark);
         this.el.appendChild(this._mark);
 
@@ -109,7 +109,7 @@ class Tab extends SimpleComponent {
         this._closer = null;
         this._close = null;
         if (closable) {
-            this._closer = new CloseButton(branch.elementMaker("close"), { label: "Close" }, ROLE.CLOSE);
+            this._closer = new CloseButton(branch.elementMaker("close"), { face: branch.elementMaker("close-face"), label: "Close" }, ROLE.CLOSE);
             this._closer.setOnClick(new TabCross(this));
             this._close = this._closer.el;
             css.addClass(this._close, mtp_chip_close);   // its place at the tab's end; its look its own

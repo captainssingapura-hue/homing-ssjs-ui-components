@@ -1,7 +1,8 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Word;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseWords;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 import hue.captains.singapura.js.homing.ui.menu.tree.M1_Node;
 
@@ -27,7 +28,7 @@ public record TabMenu() implements ContextMenuKind<TabMenu> {
         public static final Detach INSTANCE = new Detach();
         @Override public TabMenu parent() { return TabMenu.INSTANCE; }
         @Override public String label() { return "Detach"; }
-        @Override public Word<?> icon() { return PaneWords.Detach.INSTANCE; }
+        @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.DetachIcon.INSTANCE; }
         @Override public String hint() { return "float it in a pane of its own"; }
     }
 
@@ -36,7 +37,7 @@ public record TabMenu() implements ContextMenuKind<TabMenu> {
         public static final Close INSTANCE = new Close();
         @Override public TabMenu parent() { return TabMenu.INSTANCE; }
         @Override public String label() { return "Close"; }
-        @Override public Word<?> icon() { return HouseWords.Close.INSTANCE; }
+        @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.CloseIcon.INSTANCE; }
         @Override public int section() { return 1; }
     }
 }

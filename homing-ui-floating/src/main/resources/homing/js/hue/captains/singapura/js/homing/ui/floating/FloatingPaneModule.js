@@ -141,7 +141,7 @@ class FloatingPane {
         head.appendChild(this._title.el);
         if (opts.closable !== false) {
             // the house's close button, cast as what closes its owner: its cross and its frame are the style's
-            var x = new CloseButton(CloseButtonFactory.create(branch, "close"), { label: "Close" }, ROLE.CLOSE);
+            var x = new CloseButton(CloseButtonFactory.create(branch, "close"), { face: branch.elementMaker("close-face"), label: "Close" }, ROLE.CLOSE);
             x.setOnClick(new FloatingPaneClose(self));
             head.appendChild(x.el);
             this._close = x.el;
