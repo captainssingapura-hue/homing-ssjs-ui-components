@@ -2,11 +2,16 @@ package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
+import hue.captains.singapura.js.homing.design.styling.CastingCss;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Done right, every style's looks are a DAG: no cycle; its layers kept - a spec and a same-style delegation within a
  * layer, a parent delegation one layer down, nothing pointing up; one root a top-level component; every look reached from
- * one; each look CSS of its own, or exactly one delegation; every element's look with CSS a look of the graph. The graphs
- * are written to target/dags/dags.json, to be drawn.
+ * one; each look CSS of its own, or exactly one delegation; every element's look with CSS a look of the graph. A look
+ * needs CSS exactly where it is an end; each end's file is there. The graphs are written to target/dags/dags.json, to be
+ * drawn - each end with its CSS's fingerprint, so that what repeats another look's CSS shows.
  */
 class StyleDagTest {
 
@@ -56,6 +62,9 @@ class StyleDagTest {
             if (roots != SPEC.top().size()) problems.add(s.token() + ": " + roots + " roots for " + SPEC.top().size() + " top-level components");
             Set<String> reached = reachable(dag);
             if (reached.size() != dag.nodes().size()) problems.add(s.token() + ": " + (dag.nodes().size() - reached.size()) + " looks no root reaches");
+            for (StyleDag.Node n : dag.nodes())
+                if (n.needsCss() && CastingCss.INSTANCE.read(n.look().getClass()).isEmpty())
+                    problems.add(s.token() + ": " + n.id() + " needs CSS, and has no " + CastingCss.INSTANCE.resource(n.look().getClass()));
             for (ElementPath e : SPEC.elements()) {
                 String worn = wornId(s, e);
                 StyleDag.Node n = byId.get(worn);
@@ -121,24 +130,37 @@ class StyleDagTest {
         for (StyleDag.Node n : dag.nodes()) layers.merge(n.layer().token(), 1, Integer::sum);
         var kinds = new LinkedHashMap<StyleDag.Points, Integer>();
         for (StyleDag.Edge e : dag.edges()) kinds.merge(e.points(), 1, Integer::sum);
-        long css = dag.nodes().stream().filter(n -> n.gives() == StyleDag.Gives.CSS).count();
+        long css = dag.nodes().stream().filter(StyleDag.Node::needsCss).count();
+        var own = dag.needingCss(dag.style());
+        long distinct = own.stream().map(StyleDagTest::fingerprint).distinct().count();
         var shared = dag.pointedAt().entrySet().stream().sorted((a, b) -> b.getValue() - a.getValue()).limit(3)
                 .map(e -> e.getKey() + "<-" + e.getValue()).toList();
         System.out.println("[dag] " + dag.style().token() + ": looks " + dag.nodes().size() + " " + layers + ", edges " + dag.edges().size() + " " + kinds
-                + ", CSS ends " + css + ", depth " + dag.depth() + ", most pointed at " + shared);
+                + ", CSS ends " + css + " (its own " + own.size() + ", " + distinct + " distinct texts), depth " + dag.depth() + ", most pointed at " + shared);
     }
 
     private static String json(StyleDag dag) {
         var nodes = new ArrayList<String>();
         for (StyleDag.Node n : dag.nodes())
             nodes.add("{\"id\": " + q(n.id()) + ", \"layer\": " + q(n.layer().token()) + ", \"casting\": " + q(n.casting().token())
-                    + ", \"gives\": " + q(n.gives().name()) + ", \"root\": " + n.root() + "}");
+                    + ", \"gives\": " + q(n.gives().name()) + ", \"root\": " + n.root()
+                    + (n.needsCss() ? ", \"css\": " + q(fingerprint(n)) + ", \"file\": " + q(CastingCss.INSTANCE.resource(n.look().getClass())) : "") + "}");
         var edges = new ArrayList<String>();
         for (StyleDag.Edge e : dag.edges())
             edges.add("{\"from\": " + q(e.from()) + ", \"to\": " + q(e.to()) + ", \"points\": " + q(e.points().name())
                     + ", \"slot\": " + (e.slot() == null ? "null" : q(e.slot().token())) + "}");
         return "{\"style\": " + q(dag.style().token()) + ", \"parent\": " + SPEC.parent(dag.style()).map(p -> q(p.token())).orElse("null")
                 + ", \"depth\": " + dag.depth() + ",\n \"nodes\": [\n  " + String.join(",\n  ", nodes) + "],\n \"edges\": [\n  " + String.join(",\n  ", edges) + "]}";
+    }
+
+    /** A look's CSS text, fingerprinted: equal texts, equal prints. */
+    private static String fingerprint(StyleDag.Node n) {
+        String text = CastingCss.INSTANCE.read(n.look().getClass()).orElse("").replace("\r\n", "\n").strip();
+        try {
+            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8))).substring(0, 12);
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private static String q(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }

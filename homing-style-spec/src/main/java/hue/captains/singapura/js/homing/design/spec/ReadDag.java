@@ -43,7 +43,7 @@ public record ReadDag() implements StatelessFunctionalObject {
         String id = id(layer, look);
         StyleDag.Node known = nodes.get(id);
         if (known != null) {
-            if (root && !known.root()) nodes.put(id, new StyleDag.Node(id, layer, as, known.gives(), true));
+            if (root && !known.root()) nodes.put(id, new StyleDag.Node(id, layer, as, known.gives(), true, look));
             return id;
         }
         StyleDag.Gives gives = switch (look.style()) {
@@ -51,7 +51,7 @@ public record ReadDag() implements StatelessFunctionalObject {
             case StylingRes.Delegation<?, ?, ?, ?> d -> StyleDag.Gives.DELEGATION;
             case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> StyleDag.Gives.PARENT_DELEGATION;
         };
-        nodes.put(id, new StyleDag.Node(id, layer, as, gives, root));
+        nodes.put(id, new StyleDag.Node(id, layer, as, gives, root, look));
         for (PartSpec<?, ?, ?> p : look.parts().parts()) {
             String to = visit(spec, p.look(), layer, p.casting(), false, nodes, edges);
             edges.add(new StyleDag.Edge(id, to, StyleDag.Points.PART, p.slot()));

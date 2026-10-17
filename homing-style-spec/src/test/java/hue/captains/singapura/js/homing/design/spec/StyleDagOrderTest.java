@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class StyleDagOrderTest {
 
     private static StyleDag.Node node(String id) {
-        return new StyleDag.Node(id, Base.INSTANCE, new Casting(HouseControls.PlainButton.INSTANCE), StyleDag.Gives.CSS, id.equals("a"));
+        return new StyleDag.Node(id, Base.INSTANCE, new Casting(HouseControls.PlainButton.INSTANCE), StyleDag.Gives.CSS, id.equals("a"),
+                new GenericsSampleTest.BasePlain());
     }
 
     private static StyleDag.Edge edge(String from, String to) { return new StyleDag.Edge(from, to, StyleDag.Points.PART, null); }

@@ -16,7 +16,8 @@ import java.util.Optional;
 /**
  * A style's looks as a graph (RFC 0067, D53): every look its elements reach, from each top-level component's
  * implementation - the style's, or the layer below's it falls to - down the parts' specs and along the delegations. Done
- * right it is a DAG, its layers the style's and those below, nothing pointing up.
+ * right it is a DAG, its layers the style's and those below, nothing pointing up. A look needs CSS exactly where it
+ * delegates nowhere - an end of the graph - and the style's author writes the ends of the style's own layer.
  *
  * @param style the style worn
  * @param nodes every look reached, each once
@@ -44,8 +45,17 @@ public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Edge> edges)
      * @param casting the casting it is a look of
      * @param gives   CSS of its own, or a delegation
      * @param root    whether it is a top-level component's implementation in the style worn
+     * @param look    the look itself
      */
-    public record Node(String id, DesignStyle<?> layer, Casting casting, Gives gives, boolean root) implements ValueObject {}
+    public record Node(String id, DesignStyle<?> layer, Casting casting, Gives gives, boolean root, CastingStylePerRole<?, ?, ?, ?> look)
+            implements ValueObject {
+        public Node {
+            Objects.requireNonNull(look, "Node.look");
+        }
+
+        /** Whether it needs CSS of its own: it delegates nowhere, an end of the graph. */
+        public boolean needsCss() { return gives == Gives.CSS; }
+    }
 
     /**
      * A spec or a delegation.
@@ -94,6 +104,11 @@ public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Edge> edges)
             max = Math.max(max, d);
         }
         return max;
+    }
+
+    /** The looks that need CSS of their own - the graph's ends - of one layer. */
+    public List<Node> needingCss(DesignStyle<?> layer) {
+        return nodes.stream().filter(n -> n.needsCss() && n.layer().equals(layer)).toList();
     }
 
     /** Each look with how many edges point at it. */
