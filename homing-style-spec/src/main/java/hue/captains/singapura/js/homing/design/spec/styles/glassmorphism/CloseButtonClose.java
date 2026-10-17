@@ -1,0 +1,16 @@
+package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
+
+import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
+import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
+
+/** glassmorphism's look of close-button_close: CSS of its own. */
+public record CloseButtonClose() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.CloseButton, HouseDoing.Close> {
+    @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.CloseButton, HouseDoing.Close> style() {
+        return new StylingRes.CssContent<>(new BaseColours.OnDanger(), new BaseColours.Border(), new BaseColours.Ring(), new BaseColours.Danger(), new BaseColours.DangerPressed());
+    }
+}

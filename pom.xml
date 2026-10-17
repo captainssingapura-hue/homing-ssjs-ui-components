@@ -61,6 +61,7 @@
         <module>homing-style-retro-futurism</module>
         <module>homing-style-sketchy</module>
         <module>homing-ui-modules</module>
+        <module>homing-style-spec</module>
         <module>homing-components-conformance</module>
     </modules>
 
