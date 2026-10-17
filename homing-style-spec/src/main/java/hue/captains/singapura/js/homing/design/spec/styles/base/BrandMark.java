@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** base's look of brand-mark: CSS of its own. */
+/** base's implementation of brand-mark: CSS of its own. */
 public record BrandMark() implements CastingStylePerRole<BaseScheme, Base, HouseMarks.BrandMark, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseMarks.BrandMark, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Accent());

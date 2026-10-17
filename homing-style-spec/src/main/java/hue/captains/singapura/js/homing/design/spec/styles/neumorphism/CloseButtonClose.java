@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neumorphism's look of close-button_close: as its component on its own, by delegation. */
+/** neumorphism's implementation of close-button_close: as its component standalone, by delegation. */
 public record CloseButtonClose() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseControls.CloseButton, HouseDoing.Close> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseControls.CloseButton, HouseDoing.Close> style() {
         return new StylingRes.RootDelegation<>(new CloseButton());

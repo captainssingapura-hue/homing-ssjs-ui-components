@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of caption_summary: as its component on its own, by delegation. */
+/** retro-futurism's implementation of caption_summary: as its component standalone, by delegation. */
 public record CaptionSummary() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.Caption, HouseSaying.Summary> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.Caption, HouseSaying.Summary> style() {
         return new StylingRes.RootDelegation<>(new Caption());

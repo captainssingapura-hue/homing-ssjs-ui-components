@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** retro-futurism's look of slider-knob_thumb: as its component on its own, by delegation. */
+/** retro-futurism's implementation of slider-knob_thumb: as its component standalone, by delegation. */
 public record SliderKnobThumb() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.SliderKnob, HouseDoing.Thumb> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.SliderKnob, HouseDoing.Thumb> style() {
         return new StylingRes.RootDelegation<>(new SliderKnob());

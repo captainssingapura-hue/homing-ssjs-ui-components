@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's look of muted: CSS of its own. */
+/** base's implementation of muted: CSS of its own. */
 public record Muted() implements CastingStylePerRole<BaseScheme, Base, HouseText.Muted, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseText.Muted, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded());

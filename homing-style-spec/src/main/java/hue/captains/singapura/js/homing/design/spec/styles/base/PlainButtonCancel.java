@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** base's look of plain-button_cancel: as its component on its own, by delegation. */
+/** base's implementation of plain-button_cancel: as its component standalone, by delegation. */
 public record PlainButtonCancel() implements CastingStylePerRole<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Cancel> {
     @Override public StylingRes<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Cancel> style() {
         return new StylingRes.RootDelegation<>(new PlainButton());

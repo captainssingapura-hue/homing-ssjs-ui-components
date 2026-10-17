@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neo-futurism's look of fill_level: as its component on its own, by delegation. */
+/** neo-futurism's implementation of fill_level: as its component standalone, by delegation. */
 public record FillLevel() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseMarks.Fill, HouseSaying.Level> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseMarks.Fill, HouseSaying.Level> style() {
         return new StylingRes.RootDelegation<>(new Fill());

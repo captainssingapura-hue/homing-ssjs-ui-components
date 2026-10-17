@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neumorphism's look of drop-mark_landing: base's, by delegation. */
+/** neumorphism's implementation of drop-mark_landing: the base's, by delegation. */
 public record DropMarkLanding() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.DropMark, HouseSaying.Landing> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.DropMark, HouseSaying.Landing> style() {
         return new StylingRes.ParentDelegation<>(new hue.captains.singapura.js.homing.design.spec.styles.base.DropMarkLanding());

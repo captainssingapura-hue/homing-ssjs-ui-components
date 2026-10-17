@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** neo-futurism's look of grip: CSS of its own. */
+/** neo-futurism's implementation of grip: CSS of its own. */
 public record Grip() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.Grip, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.Grip, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring());

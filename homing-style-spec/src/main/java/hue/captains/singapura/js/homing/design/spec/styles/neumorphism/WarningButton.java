@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** neumorphism's look of warning-button: CSS of its own. */
+/** neumorphism's implementation of warning-button: CSS of its own. */
 public record WarningButton() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseControls.WarningButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseControls.WarningButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.WarningInk(), new BaseColours.Border(), new BaseColours.Ring(), new BaseColours.ShadeFirm(), new BaseColours.WarningGround());

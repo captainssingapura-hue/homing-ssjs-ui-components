@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** sketchy's look of slider-rack: CSS of its own. */
+/** sketchy's implementation of slider-rack: CSS of its own. */
 public record SliderRack() implements CastingStylePerRole<BaseScheme, Sketchy, HouseRegions.SliderRack, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseRegions.SliderRack, RoleRoot> style() {
         return new StylingRes.CssContent<>();

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** editorial's look of slider-groove: CSS of its own. */
+/** editorial's implementation of slider-groove: CSS of its own. */
 public record SliderGroove() implements CastingStylePerRole<BaseScheme, Editorial, HouseMarks.SliderGroove, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseMarks.SliderGroove, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.WashSoft(), new BaseColours.GrooveEdge());

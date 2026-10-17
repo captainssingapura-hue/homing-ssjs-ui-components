@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of kicker: CSS of its own. */
+/** editorial's implementation of kicker: CSS of its own. */
 public record Kicker() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Kicker, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Kicker, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.KickerInk());

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of code: CSS of its own. */
+/** neumorphism's implementation of code: CSS of its own. */
 public record Code() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Code, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Code, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.WashFaint());

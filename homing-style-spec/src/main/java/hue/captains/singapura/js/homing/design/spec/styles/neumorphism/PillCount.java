@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of pill_count: as its component on its own, by delegation. */
+/** neumorphism's implementation of pill_count: as its component standalone, by delegation. */
 public record PillCount() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Pill, HouseSaying.Count> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Pill, HouseSaying.Count> style() {
         return new StylingRes.RootDelegation<>(new Pill());

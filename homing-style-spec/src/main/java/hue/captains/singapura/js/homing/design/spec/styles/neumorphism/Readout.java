@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of readout: CSS of its own. */
+/** neumorphism's implementation of readout: CSS of its own. */
 public record Readout() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Readout, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Readout, RoleRoot> style() {
         return new StylingRes.CssContent<>();

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neo-brutalism's look of separator: CSS of its own. */
+/** neo-brutalism's implementation of separator: CSS of its own. */
 public record Separator() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseMarks.Separator, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseMarks.Separator, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Hairline());

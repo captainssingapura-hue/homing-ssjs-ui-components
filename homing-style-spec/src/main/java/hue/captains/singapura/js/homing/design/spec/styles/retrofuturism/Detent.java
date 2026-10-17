@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** retro-futurism's look of detent: CSS of its own. */
+/** retro-futurism's implementation of detent: CSS of its own. */
 public record Detent() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseMarks.Detent, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseMarks.Detent, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

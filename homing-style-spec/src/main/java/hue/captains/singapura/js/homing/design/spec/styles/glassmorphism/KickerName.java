@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of kicker_name: as its component on its own, by delegation. */
+/** glassmorphism's implementation of kicker_name: as its component standalone, by delegation. */
 public record KickerName() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Kicker, HouseSaying.Name> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Kicker, HouseSaying.Name> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

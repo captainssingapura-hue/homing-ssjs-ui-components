@@ -6,84 +6,91 @@ import hue.captains.singapura.js.homing.design.styling.CastingCss;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HexFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Done right, every style's looks are a DAG: no cycle; its layers kept - a spec pointer within its layer, a delegation
- * pointer within it too, or one layer down for a parent delegation, nothing pointing up; a spec pointer for every part
- * slot of a look and a delegation pointer for every look that delegates, the two never confused; one root a top-level component; every look reached from
- * one; each look CSS of its own, or exactly one delegation; every element's look with CSS a look of the graph. A look
- * needs CSS exactly where it is an end; each end's file is there. The graphs are written to target/dags/dags.json, to be
- * drawn - each end with its CSS's fingerprint, so that what repeats another look's CSS shows.
+ * Done right, every style's declarations and implementations are a DAG of two levels: no cycle; a declaration's own and
+ * same-role spec pointers within its layer, a standalone spec pointer to the placed part's standalone in the style worn,
+ * a delegation pointer within its layer or one layer down; a declaration with one pointer to its own implementation and
+ * one for each slot of its composite; an implementation giving CSS of its own or exactly one delegation; a root for each
+ * top-level component; everything reached from one; every element's implementation with CSS an end of the graph, its
+ * file there. The graphs are written to target/dags/dags.json, to be drawn - each end with its CSS's fingerprint.
  */
 class StyleDagTest {
 
     private static final SpecRegistry SPEC = HouseSpec.INSTANCE.registry();
 
     @Test
-    void everyStyle_isADag_itsLayersKept() throws IOException {
+    void everyStyle_isADagOfTwoLevels() throws IOException {
         var problems = new ArrayList<String>();
         var json = new ArrayList<String>();
         for (DesignStyle<?> s : SPEC.styles()) {
             StyleDag dag = ReadDag.INSTANCE.read(SPEC, s);
             var byId = new HashMap<String, StyleDag.Node>();
             for (StyleDag.Node n : dag.nodes()) byId.put(n.id(), n);
-            if (dag.order().isEmpty()) problems.add(s.token() + ": a cycle: " + cycle(dag));
+            if (dag.order().isEmpty()) problems.add(s.token() + ": a cycle");
             var delegations = new HashMap<String, Integer>();
-            var specs = new HashMap<String, Integer>();
+            var owns = new HashMap<String, Integer>();
+            var slots = new HashMap<String, Integer>();
             for (StyleDag.Pointer p : dag.pointers()) {
                 StyleDag.Node from = byId.get(p.from()), to = byId.get(p.to());
-                boolean kept = switch (p) {
-                    case StyleDag.SpecPointer sp -> from.layer().equals(to.layer());
-                    case StyleDag.DelegationPointer dp -> dp.gives() == StyleDag.Gives.PARENT_DELEGATION
-                            ? SPEC.parent(from.layer()).map(to.layer()::equals).orElse(false)
-                            : from.layer().equals(to.layer());
-                };
-                if (!kept) problems.add(s.token() + ": " + p + " leaves its layer");
                 switch (p) {
-                    case StyleDag.SpecPointer sp -> specs.merge(sp.from(), 1, Integer::sum);
+                    case StyleDag.SpecPointer sp -> {
+                        if (!(from instanceof StyleDag.DeclarationNode)) problems.add(s.token() + ": " + p + " leaves no declaration");
+                        if (sp.spec() != StyleDag.Spec.STANDALONE && !from.layer().equals(to.layer())) problems.add(s.token() + ": " + p + " leaves its layer");
+                        if (sp.spec() == StyleDag.Spec.STANDALONE && !SPEC.standaloneLayer(s, to.casting().cast()).equals(to.layer()))
+                            problems.add(s.token() + ": " + p + " reaches no standalone of the style worn");
+                        if (sp.spec() == StyleDag.Spec.OWN) {
+                            owns.merge(sp.from(), 1, Integer::sum);
+                            if (!(to instanceof StyleDag.ImplNode)) problems.add(s.token() + ": " + p + " reaches no implementation");
+                        } else slots.merge(sp.from(), 1, Integer::sum);
+                    }
                     case StyleDag.DelegationPointer dp -> {
+                        if (!(from instanceof StyleDag.ImplNode fi) || !(to instanceof StyleDag.ImplNode)) {
+                            problems.add(s.token() + ": " + p + " is no implementation's");
+                            continue;
+                        }
+                        boolean kept = dp.gives() == StyleDag.Gives.PARENT_DELEGATION
+                                ? SPEC.parent(from.layer()).map(to.layer()::equals).orElse(false) : from.layer().equals(to.layer());
+                        if (!kept) problems.add(s.token() + ": " + p + " leaves its layer");
+                        if (dp.gives() != fi.gives()) problems.add(s.token() + ": " + p + " is not what " + fi.id() + " gives, " + fi.gives());
                         delegations.merge(dp.from(), 1, Integer::sum);
-                        if (dp.gives() != from.gives()) problems.add(s.token() + ": " + dp + " is not what " + from.id() + " gives, " + from.gives());
                     }
                 }
             }
-            for (StyleDag.Node n : dag.nodes()) {
-                int slots = n.look().parts().parts().size();
-                if (specs.getOrDefault(n.id(), 0) != slots) problems.add(s.token() + ": " + n.id() + " has " + slots + " part slots and "
-                        + specs.getOrDefault(n.id(), 0) + " spec pointers");
+            for (StyleDag.DeclarationNode d : dag.declarations()) {
+                int expected = Slots.INSTANCE.of(SPEC.taxonomy(), d.casting().cast()).size();
+                if (owns.getOrDefault(d.id(), 0) != 1) problems.add(s.token() + ": " + d.id() + " has " + owns.getOrDefault(d.id(), 0) + " pointers to its own implementation");
+                if (slots.getOrDefault(d.id(), 0) != expected) problems.add(s.token() + ": " + d.id() + " has " + expected + " slots and " + slots.getOrDefault(d.id(), 0) + " spec pointers");
             }
-            for (StyleDag.Node n : dag.nodes()) {
+            for (StyleDag.ImplNode n : dag.implementations()) {
                 int d = delegations.getOrDefault(n.id(), 0);
-                if (n.gives() == StyleDag.Gives.CSS ? d != 0 : d != 1) problems.add(s.token() + ": " + n.id() + " gives " + n.gives() + " with " + d + " delegations");
+                if (n.needsCss() ? d != 0 : d != 1) problems.add(s.token() + ": " + n.id() + " gives " + n.gives() + " with " + d + " delegations");
+                if (n.needsCss() && CastingCss.INSTANCE.read(n.impl().getClass()).isEmpty())
+                    problems.add(s.token() + ": " + n.id() + " needs CSS, and has no " + CastingCss.INSTANCE.resource(n.impl().getClass()));
             }
             long roots = dag.nodes().stream().filter(StyleDag.Node::root).count();
             if (roots != SPEC.top().size()) problems.add(s.token() + ": " + roots + " roots for " + SPEC.top().size() + " top-level components");
-            Set<String> reached = reachable(dag);
-            if (reached.size() != dag.nodes().size()) problems.add(s.token() + ": " + (dag.nodes().size() - reached.size()) + " looks no root reaches");
-            for (StyleDag.Node n : dag.nodes())
-                if (n.needsCss() && CastingCss.INSTANCE.read(n.look().getClass()).isEmpty())
-                    problems.add(s.token() + ": " + n.id() + " needs CSS, and has no " + CastingCss.INSTANCE.resource(n.look().getClass()));
+            if (reachable(dag).size() != dag.nodes().size()) problems.add(s.token() + ": " + (dag.nodes().size() - reachable(dag).size()) + " nodes no root reaches");
             for (ElementPath e : SPEC.elements()) {
-                String worn = wornId(s, e);
-                StyleDag.Node n = byId.get(worn);
-                if (n == null || n.gives() != StyleDag.Gives.CSS) problems.add(s.token() + " " + e.token() + ": wears " + worn + ", no CSS look of the graph");
+                CastingStylePerRole<?, ?, ?, ?> worn = SPEC.wears(s, e);
+                boolean found = dag.implementations().stream().anyMatch(n -> n.needsCss() && n.impl().getClass() == worn.getClass());
+                if (!found) problems.add(s.token() + " " + e.token() + ": wears " + worn.getClass().getName() + ", no CSS end of the graph");
             }
             summary(dag);
             json.add(json(dag));
@@ -91,16 +98,8 @@ class StyleDagTest {
         Path out = Path.of("target/dags/dags.json");
         Files.createDirectories(out.getParent());
         Files.writeString(out, "{\"styles\": [\n" + String.join(",\n", json) + "\n]}\n");
-        assertTrue(problems.isEmpty(), String.join("\n", problems));
+        assertTrue(problems.isEmpty(), problems.size() + " problems:\n" + String.join("\n", problems.subList(0, Math.min(40, problems.size()))));
         assertEquals(SPEC.styles().size(), json.size());
-    }
-
-    /** The id of the look with CSS an element wears, by walking the registry - its layer found as the graph finds it. */
-    private static String wornId(DesignStyle<?> s, ElementPath e) {
-        CastingStylePerRole<?, ?, ?, ?> look = SPEC.wears(s, e);
-        for (DesignStyle<?> at = s; at != null; at = SPEC.parent(at).orElse(null))
-            if (look.getClass().getPackageName().endsWith("." + at.token().replace("-", ""))) return at.token() + "/" + look.getClass().getSimpleName();
-        return "?/" + look.getClass().getSimpleName();
     }
 
     private static Set<String> reachable(StyleDag dag) {
@@ -113,72 +112,48 @@ class StyleDagTest {
         return seen;
     }
 
-    private static String cycle(StyleDag dag) {
-        var out = new HashMap<String, List<String>>();
-        for (StyleDag.Pointer p : dag.pointers()) out.computeIfAbsent(p.from(), k -> new ArrayList<>()).add(p.to());
-        var state = new HashMap<String, Integer>();
-        var path = new ArrayList<String>();
-        for (StyleDag.Node n : dag.nodes()) {
-            String found = dfs(n.id(), out, state, path);
-            if (found != null) return found;
-        }
-        return "?";
-    }
-
-    private static String dfs(String id, Map<String, List<String>> out, Map<String, Integer> state, List<String> path) {
-        Integer st = state.get(id);
-        if (st != null && st == 2) return null;
-        if (st != null && st == 1) return String.join(" -> ", path.subList(path.indexOf(id), path.size())) + " -> " + id;
-        state.put(id, 1);
-        path.add(id);
-        for (String to : out.getOrDefault(id, List.of())) {
-            String found = dfs(to, out, state, path);
-            if (found != null) return found;
-        }
-        path.removeLast();
-        state.put(id, 2);
-        return null;
-    }
-
     private static void summary(StyleDag dag) {
         var layers = new LinkedHashMap<String, Integer>();
         for (StyleDag.Node n : dag.nodes()) layers.merge(n.layer().token(), 1, Integer::sum);
-        var kinds = new LinkedHashMap<StyleDag.Gives, Integer>();
-        for (StyleDag.DelegationPointer d : dag.delegations()) kinds.merge(d.gives(), 1, Integer::sum);
-        long css = dag.nodes().stream().filter(StyleDag.Node::needsCss).count();
+        var specs = new LinkedHashMap<StyleDag.Spec, Integer>();
+        for (StyleDag.SpecPointer p : dag.specs()) specs.merge(p.spec(), 1, Integer::sum);
+        var dels = new LinkedHashMap<StyleDag.Gives, Integer>();
+        for (StyleDag.DelegationPointer d : dag.delegations()) dels.merge(d.gives(), 1, Integer::sum);
         var own = dag.needingCss(dag.style());
         long distinct = own.stream().map(StyleDagTest::fingerprint).distinct().count();
-        var shared = dag.pointedAt().entrySet().stream().sorted((a, b) -> b.getValue() - a.getValue()).limit(3)
-                .map(e -> e.getKey() + "<-" + e.getValue()).toList();
-        System.out.println("[dag] " + dag.style().token() + ": looks " + dag.nodes().size() + " " + layers + ", spec pointers " + dag.specs().size()
-                + " (nesting " + dag.specDepth() + "), delegation pointers " + dag.delegations().size() + " " + kinds + " (longest chain " + dag.delegationLength() + ")"
-                + ", CSS ends " + css + " (its own " + own.size() + ", " + distinct + " distinct texts), depth " + dag.depth() + ", most pointed at " + shared);
+        System.out.println("[dag] " + dag.style().token() + ": declarations " + dag.declarations().size() + ", implementations " + dag.implementations().size()
+                + " " + layers + "; spec pointers " + dag.specs().size() + " " + specs + " (nesting " + dag.nesting() + "); delegation pointers "
+                + dag.delegations().size() + " " + dels + " (chain " + dag.delegationLength() + "); CSS ends of its own " + own.size() + ", " + distinct + " distinct");
     }
 
-    private static String json(StyleDag dag) {
-        var nodes = new ArrayList<String>();
-        for (StyleDag.Node n : dag.nodes())
-            nodes.add("{\"id\": " + q(n.id()) + ", \"layer\": " + q(n.layer().token()) + ", \"casting\": " + q(n.casting().token())
-                    + ", \"gives\": " + q(n.gives().name()) + ", \"root\": " + n.root()
-                    + (n.needsCss() ? ", \"css\": " + q(fingerprint(n)) + ", \"file\": " + q(CastingCss.INSTANCE.resource(n.look().getClass())) : "") + "}");
-        var edges = new ArrayList<String>();
-        for (StyleDag.Pointer p : dag.pointers())
-            edges.add("{\"from\": " + q(p.from()) + ", \"to\": " + q(p.to()) + switch (p) {
-                case StyleDag.SpecPointer sp -> ", \"pointer\": \"spec\", \"slot\": " + q(sp.slot().token());
-                case StyleDag.DelegationPointer dp -> ", \"pointer\": \"delegation\", \"gives\": " + q(dp.gives().name());
-            } + "}");
-        return "{\"style\": " + q(dag.style().token()) + ", \"parent\": " + SPEC.parent(dag.style()).map(p -> q(p.token())).orElse("null")
-                + ", \"depth\": " + dag.depth() + ", \"specDepth\": " + dag.specDepth() + ", \"delegationLength\": " + dag.delegationLength() + ",\n \"nodes\": [\n  " + String.join(",\n  ", nodes) + "],\n \"edges\": [\n  " + String.join(",\n  ", edges) + "]}";
-    }
-
-    /** A look's CSS text, fingerprinted: equal texts, equal prints. */
-    private static String fingerprint(StyleDag.Node n) {
-        String text = CastingCss.INSTANCE.read(n.look().getClass()).orElse("").replace("\r\n", "\n").strip();
+    private static String fingerprint(StyleDag.ImplNode n) {
+        String text = CastingCss.INSTANCE.read(n.impl().getClass()).orElse("").replace("\r\n", "\n").strip();
         try {
             return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8))).substring(0, 12);
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    private static String json(StyleDag dag) {
+        var nodes = new ArrayList<String>();
+        for (StyleDag.Node n : dag.nodes()) {
+            String common = "{\"id\": " + q(n.id()) + ", \"layer\": " + q(n.layer().token()) + ", \"casting\": " + q(n.casting().token()) + ", \"root\": " + n.root();
+            nodes.add(switch (n) {
+                case StyleDag.DeclarationNode d -> common + ", \"node\": \"declaration\"}";
+                case StyleDag.ImplNode i -> common + ", \"node\": \"impl\", \"gives\": " + q(i.gives().name())
+                        + (i.needsCss() ? ", \"css\": " + q(fingerprint(i)) + ", \"file\": " + q(CastingCss.INSTANCE.resource(i.impl().getClass())) : "") + "}";
+            });
+        }
+        var edges = new ArrayList<String>();
+        for (StyleDag.Pointer p : dag.pointers())
+            edges.add("{\"from\": " + q(p.from()) + ", \"to\": " + q(p.to()) + switch (p) {
+                case StyleDag.SpecPointer sp -> ", \"pointer\": \"spec\", \"spec\": " + q(sp.spec().name()) + ", \"slot\": " + q(sp.slot().token());
+                case StyleDag.DelegationPointer dp -> ", \"pointer\": \"delegation\", \"gives\": " + q(dp.gives().name());
+            } + "}");
+        return "{\"style\": " + q(dag.style().token()) + ", \"parent\": " + SPEC.parent(dag.style()).map(p -> q(p.token())).orElse("null")
+                + ", \"depth\": " + dag.depth() + ", \"nesting\": " + dag.nesting() + ", \"delegationLength\": " + dag.delegationLength()
+                + ",\n \"nodes\": [\n  " + String.join(",\n  ", nodes) + "],\n \"edges\": [\n  " + String.join(",\n  ", edges) + "]}";
     }
 
     private static String q(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
-/** base's look of single-tab-pane: CSS of its own. */
+/** base's implementation of single-tab-pane: CSS of its own. */
 public record SingleTabPane() implements CastingStylePerRole<BaseScheme, Base, HousePanes.SingleTabPane, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HousePanes.SingleTabPane, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Text(), new BaseColours.Accent(), new BaseColours.KeysCandidate(), new BaseColours.KeysLent());

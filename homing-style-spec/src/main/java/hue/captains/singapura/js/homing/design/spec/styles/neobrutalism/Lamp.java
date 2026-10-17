@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neo-brutalism's look of lamp: CSS of its own. */
+/** neo-brutalism's implementation of lamp: CSS of its own. */
 public record Lamp() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseMarks.Lamp, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseMarks.Lamp, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.OnDanger(), new BaseColours.Border(), new BaseColours.Quiet(), new BaseColours.Accent(), new BaseColours.AccentWashLight(), new BaseColours.Danger());

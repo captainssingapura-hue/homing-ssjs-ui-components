@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of wordmark_name: as its component on its own, by delegation. */
+/** retro-futurism's implementation of wordmark_name: as its component standalone, by delegation. */
 public record WordmarkName() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.Wordmark, HouseSaying.Name> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.Wordmark, HouseSaying.Name> style() {
         return new StylingRes.RootDelegation<>(new Wordmark());

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** sketchy's look of code-block: CSS of its own. */
+/** sketchy's implementation of code-block: CSS of its own. */
 public record CodeBlock() implements CastingStylePerRole<BaseScheme, Sketchy, HouseRegions.CodeBlock, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseRegions.CodeBlock, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed(), new BaseColours.Text(), new BaseColours.Border());

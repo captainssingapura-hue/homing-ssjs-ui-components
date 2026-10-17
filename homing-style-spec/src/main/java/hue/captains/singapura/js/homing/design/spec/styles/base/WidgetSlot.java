@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** base's look of widget-slot: CSS of its own. */
+/** base's implementation of widget-slot: CSS of its own. */
 public record WidgetSlot() implements CastingStylePerRole<BaseScheme, Base, HouseRegions.WidgetSlot, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseRegions.WidgetSlot, RoleRoot> style() {
         return new StylingRes.CssContent<>();

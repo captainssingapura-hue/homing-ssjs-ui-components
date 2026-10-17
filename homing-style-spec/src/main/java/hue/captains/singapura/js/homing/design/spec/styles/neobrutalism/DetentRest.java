@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neo-brutalism's look of detent_rest: as its component on its own, by delegation. */
+/** neo-brutalism's implementation of detent_rest: as its component standalone, by delegation. */
 public record DetentRest() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseMarks.Detent, HouseSaying.Rest> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseMarks.Detent, HouseSaying.Rest> style() {
         return new StylingRes.RootDelegation<>(new Detent());

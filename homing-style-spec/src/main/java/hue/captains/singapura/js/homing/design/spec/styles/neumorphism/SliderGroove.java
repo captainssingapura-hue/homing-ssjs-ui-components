@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neumorphism's look of slider-groove: CSS of its own. */
+/** neumorphism's implementation of slider-groove: CSS of its own. */
 public record SliderGroove() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.SliderGroove, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.SliderGroove, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.WashSoft(), new BaseColours.GrooveEdge());

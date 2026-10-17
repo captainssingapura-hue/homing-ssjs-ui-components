@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** retro-futurism's look of slider-knob: CSS of its own. */
+/** retro-futurism's implementation of slider-knob: CSS of its own. */
 public record SliderKnob() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.SliderKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.SliderKnob, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring());

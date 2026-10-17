@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** base's look of slider-knob: CSS of its own. */
+/** base's implementation of slider-knob: CSS of its own. */
 public record SliderKnob() implements CastingStylePerRole<BaseScheme, Base, HouseControls.SliderKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseControls.SliderKnob, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring());

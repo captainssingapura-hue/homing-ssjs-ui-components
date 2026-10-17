@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of label_name: as its component on its own, by delegation. */
+/** neo-futurism's implementation of label_name: as its component standalone, by delegation. */
 public record LabelName() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Label, HouseSaying.Name> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Label, HouseSaying.Name> style() {
         return new StylingRes.RootDelegation<>(new Label());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's look of badge_tag: as its component on its own, by delegation. */
+/** sketchy's implementation of badge_tag: as its component standalone, by delegation. */
 public record BadgeTag() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Badge, HouseSaying.Tag> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Badge, HouseSaying.Tag> style() {
         return new StylingRes.RootDelegation<>(new Badge());

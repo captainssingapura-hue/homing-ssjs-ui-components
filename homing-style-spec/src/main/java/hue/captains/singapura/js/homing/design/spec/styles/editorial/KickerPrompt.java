@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of kicker_prompt: as its component on its own, by delegation. */
+/** editorial's implementation of kicker_prompt: as its component standalone, by delegation. */
 public record KickerPrompt() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Kicker, HouseSaying.Prompt> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Kicker, HouseSaying.Prompt> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

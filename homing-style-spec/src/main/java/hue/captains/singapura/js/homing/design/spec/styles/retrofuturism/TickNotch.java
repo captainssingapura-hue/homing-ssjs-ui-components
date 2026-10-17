@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** retro-futurism's look of tick_notch: as its component on its own, by delegation. */
+/** retro-futurism's implementation of tick_notch: as its component standalone, by delegation. */
 public record TickNotch() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseMarks.Tick, HouseSaying.Notch> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseMarks.Tick, HouseSaying.Notch> style() {
         return new StylingRes.RootDelegation<>(new Tick());

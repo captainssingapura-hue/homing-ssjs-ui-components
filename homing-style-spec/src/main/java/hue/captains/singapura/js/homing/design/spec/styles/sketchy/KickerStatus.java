@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's look of kicker_status: as its component on its own, by delegation. */
+/** sketchy's implementation of kicker_status: as its component standalone, by delegation. */
 public record KickerStatus() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Kicker, HouseSaying.Status> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Kicker, HouseSaying.Status> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

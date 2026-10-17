@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of kicker: CSS of its own. */
+/** glassmorphism's implementation of kicker: CSS of its own. */
 public record Kicker() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Kicker, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Kicker, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.KickerInk());

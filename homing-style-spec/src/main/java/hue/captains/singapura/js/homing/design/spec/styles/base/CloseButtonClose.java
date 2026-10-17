@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** base's look of close-button_close: as its component on its own, by delegation. */
+/** base's implementation of close-button_close: as its component standalone, by delegation. */
 public record CloseButtonClose() implements CastingStylePerRole<BaseScheme, Base, HouseControls.CloseButton, HouseDoing.Close> {
     @Override public StylingRes<BaseScheme, Base, HouseControls.CloseButton, HouseDoing.Close> style() {
         return new StylingRes.RootDelegation<>(new CloseButton());

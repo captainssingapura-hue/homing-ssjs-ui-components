@@ -8,9 +8,10 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import java.util.List;
 
-/** neo-brutalism's look of primary-button: CSS of its own. */
+/** neo-brutalism's implementation of primary-button: CSS of its own. */
 public record PrimaryButton() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseControls.PrimaryButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseControls.PrimaryButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Inverted(), new BaseColours.Title(), new BaseColours.Ring(), new ButtonGround(), new ButtonLabel());

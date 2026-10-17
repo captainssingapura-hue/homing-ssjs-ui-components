@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** retro-futurism's look of toggle-knob: CSS of its own. */
+/** retro-futurism's implementation of toggle-knob: CSS of its own. */
 public record ToggleKnob() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.ToggleKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.ToggleKnob, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised());

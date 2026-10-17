@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** glassmorphism's look of close-button_close: as its component on its own, by delegation. */
+/** glassmorphism's implementation of close-button_close: as its component standalone, by delegation. */
 public record CloseButtonClose() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.CloseButton, HouseDoing.Close> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.CloseButton, HouseDoing.Close> style() {
         return new StylingRes.RootDelegation<>(new CloseButton());

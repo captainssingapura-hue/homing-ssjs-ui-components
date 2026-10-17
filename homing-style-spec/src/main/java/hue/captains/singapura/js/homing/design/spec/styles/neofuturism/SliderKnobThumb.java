@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neo-futurism's look of slider-knob_thumb: as its component on its own, by delegation. */
+/** neo-futurism's implementation of slider-knob_thumb: as its component standalone, by delegation. */
 public record SliderKnobThumb() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.SliderKnob, HouseDoing.Thumb> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.SliderKnob, HouseDoing.Thumb> style() {
         return new StylingRes.RootDelegation<>(new SliderKnob());

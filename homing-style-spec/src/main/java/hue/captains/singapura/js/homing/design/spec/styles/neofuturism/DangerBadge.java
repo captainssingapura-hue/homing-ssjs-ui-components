@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of danger-badge: CSS of its own. */
+/** neo-futurism's implementation of danger-badge: CSS of its own. */
 public record DangerBadge() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.DangerBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.DangerBadge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.DangerInk(), new BaseColours.DangerWash());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-brutalism's look of caption_hint: as its component on its own, by delegation. */
+/** neo-brutalism's implementation of caption_hint: as its component standalone, by delegation. */
 public record CaptionHint() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.Caption, HouseSaying.Hint> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.Caption, HouseSaying.Hint> style() {
         return new StylingRes.RootDelegation<>(new Caption());

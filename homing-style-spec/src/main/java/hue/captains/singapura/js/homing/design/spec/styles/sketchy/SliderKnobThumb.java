@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** sketchy's look of slider-knob_thumb: as its component on its own, by delegation. */
+/** sketchy's implementation of slider-knob_thumb: as its component standalone, by delegation. */
 public record SliderKnobThumb() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.SliderKnob, HouseDoing.Thumb> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.SliderKnob, HouseDoing.Thumb> style() {
         return new StylingRes.RootDelegation<>(new SliderKnob());

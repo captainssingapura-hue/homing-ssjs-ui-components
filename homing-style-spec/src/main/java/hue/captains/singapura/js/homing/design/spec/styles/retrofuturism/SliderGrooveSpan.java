@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** retro-futurism's look of slider-groove_span: as its component on its own, by delegation. */
+/** retro-futurism's implementation of slider-groove_span: as its component standalone, by delegation. */
 public record SliderGrooveSpan() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseMarks.SliderGroove, HouseSaying.Span> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseMarks.SliderGroove, HouseSaying.Span> style() {
         return new StylingRes.RootDelegation<>(new SliderGroove());

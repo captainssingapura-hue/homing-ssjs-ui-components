@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of rotate-icon: CSS of its own. */
+/** base's implementation of rotate-icon: CSS of its own. */
 public record RotateIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.RotateIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.RotateIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

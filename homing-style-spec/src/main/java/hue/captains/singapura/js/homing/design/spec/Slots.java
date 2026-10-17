@@ -9,13 +9,11 @@ import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 import hue.captains.singapura.tao.ontology.ValueObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
- * A component's part slots as a look must point them (RFC 0067, D53): every player of every part it declares, in the
- * part's role - but a top-level player a role only places, which wears its own implementation and is no slot of its
- * owner's look.
+ * A component's part slots as a declaration must point them (RFC 0067, D53): every player of every part it declares, in
+ * the part's role - a functional one marked, its part placed, worn standalone.
  */
 public record Slots() implements StatelessFunctionalObject {
 
@@ -26,7 +24,7 @@ public record Slots() implements StatelessFunctionalObject {
      *
      * @param part   the player
      * @param role   the role the part is in
-     * @param placed whether the role only places it: it then wears a look of it on its own
+     * @param placed whether the role only places it: it then wears its standalone
      */
     public record Slot(Component<?> part, Role<?> role, boolean placed) implements ValueObject {
         /** The casting its look is of. */
@@ -37,14 +35,10 @@ public record Slots() implements StatelessFunctionalObject {
     }
 
     /** A component's slots, in its parts' order. */
-    public List<Slot> of(Taxonomy taxonomy, Collection<? extends Component<?>> topLevel, Component<?> component) {
+    public List<Slot> of(Taxonomy taxonomy, Component<?> component) {
         var out = new ArrayList<Slot>();
         for (Part<?, ?> p : taxonomy.partsOf(component))
-            for (Component<?> b : p.bases()) {
-                boolean placed = new Casting(b, p.role()).functional();
-                if (placed && topLevel.contains(b)) continue;
-                out.add(new Slot(b, p.role(), placed));
-            }
+            for (Component<?> b : p.bases()) out.add(new Slot(b, p.role(), new Casting(b, p.role()).functional()));
         return List.copyOf(out);
     }
 }

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neumorphism's look of toggle-groove_span: as its component on its own, by delegation. */
+/** neumorphism's implementation of toggle-groove_span: as its component standalone, by delegation. */
 public record ToggleGrooveSpan() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.ToggleGroove, HouseSaying.Span> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.ToggleGroove, HouseSaying.Span> style() {
         return new StylingRes.RootDelegation<>(new ToggleGroove());

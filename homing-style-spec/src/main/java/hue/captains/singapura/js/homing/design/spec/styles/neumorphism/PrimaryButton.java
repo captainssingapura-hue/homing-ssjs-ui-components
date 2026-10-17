@@ -8,9 +8,10 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import java.util.List;
 
-/** neumorphism's look of primary-button: CSS of its own. */
+/** neumorphism's implementation of primary-button: CSS of its own. */
 public record PrimaryButton() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseControls.PrimaryButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseControls.PrimaryButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.ShadeFirm(), new ButtonGround(), new ButtonLabel());

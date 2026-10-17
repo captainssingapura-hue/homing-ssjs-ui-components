@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** sketchy's look of slider-rail: CSS of its own. */
+/** sketchy's implementation of slider-rail: CSS of its own. */
 public record SliderRail() implements CastingStylePerRole<BaseScheme, Sketchy, HouseMarks.SliderRail, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseMarks.SliderRail, RoleRoot> style() {
         return new StylingRes.CssContent<>();

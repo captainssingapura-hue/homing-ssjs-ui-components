@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neo-brutalism's look of slider-rail: CSS of its own. */
+/** neo-brutalism's implementation of slider-rail: CSS of its own. */
 public record SliderRail() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseMarks.SliderRail, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseMarks.SliderRail, RoleRoot> style() {
         return new StylingRes.CssContent<>();

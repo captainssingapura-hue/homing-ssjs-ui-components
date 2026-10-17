@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** neo-brutalism's look of plain-button: CSS of its own. */
+/** neo-brutalism's implementation of plain-button: CSS of its own. */
 public record PlainButton() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseControls.PlainButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseControls.PlainButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Inverted(), new BaseColours.Text(), new BaseColours.Border(), new BaseColours.Ring());

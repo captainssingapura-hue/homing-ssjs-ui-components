@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** sketchy's look of plain-button_choice: as its component on its own, by delegation. */
+/** sketchy's implementation of plain-button_choice: as its component standalone, by delegation. */
 public record PlainButtonChoice() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.PlainButton, HouseDoing.Choice> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.PlainButton, HouseDoing.Choice> style() {
         return new StylingRes.RootDelegation<>(new PlainButton());

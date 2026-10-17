@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** glassmorphism's look of toggle-knob: CSS of its own. */
+/** glassmorphism's implementation of toggle-knob: CSS of its own. */
 public record ToggleKnob() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.ToggleKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.ToggleKnob, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised());

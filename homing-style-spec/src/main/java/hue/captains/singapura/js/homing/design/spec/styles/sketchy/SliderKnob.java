@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** sketchy's look of slider-knob: CSS of its own. */
+/** sketchy's implementation of slider-knob: CSS of its own. */
 public record SliderKnob() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.SliderKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.SliderKnob, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Accent(), new BaseColours.Ring());

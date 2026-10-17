@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neumorphism's look of toggle-groove: CSS of its own. */
+/** neumorphism's implementation of toggle-groove: CSS of its own. */
 public record ToggleGroove() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.ToggleGroove, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.ToggleGroove, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.WashSoft(), new BaseColours.GrooveEdge(), new BaseColours.Accent());

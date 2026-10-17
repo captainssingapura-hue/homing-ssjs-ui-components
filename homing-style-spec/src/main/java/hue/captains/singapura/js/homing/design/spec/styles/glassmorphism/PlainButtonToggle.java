@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** glassmorphism's look of plain-button_toggle: as its component on its own, by delegation. */
+/** glassmorphism's implementation of plain-button_toggle: as its component standalone, by delegation. */
 public record PlainButtonToggle() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.PlainButton, HouseDoing.Toggle> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.PlainButton, HouseDoing.Toggle> style() {
         return new StylingRes.RootDelegation<>(new PlainButton());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of kicker_status: as its component on its own, by delegation. */
+/** neo-futurism's implementation of kicker_status: as its component standalone, by delegation. */
 public record KickerStatus() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Kicker, HouseSaying.Status> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Kicker, HouseSaying.Status> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

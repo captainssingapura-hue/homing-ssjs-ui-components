@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neumorphism's look of tick_notch: as its component on its own, by delegation. */
+/** neumorphism's implementation of tick_notch: as its component standalone, by delegation. */
 public record TickNotch() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.Tick, HouseSaying.Notch> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.Tick, HouseSaying.Notch> style() {
         return new StylingRes.RootDelegation<>(new Tick());

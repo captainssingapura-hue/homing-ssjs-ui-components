@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMenus;
 
-/** base's look of context-menu-steward: CSS of its own. */
+/** base's implementation of context-menu-steward: CSS of its own. */
 public record ContextMenuSteward() implements CastingStylePerRole<BaseScheme, Base, HouseMenus.ContextMenuSteward, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseMenus.ContextMenuSteward, RoleRoot> style() {
         return new StylingRes.CssContent<>();

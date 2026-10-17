@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** glassmorphism's look of code-block: CSS of its own. */
+/** glassmorphism's implementation of code-block: CSS of its own. */
 public record CodeBlock() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseRegions.CodeBlock, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseRegions.CodeBlock, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed(), new BaseColours.Text(), new BaseColours.Border());

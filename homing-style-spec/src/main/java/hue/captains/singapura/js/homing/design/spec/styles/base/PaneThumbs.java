@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
-/** base's look of pane-thumbs: CSS of its own. */
+/** base's implementation of pane-thumbs: CSS of its own. */
 public record PaneThumbs() implements CastingStylePerRole<BaseScheme, Base, HousePanes.PaneThumbs, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HousePanes.PaneThumbs, RoleRoot> style() {
         return new StylingRes.CssContent<>();

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of caption: CSS of its own. */
+/** neo-futurism's implementation of caption: CSS of its own. */
 public record Caption() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Caption, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Caption, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded());

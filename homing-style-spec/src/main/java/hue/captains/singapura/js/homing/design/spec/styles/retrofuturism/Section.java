@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** retro-futurism's look of section: CSS of its own. */
+/** retro-futurism's implementation of section: CSS of its own. */
 public record Section() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseRegions.Section, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseRegions.Section, RoleRoot> style() {
         return new StylingRes.CssContent<>();

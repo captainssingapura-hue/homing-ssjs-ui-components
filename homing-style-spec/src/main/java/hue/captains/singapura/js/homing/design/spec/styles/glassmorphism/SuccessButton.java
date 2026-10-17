@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** glassmorphism's look of success-button: CSS of its own. */
+/** glassmorphism's implementation of success-button: CSS of its own. */
 public record SuccessButton() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.SuccessButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.SuccessButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.SuccessInk(), new BaseColours.Border(), new BaseColours.Ring(), new BaseColours.ShadeSoft(), new BaseColours.ShadeFirm(), new BaseColours.Sheen(), new BaseColours.SuccessGround());

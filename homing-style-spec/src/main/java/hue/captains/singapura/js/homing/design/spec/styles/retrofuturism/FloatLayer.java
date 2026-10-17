@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** retro-futurism's look of float-layer: CSS of its own. */
+/** retro-futurism's implementation of float-layer: CSS of its own. */
 public record FloatLayer() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseContainers.FloatLayer, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseContainers.FloatLayer, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed());

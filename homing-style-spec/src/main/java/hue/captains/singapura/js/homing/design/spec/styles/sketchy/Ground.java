@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** sketchy's look of ground: CSS of its own. */
+/** sketchy's implementation of ground: CSS of its own. */
 public record Ground() implements CastingStylePerRole<BaseScheme, Sketchy, HouseContainers.Ground, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseContainers.Ground, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ground(), new BaseColours.ScrollThumb(), new BaseColours.Text());

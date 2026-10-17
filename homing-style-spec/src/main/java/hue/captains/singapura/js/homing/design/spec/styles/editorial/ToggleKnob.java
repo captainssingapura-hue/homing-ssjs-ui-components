@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** editorial's look of toggle-knob: CSS of its own. */
+/** editorial's implementation of toggle-knob: CSS of its own. */
 public record ToggleKnob() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.ToggleKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseControls.ToggleKnob, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised());

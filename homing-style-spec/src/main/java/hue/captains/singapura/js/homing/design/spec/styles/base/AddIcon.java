@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of add-icon: CSS of its own. */
+/** base's implementation of add-icon: CSS of its own. */
 public record AddIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.AddIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.AddIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

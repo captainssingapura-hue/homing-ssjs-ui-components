@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of heading2: CSS of its own. */
+/** editorial's implementation of heading2: CSS of its own. */
 public record Heading2() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Heading2, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Heading2, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.HeadingInk());

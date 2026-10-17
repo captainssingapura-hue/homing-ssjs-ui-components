@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** editorial's look of plain-button_zoom-in: as its component on its own, by delegation. */
+/** editorial's implementation of plain-button_zoom-in: as its component standalone, by delegation. */
 public record PlainButtonZoomIn() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.PlainButton, HouseDoing.ZoomIn> {
     @Override public StylingRes<BaseScheme, Editorial, HouseControls.PlainButton, HouseDoing.ZoomIn> style() {
         return new StylingRes.RootDelegation<>(new PlainButton());

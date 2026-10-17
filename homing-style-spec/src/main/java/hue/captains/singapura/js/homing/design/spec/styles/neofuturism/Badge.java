@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of badge: CSS of its own. */
+/** neo-futurism's implementation of badge: CSS of its own. */
 public record Badge() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Badge, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Badge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.AccentWash());

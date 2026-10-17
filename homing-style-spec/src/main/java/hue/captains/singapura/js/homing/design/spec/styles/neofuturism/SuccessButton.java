@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** neo-futurism's look of success-button: CSS of its own. */
+/** neo-futurism's implementation of success-button: CSS of its own. */
 public record SuccessButton() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.SuccessButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.SuccessButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.SuccessInk(), new BaseColours.Border(), new BaseColours.Ring(), new BaseColours.ShadeSoft(), new BaseColours.GlowFaint(), new BaseColours.GlowDim(), new BaseColours.GlowSoft(), new BaseColours.GlowBright(), new BaseColours.SuccessGround());

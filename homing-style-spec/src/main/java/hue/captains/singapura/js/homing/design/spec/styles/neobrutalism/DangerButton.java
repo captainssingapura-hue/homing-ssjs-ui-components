@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** neo-brutalism's look of danger-button: CSS of its own. */
+/** neo-brutalism's implementation of danger-button: CSS of its own. */
 public record DangerButton() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseControls.DangerButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseControls.DangerButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Inverted(), new BaseColours.Ring(), new BaseColours.DangerEdge(), new BaseColours.DangerGround(), new BaseColours.DangerWriting());

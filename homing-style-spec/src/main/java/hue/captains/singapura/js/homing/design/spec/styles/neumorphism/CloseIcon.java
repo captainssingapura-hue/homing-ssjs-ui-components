@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** neumorphism's look of close-icon: CSS of its own. */
+/** neumorphism's implementation of close-icon: CSS of its own. */
 public record CloseIcon() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseIcons.CloseIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseIcons.CloseIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

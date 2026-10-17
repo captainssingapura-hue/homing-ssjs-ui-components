@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** base's look of code-block: CSS of its own. */
+/** base's implementation of code-block: CSS of its own. */
 public record CodeBlock() implements CastingStylePerRole<BaseScheme, Base, HouseRegions.CodeBlock, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseRegions.CodeBlock, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed(), new BaseColours.Text(), new BaseColours.Border());

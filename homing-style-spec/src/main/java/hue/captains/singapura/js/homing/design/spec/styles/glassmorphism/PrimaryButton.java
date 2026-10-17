@@ -8,9 +8,10 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import java.util.List;
 
-/** glassmorphism's look of primary-button: CSS of its own. */
+/** glassmorphism's implementation of primary-button: CSS of its own. */
 public record PrimaryButton() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.PrimaryButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.PrimaryButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.ShadeSoft(), new BaseColours.ShadeFirm(), new BaseColours.Sheen(), new ButtonGround(), new ButtonLabel());

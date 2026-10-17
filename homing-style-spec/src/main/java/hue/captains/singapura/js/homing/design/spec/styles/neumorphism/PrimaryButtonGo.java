@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neumorphism's look of primary-button_go: as its component on its own, by delegation. */
+/** neumorphism's implementation of primary-button_go: as its component standalone, by delegation. */
 public record PrimaryButtonGo() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseControls.PrimaryButton, HouseDoing.Go> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseControls.PrimaryButton, HouseDoing.Go> style() {
         return new StylingRes.RootDelegation<>(new PrimaryButton());

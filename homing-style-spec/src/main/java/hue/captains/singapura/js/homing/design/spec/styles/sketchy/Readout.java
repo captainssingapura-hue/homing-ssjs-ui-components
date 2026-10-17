@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's look of readout: CSS of its own. */
+/** sketchy's implementation of readout: CSS of its own. */
 public record Readout() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Readout, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Readout, RoleRoot> style() {
         return new StylingRes.CssContent<>();

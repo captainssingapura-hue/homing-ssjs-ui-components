@@ -8,9 +8,10 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import java.util.List;
 
-/** base's look of secondary-button: CSS of its own. */
+/** base's implementation of secondary-button: CSS of its own. */
 public record SecondaryButton() implements CastingStylePerRole<BaseScheme, Base, HouseControls.SecondaryButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseControls.SecondaryButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new ButtonLabel(), new BaseColours.AccentEdge(), new BaseColours.Ring(), new ButtonGround());

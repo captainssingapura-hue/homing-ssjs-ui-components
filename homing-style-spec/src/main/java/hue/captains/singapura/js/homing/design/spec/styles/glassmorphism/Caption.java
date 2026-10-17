@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of caption: CSS of its own. */
+/** glassmorphism's implementation of caption: CSS of its own. */
 public record Caption() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Caption, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Caption, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded());

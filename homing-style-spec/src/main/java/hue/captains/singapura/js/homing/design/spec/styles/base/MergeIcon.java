@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of merge-icon: CSS of its own. */
+/** base's implementation of merge-icon: CSS of its own. */
 public record MergeIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.MergeIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.MergeIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

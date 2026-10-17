@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's look of label_name: as its component on its own, by delegation. */
+/** sketchy's implementation of label_name: as its component standalone, by delegation. */
 public record LabelName() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Label, HouseSaying.Name> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Label, HouseSaying.Name> style() {
         return new StylingRes.RootDelegation<>(new Label());

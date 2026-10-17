@@ -8,9 +8,10 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import java.util.List;
 
-/** retro-futurism's look of primary-button: CSS of its own. */
+/** retro-futurism's implementation of primary-button: CSS of its own. */
 public record PrimaryButton() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.PrimaryButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.PrimaryButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.GlowDim(), new BaseColours.GlowMedium(), new BaseColours.GlowStrong(), new BaseColours.GlowFull(), new ButtonGround(), new ButtonLabel());

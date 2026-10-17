@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** retro-futurism's look of slider-rail: CSS of its own. */
+/** retro-futurism's implementation of slider-rail: CSS of its own. */
 public record SliderRail() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseMarks.SliderRail, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseMarks.SliderRail, RoleRoot> style() {
         return new StylingRes.CssContent<>();

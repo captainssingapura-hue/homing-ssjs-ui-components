@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's look of lede: CSS of its own. */
+/** base's implementation of lede: CSS of its own. */
 public record Lede() implements CastingStylePerRole<BaseScheme, Base, HouseText.Lede, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseText.Lede, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded());

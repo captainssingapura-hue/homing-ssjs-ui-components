@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of badge_tag: as its component on its own, by delegation. */
+/** retro-futurism's implementation of badge_tag: as its component standalone, by delegation. */
 public record BadgeTag() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.Badge, HouseSaying.Tag> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.Badge, HouseSaying.Tag> style() {
         return new StylingRes.RootDelegation<>(new Badge());

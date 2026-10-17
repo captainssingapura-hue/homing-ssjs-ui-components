@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of badge: CSS of its own. */
+/** glassmorphism's implementation of badge: CSS of its own. */
 public record Badge() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Badge, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Badge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.AccentWash());

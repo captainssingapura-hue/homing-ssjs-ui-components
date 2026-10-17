@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neo-brutalism's look of detent: CSS of its own. */
+/** neo-brutalism's implementation of detent: CSS of its own. */
 public record Detent() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseMarks.Detent, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseMarks.Detent, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

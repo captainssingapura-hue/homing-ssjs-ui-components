@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** neo-futurism's look of float-layer: CSS of its own. */
+/** neo-futurism's implementation of float-layer: CSS of its own. */
 public record FloatLayer() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseContainers.FloatLayer, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseContainers.FloatLayer, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed());

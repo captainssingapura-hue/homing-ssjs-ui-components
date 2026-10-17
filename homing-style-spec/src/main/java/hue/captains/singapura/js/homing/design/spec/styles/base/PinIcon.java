@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of pin-icon: CSS of its own. */
+/** base's implementation of pin-icon: CSS of its own. */
 public record PinIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.PinIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.PinIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's look of lede_summary: as its component on its own, by delegation. */
+/** base's implementation of lede_summary: as its component standalone, by delegation. */
 public record LedeSummary() implements CastingStylePerRole<BaseScheme, Base, HouseText.Lede, HouseSaying.Summary> {
     @Override public StylingRes<BaseScheme, Base, HouseText.Lede, HouseSaying.Summary> style() {
         return new StylingRes.RootDelegation<>(new Lede());

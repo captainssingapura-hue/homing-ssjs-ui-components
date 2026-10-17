@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** base's look of detent: CSS of its own. */
+/** base's implementation of detent: CSS of its own. */
 public record Detent() implements CastingStylePerRole<BaseScheme, Base, HouseMarks.Detent, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseMarks.Detent, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

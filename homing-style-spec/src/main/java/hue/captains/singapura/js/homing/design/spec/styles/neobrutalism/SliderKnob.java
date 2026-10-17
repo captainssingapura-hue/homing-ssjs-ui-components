@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** neo-brutalism's look of slider-knob: CSS of its own. */
+/** neo-brutalism's implementation of slider-knob: CSS of its own. */
 public record SliderKnob() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseControls.SliderKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseControls.SliderKnob, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Accent(), new BaseColours.Ring());

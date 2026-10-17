@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** base's look of text-box: CSS of its own. */
+/** base's implementation of text-box: CSS of its own. */
 public record TextBox() implements CastingStylePerRole<BaseScheme, Base, HouseControls.TextBox, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseControls.TextBox, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed(), new BaseColours.Text(), new BaseColours.TextFaded(), new BaseColours.Border(), new BaseColours.Ring());

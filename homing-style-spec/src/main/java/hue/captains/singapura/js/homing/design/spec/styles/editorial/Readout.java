@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of readout: CSS of its own. */
+/** editorial's implementation of readout: CSS of its own. */
 public record Readout() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Readout, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Readout, RoleRoot> style() {
         return new StylingRes.CssContent<>();

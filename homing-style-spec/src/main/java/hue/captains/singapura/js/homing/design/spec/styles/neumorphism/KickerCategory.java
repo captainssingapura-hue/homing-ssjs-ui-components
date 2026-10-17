@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of kicker_category: as its component on its own, by delegation. */
+/** neumorphism's implementation of kicker_category: as its component standalone, by delegation. */
 public record KickerCategory() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Kicker, HouseSaying.Category> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Kicker, HouseSaying.Category> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

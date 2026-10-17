@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-brutalism's look of badge_tag: as its component on its own, by delegation. */
+/** neo-brutalism's implementation of badge_tag: as its component standalone, by delegation. */
 public record BadgeTag() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.Badge, HouseSaying.Tag> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.Badge, HouseSaying.Tag> style() {
         return new StylingRes.RootDelegation<>(new Badge());

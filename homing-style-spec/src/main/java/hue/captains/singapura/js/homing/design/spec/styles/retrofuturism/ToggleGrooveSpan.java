@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** retro-futurism's look of toggle-groove_span: as its component on its own, by delegation. */
+/** retro-futurism's implementation of toggle-groove_span: as its component standalone, by delegation. */
 public record ToggleGrooveSpan() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseMarks.ToggleGroove, HouseSaying.Span> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseMarks.ToggleGroove, HouseSaying.Span> style() {
         return new StylingRes.RootDelegation<>(new ToggleGroove());

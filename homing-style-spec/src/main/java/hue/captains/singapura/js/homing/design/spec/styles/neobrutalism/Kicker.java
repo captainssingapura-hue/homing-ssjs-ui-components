@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-brutalism's look of kicker: CSS of its own. */
+/** neo-brutalism's implementation of kicker: CSS of its own. */
 public record Kicker() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.Kicker, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.Kicker, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.KickerInk());

@@ -14,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class StyleDagOrderTest {
 
     private static StyleDag.Node node(String id) {
-        return new StyleDag.Node(id, Base.INSTANCE, new Casting(HouseControls.PlainButton.INSTANCE), StyleDag.Gives.CSS, id.equals("a"),
+        return new StyleDag.ImplNode(id, Base.INSTANCE, new Casting(HouseControls.PlainButton.INSTANCE), StyleDag.Gives.CSS, id.equals("a"),
                 new GenericsSampleTest.BasePlain());
     }
 
-    private static StyleDag.Pointer edge(String from, String to) { return new StyleDag.SpecPointer(from, to, new Casting(HouseControls.PlainButton.INSTANCE)); }
+    private static StyleDag.Pointer edge(String from, String to) { return new StyleDag.SpecPointer(from, to, StyleDag.Spec.SAME_ROLE, new Casting(HouseControls.PlainButton.INSTANCE)); }
 
     @Test
     void aCycle_leavesNoOrder() {

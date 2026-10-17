@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of kicker: CSS of its own. */
+/** retro-futurism's implementation of kicker: CSS of its own. */
 public record Kicker() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.Kicker, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.Kicker, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.KickerInk());

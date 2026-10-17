@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** editorial's look of danger-button: CSS of its own. */
+/** editorial's implementation of danger-button: CSS of its own. */
 public record DangerButton() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.DangerButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseControls.DangerButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring(), new BaseColours.ShadeFaint(), new BaseColours.ShadeLight(), new BaseColours.ShadeMedium(), new BaseColours.DangerEdge(), new BaseColours.DangerGround(), new BaseColours.DangerWriting());

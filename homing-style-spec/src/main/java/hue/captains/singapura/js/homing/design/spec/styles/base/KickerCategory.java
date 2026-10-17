@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's look of kicker_category: as its component on its own, by delegation. */
+/** base's implementation of kicker_category: as its component standalone, by delegation. */
 public record KickerCategory() implements CastingStylePerRole<BaseScheme, Base, HouseText.Kicker, HouseSaying.Category> {
     @Override public StylingRes<BaseScheme, Base, HouseText.Kicker, HouseSaying.Category> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

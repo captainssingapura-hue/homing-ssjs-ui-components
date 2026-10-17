@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** neumorphism's look of scrim: CSS of its own. */
+/** neumorphism's implementation of scrim: CSS of its own. */
 public record Scrim() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseContainers.Scrim, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseContainers.Scrim, RoleRoot> style() {
         return new StylingRes.CssContent<>();

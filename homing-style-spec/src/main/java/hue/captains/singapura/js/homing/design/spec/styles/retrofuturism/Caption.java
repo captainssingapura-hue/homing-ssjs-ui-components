@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of caption: CSS of its own. */
+/** retro-futurism's implementation of caption: CSS of its own. */
 public record Caption() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.Caption, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.Caption, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded());

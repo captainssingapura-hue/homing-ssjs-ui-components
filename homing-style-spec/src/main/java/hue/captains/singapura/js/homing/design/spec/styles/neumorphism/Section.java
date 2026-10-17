@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** neumorphism's look of section: CSS of its own. */
+/** neumorphism's implementation of section: CSS of its own. */
 public record Section() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseRegions.Section, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseRegions.Section, RoleRoot> style() {
         return new StylingRes.CssContent<>();

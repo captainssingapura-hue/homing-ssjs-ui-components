@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** neo-brutalism's look of warning-button: CSS of its own. */
+/** neo-brutalism's implementation of warning-button: CSS of its own. */
 public record WarningButton() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseControls.WarningButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseControls.WarningButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Inverted(), new BaseColours.WarningInk(), new BaseColours.Border(), new BaseColours.Ring(), new BaseColours.WarningGround());

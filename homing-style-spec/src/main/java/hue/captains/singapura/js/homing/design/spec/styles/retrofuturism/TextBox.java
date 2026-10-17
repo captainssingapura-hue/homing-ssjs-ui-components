@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** retro-futurism's look of text-box: CSS of its own. */
+/** retro-futurism's implementation of text-box: CSS of its own. */
 public record TextBox() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.TextBox, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.TextBox, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed(), new BaseColours.Text(), new BaseColours.TextFaded(), new BaseColours.Border(), new BaseColours.Ring());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-brutalism's look of label_title: CSS of its own. */
+/** neo-brutalism's implementation of label_title: CSS of its own. */
 public record LabelTitle() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.Label, HouseSaying.Title> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.Label, HouseSaying.Title> style() {
         return new StylingRes.CssContent<>();

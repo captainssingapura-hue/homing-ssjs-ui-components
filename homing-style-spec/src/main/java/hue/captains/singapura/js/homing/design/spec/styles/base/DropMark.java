@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** base's look of drop-mark: CSS of its own. */
+/** base's implementation of drop-mark: CSS of its own. */
 public record DropMark() implements CastingStylePerRole<BaseScheme, Base, HouseMarks.DropMark, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseMarks.DropMark, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Accent());

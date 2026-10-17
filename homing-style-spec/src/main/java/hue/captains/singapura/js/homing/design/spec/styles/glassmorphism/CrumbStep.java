@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** glassmorphism's look of crumb_step: as its component on its own, by delegation. */
+/** glassmorphism's implementation of crumb_step: as its component standalone, by delegation. */
 public record CrumbStep() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.Crumb, HouseDoing.Step> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.Crumb, HouseDoing.Step> style() {
         return new StylingRes.RootDelegation<>(new Crumb());

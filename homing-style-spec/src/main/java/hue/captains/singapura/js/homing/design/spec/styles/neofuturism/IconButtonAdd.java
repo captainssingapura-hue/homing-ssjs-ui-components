@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neo-futurism's look of icon-button_add: as its component on its own, by delegation. */
+/** neo-futurism's implementation of icon-button_add: as its component standalone, by delegation. */
 public record IconButtonAdd() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.IconButton, HouseDoing.Add> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.IconButton, HouseDoing.Add> style() {
         return new StylingRes.RootDelegation<>(new IconButton());

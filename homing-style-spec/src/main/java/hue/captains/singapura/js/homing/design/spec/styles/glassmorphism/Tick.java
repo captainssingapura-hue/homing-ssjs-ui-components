@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** glassmorphism's look of tick: CSS of its own. */
+/** glassmorphism's implementation of tick: CSS of its own. */
 public record Tick() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseMarks.Tick, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseMarks.Tick, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

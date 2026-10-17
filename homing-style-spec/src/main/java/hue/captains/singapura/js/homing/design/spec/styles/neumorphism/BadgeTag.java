@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of badge_tag: as its component on its own, by delegation. */
+/** neumorphism's implementation of badge_tag: as its component standalone, by delegation. */
 public record BadgeTag() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Badge, HouseSaying.Tag> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Badge, HouseSaying.Tag> style() {
         return new StylingRes.RootDelegation<>(new Badge());

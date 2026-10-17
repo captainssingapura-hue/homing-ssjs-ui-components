@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** editorial's look of fill: CSS of its own. */
+/** editorial's implementation of fill: CSS of its own. */
 public record Fill() implements CastingStylePerRole<BaseScheme, Editorial, HouseMarks.Fill, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseMarks.Fill, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Accent());

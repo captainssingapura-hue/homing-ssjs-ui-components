@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** sketchy's look of plain-button_cancel: as its component on its own, by delegation. */
+/** sketchy's implementation of plain-button_cancel: as its component standalone, by delegation. */
 public record PlainButtonCancel() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.PlainButton, HouseDoing.Cancel> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.PlainButton, HouseDoing.Cancel> style() {
         return new StylingRes.RootDelegation<>(new PlainButton());

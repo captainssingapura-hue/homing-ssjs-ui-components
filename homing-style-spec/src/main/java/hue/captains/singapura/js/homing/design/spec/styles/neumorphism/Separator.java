@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neumorphism's look of separator: CSS of its own. */
+/** neumorphism's implementation of separator: CSS of its own. */
 public record Separator() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.Separator, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.Separator, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Hairline());

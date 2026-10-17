@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of kicker_prompt: as its component on its own, by delegation. */
+/** glassmorphism's implementation of kicker_prompt: as its component standalone, by delegation. */
 public record KickerPrompt() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Kicker, HouseSaying.Prompt> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Kicker, HouseSaying.Prompt> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neo-futurism's look of detent_rest: as its component on its own, by delegation. */
+/** neo-futurism's implementation of detent_rest: as its component standalone, by delegation. */
 public record DetentRest() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseMarks.Detent, HouseSaying.Rest> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseMarks.Detent, HouseSaying.Rest> style() {
         return new StylingRes.RootDelegation<>(new Detent());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of flip-icon: CSS of its own. */
+/** base's implementation of flip-icon: CSS of its own. */
 public record FlipIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.FlipIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.FlipIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

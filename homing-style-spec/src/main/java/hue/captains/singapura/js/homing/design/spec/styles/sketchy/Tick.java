@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** sketchy's look of tick: CSS of its own. */
+/** sketchy's implementation of tick: CSS of its own. */
 public record Tick() implements CastingStylePerRole<BaseScheme, Sketchy, HouseMarks.Tick, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseMarks.Tick, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

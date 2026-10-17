@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** glassmorphism's look of icon-button: CSS of its own. */
+/** glassmorphism's implementation of icon-button: CSS of its own. */
 public record IconButton() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.IconButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.IconButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Wash(), new BaseColours.Border(), new BaseColours.Ring());

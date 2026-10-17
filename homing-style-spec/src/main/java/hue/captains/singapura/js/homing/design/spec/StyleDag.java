@@ -15,15 +15,14 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * A style's looks as a graph (RFC 0067, D53): every look its elements reach, from each top-level component's
- * implementation - the style's, or the layer below's it falls to - along two kinds of pointer, never confused: a spec
- * pointer, from a look to the look a part slot of it wears - the model's structure; and a delegation pointer, from a
- * look to the look whose CSS it gives - how little is written. Done right it is a DAG, its layers the style's and those
- * below, nothing pointing up. A look needs CSS exactly where no delegation pointer leaves it - an end - and the style's
- * author writes the ends of the style's own layer.
+ * A style's declarations and implementations as a graph (RFC 0067, D53): everything its elements reach, from each
+ * top-level component's standalone - the style's, or the layer below's it falls to. Two levels, two kinds of pointer,
+ * never confused: spec pointers from a declaration - to its own implementation, to a slot's target in the same role, or
+ * to a placed part's standalone in the style worn - and delegation pointers from an implementation to the one whose CSS
+ * it gives. Done right it is a DAG. An implementation needs CSS exactly where no delegation pointer leaves it.
  *
  * @param style    the style worn
- * @param nodes    every look reached, each once
+ * @param nodes    every declaration and implementation reached, each once
  * @param pointers each spec pointer and each delegation pointer between them
  */
 public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Pointer> pointers) implements ValueObject {
@@ -34,58 +33,77 @@ public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Pointer> poi
         pointers = List.copyOf(pointers);
     }
 
-    /** What a look gives: CSS of its own, or one of the three delegations. */
+    /** What an implementation gives: CSS of its own, or one of the three delegations. */
     public enum Gives { CSS, DELEGATION, ROOT_DELEGATION, PARENT_DELEGATION }
 
-    /**
-     * A look.
-     *
-     * @param id      its layer's token and its class's simple name: {@code editorial/PlainButtonAction}
-     * @param layer   the style it is of: the style worn, or one below
-     * @param casting the casting it is a look of
-     * @param gives   CSS of its own, or a delegation
-     * @param root    whether it is a top-level component's implementation in the style worn
-     * @param look    the look itself
-     */
-    public record Node(String id, DesignStyle<?> layer, Casting casting, Gives gives, boolean root, CastingStylePerRole<?, ?, ?, ?> look)
-            implements ValueObject {
-        public Node {
-            Objects.requireNonNull(look, "Node.look");
+    /** What a spec pointer points: a declaration's own implementation, a slot in its role, a placed slot standalone. */
+    public enum Spec { OWN, SAME_ROLE, STANDALONE }
+
+    /** A declaration or an implementation. */
+    public sealed interface Node extends ValueObject permits DeclarationNode, ImplNode {
+
+        /** Its layer's token and its class's simple name: {@code editorial/DialogDeclaration}. */
+        String id();
+
+        /** The style it is of: the style worn, or one below. */
+        DesignStyle<?> layer();
+
+        /** The casting it is of. */
+        Casting casting();
+
+        /** Whether it is a top-level component's standalone in the style worn. */
+        boolean root();
+    }
+
+    /** A declaration: a composite's structure in a role. */
+    public record DeclarationNode(String id, DesignStyle<?> layer, Casting casting, boolean root, CastingDeclaration<?, ?, ?, ?> declaration)
+            implements Node {
+        public DeclarationNode {
+            Objects.requireNonNull(declaration, "DeclarationNode.declaration");
+        }
+    }
+
+    /** An implementation: CSS, or a delegation. */
+    public record ImplNode(String id, DesignStyle<?> layer, Casting casting, Gives gives, boolean root, CastingStylePerRole<?, ?, ?, ?> impl)
+            implements Node {
+        public ImplNode {
+            Objects.requireNonNull(impl, "ImplNode.impl");
         }
 
-        /** Whether it needs CSS of its own: no delegation pointer leaves it, an end of the graph. */
+        /** Whether it needs CSS of its own: no delegation pointer leaves it. */
         public boolean needsCss() { return gives == Gives.CSS; }
     }
 
-    /** A pointer from one look to another: a spec pointer, or a delegation pointer. */
+    /** A pointer between two nodes: a spec pointer, or a delegation pointer. */
     public sealed interface Pointer extends ValueObject permits SpecPointer, DelegationPointer {
 
-        /** The look pointing. */
+        /** The node pointing. */
         String from();
 
-        /** The look pointed at. */
+        /** The node pointed at. */
         String to();
     }
 
     /**
-     * A part slot of the look pointing, pointed at the look the part wears there: the model's structure, held complete.
+     * A declaration's pointer: its own implementation, a slot's target in the same role, or a placed part's standalone.
      *
-     * @param from the owner's look
-     * @param to   the look the part wears
-     * @param slot the slot: the part in the role its owner declares
+     * @param from the declaration
+     * @param to   what it reaches
+     * @param spec which
+     * @param slot the slot it points - for its own implementation, the declaration's own casting
      */
-    public record SpecPointer(String from, String to, Casting slot) implements Pointer {
+    public record SpecPointer(String from, String to, Spec spec, Casting slot) implements Pointer {
         public SpecPointer {
+            Objects.requireNonNull(spec, "SpecPointer.spec");
             Objects.requireNonNull(slot, "SpecPointer.slot");
         }
     }
 
     /**
-     * A look giving another look's CSS: the same component's, in the same role in its style or the one below, or on its
-     * own in its style.
+     * An implementation giving another's CSS.
      *
-     * @param from  the look delegating
-     * @param to    the look it gives the CSS of
+     * @param from  the implementation delegating
+     * @param to    the implementation it gives the CSS of
      * @param gives which delegation: never CSS
      */
     public record DelegationPointer(String from, String to, Gives gives) implements Pointer {
@@ -104,7 +122,17 @@ public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Pointer> poi
         return pointers.stream().filter(p -> p instanceof DelegationPointer).map(p -> (DelegationPointer) p).toList();
     }
 
-    /** Its looks in an order where every pointer points forward - a topological order - or empty when a cycle forbids one. */
+    /** Its declarations. */
+    public List<DeclarationNode> declarations() {
+        return nodes.stream().filter(n -> n instanceof DeclarationNode).map(n -> (DeclarationNode) n).toList();
+    }
+
+    /** Its implementations. */
+    public List<ImplNode> implementations() {
+        return nodes.stream().filter(n -> n instanceof ImplNode).map(n -> (ImplNode) n).toList();
+    }
+
+    /** Its nodes in an order where every pointer points forward - a topological order - or empty when a cycle forbids one. */
     public Optional<List<Node>> order() {
         var byId = new LinkedHashMap<String, Node>();
         for (Node n : nodes) byId.put(n.id(), n);
@@ -129,14 +157,18 @@ public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Pointer> poi
     /** The longest path's length, in pointers of any kind, when it is a DAG. */
     public int depth() { return longest(p -> true); }
 
-    /** The deepest nesting of parts: the longest path of spec pointers alone. */
-    public int specDepth() { return longest(p -> p instanceof SpecPointer); }
+    /** The deepest nesting of declarations: the longest path of spec pointers between declarations. */
+    public int nesting() {
+        var declared = new java.util.HashSet<String>();
+        for (Node n : nodes) if (n instanceof DeclarationNode) declared.add(n.id());
+        return longest(p -> p instanceof SpecPointer && declared.contains(p.to()));
+    }
 
-    /** The longest chain of delegation pointers alone: how far a look reaches for its CSS. */
+    /** The longest chain of delegation pointers alone: how far an implementation reaches for its CSS. */
     public int delegationLength() { return longest(p -> p instanceof DelegationPointer); }
 
     private int longest(Predicate<Pointer> kind) {
-        List<Node> sorted = order().orElseThrow(() -> new IllegalStateException(style.token() + "'s looks hold a cycle"));
+        List<Node> sorted = order().orElseThrow(() -> new IllegalStateException(style.token() + "'s graph holds a cycle"));
         var longest = new HashMap<String, Integer>();
         var out = new HashMap<String, List<String>>();
         for (Pointer p : pointers) if (kind.test(p)) out.computeIfAbsent(p.from(), k -> new ArrayList<>()).add(p.to());
@@ -151,12 +183,12 @@ public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Pointer> poi
         return max;
     }
 
-    /** The looks that need CSS of their own - the graph's ends - of one layer. */
-    public List<Node> needingCss(DesignStyle<?> layer) {
-        return nodes.stream().filter(n -> n.needsCss() && n.layer().equals(layer)).toList();
+    /** The implementations that need CSS of their own - the graph's ends - of one layer. */
+    public List<ImplNode> needingCss(DesignStyle<?> layer) {
+        return implementations().stream().filter(n -> n.needsCss() && n.layer().equals(layer)).toList();
     }
 
-    /** Each look with how many pointers of any kind point at it. */
+    /** Each node with how many pointers of any kind point at it. */
     public Map<String, Integer> pointedAt() {
         var out = new LinkedHashMap<String, Integer>();
         for (Node n : nodes) out.put(n.id(), 0);

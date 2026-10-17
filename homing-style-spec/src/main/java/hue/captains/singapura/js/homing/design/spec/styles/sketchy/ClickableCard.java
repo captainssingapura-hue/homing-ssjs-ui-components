@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** sketchy's look of clickable-card: CSS of its own. */
+/** sketchy's implementation of clickable-card: CSS of its own. */
 public record ClickableCard() implements CastingStylePerRole<BaseScheme, Sketchy, HouseContainers.ClickableCard, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseContainers.ClickableCard, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised(), new BaseColours.Border(), new BaseColours.Accent(), new BaseColours.Ring(), new BaseColours.KeysCandidate(), new BaseColours.KeysLent());

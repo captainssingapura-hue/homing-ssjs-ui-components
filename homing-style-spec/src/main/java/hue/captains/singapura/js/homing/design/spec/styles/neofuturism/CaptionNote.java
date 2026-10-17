@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of caption_note: as its component on its own, by delegation. */
+/** neo-futurism's implementation of caption_note: as its component standalone, by delegation. */
 public record CaptionNote() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Caption, HouseSaying.Note> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Caption, HouseSaying.Note> style() {
         return new StylingRes.RootDelegation<>(new Caption());

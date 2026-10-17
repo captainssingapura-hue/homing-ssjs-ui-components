@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neo-futurism's look of range_adjust: as its component on its own, by delegation. */
+/** neo-futurism's implementation of range_adjust: as its component standalone, by delegation. */
 public record RangeAdjust() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.Range, HouseDoing.Adjust> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.Range, HouseDoing.Adjust> style() {
         return new StylingRes.RootDelegation<>(new Range());

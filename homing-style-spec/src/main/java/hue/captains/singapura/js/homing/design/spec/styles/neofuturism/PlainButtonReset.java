@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neo-futurism's look of plain-button_reset: as its component on its own, by delegation. */
+/** neo-futurism's implementation of plain-button_reset: as its component standalone, by delegation. */
 public record PlainButtonReset() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.PlainButton, HouseDoing.Reset> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.PlainButton, HouseDoing.Reset> style() {
         return new StylingRes.RootDelegation<>(new PlainButton());

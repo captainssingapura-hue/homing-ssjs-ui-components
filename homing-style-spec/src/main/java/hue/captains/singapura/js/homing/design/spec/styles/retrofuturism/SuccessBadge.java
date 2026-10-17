@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of success-badge: CSS of its own. */
+/** retro-futurism's implementation of success-badge: CSS of its own. */
 public record SuccessBadge() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.SuccessBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.SuccessBadge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.SuccessInk(), new BaseColours.SuccessWash());

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of heading4: CSS of its own. */
+/** glassmorphism's implementation of heading4: CSS of its own. */
 public record Heading4() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Heading4, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Heading4, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.HeadingInk());

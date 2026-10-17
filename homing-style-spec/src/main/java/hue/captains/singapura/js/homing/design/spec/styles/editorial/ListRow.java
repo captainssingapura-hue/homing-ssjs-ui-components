@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 
-/** editorial's look of list-row: CSS of its own. */
+/** editorial's implementation of list-row: CSS of its own. */
 public record ListRow() implements CastingStylePerRole<BaseScheme, Editorial, HouseItems.ListRow, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseItems.ListRow, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.OnInverted(), new BaseColours.Border(), new BaseColours.Title(), new BaseColours.Accent(), new BaseColours.AccentWashLight(), new BaseColours.AccentWashSoft(), new BaseColours.KeysCandidate(), new BaseColours.KeysLent());

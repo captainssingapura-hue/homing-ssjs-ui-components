@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** editorial's look of crumb: CSS of its own. */
+/** editorial's implementation of crumb: CSS of its own. */
 public record Crumb() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.Crumb, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseControls.Crumb, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring());

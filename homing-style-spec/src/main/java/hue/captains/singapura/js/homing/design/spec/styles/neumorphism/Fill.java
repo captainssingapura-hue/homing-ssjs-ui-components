@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neumorphism's look of fill: CSS of its own. */
+/** neumorphism's implementation of fill: CSS of its own. */
 public record Fill() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.Fill, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.Fill, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Accent());

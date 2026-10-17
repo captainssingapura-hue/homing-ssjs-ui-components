@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of aspect-icon: CSS of its own. */
+/** base's implementation of aspect-icon: CSS of its own. */
 public record AspectIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.AspectIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.AspectIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

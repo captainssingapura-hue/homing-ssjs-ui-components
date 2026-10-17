@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neo-futurism's look of toggle-groove_span: as its component on its own, by delegation. */
+/** neo-futurism's implementation of toggle-groove_span: as its component standalone, by delegation. */
 public record ToggleGrooveSpan() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseMarks.ToggleGroove, HouseSaying.Span> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseMarks.ToggleGroove, HouseSaying.Span> style() {
         return new StylingRes.RootDelegation<>(new ToggleGroove());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of readout_value: as its component on its own, by delegation. */
+/** retro-futurism's implementation of readout_value: as its component standalone, by delegation. */
 public record ReadoutValue() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.Readout, HouseSaying.Value> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.Readout, HouseSaying.Value> style() {
         return new StylingRes.RootDelegation<>(new Readout());

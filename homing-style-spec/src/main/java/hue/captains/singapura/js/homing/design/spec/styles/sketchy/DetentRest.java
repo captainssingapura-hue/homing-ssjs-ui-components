@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** sketchy's look of detent_rest: as its component on its own, by delegation. */
+/** sketchy's implementation of detent_rest: as its component standalone, by delegation. */
 public record DetentRest() implements CastingStylePerRole<BaseScheme, Sketchy, HouseMarks.Detent, HouseSaying.Rest> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseMarks.Detent, HouseSaying.Rest> style() {
         return new StylingRes.RootDelegation<>(new Detent());

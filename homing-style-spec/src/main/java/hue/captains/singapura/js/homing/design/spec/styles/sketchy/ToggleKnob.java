@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** sketchy's look of toggle-knob: CSS of its own. */
+/** sketchy's implementation of toggle-knob: CSS of its own. */
 public record ToggleKnob() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.ToggleKnob, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.ToggleKnob, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Raised());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's look of heading4_title: as its component on its own, by delegation. */
+/** base's implementation of heading4_title: as its component standalone, by delegation. */
 public record Heading4Title() implements CastingStylePerRole<BaseScheme, Base, HouseText.Heading4, HouseSaying.Title> {
     @Override public StylingRes<BaseScheme, Base, HouseText.Heading4, HouseSaying.Title> style() {
         return new StylingRes.RootDelegation<>(new Heading4());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-brutalism's look of kicker_status: as its component on its own, by delegation. */
+/** neo-brutalism's implementation of kicker_status: as its component standalone, by delegation. */
 public record KickerStatus() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.Kicker, HouseSaying.Status> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.Kicker, HouseSaying.Status> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

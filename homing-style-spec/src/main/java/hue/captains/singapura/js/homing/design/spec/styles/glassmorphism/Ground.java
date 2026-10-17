@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** glassmorphism's look of ground: CSS of its own. */
+/** glassmorphism's implementation of ground: CSS of its own. */
 public record Ground() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseContainers.Ground, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseContainers.Ground, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ground(), new BaseColours.ScrollThumb(), new BaseColours.Text());

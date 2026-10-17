@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** base's look of fill_level: as its component on its own, by delegation. */
+/** base's implementation of fill_level: as its component standalone, by delegation. */
 public record FillLevel() implements CastingStylePerRole<BaseScheme, Base, HouseMarks.Fill, HouseSaying.Level> {
     @Override public StylingRes<BaseScheme, Base, HouseMarks.Fill, HouseSaying.Level> style() {
         return new StylingRes.RootDelegation<>(new Fill());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** retro-futurism's look of fill_level: as its component on its own, by delegation. */
+/** retro-futurism's implementation of fill_level: as its component standalone, by delegation. */
 public record FillLevel() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseMarks.Fill, HouseSaying.Level> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseMarks.Fill, HouseSaying.Level> style() {
         return new StylingRes.RootDelegation<>(new Fill());

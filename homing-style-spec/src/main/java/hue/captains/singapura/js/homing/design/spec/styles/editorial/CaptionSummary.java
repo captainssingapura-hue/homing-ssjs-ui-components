@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of caption_summary: as its component on its own, by delegation. */
+/** editorial's implementation of caption_summary: as its component standalone, by delegation. */
 public record CaptionSummary() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Caption, HouseSaying.Summary> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Caption, HouseSaying.Summary> style() {
         return new StylingRes.RootDelegation<>(new Caption());

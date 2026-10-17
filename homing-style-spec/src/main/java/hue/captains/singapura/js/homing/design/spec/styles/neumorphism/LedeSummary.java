@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of lede_summary: as its component on its own, by delegation. */
+/** neumorphism's implementation of lede_summary: as its component standalone, by delegation. */
 public record LedeSummary() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Lede, HouseSaying.Summary> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Lede, HouseSaying.Summary> style() {
         return new StylingRes.RootDelegation<>(new Lede());

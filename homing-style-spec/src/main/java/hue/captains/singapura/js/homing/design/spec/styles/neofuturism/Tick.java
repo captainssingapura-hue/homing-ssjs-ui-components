@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neo-futurism's look of tick: CSS of its own. */
+/** neo-futurism's implementation of tick: CSS of its own. */
 public record Tick() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseMarks.Tick, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseMarks.Tick, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

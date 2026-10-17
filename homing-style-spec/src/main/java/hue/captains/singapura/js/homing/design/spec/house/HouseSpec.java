@@ -10,17 +10,18 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseEvents;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRoleCatalogue;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
+
 import java.util.List;
 
 /**
- * The house in the typed spec stack (RFC 0067, D53): each house component module implemented in Base, and each house
- * style's implementations, read and held by {@link ReadSpec} with the house's words.
+ * The house in the typed spec stack (RFC 0067, D53): each house component module's standalones in Base, and each house
+ * style's, read and held by {@link ReadSpec} with the house's words.
  */
 public record HouseSpec() implements StatelessFunctionalObject {
 
     public static final HouseSpec INSTANCE = new HouseSpec();
 
-    /** Each house component module, implemented in Base. */
+    /** Each house component module, its standalones in Base. */
     public static final List<BaseSpecModule<BaseScheme, Base>> BASE = List.of(
             UiElementsBaseSpec.INSTANCE,
             UiIconsBaseSpec.INSTANCE,
@@ -35,7 +36,7 @@ public record HouseSpec() implements StatelessFunctionalObject {
             MpaBaseSpec.INSTANCE,
             UiControlPanelBaseSpec.INSTANCE);
 
-    /** Each house style's implementations. */
+    /** Each house style's standalones. */
     public static final List<SpecModule<BaseScheme, ?>> STYLES = List.of(
             EditorialSpec.INSTANCE,
             NeoBrutalismSpec.INSTANCE,

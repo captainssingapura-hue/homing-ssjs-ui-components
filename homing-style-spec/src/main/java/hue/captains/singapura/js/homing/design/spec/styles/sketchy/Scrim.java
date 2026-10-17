@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** sketchy's look of scrim: CSS of its own. */
+/** sketchy's implementation of scrim: CSS of its own. */
 public record Scrim() implements CastingStylePerRole<BaseScheme, Sketchy, HouseContainers.Scrim, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseContainers.Scrim, RoleRoot> style() {
         return new StylingRes.CssContent<>();

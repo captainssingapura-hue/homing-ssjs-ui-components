@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of heading4_title: as its component on its own, by delegation. */
+/** neo-futurism's implementation of heading4_title: as its component standalone, by delegation. */
 public record Heading4Title() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Heading4, HouseSaying.Title> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Heading4, HouseSaying.Title> style() {
         return new StylingRes.RootDelegation<>(new Heading4());

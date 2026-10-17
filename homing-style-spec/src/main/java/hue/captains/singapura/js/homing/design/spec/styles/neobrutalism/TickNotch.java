@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neo-brutalism's look of tick_notch: as its component on its own, by delegation. */
+/** neo-brutalism's implementation of tick_notch: as its component standalone, by delegation. */
 public record TickNotch() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseMarks.Tick, HouseSaying.Notch> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseMarks.Tick, HouseSaying.Notch> style() {
         return new StylingRes.RootDelegation<>(new Tick());

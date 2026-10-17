@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** glassmorphism's look of grip: CSS of its own. */
+/** glassmorphism's implementation of grip: CSS of its own. */
 public record Grip() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.Grip, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.Grip, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring());

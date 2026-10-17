@@ -8,9 +8,10 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import java.util.List;
 
-/** neo-futurism's look of secondary-button: CSS of its own. */
+/** neo-futurism's implementation of secondary-button: CSS of its own. */
 public record SecondaryButton() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.SecondaryButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.SecondaryButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new ButtonLabel(), new BaseColours.AccentEdge(), new BaseColours.Ring(), new BaseColours.ShadeSoft(), new BaseColours.GlowFaint(), new BaseColours.GlowDim(), new BaseColours.GlowSoft(), new BaseColours.GlowBright(), new ButtonGround());

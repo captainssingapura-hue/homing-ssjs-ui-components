@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** glassmorphism's look of separator: CSS of its own. */
+/** glassmorphism's implementation of separator: CSS of its own. */
 public record Separator() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseMarks.Separator, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseMarks.Separator, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Hairline());

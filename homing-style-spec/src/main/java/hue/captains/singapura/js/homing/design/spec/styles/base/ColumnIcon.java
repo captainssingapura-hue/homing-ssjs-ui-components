@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of column-icon: CSS of its own. */
+/** base's implementation of column-icon: CSS of its own. */
 public record ColumnIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.ColumnIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.ColumnIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

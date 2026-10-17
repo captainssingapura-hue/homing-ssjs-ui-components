@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** base's look of float-layer: CSS of its own. */
+/** base's implementation of float-layer: CSS of its own. */
 public record FloatLayer() implements CastingStylePerRole<BaseScheme, Base, HouseContainers.FloatLayer, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseContainers.FloatLayer, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** sketchy's look of settings-icon: CSS of its own. */
+/** sketchy's implementation of settings-icon: CSS of its own. */
 public record SettingsIcon() implements CastingStylePerRole<BaseScheme, Sketchy, HouseIcons.SettingsIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseIcons.SettingsIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

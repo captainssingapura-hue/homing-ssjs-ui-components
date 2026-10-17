@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's look of heading5: CSS of its own. */
+/** neo-futurism's implementation of heading5: CSS of its own. */
 public record Heading5() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Heading5, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Heading5, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.HeadingInk());

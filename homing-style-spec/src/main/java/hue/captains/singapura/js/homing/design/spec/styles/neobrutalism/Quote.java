@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** neo-brutalism's look of quote: CSS of its own. */
+/** neo-brutalism's implementation of quote: CSS of its own. */
 public record Quote() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseRegions.Quote, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseRegions.Quote, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded(), new BaseColours.Border());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of kicker_status: as its component on its own, by delegation. */
+/** editorial's implementation of kicker_status: as its component standalone, by delegation. */
 public record KickerStatus() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Kicker, HouseSaying.Status> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Kicker, HouseSaying.Status> style() {
         return new StylingRes.RootDelegation<>(new Kicker());

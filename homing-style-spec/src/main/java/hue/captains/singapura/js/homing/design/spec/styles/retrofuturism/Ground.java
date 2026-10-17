@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** retro-futurism's look of ground: CSS of its own. */
+/** retro-futurism's implementation of ground: CSS of its own. */
 public record Ground() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseContainers.Ground, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseContainers.Ground, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ground(), new BaseColours.ScrollThumb(), new BaseColours.Text());

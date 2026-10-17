@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neo-futurism's look of slider-groove: CSS of its own. */
+/** neo-futurism's implementation of slider-groove: CSS of its own. */
 public record SliderGroove() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseMarks.SliderGroove, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseMarks.SliderGroove, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.WashSoft(), new BaseColours.GrooveEdge());

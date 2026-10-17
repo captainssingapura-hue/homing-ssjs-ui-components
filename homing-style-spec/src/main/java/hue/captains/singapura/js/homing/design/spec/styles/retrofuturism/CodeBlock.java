@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** retro-futurism's look of code-block: CSS of its own. */
+/** retro-futurism's implementation of code-block: CSS of its own. */
 public record CodeBlock() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseRegions.CodeBlock, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseRegions.CodeBlock, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Recessed(), new BaseColours.Text(), new BaseColours.Border());

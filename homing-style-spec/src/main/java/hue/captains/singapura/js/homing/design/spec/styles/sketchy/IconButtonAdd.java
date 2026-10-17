@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** sketchy's look of icon-button_add: as its component on its own, by delegation. */
+/** sketchy's implementation of icon-button_add: as its component standalone, by delegation. */
 public record IconButtonAdd() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.IconButton, HouseDoing.Add> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.IconButton, HouseDoing.Add> style() {
         return new StylingRes.RootDelegation<>(new IconButton());

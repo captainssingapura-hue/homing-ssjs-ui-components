@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** base's look of drop-mark_landing: as its component on its own, by delegation. */
+/** base's implementation of drop-mark_landing: as its component standalone, by delegation. */
 public record DropMarkLanding() implements CastingStylePerRole<BaseScheme, Base, HouseMarks.DropMark, HouseSaying.Landing> {
     @Override public StylingRes<BaseScheme, Base, HouseMarks.DropMark, HouseSaying.Landing> style() {
         return new StylingRes.RootDelegation<>(new DropMark());

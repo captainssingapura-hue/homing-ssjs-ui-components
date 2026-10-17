@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of wordmark: CSS of its own. */
+/** glassmorphism's implementation of wordmark: CSS of its own. */
 public record Wordmark() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Wordmark, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Wordmark, RoleRoot> style() {
         return new StylingRes.CssContent<>();

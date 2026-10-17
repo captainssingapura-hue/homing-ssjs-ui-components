@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-brutalism's look of success-badge: CSS of its own. */
+/** neo-brutalism's implementation of success-badge: CSS of its own. */
 public record SuccessBadge() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.SuccessBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.SuccessBadge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.SuccessInk(), new BaseColours.SuccessWash());

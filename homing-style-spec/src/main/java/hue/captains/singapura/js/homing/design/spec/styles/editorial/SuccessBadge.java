@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of success-badge: CSS of its own. */
+/** editorial's implementation of success-badge: CSS of its own. */
 public record SuccessBadge() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.SuccessBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.SuccessBadge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.SuccessInk(), new BaseColours.SuccessWash());

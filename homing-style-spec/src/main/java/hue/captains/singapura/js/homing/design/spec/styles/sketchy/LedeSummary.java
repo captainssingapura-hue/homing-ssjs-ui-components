@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's look of lede_summary: as its component on its own, by delegation. */
+/** sketchy's implementation of lede_summary: as its component standalone, by delegation. */
 public record LedeSummary() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Lede, HouseSaying.Summary> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Lede, HouseSaying.Summary> style() {
         return new StylingRes.RootDelegation<>(new Lede());

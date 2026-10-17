@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** glassmorphism's look of crumb: CSS of its own. */
+/** glassmorphism's implementation of crumb: CSS of its own. */
 public record Crumb() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.Crumb, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseControls.Crumb, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring());

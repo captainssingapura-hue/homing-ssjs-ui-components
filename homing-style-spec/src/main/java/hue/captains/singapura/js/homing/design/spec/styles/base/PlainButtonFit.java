@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** base's look of plain-button_fit: as its component on its own, by delegation. */
+/** base's implementation of plain-button_fit: as its component standalone, by delegation. */
 public record PlainButtonFit() implements CastingStylePerRole<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Fit> {
     @Override public StylingRes<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Fit> style() {
         return new StylingRes.RootDelegation<>(new PlainButton());

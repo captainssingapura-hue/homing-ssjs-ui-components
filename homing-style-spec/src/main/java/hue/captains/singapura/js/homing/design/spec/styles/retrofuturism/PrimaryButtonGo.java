@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** retro-futurism's look of primary-button_go: as its component on its own, by delegation. */
+/** retro-futurism's implementation of primary-button_go: as its component standalone, by delegation. */
 public record PrimaryButtonGo() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.PrimaryButton, HouseDoing.Go> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.PrimaryButton, HouseDoing.Go> style() {
         return new StylingRes.RootDelegation<>(new PrimaryButton());

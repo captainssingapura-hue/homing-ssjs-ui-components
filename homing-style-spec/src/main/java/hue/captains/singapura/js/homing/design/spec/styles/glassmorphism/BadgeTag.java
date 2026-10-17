@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** glassmorphism's look of badge_tag: as its component on its own, by delegation. */
+/** glassmorphism's implementation of badge_tag: as its component standalone, by delegation. */
 public record BadgeTag() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Badge, HouseSaying.Tag> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Badge, HouseSaying.Tag> style() {
         return new StylingRes.RootDelegation<>(new Badge());

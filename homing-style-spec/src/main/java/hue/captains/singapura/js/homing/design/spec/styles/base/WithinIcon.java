@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of within-icon: CSS of its own. */
+/** base's implementation of within-icon: CSS of its own. */
 public record WithinIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.WithinIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.WithinIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.KeysMark());

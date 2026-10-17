@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** sketchy's look of slider-groove_span: as its component on its own, by delegation. */
+/** sketchy's implementation of slider-groove_span: as its component standalone, by delegation. */
 public record SliderGrooveSpan() implements CastingStylePerRole<BaseScheme, Sketchy, HouseMarks.SliderGroove, HouseSaying.Span> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseMarks.SliderGroove, HouseSaying.Span> style() {
         return new StylingRes.RootDelegation<>(new SliderGroove());

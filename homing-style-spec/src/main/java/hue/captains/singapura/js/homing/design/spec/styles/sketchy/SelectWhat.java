@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** sketchy's look of select_what: as its component on its own, by delegation. */
+/** sketchy's implementation of select_what: as its component standalone, by delegation. */
 public record SelectWhat() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.Select, HouseDoing.What> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.Select, HouseDoing.What> style() {
         return new StylingRes.RootDelegation<>(new Select());

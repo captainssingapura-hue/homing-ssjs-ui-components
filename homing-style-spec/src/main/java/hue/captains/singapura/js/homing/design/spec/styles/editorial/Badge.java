@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of badge: CSS of its own. */
+/** editorial's implementation of badge: CSS of its own. */
 public record Badge() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Badge, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Badge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.AccentWash());

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neumorphism's look of lamp: CSS of its own. */
+/** neumorphism's implementation of lamp: CSS of its own. */
 public record Lamp() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.Lamp, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.Lamp, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Text(), new BaseColours.OnDanger(), new BaseColours.Quiet(), new BaseColours.Accent(), new BaseColours.AccentWashLight(), new BaseColours.Danger());

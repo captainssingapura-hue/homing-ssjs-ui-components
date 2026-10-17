@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of lede: CSS of its own. */
+/** neumorphism's implementation of lede: CSS of its own. */
 public record Lede() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Lede, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Lede, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded());

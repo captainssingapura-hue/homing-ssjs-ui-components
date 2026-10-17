@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neo-futurism's look of plain-button_zoom-in: as its component on its own, by delegation. */
+/** neo-futurism's implementation of plain-button_zoom-in: as its component standalone, by delegation. */
 public record PlainButtonZoomIn() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.PlainButton, HouseDoing.ZoomIn> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.PlainButton, HouseDoing.ZoomIn> style() {
         return new StylingRes.RootDelegation<>(new PlainButton());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's look of wordmark: CSS of its own. */
+/** base's implementation of wordmark: CSS of its own. */
 public record Wordmark() implements CastingStylePerRole<BaseScheme, Base, HouseText.Wordmark, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseText.Wordmark, RoleRoot> style() {
         return new StylingRes.CssContent<>();

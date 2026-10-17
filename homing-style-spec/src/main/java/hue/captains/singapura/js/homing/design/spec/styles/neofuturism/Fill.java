@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neo-futurism's look of fill: CSS of its own. */
+/** neo-futurism's implementation of fill: CSS of its own. */
 public record Fill() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseMarks.Fill, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseMarks.Fill, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Accent());

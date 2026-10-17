@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** neo-futurism's look of quote: CSS of its own. */
+/** neo-futurism's implementation of quote: CSS of its own. */
 public record Quote() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseRegions.Quote, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseRegions.Quote, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded(), new BaseColours.Border());

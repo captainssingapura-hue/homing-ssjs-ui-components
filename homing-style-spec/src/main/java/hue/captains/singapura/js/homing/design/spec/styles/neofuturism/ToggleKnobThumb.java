@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neo-futurism's look of toggle-knob_thumb: as its component on its own, by delegation. */
+/** neo-futurism's implementation of toggle-knob_thumb: as its component standalone, by delegation. */
 public record ToggleKnobThumb() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.ToggleKnob, HouseDoing.Thumb> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.ToggleKnob, HouseDoing.Thumb> style() {
         return new StylingRes.RootDelegation<>(new ToggleKnob());

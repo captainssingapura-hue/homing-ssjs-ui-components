@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** base's look of delimiter: CSS of its own. */
+/** base's implementation of delimiter: CSS of its own. */
 public record Delimiter() implements CastingStylePerRole<BaseScheme, Base, HouseMarks.Delimiter, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseMarks.Delimiter, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

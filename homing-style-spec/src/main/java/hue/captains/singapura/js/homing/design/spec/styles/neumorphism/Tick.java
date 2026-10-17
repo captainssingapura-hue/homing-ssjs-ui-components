@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** neumorphism's look of tick: CSS of its own. */
+/** neumorphism's implementation of tick: CSS of its own. */
 public record Tick() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseMarks.Tick, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseMarks.Tick, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

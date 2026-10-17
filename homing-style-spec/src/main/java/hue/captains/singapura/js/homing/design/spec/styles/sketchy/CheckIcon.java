@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** sketchy's look of check-icon: CSS of its own. */
+/** sketchy's implementation of check-icon: CSS of its own. */
 public record CheckIcon() implements CastingStylePerRole<BaseScheme, Sketchy, HouseIcons.CheckIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseIcons.CheckIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

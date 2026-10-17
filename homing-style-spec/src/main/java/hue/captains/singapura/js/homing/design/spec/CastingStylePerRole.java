@@ -4,18 +4,18 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleNode;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 /**
- * A look of a component in a role in a style (RFC 0067, D53): the role is in its type, as the style and the component
- * are - the role root's for the component on its own. A role means the same everywhere, so a look of one role never
- * stands for another role's: it gives CSS of its own, or delegates to the look of the same component in the same role,
- * of its style or the style it is written over - or, drawn as its component is, to the component's look on its own in
- * its style ({@link StylingRes}).
+ * An implementation (RFC 0067, D53): how a component in a role is drawn in a style - CSS of its own, or a delegation to
+ * another implementation ({@link StylingRes}). Nothing else: it holds no parts - those are a declaration's
+ * ({@link CastingDeclaration}) - so an implementation is the same value whether its component is a leaf or a composite,
+ * a part or on its own. Its style, component and role are in its type - the role root's for the component standalone.
  *
  * <pre>{@code
  * public record PlainButtonAction() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.PlainButton, HouseDoing.Action> {
  *     @Override public StylingRes<BaseScheme, Editorial, HouseControls.PlainButton, HouseDoing.Action> style() {
- *         return new StylingRes.CssContent<>(new BaseColours.Border(), new BaseColours.Ring());
+ *         return new StylingRes.RootDelegation<>(new PlainButton());
  *     }
  * }
  * }</pre>
@@ -23,11 +23,11 @@ import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
  * @param <Sc> its style's colour scheme
  * @param <S>  its style
  * @param <C>  the component it draws
- * @param <R>  the role it draws it in: {@code RoleRoot} on its own
+ * @param <R>  the role it draws it in: {@code RoleRoot} standalone
  */
-public non-sealed interface CastingStylePerRole<Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>, R extends RoleNode>
-        extends CastingStyle<Sc, S, C> {
+public interface CastingStylePerRole<Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>, R extends RoleNode>
+        extends StatelessFunctionalObject {
 
-    /** Its CSS, or a delegation: the same component in the same role, of its style or the one below; or the component on its own, of its style. */
+    /** Its CSS, or a delegation: the same component in the same role, of its style or the one below; or standalone, of its style. */
     StylingRes<Sc, S, C, R> style();
 }

@@ -8,9 +8,10 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+
 import java.util.List;
 
-/** sketchy's look of secondary-button: CSS of its own. */
+/** sketchy's implementation of secondary-button: CSS of its own. */
 public record SecondaryButton() implements CastingStylePerRole<BaseScheme, Sketchy, HouseControls.SecondaryButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseControls.SecondaryButton, RoleRoot> style() {
         return new StylingRes.CssContent<>(new ButtonLabel(), new BaseColours.AccentEdge(), new BaseColours.Ring(), new ButtonGround());

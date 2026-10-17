@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's look of label: CSS of its own. */
+/** base's implementation of label: CSS of its own. */
 public record Label() implements CastingStylePerRole<BaseScheme, Base, HouseText.Label, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseText.Label, RoleRoot> style() {
         return new StylingRes.CssContent<>();

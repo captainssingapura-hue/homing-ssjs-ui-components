@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** retro-futurism's look of grip: CSS of its own. */
+/** retro-futurism's implementation of grip: CSS of its own. */
 public record Grip() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.Grip, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.Grip, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring());

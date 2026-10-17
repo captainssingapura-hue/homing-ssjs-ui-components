@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-brutalism's look of warning-badge: CSS of its own. */
+/** neo-brutalism's implementation of warning-badge: CSS of its own. */
 public record WarningBadge() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.WarningBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.WarningBadge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.WarningInk(), new BaseColours.WarningWash());

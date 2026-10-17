@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of warning-badge: CSS of its own. */
+/** retro-futurism's implementation of warning-badge: CSS of its own. */
 public record WarningBadge() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.WarningBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.WarningBadge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.WarningInk(), new BaseColours.WarningWash());

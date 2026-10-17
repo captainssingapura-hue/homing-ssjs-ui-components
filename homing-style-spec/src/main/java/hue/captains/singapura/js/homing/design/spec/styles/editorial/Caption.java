@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's look of caption: CSS of its own. */
+/** editorial's implementation of caption: CSS of its own. */
 public record Caption() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Caption, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Caption, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.TextFaded());

@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModules;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
+import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
@@ -12,6 +13,7 @@ import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -24,17 +26,20 @@ import java.util.Set;
  * Reads the typed spec stack (RFC 0067, D53) and holds it to its rules, refusing it with every problem at once:
  *
  * <ul>
- *   <li>the base modules: one base layer, written over nothing; their components a taxonomy; each listed component
- *       implemented once in the base, by its own module, and nothing else implemented;</li>
- *   <li>each style: written over the base or a style registered before it; implementing top-level components only,
- *       each once;</li>
- *   <li>every look reached - from an implementation, a spec or a delegation - a stateless record; its parts complete:
- *       one spec for every slot of its component, of the slot's kind, and nothing else; its delegations ending at CSS of
- *       its own, never round.</li>
+ *   <li>the base modules: one base layer, written over nothing; their components a taxonomy; a standalone in the base for
+ *       every top-level component, and for every component a functional role places; each module's standalones of its
+ *       own design;</li>
+ *   <li>each style: written over the base or a style registered before it;</li>
+ *   <li>one standalone a (style, component): the module's, and no other implementation of the component standalone in
+ *       that style - a root delegation, a declaration's own, reach that one;</li>
+ *   <li>every declaration reached complete - one spec for every slot of its composite, of the kind the slot's role says,
+ *       and nothing else - its nesting ending, never round; every implementation reached ending at CSS of its own, never
+ *       round; each a stateless record.</li>
  * </ul>
  *
- * <p>That a spec's look is of the owner's style exactly, and a delegation's of the same component in the same role in
- * the same style or the one it is written over, is the compiler's.</p>
+ * <p>That a spec reaches exactly its declaration's style, part and role, that a leaf is reached through its
+ * implementation and a composite through its declaration, and that a delegation stays within style, part and role, is the
+ * compiler's.</p>
  */
 public record ReadSpec() implements StatelessFunctionalObject {
 
@@ -44,7 +49,7 @@ public record ReadSpec() implements StatelessFunctionalObject {
     public SpecRegistry read(List<? extends BaseSpecModule<?, ?>> bases, List<? extends SpecModule<?, ?>> styles,
                              List<? extends Role<?>> roles, List<? extends StateType<?>> states, List<? extends EventType<?>> events) {
         var problems = new ArrayList<String>();
-        if (bases.isEmpty()) refuse(List.of("no base module: the base layer implements every top-level component"));
+        if (bases.isEmpty()) refuse(List.of("no base module: the base layer gives every top-level component its standalone"));
         DesignStyle<?> base = bases.get(0).style();
         for (BaseSpecModule<?, ?> m : bases)
             if (m.style().getClass() != base.getClass())
@@ -60,65 +65,92 @@ public record ReadSpec() implements StatelessFunctionalObject {
         }
         var top = new LinkedHashSet<Component<?>>();
         for (BaseSpecModule<?, ?> m : bases) top.addAll(m.components().components());
+        var placed = new LinkedHashSet<Component<?>>();
+        for (Part<?, ?> p : taxonomy.parts()) for (Component<?> b : p.bases()) if (new Casting(b, p.role()).functional()) placed.add(b);
 
-        var implementations = new LinkedHashMap<DesignStyle<?>, Map<Component<?>, CastingStylePerRole<?, ?, ?, ?>>>();
-        var onBase = new LinkedHashMap<Component<?>, CastingStylePerRole<?, ?, ?, ?>>();
+        var standalones = new LinkedHashMap<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>>();
+        var onBase = new LinkedHashMap<Component<?>, Target<?, ?, ?, ?>>();
         for (BaseSpecModule<?, ?> m : bases) {
-            List<? extends Component<?>> listed = m.components().components();
-            for (Implemented<?, ?, ?> i : m.implementations()) {
-                if (!listed.contains(i.component()))
-                    problems.add(name(m) + " implements " + i.component().token() + ", which it does not list: a module implements its own components");
-                else if (onBase.putIfAbsent(i.component(), i.look()) != null)
-                    problems.add(i.component().token() + " is implemented twice in the base");
+            Set<Component<?>> design = design(taxonomy, m.components().components());
+            for (StandaloneEntry<?, ?, ?> e : m.standalones()) {
+                if (!design.contains(e.component()))
+                    problems.add(name(m) + " gives " + e.component().token() + " a standalone, no component of its design");
+                else if (onBase.putIfAbsent(e.component(), e.to()) != null)
+                    problems.add(e.component().token() + " has two standalones in the base: a component has one");
             }
-            for (Component<?> c : listed)
-                if (!onBase.containsKey(c) && !(c instanceof VirtualComponent<?>))
-                    problems.add(name(m) + " leaves " + c.token() + " unimplemented in the base: the base implements every top-level component");
         }
-        implementations.put(base, onBase);
+        for (Component<?> c : top)
+            if (!onBase.containsKey(c) && !(c instanceof VirtualComponent<?>))
+                problems.add(c.token() + " has no standalone in the base: the base gives every top-level component one");
+        for (Component<?> c : placed)
+            if (!onBase.containsKey(c)) problems.add(c.token() + " is placed by a functional role, and has no standalone in the base");
+        standalones.put(base, onBase);
         var order = new ArrayList<DesignStyle<?>>(List.of(base));
         for (SpecModule<?, ?> m : styles) {
             DesignStyle<?> s = m.style();
             if (s.getClass() == base.getClass()) { problems.add(name(m) + " is of the base: the base comes in base modules"); continue; }
-            Map<Component<?>, CastingStylePerRole<?, ?, ?, ?>> mine = implementations.get(s);
+            Map<Component<?>, Target<?, ?, ?, ?>> mine = standalones.get(s);
             if (mine == null) {
-                if (!(s instanceof Derives<?, ?> d) || !implementations.containsKey(d.base()))
+                if (!(s instanceof Derives<?, ?> d) || !standalones.containsKey(d.base()))
                     problems.add(s.token() + " is written over no style registered before it: a style is written over the base, or one registered over it");
                 mine = new LinkedHashMap<>();
-                implementations.put(s, mine);
+                standalones.put(s, mine);
                 order.add(s);
             }
-            for (Implemented<?, ?, ?> i : m.implementations()) {
-                if (!top.contains(i.component()))
-                    problems.add(s.token() + ": " + name(m) + " implements " + i.component().token() + ", no top-level component: a part's look is reached by pointing");
-                else if (mine.putIfAbsent(i.component(), i.look()) != null)
-                    problems.add(i.component().token() + " is implemented twice in " + s.token());
+            for (StandaloneEntry<?, ?, ?> e : m.standalones()) {
+                if (!taxonomy.components().contains(e.component()))
+                    problems.add(s.token() + ": " + name(m) + " gives " + e.component().token() + " a standalone, no component of the taxonomy");
+                else if (mine.putIfAbsent(e.component(), e.to()) != null)
+                    problems.add(e.component().token() + " has two standalones in " + s.token() + ": a component has one");
             }
         }
 
-        var reached = new LinkedHashMap<Class<?>, Casting>();
-        for (var e : implementations.entrySet())
-            for (var i : e.getValue().entrySet()) reach(i.getValue(), new Casting(i.getKey()), taxonomy, top, reached, problems);
+        var reached = new LinkedHashMap<Object, Casting>();
+        for (var layer : standalones.entrySet())
+            for (var e : layer.getValue().entrySet())
+                reach(e.getValue(), new Casting(e.getKey()), layer.getKey(), taxonomy, standalones, reached, new ArrayDeque<>(), problems);
         if (!problems.isEmpty()) refuse(problems);
-        return new SpecRegistry(taxonomy, base, List.copyOf(top), order, implementations);
+        return new SpecRegistry(taxonomy, base, List.copyOf(top), order, standalones);
     }
 
-    /** A look reached as a casting, held: a stateless record, its parts complete, its delegations to CSS; then what it reaches. */
-    private static void reach(CastingStylePerRole<?, ?, ?, ?> look, Casting as, Taxonomy taxonomy, Set<Component<?>> top,
-                              Map<Class<?>, Casting> reached, List<String> problems) {
-        Class<?> type = look.getClass();
-        Casting before = reached.putIfAbsent(type, as);
-        if (before != null) {
-            if (!before.equals(as)) problems.add(type.getName() + " is reached as " + before.token() + " and as " + as.token() + ": a look is of one casting");
+    /** The components of a module's design: its own, and every part of theirs, down. */
+    private static Set<Component<?>> design(Taxonomy taxonomy, List<? extends Component<?>> components) {
+        var out = new LinkedHashSet<Component<?>>(components);
+        var todo = new ArrayDeque<Component<?>>(components);
+        while (!todo.isEmpty())
+            for (Part<?, ?> p : taxonomy.partsOf(todo.poll())) for (Component<?> b : p.bases()) if (out.add(b)) todo.add(b);
+        return out;
+    }
+
+    private static void reach(Target<?, ?, ?, ?> target, Casting as, DesignStyle<?> layer, Taxonomy taxonomy,
+                              Map<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>> standalones, Map<Object, Casting> reached,
+                              ArrayDeque<Object> path, List<String> problems) {
+        switch (target) {
+            case Target.Impl<?, ?, ?, ?> i -> impl(i.impl(), as, layer, standalones, reached, problems);
+            case Target.Declared<?, ?, ?, ?> d -> declaration(d.declaration(), as, layer, taxonomy, standalones, reached, path, problems);
+        }
+    }
+
+    /** A declaration reached as a casting, held: a stateless record, complete, its nesting never round; then what it reaches. */
+    private static void declaration(CastingDeclaration<?, ?, ?, ?> declaration, Casting as, DesignStyle<?> layer, Taxonomy taxonomy,
+                                    Map<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>> standalones, Map<Object, Casting> reached,
+                                    ArrayDeque<Object> path, List<String> problems) {
+        Class<?> type = declaration.getClass();
+        if (path.contains(type)) {
+            problems.add(type.getName() + " nests in itself: " + path + " -> " + type.getSimpleName());
             return;
         }
-        if (!type.isRecord() || type.getRecordComponents().length > 0)
-            problems.add(type.getName() + " is no stateless record: a look is a value, a record of no components");
+        Casting before = reached.putIfAbsent(type, as);
+        if (before != null) {
+            if (!before.equals(as)) problems.add(type.getName() + " is reached as " + before.token() + " and as " + as.token() + ": a declaration is of one casting");
+            return;
+        }
+        record(type, problems);
         var expected = new LinkedHashMap<Casting, Slots.Slot>();
-        for (Slots.Slot s : Slots.INSTANCE.of(taxonomy, top, as.cast())) expected.put(s.slot(), s);
+        for (Slots.Slot s : Slots.INSTANCE.of(taxonomy, as.cast())) expected.put(s.slot(), s);
         PartsSpec<?, ?, ?> parts;
         try {
-            parts = look.parts();
+            parts = declaration.parts();
         } catch (RuntimeException e) {
             problems.add(type.getName() + "'s parts are refused: " + e.getMessage());
             return;
@@ -128,38 +160,79 @@ public record ReadSpec() implements StatelessFunctionalObject {
         for (var s : expected.entrySet()) {
             PartSpec<?, ?, ?> p = given.get(s.getKey());
             if (p == null) missing.add(s.getKey().token());
-            else if ((p instanceof PartSpec.Placed<?, ?, ?, ?, ?>) != s.getValue().placed())
-                problems.add(type.getName() + " points " + s.getKey().token() + " as " + (s.getValue().placed() ? "cast" : "placed")
-                        + ", and its role " + (s.getValue().placed() ? "only places it" : "casts it"));
+            else if ((p instanceof PartSpec.Standalone<?, ?, ?, ?, ?>) != s.getValue().placed())
+                problems.add(type.getName() + " points " + s.getKey().token() + (s.getValue().placed() ? " in its role: the role only places it, standalone" : " standalone: its role has a look of its own"));
         }
-        if (!missing.isEmpty()) problems.add(type.getName() + ", " + as.token() + ", points none of " + String.join(", ", missing)
-                + ": a look points every slot of its component");
-        for (Casting c : given.keySet())
-            if (!expected.containsKey(c)) problems.add(type.getName() + " points " + c.token() + ", no slot of " + as.cast().token());
+        if (!missing.isEmpty()) problems.add(type.getName() + ", " + as.token() + ", points none of " + String.join(", ", missing) + ": a declaration points every slot");
+        for (Casting c : given.keySet()) if (!expected.containsKey(c)) problems.add(type.getName() + " points " + c.token() + ", no slot of " + as.cast().token());
         for (PartSpec<?, ?, ?> p : parts.parts())
-            if (!p.owner().equals(as.cast()))
-                problems.add(type.getName() + "'s parts are " + p.owner().token() + "'s, and it draws " + as.cast().token());
-        for (PartSpec<?, ?, ?> p : parts.parts()) if (expected.containsKey(p.slot())) reach(p.look(), p.casting(), taxonomy, top, reached, problems);
-        var passed = new HashSet<Class<?>>(List.of(type));
-        CastingStylePerRole<?, ?, ?, ?> at = look;
+            if (!p.owner().equals(as.cast())) problems.add(type.getName() + "'s specs are " + p.owner().token() + "'s, and it declares " + as.cast().token());
+        path.push(type);
+        for (PartSpec<?, ?, ?> p : parts.parts())
+            if (p instanceof PartSpec.SameRole<?, ?, ?, ?, ?> s && expected.containsKey(s.slot()))
+                reach(s.to(), s.casting(), layer, taxonomy, standalones, reached, path, problems);
+        path.pop();
+        impl(declaration.own(), as, layer, standalones, reached, problems);
+    }
+
+    /**
+     * An implementation reached as a casting, held: a stateless record; standalone, the one its layer gives; its
+     * delegations ending at CSS, never round.
+     */
+    private static void impl(CastingStylePerRole<?, ?, ?, ?> impl, Casting as, DesignStyle<?> layer,
+                             Map<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>> standalones, Map<Object, Casting> reached,
+                             List<String> problems) {
+        var passed = new HashSet<Class<?>>();
+        CastingStylePerRole<?, ?, ?, ?> at = impl;
         Casting atAs = as;
-        while (true) {
-            CastingStylePerRole<?, ?, ?, ?> next = switch (at.style()) {
-                case StylingRes.CssContent<?, ?, ?, ?> c -> null;
-                case StylingRes.Delegation<?, ?, ?, ?> d -> d.to();
-                case StylingRes.RootDelegation<?, ?, ?, ?> r -> r.to();
-                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> p.to();
-                case null -> { problems.add(at.getClass().getName() + " gives nothing: CSS of its own, or a delegation"); yield null; }
-            };
-            if (next == null) break;
-            if (at.style() instanceof StylingRes.RootDelegation<?, ?, ?, ?>) atAs = atAs.alone();
-            if (!passed.add(next.getClass())) {
-                problems.add(type.getName() + " delegates round to " + next.getClass().getName());
-                break;
+        DesignStyle<?> atLayer = layer;
+        while (at != null) {
+            Class<?> type = at.getClass();
+            if (!passed.add(type)) {
+                problems.add(impl.getClass().getName() + " delegates round to " + type.getName());
+                return;
             }
-            reach(next, atAs, taxonomy, top, reached, problems);
-            at = next;
+            Casting before = reached.putIfAbsent(type, atAs);
+            if (before != null && !before.equals(atAs))
+                problems.add(type.getName() + " is reached as " + before.token() + " and as " + atAs.token() + ": an implementation is of one casting");
+            if (before == null) {
+                record(type, problems);
+                if (atAs.standalone()) standaloneHeld(at, atAs, atLayer, standalones, problems);
+            }
+            switch (at.style()) {
+                case StylingRes.CssContent<?, ?, ?, ?> c -> at = null;
+                case StylingRes.Delegation<?, ?, ?, ?> d -> at = d.to();
+                case StylingRes.RootDelegation<?, ?, ?, ?> r -> { at = r.to(); atAs = atAs.alone(); }
+                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> {
+                    at = p.to();
+                    atLayer = atLayer instanceof Derives<?, ?> d ? d.base() : atLayer;
+                }
+                case null -> { problems.add(type.getName() + " gives nothing: CSS of its own, or a delegation"); at = null; }
+            }
         }
+    }
+
+    /** An implementation of a component standalone, in a layer: the one the layer's standalone of the component wears. */
+    private static void standaloneHeld(CastingStylePerRole<?, ?, ?, ?> impl, Casting as, DesignStyle<?> layer,
+                                       Map<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>> standalones, List<String> problems) {
+        Target<?, ?, ?, ?> entry = standalones.getOrDefault(layer, Map.of()).get(as.cast());
+        if (entry == null) {
+            problems.add(impl.getClass().getName() + " implements " + as.cast().token() + " standalone in " + layer.token()
+                    + ", which gives it no standalone: a component has one standalone a style, listed by its module");
+            return;
+        }
+        CastingStylePerRole<?, ?, ?, ?> one = switch (entry) {
+            case Target.Impl<?, ?, ?, ?> i -> i.impl();
+            case Target.Declared<?, ?, ?, ?> d -> d.declaration().own();
+        };
+        if (one.getClass() != impl.getClass())
+            problems.add(impl.getClass().getName() + " implements " + as.cast().token() + " standalone in " + layer.token() + ", and its standalone is "
+                    + one.getClass().getName() + ": a component has one standalone implementation a style");
+    }
+
+    private static void record(Class<?> type, List<String> problems) {
+        if (!type.isRecord() || type.getRecordComponents().length > 0)
+            problems.add(type.getName() + " is no stateless record: a declaration or an implementation is a value, a record of no components");
     }
 
     private static String name(Object module) { return module.getClass().getSimpleName(); }

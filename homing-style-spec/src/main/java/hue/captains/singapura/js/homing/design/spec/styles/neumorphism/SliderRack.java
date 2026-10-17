@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** neumorphism's look of slider-rack: CSS of its own. */
+/** neumorphism's implementation of slider-rack: CSS of its own. */
 public record SliderRack() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseRegions.SliderRack, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseRegions.SliderRack, RoleRoot> style() {
         return new StylingRes.CssContent<>();

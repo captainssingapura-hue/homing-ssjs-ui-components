@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** base's look of boundary-line: CSS of its own. */
+/** base's implementation of boundary-line: CSS of its own. */
 public record BoundaryLine() implements CastingStylePerRole<BaseScheme, Base, HouseMarks.BoundaryLine, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseMarks.BoundaryLine, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Border(), new BaseColours.LineHovered(), new BaseColours.Accent());

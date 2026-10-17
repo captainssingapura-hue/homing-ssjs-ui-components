@@ -2,17 +2,19 @@ package hue.captains.singapura.js.homing.design.spec.house;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.design.spec.BaseSpecModule;
-import hue.captains.singapura.js.homing.design.spec.Implemented;
+import hue.captains.singapura.js.homing.design.spec.StandaloneEntry;
+import hue.captains.singapura.js.homing.design.spec.Target;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiPanesComponentModule;
+
 import java.util.List;
 
-/** UiPanesComponentModule's components implemented in Base, in the typed spec stack (RFC 0067, D53). */
+/** UiPanesComponentModule's standalones in Base, in the typed spec stack (RFC 0067, D53): its components', and those of their design a functional role places. */
 public record UiPanesBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     public static final UiPanesBaseSpec INSTANCE = new UiPanesBaseSpec();
@@ -21,20 +23,17 @@ public record UiPanesBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     @Override public ComponentModule components() { return UiPanesComponentModule.INSTANCE; }
 
-    @Override public List<Implemented<BaseScheme, Base, ?>> implementations() {
+    @Override public List<StandaloneEntry<BaseScheme, Base, ?>> standalones() {
         return List.of(
-                new Implemented<>(HousePanes.MultiTabPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.MultiTabPane()),
-                new Implemented<>(HousePanes.SingleTabPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SingleTabPane()),
-                new Implemented<>(HouseContainers.TabStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabStrip()),
-                new Implemented<>(HouseControls.Tab.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Tab()),
-                new Implemented<>(HousePanes.TabPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPane()),
-                new Implemented<>(HousePanes.TabOpener.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabOpener()),
-                new Implemented<>(HousePanes.TabPicker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()),
-                new Implemented<>(HousePanes.AddTab.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.AddTab()),
-                new Implemented<>(HouseIcons.ColumnIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ColumnIcon()),
-                new Implemented<>(HouseIcons.RowIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.RowIcon()),
-                new Implemented<>(HouseIcons.MergeIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.MergeIcon()),
-                new Implemented<>(HouseIcons.DetachIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.DetachIcon()),
-                new Implemented<>(HouseIcons.WithinIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.WithinIcon()));
+                new StandaloneEntry<>(HousePanes.MultiTabPane.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.MultiTabPaneDeclaration())),
+                new StandaloneEntry<>(HousePanes.TabPicker.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabPickerDeclaration())),
+                new StandaloneEntry<>(HousePanes.SingleTabPane.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.SingleTabPaneDeclaration())),
+                new StandaloneEntry<>(HouseContainers.TabStrip.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabStripDeclaration())),
+                new StandaloneEntry<>(HouseControls.Tab.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabDeclaration())),
+                new StandaloneEntry<>(HousePanes.TabPane.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabPaneDeclaration())),
+                new StandaloneEntry<>(HousePanes.TabOpener.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabOpenerDeclaration())),
+                new StandaloneEntry<>(HousePanes.AddTab.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.AddTabDeclaration())),
+                new StandaloneEntry<>(HousePanes.PaneThumbs.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbsDeclaration())),
+                new StandaloneEntry<>(HouseRegions.StripTail.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.base.StripTail())));
     }
 }

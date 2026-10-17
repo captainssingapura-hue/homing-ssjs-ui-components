@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of label_title: CSS of its own. */
+/** neumorphism's implementation of label_title: CSS of its own. */
 public record LabelTitle() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Label, HouseSaying.Title> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Label, HouseSaying.Title> style() {
         return new StylingRes.CssContent<>();

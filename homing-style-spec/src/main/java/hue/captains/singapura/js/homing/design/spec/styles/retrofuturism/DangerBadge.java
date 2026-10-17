@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of danger-badge: CSS of its own. */
+/** retro-futurism's implementation of danger-badge: CSS of its own. */
 public record DangerBadge() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.DangerBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.DangerBadge, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.DangerInk(), new BaseColours.DangerWash());

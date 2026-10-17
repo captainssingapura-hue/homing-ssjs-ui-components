@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of pill_count: as its component on its own, by delegation. */
+/** retro-futurism's implementation of pill_count: as its component standalone, by delegation. */
 public record PillCount() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.Pill, HouseSaying.Count> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.Pill, HouseSaying.Count> style() {
         return new StylingRes.RootDelegation<>(new Pill());

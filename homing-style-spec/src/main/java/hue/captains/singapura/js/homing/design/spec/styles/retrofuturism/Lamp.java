@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** retro-futurism's look of lamp: CSS of its own. */
+/** retro-futurism's implementation of lamp: CSS of its own. */
 public record Lamp() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseMarks.Lamp, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseMarks.Lamp, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Text(), new BaseColours.OnDanger(), new BaseColours.Quiet(), new BaseColours.Accent(), new BaseColours.AccentWashLight(), new BaseColours.Danger());

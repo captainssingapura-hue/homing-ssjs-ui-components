@@ -67,8 +67,8 @@ class HouseSpecTest {
     @Test
     void summary() {
         var lines = new ArrayList<String>();
-        for (DesignStyle<?> s : SPEC.styles()) lines.add(s.token() + "=" + SPEC.implementations().get(s).size());
-        System.out.println("[spec] top-level components " + SPEC.top().size() + "; implementations per style: " + String.join(", ", lines));
+        for (DesignStyle<?> s : SPEC.styles()) lines.add(s.token() + "=" + SPEC.standalones().get(s).size());
+        System.out.println("[spec] top-level components " + SPEC.top().size() + "; standalones per style: " + String.join(", ", lines));
         assertEquals(List.copyOf(SPEC.top()), SPEC.top());
     }
 }

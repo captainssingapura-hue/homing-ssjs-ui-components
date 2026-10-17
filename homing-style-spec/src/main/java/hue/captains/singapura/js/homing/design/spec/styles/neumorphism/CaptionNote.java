@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's look of caption_note: as its component on its own, by delegation. */
+/** neumorphism's implementation of caption_note: as its component standalone, by delegation. */
 public record CaptionNote() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Caption, HouseSaying.Note> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Caption, HouseSaying.Note> style() {
         return new StylingRes.RootDelegation<>(new Caption());

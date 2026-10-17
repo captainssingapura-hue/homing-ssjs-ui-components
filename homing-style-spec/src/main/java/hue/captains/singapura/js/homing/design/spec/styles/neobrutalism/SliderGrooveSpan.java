@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 
-/** neo-brutalism's look of slider-groove_span: as its component on its own, by delegation. */
+/** neo-brutalism's implementation of slider-groove_span: as its component standalone, by delegation. */
 public record SliderGrooveSpan() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseMarks.SliderGroove, HouseSaying.Span> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseMarks.SliderGroove, HouseSaying.Span> style() {
         return new StylingRes.RootDelegation<>(new SliderGroove());

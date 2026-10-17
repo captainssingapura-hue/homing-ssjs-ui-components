@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** sketchy's look of fill: CSS of its own. */
+/** sketchy's implementation of fill: CSS of its own. */
 public record Fill() implements CastingStylePerRole<BaseScheme, Sketchy, HouseMarks.Fill, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseMarks.Fill, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Accent());

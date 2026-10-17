@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** base's look of ground: CSS of its own. */
+/** base's implementation of ground: CSS of its own. */
 public record Ground() implements CastingStylePerRole<BaseScheme, Base, HouseContainers.Ground, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseContainers.Ground, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ground(), new BaseColours.ScrollThumb(), new BaseColours.Text());

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** retro-futurism's look of readout: CSS of its own. */
+/** retro-futurism's implementation of readout: CSS of its own. */
 public record Readout() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseText.Readout, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseText.Readout, RoleRoot> style() {
         return new StylingRes.CssContent<>();

@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** editorial's look of link_open: as its component on its own, by delegation. */
+/** editorial's implementation of link_open: as its component standalone, by delegation. */
 public record LinkOpen() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.Link, HouseDoing.Open> {
     @Override public StylingRes<BaseScheme, Editorial, HouseControls.Link, HouseDoing.Open> style() {
         return new StylingRes.RootDelegation<>(new Link());

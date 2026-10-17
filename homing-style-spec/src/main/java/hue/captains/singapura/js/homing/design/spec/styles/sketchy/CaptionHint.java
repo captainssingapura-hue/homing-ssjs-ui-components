@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's look of caption_hint: as its component on its own, by delegation. */
+/** sketchy's implementation of caption_hint: as its component standalone, by delegation. */
 public record CaptionHint() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Caption, HouseSaying.Hint> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Caption, HouseSaying.Hint> style() {
         return new StylingRes.RootDelegation<>(new Caption());

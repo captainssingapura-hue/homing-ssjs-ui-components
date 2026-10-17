@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** editorial's look of slider-knob_thumb: as its component on its own, by delegation. */
+/** editorial's implementation of slider-knob_thumb: as its component standalone, by delegation. */
 public record SliderKnobThumb() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.SliderKnob, HouseDoing.Thumb> {
     @Override public StylingRes<BaseScheme, Editorial, HouseControls.SliderKnob, HouseDoing.Thumb> style() {
         return new StylingRes.RootDelegation<>(new SliderKnob());

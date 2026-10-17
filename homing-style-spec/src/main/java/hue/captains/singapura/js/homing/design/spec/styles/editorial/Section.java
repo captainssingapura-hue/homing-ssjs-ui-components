@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** editorial's look of section: CSS of its own. */
+/** editorial's implementation of section: CSS of its own. */
 public record Section() implements CastingStylePerRole<BaseScheme, Editorial, HouseRegions.Section, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseRegions.Section, RoleRoot> style() {
         return new StylingRes.CssContent<>();

@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** sketchy's look of toggle-groove: CSS of its own. */
+/** sketchy's implementation of toggle-groove: CSS of its own. */
 public record ToggleGroove() implements CastingStylePerRole<BaseScheme, Sketchy, HouseMarks.ToggleGroove, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseMarks.ToggleGroove, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.WashSoft(), new BaseColours.GrooveEdge(), new BaseColours.Accent());

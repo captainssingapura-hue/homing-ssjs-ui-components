@@ -9,66 +9,85 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
- * A style's looks as a graph ({@link StyleDag}), read off the registry by walking, never off the looks' types: each
- * top-level component's implementation found in the style or the layer below it falls to, then a spec pointer for each
- * part slot - of the same layer, as the compiler holds - and a delegation pointer for each delegation: to the same
- * layer, or the one below.
+ * A style's declarations and implementations as a graph ({@link StyleDag}), read off the registry by walking, never off
+ * the types: each top-level component's standalone, in the style or the layer below it falls to; from a declaration, a
+ * spec pointer to its own implementation, one to each slot's target in its role - of the same layer - and one to each
+ * placed part's standalone, as the style worn gives it; from an implementation, its delegation pointer: within its layer,
+ * or to the one below.
  */
 public record ReadDag() implements StatelessFunctionalObject {
 
     public static final ReadDag INSTANCE = new ReadDag();
 
     public StyleDag read(SpecRegistry spec, DesignStyle<?> style) {
-        var nodes = new LinkedHashMap<String, StyleDag.Node>();
-        var pointers = new ArrayList<StyleDag.Pointer>();
+        var walk = new Walk(spec, style, new LinkedHashMap<>(), new ArrayList<>());
         for (Component<?> top : spec.top()) {
-            for (Optional<DesignStyle<?>> at = Optional.of(style); at.isPresent(); at = spec.parent(at.get())) {
-                CastingStylePerRole<?, ?, ?, ?> own = spec.implementations().getOrDefault(at.get(), Map.of()).get(top);
-                if (own == null) continue;
-                visit(spec, own, at.get(), new Casting(top), true, nodes, pointers);
-                break;
-            }
+            DesignStyle<?> layer = spec.standaloneLayer(style, top);
+            walk.target(spec.standalones().get(layer).get(top), layer, new Casting(top), true);
         }
-        return new StyleDag(style, new ArrayList<>(nodes.values()), pointers);
+        return new StyleDag(style, new ArrayList<>(walk.nodes().values()), walk.pointers());
     }
 
-    private static String id(DesignStyle<?> layer, CastingStylePerRole<?, ?, ?, ?> look) {
-        return layer.token() + "/" + look.getClass().getSimpleName();
-    }
+    private record Walk(SpecRegistry spec, DesignStyle<?> worn, Map<String, StyleDag.Node> nodes, List<StyleDag.Pointer> pointers) {
 
-    private static String visit(SpecRegistry spec, CastingStylePerRole<?, ?, ?, ?> look, DesignStyle<?> layer, Casting as, boolean root,
-                                Map<String, StyleDag.Node> nodes, List<StyleDag.Pointer> pointers) {
-        String id = id(layer, look);
-        StyleDag.Node known = nodes.get(id);
-        if (known != null) {
-            if (root && !known.root()) nodes.put(id, new StyleDag.Node(id, layer, as, known.gives(), true, look));
+        String target(Target<?, ?, ?, ?> target, DesignStyle<?> layer, Casting as, boolean root) {
+            return switch (target) {
+                case Target.Impl<?, ?, ?, ?> i -> impl(i.impl(), layer, as, root);
+                case Target.Declared<?, ?, ?, ?> d -> declaration(d.declaration(), layer, as, root);
+            };
+        }
+
+        String declaration(CastingDeclaration<?, ?, ?, ?> declaration, DesignStyle<?> layer, Casting as, boolean root) {
+            String id = layer.token() + "/" + declaration.getClass().getSimpleName();
+            StyleDag.Node known = nodes.get(id);
+            if (known != null) {
+                if (root && !known.root()) nodes.put(id, new StyleDag.DeclarationNode(id, layer, as, true, declaration));
+                return id;
+            }
+            nodes.put(id, new StyleDag.DeclarationNode(id, layer, as, root, declaration));
+            for (PartSpec<?, ?, ?> p : declaration.parts().parts()) {
+                switch (p) {
+                    case PartSpec.SameRole<?, ?, ?, ?, ?> s ->
+                            pointers.add(new StyleDag.SpecPointer(id, target(s.to(), layer, s.casting(), false), StyleDag.Spec.SAME_ROLE, s.slot()));
+                    case PartSpec.Standalone<?, ?, ?, ?, ?> s -> {
+                        DesignStyle<?> at = spec.standaloneLayer(worn, s.part());
+                        String to = target(spec.standalones().get(at).get(s.part()), at, new Casting(s.part()), false);
+                        pointers.add(new StyleDag.SpecPointer(id, to, StyleDag.Spec.STANDALONE, s.slot()));
+                    }
+                }
+            }
+            pointers.add(new StyleDag.SpecPointer(id, impl(declaration.own(), layer, as, false), StyleDag.Spec.OWN, as));
             return id;
         }
-        StyleDag.Gives gives = switch (look.style()) {
-            case StylingRes.CssContent<?, ?, ?, ?> c -> StyleDag.Gives.CSS;
-            case StylingRes.Delegation<?, ?, ?, ?> d -> StyleDag.Gives.DELEGATION;
-            case StylingRes.RootDelegation<?, ?, ?, ?> r -> StyleDag.Gives.ROOT_DELEGATION;
-            case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> StyleDag.Gives.PARENT_DELEGATION;
-        };
-        nodes.put(id, new StyleDag.Node(id, layer, as, gives, root, look));
-        for (PartSpec<?, ?, ?> p : look.parts().parts()) {
-            String to = visit(spec, p.look(), layer, p.casting(), false, nodes, pointers);
-            pointers.add(new StyleDag.SpecPointer(id, to, p.slot()));
-        }
-        switch (look.style()) {
-            case StylingRes.CssContent<?, ?, ?, ?> c -> { }
-            case StylingRes.Delegation<?, ?, ?, ?> d ->
-                    pointers.add(new StyleDag.DelegationPointer(id, visit(spec, d.to(), layer, as, false, nodes, pointers), StyleDag.Gives.DELEGATION));
-            case StylingRes.RootDelegation<?, ?, ?, ?> r ->
-                    pointers.add(new StyleDag.DelegationPointer(id, visit(spec, r.to(), layer, as.alone(), false, nodes, pointers), StyleDag.Gives.ROOT_DELEGATION));
-            case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> {
-                DesignStyle<?> below = spec.parent(layer).orElseThrow(() -> new IllegalStateException(id + " delegates below " + layer.token() + ", which is written over nothing"));
-                pointers.add(new StyleDag.DelegationPointer(id, visit(spec, p.to(), below, as, false, nodes, pointers), StyleDag.Gives.PARENT_DELEGATION));
+
+        String impl(CastingStylePerRole<?, ?, ?, ?> impl, DesignStyle<?> layer, Casting as, boolean root) {
+            String id = layer.token() + "/" + impl.getClass().getSimpleName();
+            StyleDag.Node known = nodes.get(id);
+            if (known instanceof StyleDag.ImplNode k) {
+                if (root && !k.root()) nodes.put(id, new StyleDag.ImplNode(id, layer, as, k.gives(), true, impl));
+                return id;
             }
+            StyleDag.Gives gives = switch (impl.style()) {
+                case StylingRes.CssContent<?, ?, ?, ?> c -> StyleDag.Gives.CSS;
+                case StylingRes.Delegation<?, ?, ?, ?> d -> StyleDag.Gives.DELEGATION;
+                case StylingRes.RootDelegation<?, ?, ?, ?> r -> StyleDag.Gives.ROOT_DELEGATION;
+                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> StyleDag.Gives.PARENT_DELEGATION;
+            };
+            nodes.put(id, new StyleDag.ImplNode(id, layer, as, gives, root, impl));
+            switch (impl.style()) {
+                case StylingRes.CssContent<?, ?, ?, ?> c -> { }
+                case StylingRes.Delegation<?, ?, ?, ?> d ->
+                        pointers.add(new StyleDag.DelegationPointer(id, impl(d.to(), layer, as, false), gives));
+                case StylingRes.RootDelegation<?, ?, ?, ?> r ->
+                        pointers.add(new StyleDag.DelegationPointer(id, impl(r.to(), layer, as.alone(), false), gives));
+                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> {
+                    DesignStyle<?> below = spec.parent(layer).orElseThrow(() -> new IllegalStateException(id + " delegates below " + layer.token() + ", written over nothing"));
+                    pointers.add(new StyleDag.DelegationPointer(id, impl(p.to(), below, as, false), gives));
+                }
+            }
+            return id;
         }
-        return id;
     }
 }

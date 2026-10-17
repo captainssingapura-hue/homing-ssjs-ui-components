@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** editorial's look of tick: CSS of its own. */
+/** editorial's implementation of tick: CSS of its own. */
 public record Tick() implements CastingStylePerRole<BaseScheme, Editorial, HouseMarks.Tick, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseMarks.Tick, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Muted());

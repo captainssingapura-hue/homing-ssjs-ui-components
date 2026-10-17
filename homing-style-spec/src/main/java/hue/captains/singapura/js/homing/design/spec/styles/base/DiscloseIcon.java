@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** base's look of disclose-icon: CSS of its own. */
+/** base's implementation of disclose-icon: CSS of its own. */
 public record DiscloseIcon() implements CastingStylePerRole<BaseScheme, Base, HouseIcons.DiscloseIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseIcons.DiscloseIcon, RoleRoot> style() {
         return new StylingRes.CssContent<>();

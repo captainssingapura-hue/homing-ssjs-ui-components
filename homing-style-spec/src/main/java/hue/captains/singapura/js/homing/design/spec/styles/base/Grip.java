@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** base's look of grip: CSS of its own. */
+/** base's implementation of grip: CSS of its own. */
 public record Grip() implements CastingStylePerRole<BaseScheme, Base, HouseControls.Grip, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseControls.Grip, RoleRoot> style() {
         return new StylingRes.CssContent<>(new BaseColours.Ring());

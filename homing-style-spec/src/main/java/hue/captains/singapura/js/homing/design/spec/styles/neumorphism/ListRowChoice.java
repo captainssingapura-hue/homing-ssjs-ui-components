@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 
-/** neumorphism's look of list-row_choice: as its component on its own, by delegation. */
+/** neumorphism's implementation of list-row_choice: as its component standalone, by delegation. */
 public record ListRowChoice() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseItems.ListRow, HouseDoing.Choice> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseItems.ListRow, HouseDoing.Choice> style() {
         return new StylingRes.RootDelegation<>(new ListRow());

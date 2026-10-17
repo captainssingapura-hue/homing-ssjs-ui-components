@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** neo-futurism's look of close-button_close: as its component on its own, by delegation. */
+/** neo-futurism's implementation of close-button_close: as its component standalone, by delegation. */
 public record CloseButtonClose() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.CloseButton, HouseDoing.Close> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.CloseButton, HouseDoing.Close> style() {
         return new StylingRes.RootDelegation<>(new CloseButton());
