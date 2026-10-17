@@ -18,7 +18,7 @@ class StyleDagOrderTest {
                 new GenericsSampleTest.BasePlain());
     }
 
-    private static StyleDag.Edge edge(String from, String to) { return new StyleDag.Edge(from, to, StyleDag.Points.PART, null); }
+    private static StyleDag.Pointer edge(String from, String to) { return new StyleDag.SpecPointer(from, to, new Casting(HouseControls.PlainButton.INSTANCE)); }
 
     @Test
     void aCycle_leavesNoOrder() {
