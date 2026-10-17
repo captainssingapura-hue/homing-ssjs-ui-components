@@ -8,7 +8,6 @@ import hue.captains.singapura.js.homing.conformance.rules.CrateClosure;
 import hue.captains.singapura.js.homing.conformance.rules.DefaultJsRulePolicy;
 import hue.captains.singapura.js.homing.conformance.rules.FindingGrader;
 import hue.captains.singapura.js.homing.conformance.rules.JsRulePolicy;
-import hue.captains.singapura.js.homing.conformance.rules.RuleId;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
@@ -84,13 +83,12 @@ public final class ComponentsConformance {
     /** The framework's policy, unextended: the components declare no types of their own. */
     public static final JsRulePolicy POLICY = DefaultJsRulePolicy.INSTANCE;
 
-    /** Documented, intentional exceptions. */
-    public static final List<Allowance> ALLOWANCES = List.of(
-            new Allowance(
-                    "hue.captains.singapura.js.homing.ui.look.LookModule",
-                    new RuleId("no-raw-css"),
-                    "Look IS the look's manager: the classes it puts on are a derived sheet's, the theme's, which the CSS "
-                            + "manager does not handle (RFC 0064, D25) - so its classList calls are where that typed path ends."));
+    /**
+     * Documented, intentional exceptions: none. The look puts its classes on and off through the css manager, as every
+     * component does - a derived sheet's class is the manager's to put on an element, whatever sheet rules it; the
+     * manager only loads the provided ones (RFC 0064, D25) - so nothing here is excused.
+     */
+    public static final List<Allowance> ALLOWANCES = List.of();
 
     /** The top level and everything it requires, transitively. */
     public static Collection<Crate> closure() {
