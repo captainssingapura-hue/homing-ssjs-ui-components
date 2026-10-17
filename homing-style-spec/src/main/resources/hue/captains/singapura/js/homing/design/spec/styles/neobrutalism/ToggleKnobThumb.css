@@ -1,0 +1,9 @@
+/* The toggle knob in neo-brutalism: what shows which way it stands, sliding in its groove; its measure the switch's. Whole: every property its look has (D9). */
+$casting {
+    background-color: var(--fp-raised);
+    border-color: currentColor;
+    border-radius: 0;
+    border-width: 3px;
+    border-style: solid;
+    transition: translate 160ms ease;
+}

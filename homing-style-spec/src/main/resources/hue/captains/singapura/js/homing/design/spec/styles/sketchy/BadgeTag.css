@@ -1,0 +1,14 @@
+/* The badge in sketchy: a tag on the accent's wash. Whole: every property its look has (D9). */
+$casting {
+    color: inherit;
+    background-color: var(--fp-accent-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Neucha", "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}

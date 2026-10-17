@@ -1,0 +1,11 @@
+/* The action bar in neo-futurism: a row of actions at the foot of what it ends - raised, capped off by a rule along its top. Whole: every property its look has (D9). */
+$casting {
+    color: inherit;
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    padding-block: 8px;
+    padding-inline: 12px;
+    gap: 8px;
+}

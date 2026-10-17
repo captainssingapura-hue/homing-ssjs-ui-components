@@ -1,0 +1,60 @@
+/* The list row in retro-futurism: one row of a list - tinted under the hand, filled while picked, washed while current, marked where the keys are. Whole: every property its look has (D9). */
+$casting {
+    color: inherit;
+    background-color: transparent;
+    border-color: transparent;
+    outline-color: currentColor;
+    border-radius: 3px;
+    box-shadow: none;
+    border-width: 1px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 4px;
+    padding-inline: 8px;
+    gap: 8px;
+    font-family: "Rajdhani", "Bahnschrift", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(13px * pow(1.2, var(--size)));
+    line-height: 1.5;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+    transform: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--fp-accent-wash-soft);
+        border-color: var(--fp-border);
+    }
+
+    &$selected {
+        color: var(--fp-on-inverted);
+        background-color: var(--fp-title);
+        border-color: var(--fp-title);
+    }
+
+    &$current {
+        background-color: var(--fp-accent-wash-light);
+    }
+
+    &$candidate {
+        outline-color: var(--fp-keys-candidate);
+        outline-width: 1px;
+        outline-style: dashed;
+        outline-offset: 4px;
+    }
+
+    &$lent {
+        outline-color: var(--fp-keys-lent);
+        outline-width: 1px;
+        outline-style: solid;
+        outline-offset: 2px;
+    }
+
+    &$held {
+        outline-color: var(--fp-accent);
+        outline-width: 2px;
+        outline-style: solid;
+        outline-offset: 2px;
+    }
+}

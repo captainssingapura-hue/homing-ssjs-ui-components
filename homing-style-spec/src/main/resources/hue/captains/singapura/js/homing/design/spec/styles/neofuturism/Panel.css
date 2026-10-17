@@ -1,0 +1,24 @@
+/* The panel in neo-futurism: a named region that fills what holds it - raised, framed, its corner the style's; lifted or set in as the app says; its edge in the accent while it is the current one. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    box-shadow: none;
+    gap: 0;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+
+    &$elevated {
+        box-shadow: 0 6px 24px var(--fp-shade-dense), inset 0 0 0 1px var(--fp-glow-soft);
+    }
+
+    &$sunken {
+        box-shadow: inset 0 1px 10px var(--fp-shade-dark);
+    }
+
+    &$current {
+        border-color: var(--fp-accent);
+    }
+}

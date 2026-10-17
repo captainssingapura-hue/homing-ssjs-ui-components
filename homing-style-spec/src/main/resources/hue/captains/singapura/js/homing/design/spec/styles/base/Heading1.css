@@ -1,0 +1,10 @@
+/* The heading 1 in the base layer: the heading of a page. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: calc(44px * pow(1.2, var(--size)));
+    line-height: 1.1;
+    letter-spacing: normal;
+}

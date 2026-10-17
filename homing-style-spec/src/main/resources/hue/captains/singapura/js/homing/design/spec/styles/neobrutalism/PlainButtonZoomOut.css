@@ -1,0 +1,44 @@
+/* The plain button in neo-brutalism: a button that does one ordinary thing. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 3px;
+    border-style: solid;
+    border-radius: 0;
+    box-shadow: 4px 4px 0 var(--fp-inverted);
+    outline: 0 none;
+    padding-block: calc(10px * pow(1.5, var(--size)));
+    padding-inline: calc(20px * pow(1.5, var(--size)));
+    gap: calc(10px * pow(1.5, var(--size)));
+    min-width: calc(64px * pow(1.5, var(--size)));
+    font-family: "Arial Black", "Impact", "Helvetica Neue", Arial, sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    transition: transform 70ms steps(2, end), box-shadow 70ms steps(2, end), background-color 70ms steps(2, end);
+    transform: none;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 8px 8px 0 var(--fp-inverted);
+        transform: translate(-2px, -2px);
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--fp-ring);
+        outline-offset: -3px;
+    }
+
+    &$disabled {
+        opacity: .4;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
+
+    &:active {
+        box-shadow: 0 0 0 var(--fp-inverted);
+        transform: translate(5px, 5px);
+    }
+}

@@ -1,0 +1,11 @@
+/* The site bar in neo-brutalism: heads a site's pages - the inverted layer, the page's ground written on it, ruled along its foot in the accent. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-on-bar);
+    background-color: var(--fp-inverted);
+    border-color: var(--fp-accent);
+    border-width: 0 0 4px 0;
+    border-style: solid;
+    padding-block: 12px;
+    padding-inline: 28px;
+    gap: 20px;
+}

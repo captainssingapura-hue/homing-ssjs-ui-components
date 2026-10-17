@@ -1,0 +1,11 @@
+/* The kicker in glassmorphism: the small line set above a title. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-kicker-ink);
+    background-color: transparent;
+    font-family: "Inter", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}

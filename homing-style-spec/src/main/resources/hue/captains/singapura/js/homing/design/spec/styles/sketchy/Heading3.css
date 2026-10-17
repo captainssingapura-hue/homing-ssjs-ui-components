@@ -1,0 +1,10 @@
+/* The heading 3 in sketchy: a heading at the third level. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Cabin Sketch", "Segoe Print", "Bradley Hand", "Chalkboard SE", cursive;
+    font-weight: 700;
+    font-size: calc(22px * pow(1.2, var(--size)));
+    line-height: 1.25;
+    letter-spacing: normal;
+}

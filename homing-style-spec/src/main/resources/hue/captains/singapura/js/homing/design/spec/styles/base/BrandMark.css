@@ -1,0 +1,4 @@
+/* The brand's mark in the base layer: a square of the accent, until a site gives a logo; every style's alike. */
+$casting {
+    background-color: var(--fp-accent);
+}

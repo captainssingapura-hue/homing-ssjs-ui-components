@@ -1,0 +1,26 @@
+/* The floating pane in sketchy: a pane over the page - raised, framed, its corner the style's, casting its shadow; the current one ringed; lit and lifted under the hand through its head, lifted further while in it. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 25px 25px 55px 5px / 5px 55px 25px 25px;
+    box-shadow: none;
+    transform: none;
+    transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
+
+    &$current {
+        border-color: var(--fp-ring);
+    }
+
+    &$highlighted {
+        box-shadow: none;
+        transform: translateY(-1px) rotate(-0.6deg);
+    }
+
+    &$dragging {
+        box-shadow: none;
+        transform: translateY(-2px) rotate(-1deg);
+    }
+}
