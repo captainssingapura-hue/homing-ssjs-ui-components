@@ -32,13 +32,15 @@ public record TreeDual(DualTree<?> tree, List<Node> nodes, int inTree, List<Stri
      * @param token   its token
      * @param parent  its parent's name; none for a root
      * @param construction how it is made: the kit's constructor of its kind, with its token, its parent and what else it takes
+     * @param refers       the nodes of other trees its construction names, which the dual imports
      */
-    public record Node(String name, String token, Optional<String> parent, String construction) implements ValueObject {
+    public record Node(String name, String token, Optional<String> parent, String construction, List<Object> refers) implements ValueObject {
         public Node {
             Objects.requireNonNull(name, "Node.name");
             Objects.requireNonNull(token, "Node.token");
             Objects.requireNonNull(parent, "Node.parent");
             Objects.requireNonNull(construction, "Node.construction");
+            refers = List.copyOf(refers);
         }
     }
 

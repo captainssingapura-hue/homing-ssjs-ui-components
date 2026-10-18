@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
-import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.spec.JsLiterals;
 
 import java.util.LinkedHashSet;
@@ -18,14 +17,14 @@ public record Components() implements DualTree<Taxon> {
 
     @Override public String name() { return "components"; }
     @Override public String prefix() { return "Component"; }
-    @Override public List<Taxon> roots(Taxonomy t) { return List.of(Root.INSTANCE); }
-    @Override public List<Taxon> children(Taxonomy t, Taxon node) { return node instanceof ComponentBranch b ? t.children(b) : List.of(); }
+    @Override public List<Taxon> roots(Registration r) { return List.of(Root.INSTANCE); }
+    @Override public List<Taxon> children(Registration r, Taxon node) { return node instanceof ComponentBranch b ? r.taxonomy().children(b) : List.of(); }
     @Override public String token(Taxon node) { return node.token(); }
-    @Override public String construct(Taxonomy t, Taxon node, String parent, List<Taxon> above) {
+    @Override public String construct(Registration r, Taxon node, String parent, List<Taxon> above) {
         String token = JsLiterals.INSTANCE.string(node.token());
         return node instanceof ComponentBranch ? "new ComponentBranch(" + token + ", " + parent + ")"
                 : "new Component(" + token + ", " + parent + ", " + (node instanceof Composite<?>) + ")";
     }
     @Override public List<String> kit() { return List.of("ComponentBranch", "Component"); }
-    @Override public Set<Taxon> used(Taxonomy t) { return new LinkedHashSet<>(t.components()); }
+    @Override public Set<Taxon> used(Registration r) { return new LinkedHashSet<>(r.taxonomy().components()); }
 }

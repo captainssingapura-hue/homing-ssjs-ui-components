@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
+import hue.captains.singapura.js.homing.design.spec.dual.Registration;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +42,7 @@ class HeaderTest {
 
     private static Map<DualTree<?>, TreeDual> duals() {
         var out = new HashMap<DualTree<?>, TreeDual>();
-        for (DualTree<?> t : ReadDual.INSTANCE.trees()) out.put(t, ReadDual.INSTANCE.read(t, SPEC.taxonomy()));
+        for (DualTree<?> t : ReadDual.INSTANCE.trees()) out.put(t, ReadDual.INSTANCE.read(t, new Registration(SPEC.taxonomy(), SPEC.top())));
         return out;
     }
 

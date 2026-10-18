@@ -1,10 +1,11 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.spec.dual.Components;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.js.homing.design.spec.dual.Events;
 import hue.captains.singapura.js.homing.design.spec.dual.Extents;
+import hue.captains.singapura.js.homing.design.spec.dual.Handles;
+import hue.captains.singapura.js.homing.design.spec.dual.Registration;
 import hue.captains.singapura.js.homing.design.spec.dual.Roles;
 import hue.captains.singapura.js.homing.design.spec.dual.States;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
@@ -26,37 +27,37 @@ public record ReadDual() implements StatelessFunctionalObject {
 
     /** Every tree the page names, in its order. */
     public List<DualTree<?>> trees() {
-        return List.of(Components.INSTANCE, Roles.INSTANCE, States.INSTANCE, Events.INSTANCE, Extents.INSTANCE);
+        return List.of(Components.INSTANCE, Roles.INSTANCE, States.INSTANCE, Events.INSTANCE, Extents.INSTANCE, Handles.INSTANCE);
     }
 
-    /** A tree's dual, for the components the taxonomy registers. */
-    public <N> TreeDual read(DualTree<N> tree, Taxonomy taxonomy) {
-        Set<N> used = tree.used(taxonomy);
+    /** A tree's dual, for the components the registration registers. */
+    public <N> TreeDual read(DualTree<N> tree, Registration registration) {
+        Set<N> used = tree.used(registration);
         var kept = new HashSet<N>();
         var all = new ArrayList<N>();
-        for (N root : tree.roots(taxonomy)) keep(tree, taxonomy, root, used, kept, all);
+        for (N root : tree.roots(registration)) keep(tree, registration, root, used, kept, all);
         var nodes = new ArrayList<TreeDual.Node>();
-        for (N root : tree.roots(taxonomy)) walk(tree, taxonomy, root, new ArrayList<>(), kept, nodes);
+        for (N root : tree.roots(registration)) walk(tree, registration, root, new ArrayList<>(), kept, nodes);
         List<String> left = all.stream().filter(n -> !kept.contains(n)).map(tree::token).toList();
         return new TreeDual(tree, nodes, all.size(), left);
     }
 
     /** Whether a node is kept: used, or above a used one. */
-    private static <N> boolean keep(DualTree<N> tree, Taxonomy taxonomy, N node, Set<N> used, Set<N> kept, List<N> all) {
+    private static <N> boolean keep(DualTree<N> tree, Registration registration, N node, Set<N> used, Set<N> kept, List<N> all) {
         all.add(node);
         boolean any = used.contains(node);
-        for (N child : tree.children(taxonomy, node)) any |= keep(tree, taxonomy, child, used, kept, all);
+        for (N child : tree.children(registration, node)) any |= keep(tree, registration, child, used, kept, all);
         if (any) kept.add(node);
         return any;
     }
 
-    private static <N> void walk(DualTree<N> tree, Taxonomy taxonomy, N node, List<N> above, Set<N> kept, List<TreeDual.Node> out) {
+    private static <N> void walk(DualTree<N> tree, Registration registration, N node, List<N> above, Set<N> kept, List<TreeDual.Node> out) {
         if (!kept.contains(node)) return;
-        Optional<String> parent = above.isEmpty() ? Optional.empty() : Optional.of(JsLiterals.INSTANCE.name(tree.token(above.getLast())));
-        out.add(new TreeDual.Node(JsLiterals.INSTANCE.name(tree.token(node)), tree.token(node), parent,
-                tree.construct(taxonomy, node, parent.orElse("null"), List.copyOf(above))));
+        Optional<String> parent = above.isEmpty() ? Optional.empty() : Optional.of(tree.name(above.getLast()));
+        out.add(new TreeDual.Node(tree.name(node), tree.token(node), parent,
+                tree.construct(registration, node, parent.orElse("null"), List.copyOf(above)), tree.refers(registration, node)));
         var down = new ArrayList<>(above);
         down.add(node);
-        for (N child : tree.children(taxonomy, node)) walk(tree, taxonomy, child, down, kept, out);
+        for (N child : tree.children(registration, node)) walk(tree, registration, child, down, kept, out);
     }
 }

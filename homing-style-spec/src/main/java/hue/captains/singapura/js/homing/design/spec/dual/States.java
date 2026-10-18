@@ -9,7 +9,6 @@ import hue.captains.singapura.js.homing.component.taxonomy.StateNode;
 import hue.captains.singapura.js.homing.component.taxonomy.StateRoot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
-import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.spec.JsLiterals;
 import hue.captains.singapura.js.homing.tree.NodeName;
 
@@ -25,10 +24,10 @@ public record States() implements DualTree<StateNode> {
 
     @Override public String name() { return "states"; }
     @Override public String prefix() { return "State"; }
-    @Override public List<StateNode> roots(Taxonomy t) { return List.of(StateRoot.INSTANCE); }
-    @Override public List<StateNode> children(Taxonomy t, StateNode node) { return node instanceof StateBranch b ? t.states().children(b) : List.of(); }
+    @Override public List<StateNode> roots(Registration r) { return List.of(StateRoot.INSTANCE); }
+    @Override public List<StateNode> children(Registration r, StateNode node) { return node instanceof StateBranch b ? r.taxonomy().states().children(b) : List.of(); }
     @Override public String token(StateNode node) { return node.name().value(); }
-    @Override public String construct(Taxonomy t, StateNode node, String parent, List<StateNode> above) {
+    @Override public String construct(Registration r, StateNode node, String parent, List<StateNode> above) {
         var js = JsLiterals.INSTANCE;
         String token = js.string(token(node));
         if (!(node instanceof StateType<?> s)) return "new StateBranch(" + token + ", " + parent + ")";
@@ -40,9 +39,9 @@ public record States() implements DualTree<StateNode> {
                 + ", " + (s instanceof Flag<?>) + ", " + (s instanceof Pseudo p ? js.string(p.pseudoClass()) : "null") + ", " + level + ")";
     }
     @Override public List<String> kit() { return List.of("StateBranch", "StateType"); }
-    @Override public Set<StateNode> used(Taxonomy t) {
+    @Override public Set<StateNode> used(Registration r) {
         var out = new LinkedHashSet<StateNode>();
-        for (Component<?> c : t.components()) if (c.states() != null) out.addAll(c.states());
+        for (Component<?> c : r.taxonomy().components()) if (c.states() != null) out.addAll(c.states());
         return out;
     }
 }
