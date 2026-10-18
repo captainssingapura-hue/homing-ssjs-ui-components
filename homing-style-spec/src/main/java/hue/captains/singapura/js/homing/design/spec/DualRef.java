@@ -5,12 +5,14 @@ import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleNode;
 import hue.captains.singapura.js.homing.component.taxonomy.StateNode;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
+import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.spec.dual.Components;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.js.homing.design.spec.dual.Events;
 import hue.captains.singapura.js.homing.design.spec.dual.Extents;
 import hue.captains.singapura.js.homing.design.spec.dual.Roles;
 import hue.captains.singapura.js.homing.design.spec.dual.States;
+import hue.captains.singapura.js.homing.design.spec.dual.Styles;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 import hue.captains.singapura.tao.ontology.ValueObject;
 
@@ -36,6 +38,7 @@ public record DualRef() implements StatelessFunctionalObject {
             case StateNode s -> ref(States.INSTANCE, s.name().value());
             case EventNode e -> ref(Events.INSTANCE, e.name().value());
             case ExtentAxis x -> ref(Extents.INSTANCE, Extents.INSTANCE.token(x));
+            case DesignStyle<?> s -> ref(Styles.INSTANCE, s.token());
             default -> throw new IllegalArgumentException(node + " is a node of no tree the page names");
         };
     }

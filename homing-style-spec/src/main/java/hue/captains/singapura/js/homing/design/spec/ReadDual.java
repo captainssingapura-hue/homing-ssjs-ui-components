@@ -8,6 +8,7 @@ import hue.captains.singapura.js.homing.design.spec.dual.Handles;
 import hue.captains.singapura.js.homing.design.spec.dual.Registration;
 import hue.captains.singapura.js.homing.design.spec.dual.Roles;
 import hue.captains.singapura.js.homing.design.spec.dual.States;
+import hue.captains.singapura.js.homing.design.spec.dual.Styles;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.Set;
 /**
  * The one way a Java tree becomes its JS dual (RFC 0071): walked from its roots, each node after its parent; kept when it
  * is a leaf the registered components' declarations use, or above one; named by its token. Whatever the tree - the
- * components, the roles, the states, the events, the extents - the same walk.
+ * components, the roles, the states, the events, the extents, the handles, the styles - the same walk.
  */
 public record ReadDual() implements StatelessFunctionalObject {
 
@@ -27,7 +28,7 @@ public record ReadDual() implements StatelessFunctionalObject {
 
     /** Every tree the page names, in its order. */
     public List<DualTree<?>> trees() {
-        return List.of(Components.INSTANCE, Roles.INSTANCE, States.INSTANCE, Events.INSTANCE, Extents.INSTANCE, Handles.INSTANCE);
+        return List.of(Components.INSTANCE, Roles.INSTANCE, States.INSTANCE, Events.INSTANCE, Extents.INSTANCE, Handles.INSTANCE, Styles.INSTANCE);
     }
 
     /** A tree's dual, for the components the registration registers. */

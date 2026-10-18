@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * @param <N> the tree's node type
  */
-public sealed interface DualTree<N> extends StatelessFunctionalObject permits Components, Roles, States, Events, Extents, Handles {
+public sealed interface DualTree<N> extends StatelessFunctionalObject permits Components, Roles, States, Events, Extents, Handles, Styles {
 
     /** The tree's name, as the page reads it: {@code components}. */
     String name();

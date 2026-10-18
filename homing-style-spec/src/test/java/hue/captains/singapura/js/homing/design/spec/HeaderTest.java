@@ -42,7 +42,7 @@ class HeaderTest {
 
     private static Map<DualTree<?>, TreeDual> duals() {
         var out = new HashMap<DualTree<?>, TreeDual>();
-        for (DualTree<?> t : ReadDual.INSTANCE.trees()) out.put(t, ReadDual.INSTANCE.read(t, new Registration(SPEC.taxonomy(), SPEC.top())));
+        for (DualTree<?> t : ReadDual.INSTANCE.trees()) out.put(t, ReadDual.INSTANCE.read(t, new Registration(SPEC.taxonomy(), SPEC.top(), SPEC.selectable())));
         return out;
     }
 
