@@ -1,15 +1,14 @@
 package hue.captains.singapura.js.homing.design.spec.styles.base;
 
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
+import hue.captains.singapura.js.homing.design.spec.RootDelegation;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 /** base's implementation of caption_hint: as its component standalone, by delegation. */
-public record CaptionHint() implements CastingStylePerRole<BaseScheme, Base, HouseText.Caption, HouseSaying.Hint> {
-    @Override public StylingRes<BaseScheme, Base, HouseText.Caption, HouseSaying.Hint> style() {
-        return new StylingRes.RootDelegation<>(new Caption());
-    }
+public record CaptionHint() implements RootDelegation<BaseScheme, Base, HouseText.Caption, HouseSaying.Hint> {
+    @Override public CastingImplementation<BaseScheme, Base, HouseText.Caption, RoleRoot> to() { return new Caption(); }
 }

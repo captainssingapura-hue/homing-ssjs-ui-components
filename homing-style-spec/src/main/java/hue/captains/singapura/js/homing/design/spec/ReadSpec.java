@@ -181,11 +181,11 @@ public record ReadSpec() implements StatelessFunctionalObject {
      * An implementation reached as a casting, held: a stateless record; standalone, the one its layer gives; its
      * delegations ending at CSS, never round.
      */
-    private static void impl(CastingStylePerRole<?, ?, ?, ?> impl, Casting as, DesignStyle<?> layer,
+    private static void impl(CastingImplementation<?, ?, ?, ?> impl, Casting as, DesignStyle<?> layer,
                              Map<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>> standalones, Map<Object, Casting> reached,
                              List<String> problems) {
         var passed = new HashSet<Class<?>>();
-        CastingStylePerRole<?, ?, ?, ?> at = impl;
+        CastingImplementation<?, ?, ?, ?> at = impl;
         Casting atAs = as;
         DesignStyle<?> atLayer = layer;
         while (at != null) {
@@ -199,24 +199,26 @@ public record ReadSpec() implements StatelessFunctionalObject {
                 problems.add(type.getName() + " is reached as " + before.token() + " and as " + atAs.token() + ": an implementation is of one casting");
             if (before == null) {
                 record(type, problems);
-                colours(at, problems);
+                if (at instanceof CssImplementation<?, ?, ?, ?> c) colours(c, problems);
                 if (atAs.standalone()) standaloneHeld(at, atAs, atLayer, standalones, problems);
             }
-            switch (at.style()) {
-                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> at = null;
-                case StylingRes.Delegation<?, ?, ?, ?> d -> at = d.to();
-                case StylingRes.RootDelegation<?, ?, ?, ?> r -> { at = r.to(); atAs = atAs.alone(); }
-                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> {
-                    at = p.to();
-                    atLayer = atLayer instanceof Derives<?, ?> d ? d.base() : atLayer;
+            switch (at) {
+                case CssImplementation<?, ?, ?, ?> c -> at = null;
+                case Delegation<?, ?, ?, ?> d -> {
+                    switch (d) {
+                        case SameRoleDelegation<?, ?, ?, ?> s -> { }
+                        case RootDelegation<?, ?, ?, ?> r -> atAs = atAs.alone();
+                        case ParentDelegation<?, ?, ?, ?, ?> p -> atLayer = atLayer instanceof Derives<?, ?> b ? b.base() : atLayer;
+                    }
+                    at = d.to();
+                    if (at == null) problems.add(type.getName() + " delegates to nothing");
                 }
-                case null -> { problems.add(type.getName() + " gives nothing: CSS of its own, or a delegation"); at = null; }
             }
         }
     }
 
     /** An implementation of a component standalone, in a layer: the one the layer's standalone of the component wears. */
-    private static void standaloneHeld(CastingStylePerRole<?, ?, ?, ?> impl, Casting as, DesignStyle<?> layer,
+    private static void standaloneHeld(CastingImplementation<?, ?, ?, ?> impl, Casting as, DesignStyle<?> layer,
                                        Map<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>> standalones, List<String> problems) {
         Target<?, ?, ?, ?> entry = standalones.getOrDefault(layer, Map.of()).get(as.cast());
         if (entry == null) {
@@ -224,7 +226,7 @@ public record ReadSpec() implements StatelessFunctionalObject {
                     + ", which gives it no standalone: a component has one standalone a style, listed by its module");
             return;
         }
-        CastingStylePerRole<?, ?, ?, ?> one = switch (entry) {
+        CastingImplementation<?, ?, ?, ?> one = switch (entry) {
             case Target.Impl<?, ?, ?, ?> i -> i.impl();
             case Target.Declared<?, ?, ?, ?> d -> d.declaration().own();
         };
@@ -233,11 +235,9 @@ public record ReadSpec() implements StatelessFunctionalObject {
                     + one.getClass().getName() + ": a component has one standalone implementation a style");
     }
 
-    /** An implementation's colours: each once; none when it delegates, having no CSS of its own to draw with them. */
-    private static void colours(CastingStylePerRole<?, ?, ?, ?> impl, List<String> problems) {
+    /** The colours of an implementation with CSS of its own: each once. One that delegates has none, by its type. */
+    private static void colours(CssImplementation<?, ?, ?, ?> impl, List<String> problems) {
         List<? extends ColorLeaf<?, ?, ?>> colours = impl.colours();
-        if (!(impl.style() instanceof StylingRes.CssPlaceHolder<?, ?, ?, ?>) && !colours.isEmpty())
-            problems.add(impl.getClass().getName() + " delegates, and lists colours: only CSS of its own draws with colours");
         var seen = new HashSet<Class<?>>();
         for (ColorLeaf<?, ?, ?> c : colours)
             if (!seen.add(c.getClass())) problems.add(impl.getClass().getName() + " lists " + c.token() + " twice: each colour once");

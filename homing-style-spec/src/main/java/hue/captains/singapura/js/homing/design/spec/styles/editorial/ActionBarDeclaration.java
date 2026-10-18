@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.editorial;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /** editorial's declaration of action-bar: its own implementation, and a spec for each of its slots. */
 public record ActionBarDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> own() { return new ActionBar(); }
+    @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> own() { return new ActionBar(); }
 
     @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.ActionBar> parts() {
         return new PartsSpec<>(List.of(

@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -15,7 +15,7 @@ import java.util.List;
 
 /** retro-futurism's declaration of pane-thumbs_where: its own implementation, and a spec for each of its slots. */
 public record PaneThumbsWhereDeclaration() implements CastingDeclaration<BaseScheme, RetroFuturism, HousePanes.PaneThumbs, HouseDoing.Where> {
-    @Override public CastingStylePerRole<BaseScheme, RetroFuturism, HousePanes.PaneThumbs, HouseDoing.Where> own() { return new PaneThumbsWhere(); }
+    @Override public CastingImplementation<BaseScheme, RetroFuturism, HousePanes.PaneThumbs, HouseDoing.Where> own() { return new PaneThumbsWhere(); }
 
     @Override public PartsSpec<BaseScheme, RetroFuturism, HousePanes.PaneThumbs> parts() {
         return new PartsSpec<>(List.of(

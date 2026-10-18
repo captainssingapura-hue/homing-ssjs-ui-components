@@ -3,24 +3,24 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.tao.ontology.ValueObject;
 
 import java.net.URL;
-import java.util.List;
 import java.util.Objects;
 
 /**
- * What a resolver found of an implementation's CSS content (RFC 0067, D53): the resource at the implementation's
- * canonical name - found once, there being nothing there, or found in several places, which is refused where the
- * content is held.
+ * What a resolver found of an implementation's CSS content (RFC 0067, D53), at the implementation's canonical name:
+ * the content, nothing there, or where it is but could not be had. Two copies of one content are no case here: they are
+ * refused when the classpath is built ({@link DuplicateContent}), so the name finds one.
  */
-public sealed interface CssResolution extends ValueObject permits CssResolution.Found, CssResolution.Nothing, CssResolution.Several {
+public sealed interface CssResolution extends ValueObject
+        permits CssResolution.Found, CssResolution.Nothing, CssResolution.Unreadable, CssResolution.NotUtf8 {
 
     /** The resource the content is to be: {@code hue/captains/singapura/js/homing/design/spec/styles/editorial/PlainButton.css}. */
     String resource();
 
     /**
-     * Found, once.
+     * Found, and read.
      *
      * @param resource the resource
-     * @param where    where it was found: the jar, or the directory, that gives it
+     * @param where    where it is: in the jar, or the directory, that gives it
      * @param text     its text
      */
     record Found(String resource, URL where, String text) implements CssResolution {
@@ -32,7 +32,7 @@ public sealed interface CssResolution extends ValueObject permits CssResolution.
     }
 
     /**
-     * Nothing is there: no jar gives the content.
+     * Nothing is there: nothing on the classpath gives the content.
      *
      * @param resource the resource looked for
      */
@@ -43,16 +43,30 @@ public sealed interface CssResolution extends ValueObject permits CssResolution.
     }
 
     /**
-     * Found in several places: two jars give the one content, and which one is meant cannot be said.
+     * There, and it could not be read.
      *
      * @param resource the resource
-     * @param where    each place it was found
+     * @param where    where it is
+     * @param reason   what went wrong, as the reading said
      */
-    record Several(String resource, List<URL> where) implements CssResolution {
-        public Several {
-            Objects.requireNonNull(resource, "Several.resource");
-            where = List.copyOf(where);
-            if (where.size() < 2) throw new IllegalArgumentException(resource + ": several is two or more");
+    record Unreadable(String resource, URL where, String reason) implements CssResolution {
+        public Unreadable {
+            Objects.requireNonNull(resource, "Unreadable.resource");
+            Objects.requireNonNull(where, "Unreadable.where");
+            Objects.requireNonNull(reason, "Unreadable.reason");
+        }
+    }
+
+    /**
+     * There, read, and not UTF-8: its bytes are no text, and none is made of them by guessing.
+     *
+     * @param resource the resource
+     * @param where    where it is
+     */
+    record NotUtf8(String resource, URL where) implements CssResolution {
+        public NotUtf8 {
+            Objects.requireNonNull(resource, "NotUtf8.resource");
+            Objects.requireNonNull(where, "NotUtf8.where");
         }
     }
 }

@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.neumorphism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** neumorphism's declaration of menu-item_choice: its own implementation, and a spec for each of its slots. */
 public record MenuItemChoiceDeclaration() implements CastingDeclaration<BaseScheme, Neumorphism, HouseItems.MenuItem, HouseDoing.Choice> {
-    @Override public CastingStylePerRole<BaseScheme, Neumorphism, HouseItems.MenuItem, HouseDoing.Choice> own() { return new MenuItemChoice(); }
+    @Override public CastingImplementation<BaseScheme, Neumorphism, HouseItems.MenuItem, HouseDoing.Choice> own() { return new MenuItemChoice(); }
 
     @Override public PartsSpec<BaseScheme, Neumorphism, HouseItems.MenuItem> parts() {
         return new PartsSpec<>(List.of(

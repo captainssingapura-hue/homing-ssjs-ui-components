@@ -42,16 +42,15 @@ class VirtualLayerTest {
     @Test
     void noImplementation_hasContentYet() {
         var found = new ArrayList<String>();
-        int placeholders = 0;
+        int looked = 0;
         for (DesignStyle<?> s : SPEC.styles())
             for (ElementPath e : SPEC.elements()) {
-                CastingStylePerRole<?, ?, ?, ?> now = SPEC.wears(s, e);
-                assertTrue(now.style() instanceof StylingRes.CssPlaceHolder<?, ?, ?, ?>, s.token() + " " + e.token() + " wears no placeholder");
-                placeholders++;
+                CssImplementation<?, ?, ?, ?> now = SPEC.wears(s, e);
+                looked++;
                 String file = CastingCss.INSTANCE.resource(now.getClass());
                 if (now.getClass().getClassLoader().getResource(file) != null) found.add(file);
             }
-        System.out.println("[virtual] " + placeholders + " elements' implementations, a placeholder each; content found for " + found.size());
+        System.out.println("[virtual] " + looked + " elements' implementations with CSS of their own; content found for " + found.size());
         assertEquals(List.of(), found.stream().distinct().toList(), "no content yet: a jar of content gives it");
     }
 

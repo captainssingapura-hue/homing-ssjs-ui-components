@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** retro-futurism's declaration of tab-picker: its own implementation, and a spec for each of its slots. */
 public record TabPickerDeclaration() implements CastingDeclaration<BaseScheme, RetroFuturism, HousePanes.TabPicker, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, RetroFuturism, HousePanes.TabPicker, RoleRoot> own() { return new TabPicker(); }
+    @Override public CastingImplementation<BaseScheme, RetroFuturism, HousePanes.TabPicker, RoleRoot> own() { return new TabPicker(); }
 
     @Override public PartsSpec<BaseScheme, RetroFuturism, HousePanes.TabPicker> parts() {
         return new PartsSpec<>(List.of(

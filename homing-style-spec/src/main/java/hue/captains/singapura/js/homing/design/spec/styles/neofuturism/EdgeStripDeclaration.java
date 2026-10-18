@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -15,7 +15,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of edge-strip: its own implementation, and a spec for each of its slots. */
 public record EdgeStripDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HouseContainers.EdgeStrip, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HouseContainers.EdgeStrip, RoleRoot> own() { return new EdgeStrip(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HouseContainers.EdgeStrip, RoleRoot> own() { return new EdgeStrip(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HouseContainers.EdgeStrip> parts() {
         return new PartsSpec<>(List.of(

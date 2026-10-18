@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.sketchy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** sketchy's declaration of trail: its own implementation, and a spec for each of its slots. */
 public record TrailDeclaration() implements CastingDeclaration<BaseScheme, Sketchy, HouseContainers.Trail, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Sketchy, HouseContainers.Trail, RoleRoot> own() { return new Trail(); }
+    @Override public CastingImplementation<BaseScheme, Sketchy, HouseContainers.Trail, RoleRoot> own() { return new Trail(); }
 
     @Override public PartsSpec<BaseScheme, Sketchy, HouseContainers.Trail> parts() {
         return new PartsSpec<>(List.of(

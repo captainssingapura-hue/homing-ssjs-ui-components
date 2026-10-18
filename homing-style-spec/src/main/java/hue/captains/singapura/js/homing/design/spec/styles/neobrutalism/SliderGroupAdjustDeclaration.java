@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.neobrutalism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /** neo-brutalism's declaration of slider-group_adjust: its own implementation, and a spec for each of its slots. */
 public record SliderGroupAdjustDeclaration() implements CastingDeclaration<BaseScheme, NeoBrutalism, HouseContainers.SliderGroup, HouseDoing.Adjust> {
-    @Override public CastingStylePerRole<BaseScheme, NeoBrutalism, HouseContainers.SliderGroup, HouseDoing.Adjust> own() { return new SliderGroupAdjust(); }
+    @Override public CastingImplementation<BaseScheme, NeoBrutalism, HouseContainers.SliderGroup, HouseDoing.Adjust> own() { return new SliderGroupAdjust(); }
 
     @Override public PartsSpec<BaseScheme, NeoBrutalism, HouseContainers.SliderGroup> parts() {
         return new PartsSpec<>(List.of(

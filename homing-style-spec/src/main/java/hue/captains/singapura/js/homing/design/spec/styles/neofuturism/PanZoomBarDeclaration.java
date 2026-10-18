@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of pan-zoom-bar: its own implementation, and a spec for each of its slots. */
 public record PanZoomBarDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HousePanZoom.PanZoomBar, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HousePanZoom.PanZoomBar, RoleRoot> own() { return new PanZoomBar(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HousePanZoom.PanZoomBar, RoleRoot> own() { return new PanZoomBar(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HousePanZoom.PanZoomBar> parts() {
         return new PartsSpec<>(List.of(

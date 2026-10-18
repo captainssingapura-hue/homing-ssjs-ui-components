@@ -6,25 +6,25 @@ import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The resolver, apart from any content: in every style each element's content looked for at its implementation's
- * canonical name, and nothing there - no jar of content yet; a content found once read, found twice refused; a delegating
- * implementation never looked for. And every element's trace ending at the implementation it wears.
+ * canonical name, and nothing there - no jar of content yet; a content there read, or why it could not be. Two copies of
+ * one content are refused at build time, on the classpath put together, never by the resolver. And every element's trace
+ * ending at the implementation it wears.
  */
 class ResolverTest {
 
@@ -32,21 +32,14 @@ class ResolverTest {
     private static final ClasspathCssResolver RESOLVER = ClasspathCssResolver.INSTANCE;
 
     /** A test's own implementation, its content in the test's resources. */
-    record Sampled() implements CastingStylePerRole<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> {
-        @Override public StylingRes<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> style() { return new StylingRes.CssPlaceHolder<>(); }
-    }
-
-    /** A test's own delegating implementation. */
-    record Delegating() implements CastingStylePerRole<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> {
-        @Override public StylingRes<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> style() { return new StylingRes.RootDelegation<>(new Sampled()); }
-    }
+    record Sampled() implements CssImplementation<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> {}
 
     @Test
     void everyElementInEveryStyle_nothingIsThere() {
         int looked = 0;
         for (DesignStyle<?> s : SPEC.styles())
             for (ElementPath e : SPEC.elements()) {
-                CastingStylePerRole<?, ?, ?, ?> worn = SPEC.wears(s, e);
+                CssImplementation<?, ?, ?, ?> worn = SPEC.wears(s, e);
                 CssResolution r = SPEC.content(s, e);
                 assertInstanceOf(CssResolution.Nothing.class, r, s.token() + " " + e.token());
                 assertEquals(worn.getClass().getName().replace('.', '/') + ".css", r.resource(), s.token() + " " + e.token());
@@ -56,25 +49,43 @@ class ResolverTest {
     }
 
     @Test
-    void contentFoundOnce_isRead() {
-        CssResolution r = RESOLVER.resolve(new Sampled());
-        var found = assertInstanceOf(CssResolution.Found.class, r);
+    void contentThere_isRead() {
+        var found = assertInstanceOf(CssResolution.Found.class, RESOLVER.resolve(new Sampled()));
         assertTrue(found.text().contains("$casting"), found.text());
         assertTrue(found.resource().endsWith("ResolverTest$Sampled.css"), found.resource());
     }
 
     @Test
-    void contentFoundTwice_isSeveral(@TempDir Path dir) throws IOException {
-        Path a = Files.writeString(dir.resolve("a.css"), "$casting { }"), b = Files.writeString(dir.resolve("b.css"), "$casting { }");
-        List<URL> two = List.of(a.toUri().toURL(), b.toUri().toURL());
-        var several = assertInstanceOf(CssResolution.Several.class, RESOLVER.at("x.css", two));
-        assertEquals(2, several.where().size());
-        assertInstanceOf(CssResolution.Nothing.class, RESOLVER.at("x.css", List.of()));
+    void contentThere_butNotToBeHad_saysWhy(@TempDir Path dir) throws IOException {
+        URL gone = dir.resolve("gone.css").toUri().toURL();
+        var unreadable = assertInstanceOf(CssResolution.Unreadable.class, RESOLVER.read("x.css", gone));
+        assertTrue(unreadable.reason().contains("gone.css"), unreadable.reason());
+        URL bytes = Files.write(dir.resolve("bytes.css"), new byte[]{'a', (byte) 0xC3, '(', 'b'}).toUri().toURL();
+        assertInstanceOf(CssResolution.NotUtf8.class, RESOLVER.read("x.css", bytes));
     }
 
     @Test
-    void aDelegatingImplementation_isNeverLookedFor() {
-        assertThrows(IllegalArgumentException.class, () -> RESOLVER.resolve(new Delegating()));
+    void theHouseClasspath_givesNoContentTwice() {
+        List<DuplicateContent.Copies> copies = DuplicateContent.INSTANCE.find(SPEC, getClass().getClassLoader());
+        assertEquals(List.of(), copies);
+        System.out.println("[resolver] " + SPEC.cssImplementations().size() + " implementations with CSS of their own: no content given twice");
+    }
+
+    @Test
+    void contentGivenTwice_isFound(@TempDir Path dir) throws IOException {
+        CssImplementation<?, ?, ?, ?> one = SPEC.cssImplementations().getFirst();
+        String resource = RESOLVER.resource(one.getClass());
+        Path a = dir.resolve("a"), b = dir.resolve("b");
+        for (Path root : List.of(a, b)) {
+            Files.createDirectories(root.resolve(resource).getParent());
+            Files.writeString(root.resolve(resource), "$casting { }");
+        }
+        try (var loader = new URLClassLoader(new URL[]{a.toUri().toURL(), b.toUri().toURL()}, null)) {
+            List<DuplicateContent.Copies> copies = DuplicateContent.INSTANCE.find(SPEC, loader);
+            assertEquals(1, copies.size());
+            assertEquals(resource, copies.getFirst().resource());
+            assertEquals(2, copies.getFirst().where().size());
+        }
     }
 
     @Test

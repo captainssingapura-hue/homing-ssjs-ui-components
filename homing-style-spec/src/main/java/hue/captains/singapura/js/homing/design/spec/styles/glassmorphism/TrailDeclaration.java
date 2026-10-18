@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** glassmorphism's declaration of trail: its own implementation, and a spec for each of its slots. */
 public record TrailDeclaration() implements CastingDeclaration<BaseScheme, Glassmorphism, HouseContainers.Trail, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Glassmorphism, HouseContainers.Trail, RoleRoot> own() { return new Trail(); }
+    @Override public CastingImplementation<BaseScheme, Glassmorphism, HouseContainers.Trail, RoleRoot> own() { return new Trail(); }
 
     @Override public PartsSpec<BaseScheme, Glassmorphism, HouseContainers.Trail> parts() {
         return new PartsSpec<>(List.of(

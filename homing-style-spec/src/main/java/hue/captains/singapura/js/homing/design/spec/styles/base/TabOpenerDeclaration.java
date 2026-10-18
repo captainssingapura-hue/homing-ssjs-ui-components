@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** base's declaration of tab-opener: its own implementation, and a spec for each of its slots. */
 public record TabOpenerDeclaration() implements CastingDeclaration<BaseScheme, Base, HousePanes.TabOpener, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Base, HousePanes.TabOpener, RoleRoot> own() { return new TabOpener(); }
+    @Override public CastingImplementation<BaseScheme, Base, HousePanes.TabOpener, RoleRoot> own() { return new TabOpener(); }
 
     @Override public PartsSpec<BaseScheme, Base, HousePanes.TabOpener> parts() {
         return new PartsSpec<>(List.of(

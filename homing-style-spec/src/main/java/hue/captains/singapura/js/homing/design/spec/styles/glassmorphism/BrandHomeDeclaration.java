@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** glassmorphism's declaration of brand_home: its own implementation, and a spec for each of its slots. */
 public record BrandHomeDeclaration() implements CastingDeclaration<BaseScheme, Glassmorphism, HouseControls.Brand, HouseDoing.Home> {
-    @Override public CastingStylePerRole<BaseScheme, Glassmorphism, HouseControls.Brand, HouseDoing.Home> own() { return new BrandHome(); }
+    @Override public CastingImplementation<BaseScheme, Glassmorphism, HouseControls.Brand, HouseDoing.Home> own() { return new BrandHome(); }
 
     @Override public PartsSpec<BaseScheme, Glassmorphism, HouseControls.Brand> parts() {
         return new PartsSpec<>(List.of(

@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /** glassmorphism's declaration of site-bar: its own implementation, and a spec for each of its slots. */
 public record SiteBarDeclaration() implements CastingDeclaration<BaseScheme, Glassmorphism, HouseContainers.SiteBar, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Glassmorphism, HouseContainers.SiteBar, RoleRoot> own() { return new SiteBar(); }
+    @Override public CastingImplementation<BaseScheme, Glassmorphism, HouseContainers.SiteBar, RoleRoot> own() { return new SiteBar(); }
 
     @Override public PartsSpec<BaseScheme, Glassmorphism, HouseContainers.SiteBar> parts() {
         return new PartsSpec<>(List.of(

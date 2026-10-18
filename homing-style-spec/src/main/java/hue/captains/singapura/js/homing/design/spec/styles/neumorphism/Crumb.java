@@ -2,8 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neumorphism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
@@ -12,11 +11,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import java.util.List;
 
 /** neumorphism's implementation of crumb: CSS of its own - its content apart, the colours it draws with typed here. */
-public record Crumb() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseControls.Crumb, RoleRoot> {
-    @Override public StylingRes<BaseScheme, Neumorphism, HouseControls.Crumb, RoleRoot> style() {
-        return new StylingRes.CssPlaceHolder<>();
-    }
-
+public record Crumb() implements CssImplementation<BaseScheme, Neumorphism, HouseControls.Crumb, RoleRoot> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.Ring());
     }

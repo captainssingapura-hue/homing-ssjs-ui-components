@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.sketchy;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -15,7 +15,7 @@ import java.util.List;
 
 /** sketchy's declaration of close-button_close: its own implementation, and a spec for each of its slots. */
 public record CloseButtonCloseDeclaration() implements CastingDeclaration<BaseScheme, Sketchy, HouseControls.CloseButton, HouseDoing.Close> {
-    @Override public CastingStylePerRole<BaseScheme, Sketchy, HouseControls.CloseButton, HouseDoing.Close> own() { return new CloseButtonClose(); }
+    @Override public CastingImplementation<BaseScheme, Sketchy, HouseControls.CloseButton, HouseDoing.Close> own() { return new CloseButtonClose(); }
 
     @Override public PartsSpec<BaseScheme, Sketchy, HouseControls.CloseButton> parts() {
         return new PartsSpec<>(List.of(

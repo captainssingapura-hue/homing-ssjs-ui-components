@@ -15,7 +15,7 @@ import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
  *
  * <pre>{@code
  * public record DialogDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> {
- *     @Override public CastingStylePerRole<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> own() { return new Dialog(); }
+ *     @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> own() { return new Dialog(); }
  *     @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.Dialog> parts() {
  *         return new PartsSpec<>(List.of(
  *                 new PartSpec.Standalone<>(HouseContainers.Dialog.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseShaping.Actions.INSTANCE)));
@@ -32,7 +32,7 @@ public interface CastingDeclaration<Sc extends ColorScheme, S extends DesignStyl
         extends StatelessFunctionalObject {
 
     /** The implementation the composite itself wears, in this role, of exactly this style. */
-    CastingStylePerRole<Sc, S, C, R> own();
+    CastingImplementation<Sc, S, C, R> own();
 
     /** A spec for every slot of the composite: one each, and nothing else. */
     PartsSpec<Sc, S, C> parts();

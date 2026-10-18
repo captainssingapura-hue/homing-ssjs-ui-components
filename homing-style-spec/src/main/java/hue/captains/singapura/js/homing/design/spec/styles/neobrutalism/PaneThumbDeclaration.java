@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neobrutalism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /** neo-brutalism's declaration of pane-thumb: its own implementation, and a spec for each of its slots. */
 public record PaneThumbDeclaration() implements CastingDeclaration<BaseScheme, NeoBrutalism, HouseControls.PaneThumb, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoBrutalism, HouseControls.PaneThumb, RoleRoot> own() { return new PaneThumb(); }
+    @Override public CastingImplementation<BaseScheme, NeoBrutalism, HouseControls.PaneThumb, RoleRoot> own() { return new PaneThumb(); }
 
     @Override public PartsSpec<BaseScheme, NeoBrutalism, HouseControls.PaneThumb> parts() {
         return new PartsSpec<>(List.of(

@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -21,7 +21,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of tab-strip: its own implementation, and a spec for each of its slots. */
 public record TabStripDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HouseContainers.TabStrip, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HouseContainers.TabStrip, RoleRoot> own() { return new TabStrip(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HouseContainers.TabStrip, RoleRoot> own() { return new TabStrip(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HouseContainers.TabStrip> parts() {
         return new PartsSpec<>(List.of(

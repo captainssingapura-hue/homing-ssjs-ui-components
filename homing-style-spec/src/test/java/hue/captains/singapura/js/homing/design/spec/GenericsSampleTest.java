@@ -21,37 +21,32 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /** The types, as a declaration and its implementations are written: what compiles holds the rules the compiler is given. */
 class GenericsSampleTest {
 
-    record BasePlain() implements CastingStylePerRole<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> {
-        @Override public StylingRes<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> style() { return new StylingRes.CssPlaceHolder<>(); }
+    record BasePlain() implements CssImplementation<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> {
         @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() { return List.of(new BaseColours.Border()); }
     }
 
-    record BasePlainAction() implements CastingStylePerRole<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> {
-        @Override public StylingRes<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> style() { return new StylingRes.RootDelegation<>(new BasePlain()); }
+    record BasePlainAction() implements RootDelegation<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> {
+        @Override public CastingImplementation<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> to() { return new BasePlain(); }
     }
 
-    record EditorialPlainAction() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.PlainButton, HouseDoing.Action> {
-        @Override public StylingRes<BaseScheme, Editorial, HouseControls.PlainButton, HouseDoing.Action> style() { return new StylingRes.ParentDelegation<>(new BasePlainAction()); }
+    record EditorialPlainAction() implements ParentDelegation<BaseScheme, Base, Editorial, HouseControls.PlainButton, HouseDoing.Action> {
+        @Override public CastingImplementation<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> to() { return new BasePlainAction(); }
     }
 
-    record EditorialDialog() implements CastingStylePerRole<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> {
-        @Override public StylingRes<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> style() { return new StylingRes.CssPlaceHolder<>(); }
-    }
+    record EditorialDialog() implements CssImplementation<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> {}
 
     record EditorialDialogDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> {
-        @Override public CastingStylePerRole<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> own() { return new EditorialDialog(); }
+        @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> own() { return new EditorialDialog(); }
         @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.Dialog> parts() {
             return new PartsSpec<>(List.of(
                     new PartSpec.Standalone<>(HouseContainers.Dialog.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseShaping.Actions.INSTANCE)));
         }
     }
 
-    record EditorialActionBar() implements CastingStylePerRole<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> {
-        @Override public StylingRes<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> style() { return new StylingRes.CssPlaceHolder<>(); }
-    }
+    record EditorialActionBar() implements CssImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> {}
 
     record EditorialActionBarDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> {
-        @Override public CastingStylePerRole<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> own() { return new EditorialActionBar(); }
+        @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> own() { return new EditorialActionBar(); }
         @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.ActionBar> parts() {
             return new PartsSpec<>(List.of(
                     new PartSpec.SameRole<>(HouseContainers.ActionBar.INSTANCE, HouseControls.PlainButton.INSTANCE, HouseDoing.Action.INSTANCE,
@@ -59,12 +54,12 @@ class GenericsSampleTest {
         }
     }
 
-    record EditorialActionBarActions() implements CastingStylePerRole<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> {
-        @Override public StylingRes<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> style() { return new StylingRes.RootDelegation<>(new EditorialActionBar()); }
+    record EditorialActionBarActions() implements RootDelegation<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> {
+        @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> to() { return new EditorialActionBar(); }
     }
 
     record EditorialActionBarActionsDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> {
-        @Override public CastingStylePerRole<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> own() { return new EditorialActionBarActions(); }
+        @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> own() { return new EditorialActionBarActions(); }
         @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.ActionBar> parts() { return new EditorialActionBarDeclaration().parts(); }
     }
 
@@ -75,7 +70,20 @@ class GenericsSampleTest {
         var bar = new EditorialActionBarDeclaration();
         var spec = (PartSpec.SameRole<?, ?, ?, ?, ?>) bar.parts().parts().getFirst();
         assertEquals(EditorialPlainAction.class, ((Target.Impl<?, ?, ?, ?>) spec.to()).impl().getClass());
-        assertEquals(BasePlainAction.class, ((StylingRes.ParentDelegation<?, ?, ?, ?, ?>) new EditorialPlainAction().style()).to().getClass());
+        assertEquals(BasePlainAction.class, new EditorialPlainAction().to().getClass());
+        assertEquals(BasePlain.class, new BasePlainAction().to().getClass());
+    }
+
+    @Test
+    void anImplementation_isCssOrADelegation_byItsType() {
+        CastingImplementation<?, ?, ?, ?> impl = new EditorialPlainAction();
+        String what = switch (impl) {
+            case CssImplementation<?, ?, ?, ?> c -> "css";
+            case SameRoleDelegation<?, ?, ?, ?> d -> "same role";
+            case RootDelegation<?, ?, ?, ?> r -> "root";
+            case ParentDelegation<?, ?, ?, ?, ?> p -> "parent";
+        };
+        assertEquals("parent", what);
     }
 
     @Test

@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -21,7 +21,7 @@ import java.util.List;
 
 /** glassmorphism's declaration of tab-strip: its own implementation, and a spec for each of its slots. */
 public record TabStripDeclaration() implements CastingDeclaration<BaseScheme, Glassmorphism, HouseContainers.TabStrip, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Glassmorphism, HouseContainers.TabStrip, RoleRoot> own() { return new TabStrip(); }
+    @Override public CastingImplementation<BaseScheme, Glassmorphism, HouseContainers.TabStrip, RoleRoot> own() { return new TabStrip(); }
 
     @Override public PartsSpec<BaseScheme, Glassmorphism, HouseContainers.TabStrip> parts() {
         return new PartsSpec<>(List.of(

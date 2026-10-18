@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of title-bar: its own implementation, and a spec for each of its slots. */
 public record TitleBarDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HouseContainers.TitleBar, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HouseContainers.TitleBar, RoleRoot> own() { return new TitleBar(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HouseContainers.TitleBar, RoleRoot> own() { return new TitleBar(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HouseContainers.TitleBar> parts() {
         return new PartsSpec<>(List.of(

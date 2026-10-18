@@ -8,6 +8,6 @@ package hue.captains.singapura.js.homing.design.spec;
  */
 public interface CssResolver {
 
-    /** What there is of the content of an implementation that gives a placeholder; refused for one that delegates. */
-    CssResolution resolve(CastingStylePerRole<?, ?, ?, ?> impl);
+    /** What there is of an implementation's content: found, nothing there, or there and not to be had. */
+    CssResolution resolve(CssImplementation<?, ?, ?, ?> impl);
 }

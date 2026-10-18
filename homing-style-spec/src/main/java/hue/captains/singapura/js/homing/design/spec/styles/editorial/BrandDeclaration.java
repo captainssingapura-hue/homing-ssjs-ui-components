@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.editorial;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** editorial's declaration of brand: its own implementation, and a spec for each of its slots. */
 public record BrandDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseControls.Brand, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Editorial, HouseControls.Brand, RoleRoot> own() { return new Brand(); }
+    @Override public CastingImplementation<BaseScheme, Editorial, HouseControls.Brand, RoleRoot> own() { return new Brand(); }
 
     @Override public PartsSpec<BaseScheme, Editorial, HouseControls.Brand> parts() {
         return new PartsSpec<>(List.of(

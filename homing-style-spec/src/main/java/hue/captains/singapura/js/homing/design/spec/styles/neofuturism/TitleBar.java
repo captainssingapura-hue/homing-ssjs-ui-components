@@ -2,8 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
@@ -12,11 +11,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import java.util.List;
 
 /** neo-futurism's implementation of title-bar: CSS of its own - its content apart, the colours it draws with typed here. */
-public record TitleBar() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseContainers.TitleBar, RoleRoot> {
-    @Override public StylingRes<BaseScheme, NeoFuturism, HouseContainers.TitleBar, RoleRoot> style() {
-        return new StylingRes.CssPlaceHolder<>();
-    }
-
+public record TitleBar() implements CssImplementation<BaseScheme, NeoFuturism, HouseContainers.TitleBar, RoleRoot> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.Inverted(), new BaseColours.OnInverted(), new BaseColours.OnBar(), new BaseColours.Border(), new BaseColours.Title());
     }

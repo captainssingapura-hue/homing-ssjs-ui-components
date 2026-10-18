@@ -83,7 +83,7 @@ class StyleDagTest {
             if (roots != SPEC.top().size()) problems.add(s.token() + ": " + roots + " roots for " + SPEC.top().size() + " top-level components");
             if (reachable(dag).size() != dag.nodes().size()) problems.add(s.token() + ": " + (dag.nodes().size() - reachable(dag).size()) + " nodes no root reaches");
             for (ElementPath e : SPEC.elements()) {
-                CastingStylePerRole<?, ?, ?, ?> worn = SPEC.wears(s, e);
+                CssImplementation<?, ?, ?, ?> worn = SPEC.wears(s, e);
                 boolean found = dag.implementations().stream().anyMatch(n -> n.needsCss() && n.impl().getClass() == worn.getClass());
                 if (!found) problems.add(s.token() + " " + e.token() + ": wears " + worn.getClass().getName() + ", no CSS end of the graph");
             }

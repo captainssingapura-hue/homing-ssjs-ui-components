@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.sketchy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** sketchy's declaration of preferences-button: its own implementation, and a spec for each of its slots. */
 public record PreferencesButtonDeclaration() implements CastingDeclaration<BaseScheme, Sketchy, HouseControls.PreferencesButton, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Sketchy, HouseControls.PreferencesButton, RoleRoot> own() { return new PreferencesButton(); }
+    @Override public CastingImplementation<BaseScheme, Sketchy, HouseControls.PreferencesButton, RoleRoot> own() { return new PreferencesButton(); }
 
     @Override public PartsSpec<BaseScheme, Sketchy, HouseControls.PreferencesButton> parts() {
         return new PartsSpec<>(List.of(

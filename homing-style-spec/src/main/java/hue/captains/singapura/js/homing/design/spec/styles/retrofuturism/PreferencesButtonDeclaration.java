@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** retro-futurism's declaration of preferences-button: its own implementation, and a spec for each of its slots. */
 public record PreferencesButtonDeclaration() implements CastingDeclaration<BaseScheme, RetroFuturism, HouseControls.PreferencesButton, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.PreferencesButton, RoleRoot> own() { return new PreferencesButton(); }
+    @Override public CastingImplementation<BaseScheme, RetroFuturism, HouseControls.PreferencesButton, RoleRoot> own() { return new PreferencesButton(); }
 
     @Override public PartsSpec<BaseScheme, RetroFuturism, HouseControls.PreferencesButton> parts() {
         return new PartsSpec<>(List.of(

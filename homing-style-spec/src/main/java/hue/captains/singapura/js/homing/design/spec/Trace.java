@@ -10,11 +10,11 @@ import java.util.Objects;
 /**
  * How an element resolves in a style (RFC 0067, D53), step by step: from the top-level component's standalone, through
  * the declarations its slots are held in, to the implementation it wears, then along its delegations to the
- * implementation with CSS of its own - the placeholder whose content a resolver finds.
+ * implementation with CSS of its own - whose content a resolver finds.
  *
  * @param style   the style worn
  * @param element the element
- * @param steps   each node reached, in order, with how it was reached; the last an implementation giving a placeholder
+ * @param steps   each node reached, in order, with how it was reached; the last, and only the last, with CSS of its own
  */
 public record Trace(DesignStyle<?> style, ElementPath element, List<Step> steps) implements ValueObject {
 
@@ -22,8 +22,8 @@ public record Trace(DesignStyle<?> style, ElementPath element, List<Step> steps)
         Objects.requireNonNull(style, "Trace.style");
         Objects.requireNonNull(element, "Trace.element");
         steps = List.copyOf(steps);
-        if (steps.isEmpty() || !(steps.getLast() instanceof ImplStep last) || !last.placeholder())
-            throw new IllegalArgumentException(element.token() + " in " + style.token() + ": a trace ends at an implementation giving a placeholder");
+        if (steps.isEmpty() || !(steps.getLast() instanceof CssStep) || steps.stream().filter(s -> s instanceof CssStep).count() != 1)
+            throw new IllegalArgumentException(element.token() + " in " + style.token() + ": a trace ends at the one implementation with CSS of its own");
     }
 
     /** How a step was reached. */
@@ -45,7 +45,7 @@ public record Trace(DesignStyle<?> style, ElementPath element, List<Step> steps)
     }
 
     /** One node reached. */
-    public sealed interface Step extends ValueObject permits DeclarationStep, ImplStep {
+    public sealed interface Step extends ValueObject permits DeclarationStep, DelegationStep, CssStep {
 
         /** How it was reached. */
         Via via();
@@ -60,13 +60,12 @@ public record Trace(DesignStyle<?> style, ElementPath element, List<Step> steps)
     /** A declaration reached. */
     public record DeclarationStep(Via via, DesignStyle<?> layer, Casting casting, CastingDeclaration<?, ?, ?, ?> declaration) implements Step {}
 
-    /** An implementation reached. */
-    public record ImplStep(Via via, DesignStyle<?> layer, Casting casting, CastingStylePerRole<?, ?, ?, ?> impl) implements Step {
+    /** An implementation reached that delegates: the next step is where to. */
+    public record DelegationStep(Via via, DesignStyle<?> layer, Casting casting, Delegation<?, ?, ?, ?> impl) implements Step {}
 
-        /** Whether it gives a placeholder: CSS of its own, its content apart. */
-        public boolean placeholder() { return impl.style() instanceof StylingRes.CssPlaceHolder<?, ?, ?, ?>; }
-    }
+    /** The implementation reached with CSS of its own: what the element wears. */
+    public record CssStep(Via via, DesignStyle<?> layer, Casting casting, CssImplementation<?, ?, ?, ?> impl) implements Step {}
 
-    /** The implementation it ends at, giving a placeholder. */
-    public ImplStep end() { return (ImplStep) steps.getLast(); }
+    /** Where it ends: the implementation with CSS of its own. */
+    public CssStep end() { return (CssStep) steps.getLast(); }
 }

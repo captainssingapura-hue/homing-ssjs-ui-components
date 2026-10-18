@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of mpa-chrome: its own implementation, and a spec for each of its slots. */
 public record MpaChromeDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HouseSite.MpaChrome, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HouseSite.MpaChrome, RoleRoot> own() { return new MpaChrome(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HouseSite.MpaChrome, RoleRoot> own() { return new MpaChrome(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HouseSite.MpaChrome> parts() {
         return new PartsSpec<>(List.of(

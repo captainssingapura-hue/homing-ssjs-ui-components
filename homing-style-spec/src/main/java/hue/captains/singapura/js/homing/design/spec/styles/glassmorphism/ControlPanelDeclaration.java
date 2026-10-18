@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** glassmorphism's declaration of control-panel: its own implementation, and a spec for each of its slots. */
 public record ControlPanelDeclaration() implements CastingDeclaration<BaseScheme, Glassmorphism, HouseControlPanel.ControlPanel, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Glassmorphism, HouseControlPanel.ControlPanel, RoleRoot> own() { return new ControlPanel(); }
+    @Override public CastingImplementation<BaseScheme, Glassmorphism, HouseControlPanel.ControlPanel, RoleRoot> own() { return new ControlPanel(); }
 
     @Override public PartsSpec<BaseScheme, Glassmorphism, HouseControlPanel.ControlPanel> parts() {
         return new PartsSpec<>(List.of(

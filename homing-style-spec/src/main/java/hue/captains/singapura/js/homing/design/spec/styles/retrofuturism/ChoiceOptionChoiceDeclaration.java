@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /** retro-futurism's declaration of choice-option_choice: its own implementation, and a spec for each of its slots. */
 public record ChoiceOptionChoiceDeclaration() implements CastingDeclaration<BaseScheme, RetroFuturism, HouseItems.ChoiceOption, HouseDoing.Choice> {
-    @Override public CastingStylePerRole<BaseScheme, RetroFuturism, HouseItems.ChoiceOption, HouseDoing.Choice> own() { return new ChoiceOptionChoice(); }
+    @Override public CastingImplementation<BaseScheme, RetroFuturism, HouseItems.ChoiceOption, HouseDoing.Choice> own() { return new ChoiceOptionChoice(); }
 
     @Override public PartsSpec<BaseScheme, RetroFuturism, HouseItems.ChoiceOption> parts() {
         return new PartsSpec<>(List.of(

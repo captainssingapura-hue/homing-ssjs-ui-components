@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.editorial;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -15,7 +15,7 @@ import java.util.List;
 
 /** editorial's declaration of panel: its own implementation, and a spec for each of its slots. */
 public record PanelDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.Panel, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Editorial, HouseContainers.Panel, RoleRoot> own() { return new Panel(); }
+    @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.Panel, RoleRoot> own() { return new Panel(); }
 
     @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.Panel> parts() {
         return new PartsSpec<>(List.of(

@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -14,7 +14,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of floating-pane: its own implementation, and a spec for each of its slots. */
 public record FloatingPaneDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HouseContainers.FloatingPane, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HouseContainers.FloatingPane, RoleRoot> own() { return new FloatingPane(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HouseContainers.FloatingPane, RoleRoot> own() { return new FloatingPane(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HouseContainers.FloatingPane> parts() {
         return new PartsSpec<>(List.of(

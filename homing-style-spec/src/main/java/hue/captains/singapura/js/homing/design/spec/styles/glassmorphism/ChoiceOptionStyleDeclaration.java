@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /** glassmorphism's declaration of choice-option_style: its own implementation, and a spec for each of its slots. */
 public record ChoiceOptionStyleDeclaration() implements CastingDeclaration<BaseScheme, Glassmorphism, HouseItems.ChoiceOption, HouseDoing.Style> {
-    @Override public CastingStylePerRole<BaseScheme, Glassmorphism, HouseItems.ChoiceOption, HouseDoing.Style> own() { return new ChoiceOptionStyle(); }
+    @Override public CastingImplementation<BaseScheme, Glassmorphism, HouseItems.ChoiceOption, HouseDoing.Style> own() { return new ChoiceOptionStyle(); }
 
     @Override public PartsSpec<BaseScheme, Glassmorphism, HouseItems.ChoiceOption> parts() {
         return new PartsSpec<>(List.of(

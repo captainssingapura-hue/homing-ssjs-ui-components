@@ -1,15 +1,14 @@
 package hue.captains.singapura.js.homing.design.spec.styles.neobrutalism;
 
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
+import hue.captains.singapura.js.homing.design.spec.RootDelegation;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 /** neo-brutalism's implementation of kicker_subtitle: as its component standalone, by delegation. */
-public record KickerSubtitle() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.Kicker, HouseSaying.Subtitle> {
-    @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.Kicker, HouseSaying.Subtitle> style() {
-        return new StylingRes.RootDelegation<>(new Kicker());
-    }
+public record KickerSubtitle() implements RootDelegation<BaseScheme, NeoBrutalism, HouseText.Kicker, HouseSaying.Subtitle> {
+    @Override public CastingImplementation<BaseScheme, NeoBrutalism, HouseText.Kicker, RoleRoot> to() { return new Kicker(); }
 }

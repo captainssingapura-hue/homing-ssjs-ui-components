@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neobrutalism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -20,7 +20,7 @@ import java.util.List;
 
 /** neo-brutalism's declaration of slider: its own implementation, and a spec for each of its slots. */
 public record SliderDeclaration() implements CastingDeclaration<BaseScheme, NeoBrutalism, HouseControls.Slider, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoBrutalism, HouseControls.Slider, RoleRoot> own() { return new Slider(); }
+    @Override public CastingImplementation<BaseScheme, NeoBrutalism, HouseControls.Slider, RoleRoot> own() { return new Slider(); }
 
     @Override public PartsSpec<BaseScheme, NeoBrutalism, HouseControls.Slider> parts() {
         return new PartsSpec<>(List.of(

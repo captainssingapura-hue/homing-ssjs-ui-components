@@ -1,15 +1,14 @@
 package hue.captains.singapura.js.homing.design.spec.styles.neumorphism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
+import hue.captains.singapura.js.homing.design.spec.ParentDelegation;
+import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 /** neumorphism's implementation of setting-row: the base's, by delegation. */
-public record SettingRow() implements CastingStylePerRole<BaseScheme, Neumorphism, HousePreferences.SettingRow, RoleRoot> {
-    @Override public StylingRes<BaseScheme, Neumorphism, HousePreferences.SettingRow, RoleRoot> style() {
-        return new StylingRes.ParentDelegation<>(new hue.captains.singapura.js.homing.design.spec.styles.base.SettingRow());
-    }
+public record SettingRow() implements ParentDelegation<BaseScheme, Base, Neumorphism, HousePreferences.SettingRow, RoleRoot> {
+    @Override public CastingImplementation<BaseScheme, Base, HousePreferences.SettingRow, RoleRoot> to() { return new hue.captains.singapura.js.homing.design.spec.styles.base.SettingRow(); }
 }

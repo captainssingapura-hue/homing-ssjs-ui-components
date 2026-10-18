@@ -64,7 +64,7 @@ public record StyleDag(DesignStyle<?> style, List<Node> nodes, List<Pointer> poi
     }
 
     /** An implementation: CSS, or a delegation. */
-    public record ImplNode(String id, DesignStyle<?> layer, Casting casting, Gives gives, boolean root, CastingStylePerRole<?, ?, ?, ?> impl)
+    public record ImplNode(String id, DesignStyle<?> layer, Casting casting, Gives gives, boolean root, CastingImplementation<?, ?, ?, ?> impl)
             implements Node {
         public ImplNode {
             Objects.requireNonNull(impl, "ImplNode.impl");

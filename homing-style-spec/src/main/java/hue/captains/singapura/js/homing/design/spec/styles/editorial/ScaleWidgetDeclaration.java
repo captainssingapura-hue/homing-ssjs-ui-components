@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.editorial;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /** editorial's declaration of scale-widget: its own implementation, and a spec for each of its slots. */
 public record ScaleWidgetDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HousePreferences.ScaleWidget, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Editorial, HousePreferences.ScaleWidget, RoleRoot> own() { return new ScaleWidget(); }
+    @Override public CastingImplementation<BaseScheme, Editorial, HousePreferences.ScaleWidget, RoleRoot> own() { return new ScaleWidget(); }
 
     @Override public PartsSpec<BaseScheme, Editorial, HousePreferences.ScaleWidget> parts() {
         return new PartsSpec<>(List.of(

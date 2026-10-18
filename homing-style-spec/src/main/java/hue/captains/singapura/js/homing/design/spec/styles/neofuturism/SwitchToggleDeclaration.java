@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of switch_toggle: its own implementation, and a spec for each of its slots. */
 public record SwitchToggleDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HouseControls.Switch, HouseDoing.Toggle> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.Switch, HouseDoing.Toggle> own() { return new SwitchToggle(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HouseControls.Switch, HouseDoing.Toggle> own() { return new SwitchToggle(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HouseControls.Switch> parts() {
         return new PartsSpec<>(List.of(

@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neobrutalism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** neo-brutalism's declaration of control-panel: its own implementation, and a spec for each of its slots. */
 public record ControlPanelDeclaration() implements CastingDeclaration<BaseScheme, NeoBrutalism, HouseControlPanel.ControlPanel, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoBrutalism, HouseControlPanel.ControlPanel, RoleRoot> own() { return new ControlPanel(); }
+    @Override public CastingImplementation<BaseScheme, NeoBrutalism, HouseControlPanel.ControlPanel, RoleRoot> own() { return new ControlPanel(); }
 
     @Override public PartsSpec<BaseScheme, NeoBrutalism, HouseControlPanel.ControlPanel> parts() {
         return new PartsSpec<>(List.of(

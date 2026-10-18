@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -15,7 +15,7 @@ import java.util.List;
 
 /** retro-futurism's declaration of icon-button_add: its own implementation, and a spec for each of its slots. */
 public record IconButtonAddDeclaration() implements CastingDeclaration<BaseScheme, RetroFuturism, HouseControls.IconButton, HouseDoing.Add> {
-    @Override public CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.IconButton, HouseDoing.Add> own() { return new IconButtonAdd(); }
+    @Override public CastingImplementation<BaseScheme, RetroFuturism, HouseControls.IconButton, HouseDoing.Add> own() { return new IconButtonAdd(); }
 
     @Override public PartsSpec<BaseScheme, RetroFuturism, HouseControls.IconButton> parts() {
         return new PartsSpec<>(List.of(

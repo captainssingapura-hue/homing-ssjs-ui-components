@@ -1,15 +1,10 @@
 package hue.captains.singapura.js.homing.design.spec.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
 /** base's implementation of tab-picker: CSS of its own - its content apart, the colours it draws with typed here. */
-public record TabPicker() implements CastingStylePerRole<BaseScheme, Base, HousePanes.TabPicker, RoleRoot> {
-    @Override public StylingRes<BaseScheme, Base, HousePanes.TabPicker, RoleRoot> style() {
-        return new StylingRes.CssPlaceHolder<>();
-    }
-}
+public record TabPicker() implements CssImplementation<BaseScheme, Base, HousePanes.TabPicker, RoleRoot> {}

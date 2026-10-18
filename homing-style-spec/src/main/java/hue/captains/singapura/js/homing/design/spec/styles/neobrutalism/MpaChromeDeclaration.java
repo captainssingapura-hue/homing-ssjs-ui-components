@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neobrutalism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /** neo-brutalism's declaration of mpa-chrome: its own implementation, and a spec for each of its slots. */
 public record MpaChromeDeclaration() implements CastingDeclaration<BaseScheme, NeoBrutalism, HouseSite.MpaChrome, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoBrutalism, HouseSite.MpaChrome, RoleRoot> own() { return new MpaChrome(); }
+    @Override public CastingImplementation<BaseScheme, NeoBrutalism, HouseSite.MpaChrome, RoleRoot> own() { return new MpaChrome(); }
 
     @Override public PartsSpec<BaseScheme, NeoBrutalism, HouseSite.MpaChrome> parts() {
         return new PartsSpec<>(List.of(

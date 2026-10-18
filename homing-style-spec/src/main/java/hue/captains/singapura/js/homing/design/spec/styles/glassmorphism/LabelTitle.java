@@ -1,15 +1,10 @@
 package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 /** glassmorphism's implementation of label_title: CSS of its own - its content apart, the colours it draws with typed here. */
-public record LabelTitle() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseText.Label, HouseSaying.Title> {
-    @Override public StylingRes<BaseScheme, Glassmorphism, HouseText.Label, HouseSaying.Title> style() {
-        return new StylingRes.CssPlaceHolder<>();
-    }
-}
+public record LabelTitle() implements CssImplementation<BaseScheme, Glassmorphism, HouseText.Label, HouseSaying.Title> {}

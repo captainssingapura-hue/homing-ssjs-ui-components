@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.sketchy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -20,7 +20,7 @@ import java.util.List;
 
 /** sketchy's declaration of theme-widget: its own implementation, and a spec for each of its slots. */
 public record ThemeWidgetDeclaration() implements CastingDeclaration<BaseScheme, Sketchy, HouseSite.ThemeWidget, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Sketchy, HouseSite.ThemeWidget, RoleRoot> own() { return new ThemeWidget(); }
+    @Override public CastingImplementation<BaseScheme, Sketchy, HouseSite.ThemeWidget, RoleRoot> own() { return new ThemeWidget(); }
 
     @Override public PartsSpec<BaseScheme, Sketchy, HouseSite.ThemeWidget> parts() {
         return new PartsSpec<>(List.of(

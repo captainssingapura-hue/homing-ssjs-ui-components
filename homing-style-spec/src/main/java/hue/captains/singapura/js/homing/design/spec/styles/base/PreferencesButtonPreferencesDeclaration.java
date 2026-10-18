@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.base;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.Base;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** base's declaration of preferences-button_preferences: its own implementation, and a spec for each of its slots. */
 public record PreferencesButtonPreferencesDeclaration() implements CastingDeclaration<BaseScheme, Base, HouseControls.PreferencesButton, HouseDoing.Preferences> {
-    @Override public CastingStylePerRole<BaseScheme, Base, HouseControls.PreferencesButton, HouseDoing.Preferences> own() { return new PreferencesButtonPreferences(); }
+    @Override public CastingImplementation<BaseScheme, Base, HouseControls.PreferencesButton, HouseDoing.Preferences> own() { return new PreferencesButtonPreferences(); }
 
     @Override public PartsSpec<BaseScheme, Base, HouseControls.PreferencesButton> parts() {
         return new PartsSpec<>(List.of(

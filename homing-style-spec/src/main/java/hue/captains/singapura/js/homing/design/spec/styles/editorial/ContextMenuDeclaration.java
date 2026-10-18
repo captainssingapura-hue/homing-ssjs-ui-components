@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.editorial;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** editorial's declaration of context-menu: its own implementation, and a spec for each of its slots. */
 public record ContextMenuDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.ContextMenu, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Editorial, HouseContainers.ContextMenu, RoleRoot> own() { return new ContextMenu(); }
+    @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.ContextMenu, RoleRoot> own() { return new ContextMenu(); }
 
     @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.ContextMenu> parts() {
         return new PartsSpec<>(List.of(

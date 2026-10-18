@@ -28,7 +28,7 @@ public sealed interface Target<Sc extends ColorScheme, S extends DesignStyle<Sc>
      * @param impl the leaf's implementation, in the role
      */
     record Impl<Sc extends ColorScheme, S extends DesignStyle<Sc>, P extends Leaf<?>, R extends RoleNode>(
-            CastingStylePerRole<Sc, S, P, R> impl) implements Target<Sc, S, P, R> {
+            CastingImplementation<Sc, S, P, R> impl) implements Target<Sc, S, P, R> {
         public Impl {
             Objects.requireNonNull(impl, "Impl.impl");
         }

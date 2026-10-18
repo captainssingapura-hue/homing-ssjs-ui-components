@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neumorphism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -16,7 +16,7 @@ import java.util.List;
 
 /** neumorphism's declaration of add-tab: its own implementation, and a spec for each of its slots. */
 public record AddTabDeclaration() implements CastingDeclaration<BaseScheme, Neumorphism, HousePanes.AddTab, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Neumorphism, HousePanes.AddTab, RoleRoot> own() { return new AddTab(); }
+    @Override public CastingImplementation<BaseScheme, Neumorphism, HousePanes.AddTab, RoleRoot> own() { return new AddTab(); }
 
     @Override public PartsSpec<BaseScheme, Neumorphism, HousePanes.AddTab> parts() {
         return new PartsSpec<>(List.of(

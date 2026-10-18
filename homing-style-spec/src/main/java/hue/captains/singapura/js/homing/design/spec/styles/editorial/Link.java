@@ -2,8 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.editorial;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
@@ -12,11 +11,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import java.util.List;
 
 /** editorial's implementation of link: CSS of its own - its content apart, the colours it draws with typed here. */
-public record Link() implements CastingStylePerRole<BaseScheme, Editorial, HouseControls.Link, RoleRoot> {
-    @Override public StylingRes<BaseScheme, Editorial, HouseControls.Link, RoleRoot> style() {
-        return new StylingRes.CssPlaceHolder<>();
-    }
-
+public record Link() implements CssImplementation<BaseScheme, Editorial, HouseControls.Link, RoleRoot> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.TextFaded(), new BaseColours.WayHovered(), new BaseColours.Ring());
     }

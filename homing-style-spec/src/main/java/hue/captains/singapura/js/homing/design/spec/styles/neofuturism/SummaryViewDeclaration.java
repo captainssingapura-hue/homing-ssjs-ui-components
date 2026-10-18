@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -18,7 +18,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of summary-view: its own implementation, and a spec for each of its slots. */
 public record SummaryViewDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HouseContainers.SummaryView, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HouseContainers.SummaryView, RoleRoot> own() { return new SummaryView(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HouseContainers.SummaryView, RoleRoot> own() { return new SummaryView(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HouseContainers.SummaryView> parts() {
         return new PartsSpec<>(List.of(

@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** glassmorphism's declaration of tab-picker_picker: its own implementation, and a spec for each of its slots. */
 public record TabPickerPickerDeclaration() implements CastingDeclaration<BaseScheme, Glassmorphism, HousePanes.TabPicker, HouseDoing.Picker> {
-    @Override public CastingStylePerRole<BaseScheme, Glassmorphism, HousePanes.TabPicker, HouseDoing.Picker> own() { return new TabPickerPicker(); }
+    @Override public CastingImplementation<BaseScheme, Glassmorphism, HousePanes.TabPicker, HouseDoing.Picker> own() { return new TabPickerPicker(); }
 
     @Override public PartsSpec<BaseScheme, Glassmorphism, HousePanes.TabPicker> parts() {
         return new PartsSpec<>(List.of(

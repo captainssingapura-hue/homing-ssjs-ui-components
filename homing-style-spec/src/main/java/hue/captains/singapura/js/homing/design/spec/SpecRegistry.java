@@ -61,7 +61,7 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
     }
 
     /** What an element's path reaches in a style, before any delegation: its component's implementation in its casting. */
-    public CastingStylePerRole<?, ?, ?, ?> impl(DesignStyle<?> style, ElementPath element) {
+    public CastingImplementation<?, ?, ?, ?> impl(DesignStyle<?> style, ElementPath element) {
         Target<?, ?, ?, ?> at = standalone(style, element.top());
         for (Casting slot : element.parts()) {
             if (!(at instanceof Target.Declared<?, ?, ?, ?> d))
@@ -80,22 +80,20 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
     }
 
     /** The implementation with CSS of its own an implementation reaches, its delegations followed. */
-    public CastingStylePerRole<?, ?, ?, ?> css(CastingStylePerRole<?, ?, ?, ?> impl) {
-        CastingStylePerRole<?, ?, ?, ?> at = impl;
+    public CssImplementation<?, ?, ?, ?> css(CastingImplementation<?, ?, ?, ?> impl) {
+        CastingImplementation<?, ?, ?, ?> at = impl;
         var passed = new HashSet<Class<?>>();
         while (true) {
             if (!passed.add(at.getClass())) throw new IllegalArgumentException(impl.getClass().getName() + " delegates round");
-            switch (at.style()) {
-                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> { return at; }
-                case StylingRes.Delegation<?, ?, ?, ?> d -> at = d.to();
-                case StylingRes.RootDelegation<?, ?, ?, ?> r -> at = r.to();
-                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> at = p.to();
+            switch (at) {
+                case CssImplementation<?, ?, ?, ?> c -> { return c; }
+                case Delegation<?, ?, ?, ?> d -> at = d.to();
             }
         }
     }
 
     /** The implementation with CSS of its own an element wears in a style. */
-    public CastingStylePerRole<?, ?, ?, ?> wears(DesignStyle<?> style, ElementPath element) { return worn(style, element).impl(); }
+    public CssImplementation<?, ?, ?, ?> wears(DesignStyle<?> style, ElementPath element) { return worn(style, element).impl(); }
 
     /**
      * What an element wears in a style, with the layer it is of - found by walking, never off its type.
@@ -103,15 +101,15 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
      * @param layer the style the implementation is of: the style worn, or one below
      * @param impl  the implementation with CSS of its own
      */
-    public record Worn(DesignStyle<?> layer, CastingStylePerRole<?, ?, ?, ?> impl) implements ValueObject {}
+    public record Worn(DesignStyle<?> layer, CssImplementation<?, ?, ?, ?> impl) implements ValueObject {}
 
     /** What an element wears in a style, and its layer: where its trace ends. */
     public Worn worn(DesignStyle<?> style, ElementPath element) {
-        Trace.ImplStep end = trace(style, element).end();
+        Trace.CssStep end = trace(style, element).end();
         return new Worn(end.layer(), end.impl());
     }
 
-    /** How an element resolves in a style, step by step, to the implementation giving a placeholder. */
+    /** How an element resolves in a style, step by step, to the implementation with CSS of its own. */
     public Trace trace(DesignStyle<?> style, ElementPath element) {
         var steps = new ArrayList<Trace.Step>();
         DesignStyle<?> layer = standaloneLayer(style, element.top());
@@ -134,7 +132,7 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
                 }
             }
         }
-        CastingStylePerRole<?, ?, ?, ?> impl;
+        CastingImplementation<?, ?, ?, ?> impl;
         switch (at) {
             case Target.Impl<?, ?, ?, ?> i -> impl = i.impl();
             case Target.Declared<?, ?, ?, ?> d -> {
@@ -146,25 +144,37 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
         var passed = new HashSet<Class<?>>();
         while (true) {
             if (!passed.add(impl.getClass())) throw new IllegalArgumentException(element.token() + " delegates round");
-            steps.add(new Trace.ImplStep(via, layer, as, impl));
-            switch (impl.style()) {
-                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> { return new Trace(style, element, steps); }
-                case StylingRes.Delegation<?, ?, ?, ?> d -> { impl = d.to(); via = Trace.Via.DELEGATION; }
-                case StylingRes.RootDelegation<?, ?, ?, ?> r -> { impl = r.to(); as = as.alone(); via = Trace.Via.ROOT_DELEGATION; }
-                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> q -> {
-                    impl = q.to();
-                    layer = parent(layer).orElseThrow();
-                    via = Trace.Via.PARENT_DELEGATION;
+            switch (impl) {
+                case CssImplementation<?, ?, ?, ?> c -> {
+                    steps.add(new Trace.CssStep(via, layer, as, c));
+                    return new Trace(style, element, steps);
+                }
+                case Delegation<?, ?, ?, ?> d -> {
+                    steps.add(new Trace.DelegationStep(via, layer, as, d));
+                    impl = d.to();
+                    switch (d) {
+                        case SameRoleDelegation<?, ?, ?, ?> s -> via = Trace.Via.DELEGATION;
+                        case RootDelegation<?, ?, ?, ?> r -> { as = as.alone(); via = Trace.Via.ROOT_DELEGATION; }
+                        case ParentDelegation<?, ?, ?, ?, ?> q -> { layer = parent(layer).orElseThrow(); via = Trace.Via.PARENT_DELEGATION; }
+                    }
                 }
             }
         }
     }
 
-    /** What the registered resolver finds of the CSS content of an implementation giving a placeholder. */
-    public CssResolution content(CastingStylePerRole<?, ?, ?, ?> impl) { return resolver.resolve(impl); }
+    /** What the registered resolver finds of an implementation's CSS content. */
+    public CssResolution content(CssImplementation<?, ?, ?, ?> impl) { return resolver.resolve(impl); }
 
     /** What the registered resolver finds of the CSS content an element wears in a style. */
     public CssResolution content(DesignStyle<?> style, ElementPath element) { return content(wears(style, element)); }
+
+    /** Every implementation with CSS of its own an element wears, in some style: each once, in the order first worn. */
+    public List<CssImplementation<?, ?, ?, ?>> cssImplementations() {
+        var out = new LinkedHashMap<Class<?>, CssImplementation<?, ?, ?, ?>>();
+        List<ElementPath> all = elements();
+        for (DesignStyle<?> s : styles) for (ElementPath e : all) out.putIfAbsent(wears(s, e).getClass(), wears(s, e));
+        return List.copyOf(out.values());
+    }
 
     /** Every element: each top-level component, and every slot down from it - placed parts too - a part met again on its path not walked twice. */
     public List<ElementPath> elements() {

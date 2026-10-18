@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -17,7 +17,7 @@ import java.util.List;
 
 /** neo-futurism's declaration of trail_path: its own implementation, and a spec for each of its slots. */
 public record TrailPathDeclaration() implements CastingDeclaration<BaseScheme, NeoFuturism, HouseContainers.Trail, HouseDoing.Path> {
-    @Override public CastingStylePerRole<BaseScheme, NeoFuturism, HouseContainers.Trail, HouseDoing.Path> own() { return new TrailPath(); }
+    @Override public CastingImplementation<BaseScheme, NeoFuturism, HouseContainers.Trail, HouseDoing.Path> own() { return new TrailPath(); }
 
     @Override public PartsSpec<BaseScheme, NeoFuturism, HouseContainers.Trail> parts() {
         return new PartsSpec<>(List.of(

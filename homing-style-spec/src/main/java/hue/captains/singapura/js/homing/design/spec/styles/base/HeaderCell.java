@@ -1,15 +1,10 @@
 package hue.captains.singapura.js.homing.design.spec.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 /** base's implementation of header-cell: CSS of its own - its content apart, the colours it draws with typed here. */
-public record HeaderCell() implements CastingStylePerRole<BaseScheme, Base, HouseContainers.HeaderCell, RoleRoot> {
-    @Override public StylingRes<BaseScheme, Base, HouseContainers.HeaderCell, RoleRoot> style() {
-        return new StylingRes.CssPlaceHolder<>();
-    }
-}
+public record HeaderCell() implements CssImplementation<BaseScheme, Base, HouseContainers.HeaderCell, RoleRoot> {}

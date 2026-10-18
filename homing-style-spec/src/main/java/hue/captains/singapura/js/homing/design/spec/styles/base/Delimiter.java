@@ -2,8 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
-import hue.captains.singapura.js.homing.design.spec.StylingRes;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -12,11 +11,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import java.util.List;
 
 /** base's implementation of delimiter: CSS of its own - its content apart, the colours it draws with typed here. */
-public record Delimiter() implements CastingStylePerRole<BaseScheme, Base, HouseMarks.Delimiter, RoleRoot> {
-    @Override public StylingRes<BaseScheme, Base, HouseMarks.Delimiter, RoleRoot> style() {
-        return new StylingRes.CssPlaceHolder<>();
-    }
-
+public record Delimiter() implements CssImplementation<BaseScheme, Base, HouseMarks.Delimiter, RoleRoot> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.Muted());
     }

@@ -62,27 +62,27 @@ public record ReadDag() implements StatelessFunctionalObject {
             return id;
         }
 
-        String impl(CastingStylePerRole<?, ?, ?, ?> impl, DesignStyle<?> layer, Casting as, boolean root) {
+        String impl(CastingImplementation<?, ?, ?, ?> impl, DesignStyle<?> layer, Casting as, boolean root) {
             String id = layer.token() + "/" + impl.getClass().getSimpleName();
             StyleDag.Node known = nodes.get(id);
             if (known instanceof StyleDag.ImplNode k) {
                 if (root && !k.root()) nodes.put(id, new StyleDag.ImplNode(id, layer, as, k.gives(), true, impl));
                 return id;
             }
-            StyleDag.Gives gives = switch (impl.style()) {
-                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> StyleDag.Gives.CSS;
-                case StylingRes.Delegation<?, ?, ?, ?> d -> StyleDag.Gives.DELEGATION;
-                case StylingRes.RootDelegation<?, ?, ?, ?> r -> StyleDag.Gives.ROOT_DELEGATION;
-                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> StyleDag.Gives.PARENT_DELEGATION;
+            StyleDag.Gives gives = switch (impl) {
+                case CssImplementation<?, ?, ?, ?> c -> StyleDag.Gives.CSS;
+                case SameRoleDelegation<?, ?, ?, ?> d -> StyleDag.Gives.DELEGATION;
+                case RootDelegation<?, ?, ?, ?> r -> StyleDag.Gives.ROOT_DELEGATION;
+                case ParentDelegation<?, ?, ?, ?, ?> p -> StyleDag.Gives.PARENT_DELEGATION;
             };
             nodes.put(id, new StyleDag.ImplNode(id, layer, as, gives, root, impl));
-            switch (impl.style()) {
-                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> { }
-                case StylingRes.Delegation<?, ?, ?, ?> d ->
+            switch (impl) {
+                case CssImplementation<?, ?, ?, ?> c -> { }
+                case SameRoleDelegation<?, ?, ?, ?> d ->
                         pointers.add(new StyleDag.DelegationPointer(id, impl(d.to(), layer, as, false), gives));
-                case StylingRes.RootDelegation<?, ?, ?, ?> r ->
+                case RootDelegation<?, ?, ?, ?> r ->
                         pointers.add(new StyleDag.DelegationPointer(id, impl(r.to(), layer, as.alone(), false), gives));
-                case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> {
+                case ParentDelegation<?, ?, ?, ?, ?> p -> {
                     DesignStyle<?> below = spec.parent(layer).orElseThrow(() -> new IllegalStateException(id + " delegates below " + layer.token() + ", written over nothing"));
                     pointers.add(new StyleDag.DelegationPointer(id, impl(p.to(), below, as, false), gives));
                 }

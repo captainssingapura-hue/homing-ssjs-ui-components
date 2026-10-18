@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.neumorphism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -15,7 +15,7 @@ import java.util.List;
 
 /** neumorphism's declaration of edge-strip: its own implementation, and a spec for each of its slots. */
 public record EdgeStripDeclaration() implements CastingDeclaration<BaseScheme, Neumorphism, HouseContainers.EdgeStrip, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Neumorphism, HouseContainers.EdgeStrip, RoleRoot> own() { return new EdgeStrip(); }
+    @Override public CastingImplementation<BaseScheme, Neumorphism, HouseContainers.EdgeStrip, RoleRoot> own() { return new EdgeStrip(); }
 
     @Override public PartsSpec<BaseScheme, Neumorphism, HouseContainers.EdgeStrip> parts() {
         return new PartsSpec<>(List.of(

@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.spec.CastingDeclaration;
-import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
+import hue.captains.singapura.js.homing.design.spec.CastingImplementation;
 import hue.captains.singapura.js.homing.design.spec.PartSpec;
 import hue.captains.singapura.js.homing.design.spec.PartsSpec;
 import hue.captains.singapura.js.homing.design.spec.Target;
@@ -19,7 +19,7 @@ import java.util.List;
 
 /** base's declaration of mpa-chrome: its own implementation, and a spec for each of its slots. */
 public record MpaChromeDeclaration() implements CastingDeclaration<BaseScheme, Base, HouseSite.MpaChrome, RoleRoot> {
-    @Override public CastingStylePerRole<BaseScheme, Base, HouseSite.MpaChrome, RoleRoot> own() { return new MpaChrome(); }
+    @Override public CastingImplementation<BaseScheme, Base, HouseSite.MpaChrome, RoleRoot> own() { return new MpaChrome(); }
 
     @Override public PartsSpec<BaseScheme, Base, HouseSite.MpaChrome> parts() {
         return new PartsSpec<>(List.of(
