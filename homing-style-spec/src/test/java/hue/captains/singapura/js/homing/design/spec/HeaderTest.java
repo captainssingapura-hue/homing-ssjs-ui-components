@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -23,6 +26,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HeaderTest {
 
     private static final SpecRegistry SPEC = HouseSpec.INSTANCE.registry();
+    private static final Pattern MADE = Pattern.compile("new ([A-Za-z]+)\\(");
+
+    /** Every object a module makes is made by one of the kit's constructors, each one the module imports; none made by hand. */
+    private static void madeByTheKit(String who, String script, List<String> problems) {
+        String kitImport = script.lines().filter(l -> l.startsWith("import ") && l.contains(DualKit.INSTANCE.address())).findFirst().orElse("");
+        for (Matcher m = MADE.matcher(script); m.find(); ) {
+            String c = m.group(1);
+            if (!DualKit.INSTANCE.classes().contains(c)) problems.add(who + ": makes a " + c + ", no class of the kit's");
+            else if (!kitImport.matches(".*[{ ,]" + c + "[ ,}].*")) problems.add(who + ": makes a " + c + " it does not import");
+        }
+        if (script.contains("Object.freeze(")) problems.add(who + ": an object made by hand");
+    }
 
     private static Map<DualTree<?>, TreeDual> duals() {
         var out = new HashMap<DualTree<?>, TreeDual>();
@@ -41,6 +56,7 @@ class HeaderTest {
                 if (!seen.add(n.name())) problems.add(d.tree().name() + ": " + n.name() + " twice");
             }
             String script = DualScript.INSTANCE.script(d);
+            madeByTheKit(d.tree().name(), script, problems);
             if (!script.contains("export { ")) problems.add(d.tree().name() + ": exports nothing");
             said.add(d.tree().name() + " " + d.nodes().size() + " of " + d.inTree());
         }
@@ -88,11 +104,28 @@ class HeaderTest {
                 if (!names.add(s.name())) problems.add(h.component().token() + ": " + s.name() + " stamped twice");
             String stamp = HeaderStamp.INSTANCE.stamp(h);
             if (stamp.contains("$")) problems.add(h.component().token() + ": an address with a nested class's name");
+            madeByTheKit(h.component().token(), stamp, problems);
             for (String line : stamp.lines().toList())
                 if (!line.startsWith("import ") && !line.startsWith("//") && line.contains("\"")) problems.add(h.component().token() + ": writes a string - " + line.trim());
             if (stamp.contains("styled-")) problems.add(h.component().token() + ": names a class");
         }
         assertEquals(List.of(), problems);
         System.out.println("[header] " + imports + " imports over every header, each in its dual");
+    }
+
+    /** The kit, every dual and every header written to target/js, each at its address's class, for a JS runtime to load. */
+    @Test
+    void everyModule_isWrittenOut_forAJsRuntimeToLoad() throws java.io.IOException {
+        var out = java.nio.file.Path.of("target/js");
+        java.nio.file.Files.createDirectories(out);
+        java.nio.file.Files.writeString(out.resolve(DualKit.class.getCanonicalName() + ".js"), DualKit.INSTANCE.script());
+        for (TreeDual d : duals().values())
+            java.nio.file.Files.writeString(out.resolve(d.tree().getClass().getCanonicalName() + ".js"), DualScript.INSTANCE.script(d));
+        int headers = 0;
+        for (ComponentHeader h : ReadHeader.INSTANCE.readAll(SPEC.taxonomy(), SPEC.top())) {
+            java.nio.file.Files.writeString(out.resolve("header." + h.component().token() + ".js"), HeaderStamp.INSTANCE.stamp(h));
+            headers++;
+        }
+        System.out.println("[header] the kit, " + ReadDual.INSTANCE.trees().size() + " duals and " + headers + " headers written to " + out);
     }
 }

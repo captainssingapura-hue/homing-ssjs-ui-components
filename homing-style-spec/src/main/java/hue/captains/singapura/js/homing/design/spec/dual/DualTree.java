@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -34,11 +33,16 @@ public sealed interface DualTree<N> extends StatelessFunctionalObject permits Co
     String token(N node);
 
     /**
-     * What a node carries for the page beyond its token and its parent - each a JS literal, by its key.
+     * A node's construction in its dual: the kit's constructor of its kind, called with its token, its parent and what else
+     * the kind takes - {@code new Component("plain-button", Buttons, false)}.
      *
-     * @param above the node's ancestors, the root first
+     * @param parent the parent's name in the dual, {@code null} for a root
+     * @param above  the node's ancestors, the root first
      */
-    Map<String, String> carries(Taxonomy taxonomy, N node, List<N> above);
+    String construct(Taxonomy taxonomy, N node, String parent, List<N> above);
+
+    /** The kit's classes its dual is made with ({@link DualKit}). */
+    List<String> kit();
 
     /** The leaves the registered components' declarations use: what the dual keeps, with their ancestors, and nothing else. */
     Set<N> used(Taxonomy taxonomy);

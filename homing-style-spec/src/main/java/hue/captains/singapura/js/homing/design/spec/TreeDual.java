@@ -3,16 +3,13 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.tao.ontology.ValueObject;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 /**
  * A Java tree's JS dual, as an instance runs it (RFC 0071): the nodes the registered components' declarations use, and
- * their ancestors - nothing else - each under its name, its parent named, what it carries. One module, at its tree's
+ * their ancestors - nothing else - each under its name, its parent named, made by the kit's constructor of its kind. One module, at its tree's
  * address.
  *
  * @param tree   the tree it is the dual of
@@ -34,14 +31,14 @@ public record TreeDual(DualTree<?> tree, List<Node> nodes, int inTree, List<Stri
      * @param name    its JS name, the token's words capitalised: unique in the dual, its tree's tokens being unique
      * @param token   its token
      * @param parent  its parent's name; none for a root
-     * @param carries what it carries for the page, each a JS literal, by its key
+     * @param construction how it is made: the kit's constructor of its kind, with its token, its parent and what else it takes
      */
-    public record Node(String name, String token, Optional<String> parent, Map<String, String> carries) implements ValueObject {
+    public record Node(String name, String token, Optional<String> parent, String construction) implements ValueObject {
         public Node {
             Objects.requireNonNull(name, "Node.name");
             Objects.requireNonNull(token, "Node.token");
             Objects.requireNonNull(parent, "Node.parent");
-            carries = Collections.unmodifiableMap(new LinkedHashMap<>(carries));
+            Objects.requireNonNull(construction, "Node.construction");
         }
     }
 

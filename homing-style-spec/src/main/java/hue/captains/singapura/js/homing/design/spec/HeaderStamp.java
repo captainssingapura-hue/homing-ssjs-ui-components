@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
+import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
@@ -15,7 +16,8 @@ import java.util.Locale;
  * What the server stamps into a component's implementation module (RFC 0071, D19): its header, made from the component's
  * declarations alone - nothing but names the implementation uses directly. Each node the component declares - itself, its
  * parts, their roles, its state types, its events, its extents - is imported from its tree's JS dual under its own name,
- * the module and the name both a pure function of the node ({@link DualRef}); each of its slots is a constant of its own.
+ * the module and the name both a pure function of the node ({@link DualRef}); each of its slots is a constant of its own,
+ * made by the kit's constructor ({@link DualKit}).
  * No string is looked up, and none is written but a module's address.
  */
 public record HeaderStamp() implements StatelessFunctionalObject {
@@ -37,14 +39,14 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         return List.copyOf(out.values());
     }
 
-    /** Each slot as its own constant: its owner, its part and its role - the imported nodes - and how many the part is. */
+    /** Each slot as its own constant, made by the kit: its owner, its part and its role - the imported nodes - and how many the part is. */
     public List<SlotConstant> slots(ComponentHeader h) {
         var refOf = DualRef.INSTANCE;
         var out = new ArrayList<SlotConstant>();
         for (ComponentHeader.HeaderSlot s : h.slots()) {
             String name = "SLOT_" + s.token().toUpperCase(Locale.ROOT).replace('-', '_');
-            out.add(new SlotConstant(name, "const " + name + " = Object.freeze({ owner: " + refOf.of(h.component()).imported()
-                    + ", part: " + refOf.of(s.part()).imported() + ", role: " + refOf.of(s.role()).imported() + ", count: " + count(s.cardinality()) + " });"));
+            out.add(new SlotConstant(name, "const " + name + " = new Slot(" + refOf.of(h.component()).imported() + ", " + refOf.of(s.part()).imported()
+                    + ", " + refOf.of(s.role()).imported() + ", " + count(s.cardinality()) + ");"));
         }
         return List.copyOf(out);
     }
@@ -54,6 +56,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         var lines = new ArrayList<String>();
         lines.add("// Stamped by the server (RFC 0071, D19): " + h.component().token() + "'s header, made from its declarations - "
                 + (h.composite() ? "a composite" : "a leaf") + (h.topLevel() ? ", top-level." : ", only ever a part."));
+        if (!h.slots().isEmpty()) lines.add("import { Slot, Count } from " + JsLiterals.INSTANCE.string(DualKit.INSTANCE.address()) + ";");
         List<DualRef.Ref> refs = refs(h);
         for (DualTree<?> tree : ReadDual.INSTANCE.trees()) {
             List<String> names = refs.stream().filter(r -> r.tree().equals(tree)).map(r -> r.name() + " as " + r.imported()).toList();
@@ -65,14 +68,14 @@ public record HeaderStamp() implements StatelessFunctionalObject {
 
     private static void add(LinkedHashMap<String, DualRef.Ref> out, DualRef.Ref r) { out.putIfAbsent(r.imported(), r); }
 
-    /** How many a part is, as data: its least and its most, none for no bound. */
+    /** How many a part is, made by the kit: its least and its most, none for no bound. */
     private static String count(Cardinality c) {
         return switch (c) {
-            case Cardinality.Fixed f -> "Object.freeze({ min: " + f.count() + ", max: " + f.count() + " })";
-            case Cardinality.Varying v -> "Object.freeze({ min: " + v.min() + ", max: " + switch (v.max()) {
+            case Cardinality.Fixed f -> "new Count(" + f.count() + ", " + f.count() + ")";
+            case Cardinality.Varying v -> "new Count(" + v.min() + ", " + switch (v.max()) {
                 case Cardinality.AtMost a -> String.valueOf(a.count());
                 case Cardinality.Unbounded u -> "null";
-            } + " })";
+            } + ")";
         };
     }
 }

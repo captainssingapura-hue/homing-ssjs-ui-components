@@ -53,7 +53,8 @@ public record ReadDual() implements StatelessFunctionalObject {
     private static <N> void walk(DualTree<N> tree, Taxonomy taxonomy, N node, List<N> above, Set<N> kept, List<TreeDual.Node> out) {
         if (!kept.contains(node)) return;
         Optional<String> parent = above.isEmpty() ? Optional.empty() : Optional.of(JsLiterals.INSTANCE.name(tree.token(above.getLast())));
-        out.add(new TreeDual.Node(JsLiterals.INSTANCE.name(tree.token(node)), tree.token(node), parent, tree.carries(taxonomy, node, List.copyOf(above))));
+        out.add(new TreeDual.Node(JsLiterals.INSTANCE.name(tree.token(node)), tree.token(node), parent,
+                tree.construct(taxonomy, node, parent.orElse("null"), List.copyOf(above))));
         var down = new ArrayList<>(above);
         down.add(node);
         for (N child : tree.children(taxonomy, node)) walk(tree, taxonomy, child, down, kept, out);
