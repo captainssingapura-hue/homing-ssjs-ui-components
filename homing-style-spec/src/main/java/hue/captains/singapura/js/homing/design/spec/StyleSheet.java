@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * A style's complete sheet as it is served (RFC 0067, D53): one rule for each implementation with CSS of its own an
  * element wears in the style, under its real class, its content's marks filled in - each once, however many elements
- * wear it. Its pair is the style's {@link HandleMapping}: the page's css manager puts each handle's class on the element,
+ * wear it. Its pair is the style's {@link PathMapping}: the page's css manager puts each path's class on the element,
  * and this sheet draws the class.
  *
  * @param style the style's token
@@ -29,10 +29,10 @@ public record StyleSheet(String style, List<Rule> rules, String css) implements 
      *
      * @param realClass the class it is served under: {@code styled-<layer>___<implementation>}
      * @param end       the implementation, with the layer it is of and the casting it is reached as
-     * @param handles   how many of the style's handles wear it
+     * @param paths   how many of the style's paths wear it
      * @param css       its content, the marks filled in for its class
      */
-    public record Rule(String realClass, Trace.CssStep end, int handles, String css) implements ValueObject {
+    public record Rule(String realClass, Trace.CssStep end, int paths, String css) implements ValueObject {
         public Rule {
             Objects.requireNonNull(realClass, "Rule.realClass");
             Objects.requireNonNull(end, "Rule.end");

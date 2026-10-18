@@ -62,7 +62,7 @@ public record ComponentHeader(Component<?> component, boolean composite, boolean
             Objects.requireNonNull(cardinality, "HeaderSlot.cardinality");
         }
 
-        /** Its token, as a handle holds it: {@code action-bar_actions}. */
+        /** Its token, as a path holds it: {@code action-bar_actions}. */
         public String token() { return new Casting(part, role).token(); }
     }
 

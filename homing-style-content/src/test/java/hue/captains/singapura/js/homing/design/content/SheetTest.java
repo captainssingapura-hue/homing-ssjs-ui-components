@@ -1,8 +1,8 @@
 package hue.captains.singapura.js.homing.design.content;
 
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.js.homing.design.spec.HandleMapping;
-import hue.captains.singapura.js.homing.design.spec.ReadHandles;
+import hue.captains.singapura.js.homing.design.spec.PathMapping;
+import hue.captains.singapura.js.homing.design.spec.ReadPathMapping;
 import hue.captains.singapura.js.homing.design.spec.ReadSheet;
 import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
 import hue.captains.singapura.js.homing.design.spec.StyleSheet;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Each style's complete sheet as served (RFC 0067, D53), with its handle mapping: the sheet reads as CSS; it rules
+ * Each style's complete sheet as served (RFC 0067, D53), with its path mapping: the sheet reads as CSS; it rules
  * exactly the classes its mapping puts on elements, each once; no mark is left; no keyframes is named twice. Both are
  * written to target/sheets, the sheet and the mapping a page loads for the style.
  */
@@ -45,7 +45,7 @@ class SheetTest {
         var problems = new ArrayList<String>();
         for (DesignStyle<?> s : SPEC.selectable()) {
             StyleSheet sheet = ReadSheet.INSTANCE.read(SPEC, s);
-            HandleMapping mapping = ReadHandles.INSTANCE.read(SPEC, s);
+            PathMapping mapping = ReadPathMapping.INSTANCE.read(SPEC, s);
             ReadCss.Read read = ReadCss.INSTANCE.read(sheet.css());
             read.problems().forEach(p -> problems.add(s.token() + ": " + p));
             var ruled = new ArrayList<String>();
@@ -68,7 +68,7 @@ class SheetTest {
             if (sheet.css().indexOf('$') >= 0) problems.add(s.token() + ": a mark is left at " + sheet.css().indexOf('$'));
             Files.writeString(OUT.resolve(s.token() + ".css"), sheet.css());
             Files.writeString(OUT.resolve(s.token() + ".js"), mapping.script());
-            System.out.println("[sheet] " + s.token() + ": " + sheet.rules().size() + " rules for " + mapping.classes().size() + " handles, "
+            System.out.println("[sheet] " + s.token() + ": " + sheet.rules().size() + " rules for " + mapping.classes().size() + " paths, "
                     + sheet.css().length() + " characters (today's sheet " + TODAY.sheet(s).length() + ")");
         }
         assertTrue(problems.isEmpty(), String.join("\n", problems.subList(0, Math.min(40, problems.size()))));
@@ -79,10 +79,10 @@ class SheetTest {
 
     /** Every element's rule, as served, is its content with the marks filled in for the class it wears. */
     @Test
-    void everyHandle_findsItsRule() {
+    void everyPath_findsItsRule() {
         for (DesignStyle<?> s : SPEC.selectable()) {
             StyleSheet sheet = ReadSheet.INSTANCE.read(SPEC, s);
-            List<String> without = ReadHandles.INSTANCE.read(SPEC, s).classes().entrySet().stream()
+            List<String> without = ReadPathMapping.INSTANCE.read(SPEC, s).classes().entrySet().stream()
                     .filter(e -> sheet.rule(e.getValue()).isEmpty()).map(e -> e.getKey() + " -> " + e.getValue()).toList();
             assertEquals(List.of(), without, s.token());
         }

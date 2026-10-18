@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  * What an instance registers, as its trees' duals are read from it (RFC 0071): the components taxonomy its component
- * modules bring, the top-level components they list - the units a handle starts at - and the styles a page may wear.
+ * modules bring, the top-level components they list - the units a path starts at - and the styles a page may wear.
  *
  * @param taxonomy the registered components, their parts, roles, states and events
  * @param top      the top-level components, in the modules' order

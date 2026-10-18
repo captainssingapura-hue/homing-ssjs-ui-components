@@ -11,25 +11,25 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * A style's flat mapping for the page's css manager (RFC 0067, D53): every handle a page's code may hold - the top-level
- * component, then each slot down to the element, so that two owners declaring a part differently hold two handles - at
+ * A style's flat mapping for the page's css manager (RFC 0067, D53): every path a page's code may hold - the top-level
+ * component, then each slot down to the element, so that two owners declaring a part differently hold two paths - at
  * the real class of the implementation with CSS it wears in the style. Built in Java, whole: the css manager resolves
- * nothing, and a style switch swaps the classes of the handles whose class differs.
+ * nothing, and a style switch swaps the classes of the paths whose class differs.
  *
  * @param style   the style's token
- * @param classes each handle's real class, in the page's order
+ * @param classes each path's real class, in the page's order
  */
-public record HandleMapping(String style, Map<String, String> classes) implements ValueObject {
+public record PathMapping(String style, Map<String, String> classes) implements ValueObject {
 
-    public HandleMapping {
-        Objects.requireNonNull(style, "HandleMapping.style");
+    public PathMapping {
+        Objects.requireNonNull(style, "PathMapping.style");
         classes = Collections.unmodifiableMap(new LinkedHashMap<>(classes));
     }
 
-    /** The handles whose class differs in another style's mapping: what a switch to it re-classes. */
-    public List<String> changedIn(HandleMapping next) {
+    /** The paths whose class differs in another style's mapping: what a switch to it re-classes. */
+    public List<String> changedIn(PathMapping next) {
         if (!classes.keySet().equals(next.classes().keySet()))
-            throw new IllegalArgumentException(style + " and " + next.style() + " map other handles: every mapping says every handle");
+            throw new IllegalArgumentException(style + " and " + next.style() + " map other paths: every mapping says every path");
         var out = new ArrayList<String>();
         classes.forEach((h, c) -> { if (!c.equals(next.classes().get(h))) out.add(h); });
         return List.copyOf(out);
@@ -42,9 +42,9 @@ public record HandleMapping(String style, Map<String, String> classes) implement
     public String script() {
         var lines = new ArrayList<String>();
         classes.forEach((h, c) -> lines.add("        " + quoted(h) + ": " + quoted(c)));
-        return "// Generated (RFC 0067, D53): " + style + "'s classes - every handle a page's code may hold, its top-level component then\n"
+        return "// Generated (RFC 0067, D53): " + style + "'s classes - every path a page's code may hold, its top-level component then\n"
                 + "// each slot down to the element, at the real class of the implementation with CSS it wears in " + style + ".\n"
-                + "const STYLE_CLASSES = Object.freeze({\n    style: " + quoted(style) + ",\n    handles: Object.freeze({\n"
+                + "const STYLE_CLASSES = Object.freeze({\n    style: " + quoted(style) + ",\n    paths: Object.freeze({\n"
                 + String.join(",\n", lines) + "\n    })\n});\n";
     }
 

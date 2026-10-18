@@ -24,13 +24,13 @@ public record ReadSheet() implements StatelessFunctionalObject {
     public static final ReadSheet INSTANCE = new ReadSheet();
 
     public StyleSheet read(SpecRegistry spec, DesignStyle<?> style) {
-        HandleMapping mapping = ReadHandles.INSTANCE.read(spec, style);
+        PathMapping mapping = ReadPathMapping.INSTANCE.read(spec, style);
         Map<String, Integer> wearing = new HashMap<>();
         for (String c : mapping.classes().values()) wearing.merge(c, 1, Integer::sum);
         var rules = new ArrayList<StyleSheet.Rule>();
         var missing = new ArrayList<String>();
         for (Trace.CssStep end : spec.cssEnds(style)) {
-            String real = ReadHandles.INSTANCE.realClass(new SpecRegistry.Worn(end.layer(), end.impl()));
+            String real = ReadPathMapping.INSTANCE.realClass(new SpecRegistry.Worn(end.layer(), end.impl()));
             switch (spec.content(end.impl())) {
                 case CssResolution.Found f -> rules.add(new StyleSheet.Rule(real, end, wearing.getOrDefault(real, 0),
                         CastingCss.INSTANCE.filled(f.text(), real, real).strip()));
@@ -53,7 +53,7 @@ public record ReadSheet() implements StatelessFunctionalObject {
             Trace.CssStep end = r.end();
             css.append("\n/* ").append(r.realClass()).append(": ").append(end.layer().token()).append("'s ")
                .append(end.impl().getClass().getSimpleName()).append(", ").append(end.casting().token())
-               .append(" - worn by ").append(r.handles()).append(r.handles() == 1 ? " handle" : " handles").append(" */\n")
+               .append(" - worn by ").append(r.paths()).append(r.paths() == 1 ? " path" : " paths").append(" */\n")
                .append(r.css()).append('\n');
         }
         return css.toString();

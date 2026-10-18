@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * The kit every tree's JS dual and every component's header is made with (RFC 0071): one class for each kind of node -
- * a branch or a leaf of each tree, an extent, a handle, a style - and one for a slot and one for its count. Each instance is made by its
+ * a branch or a leaf of each tree, an extent, a path, a style - and one for a slot and one for its count. Each instance is made by its
  * constructor, which checks what it is given - a token a token, a parent a branch of its own tree, a slot's owner a
  * composite - and frozen. Nothing in a dual or a header is an object made by hand.
  */
@@ -20,7 +20,7 @@ public record DualKit() implements StatelessFunctionalObject {
     /** The classes it gives, in its order. */
     public List<String> classes() {
         return List.of("ComponentBranch", "Component", "RoleBranch", "Role", "StateBranch", "StateType", "EventBranch", "EventType",
-                "Extent", "Count", "Slot", "Handle", "Style");
+                "Extent", "Count", "Slot", "ElementPath", "Style");
     }
 
     /** Its module. */
@@ -129,13 +129,13 @@ public record DualKit() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
                 }
-                class Handle {
+                class ElementPath {
                     constructor(parent, part, role) {
-                        if (parent !== null && !(parent instanceof Handle)) throw new TypeError("Handle: its parent is a Handle, or none for a top-level component");
-                        if (!(part instanceof Component)) throw new TypeError("Handle: its part is a Component");
+                        if (parent !== null && !(parent instanceof ElementPath)) throw new TypeError("ElementPath: its parent is an ElementPath, or none for a top-level component");
+                        if (!(part instanceof Component)) throw new TypeError("ElementPath: its part is a Component");
                         if (parent === null ? role !== null : !(role instanceof Role))
-                            throw new TypeError("Handle " + part.token + ": a top-level component is in no role; a part is in its owner's");
-                        if (parent !== null && !parent.part.composite) throw new TypeError("Handle " + part.token + ": its owner, " + parent.part.token + ", is a leaf");
+                            throw new TypeError("ElementPath " + part.token + ": a top-level component is in no role; a part is in its owner's");
+                        if (parent !== null && !parent.part.composite) throw new TypeError("ElementPath " + part.token + ": its owner, " + parent.part.token + ", is a leaf");
                         this.parent = parent; this.part = part; this.role = role;
                         Object.freeze(this);
                     }
@@ -143,7 +143,7 @@ public record DualKit() implements StatelessFunctionalObject {
                 class Style {
                     constructor(t) { this.token = token("Style", t); Object.freeze(this); }
                 }
-                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, Handle, Style };
+                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, ElementPath, Style };
                 """;
     }
 }
