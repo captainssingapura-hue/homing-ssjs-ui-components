@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.base;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
@@ -8,9 +9,15 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** base's implementation of success-badge: CSS of its own. */
+import java.util.List;
+
+/** base's implementation of success-badge: CSS of its own - its content apart, the colours it draws with typed here. */
 public record SuccessBadge() implements CastingStylePerRole<BaseScheme, Base, HouseText.SuccessBadge, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseText.SuccessBadge, RoleRoot> style() {
-        return new StylingRes.CssContent<>(new BaseColours.SuccessInk(), new BaseColours.SuccessWash());
+        return new StylingRes.CssPlaceHolder<>();
+    }
+
+    @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
+        return List.of(new BaseColours.SuccessInk(), new BaseColours.SuccessWash());
     }
 }

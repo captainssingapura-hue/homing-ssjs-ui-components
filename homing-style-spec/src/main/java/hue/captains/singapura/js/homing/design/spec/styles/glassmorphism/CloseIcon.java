@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** glassmorphism's implementation of close-icon: CSS of its own. */
+/** glassmorphism's implementation of close-icon: CSS of its own - its content apart, the colours it draws with typed here. */
 public record CloseIcon() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseIcons.CloseIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseIcons.CloseIcon, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
@@ -21,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class GenericsSampleTest {
 
     record BasePlain() implements CastingStylePerRole<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> {
-        @Override public StylingRes<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> style() { return new StylingRes.CssContent<>(new BaseColours.Border()); }
+        @Override public StylingRes<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> style() { return new StylingRes.CssPlaceHolder<>(); }
+        @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() { return List.of(new BaseColours.Border()); }
     }
 
     record BasePlainAction() implements CastingStylePerRole<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> {
@@ -33,7 +35,7 @@ class GenericsSampleTest {
     }
 
     record EditorialDialog() implements CastingStylePerRole<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> {
-        @Override public StylingRes<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> style() { return new StylingRes.CssContent<>(); }
+        @Override public StylingRes<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> style() { return new StylingRes.CssPlaceHolder<>(); }
     }
 
     record EditorialDialogDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> {
@@ -45,7 +47,7 @@ class GenericsSampleTest {
     }
 
     record EditorialActionBar() implements CastingStylePerRole<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> {
-        @Override public StylingRes<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> style() { return new StylingRes.CssContent<>(); }
+        @Override public StylingRes<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> style() { return new StylingRes.CssPlaceHolder<>(); }
     }
 
     record EditorialActionBarDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> {

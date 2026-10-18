@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's implementation of wordmark: CSS of its own. */
+/** sketchy's implementation of wordmark: CSS of its own - its content apart, the colours it draws with typed here. */
 public record Wordmark() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Wordmark, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Wordmark, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

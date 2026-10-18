@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
-/** base's implementation of setting-row: CSS of its own. */
+/** base's implementation of setting-row: CSS of its own - its content apart, the colours it draws with typed here. */
 public record SettingRow() implements CastingStylePerRole<BaseScheme, Base, HousePreferences.SettingRow, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HousePreferences.SettingRow, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-futurism's implementation of label: CSS of its own. */
+/** neo-futurism's implementation of label: CSS of its own - its content apart, the colours it draws with typed here. */
 public record Label() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseText.Label, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseText.Label, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

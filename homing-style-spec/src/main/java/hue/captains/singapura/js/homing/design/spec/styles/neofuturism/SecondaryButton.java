@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.color.ColorScale;
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
@@ -11,10 +12,14 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
 
-/** neo-futurism's implementation of secondary-button: CSS of its own. */
+/** neo-futurism's implementation of secondary-button: CSS of its own - its content apart, the colours it draws with typed here. */
 public record SecondaryButton() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseControls.SecondaryButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseControls.SecondaryButton, RoleRoot> style() {
-        return new StylingRes.CssContent<>(new ButtonLabel(), new BaseColours.AccentEdge(), new BaseColours.Ring(), new BaseColours.ShadeSoft(), new BaseColours.GlowFaint(), new BaseColours.GlowDim(), new BaseColours.GlowSoft(), new BaseColours.GlowBright(), new ButtonGround());
+        return new StylingRes.CssPlaceHolder<>();
+    }
+
+    @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
+        return List.of(new ButtonLabel(), new BaseColours.AccentEdge(), new BaseColours.Ring(), new BaseColours.ShadeSoft(), new BaseColours.GlowFaint(), new BaseColours.GlowDim(), new BaseColours.GlowSoft(), new BaseColours.GlowBright(), new ButtonGround());
     }
 
     /** Its ground along the degree: nothing at -1, each palette's neutral at 0, the accent at 1 (D41). */

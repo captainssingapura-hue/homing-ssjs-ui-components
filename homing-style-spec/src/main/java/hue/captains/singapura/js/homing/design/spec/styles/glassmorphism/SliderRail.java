@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
-/** glassmorphism's implementation of slider-rail: CSS of its own. */
+/** glassmorphism's implementation of slider-rail: CSS of its own - its content apart, the colours it draws with typed here. */
 public record SliderRail() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseMarks.SliderRail, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseMarks.SliderRail, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

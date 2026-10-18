@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
@@ -8,9 +9,15 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
-/** retro-futurism's implementation of danger-button: CSS of its own. */
+import java.util.List;
+
+/** retro-futurism's implementation of danger-button: CSS of its own - its content apart, the colours it draws with typed here. */
 public record DangerButton() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseControls.DangerButton, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseControls.DangerButton, RoleRoot> style() {
-        return new StylingRes.CssContent<>(new BaseColours.Ring(), new BaseColours.GlowDim(), new BaseColours.GlowMedium(), new BaseColours.GlowStrong(), new BaseColours.GlowFull(), new BaseColours.DangerEdge(), new BaseColours.DangerGround(), new BaseColours.DangerWriting());
+        return new StylingRes.CssPlaceHolder<>();
+    }
+
+    @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
+        return List.of(new BaseColours.Ring(), new BaseColours.GlowDim(), new BaseColours.GlowMedium(), new BaseColours.GlowStrong(), new BaseColours.GlowFull(), new BaseColours.DangerEdge(), new BaseColours.DangerGround(), new BaseColours.DangerWriting());
     }
 }

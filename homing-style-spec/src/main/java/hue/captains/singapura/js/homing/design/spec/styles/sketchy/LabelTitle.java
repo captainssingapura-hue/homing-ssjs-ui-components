@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** sketchy's implementation of label_title: CSS of its own. */
+/** sketchy's implementation of label_title: CSS of its own - its content apart, the colours it draws with typed here. */
 public record LabelTitle() implements CastingStylePerRole<BaseScheme, Sketchy, HouseText.Label, HouseSaying.Title> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseText.Label, HouseSaying.Title> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

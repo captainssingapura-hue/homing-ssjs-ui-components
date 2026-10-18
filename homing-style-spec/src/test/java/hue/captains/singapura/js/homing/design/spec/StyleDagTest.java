@@ -6,16 +6,12 @@ import hue.captains.singapura.js.homing.design.styling.CastingCss;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.HexFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * same-role spec pointers within its layer, a standalone spec pointer to the placed part's standalone in the style worn,
  * a delegation pointer within its layer or one layer down; a declaration with one pointer to its own implementation and
  * one for each slot of its composite; an implementation giving CSS of its own or exactly one delegation; a root for each
- * top-level component; everything reached from one; every element's implementation with CSS an end of the graph, its
- * file there. The graphs are written to target/dags/dags.json, to be drawn - each end with its CSS's fingerprint.
+ * top-level component; everything reached from one; every element's implementation with CSS an end of the graph. The
+ * graphs are written to target/dags/dags.json, to be drawn - each end with the resource its content is to be, no content
+ * read: the virtual layer holds none.
  */
 class StyleDagTest {
 
@@ -81,8 +78,6 @@ class StyleDagTest {
             for (StyleDag.ImplNode n : dag.implementations()) {
                 int d = delegations.getOrDefault(n.id(), 0);
                 if (n.needsCss() ? d != 0 : d != 1) problems.add(s.token() + ": " + n.id() + " gives " + n.gives() + " with " + d + " delegations");
-                if (n.needsCss() && CastingCss.INSTANCE.read(n.impl().getClass()).isEmpty())
-                    problems.add(s.token() + ": " + n.id() + " needs CSS, and has no " + CastingCss.INSTANCE.resource(n.impl().getClass()));
             }
             long roots = dag.nodes().stream().filter(StyleDag.Node::root).count();
             if (roots != SPEC.top().size()) problems.add(s.token() + ": " + roots + " roots for " + SPEC.top().size() + " top-level components");
@@ -120,19 +115,9 @@ class StyleDagTest {
         var dels = new LinkedHashMap<StyleDag.Gives, Integer>();
         for (StyleDag.DelegationPointer d : dag.delegations()) dels.merge(d.gives(), 1, Integer::sum);
         var own = dag.needingCss(dag.style());
-        long distinct = own.stream().map(StyleDagTest::fingerprint).distinct().count();
         System.out.println("[dag] " + dag.style().token() + ": declarations " + dag.declarations().size() + ", implementations " + dag.implementations().size()
                 + " " + layers + "; spec pointers " + dag.specs().size() + " " + specs + " (nesting " + dag.nesting() + "); delegation pointers "
-                + dag.delegations().size() + " " + dels + " (chain " + dag.delegationLength() + "); CSS ends of its own " + own.size() + ", " + distinct + " distinct");
-    }
-
-    private static String fingerprint(StyleDag.ImplNode n) {
-        String text = CastingCss.INSTANCE.read(n.impl().getClass()).orElse("").replace("\r\n", "\n").strip();
-        try {
-            return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8))).substring(0, 12);
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalStateException(e);
-        }
+                + dag.delegations().size() + " " + dels + " (chain " + dag.delegationLength() + "); CSS ends of its own " + own.size());
     }
 
     private static String json(StyleDag dag) {
@@ -142,7 +127,7 @@ class StyleDagTest {
             nodes.add(switch (n) {
                 case StyleDag.DeclarationNode d -> common + ", \"node\": \"declaration\"}";
                 case StyleDag.ImplNode i -> common + ", \"node\": \"impl\", \"gives\": " + q(i.gives().name())
-                        + (i.needsCss() ? ", \"css\": " + q(fingerprint(i)) + ", \"file\": " + q(CastingCss.INSTANCE.resource(i.impl().getClass())) : "") + "}";
+                        + (i.needsCss() ? ", \"file\": " + q(CastingCss.INSTANCE.resource(i.impl().getClass())) : "") + "}";
             });
         }
         var edges = new ArrayList<String>();

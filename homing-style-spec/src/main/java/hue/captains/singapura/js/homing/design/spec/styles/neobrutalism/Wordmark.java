@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neo-brutalism's implementation of wordmark: CSS of its own. */
+/** neo-brutalism's implementation of wordmark: CSS of its own - its content apart, the colours it draws with typed here. */
 public record Wordmark() implements CastingStylePerRole<BaseScheme, NeoBrutalism, HouseText.Wordmark, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoBrutalism, HouseText.Wordmark, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

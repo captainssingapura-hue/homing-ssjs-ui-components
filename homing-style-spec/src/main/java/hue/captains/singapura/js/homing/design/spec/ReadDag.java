@@ -70,14 +70,14 @@ public record ReadDag() implements StatelessFunctionalObject {
                 return id;
             }
             StyleDag.Gives gives = switch (impl.style()) {
-                case StylingRes.CssContent<?, ?, ?, ?> c -> StyleDag.Gives.CSS;
+                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> StyleDag.Gives.CSS;
                 case StylingRes.Delegation<?, ?, ?, ?> d -> StyleDag.Gives.DELEGATION;
                 case StylingRes.RootDelegation<?, ?, ?, ?> r -> StyleDag.Gives.ROOT_DELEGATION;
                 case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> StyleDag.Gives.PARENT_DELEGATION;
             };
             nodes.put(id, new StyleDag.ImplNode(id, layer, as, gives, root, impl));
             switch (impl.style()) {
-                case StylingRes.CssContent<?, ?, ?, ?> c -> { }
+                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> { }
                 case StylingRes.Delegation<?, ?, ?, ?> d ->
                         pointers.add(new StyleDag.DelegationPointer(id, impl(d.to(), layer, as, false), gives));
                 case StylingRes.RootDelegation<?, ?, ?, ?> r ->

@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
-/** base's implementation of toggle-widget: CSS of its own. */
+/** base's implementation of toggle-widget: CSS of its own - its content apart, the colours it draws with typed here. */
 public record ToggleWidget() implements CastingStylePerRole<BaseScheme, Base, HousePreferences.ToggleWidget, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HousePreferences.ToggleWidget, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

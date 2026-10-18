@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
-/** base's implementation of preferences-view: CSS of its own. */
+/** base's implementation of preferences-view: CSS of its own - its content apart, the colours it draws with typed here. */
 public record PreferencesView() implements CastingStylePerRole<BaseScheme, Base, HousePreferences.PreferencesView, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HousePreferences.PreferencesView, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanZoom;
 
-/** base's implementation of svg-pan-zoom: CSS of its own. */
+/** base's implementation of svg-pan-zoom: CSS of its own - its content apart, the colours it draws with typed here. */
 public record SvgPanZoom() implements CastingStylePerRole<BaseScheme, Base, HousePanZoom.SvgPanZoom, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HousePanZoom.SvgPanZoom, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

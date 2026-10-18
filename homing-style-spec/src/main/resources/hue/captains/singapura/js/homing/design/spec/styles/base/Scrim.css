@@ -1,6 +1,0 @@
-/* The scrim in the base layer: the veil over the page behind a dialog - nothing of its own drawn, what is behind it dimmed and softened. Whole: every property its look has (D9). */
-$casting {
-    color: inherit;
-    background-color: transparent;
-    backdrop-filter: brightness(0.45) blur(2px);
-}

@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.editorial;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
@@ -8,9 +9,15 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** editorial's implementation of heading4: CSS of its own. */
+import java.util.List;
+
+/** editorial's implementation of heading4: CSS of its own - its content apart, the colours it draws with typed here. */
 public record Heading4() implements CastingStylePerRole<BaseScheme, Editorial, HouseText.Heading4, RoleRoot> {
     @Override public StylingRes<BaseScheme, Editorial, HouseText.Heading4, RoleRoot> style() {
-        return new StylingRes.CssContent<>(new BaseColours.HeadingInk());
+        return new StylingRes.CssPlaceHolder<>();
+    }
+
+    @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
+        return List.of(new BaseColours.HeadingInk());
     }
 }

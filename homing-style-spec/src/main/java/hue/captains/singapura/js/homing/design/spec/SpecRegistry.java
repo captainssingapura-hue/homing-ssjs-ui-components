@@ -83,7 +83,7 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
         while (true) {
             if (!passed.add(at.getClass())) throw new IllegalArgumentException(impl.getClass().getName() + " delegates round");
             switch (at.style()) {
-                case StylingRes.CssContent<?, ?, ?, ?> c -> { return at; }
+                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> { return at; }
                 case StylingRes.Delegation<?, ?, ?, ?> d -> at = d.to();
                 case StylingRes.RootDelegation<?, ?, ?, ?> r -> at = r.to();
                 case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> at = p.to();
@@ -127,7 +127,7 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
         while (true) {
             if (!passed.add(impl.getClass())) throw new IllegalArgumentException(element.token() + " delegates round");
             switch (impl.style()) {
-                case StylingRes.CssContent<?, ?, ?, ?> c -> { return new Worn(layer, impl); }
+                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> { return new Worn(layer, impl); }
                 case StylingRes.Delegation<?, ?, ?, ?> d -> impl = d.to();
                 case StylingRes.RootDelegation<?, ?, ?, ?> r -> impl = r.to();
                 case StylingRes.ParentDelegation<?, ?, ?, ?, ?> q -> {

@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMonitors;
 
-/** base's implementation of focus-monitor: CSS of its own. */
+/** base's implementation of focus-monitor: CSS of its own - its content apart, the colours it draws with typed here. */
 public record FocusMonitor() implements CastingStylePerRole<BaseScheme, Base, HouseMonitors.FocusMonitor, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseMonitors.FocusMonitor, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

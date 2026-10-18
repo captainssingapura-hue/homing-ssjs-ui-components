@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** sketchy's implementation of close-icon: CSS of its own. */
+/** sketchy's implementation of close-icon: CSS of its own - its content apart, the colours it draws with typed here. */
 public record CloseIcon() implements CastingStylePerRole<BaseScheme, Sketchy, HouseIcons.CloseIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseIcons.CloseIcon, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

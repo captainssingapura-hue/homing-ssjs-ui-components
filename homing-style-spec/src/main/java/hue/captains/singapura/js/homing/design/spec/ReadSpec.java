@@ -9,6 +9,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
@@ -197,10 +198,11 @@ public record ReadSpec() implements StatelessFunctionalObject {
                 problems.add(type.getName() + " is reached as " + before.token() + " and as " + atAs.token() + ": an implementation is of one casting");
             if (before == null) {
                 record(type, problems);
+                colours(at, problems);
                 if (atAs.standalone()) standaloneHeld(at, atAs, atLayer, standalones, problems);
             }
             switch (at.style()) {
-                case StylingRes.CssContent<?, ?, ?, ?> c -> at = null;
+                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> at = null;
                 case StylingRes.Delegation<?, ?, ?, ?> d -> at = d.to();
                 case StylingRes.RootDelegation<?, ?, ?, ?> r -> { at = r.to(); atAs = atAs.alone(); }
                 case StylingRes.ParentDelegation<?, ?, ?, ?, ?> p -> {
@@ -228,6 +230,16 @@ public record ReadSpec() implements StatelessFunctionalObject {
         if (one.getClass() != impl.getClass())
             problems.add(impl.getClass().getName() + " implements " + as.cast().token() + " standalone in " + layer.token() + ", and its standalone is "
                     + one.getClass().getName() + ": a component has one standalone implementation a style");
+    }
+
+    /** An implementation's colours: each once; none when it delegates, having no CSS of its own to draw with them. */
+    private static void colours(CastingStylePerRole<?, ?, ?, ?> impl, List<String> problems) {
+        List<? extends ColorLeaf<?, ?, ?>> colours = impl.colours();
+        if (!(impl.style() instanceof StylingRes.CssPlaceHolder<?, ?, ?, ?>) && !colours.isEmpty())
+            problems.add(impl.getClass().getName() + " delegates, and lists colours: only CSS of its own draws with colours");
+        var seen = new HashSet<Class<?>>();
+        for (ColorLeaf<?, ?, ?> c : colours)
+            if (!seen.add(c.getClass())) problems.add(impl.getClass().getName() + " lists " + c.token() + " twice: each colour once");
     }
 
     private static void record(Class<?> type, List<String> problems) {

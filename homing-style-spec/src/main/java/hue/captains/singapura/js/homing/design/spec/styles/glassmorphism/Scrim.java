@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** glassmorphism's implementation of scrim: CSS of its own. */
+/** glassmorphism's implementation of scrim: CSS of its own - its content apart, the colours it draws with typed here. */
 public record Scrim() implements CastingStylePerRole<BaseScheme, Glassmorphism, HouseContainers.Scrim, RoleRoot> {
     @Override public StylingRes<BaseScheme, Glassmorphism, HouseContainers.Scrim, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

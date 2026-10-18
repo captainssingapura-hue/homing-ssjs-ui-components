@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** neo-futurism's implementation of close-icon: CSS of its own. */
+/** neo-futurism's implementation of close-icon: CSS of its own - its content apart, the colours it draws with typed here. */
 public record CloseIcon() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseIcons.CloseIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseIcons.CloseIcon, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

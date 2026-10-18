@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 
-/** neo-futurism's implementation of slider-rack: CSS of its own. */
+/** neo-futurism's implementation of slider-rack: CSS of its own - its content apart, the colours it draws with typed here. */
 public record SliderRack() implements CastingStylePerRole<BaseScheme, NeoFuturism, HouseRegions.SliderRack, RoleRoot> {
     @Override public StylingRes<BaseScheme, NeoFuturism, HouseRegions.SliderRack, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

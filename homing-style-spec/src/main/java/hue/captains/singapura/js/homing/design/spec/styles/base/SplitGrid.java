@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSplitGrid;
 
-/** base's implementation of split-grid: CSS of its own. */
+/** base's implementation of split-grid: CSS of its own - its content apart, the colours it draws with typed here. */
 public record SplitGrid() implements CastingStylePerRole<BaseScheme, Base, HouseSplitGrid.SplitGrid, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseSplitGrid.SplitGrid, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

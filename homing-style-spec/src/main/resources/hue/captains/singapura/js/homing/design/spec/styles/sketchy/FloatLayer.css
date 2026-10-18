@@ -1,5 +1,0 @@
-/* The float layer in sketchy: the desk floating panes are stacked on - recessed below the page. The keys' marks on it draw nothing, as before. Whole: every property its look has (D9). */
-$casting {
-    color: inherit;
-    background-color: var(--fp-recessed);
-}

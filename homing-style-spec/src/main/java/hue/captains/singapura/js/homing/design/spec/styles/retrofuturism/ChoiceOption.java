@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
 import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.spec.CastingStylePerRole;
 import hue.captains.singapura.js.homing.design.spec.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
@@ -8,9 +9,15 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 
-/** retro-futurism's implementation of choice-option: CSS of its own. */
+import java.util.List;
+
+/** retro-futurism's implementation of choice-option: CSS of its own - its content apart, the colours it draws with typed here. */
 public record ChoiceOption() implements CastingStylePerRole<BaseScheme, RetroFuturism, HouseItems.ChoiceOption, RoleRoot> {
     @Override public StylingRes<BaseScheme, RetroFuturism, HouseItems.ChoiceOption, RoleRoot> style() {
-        return new StylingRes.CssContent<>(new BaseColours.OnInverted(), new BaseColours.Border(), new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.AccentWashSoft());
+        return new StylingRes.CssPlaceHolder<>();
+    }
+
+    @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
+        return List.of(new BaseColours.OnInverted(), new BaseColours.Border(), new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.AccentWashSoft());
     }
 }

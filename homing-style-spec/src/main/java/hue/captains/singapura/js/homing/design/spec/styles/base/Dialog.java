@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** base's implementation of dialog: CSS of its own. */
+/** base's implementation of dialog: CSS of its own - its content apart, the colours it draws with typed here. */
 public record Dialog() implements CastingStylePerRole<BaseScheme, Base, HouseContainers.Dialog, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HouseContainers.Dialog, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

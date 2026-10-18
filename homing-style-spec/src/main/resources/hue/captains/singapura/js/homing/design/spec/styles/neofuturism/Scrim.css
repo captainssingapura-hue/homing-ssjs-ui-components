@@ -1,6 +1,0 @@
-/* The scrim in neo-futurism: the veil over the page behind a dialog - nothing of its own drawn, what is behind it filtered the style's way. Whole: every property its look has (D9). */
-$casting {
-    color: inherit;
-    background-color: transparent;
-    backdrop-filter: blur(14px) saturate(1.4) brightness(0.7);
-}

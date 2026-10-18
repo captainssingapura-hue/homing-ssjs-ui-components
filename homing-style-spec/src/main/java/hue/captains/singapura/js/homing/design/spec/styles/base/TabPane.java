@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
-/** base's implementation of tab-pane: CSS of its own. */
+/** base's implementation of tab-pane: CSS of its own - its content apart, the colours it draws with typed here. */
 public record TabPane() implements CastingStylePerRole<BaseScheme, Base, HousePanes.TabPane, RoleRoot> {
     @Override public StylingRes<BaseScheme, Base, HousePanes.TabPane, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

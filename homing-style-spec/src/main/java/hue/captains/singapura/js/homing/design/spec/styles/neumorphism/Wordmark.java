@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
-/** neumorphism's implementation of wordmark: CSS of its own. */
+/** neumorphism's implementation of wordmark: CSS of its own - its content apart, the colours it draws with typed here. */
 public record Wordmark() implements CastingStylePerRole<BaseScheme, Neumorphism, HouseText.Wordmark, RoleRoot> {
     @Override public StylingRes<BaseScheme, Neumorphism, HouseText.Wordmark, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }

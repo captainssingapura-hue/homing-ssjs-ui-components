@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 
-/** sketchy's implementation of pin-icon: CSS of its own. */
+/** sketchy's implementation of pin-icon: CSS of its own - its content apart, the colours it draws with typed here. */
 public record PinIcon() implements CastingStylePerRole<BaseScheme, Sketchy, HouseIcons.PinIcon, RoleRoot> {
     @Override public StylingRes<BaseScheme, Sketchy, HouseIcons.PinIcon, RoleRoot> style() {
-        return new StylingRes.CssContent<>();
+        return new StylingRes.CssPlaceHolder<>();
     }
 }
