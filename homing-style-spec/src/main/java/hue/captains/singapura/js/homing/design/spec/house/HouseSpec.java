@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.house;
 
 import hue.captains.singapura.js.homing.design.spec.BaseSpecModule;
+import hue.captains.singapura.js.homing.design.spec.ClasspathCssResolver;
 import hue.captains.singapura.js.homing.design.spec.ReadSpec;
 import hue.captains.singapura.js.homing.design.spec.SpecModule;
 import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
@@ -46,8 +47,8 @@ public record HouseSpec() implements StatelessFunctionalObject {
             RetroFuturismSpec.INSTANCE,
             SketchySpec.INSTANCE);
 
-    /** The house, read and held. */
+    /** The house, read and held, its content found on the classpath. */
     public SpecRegistry registry() {
-        return ReadSpec.INSTANCE.read(BASE, STYLES, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL, HouseEvents.ALL);
+        return ReadSpec.INSTANCE.read(BASE, STYLES, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL, HouseEvents.ALL, ClasspathCssResolver.INSTANCE);
     }
 }

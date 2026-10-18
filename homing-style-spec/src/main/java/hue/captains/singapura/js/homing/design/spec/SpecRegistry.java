@@ -21,18 +21,21 @@ import java.util.Set;
  * the base layer, and each style's standalones. What an element wears in a style is found by walking: the top-level
  * component's standalone - the style's, else the nearest below's - then down the element's slots, each through the
  * declaration that holds it: a same-role spec to its target, a standalone spec to the part's standalone in the style
- * worn; then the implementation reached, its delegations followed to the implementation with CSS of its own.
+ * worn; then the implementation reached, its delegations followed to the implementation with CSS of its own. Its content
+ * is the registered resolver's to find.
  *
  * @param taxonomy    the base modules' components, their parts with them
  * @param base        the base layer
  * @param top         every top-level component, in the base modules' order
  * @param styles      the base layer, then each style in the order registered
  * @param standalones each style's standalones, by component
+ * @param resolver    what finds an implementation's CSS content, registered explicitly, apart from any content
  */
 public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Component<?>> top, List<DesignStyle<?>> styles,
-                           Map<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>> standalones) implements ValueObject {
+                           Map<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>> standalones, CssResolver resolver) implements ValueObject {
 
     public SpecRegistry {
+        java.util.Objects.requireNonNull(resolver, "SpecRegistry.resolver");
         top = List.copyOf(top);
         styles = List.copyOf(styles);
         var copy = new LinkedHashMap<DesignStyle<?>, Map<Component<?>, Target<?, ?, ?, ?>>>();
@@ -102,41 +105,66 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
      */
     public record Worn(DesignStyle<?> layer, CastingStylePerRole<?, ?, ?, ?> impl) implements ValueObject {}
 
-    /** What an element wears in a style, and its layer. */
+    /** What an element wears in a style, and its layer: where its trace ends. */
     public Worn worn(DesignStyle<?> style, ElementPath element) {
+        Trace.ImplStep end = trace(style, element).end();
+        return new Worn(end.layer(), end.impl());
+    }
+
+    /** How an element resolves in a style, step by step, to the implementation giving a placeholder. */
+    public Trace trace(DesignStyle<?> style, ElementPath element) {
+        var steps = new ArrayList<Trace.Step>();
         DesignStyle<?> layer = standaloneLayer(style, element.top());
         Target<?, ?, ?, ?> at = standalones.get(layer).get(element.top());
+        Casting as = new Casting(element.top());
+        Trace.Via via = Trace.Via.STANDALONE;
         for (Casting slot : element.parts()) {
             if (!(at instanceof Target.Declared<?, ?, ?, ?> d))
                 throw new IllegalArgumentException(element.token() + ": a leaf has no slot " + slot.token());
+            steps.add(new Trace.DeclarationStep(via, layer, as, d.declaration()));
             PartSpec<?, ?, ?> p = d.declaration().parts().of(slot).orElseThrow(() -> new IllegalArgumentException(
                     d.declaration().getClass().getName() + " points no " + slot.token() + ", on the way to " + element.token()));
             switch (p) {
-                case PartSpec.SameRole<?, ?, ?, ?, ?> s -> at = s.to();
+                case PartSpec.SameRole<?, ?, ?, ?, ?> s -> { at = s.to(); as = s.casting(); via = Trace.Via.SAME_ROLE; }
                 case PartSpec.Standalone<?, ?, ?, ?, ?> s -> {
                     layer = standaloneLayer(style, s.part());
                     at = standalones.get(layer).get(s.part());
+                    as = new Casting(s.part());
+                    via = Trace.Via.PLACED;
                 }
             }
         }
-        CastingStylePerRole<?, ?, ?, ?> impl = switch (at) {
-            case Target.Impl<?, ?, ?, ?> i -> i.impl();
-            case Target.Declared<?, ?, ?, ?> d -> d.declaration().own();
-        };
+        CastingStylePerRole<?, ?, ?, ?> impl;
+        switch (at) {
+            case Target.Impl<?, ?, ?, ?> i -> impl = i.impl();
+            case Target.Declared<?, ?, ?, ?> d -> {
+                steps.add(new Trace.DeclarationStep(via, layer, as, d.declaration()));
+                impl = d.declaration().own();
+                via = Trace.Via.OWN;
+            }
+        }
         var passed = new HashSet<Class<?>>();
         while (true) {
             if (!passed.add(impl.getClass())) throw new IllegalArgumentException(element.token() + " delegates round");
+            steps.add(new Trace.ImplStep(via, layer, as, impl));
             switch (impl.style()) {
-                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> { return new Worn(layer, impl); }
-                case StylingRes.Delegation<?, ?, ?, ?> d -> impl = d.to();
-                case StylingRes.RootDelegation<?, ?, ?, ?> r -> impl = r.to();
+                case StylingRes.CssPlaceHolder<?, ?, ?, ?> c -> { return new Trace(style, element, steps); }
+                case StylingRes.Delegation<?, ?, ?, ?> d -> { impl = d.to(); via = Trace.Via.DELEGATION; }
+                case StylingRes.RootDelegation<?, ?, ?, ?> r -> { impl = r.to(); as = as.alone(); via = Trace.Via.ROOT_DELEGATION; }
                 case StylingRes.ParentDelegation<?, ?, ?, ?, ?> q -> {
                     impl = q.to();
                     layer = parent(layer).orElseThrow();
+                    via = Trace.Via.PARENT_DELEGATION;
                 }
             }
         }
     }
+
+    /** What the registered resolver finds of the CSS content of an implementation giving a placeholder. */
+    public CssResolution content(CastingStylePerRole<?, ?, ?, ?> impl) { return resolver.resolve(impl); }
+
+    /** What the registered resolver finds of the CSS content an element wears in a style. */
+    public CssResolution content(DesignStyle<?> style, ElementPath element) { return content(wears(style, element)); }
 
     /** Every element: each top-level component, and every slot down from it - placed parts too - a part met again on its path not walked twice. */
     public List<ElementPath> elements() {

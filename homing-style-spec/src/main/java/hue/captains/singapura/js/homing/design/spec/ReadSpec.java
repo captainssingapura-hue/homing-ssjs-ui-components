@@ -46,9 +46,10 @@ public record ReadSpec() implements StatelessFunctionalObject {
 
     public static final ReadSpec INSTANCE = new ReadSpec();
 
-    /** The registry of the base modules and the style modules, with the instance's words. */
+    /** The registry of the base modules and the style modules, with the instance's words and the resolver of their content, registered explicitly. */
     public SpecRegistry read(List<? extends BaseSpecModule<?, ?>> bases, List<? extends SpecModule<?, ?>> styles,
-                             List<? extends Role<?>> roles, List<? extends StateType<?>> states, List<? extends EventType<?>> events) {
+                             List<? extends Role<?>> roles, List<? extends StateType<?>> states, List<? extends EventType<?>> events,
+                             CssResolver resolver) {
         var problems = new ArrayList<String>();
         if (bases.isEmpty()) refuse(List.of("no base module: the base layer gives every top-level component its standalone"));
         DesignStyle<?> base = bases.get(0).style();
@@ -111,7 +112,7 @@ public record ReadSpec() implements StatelessFunctionalObject {
             for (var e : layer.getValue().entrySet())
                 reach(e.getValue(), new Casting(e.getKey()), layer.getKey(), taxonomy, standalones, reached, new ArrayDeque<>(), problems);
         if (!problems.isEmpty()) refuse(problems);
-        return new SpecRegistry(taxonomy, base, List.copyOf(top), order, standalones);
+        return new SpecRegistry(taxonomy, base, List.copyOf(top), order, standalones, resolver);
     }
 
     /** The components of a module's design: its own, and every part of theirs, down. */
