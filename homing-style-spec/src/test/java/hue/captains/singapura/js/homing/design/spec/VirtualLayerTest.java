@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
-import hue.captains.singapura.js.homing.design.styling.CastingCss;
 import hue.captains.singapura.js.homing.design.styling.StyleManager;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 import org.junit.jupiter.api.Test;
@@ -45,10 +44,8 @@ class VirtualLayerTest {
         int looked = 0;
         for (DesignStyle<?> s : SPEC.styles())
             for (ElementPath e : SPEC.elements()) {
-                CssImplementation<?, ?, ?, ?> now = SPEC.wears(s, e);
                 looked++;
-                String file = CastingCss.INSTANCE.resource(now.getClass());
-                if (now.getClass().getClassLoader().getResource(file) != null) found.add(file);
+                if (SPEC.content(s, e) instanceof CssResolution.Found f) found.add(f.resource());
             }
         System.out.println("[virtual] " + looked + " elements' implementations with CSS of their own; content found for " + found.size());
         assertEquals(List.of(), found.stream().distinct().toList(), "no content yet: a jar of content gives it");

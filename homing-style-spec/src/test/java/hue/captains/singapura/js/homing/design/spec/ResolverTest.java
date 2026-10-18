@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -29,9 +30,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ResolverTest {
 
     private static final SpecRegistry SPEC = HouseSpec.INSTANCE.registry();
-    private static final ClasspathCssResolver RESOLVER = ClasspathCssResolver.INSTANCE;
+    /** The resolver the house registered: the classpath, under its prefix. */
+    private static final ClasspathCssResolver RESOLVER = (ClasspathCssResolver) SPEC.resolver();
 
-    /** A test's own implementation, its content in the test's resources. */
+    /** A test's own implementation, its content in the test's resources, under the house's prefix. */
     record Sampled() implements CssImplementation<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> {}
 
     @Test
@@ -42,7 +44,7 @@ class ResolverTest {
                 CssImplementation<?, ?, ?, ?> worn = SPEC.wears(s, e);
                 CssResolution r = SPEC.content(s, e);
                 assertInstanceOf(CssResolution.Nothing.class, r, s.token() + " " + e.token());
-                assertEquals(worn.getClass().getName().replace('.', '/') + ".css", r.resource(), s.token() + " " + e.token());
+                assertEquals("homing-css/" + worn.getClass().getName().replace('.', '/') + ".css", r.resource(), s.token() + " " + e.token());
                 looked++;
             }
         System.out.println("[resolver] " + looked + " elements' content looked for: nothing is there");
@@ -52,7 +54,19 @@ class ResolverTest {
     void contentThere_isRead() {
         var found = assertInstanceOf(CssResolution.Found.class, RESOLVER.resolve(new Sampled()));
         assertTrue(found.text().contains("$casting"), found.text());
-        assertTrue(found.resource().endsWith("ResolverTest$Sampled.css"), found.resource());
+        assertEquals("homing-css/hue/captains/singapura/js/homing/design/spec/ResolverTest$Sampled.css", found.resource());
+    }
+
+    @Test
+    void thePrefix_isRegistered_andHeldToItsRules() {
+        assertEquals(new ClasspathCssResolver("homing-css/"), SPEC.resolver());
+        assertEquals("a/b/hue/captains/singapura/js/homing/design/spec/ResolverTest$Sampled.css", new ClasspathCssResolver("a/b/").resource(Sampled.class));
+        for (String fine : List.of("homing-css/", "a/b/", "META-INF/homing/css/")) new ClasspathCssResolver(fine);
+        var refused = assertThrows(IllegalArgumentException.class, () -> new ClasspathCssResolver("/a\\b//"));
+        for (String said : List.of("starts with a slash", "holds a backslash", "holds a directory ''"))
+            assertTrue(refused.getMessage().contains(said), refused.getMessage());
+        for (String bad : List.of("", "homing-css", "./css/", "css/../x/")) assertThrows(IllegalArgumentException.class, () -> new ClasspathCssResolver(bad), bad);
+        assertThrows(IllegalArgumentException.class, () -> new ClasspathCssResolver(null));
     }
 
     @Test

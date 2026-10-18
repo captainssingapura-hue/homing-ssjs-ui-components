@@ -47,8 +47,9 @@ public record HouseSpec() implements StatelessFunctionalObject {
             RetroFuturismSpec.INSTANCE,
             SketchySpec.INSTANCE);
 
-    /** The house, read and held, its content found on the classpath. */
+    /** The house, read and held, its content found on the classpath under {@code homing-css/}. */
     public SpecRegistry registry() {
-        return ReadSpec.INSTANCE.read(BASE, STYLES, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL, HouseEvents.ALL, ClasspathCssResolver.INSTANCE);
+        return ReadSpec.INSTANCE.read(BASE, STYLES, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL, HouseEvents.ALL,
+                new ClasspathCssResolver("homing-css/"));
     }
 }

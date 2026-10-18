@@ -34,11 +34,17 @@ public record DuplicateContent() implements StatelessFunctionalObject {
         }
     }
 
-    /** Every implementation with CSS of its own the registry holds whose content the loader is given more than once. */
+    /**
+     * Every implementation with CSS of its own the registry holds whose content the loader is given more than once, each
+     * named as the registry's resolver names it - its prefix the one it was registered with. Refused for a registry whose
+     * resolver does not look on the classpath: content given twice there is that resolver's to find.
+     */
     public List<Copies> find(SpecRegistry spec, ClassLoader loader) {
+        if (!(spec.resolver() instanceof ClasspathCssResolver classpath))
+            throw new IllegalArgumentException("the registry's resolver, " + spec.resolver() + ", does not look on the classpath");
         var out = new ArrayList<Copies>();
         for (CssImplementation<?, ?, ?, ?> impl : spec.cssImplementations()) {
-            String resource = ClasspathCssResolver.INSTANCE.resource(impl.getClass());
+            String resource = classpath.resource(impl.getClass());
             try {
                 List<URL> where = Collections.list(loader.getResources(resource));
                 if (where.size() > 1) out.add(new Copies(resource, where));
