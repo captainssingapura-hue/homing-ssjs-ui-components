@@ -3,73 +3,70 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
-import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 
 /**
- * What the server would stamp into a component's implementation module (RFC 0071, D19, D20) - a sketch of the shape, the
- * shape itself still open (RFC 0071, open point 3). The module asks the style manager for its own header, by its own
- * address, and binds a name to each object the style manager made for the component: itself, each slot, each part, each
- * state type, each event and degree. Each name the token's, upper case; nothing in it names a class.
+ * What the server stamps into a component's implementation module (RFC 0071, D19): its header, made from the component's
+ * declarations alone. Each node it names - the component, its parts, their roles, its state types, its events, its
+ * degrees - is imported from its tree's JS dual, the module and the name both a pure function of the node
+ * ({@link DualRef}); then the header is one frozen object of those imports. No string is looked up and none is written
+ * but a module's address.
  */
 public record HeaderStamp() implements StatelessFunctionalObject {
 
     public static final HeaderStamp INSTANCE = new HeaderStamp();
 
-    /** One binding of the stamp: the name the module's code uses, and what it is bound to. */
-    public record Binding(String name, String line) {}
-
-    /** The stamp's bindings, in its order: the component, its slots, its parts, its state types, its events, its degrees. */
-    public List<Binding> bindings(ComponentHeader h) {
-        var out = new ArrayList<Binding>();
-        String self = constant(h.component().token());
-        out.add(new Binding(self, "const " + self + " = styleManager.header(import.meta.url).component(" + quoted(h.component().token()) + ");"));
-        for (ComponentHeader.HeaderSlot s : h.slots())
-            out.add(new Binding("SLOT_" + constant(s.token()), "const SLOT_" + constant(s.token()) + " = " + self + ".slot(" + quoted(s.token()) + ");"
-                    + "   // " + s.part().token() + " as " + s.role().name().value() + ", " + many(s.cardinality())
-                    + (s.placed() ? ", placed - its own standalone" : "") + (s.alternatives() > 1 ? ", one of " + s.alternatives() : "")));
-        for (var p : h.parts())
-            out.add(new Binding("PART_" + constant(p.token()), "const PART_" + constant(p.token()) + " = " + self + ".part(" + quoted(p.token()) + ");"));
-        for (ComponentHeader.HeaderState st : h.states())
-            out.add(new Binding("STATE_" + constant(st.token()), "const STATE_" + constant(st.token()) + " = " + self + ".state(" + quoted(st.token()) + ");"
-                    + "   // " + String.join(" | ", st.allowed().stream().map(StateValue::token).toList()) + ", at rest " + st.rest().token()
-                    + st.browser().map(b -> " - the browser's (" + b + "), never made here").orElse("")));
-        for (EventType<?> e : h.events()) {
-            String t = e.name().value();
-            out.add(new Binding("EVENT_" + constant(t), "const EVENT_" + constant(t) + " = " + self + ".event(" + quoted(t) + ");"));
-        }
-        for (ExtentAxis d : h.degrees()) {
-            String t = d.name().toLowerCase(Locale.ROOT);
-            out.add(new Binding("DEGREE_" + constant(t), "const DEGREE_" + constant(t) + " = " + self + ".degree(" + quoted(t) + ");"));
-        }
-        return List.copyOf(out);
+    /** Every node the header names, each once, in its order: the component, each slot's part and role, its state types, events, degrees. */
+    public List<DualRef.Ref> refs(ComponentHeader h) {
+        var out = new LinkedHashMap<String, DualRef.Ref>();
+        var refs = DualRef.INSTANCE;
+        add(out, refs.of(h.component()));
+        for (ComponentHeader.HeaderSlot s : h.slots()) { add(out, refs.of(s.part())); add(out, refs.of(s.role())); }
+        for (ComponentHeader.HeaderState s : h.states()) add(out, refs.of(s.type()));
+        for (EventType<?> e : h.events()) add(out, refs.of(e));
+        for (ExtentAxis d : h.degrees()) add(out, refs.of(d));
+        return List.copyOf(out.values());
     }
 
-    /** The stamp as the module would begin. */
+    /** The stamp as the module would begin: its imports, tree by tree, then its header. */
     public String stamp(ComponentHeader h) {
         var lines = new ArrayList<String>();
-        lines.add("// Stamped by the server (RFC 0071, D19): " + h.component().token() + "'s header, derived from the taxonomy as the module");
-        lines.add("// is served - " + (h.composite() ? "a composite" : "a leaf") + (h.topLevel() ? ", top-level" : ", only ever a part")
-                + ". Every object the style manager's own; the module's code begins below it.");
-        for (Binding b : bindings(h)) lines.add(b.line());
+        lines.add("// Stamped by the server (RFC 0071, D19): " + h.component().token() + "'s header, made from its declarations - "
+                + (h.composite() ? "a composite" : "a leaf") + (h.topLevel() ? ", top-level." : ", only ever a part."));
+        List<DualRef.Ref> refs = refs(h);
+        for (DualTree<?> tree : ReadDual.INSTANCE.trees()) {
+            List<String> names = refs.stream().filter(r -> r.tree().equals(tree)).map(r -> r.name() + " as " + r.imported()).toList();
+            if (!names.isEmpty()) lines.add("import { " + String.join(", ", names) + " } from " + JsLiterals.INSTANCE.string(tree.address()) + ";");
+        }
+        var refOf = DualRef.INSTANCE;
+        var slots = new ArrayList<String>();
+        for (ComponentHeader.HeaderSlot s : h.slots())
+            slots.add("        Object.freeze({ part: " + refOf.of(s.part()).imported() + ", role: " + refOf.of(s.role()).imported()
+                    + ", count: " + count(s.cardinality()) + " })");
+        lines.add("const HEADER = Object.freeze({");
+        lines.add("    component: " + refOf.of(h.component()).imported() + ",");
+        lines.add("    slots: Object.freeze([" + (slots.isEmpty() ? "" : "\n" + String.join(",\n", slots) + "\n    ") + "]),");
+        lines.add("    states: Object.freeze([" + String.join(", ", h.states().stream().map(s -> refOf.of(s.type()).imported()).toList()) + "]),");
+        lines.add("    events: Object.freeze([" + String.join(", ", h.events().stream().map(e -> refOf.of(e).imported()).toList()) + "]),");
+        lines.add("    degrees: Object.freeze([" + String.join(", ", h.degrees().stream().map(d -> refOf.of(d).imported()).toList()) + "])");
+        lines.add("});");
         return String.join("\n", lines) + "\n";
     }
 
-    private static String constant(String token) { return token.toUpperCase(Locale.ROOT).replace('-', '_'); }
+    private static void add(LinkedHashMap<String, DualRef.Ref> out, DualRef.Ref r) { out.putIfAbsent(r.imported(), r); }
 
-    private static String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
-
-    private static String many(Cardinality c) {
+    /** How many a part is, as data: its least and its most, none for no bound. */
+    private static String count(Cardinality c) {
         return switch (c) {
-            case Cardinality.Fixed f -> f.count() == 1 ? "one" : f.count() + "";
-            case Cardinality.Varying v -> v.min() + " or more" + switch (v.max()) {
-                case Cardinality.AtMost a -> ", at most " + a.count();
-                case Cardinality.Unbounded u -> "";
-            };
+            case Cardinality.Fixed f -> "Object.freeze({ min: " + f.count() + ", max: " + f.count() + " })";
+            case Cardinality.Varying v -> "Object.freeze({ min: " + v.min() + ", max: " + switch (v.max()) {
+                case Cardinality.AtMost a -> String.valueOf(a.count());
+                case Cardinality.Unbounded u -> "null";
+            } + " })";
         };
     }
 }
