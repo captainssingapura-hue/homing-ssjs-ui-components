@@ -11,7 +11,8 @@ import java.util.List;
 
 /**
  * The style manager's module (RFC 0071): the page's one keeper of every element's style, and of the style the page wears.
- * A component hands it an element and gets back a reference; that is all it ever does with it.
+ * A component hands it an element and gets back a reference; that is all it ever does with it. It never imports it: a
+ * top-level component's header binds it to the component ({@code unit}), and a part's reference comes from its owner.
  *
  * <p>Each element handed over becomes a managed object, in charge of everything about the element's style for as long
  * as it lives: the class it is given, the states it is in - and, for a composite, its parts, being their sub-manager. The
@@ -56,9 +57,10 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
         var js = JsLiterals.INSTANCE;
         return """
                 // The style manager (RFC 0071): the page's one keeper of every element's style, and of the style the page
-                // wears. A component hands it an element and gets back a reference - its states to set, its parts to hand
-                // over - and does nothing else with it. Each element handed over is a managed object, in charge of the
-                // element's style for as long as it lives, and the sub-manager of its parts. Every class is derived from a
+                // wears. A component hands it an element - through the binding its header is stamped with, or its owner's
+                // reference - and gets back a reference: its states to set, its parts to hand over; it does nothing else.
+                // Each element handed over is a managed object, in charge of the element's style for as long as it lives,
+                // and the sub-manager of its parts. Every class is derived from a
                 // typed node, the same in every style: a switch is the sheet swapped, no element written. It touches no
                 // document: all it writes goes through the surface it is given - add(element, class), remove(element, class),
                 // show(style) - and its clean-up worker runs on the clock it is given - every(ms, task). Generated from Java;
@@ -234,12 +236,16 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                     /** How many managed objects its clean-up worker has taken out, their elements gone. */
                     get swept() { return this.#swept; }
 
-                    /** Hands over a top-level component's element, at the root: its reference. */
-                    manage(element, component) {
+                    /**
+                     * A top-level component's binding, which its header is stamped with: a function that hands over the
+                     * component's element at the root and gives back its reference - the one way an element is handed over
+                     * but as a part, along its owner's slot.
+                     */
+                    unit(component) {
                         const path = component instanceof Component ? this.#roots.get(component) : undefined;
-                        if (path === undefined) throw new TypeError("manage: " + (component instanceof Component ? component.token : String(component))
+                        if (path === undefined) throw new TypeError("unit: " + (component instanceof Component ? component.token : String(component))
                                 + " is no top-level component the page registers; a part is handed to its owner's");
-                        return this.#manage(element, path, this.#units);
+                        return Object.freeze(element => this.#manage(element, path, this.#units));
                     }
 
                     /** Wears a style: its sheet shown, and nothing else - every element's classes are the same in every style. */

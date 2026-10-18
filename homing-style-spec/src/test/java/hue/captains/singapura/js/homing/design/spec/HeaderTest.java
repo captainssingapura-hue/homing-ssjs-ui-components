@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.js.homing.design.spec.dual.Registration;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
+import hue.captains.singapura.js.homing.design.spec.page.PageStyleManager;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ class HeaderTest {
 
     private static final SpecRegistry SPEC = HouseSpec.INSTANCE.registry();
     private static final Pattern MADE = Pattern.compile("new ([A-Za-z]+)\\(");
+    /** Where the test says the page's style manager is. */
+    private static final PageStyleManager PAGE = new PageStyleManager("/module?class=hue.captains.singapura.js.homing.design.spec.page.PageStyles");
 
     /** Every object a module makes is made by one of the kit's constructors, each one the module imports; none made by hand. */
     private static void madeByTheKit(String who, String script, List<String> problems) {
@@ -103,7 +106,15 @@ class HeaderTest {
             }
             for (HeaderStamp.SlotConstant s : HeaderStamp.INSTANCE.slots(h))
                 if (!names.add(s.name())) problems.add(h.component().token() + ": " + s.name() + " stamped twice");
-            String stamp = HeaderStamp.INSTANCE.stamp(h);
+            String stamp = HeaderStamp.INSTANCE.stamp(h, PAGE);
+            String binding = "const " + HeaderStamp.INSTANCE.manage(h) + " = " + PageStyleManager.EXPORTED + ".unit("
+                    + DualRef.INSTANCE.of(h.component()).imported() + ");";
+            String pageImport = "import { " + PageStyleManager.EXPORTED + " } from \"" + PAGE.address() + "\";";
+            long mentions = stamp.lines().filter(l -> l.contains(PageStyleManager.EXPORTED)).count();
+            if (h.topLevel() && (mentions != 2 || !stamp.lines().toList().contains(binding) || !stamp.lines().toList().contains(pageImport)))
+                problems.add(h.component().token() + ": top-level, and not bound once to the page's style manager");
+            if (!h.topLevel() && mentions != 0) problems.add(h.component().token() + ": only ever a part, and bound to the page's style manager");
+            if (h.topLevel() && !names.add(HeaderStamp.INSTANCE.manage(h))) problems.add(h.component().token() + ": its binding's name stamped twice");
             if (stamp.contains("$")) problems.add(h.component().token() + ": an address with a nested class's name");
             madeByTheKit(h.component().token(), stamp, problems);
             for (String line : stamp.lines().toList())
@@ -124,7 +135,7 @@ class HeaderTest {
             java.nio.file.Files.writeString(out.resolve(d.tree().getClass().getCanonicalName() + ".js"), DualScript.INSTANCE.script(d));
         int headers = 0;
         for (ComponentHeader h : ReadHeader.INSTANCE.readAll(SPEC.taxonomy(), SPEC.top())) {
-            java.nio.file.Files.writeString(out.resolve("header." + h.component().token() + ".js"), HeaderStamp.INSTANCE.stamp(h));
+            java.nio.file.Files.writeString(out.resolve("header." + h.component().token() + ".js"), HeaderStamp.INSTANCE.stamp(h, PAGE));
             headers++;
         }
         System.out.println("[header] the kit, " + ReadDual.INSTANCE.trees().size() + " duals and " + headers + " headers written to " + out);
