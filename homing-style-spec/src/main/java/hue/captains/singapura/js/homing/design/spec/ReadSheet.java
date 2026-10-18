@@ -16,7 +16,8 @@ import java.util.Map;
  * of its own an element wears in the style, its content as the registry's resolver finds it, the marks filled in for its
  * real class ({@link CastingCss#filled(String, String, String)}) - {@code $casting} the class, {@code &$word}
  * {@code <class>--<word>}, a keyframes of its own {@code <class>-<name>}. Refused, every missing content named, unless
- * every one is found: a sheet is served whole or not at all.
+ * every one is found: a sheet is served whole or not at all. And only for a selectable style: the base layer has no sheet
+ * of its own - its rules are in each sheet that wears them.
  */
 public record ReadSheet() implements StatelessFunctionalObject {
 

@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,8 +39,11 @@ class SheetTest {
     @Test
     void eachStyle_isServedWhole_withItsMapping() throws IOException {
         Files.createDirectories(OUT);
+        try (Stream<Path> old = Files.list(OUT)) {
+            for (Path p : old.toList()) Files.delete(p);
+        }
         var problems = new ArrayList<String>();
-        for (DesignStyle<?> s : SPEC.styles()) {
+        for (DesignStyle<?> s : SPEC.selectable()) {
             StyleSheet sheet = ReadSheet.INSTANCE.read(SPEC, s);
             HandleMapping mapping = ReadHandles.INSTANCE.read(SPEC, s);
             ReadCss.Read read = ReadCss.INSTANCE.read(sheet.css());
@@ -68,13 +72,15 @@ class SheetTest {
                     + sheet.css().length() + " characters (today's sheet " + TODAY.sheet(s).length() + ")");
         }
         assertTrue(problems.isEmpty(), String.join("\n", problems.subList(0, Math.min(40, problems.size()))));
-        assertEquals(SPEC.styles().size() * 2L, Files.list(OUT).count(), "a sheet and a mapping for each style");
+        try (Stream<Path> written = Files.list(OUT)) {
+            assertEquals(SPEC.selectable().size() * 2L, written.count(), "a sheet and a mapping for each selectable style, none for the base");
+        }
     }
 
     /** Every element's rule, as served, is its content with the marks filled in for the class it wears. */
     @Test
     void everyHandle_findsItsRule() {
-        for (DesignStyle<?> s : SPEC.styles()) {
+        for (DesignStyle<?> s : SPEC.selectable()) {
             StyleSheet sheet = ReadSheet.INSTANCE.read(SPEC, s);
             List<String> without = ReadHandles.INSTANCE.read(SPEC, s).classes().entrySet().stream()
                     .filter(e -> sheet.rule(e.getValue()).isEmpty()).map(e -> e.getKey() + " -> " + e.getValue()).toList();

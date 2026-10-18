@@ -193,6 +193,12 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
         return List.copyOf(out.values());
     }
 
+    /**
+     * The styles a page may wear: every style registered over the base layer, in the order registered. The base layer is
+     * never one - it stands alone nowhere, and is served only as the rules a style leaves to it, in that style's sheet.
+     */
+    public List<DesignStyle<?>> selectable() { return styles.stream().filter(s -> !s.equals(base)).toList(); }
+
     /** Every element: each top-level component, and every slot down from it - placed parts too - a part met again on its path not walked twice. */
     public List<ElementPath> elements() {
         var out = new ArrayList<ElementPath>();

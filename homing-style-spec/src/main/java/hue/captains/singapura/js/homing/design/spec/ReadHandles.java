@@ -15,7 +15,11 @@ public record ReadHandles() implements StatelessFunctionalObject {
 
     public static final ReadHandles INSTANCE = new ReadHandles();
 
+    /** A selectable style's mapping; refused for the base layer, which no page wears on its own. */
     public HandleMapping read(SpecRegistry spec, DesignStyle<?> style) {
+        if (!spec.selectable().contains(style))
+            throw new IllegalArgumentException(style.token() + " is no style a page wears: the base layer stands alone nowhere - "
+                    + "it is served only as the rules a style leaves to it");
         var classes = new LinkedHashMap<String, String>();
         for (ElementPath e : spec.elements()) {
             SpecRegistry.Worn w = spec.worn(style, e);

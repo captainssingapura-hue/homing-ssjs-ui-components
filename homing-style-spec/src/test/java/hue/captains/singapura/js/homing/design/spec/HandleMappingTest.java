@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -28,7 +30,7 @@ class HandleMappingTest {
     void eachStyle_mapsEveryHandle_atTheClassOfWhatItWears() throws IOException {
         Files.createDirectories(Path.of("target/mappings"));
         var mappings = new ArrayList<HandleMapping>();
-        for (DesignStyle<?> s : SPEC.styles()) {
+        for (DesignStyle<?> s : SPEC.selectable()) {
             HandleMapping m = ReadHandles.INSTANCE.read(SPEC, s);
             assertEquals(SPEC.elements().size(), m.classes().size(), s.token() + ": a handle for every element");
             var byClass = new HashMap<String, Class<?>>();
@@ -45,7 +47,7 @@ class HandleMappingTest {
                     + m.script().length() + " characters");
         }
         Map<String, List<String>> switches = new HashMap<>();
-        HandleMapping first = mappings.get(1);
+        HandleMapping first = mappings.getFirst();
         for (HandleMapping to : mappings) {
             if (to == first) continue;
             List<String> changed = first.changedIn(to);
@@ -56,5 +58,15 @@ class HandleMappingTest {
         var said = new ArrayList<String>();
         switches.forEach((to, changed) -> said.add(to + "=" + changed.size()));
         System.out.println("[map] a switch from " + first.style() + " re-classes: " + String.join(", ", said));
+    }
+
+    /** The base layer is no style a page wears: every registered style but it is selectable, and it has no mapping of its own. */
+    @Test
+    void theBase_isNeverServedAlone() {
+        assertEquals(SPEC.styles().subList(1, SPEC.styles().size()), SPEC.selectable());
+        assertFalse(SPEC.selectable().contains(SPEC.base()));
+        var refused = assertThrows(IllegalArgumentException.class, () -> ReadHandles.INSTANCE.read(SPEC, SPEC.base()));
+        assertTrue(refused.getMessage().contains("stands alone nowhere"), refused.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> ReadSheet.INSTANCE.read(SPEC, SPEC.base()));
     }
 }
