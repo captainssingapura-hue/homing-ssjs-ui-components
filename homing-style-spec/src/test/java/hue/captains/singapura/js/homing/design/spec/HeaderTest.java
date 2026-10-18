@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +84,10 @@ class HeaderTest {
                 if (!names.add(r.imported())) problems.add(h.component().token() + ": " + r.imported() + " imported twice");
                 imports++;
             }
+            for (HeaderStamp.SlotConstant s : HeaderStamp.INSTANCE.slots(h))
+                if (!names.add(s.name())) problems.add(h.component().token() + ": " + s.name() + " stamped twice");
             String stamp = HeaderStamp.INSTANCE.stamp(h);
+            if (stamp.contains("$")) problems.add(h.component().token() + ": an address with a nested class's name");
             for (String line : stamp.lines().toList())
                 if (!line.startsWith("import ") && !line.startsWith("//") && line.contains("\"")) problems.add(h.component().token() + ": writes a string - " + line.trim());
             if (stamp.contains("styled-")) problems.add(h.component().token() + ": names a class");

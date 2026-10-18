@@ -23,7 +23,7 @@ import java.util.Optional;
 
 /**
  * A component's header ({@link ComponentHeader}), read off the taxonomy (RFC 0071, D19): its parts' players in their
- * roles, its declared state types with what each carries, its events, its degrees - nothing written by hand.
+ * roles, its declared state types with what each carries, its events, its extents - nothing written by hand.
  */
 public record ReadHeader() implements StatelessFunctionalObject {
 

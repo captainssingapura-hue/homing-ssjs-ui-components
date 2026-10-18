@@ -20,7 +20,7 @@ import java.util.Optional;
 /**
  * A component's header (RFC 0071, D19): what the server stamps into the module that implements it, derived from the
  * taxonomy and from nothing else - what the component is, and nothing of how it is built. Its marker, its slots, exactly
- * its parts, its state types with what each carries, its events and its degrees. The same wherever the component is made
+ * its parts, its state types with what each carries, its events and its extents. The same wherever the component is made
  * and whatever role it plays; it names no class.
  *
  * @param component the component
@@ -30,11 +30,11 @@ import java.util.Optional;
  * @param parts     its parts, each once, in its slots' order
  * @param states    the state types it declares, in the order it lists them, each with what it carries
  * @param events    the events it offers besides its states' changes
- * @param degrees   the degrees it varies by, its branches' first
+ * @param extents   the extents it varies along, its branches' first
  */
 public record ComponentHeader(Component<?> component, boolean composite, boolean topLevel, List<HeaderSlot> slots,
                               List<Component<?>> parts, List<HeaderState> states, List<EventType<?>> events,
-                              List<ExtentAxis> degrees) implements ValueObject {
+                              List<ExtentAxis> extents) implements ValueObject {
 
     public ComponentHeader {
         Objects.requireNonNull(component, "ComponentHeader.component");
@@ -42,7 +42,7 @@ public record ComponentHeader(Component<?> component, boolean composite, boolean
         parts = List.copyOf(parts);
         states = List.copyOf(states);
         events = List.copyOf(events);
-        degrees = List.copyOf(degrees);
+        extents = List.copyOf(extents);
     }
 
     /**

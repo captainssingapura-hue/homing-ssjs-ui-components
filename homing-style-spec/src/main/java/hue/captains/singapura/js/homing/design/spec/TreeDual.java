@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec;
 
+import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.tao.ontology.ValueObject;
 
 import java.util.Collections;
