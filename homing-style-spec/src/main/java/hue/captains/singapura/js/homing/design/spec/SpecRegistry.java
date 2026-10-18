@@ -179,12 +179,17 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
      */
     public List<Trace.CssStep> cssEnds() {
         var out = new LinkedHashMap<Class<?>, Trace.CssStep>();
-        List<ElementPath> all = elements();
-        for (DesignStyle<?> s : styles)
-            for (ElementPath e : all) {
-                Trace.CssStep end = trace(s, e).end();
-                out.putIfAbsent(end.impl().getClass(), end);
-            }
+        for (DesignStyle<?> s : styles) for (Trace.CssStep end : cssEnds(s)) out.putIfAbsent(end.impl().getClass(), end);
+        return List.copyOf(out.values());
+    }
+
+    /** Where every trace in a style ends: each implementation with CSS of its own an element wears in it, once, in the elements' order. */
+    public List<Trace.CssStep> cssEnds(DesignStyle<?> style) {
+        var out = new LinkedHashMap<Class<?>, Trace.CssStep>();
+        for (ElementPath e : elements()) {
+            Trace.CssStep end = trace(style, e).end();
+            out.putIfAbsent(end.impl().getClass(), end);
+        }
         return List.copyOf(out.values());
     }
 

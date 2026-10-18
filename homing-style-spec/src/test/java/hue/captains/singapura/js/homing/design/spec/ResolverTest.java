@@ -102,6 +102,15 @@ class ResolverTest {
         }
     }
 
+    /** A sheet is served whole or not at all: here, with no content on the classpath, every style's is refused, every content named. */
+    @Test
+    void aSheet_withoutItsContent_isNotServed() {
+        for (DesignStyle<?> s : SPEC.styles()) {
+            var refused = assertThrows(IllegalStateException.class, () -> ReadSheet.INSTANCE.read(SPEC, s));
+            assertTrue(refused.getMessage().contains(SPEC.cssEnds(s).size() + " contents not to be had"), refused.getMessage().lines().findFirst().orElseThrow());
+        }
+    }
+
     @Test
     void everyTrace_endsAtWhatTheElementWears() {
         int steps = 0;
