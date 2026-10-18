@@ -1,0 +1,10 @@
+/* The heading 1 in neumorphism: the heading of a page. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Nunito", "Quicksand", "Varela Round", "Segoe UI", system-ui, sans-serif;
+    font-weight: 900;
+    font-size: calc(42px * pow(1.2, var(--size)));
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}

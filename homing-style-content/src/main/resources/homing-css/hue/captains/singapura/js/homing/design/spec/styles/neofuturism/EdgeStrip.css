@@ -1,0 +1,12 @@
+/* The edge strip in neo-futurism: a strip along an edge, shown when its lip is reached - raised, ruled along the edge it comes from, casting its shadow over what it covers. It shows no state of its own. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    box-shadow: 0 24px 64px var(--fp-shade-thick), 0 0 0 1px var(--fp-glow-soft);
+    padding-block: 8px;
+    padding-inline: 14px;
+    gap: 8px;
+}

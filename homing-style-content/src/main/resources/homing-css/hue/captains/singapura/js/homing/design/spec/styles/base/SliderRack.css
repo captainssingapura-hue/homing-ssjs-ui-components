@@ -1,0 +1,4 @@
+/* The slider rack in the base layer: a slider group's sliders, stacked or side by side - the room between them, its group's. Whole: every property its look has (D9). */
+$casting {
+    gap: 8px;
+}

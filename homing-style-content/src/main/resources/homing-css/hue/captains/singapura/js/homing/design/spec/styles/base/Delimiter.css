@@ -1,0 +1,29 @@
+/* The delimiter in the base layer: the sign between a run's steps, on one line with them - in the colour it is given, muted. Whole: every property its look has (D9). */
+$casting {
+    --current-muted: color-mix(in oklab, currentColor 60%, transparent);
+
+    color: var(--current-muted);
+    background-color: transparent;
+    border-color: currentColor;
+    outline-color: currentColor;
+    border-radius: 0;
+    box-shadow: none;
+    border-width: 0;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 0;
+    padding-inline: 0;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    transition: none;
+    transform: none;
+    cursor: auto;
+
+    &::before {
+        content: "/";
+    }
+}

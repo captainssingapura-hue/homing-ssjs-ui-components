@@ -1,0 +1,16 @@
+/* The floating pane in the base layer: a pane over the page - raised, framed, its corner square, casting nothing; the current one ringed. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    transition: none;
+
+    &$current {
+        border-color: var(--fp-ring);
+    }
+}

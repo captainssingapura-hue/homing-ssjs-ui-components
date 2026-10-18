@@ -1,0 +1,10 @@
+/* The quote in neo-futurism: words quoted from elsewhere, ruled along their leading edge in the hairline, set in from the rule, quieter than the text round them. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    border-color: var(--fp-border);
+    border-width: 0 0 0 2px;
+    border-style: solid;
+    padding-block: 0;
+    padding-inline: 12px 0;
+}

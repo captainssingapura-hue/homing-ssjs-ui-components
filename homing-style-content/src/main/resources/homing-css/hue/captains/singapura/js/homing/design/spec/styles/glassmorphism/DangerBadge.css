@@ -1,0 +1,15 @@
+/* The danger badge in glassmorphism: danger said by a badge, its ink on its wash. Whole: every property its look has (D9). */
+$casting {
+    --fixed-danger-wash: rgb(220 38 38 / 0.12);
+    color: var(--fp-danger-ink);
+    background-color: var(--fixed-danger-wash);
+    border-radius: 999px;
+    padding-block: 0.15em;
+    padding-inline: 0.6em;
+    font-family: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(11px * pow(1.15, var(--size)));
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}

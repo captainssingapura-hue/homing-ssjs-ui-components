@@ -1,0 +1,15 @@
+/* The context menu in neumorphism: a menu opened where it is asked - raised, framed, its corner the style's, casting its shadow, in the style's face; its items and their lines its parts'. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 0;
+    border-style: solid;
+    border-radius: 14px;
+    box-shadow: 14px 14px 28px var(--fp-shade-firm), -14px -14px 28px var(--fp-raised);
+    padding-block: 8px;
+    gap: 2px;
+    min-width: 210px;
+    font-family: "Nunito", "Segoe UI", system-ui, sans-serif;
+    user-select: none;
+}

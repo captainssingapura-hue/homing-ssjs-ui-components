@@ -1,0 +1,28 @@
+/* The crumb in sketchy: a step of a trail back, in the colour of what holds it; the page itself the boldest. */
+$casting {
+    color: inherit;
+    background-color: transparent;
+    text-decoration-line: none;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    outline: 0 none;
+    transition: none;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration-line: underline;
+        text-decoration-style: wavy;
+        text-underline-offset: 3px;
+    }
+
+    &:focus-visible {
+        outline: 2px dashed var(--fp-ring);
+        outline-offset: -3px;
+    }
+
+    &$current {
+        font-weight: 600;
+    }
+}
