@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.js.homing.design.styling.CastingCss;
+import hue.captains.singapura.js.homing.design.semantic.ColorTree;
+import hue.captains.singapura.js.homing.design.styling.CheckDeclaration;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
@@ -11,10 +12,12 @@ import java.util.Set;
 
 /**
  * Build time only (RFC 0067, D53): a jar of content held to a registry. Every implementation with CSS of its own the
- * registry holds has its content where the registry's resolver looks - there, read, UTF-8 - and its marks in their forms
- * ({@code $casting { … }}, {@code &$word}, {@code @keyframes $name}; no class named); and nothing the jar ships is left
- * over - each file it ships is the content of one of them. Run in the content jar's own test; two copies on a classpath
- * put together are {@link DuplicateContent}'s to find.
+ * registry holds has its content where the registry's resolver looks - there, read, UTF-8 - held whole as core holds an
+ * implementation's CSS ({@link CheckDeclaration#content}): its marks in their forms; filled in for the casting it is
+ * reached as, a casting's rule; its colours - those it lists, typed - the tree's, seen by its style's scheme, and imported
+ * both ways (D32), its own spectra anchored at the tree's (D41). And nothing the jar ships is left over - each file it
+ * ships is the content of one of them. Run in the content jar's own test; two copies on a classpath put together are
+ * {@link DuplicateContent}'s to find.
  */
 public record CheckContent() implements StatelessFunctionalObject {
 
@@ -28,13 +31,15 @@ public record CheckContent() implements StatelessFunctionalObject {
         return out;
     }
 
-    /** Every implementation's content: found, and its marks in form - every problem, each naming its file. */
-    public List<String> content(SpecRegistry spec) {
+    /** Every implementation's content: found, and held whole against the colour tree - every problem, each naming its file. */
+    public List<String> content(SpecRegistry spec, ColorTree tree) {
         classpath(spec);
         var problems = new ArrayList<String>();
-        for (CssImplementation<?, ?, ?, ?> impl : spec.cssImplementations()) {
+        for (Trace.CssStep end : spec.cssEnds()) {
+            CssImplementation<?, ?, ?, ?> impl = end.impl();
             switch (spec.content(impl)) {
-                case CssResolution.Found f -> problems.addAll(CastingCss.INSTANCE.marks(f.resource(), f.text()).problems());
+                case CssResolution.Found f -> problems.addAll(CheckDeclaration.INSTANCE.content(
+                        spec.taxonomy(), tree, end.layer(), end.casting(), f.resource(), f.text(), impl.colours()));
                 case CssResolution.Nothing n -> problems.add(n.resource() + ": nothing is there - an implementation with CSS of its own has its content");
                 case CssResolution.Unreadable u -> problems.add(u.resource() + ": there at " + u.where() + ", and not to be read: " + u.reason());
                 case CssResolution.NotUtf8 b -> problems.add(b.resource() + ": there at " + b.where() + ", and not UTF-8");

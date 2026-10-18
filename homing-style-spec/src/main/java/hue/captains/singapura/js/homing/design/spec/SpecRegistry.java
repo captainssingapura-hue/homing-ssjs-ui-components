@@ -170,9 +170,21 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
 
     /** Every implementation with CSS of its own an element wears, in some style: each once, in the order first worn. */
     public List<CssImplementation<?, ?, ?, ?>> cssImplementations() {
-        var out = new LinkedHashMap<Class<?>, CssImplementation<?, ?, ?, ?>>();
+        return cssEnds().stream().<CssImplementation<?, ?, ?, ?>>map(Trace.CssStep::impl).toList();
+    }
+
+    /**
+     * Where every trace ends, each implementation with CSS of its own once, in the order first worn: with the layer it is
+     * of and the casting it is reached as - one casting an implementation, as the registry was read.
+     */
+    public List<Trace.CssStep> cssEnds() {
+        var out = new LinkedHashMap<Class<?>, Trace.CssStep>();
         List<ElementPath> all = elements();
-        for (DesignStyle<?> s : styles) for (ElementPath e : all) out.putIfAbsent(wears(s, e).getClass(), wears(s, e));
+        for (DesignStyle<?> s : styles)
+            for (ElementPath e : all) {
+                Trace.CssStep end = trace(s, e).end();
+                out.putIfAbsent(end.impl().getClass(), end);
+            }
         return List.copyOf(out.values());
     }
 
