@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
+import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Mark;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Track;
 
@@ -20,17 +21,19 @@ public final class HouseMarks {
     // ── marks ────────────────────────────────────────────────────────────
 
     /** A notch a value may snap to. */
-    public record Detent() implements Leaf<Mark> {
+    public record Detent() implements Leaf<Mark>, WithRoles<HouseRoleSets.Scaling> {
         public static final Detent INSTANCE = new Detent();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        @Override public HouseRoleSets.Scaling roleSet() { return HouseRoleSets.Scaling.INSTANCE; }
         /** Shown while what rests on it is in the hand. */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Dragging.INSTANCE); }
     }
 
     /** A scale's tick. */
-    public record Tick() implements Leaf<Mark> {
+    public record Tick() implements Leaf<Mark>, WithRoles<HouseRoleSets.Scaling> {
         public static final Tick INSTANCE = new Tick();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        @Override public HouseRoleSets.Scaling roleSet() { return HouseRoleSets.Scaling.INSTANCE; }
     }
 
     /** A line between the rows of a list or a menu: one group ruled off from the next. */
@@ -44,9 +47,10 @@ public final class HouseMarks {
      * as that, or not drawn at all. Never by itself: a boundary is between two regions. Its role says
      * whether the hand may move it; upright, it reads {@code aria-orientation}.
      */
-    public record BoundaryLine() implements Leaf<Mark> {
+    public record BoundaryLine() implements Leaf<Mark>, WithRoles<HouseRoleSets.Changing> {
         public static final BoundaryLine INSTANCE = new BoundaryLine();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
         /** Upright or lying; the pointer over it; the focus on it; in the hand. */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Orientation.INSTANCE, HouseStates.Hovered.INSTANCE,
                 HouseStates.Focused.INSTANCE, HouseStates.Dragging.INSTANCE); }
@@ -67,9 +71,10 @@ public final class HouseMarks {
     }
 
     /** The brand's mark: a square of its colour, until a site gives a logo. A part of the brand: it is never alone. */
-    public record BrandMark() implements Leaf<Mark> {
+    public record BrandMark() implements Leaf<Mark>, WithRoles<HouseRoleSets.Naming> {
         public static final BrandMark INSTANCE = new BrandMark();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        @Override public HouseRoleSets.Naming roleSet() { return HouseRoleSets.Naming.INSTANCE; }
     }
 
     /** A small sign of a state: the current tab, the holder of the keys. */
@@ -79,9 +84,10 @@ public final class HouseMarks {
     }
 
     /** Where a dragged thing would land. */
-    public record DropMark() implements Leaf<Mark> {
+    public record DropMark() implements Leaf<Mark>, WithRoles<HouseRoleSets.Signalling> {
         public static final DropMark INSTANCE = new DropMark();
         @Override public Mark parent() { return Mark.INSTANCE; }
+        @Override public HouseRoleSets.Signalling roleSet() { return HouseRoleSets.Signalling.INSTANCE; }
     }
 
     // ── tracks ───────────────────────────────────────────────────────────
@@ -94,23 +100,26 @@ public final class HouseMarks {
     }
 
     /** The slider's groove: the line its knob runs along. Never alone: a slider's part. */
-    public record SliderGroove() implements Leaf<Track> {
+    public record SliderGroove() implements Leaf<Track>, WithRoles<HouseRoleSets.Scaling> {
         public static final SliderGroove INSTANCE = new SliderGroove();
         @Override public Track parent() { return Track.INSTANCE; }
+        @Override public HouseRoleSets.Scaling roleSet() { return HouseRoleSets.Scaling.INSTANCE; }
     }
 
     /** The toggle's groove: the pill a switch's knob slides in, in the accent when the switch is on. Never alone: a switch's part. */
-    public record ToggleGroove() implements Leaf<Track> {
+    public record ToggleGroove() implements Leaf<Track>, WithRoles<HouseRoleSets.Scaling> {
         public static final ToggleGroove INSTANCE = new ToggleGroove();
         @Override public Track parent() { return Track.INSTANCE; }
+        @Override public HouseRoleSets.Scaling roleSet() { return HouseRoleSets.Scaling.INSTANCE; }
         @Override public List<StateType<?>> states() {
             return List.of(HouseStates.Checked.INSTANCE);
         }
     }
 
     /** The part of a groove a value fills. */
-    public record Fill() implements Leaf<Track> {
+    public record Fill() implements Leaf<Track>, WithRoles<HouseRoleSets.Reporting> {
         public static final Fill INSTANCE = new Fill();
         @Override public Track parent() { return Track.INSTANCE; }
+        @Override public HouseRoleSets.Reporting roleSet() { return HouseRoleSets.Reporting.INSTANCE; }
     }
 }

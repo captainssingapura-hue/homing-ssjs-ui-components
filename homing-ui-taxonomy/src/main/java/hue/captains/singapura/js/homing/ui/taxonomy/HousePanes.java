@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
+import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 
 import java.util.List;
 
@@ -18,10 +19,11 @@ public final class HousePanes {
     private HousePanes() {}
 
     /** The thumbnails of the panes one may open: each a cell of the picture it draws, the house's thumbnail on its own. */
-    public record PaneThumbs() implements Composite<HouseBranches.Chooser> {
+    public record PaneThumbs() implements Composite<HouseBranches.Chooser>, WithRoles<HouseRoleSets.Choosing> {
         public static final PaneThumbs INSTANCE = new PaneThumbs();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
+        @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
         }
@@ -52,10 +54,11 @@ public final class HousePanes {
     }
 
     /** The list of a pane's tabs, to pick from. */
-    public record TabPicker() implements Composite<HouseBranches.Chooser> {
+    public record TabPicker() implements Composite<HouseBranches.Chooser>, WithRoles<HouseRoleSets.Choosing> {
         public static final TabPicker INSTANCE = new TabPicker();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
+        @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Prompt.INSTANCE).one(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Choice.INSTANCE).any(),

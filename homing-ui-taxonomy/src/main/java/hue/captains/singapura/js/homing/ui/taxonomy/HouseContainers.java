@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
+import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 
 import java.util.List;
 
@@ -63,10 +64,11 @@ public final class HouseContainers {
     // ── containers ───────────────────────────────────────────────────────
 
     /** Sliders gathered under one header. */
-    public record SliderGroup() implements Composite<HouseBranches.Cluster> {
+    public record SliderGroup() implements Composite<HouseBranches.Cluster>, WithRoles<HouseRoleSets.Changing> {
         public static final SliderGroup INSTANCE = new SliderGroup();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Cluster parent() { return HouseBranches.Cluster.INSTANCE; }
+        @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
         /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
@@ -241,10 +243,11 @@ public final class HouseContainers {
     }
 
     /** The way back, crumb by crumb. */
-    public record Trail() implements Composite<HouseBranches.Bar> {
+    public record Trail() implements Composite<HouseBranches.Bar>, WithRoles<HouseRoleSets.Going> {
         public static final Trail INSTANCE = new Trail();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Crumb.INSTANCE).as(HouseDoing.Step.INSTANCE).any(),
                            DSL.part(HouseMarks.Delimiter.INSTANCE).as(HouseShaping.Break.INSTANCE).any());

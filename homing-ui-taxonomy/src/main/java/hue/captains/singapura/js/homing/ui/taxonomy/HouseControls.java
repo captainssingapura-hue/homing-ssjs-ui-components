@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
+import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Button;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Handle;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Input;
@@ -66,19 +67,21 @@ public final class HouseControls {
     // ── buttons ──────────────────────────────────────────────────────────
 
     /** A button with no emphasis. */
-    public record PlainButton() implements Leaf<Button> {
+    public record PlainButton() implements Leaf<Button>, WithRoles<HouseRoleSets.PlainButton> {
         public static final PlainButton INSTANCE = new PlainButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public HouseRoleSets.PlainButton roleSet() { return HouseRoleSets.PlainButton.INSTANCE; }
     }
 
     /** The one action a view leads with. */
-    public record PrimaryButton() implements Leaf<Button> {
+    public record PrimaryButton() implements Leaf<Button>, WithRoles<HouseRoleSets.Committing> {
         public static final PrimaryButton INSTANCE = new PrimaryButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public HouseRoleSets.Committing roleSet() { return HouseRoleSets.Committing.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
 
@@ -127,24 +130,26 @@ public final class HouseControls {
     }
 
     /** A button that is an icon alone: the icon its part, whichever icon it is. */
-    public record IconButton() implements Composite<Button> {
+    public record IconButton() implements Composite<Button>, WithRoles<HouseRoleSets.Managing> {
         public static final IconButton INSTANCE = new IconButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public HouseRoleSets.Managing roleSet() { return HouseRoleSets.Managing.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.anyOf(HouseBranches.Icon.INSTANCE).as(HouseShaping.Face.INSTANCE).one());
         }
     }
 
     /** The button that closes what holds it. */
-    public record CloseButton() implements Composite<Button> {
+    public record CloseButton() implements Composite<Button>, WithRoles<HouseRoleSets.Managing> {
         public static final CloseButton INSTANCE = new CloseButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public HouseRoleSets.Managing roleSet() { return HouseRoleSets.Managing.INSTANCE; }
         /** Its face the close icon: the same cross wherever something closes, drawn once in each style. */
         @Override public List<Slot<?>> parts() { return List.of(DSL.part(HouseIcons.CloseIcon.INSTANCE).as(HouseShaping.Face.INSTANCE).one()); }
     }
@@ -152,16 +157,18 @@ public final class HouseControls {
     // ── handles ──────────────────────────────────────────────────────────
 
     /** The slider's knob: what is grabbed to move its value along its groove; upright it is a cap. Never alone: a slider's part. */
-    public record SliderKnob() implements Leaf<Handle> {
+    public record SliderKnob() implements Leaf<Handle>, WithRoles<HouseRoleSets.Changing> {
         public static final SliderKnob INSTANCE = new SliderKnob();
         @Override public Handle parent() { return Handle.INSTANCE; }
+        @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_SLIDER_KNOB; }
     }
 
     /** The toggle's knob: what shows which way a switch stands, sliding in its groove. Never alone: a switch's part. */
-    public record ToggleKnob() implements Leaf<Handle> {
+    public record ToggleKnob() implements Leaf<Handle>, WithRoles<HouseRoleSets.Changing> {
         public static final ToggleKnob INSTANCE = new ToggleKnob();
         @Override public Handle parent() { return Handle.INSTANCE; }
+        @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
     }
 
     /** What is grabbed to move the thing it is on. */
@@ -181,35 +188,39 @@ public final class HouseControls {
     // ── other controls ───────────────────────────────────────────────────
 
     /** A way to somewhere else. */
-    public record Link() implements Leaf<Way> {
+    public record Link() implements Leaf<Way>, WithRoles<HouseRoleSets.Going> {
         public static final Link INSTANCE = new Link();
         @Override public Way parent() { return Way.INSTANCE; }
+        @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_WAY; }
         @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
     /** One step of a trail back. */
-    public record Crumb() implements Leaf<Way> {
+    public record Crumb() implements Leaf<Way>, WithRoles<HouseRoleSets.Going> {
         public static final Crumb INSTANCE = new Crumb();
         @Override public Way parent() { return Way.INSTANCE; }
+        @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_CRUMB; }
         @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
     /** A value picked along a scale. */
-    public record Range() implements Leaf<Input> {
+    public record Range() implements Leaf<Input>, WithRoles<HouseRoleSets.Changing> {
         public static final Range INSTANCE = new Range();
         @Override public List<StateType<?>> states() { return AN_INPUT; }
         @Override public List<EventType<?>> events() { return EDITED; }
         @Override public Input parent() { return Input.INSTANCE; }
+        @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
     }
 
     /** A value picked from a list that drops down. */
-    public record Select() implements Leaf<Input> {
+    public record Select() implements Leaf<Input>, WithRoles<HouseRoleSets.Choosing> {
         public static final Select INSTANCE = new Select();
         @Override public List<StateType<?>> states() { return AN_INPUT; }
         @Override public List<EventType<?>> events() { return COMMITTED; }
         @Override public Input parent() { return Input.INSTANCE; }
+        @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
     }
 
     /** Words the user types: a line of them, or as many as they write - the browser's own editing. */
@@ -258,10 +269,11 @@ public final class HouseControls {
     }
 
     /** A site's mark and name, a way home. */
-    public record Brand() implements Composite<Way> {
+    public record Brand() implements Composite<Way>, WithRoles<HouseRoleSets.Going> {
         public static final Brand INSTANCE = new Brand();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Way parent() { return Way.INSTANCE; }
+        @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_BRAND; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.BrandMark.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
@@ -270,10 +282,11 @@ public final class HouseControls {
     }
 
     /** The button that opens a site's preferences in a dialog, a slot its page: what is shown there is a widget, the site's. */
-    public record PreferencesButton() implements Composite<Button> {
+    public record PreferencesButton() implements Composite<Button>, WithRoles<HouseRoleSets.Going> {
         public static final PreferencesButton INSTANCE = new PreferencesButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
+        @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseIcons.SettingsIcon.INSTANCE).as(HouseShaping.Face.INSTANCE).one(),
@@ -283,12 +296,13 @@ public final class HouseControls {
     }
 
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
-    public record Switch() implements Composite<Input> {
+    public record Switch() implements Composite<Input>, WithRoles<HouseRoleSets.Changing> {
         public static final Switch INSTANCE = new Switch();
         @Override public List<StateType<?>> states() { return A_CHECK; }
         @Override public List<EventType<?>> events() { return COMMITTED; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Input parent() { return Input.INSTANCE; }
+        @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.ToggleGroove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
                            DSL.part(ToggleKnob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one());

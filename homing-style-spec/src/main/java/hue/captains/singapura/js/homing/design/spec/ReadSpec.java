@@ -5,11 +5,11 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModules;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
-import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.VirtualComponent;
+import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Reads the typed spec stack (RFC 0067, D53, D54) and holds it to its rules, refusing it with every problem at once:
+ * Reads the typed spec stack (RFC 0067, D53, D54, D55) and holds it to its rules, refusing it with every problem at once:
  *
  * <ul>
  *   <li>the base modules: one base layer, written over nothing; their components a taxonomy;</li>
@@ -32,9 +32,9 @@ import java.util.Set;
  *   <li>each module: naming only component modules registered, and assigning only components they bring - a jar styles
  *       nothing it does not say it styles;</li>
  *   <li>one assignment a (layer, component); the base assigning every component, each by the module that brings it;</li>
- *   <li>a component cast only in the roles its base assignment gives - so a component's castings are its own, and an
- *       extension reaches no casting of a component it does not bring;</li>
- *   <li>a style's assignment of a component whole: every casting the base's gives, and no other;</li>
+ *   <li>every assignment of a component whole: its castings exactly - on its own, and in each role of its set
+ *       ({@code WithRoles}, D55), which the taxonomy holds every slot to - so an extension reaches no casting of a
+ *       component it does not bring, and base draws every casting it could be asked for;</li>
  *   <li>each implementation a stateless record, listing each of its colours once.</li>
  * </ul>
  *
@@ -108,21 +108,9 @@ public record ReadSpec() implements StatelessFunctionalObject {
         for (Component<?> c : taxonomy.components())
             if (!onBase.containsKey(c) && !(c instanceof VirtualComponent<?>))
                 problems.add(c.token() + " has no assignment in the base: the base assigns every component");
-        for (Part<?, ?> p : taxonomy.parts())
-            for (Component<?> b : p.bases()) {
-                Casting k = new Casting(b, p.role());
-                ComponentAssignment<?, ?, ?> a = onBase.get(b);
-                if (k.functional() || a == null) continue;
-                if (a.of(k).isEmpty())
-                    problems.add(p.owner().token() + " casts " + b.token() + " as " + p.role().name().value()
-                            + ", a role the base's assignment of it does not give: a component is cast only in the roles its assignment gives");
-            }
-        for (DesignStyle<?> s : order) {
-            if (s.equals(base)) continue;
+        for (DesignStyle<?> s : order)
             for (ComponentAssignment<?, ?, ?> a : assignments.get(s).values()) {
-                ComponentAssignment<?, ?, ?> b = onBase.get(a.component());
-                if (b == null) continue;
-                Set<Casting> want = new LinkedHashSet<>(b.castings());
+                Set<Casting> want = castings(a.component());
                 Set<Casting> have = new LinkedHashSet<>(a.castings());
                 var missing = new ArrayList<String>();
                 for (Casting k : want) if (!have.contains(k)) missing.add(k.token());
@@ -130,14 +118,21 @@ public record ReadSpec() implements StatelessFunctionalObject {
                 for (Casting k : have) if (!want.contains(k)) extra.add(k.token());
                 if (!missing.isEmpty())
                     problems.add(s.token() + " assigns " + a.component().token() + " and not " + String.join(", ", missing)
-                            + ": a layer assigns every casting of a component it assigns");
+                            + ": a layer assigns every casting of a component it assigns - on its own, and in each role of its set");
                 if (!extra.isEmpty())
-                    problems.add(s.token() + " assigns " + String.join(", ", extra) + ", which the base's assignment of "
-                            + a.component().token() + " does not give: a component is cast only in the roles its assignment gives");
+                    problems.add(s.token() + " assigns " + String.join(", ", extra) + ", which " + a.component().token()
+                            + "'s role set does not give: a component is cast only in the roles of its set");
             }
-        }
         if (!problems.isEmpty()) refuse(problems);
         return new SpecRegistry(taxonomy, base, List.copyOf(top), order, assignments, resolver);
+    }
+
+    /** A component's castings, its own (D55): on its own, and in each role of its set - none, for a component only ever placed. */
+    private static Set<Casting> castings(Component<?> c) {
+        var out = new LinkedHashSet<Casting>();
+        out.add(new Casting(c));
+        if (c instanceof WithRoles<?> w) for (Role<?> r : w.roleSet().roles()) out.add(new Casting(c, r));
+        return out;
     }
 
     /** The colours of an implementation: each once. */

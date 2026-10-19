@@ -16,10 +16,10 @@ import java.util.Optional;
 
 /**
  * A component's assignment in a layer (RFC 0067, D54): the implementation each of its castings wears - the component on
- * its own, and in each role with a look of its own it is cast in - each one of the component's own, of exactly this layer,
- * by the compiler. Whole: a layer that assigns a component assigns every casting of it, those base's assignment of it
- * gives; a layer that does not leaves the component, whole, to the layer it is written over. Two castings meant alike
- * name one implementation; no casting can name another component's, and nothing delegates.
+ * its own, and in each role of its role set (D55) - each one of the component's own, of exactly this layer, by the
+ * compiler. Whole: a layer that assigns a component assigns every casting of it; a layer that does not leaves the
+ * component, whole, to the layer it is written over. Two castings meant alike name one implementation; no casting can
+ * name another component's, and nothing delegates.
  *
  * <pre>{@code
  * new ComponentAssignment<>(HouseText.Label.INSTANCE, new Label(), List.of(

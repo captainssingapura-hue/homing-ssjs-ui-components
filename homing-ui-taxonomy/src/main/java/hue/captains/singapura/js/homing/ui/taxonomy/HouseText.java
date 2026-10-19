@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
+import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Text;
 
 /**
@@ -13,9 +14,10 @@ public final class HouseText {
     private HouseText() {}
 
     /** A control's or a field's name. */
-    public record Label() implements Leaf<Text> {
+    public record Label() implements Leaf<Text>, WithRoles<HouseRoleSets.Naming> {
         public static final Label INSTANCE = new Label();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.Naming roleSet() { return HouseRoleSets.Naming.INSTANCE; }
     }
 
     // ── the headings: one leaf for each level of a page's outline, under the Heading branch ──
@@ -39,9 +41,10 @@ public final class HouseText {
     }
 
     /** The heading of a smaller section, or of what a container holds: a card's, a group's, a setting's title. */
-    public record Heading4() implements Leaf<HouseBranches.Heading> {
+    public record Heading4() implements Leaf<HouseBranches.Heading>, WithRoles<HouseRoleSets.Naming> {
         public static final Heading4 INSTANCE = new Heading4();
         @Override public HouseBranches.Heading parent() { return HouseBranches.Heading.INSTANCE; }
+        @Override public HouseRoleSets.Naming roleSet() { return HouseRoleSets.Naming.INSTANCE; }
     }
 
     /** The heading of a division within a smaller section. */
@@ -57,15 +60,17 @@ public final class HouseText {
     }
 
     /** The small line above a heading. */
-    public record Kicker() implements Leaf<Text> {
+    public record Kicker() implements Leaf<Text>, WithRoles<HouseRoleSets.Kicker> {
         public static final Kicker INSTANCE = new Kicker();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.Kicker roleSet() { return HouseRoleSets.Kicker.INSTANCE; }
     }
 
     /** Quiet words beside something: a note, a hint. */
-    public record Caption() implements Leaf<Text> {
+    public record Caption() implements Leaf<Text>, WithRoles<HouseRoleSets.Caption> {
         public static final Caption INSTANCE = new Caption();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.Caption roleSet() { return HouseRoleSets.Caption.INSTANCE; }
     }
 
     /** Words said with weight among the words round them: a table's heads, a cell said strongly. */
@@ -81,39 +86,45 @@ public final class HouseText {
     }
 
     /** The first words of a body, or its summary. */
-    public record Lede() implements Leaf<Text> {
+    public record Lede() implements Leaf<Text>, WithRoles<HouseRoleSets.Describing> {
         public static final Lede INSTANCE = new Lede();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.Describing roleSet() { return HouseRoleSets.Describing.INSTANCE; }
     }
 
     /** A value read out: a number, a percentage. */
-    public record Readout() implements Leaf<Text> {
+    public record Readout() implements Leaf<Text>, WithRoles<HouseRoleSets.Reporting> {
         public static final Readout INSTANCE = new Readout();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.Reporting roleSet() { return HouseRoleSets.Reporting.INSTANCE; }
     }
 
     /** A table cell's words: plain text, set in its cell - a fact where a row and a column meet, or the name heading a column (D42). */
-    public record TextCell() implements Leaf<Text> {
+    public record TextCell() implements Leaf<Text>, WithRoles<HouseRoleSets.TextCell> {
         public static final TextCell INSTANCE = new TextCell();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.TextCell roleSet() { return HouseRoleSets.TextCell.INSTANCE; }
     }
 
     /** A short tag beside a heading. */
-    public record Badge() implements Leaf<Text> {
+    public record Badge() implements Leaf<Text>, WithRoles<HouseRoleSets.Describing> {
         public static final Badge INSTANCE = new Badge();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.Describing roleSet() { return HouseRoleSets.Describing.INSTANCE; }
     }
 
     /** A count in a rounded tag. */
-    public record Pill() implements Leaf<Text> {
+    public record Pill() implements Leaf<Text>, WithRoles<HouseRoleSets.Reporting> {
         public static final Pill INSTANCE = new Pill();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.Reporting roleSet() { return HouseRoleSets.Reporting.INSTANCE; }
     }
 
     /** A brand's name, set as its mark. */
-    public record Wordmark() implements Leaf<Text> {
+    public record Wordmark() implements Leaf<Text>, WithRoles<HouseRoleSets.Naming> {
         public static final Wordmark INSTANCE = new Wordmark();
         @Override public Text parent() { return Text.INSTANCE; }
+        @Override public HouseRoleSets.Naming roleSet() { return HouseRoleSets.Naming.INSTANCE; }
     }
     // ── code, and the badges that say how a thing stands ──
 

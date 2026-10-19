@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The reader's rules bite (RFC 0067, D54): the house read with one thing changed is refused, naming what - a jar assigning
  * a component it does not say it styles, a component assigned twice in a layer, the base leaving a component out, a
- * component cast in a role its base assignment does not give, a style assigning a component only in part.
+ * layer leaving out a role of a component's set (D55) - the base, or a style assigning a component only in part.
  */
 class ReadSpecTest {
 
@@ -58,9 +58,9 @@ class ReadSpecTest {
     }
 
     @Test
-    void aComponentCastInARole_itsBaseAssignmentDoesNotGive_isRefused() {
+    void theBase_leavingOutARoleOfAComponentsSet_isRefused() {
         refused(bases(a -> a.equals(PLAIN) ? without(PLAIN, HouseDoing.Action.INSTANCE) : a), HouseSpec.STYLES,
-                "casts plain-button as action, a role the base's assignment of it does not give");
+                "base assigns plain-button and not plain-button_action: a layer assigns every casting of a component it assigns");
     }
 
     @Test
@@ -68,7 +68,7 @@ class ReadSpecTest {
         var styles = new ArrayList<SpecModule<BaseScheme, ?>>(HouseSpec.STYLES);
         styles.set(0, new Style(EditorialSpec.INSTANCE.modules(), EditorialSpec.INSTANCE.assignments().stream()
                 .map(a -> a.component().equals(HouseControls.PlainButton.INSTANCE) ? editorial(HouseControls.PlainButton.INSTANCE) : a).toList()));
-        refused(HouseSpec.BASE, styles, "editorial assigns plain-button and not plain-button_action");
+        refused(HouseSpec.BASE, styles, "editorial assigns plain-button and not plain-button_go, plain-button_cancel, plain-button_action");
     }
 
     /** Editorial's own assignment of a component, its roles left out. */

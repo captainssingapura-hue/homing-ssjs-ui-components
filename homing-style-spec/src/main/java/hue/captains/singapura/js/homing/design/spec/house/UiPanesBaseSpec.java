@@ -38,7 +38,14 @@ public record UiPanesBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                 new ComponentAssignment<>(HousePanes.TabPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPane(), List.of()),
                 new ComponentAssignment<>(HousePanes.TabOpener.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabOpener(), List.of()),
                 new ComponentAssignment<>(HousePanes.TabPicker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker(), List.of(
-                        new RoleAssignment<>(HouseDoing.Picker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()))),
+                        new RoleAssignment<>(HouseDoing.Choice.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()),
+                        new RoleAssignment<>(HouseDoing.Style.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()),
+                        new RoleAssignment<>(HouseDoing.Palette.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()),
+                        new RoleAssignment<>(HouseDoing.What.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()),
+                        new RoleAssignment<>(HouseDoing.How.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()),
+                        new RoleAssignment<>(HouseDoing.Where.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()),
+                        new RoleAssignment<>(HouseDoing.Picker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()),
+                        new RoleAssignment<>(HouseDoing.Query.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()))),
                 new ComponentAssignment<>(HousePanes.AddTab.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.AddTab(), List.of()),
                 new ComponentAssignment<>(HouseIcons.ColumnIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ColumnIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.RowIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.RowIcon(), List.of()),
@@ -47,6 +54,13 @@ public record UiPanesBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                 new ComponentAssignment<>(HouseIcons.WithinIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.WithinIcon(), List.of()),
                 new ComponentAssignment<>(HouseRegions.StripTail.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.StripTail(), List.of()),
                 new ComponentAssignment<>(HousePanes.PaneThumbs.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs(), List.of(
-                        new RoleAssignment<>(HouseDoing.Where.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()))));
+                        new RoleAssignment<>(HouseDoing.Choice.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),
+                        new RoleAssignment<>(HouseDoing.Style.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),
+                        new RoleAssignment<>(HouseDoing.Palette.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),
+                        new RoleAssignment<>(HouseDoing.What.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),
+                        new RoleAssignment<>(HouseDoing.How.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),
+                        new RoleAssignment<>(HouseDoing.Where.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),
+                        new RoleAssignment<>(HouseDoing.Picker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),
+                        new RoleAssignment<>(HouseDoing.Query.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()))));
     }
 }
