@@ -6,8 +6,6 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
  */
 public record SiteBarModule() implements DomModule<SiteBarModule>, ImplFor<HouseContainers.SiteBar> {
 
-    /** A branch component: {@code new SiteBar(branch, { brand, crumbs })}; {@code root}, {@code trail}, {@code end(c)}. */
+    /** A branch component: {@code new SiteBar(branch, new FixedSiteBar(), place?)}; {@code root}, {@code brand}, {@code trail}, {@code end(c)}. */
     public record SiteBar() implements BranchComponent<SiteBarModule> {
         @Override public String summary() { return "Heads a site's pages: its brand, the way to where the user is, and what its owner hands it at its end."; }
     }
@@ -29,8 +27,8 @@ public record SiteBarModule() implements DomModule<SiteBarModule>, ImplFor<House
     @Override
     public ImportsFor<SiteBarModule> imports() {
         return ImportsFor.<SiteBarModule>builder()
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BrandModule.Brand()), BrandModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TrailModule.Trail()), TrailModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

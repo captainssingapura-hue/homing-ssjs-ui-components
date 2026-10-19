@@ -7,8 +7,6 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.server.HrefManager;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
  */
 public record BrandModule() implements DomModule<BrandModule>, ImplFor<HouseControls.Brand> {
 
-    /** A branch component: {@code new Brand(branch, { label, home }, role?)}; {@code root}. */
+    /** A branch component: {@code new Brand(branch, new FixedBrand(), place?)}; {@code root}, {@code label}, {@code home}. */
     public record Brand() implements BranchComponent<BrandModule> {
         @Override public String summary() { return "The site's own: its mark and its name, the way home."; }
     }
@@ -30,8 +28,8 @@ public record BrandModule() implements DomModule<BrandModule>, ImplFor<HouseCont
     @Override
     public ImportsFor<BrandModule> imports() {
         return ImportsFor.<BrandModule>builder()
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BrandMarkModule.BrandMark()), BrandMarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark()), WordmarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))

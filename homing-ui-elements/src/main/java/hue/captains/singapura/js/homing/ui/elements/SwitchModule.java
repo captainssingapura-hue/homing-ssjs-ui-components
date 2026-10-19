@@ -6,8 +6,6 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
@@ -18,7 +16,7 @@ import java.util.List;
  */
 public record SwitchModule() implements DomModule<SwitchModule>, ImplFor<HouseControls.Switch> {
 
-    /** {@code new Switch(branch, { checked, enabled, text }, role?)}; {@code root}, {@code checked}, {@code enabled}, {@code text}, {@code setOnCheckedChanged}, {@code setOnCommit}. */
+    /** {@code new Switch(branch, new FixedSwitch(), place?)}; {@code root}, {@code checked}, {@code enabled}, {@code text}, {@code setOnCheckedChanged}, {@code setOnCommit}. */
     public record Switch() implements BranchComponent<SwitchModule> {
         @Override public String summary() { return "A setting on or off: a knob sliding in a groove, the whole a control."; }
     }
@@ -28,8 +26,6 @@ public record SwitchModule() implements DomModule<SwitchModule>, ImplFor<HouseCo
     @Override
     public ImportsFor<SwitchModule> imports() {
         return ImportsFor.<SwitchModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new InputBehaviorsModule.TurnBehavior()), InputBehaviorsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ToggleGrooveModule.ToggleGroove()), ToggleGrooveModule.INSTANCE))
