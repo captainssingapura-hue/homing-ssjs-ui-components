@@ -18,27 +18,24 @@ import java.util.List;
  */
 public record TextCellModule() implements DomModule<TextCellModule>, ImplFor<HouseText.TextCell> {
 
-    /** An element component: {@code new TextCell(el, { text, size }, role)} on the element its companion makes; {@code text}, {@code size}. */
+    /** An element component: {@code new TextCell(make, new FixedTextCell(), place?)}, made and placed by itself; {@code text}, {@code size}. */
     public record TextCell() implements ElementComponent<TextCellModule> {
         @Override public String tag() { return "div"; }
         @Override public String summary() { return "A table cell's words: plain text set in its cell - a fact in its row, or the name heading its column."; }
     }
 
-    /** Its companion: {@code TextCellFactory.create(branch, name)} makes the element it is realized on. */
-    public record TextCellFactory() implements Exportable._Constant<TextCellModule> {}
 
     public static final TextCellModule INSTANCE = new TextCellModule();
 
     @Override
     public ImportsFor<TextCellModule> imports() {
         return ImportsFor.<TextCellModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<TextCellModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new TextCell(), new TextCellFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new TextCell()));
     }
 }

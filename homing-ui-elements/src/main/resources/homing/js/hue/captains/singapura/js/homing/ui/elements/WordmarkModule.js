@@ -1,14 +1,14 @@
 // =============================================================================
 // Wordmark — a name set as the mark of whom it belongs to. A Text (a simple component) on a <span>, in the wordmark's look.
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 //
-//   var x = new Wordmark(WordmarkFactory.create(branch, "wordmark"), { text: "…" }, ROLE.STANDALONE);
-//   x.text  x.size
+//   var t = new Wordmark(branch.elementMaker("x"), new FixedWordmark(), me.slot(SLOT_…));   in a slot
+//   var t = new Wordmark(branch.elementMaker("x"), new FixedWordmark());                     at the root
+//   t.text = "…"   t.size = -1
 // =============================================================================
 
 class Wordmark extends Text {
-    static LEAF = "wordmark";
     static TAG = "span";
-}
 
-/** Its companion: makes the <span> it is realized on, on its owner's branch, under its owner's name. */
-const WordmarkFactory = new SimpleComponentFactory(Wordmark);
+    constructor(make, fixed, place) { super(make, fixed, FixedWordmark, place ?? manageWordmark); }
+}

@@ -34,7 +34,7 @@ public record FloatingPaneModule() implements DomModule<FloatingPaneModule>, Imp
     @Override
     public ImportsFor<FloatingPaneModule> imports() {
         return ImportsFor.<FloatingPaneModule>builder()
-                .add(new ModuleImports<>(List.of(new LabelModule.Label(), new LabelModule.LabelFactory()), LabelModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LabelModule.Label()), LabelModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatEventsModule.FloatEvents()), FloatEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton(), new CloseButtonModule.CloseButtonFactory()), CloseButtonModule.INSTANCE))

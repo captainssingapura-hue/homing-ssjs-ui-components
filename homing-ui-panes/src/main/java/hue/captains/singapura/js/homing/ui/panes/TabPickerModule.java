@@ -38,7 +38,7 @@ public record TabPickerModule() implements DomModule<TabPickerModule>, ImplFor<H
     @Override
     public ImportsFor<TabPickerModule> imports() {
         return ImportsFor.<TabPickerModule>builder()
-                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),

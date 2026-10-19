@@ -141,10 +141,11 @@ public final class HouseBranches {
         @Override public Root parent() { return Root.INSTANCE; }
     }
 
-    /** Words, and the numbers read as words. */
+    /** Words, and the numbers read as words - at a size: a panel's and a pane's title follow their own. */
     public record Text() implements L1_ComponentBranch<Root>, FamilyHead {
         public static final Text INSTANCE = new Text();
         @Override public Root parent() { return Root.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** Words that say what a container holds, read first: a leaf for each level of a page's outline. */

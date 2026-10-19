@@ -41,9 +41,9 @@ public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWid
     @Override
     public ImportsFor<OverviewWidgetModule> imports() {
         return ImportsFor.<OverviewWidgetModule>builder()
-                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new Heading4Module.Heading4(), new Heading4Module.Heading4Factory()), Heading4Module.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LedeModule.Lede(), new LedeModule.LedeFactory()), LedeModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new Heading4Module.Heading4()), Heading4Module.INSTANCE))
+                .add(new ModuleImports<>(List.of(new LedeModule.Lede()), LedeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SeparatorModule.Separator()), SeparatorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SettingRowModule.SettingRow()), SettingRowModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))

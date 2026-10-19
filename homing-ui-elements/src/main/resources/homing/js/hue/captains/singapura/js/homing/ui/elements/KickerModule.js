@@ -1,14 +1,14 @@
 // =============================================================================
 // Kicker — a few words above a heading that say where it belongs. A Text (a simple component) on a <span>, in the kicker's look.
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 //
-//   var x = new Kicker(KickerFactory.create(branch, "kicker"), { text: "…" }, ROLE.STANDALONE);
-//   x.text  x.size
+//   var t = new Kicker(branch.elementMaker("x"), new FixedKicker(), me.slot(SLOT_…));   in a slot
+//   var t = new Kicker(branch.elementMaker("x"), new FixedKicker());                     at the root
+//   t.text = "…"   t.size = -1
 // =============================================================================
 
 class Kicker extends Text {
-    static LEAF = "kicker";
     static TAG = "span";
-}
 
-/** Its companion: makes the <span> it is realized on, on its owner's branch, under its owner's name. */
-const KickerFactory = new SimpleComponentFactory(Kicker);
+    constructor(make, fixed, place) { super(make, fixed, FixedKicker, place ?? manageKicker); }
+}

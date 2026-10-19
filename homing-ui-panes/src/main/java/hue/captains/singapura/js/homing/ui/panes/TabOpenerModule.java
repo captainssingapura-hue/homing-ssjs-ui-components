@@ -64,7 +64,7 @@ public record TabOpenerModule() implements DomModule<TabOpenerModule>, ImplFor<H
     @Override
     public ImportsFor<TabOpenerModule> imports() {
         return ImportsFor.<TabOpenerModule>builder()
-                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),
