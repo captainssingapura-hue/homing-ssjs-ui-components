@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
@@ -21,22 +20,19 @@ public record SliderKnobModule() implements DomModule<SliderKnobModule>, ImplFor
         @Override public String summary() { return "What is grabbed to move a slider's value along its groove; upright it is a cap."; }
     }
 
-    /** Its companion: {@code SliderKnobFactory.create(branch, name)} makes the element it is realized on. */
-    public record SliderKnobFactory() implements Exportable._Constant<SliderKnobModule> {}
 
     public static final SliderKnobModule INSTANCE = new SliderKnobModule();
 
     @Override
     public ImportsFor<SliderKnobModule> imports() {
         return ImportsFor.<SliderKnobModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<SliderKnobModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new SliderKnob(), new SliderKnobFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new SliderKnob()));
     }
 }

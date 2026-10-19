@@ -5,39 +5,41 @@
 // Its state is the slider's to set - off, the current of a group, dragged - and
 // its standing, given once; each held as its state's class while it holds.
 //
-//   var x = new SliderKnob(branch.elementMaker("knob"), { orientation: "vertical" }, ROLE.THUMB);
+//   var x = new SliderKnob(branch.elementMaker("slider-knob"), new FixedSliderKnob(), me.slot(SLOT_…));
+// On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
 class SliderKnob extends SimpleComponent {
-    static LEAF = "slider-knob";
     static TAG = "div";
     static AXES = Object.freeze({
         enabled: Object.freeze({
             values: Object.freeze([true, false]),
             rest: true,
             reflect: function (el, on) { el.setAttribute("aria-disabled", on ? "false" : "true"); },
-            state: STATE.ENABLED
+            state: StateEnabled
         }),
         orientation: Object.freeze({
-            values: Object.freeze(["horizontal", "vertical"]),
-            rest: "horizontal",
+            values: StateOrientation.states,
+            rest: StateOrientation.rest,
             reflect: function (el, o) { el.setAttribute("aria-orientation", o); },
-            state: STATE.ORIENTATION
+            state: StateOrientation
         }),
         current: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
             reflect: function (el, on) { if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); },
-            state: STATE.CURRENT
+            state: StateCurrent
         }),
         dragging: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
-            state: STATE.DRAGGING
+            state: StateDragging
         })
     });
-    static DEGREES = Object.freeze(["size"]);
+    static DEGREES = Object.freeze([ExtentSize]);
     static BEHAVIOR = MarkBehavior;
+
+    constructor(make, fixed, place) { super(make, fixed, FixedSliderKnob, place ?? manageSliderKnob); }
 
     /** Whether it takes the hand: off, aria-disabled. */
     get enabled() { return this._get("enabled"); }
@@ -51,24 +53,23 @@ class SliderKnob extends SimpleComponent {
     get dragging() { return this._get("dragging"); }
     set dragging(on) { this._set("dragging", !!on); }
 
-    /** Lying along or stood up: given once, by its slider. */
+    /** Lying along or stood up: given once, by its slider - fixed for its life, a setter until a fixed type has fields (the port journal). */
     get orientation() { return this._get("orientation"); }
+    set orientation(o) { this._set("orientation", String(o)); }
 
-    get size() { return this._degrees.size; }
-    set size(s) { this._degree("size", s); }
+    get size() { return this._degree(ExtentSize); }
+    set size(s) { this._setDegree(ExtentSize, s); }
 
     /** Its enabled changed: by its slider. */
-    setOnEnabledChanged(handler) { this._setOn(STATE.ENABLED.changed, handler); }
+    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** Its standing changed: given once, so never after it is made. */
-    setOnOrientationChanged(handler) { this._setOn(STATE.ORIENTATION.changed, handler); }
+    setOnOrientationChanged(handler) { this._setOn(StateOrientation, handler); }
 
     /** Made the current of a group, or no longer: by its slider. */
-    setOnCurrentChanged(handler) { this._setOn(STATE.CURRENT.changed, handler); }
+    setOnCurrentChanged(handler) { this._setOn(StateCurrent, handler); }
 
     /** The hand on it, or off it: by its slider. */
-    setOnDraggingChanged(handler) { this._setOn(STATE.DRAGGING.changed, handler); }
+    setOnDraggingChanged(handler) { this._setOn(StateDragging, handler); }
 }
 
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const SliderKnobFactory = new SimpleComponentFactory(SliderKnob);

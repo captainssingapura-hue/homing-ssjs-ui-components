@@ -162,6 +162,8 @@ public final class HouseControls {
         @Override public Handle parent() { return Handle.INSTANCE; }
         @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_SLIDER_KNOB; }
+        /** Grown by its slider's size, as its slider is. */
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** The toggle's knob: what shows which way a switch stands, sliding in its groove. Never alone: a switch's part. */
