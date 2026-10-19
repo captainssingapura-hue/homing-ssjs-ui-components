@@ -1,10 +1,13 @@
 package hue.captains.singapura.js.homing.design.spec.dual;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
+import hue.captains.singapura.js.homing.design.spec.FixedTypes;
 import hue.captains.singapura.js.homing.design.spec.JsLiterals;
+import hue.captains.singapura.js.homing.design.spec.TreeDual;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -25,6 +28,11 @@ public record Components() implements DualTree<Taxon> {
         return node instanceof ComponentBranch ? "new ComponentBranch(" + token + ", " + parent + ")"
                 : "new Component(" + token + ", " + parent + ", " + (node instanceof Composite<?>) + ")";
     }
-    @Override public List<String> kit() { return List.of("ComponentBranch", "Component"); }
+    @Override public List<String> kit() { return List.of("ComponentBranch", "Component", "Fixed"); }
+
+    /** Beside each component, its fixed type (D30): {@code FixedPlainButton} beside {@code ComponentPlainButton}. */
+    @Override public List<TreeDual.Companion> companions(Registration r, Taxon node) {
+        return node instanceof Component<?> c ? List.of(FixedTypes.INSTANCE.companion(c, name(node))) : List.of();
+    }
     @Override public Set<Taxon> used(Registration r) { return new LinkedHashSet<>(r.taxonomy().components()); }
 }

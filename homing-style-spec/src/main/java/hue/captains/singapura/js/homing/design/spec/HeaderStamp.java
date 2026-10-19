@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
+import hue.captains.singapura.js.homing.design.spec.dual.Components;
 import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.js.homing.design.spec.page.PageStyleManager;
@@ -10,6 +11,7 @@ import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -73,7 +75,8 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         if (!h.slots().isEmpty()) lines.add("import { Slot, Count } from " + js.string(DualKit.INSTANCE.address()) + ";");
         List<DualRef.Ref> refs = refs(h);
         for (DualTree<?> tree : ReadDual.INSTANCE.trees()) {
-            List<String> names = refs.stream().filter(r -> r.tree().equals(tree)).map(r -> r.name() + " as " + r.imported()).toList();
+            var names = new ArrayList<>(refs.stream().filter(r -> r.tree().equals(tree)).map(r -> r.name() + " as " + r.imported()).toList());
+            if (tree instanceof Components) names.addAll(fixed(h));
             if (!names.isEmpty()) lines.add("import { " + String.join(", ", names) + " } from " + js.string(tree.address()) + ";");
         }
         if (h.topLevel()) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
@@ -81,6 +84,14 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         if (h.topLevel())
             lines.add("const " + manage(h) + " = " + PageStyleManager.EXPORTED + ".unit(" + DualRef.INSTANCE.of(h.component()).imported() + ");");
         return String.join("\n", lines) + "\n";
+    }
+
+    /** The fixed types it imports (D30): its component's, then each part's, each once - every one an owner may make. */
+    public List<String> fixed(ComponentHeader h) {
+        var out = new LinkedHashSet<String>();
+        out.add(FixedTypes.INSTANCE.name(h.component()));
+        for (ComponentHeader.HeaderSlot s : h.slots()) out.add(FixedTypes.INSTANCE.name(s.part()));
+        return List.copyOf(out);
     }
 
     private static void add(LinkedHashMap<String, DualRef.Ref> out, DualRef.Ref r) { out.putIfAbsent(r.imported(), r); }

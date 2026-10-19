@@ -30,7 +30,10 @@ public record DualScript() implements StatelessFunctionalObject {
             if (!names.isEmpty()) lines.add("import { " + String.join(", ", names) + " } from " + JsLiterals.INSTANCE.string(other.address()) + ";");
         }
         for (TreeDual.Node n : dual.nodes()) lines.add("const " + n.name() + " = " + n.construction() + ";");
-        lines.add("export { " + String.join(", ", dual.nodes().stream().map(TreeDual.Node::name).toList()) + " };");
+        var exported = new ArrayList<String>();
+        for (TreeDual.Node n : dual.nodes()) exported.add(n.name());
+        for (TreeDual.Node n : dual.nodes()) for (TreeDual.Companion c : n.companions()) { lines.add(c.declaration()); exported.add(c.name()); }
+        lines.add("export { " + String.join(", ", exported) + " };");
         return String.join("\n", lines) + "\n";
     }
 }

@@ -6,7 +6,8 @@ import java.util.List;
 
 /**
  * The kit every tree's JS dual and every component's header is made with (RFC 0071): one class for each kind of node -
- * a branch or a leaf of each tree, an extent, a path, a style - and one for a slot and one for its count. Each instance is made by its
+ * a branch or a leaf of each tree, an extent, a path, a style - one for a slot and one for its count, and the one every
+ * component's fixed type extends (D30). Each instance is made by its
  * constructor, which checks what it is given - a token a token, a parent a branch of its own tree, a slot's owner a
  * composite - and frozen. Nothing in a dual or a header is an object made by hand.
  */
@@ -20,7 +21,7 @@ public record DualKit() implements StatelessFunctionalObject {
     /** The classes it gives, in its order. */
     public List<String> classes() {
         return List.of("ComponentBranch", "Component", "RoleBranch", "Role", "StateBranch", "StateType", "EventBranch", "EventType",
-                "Extent", "Count", "Slot", "ElementPath", "Style");
+                "Extent", "Count", "Slot", "ElementPath", "Style", "Fixed");
     }
 
     /** Its module. */
@@ -143,7 +144,17 @@ public record DualKit() implements StatelessFunctionalObject {
                 class Style {
                     constructor(t) { this.token = token("Style", t); Object.freeze(this); }
                 }
-                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, ElementPath, Style };
+                // What every component's fixed type extends (D30): its dual's FixedPlainButton names the component and hands on
+                // what it is given. A component with nothing fixed has a type with no fields, refusing any argument.
+                class Fixed {
+                    constructor(component, given) {
+                        if (new.target === Fixed) throw new TypeError("Fixed: made only as a component's own fixed type");
+                        if (!(component instanceof Component)) throw new TypeError(new.target.name + ": the fixed type of a Component");
+                        if (given.length !== 0) throw new TypeError(new.target.name + ": " + component.token + " has nothing fixed - its fixed object has no fields");
+                        Object.freeze(this);
+                    }
+                }
+                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, ElementPath, Style, Fixed };
                 """;
     }
 }

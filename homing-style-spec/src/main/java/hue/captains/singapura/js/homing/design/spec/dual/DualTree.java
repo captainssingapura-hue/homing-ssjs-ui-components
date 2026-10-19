@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec.dual;
 
+import hue.captains.singapura.js.homing.design.spec.TreeDual;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
@@ -48,6 +49,9 @@ public sealed interface DualTree<N> extends StatelessFunctionalObject permits Co
 
     /** The kit's classes its dual is made with ({@link DualKit}). */
     List<String> kit();
+
+    /** What its dual declares beside a node, exported under its own name: none, unless the tree says. */
+    default List<TreeDual.Companion> companions(Registration registration, N node) { return List.of(); }
 
     /** The leaves the registered components' declarations use: what the dual keeps, with their ancestors, and nothing else. */
     Set<N> used(Registration registration);
