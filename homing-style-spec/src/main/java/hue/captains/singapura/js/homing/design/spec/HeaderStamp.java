@@ -3,6 +3,8 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
+import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.design.spec.dual.Components;
 import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
@@ -40,6 +42,11 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         for (ComponentHeader.HeaderState s : h.states()) add(out, refs.of(s.type()));
         for (EventType<?> e : h.events()) add(out, refs.of(e));
         for (ExtentAxis x : h.extents()) add(out, refs.of(x));
+        // what its parts fire and change, so an owner can handle each - a press on the button it holds (port journal)
+        for (Component<?> p : h.parts()) {
+            for (EventType<?> e : p.events()) add(out, refs.of(e));
+            for (var s : p.states()) if (!(s instanceof Pseudo)) add(out, refs.of(s));
+        }
         return List.copyOf(out.values());
     }
 
