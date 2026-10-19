@@ -4,8 +4,6 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
-import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -19,9 +17,7 @@ public record ScrimBehaviorModule() implements DomModule<ScrimBehaviorModule> {
 
     @Override
     public ImportsFor<ScrimBehaviorModule> imports() {
-        return ImportsFor.<ScrimBehaviorModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .build();
+        return ImportsFor.noImports();
     }
 
     @Override public ExportsOf<ScrimBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ScrimBehavior())); }

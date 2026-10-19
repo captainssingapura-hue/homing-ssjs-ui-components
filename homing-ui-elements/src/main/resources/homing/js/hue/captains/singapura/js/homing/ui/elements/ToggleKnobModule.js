@@ -3,14 +3,14 @@
 // it is turned. A simple component on a <span>, in the toggle knob's look; where
 // it stands is its switch's placement. It has no state and offers nothing.
 //
-//   var x = new ToggleKnob(branch.elementMaker("knob"), {}, ROLE.THUMB);
+//   var x = new ToggleKnob(branch.elementMaker("toggle-knob"), new FixedToggleKnob(), me.slot(SLOT_…));
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 // =============================================================================
 
 class ToggleKnob extends SimpleComponent {
-    static LEAF = "toggle-knob";
     static TAG = "span";
     static BEHAVIOR = MarkBehavior;
+
+    constructor(make, fixed, place) { super(make, fixed, FixedToggleKnob, place ?? manageToggleKnob); }
 }
 
-/** Its companion: makes the <span> it is realized on, on its owner's branch, under its owner's name. */
-const ToggleKnobFactory = new SimpleComponentFactory(ToggleKnob);

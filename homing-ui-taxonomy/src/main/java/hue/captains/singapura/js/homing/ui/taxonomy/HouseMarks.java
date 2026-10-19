@@ -97,6 +97,8 @@ public final class HouseMarks {
         public static final SliderRail INSTANCE = new SliderRail();
         @Override public Track parent() { return Track.INSTANCE; }
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Enabled.INSTANCE); }
+        /** Grown by its slider's size, as its slider is. */
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** The slider's groove: the line its knob runs along. Never alone: a slider's part. */
@@ -104,6 +106,8 @@ public final class HouseMarks {
         public static final SliderGroove INSTANCE = new SliderGroove();
         @Override public Track parent() { return Track.INSTANCE; }
         @Override public HouseRoleSets.Scaling roleSet() { return HouseRoleSets.Scaling.INSTANCE; }
+        /** Grown by its slider's size, as its slider is. */
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** The toggle's groove: the pill a switch's knob slides in, in the accent when the switch is on. Never alone: a switch's part. */

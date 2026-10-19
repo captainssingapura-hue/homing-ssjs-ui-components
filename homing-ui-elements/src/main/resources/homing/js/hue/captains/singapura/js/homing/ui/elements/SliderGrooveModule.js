@@ -3,18 +3,18 @@
 // range. A simple component on a <div>, in the slider groove's look; the slider
 // places it across its rail. It has no state and offers nothing.
 //
-//   var x = new SliderGroove(branch.elementMaker("track"), {}, ROLE.SPAN);
+//   var x = new SliderGroove(branch.elementMaker("slider-groove"), new FixedSliderGroove(), me.slot(SLOT_…));
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 // =============================================================================
 
 class SliderGroove extends SimpleComponent {
-    static LEAF = "slider-groove";
     static TAG = "div";
-    static DEGREES = Object.freeze(["size"]);
+    static DEGREES = Object.freeze([ExtentSize]);
     static BEHAVIOR = MarkBehavior;
 
-    get size() { return this._degrees.size; }
-    set size(s) { this._degree("size", s); }
+    constructor(make, fixed, place) { super(make, fixed, FixedSliderGroove, place ?? manageSliderGroove); }
+
+    get size() { return this._degree(ExtentSize); }
+    set size(s) { this._setDegree(ExtentSize, s); }
 }
 
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const SliderGrooveFactory = new SimpleComponentFactory(SliderGroove);

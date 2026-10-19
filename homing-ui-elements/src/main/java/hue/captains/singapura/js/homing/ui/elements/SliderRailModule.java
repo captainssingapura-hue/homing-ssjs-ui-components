@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 
 import java.util.List;
@@ -21,22 +20,19 @@ public record SliderRailModule() implements DomModule<SliderRailModule>, ImplFor
         @Override public String summary() { return "The stretch a slider's value is set along, the hand taken anywhere on it."; }
     }
 
-    /** Its companion: {@code SliderRailFactory.create(branch, name)} makes the element it is realized on. */
-    public record SliderRailFactory() implements Exportable._Constant<SliderRailModule> {}
 
     public static final SliderRailModule INSTANCE = new SliderRailModule();
 
     @Override
     public ImportsFor<SliderRailModule> imports() {
         return ImportsFor.<SliderRailModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<SliderRailModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new SliderRail(), new SliderRailFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new SliderRail()));
     }
 }

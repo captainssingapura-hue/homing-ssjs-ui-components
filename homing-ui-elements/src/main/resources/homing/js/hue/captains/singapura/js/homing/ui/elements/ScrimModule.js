@@ -4,22 +4,25 @@
 // dimmed, blurred or left as it is, is its style's. It shows no words and has
 // no state; it offers a press:
 //
-//   var s = new Scrim(ScrimFactory.create(branch, "scrim"), {}, ROLE.VEIL);
+//   var s = new Scrim(branch.elementMaker("scrim"), new FixedScrim(), me.slot(SLOT_…));
 //   s.setOnPress(handler)   the hand came down on it: handler.handle(ComponentEvent)
 //
 // Where it is - over the whole page, beneath the dialog - is its owner's, by its
 // own placement class.
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 // =============================================================================
 
 class Scrim extends SimpleComponent {
-    static LEAF = "scrim";
     static TAG = "div";
-    static EVENTS = Object.freeze([EVENT.PRESS]);
+    static EVENTS = Object.freeze([EventPress]);
     static BEHAVIOR = ScrimBehavior;
 
+    constructor(make, fixed, place) { super(make, fixed, FixedScrim, place ?? manageScrim); }
+
     /** The hand came down on it. */
-    setOnPress(handler) { this._setOn(EVENT.PRESS, handler); }
+    setOnPress(handler) { this._setOn(EventPress, handler); }
+
+    /** The hand coming down, as its behaviour hears it: its press. */
+    _pressed(ev) { this._fire(EventPress, ev); }
 }
 
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const ScrimFactory = new SimpleComponentFactory(Scrim);

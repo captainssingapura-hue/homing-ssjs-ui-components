@@ -20,21 +20,19 @@ public record FillModule() implements DomModule<FillModule>, ImplFor<HouseMarks.
         @Override public String summary() { return "The part of the range the value has reached."; }
     }
 
-    /** Its companion: {@code FillFactory.create(branch, name)} makes the element it is realized on. */
-    public record FillFactory() implements Exportable._Constant<FillModule> {}
 
     public static final FillModule INSTANCE = new FillModule();
 
     @Override
     public ImportsFor<FillModule> imports() {
         return ImportsFor.<FillModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<FillModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Fill(), new FillFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new Fill()));
     }
 }

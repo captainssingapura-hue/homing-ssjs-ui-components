@@ -20,21 +20,19 @@ public record SliderGrooveModule() implements DomModule<SliderGrooveModule>, Imp
         @Override public String summary() { return "The line a slider's value is set along: the whole of its range."; }
     }
 
-    /** Its companion: {@code SliderGrooveFactory.create(branch, name)} makes the element it is realized on. */
-    public record SliderGrooveFactory() implements Exportable._Constant<SliderGrooveModule> {}
 
     public static final SliderGrooveModule INSTANCE = new SliderGrooveModule();
 
     @Override
     public ImportsFor<SliderGrooveModule> imports() {
         return ImportsFor.<SliderGrooveModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<SliderGrooveModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new SliderGroove(), new SliderGrooveFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new SliderGroove()));
     }
 }
