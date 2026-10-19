@@ -16,7 +16,7 @@
          preferences, so it lives where they do - for now. -->
     <groupId>io.github.captainssingapura-hue.homing.js</groupId>
     <artifactId>homing-components</artifactId>
-    <version>LOCAL-SNAPSHOT</version>
+    <version>LOCAL-SNAPSHOT-T1</version>
     <packaging>pom</packaging>
     <description>
         RFC 0066 Episode 3, layer 2 - the DOM-level components, one module
