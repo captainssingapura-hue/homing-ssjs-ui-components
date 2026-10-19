@@ -11,18 +11,20 @@ import java.util.List;
 
 /**
  * The style manager's module (RFC 0071): the page's one keeper of every element's style, and of the style the page wears.
- * A component hands it an element and gets back a reference; that is all it ever does with it. It never imports it: a
- * top-level component's header binds it to the component ({@code unit}), and a part's reference comes from its owner.
+ * A component places its element with it and gets back a reference; that is all it ever does with it. It never imports
+ * it: a top-level component's header binds it to the component ({@code unit}) - a placement at the root - and a part is
+ * handed a placement for its slot by its owner (D28). Either is a function, element to reference; the component calls
+ * it in its constructor with the element it made, so its owner never holds its element nor its reference.
  *
- * <p>Each element handed over becomes a managed object, in charge of everything about the element's style for as long
- * as it lives: the class it is given, the states it is in - and, for a composite, its parts, being their sub-manager. The
- * component makes each part's element and hands it to its own managed object, along a slot it declares. So the managed
- * objects are a tree beside the tree of element paths, one for each live unit: the style manager keeps the units, each
- * managed object its parts - each in a map from an element path to the live instances at it, there being any number of
- * each: three dialogs open, a tab strip's every tab.
+ * <p>Each element placed becomes a managed object, in charge of everything about the element's style for as long as it
+ * lives: the class it is given, the states it is in - and, for a composite, its parts, being their sub-manager. A
+ * composite asks its own reference for a placement along each slot it declares - {@code slot(slot)}, one placement a
+ * part, used once - and hands it to the part. So the managed objects are a tree beside the tree of element paths, one
+ * for each live unit: the style manager keeps the units, each managed object its parts - each in a map from an element
+ * path to the live instances at it, there being any number of each: three dialogs open, a tab strip's every tab.
  *
- * <p>A component never holds a managed object, only a reference to it: its states to set and read, its parts to hand
- * over. Not the element, not its class, not the style.
+ * <p>A component never holds a managed object, only a reference to it: its states to set and read, a placement for each
+ * part it makes. Not the element, not its class, not the style.
  *
  * <p>Every class is derived from a typed node, the same in every style ({@code StyleClasses}): an element's from its
  * casting - the path it is handed along says which, its owner and slot being the layout's (RFC 0067, D54) - a state's
@@ -51,17 +53,17 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
     }
 
     /** What a component's reference gives it, and nothing more. */
-    public List<String> reference() { return List.of("component", "part", "set", "state"); }
+    public List<String> reference() { return List.of("component", "slot", "set", "state"); }
 
     /** Its module. */
     public String script() {
         var js = JsLiterals.INSTANCE;
         return """
                 // The style manager (RFC 0071): the page's one keeper of every element's style, and of the style the page
-                // wears. A component hands it an element - through the binding its header is stamped with, or its owner's
-                // reference - and gets back a reference: its states to set, its parts to hand over; it does nothing else.
-                // Each element handed over is a managed object, in charge of the element's style for as long as it lives,
-                // and the sub-manager of its parts. Every class is derived from a
+                // wears. A component places its element with it - through the binding its header is stamped with, or the
+                // placement its owner hands it - and gets back a reference: its states to set, a placement for each of its
+                // parts; it does nothing else. Each element placed is a managed object, in charge of the element's style for
+                // as long as it lives, and the sub-manager of its parts. Every class is derived from a
                 // typed node, the same in every style: a switch is the sheet swapped, no element written. It touches no
                 // document: all it writes goes through the surface it is given - add(element, class), remove(element, class),
                 // show(style) - and its clean-up worker runs on the clock it is given - every(ms, task). Generated from Java;
@@ -118,9 +120,9 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                 }
 
                 /**
-                 * An element handed over: in charge of its style for as long as it lives - the class it is given, the states it
-                 * is in - and the sub-manager of its parts, each in a map from its path to the live instances at it. Made only
-                 * by the style manager, held by it and by its owner, never by a component: a component holds its reference.
+                 * An element placed: in charge of its style for as long as it lives - the class it is given, the states it is
+                 * in - and the sub-manager of its parts, each in a map from its path to the live instances at it. Made only by
+                 * the style manager, held by it and by its owner, never by a component: a component holds its reference.
                  */
                 class ManagedElement {
                     constructor(mint, element, path, page) {
@@ -134,11 +136,18 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
 
-                    part(element, slot) {
-                        if (!(slot instanceof Slot)) throw new TypeError("part: a part is handed over along a slot its owner declares");
+                    /** A placement along a slot this element's component declares: element to reference, used once. */
+                    slot(slot) {
+                        if (!(slot instanceof Slot)) throw new TypeError("slot: a part is placed along a slot its owner declares");
                         if (slot.owner !== this.path.part)
-                            throw new TypeError("part: the slot is " + slot.owner.token + "'s, and this element " + this.path.part.token + "'s");
-                        return this.page.manage(element, this.page.below(this.path, slot), this.parts);
+                            throw new TypeError("slot: the slot is " + slot.owner.token + "'s, and this element " + this.path.part.token + "'s");
+                        const path = this.page.below(this.path, slot), parts = this.parts, page = this.page;
+                        let used = false;
+                        return Object.freeze(function place(element) {
+                            if (used) throw new TypeError("a placement places one element, once: its owner asks its reference for another");
+                            used = true;
+                            return page.manage(element, path, parts);
+                        });
                     }
 
                     set(type, state) {
@@ -159,8 +168,8 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
 
                 /**
                  * What a component holds of its element's managed object, and all it can do with it: set and read the
-                 * element's states, and hand over its parts' elements - each handing back the part's reference. It gives no
-                 * way to the element, its class or the style.
+                 * element's states, and give a placement for each part it makes - the part placing its own element with it,
+                 * and keeping the reference it gets. It gives no way to the element, its class or the style.
                  */
                 class Reference {
                     #managed;
@@ -173,8 +182,8 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                     /** The component the element is of. */
                     get component() { return this.#managed.path.part; }
 
-                    /** Hands over a part's element, along a slot the component declares: the part's reference. */
-                    part(element, slot) { return this.#managed.part(element, slot); }
+                    /** A placement along a slot the component declares, for one part: element to the part's reference, used once. */
+                    slot(slot) { return this.#managed.slot(slot); }
 
                     /** Puts the element in a state of a type the page draws: its old state's class off, its new one's on. */
                     set(type, state) { this.#managed.set(type, state); }
@@ -240,14 +249,14 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                     get swept() { return this.#swept; }
 
                     /**
-                     * A top-level component's binding, which its header is stamped with: a function that hands over the
-                     * component's element at the root and gives back its reference - the one way an element is handed over
-                     * but as a part, along its owner's slot.
+                     * A top-level component's binding, which its header is stamped with: a placement at the root - a function
+                     * that places the component's element there and gives back its reference, for each instance the component
+                     * makes - the one way an element is placed but as a part, by the placement its owner hands it.
                      */
                     unit(component) {
                         const path = component instanceof Component ? this.#roots.get(component) : undefined;
                         if (path === undefined) throw new TypeError("unit: " + (component instanceof Component ? component.token : String(component))
-                                + " is no top-level component the page registers; a part is handed to its owner's");
+                                + " is no top-level component the page registers; a part is placed by its owner's placement");
                         return Object.freeze(element => this.#manage(element, path, this.#units));
                     }
 
