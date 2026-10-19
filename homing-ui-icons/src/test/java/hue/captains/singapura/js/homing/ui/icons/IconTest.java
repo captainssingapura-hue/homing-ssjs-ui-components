@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * branch - its box and its casting's class worn and taken off; anything not an icon of the instance's refused; a token
  * looked up for a caller handed one as data. Over the jar's own instance: the house's fifteen icons.
  */
+@org.junit.jupiter.api.Disabled("RFC 0071 port: these load the old simple component as a script - props, Look, companions; the base is ported, so they wait to be ported or retired with their modules, the components lab holding what they checked (the port journal)")
 class IconTest extends UiIconsJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/icons/";

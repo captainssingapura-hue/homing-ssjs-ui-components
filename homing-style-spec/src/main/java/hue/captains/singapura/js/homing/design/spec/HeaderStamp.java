@@ -133,6 +133,24 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         return String.join("\n", lines) + "\n";
     }
 
+    /**
+     * For the one class that realizes every leaf under a branch - the icons' ({@code ImplForLeavesOf}) - the leaves it is
+     * stamped with, after its merged stamp: each leaf's node, its fixed type and its binding, none for a leaf only ever a
+     * part - {@code [ComponentCloseIcon, FixedCloseIcon, manageCloseIcon]}. The class tells which leaf it is made as by
+     * the type of the fixed object it is handed, and places itself at the root with that leaf's binding. Nothing else
+     * says which binding is whose: they are the module's own names.
+     */
+    public String leaves(List<ComponentHeader> headers) {
+        var rows = new ArrayList<String>();
+        for (ComponentHeader h : headers)
+            rows.add("[" + DualRef.INSTANCE.of(h.component()).imported() + ", " + FixedTypes.INSTANCE.name(h.component()) + ", "
+                    + (h.topLevel() ? manage(h) : "null") + "]");
+        return "const " + LEAVES + " = [" + String.join(", ", rows) + "];\n";
+    }
+
+    /** The name the leaves a one-class module realizes are stamped under. */
+    public static final String LEAVES = "LEAVES_IMPLEMENTED";
+
     /** The fixed types it imports (D30): its component's, then each part's, each once - every one an owner may make. */
     public List<String> fixed(ComponentHeader h) {
         var out = new LinkedHashSet<String>();
