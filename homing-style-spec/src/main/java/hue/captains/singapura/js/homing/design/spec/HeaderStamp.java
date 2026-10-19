@@ -56,6 +56,18 @@ public record HeaderStamp() implements StatelessFunctionalObject {
     }
 
     /**
+     * Each slot as its constant in a merged stamp: its owner's name before the slot's - {@code SLOT_CLOSE_BUTTON_CLOSE_ICON_FACE}
+     * - since two owners under one branch may each have a slot of one token, the close button's face and the icon button's.
+     */
+    public List<SlotConstant> merged(ComponentHeader h) {
+        String owner = h.component().token().toUpperCase(Locale.ROOT).replace('-', '_');
+        return slots(h).stream().map(s -> {
+            String name = "SLOT_" + owner + "_" + s.name().substring("SLOT_".length());
+            return new SlotConstant(name, "const " + name + s.line().substring(("const " + s.name()).length()));
+        }).toList();
+    }
+
+    /**
      * The name a top-level component's binding is stamped under: {@code manage}, then the component's name -
      * {@code manageDialog}. One for each component a module implements, so several never meet.
      */
@@ -82,6 +94,41 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         if (h.topLevel()) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
         for (SlotConstant s : slots(h)) lines.add(s.line());
         if (h.topLevel())
+            lines.add("const " + manage(h) + " = " + PageStyleManager.EXPORTED + ".unit(" + DualRef.INSTANCE.of(h.component()).imported() + ");");
+        return String.join("\n", lines) + "\n";
+    }
+
+    /**
+     * The stamp of a module that implements several components - a branch's base, every leaf under it; the icons' one
+     * class - their headers merged (D19): each tree's imports once, two headers naming one node; the kit's and the page's
+     * style manager's once; each slot's constant once, its owner's name before it ({@link #merged}); a
+     * binding for each top-level component, each under its own name. One header is stamped as it is.
+     */
+    public String stamp(List<ComponentHeader> headers, PageStyleManager page) {
+        if (headers.isEmpty()) throw new IllegalArgumentException("a stamp is of one header at least");
+        if (headers.size() == 1) return stamp(headers.getFirst(), page);
+        var js = JsLiterals.INSTANCE;
+        var lines = new ArrayList<String>();
+        lines.add("// Stamped by the server (RFC 0071, D19): the headers of " + String.join(", ", headers.stream().map(h -> h.component().token()).toList())
+                + ", merged - each made from its declarations.");
+        if (headers.stream().anyMatch(h -> !h.slots().isEmpty())) lines.add("import { Slot, Count } from " + js.string(DualKit.INSTANCE.address()) + ";");
+        for (DualTree<?> tree : ReadDual.INSTANCE.trees()) {
+            var names = new LinkedHashSet<String>();
+            for (ComponentHeader h : headers) {
+                for (DualRef.Ref r : refs(h)) if (r.tree().equals(tree)) names.add(r.name() + " as " + r.imported());
+                if (tree instanceof Components) names.addAll(fixed(h));
+            }
+            if (!names.isEmpty()) lines.add("import { " + String.join(", ", names) + " } from " + js.string(tree.address()) + ";");
+        }
+        if (headers.stream().anyMatch(ComponentHeader::topLevel)) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
+        var constants = new LinkedHashMap<String, String>();
+        for (ComponentHeader h : headers) for (SlotConstant s : merged(h)) {
+            String was = constants.putIfAbsent(s.name(), s.line());
+            if (was != null && !was.equals(s.line()))
+                throw new IllegalArgumentException("two slots stamped as " + s.name() + " in one module: " + was + " and " + s.line());
+        }
+        lines.addAll(constants.values());
+        for (ComponentHeader h : headers) if (h.topLevel())
             lines.add("const " + manage(h) + " = " + PageStyleManager.EXPORTED + ".unit(" + DualRef.INSTANCE.of(h.component()).imported() + ");");
         return String.join("\n", lines) + "\n";
     }

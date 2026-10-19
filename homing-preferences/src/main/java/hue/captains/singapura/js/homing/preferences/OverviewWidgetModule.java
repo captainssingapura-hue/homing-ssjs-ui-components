@@ -51,7 +51,7 @@ public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWid
                         new PreferenceSteward.PreferenceStewardInstance(),
                         new PreferenceSteward.PreferenceViewInstance()
                 ), PreferenceSteward.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PreferencesStyles.pv_kicker(),

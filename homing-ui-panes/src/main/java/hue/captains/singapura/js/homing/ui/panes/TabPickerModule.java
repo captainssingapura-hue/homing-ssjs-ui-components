@@ -45,7 +45,7 @@ public record TabPickerModule() implements DomModule<TabPickerModule>, ImplFor<H
                         new PaneStyles.mtp_opener_note(),
                         new PaneStyles.mtp_opener_grid()
                 ), PaneStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .build();
     }

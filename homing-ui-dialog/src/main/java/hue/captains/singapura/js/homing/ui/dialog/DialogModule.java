@@ -56,9 +56,9 @@ public record DialogModule() implements DomModule<DialogModule>, ImplFor<HouseCo
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ModalityModule.Modality()), ModalityModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PrimaryButtonModule.PrimaryButton(), new PrimaryButtonModule.PrimaryButtonFactory()), PrimaryButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PrimaryButtonModule.PrimaryButton()), PrimaryButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ScrimModule.Scrim(), new ScrimModule.ScrimFactory()), ScrimModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new DialogStyles.dl_scrim(),

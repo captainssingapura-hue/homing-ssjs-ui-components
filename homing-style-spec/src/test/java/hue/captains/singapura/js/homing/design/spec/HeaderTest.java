@@ -125,6 +125,42 @@ class HeaderTest {
         System.out.println("[header] " + imports + " imports over every header, each in its dual");
     }
 
+    /**
+     * A module implementing several components - every leaf under a branch, as a branch's base is - is stamped with their
+     * headers merged: each name imported once, the page's style manager once, a binding for each top-level one, no two
+     * slots under one name - over every branch of the house with more than one component.
+     */
+    @Test
+    void everyBranchsHeaders_merge() {
+        var byBranch = new java.util.LinkedHashMap<Object, List<ComponentHeader>>();
+        for (ComponentHeader h : ReadHeader.INSTANCE.readAll(SPEC.taxonomy(), SPEC.top()))
+            byBranch.computeIfAbsent(h.component().parent(), b -> new ArrayList<>()).add(h);
+        var problems = new ArrayList<String>();
+        int merged = 0;
+        for (List<ComponentHeader> hs : byBranch.values()) {
+            if (hs.size() < 2) continue;
+            String who = hs.getFirst().component().parent().token();
+            String stamp;
+            try { stamp = HeaderStamp.INSTANCE.stamp(hs, PAGE); }
+            catch (IllegalArgumentException e) { problems.add(who + ": " + e.getMessage()); continue; }
+            var names = new HashSet<String>();
+            for (String line : stamp.lines().toList()) {
+                if (!line.startsWith("import {")) continue;
+                for (String n : line.substring("import { ".length(), line.indexOf(" }")).split(", ")) {
+                    String as = n.contains(" as ") ? n.substring(n.indexOf(" as ") + 4) : n;
+                    if (!names.add(as)) problems.add(who + ": " + as + " imported twice");
+                }
+            }
+            long pageImports = stamp.lines().filter(l -> l.startsWith("import { " + PageStyleManager.EXPORTED + " }")).count();
+            if (pageImports != (hs.stream().anyMatch(ComponentHeader::topLevel) ? 1 : 0)) problems.add(who + ": the page's style manager imported " + pageImports + " times");
+            for (ComponentHeader h : hs) if (h.topLevel() && !stamp.contains("const " + HeaderStamp.INSTANCE.manage(h) + " = ")) problems.add(who + ": no binding for " + h.component().token());
+            madeByTheKit(who, stamp, problems);
+            merged++;
+        }
+        assertEquals(List.of(), problems);
+        System.out.println("[header] " + merged + " branches' headers merged, each name once");
+    }
+
     /** The kit, every dual and every header written to target/js, each at its address's class, for a JS runtime to load. */
     @Test
     void everyModule_isWrittenOut_forAJsRuntimeToLoad() throws java.io.IOException {

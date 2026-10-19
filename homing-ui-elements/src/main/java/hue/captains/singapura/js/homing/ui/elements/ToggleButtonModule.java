@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
@@ -21,16 +20,12 @@ public record ToggleButtonModule() implements DomModule<ToggleButtonModule>, Imp
         @Override public String summary() { return "A button that is on or off: a press turns it over, and on it stays pressed."; }
     }
 
-    /** Its companion: {@code ToggleButtonFactory.create(branch, name)} makes the element it is realized on. */
-    public record ToggleButtonFactory() implements Exportable._Constant<ToggleButtonModule> {}
 
     public static final ToggleButtonModule INSTANCE = new ToggleButtonModule();
 
     @Override
     public ImportsFor<ToggleButtonModule> imports() {
         return ImportsFor.<ToggleButtonModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ToggleButtonBehaviorModule.ToggleButtonBehavior()), ToggleButtonBehaviorModule.INSTANCE))
                 .build();
@@ -38,6 +33,6 @@ public record ToggleButtonModule() implements DomModule<ToggleButtonModule>, Imp
 
     @Override
     public ExportsOf<ToggleButtonModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new ToggleButton(), new ToggleButtonFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new ToggleButton()));
     }
 }

@@ -1,8 +1,8 @@
 // =============================================================================
-// ButtonBehavior — what a button does: a press, while it is enabled, is its
-// click, dressed from the DOM's and fired to its handler. Shared by the button
-// leaves, the toggle's press its own. It reads the state through the button,
-// keeps none of its own, and never touches the look.
+// ButtonBehavior — what a button does: a press is told to the button, which
+// answers it - its click, while it is enabled (Button._pressed); the toggle
+// turns over first (ToggleButton._pressed). Shared by the button leaves. It
+// keeps no state of its own, names no node, and never touches the style.
 //
 //   new ButtonBehavior(el, button)
 //
@@ -13,6 +13,6 @@
 class ButtonBehavior {
     constructor(el, button) {
         el.type = "button";
-        el.addEventListener("click", function (ev) { if (button.enabled) button._fire(EVENT.CLICK, ev); });
+        el.addEventListener("click", function (ev) { button._pressed(ev); });
     }
 }

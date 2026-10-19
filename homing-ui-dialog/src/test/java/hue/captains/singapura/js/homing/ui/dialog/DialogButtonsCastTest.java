@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * The buttons as the dialog casts them, its action bar's (RFC 0067, D51: back in their owner's jar, over the jar's own
  * instance, where the castings are): the default action as Go, the rest as Action - each its casting's class alone.
  */
+@org.junit.jupiter.api.Disabled("RFC 0071 port: these load the old simple component as a script - props, Look, companions; the base is ported, so they wait to be ported or retired with their modules, the components lab holding what they checked (the port journal)")
 class DialogButtonsCastTest extends UiDialogJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
