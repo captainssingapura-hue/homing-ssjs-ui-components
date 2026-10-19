@@ -1,21 +1,18 @@
 // =============================================================================
 // Tick — A scale's tick: a short line in the colour it is given, its place on the scale its owner's.
-// A simple component on a <div>, in the tick's look.
+// A simple component on a <div>.
+// On the style manager (RFC 0071): its module stamped with its header (D19),
+// its states set through its reference.
 //
-//   var tick = new Tick(branch.elementMaker("tick-0-line"), {}, ROLE.NOTCH);
-//   tick.el
+//   var m = new Tick(branch.elementMaker("x"), new FixedTick(), me.slot(SLOT_…));
 // =============================================================================
 
 class Tick extends SimpleComponent {
-    static LEAF = "tick";
     static TAG = "div";
     static BEHAVIOR = MarkBehavior;
 
-    constructor(make, props, role) {
-        super(make, props, role);
+    constructor(make, fixed, place) {
+        super(make, fixed, FixedTick, place ?? manageTick);
         this.el.setAttribute("aria-hidden", "true");
     }
 }
-
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const TickFactory = new SimpleComponentFactory(Tick);

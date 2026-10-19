@@ -20,21 +20,19 @@ public record BrandMarkModule() implements DomModule<BrandMarkModule>, ImplFor<H
         @Override public String summary() { return "The brand's own sign beside its name: a square of its colour, until a site gives a logo."; }
     }
 
-    /** Its companion: {@code BrandMarkFactory.create(branch, name)} makes the element it is realized on. */
-    public record BrandMarkFactory() implements Exportable._Constant<BrandMarkModule> {}
 
     public static final BrandMarkModule INSTANCE = new BrandMarkModule();
 
     @Override
     public ImportsFor<BrandMarkModule> imports() {
         return ImportsFor.<BrandMarkModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<BrandMarkModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new BrandMark(), new BrandMarkFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new BrandMark()));
     }
 }

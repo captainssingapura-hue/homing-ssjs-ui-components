@@ -32,7 +32,7 @@ public record BrandModule() implements DomModule<BrandModule>, ImplFor<HouseCont
         return ImportsFor.<BrandModule>builder()
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new BrandMarkModule.BrandMark(), new BrandMarkModule.BrandMarkFactory()), BrandMarkModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new BrandMarkModule.BrandMark()), BrandMarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark()), WordmarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .add(new ModuleImports<>(List.of(

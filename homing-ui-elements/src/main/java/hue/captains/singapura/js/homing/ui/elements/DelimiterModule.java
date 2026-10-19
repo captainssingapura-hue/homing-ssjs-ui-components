@@ -20,21 +20,19 @@ public record DelimiterModule() implements DomModule<DelimiterModule>, ImplFor<H
         @Override public String summary() { return "A mark between the steps of a run, on one line with them: the sign between a trail's crumbs."; }
     }
 
-    /** Its companion: {@code DelimiterFactory.create(branch, name)} makes the element it is realized on. */
-    public record DelimiterFactory() implements Exportable._Constant<DelimiterModule> {}
 
     public static final DelimiterModule INSTANCE = new DelimiterModule();
 
     @Override
     public ImportsFor<DelimiterModule> imports() {
         return ImportsFor.<DelimiterModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<DelimiterModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Delimiter(), new DelimiterFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new Delimiter()));
     }
 }

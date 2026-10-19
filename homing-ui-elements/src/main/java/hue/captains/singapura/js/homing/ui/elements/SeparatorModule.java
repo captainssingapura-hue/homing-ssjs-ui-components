@@ -20,21 +20,19 @@ public record SeparatorModule() implements DomModule<SeparatorModule>, ImplFor<H
         @Override public String summary() { return "A line between the rows of a list or a menu: one group ruled off from the next."; }
     }
 
-    /** Its companion: {@code SeparatorFactory.create(branch, name)} makes the element it is realized on. */
-    public record SeparatorFactory() implements Exportable._Constant<SeparatorModule> {}
 
     public static final SeparatorModule INSTANCE = new SeparatorModule();
 
     @Override
     public ImportsFor<SeparatorModule> imports() {
         return ImportsFor.<SeparatorModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<SeparatorModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Separator(), new SeparatorFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new Separator()));
     }
 }

@@ -31,7 +31,7 @@ public record TrailModule() implements DomModule<TrailModule>, ImplFor<HouseCont
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CrumbModule.Crumb(), new CrumbModule.CrumbFactory()), CrumbModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DelimiterModule.Delimiter(), new DelimiterModule.DelimiterFactory()), DelimiterModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new DelimiterModule.Delimiter()), DelimiterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new ElementStyles.el_trail(),
                         new ElementStyles.el_trail_crumb()

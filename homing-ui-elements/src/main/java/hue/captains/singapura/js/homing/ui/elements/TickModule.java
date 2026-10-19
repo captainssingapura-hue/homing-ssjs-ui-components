@@ -19,20 +19,19 @@ public record TickModule() implements DomModule<TickModule>, ImplFor<HouseMarks.
         @Override public String summary() { return "A scale's tick."; }
     }
 
-    public record TickFactory() implements Exportable._Constant<TickModule> {}
 
     public static final TickModule INSTANCE = new TickModule();
 
     @Override
     public ImportsFor<TickModule> imports() {
         return ImportsFor.<TickModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<TickModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Tick(), new TickFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new Tick()));
     }
 }
