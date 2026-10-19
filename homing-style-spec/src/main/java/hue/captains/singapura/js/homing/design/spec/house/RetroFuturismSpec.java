@@ -1,123 +1,163 @@
 package hue.captains.singapura.js.homing.design.spec.house;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
+import hue.captains.singapura.js.homing.design.spec.ComponentAssignment;
+import hue.captains.singapura.js.homing.design.spec.RoleAssignment;
 import hue.captains.singapura.js.homing.design.spec.SpecModule;
-import hue.captains.singapura.js.homing.design.spec.StandaloneEntry;
-import hue.captains.singapura.js.homing.design.spec.Target;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControlPanel;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
-import hue.captains.singapura.js.homing.ui.taxonomy.HousePanZoom;
-import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
-import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseSite;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseSaying;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
 
 import java.util.List;
 
-/** retro-futurism's standalones, in the typed spec stack (RFC 0067, D53): each component it draws otherwise than Base; the rest are Base's. */
+/**
+ * retro-futurism's assignments, in the typed spec stack (RFC 0067, D53, D54): each house component it draws its own way, and
+ * the implementation each of its castings wears - every casting of it; the components it does not assign are Base's,
+ * whole.
+ */
 public record RetroFuturismSpec() implements SpecModule<BaseScheme, RetroFuturism> {
 
     public static final RetroFuturismSpec INSTANCE = new RetroFuturismSpec();
 
     @Override public RetroFuturism style() { return RetroFuturism.INSTANCE; }
 
-    @Override public List<StandaloneEntry<BaseScheme, RetroFuturism, ?>> standalones() {
+    @Override public List<ComponentModule> modules() { return HouseTaxonomy.MODULES; }
+
+    @Override public List<ComponentAssignment<BaseScheme, RetroFuturism, ?>> assignments() {
         return List.of(
-                new StandaloneEntry<>(HouseControls.PlainButton.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton())),
-                new StandaloneEntry<>(HouseControls.PrimaryButton.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PrimaryButton())),
-                new StandaloneEntry<>(HouseControls.SecondaryButton.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SecondaryButton())),
-                new StandaloneEntry<>(HouseControls.DangerButton.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.DangerButton())),
-                new StandaloneEntry<>(HouseControls.WarningButton.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.WarningButton())),
-                new StandaloneEntry<>(HouseControls.SuccessButton.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SuccessButton())),
-                new StandaloneEntry<>(HouseControls.ToggleButton.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleButton())),
-                new StandaloneEntry<>(HouseControls.CloseButton.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CloseButtonDeclaration())),
-                new StandaloneEntry<>(HouseControls.IconButton.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.IconButtonDeclaration())),
-                new StandaloneEntry<>(HouseText.Heading1.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading1())),
-                new StandaloneEntry<>(HouseText.Heading2.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading2())),
-                new StandaloneEntry<>(HouseText.Heading3.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading3())),
-                new StandaloneEntry<>(HouseText.Heading4.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading4())),
-                new StandaloneEntry<>(HouseText.Heading5.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading5())),
-                new StandaloneEntry<>(HouseText.Heading6.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading6())),
-                new StandaloneEntry<>(HouseText.Kicker.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Kicker())),
-                new StandaloneEntry<>(HouseText.Caption.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Caption())),
-                new StandaloneEntry<>(HouseText.Lede.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Lede())),
-                new StandaloneEntry<>(HouseText.Label.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Label())),
-                new StandaloneEntry<>(HouseText.Readout.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Readout())),
-                new StandaloneEntry<>(HouseText.Badge.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Badge())),
-                new StandaloneEntry<>(HouseText.Pill.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Pill())),
-                new StandaloneEntry<>(HouseText.Code.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Code())),
-                new StandaloneEntry<>(HouseText.SuccessBadge.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SuccessBadge())),
-                new StandaloneEntry<>(HouseText.WarningBadge.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.WarningBadge())),
-                new StandaloneEntry<>(HouseText.DangerBadge.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.DangerBadge())),
-                new StandaloneEntry<>(HouseText.Wordmark.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Wordmark())),
-                new StandaloneEntry<>(HouseControls.Link.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Link())),
-                new StandaloneEntry<>(HouseControls.Crumb.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Crumb())),
-                new StandaloneEntry<>(HouseControls.TextBox.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TextBox())),
-                new StandaloneEntry<>(HouseControls.Checkbox.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Checkbox())),
-                new StandaloneEntry<>(HouseControls.Range.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Range())),
-                new StandaloneEntry<>(HouseControls.Select.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Select())),
-                new StandaloneEntry<>(HouseContainers.Scrim.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Scrim())),
-                new StandaloneEntry<>(HouseMarks.Separator.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Separator())),
-                new StandaloneEntry<>(HouseMarks.Lamp.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Lamp())),
-                new StandaloneEntry<>(HouseMarks.Detent.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Detent())),
-                new StandaloneEntry<>(HouseMarks.Tick.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Tick())),
-                new StandaloneEntry<>(HouseItems.MenuItem.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.MenuItemDeclaration())),
-                new StandaloneEntry<>(HouseItems.ListRow.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ListRow())),
-                new StandaloneEntry<>(HouseItems.ChoiceOption.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ChoiceOptionDeclaration())),
-                new StandaloneEntry<>(HouseContainers.PlainCard.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainCard())),
-                new StandaloneEntry<>(HouseContainers.ClickableCard.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ClickableCard())),
-                new StandaloneEntry<>(HouseContainers.SummaryView.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SummaryViewDeclaration())),
-                new StandaloneEntry<>(HouseMarks.SliderRail.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderRail())),
-                new StandaloneEntry<>(HouseMarks.SliderGroove.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderGroove())),
-                new StandaloneEntry<>(HouseMarks.Fill.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Fill())),
-                new StandaloneEntry<>(HouseControls.SliderKnob.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderKnob())),
-                new StandaloneEntry<>(HouseMarks.ToggleGroove.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleGroove())),
-                new StandaloneEntry<>(HouseControls.ToggleKnob.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleKnob())),
-                new StandaloneEntry<>(HouseControls.Grip.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Grip())),
-                new StandaloneEntry<>(HouseControls.Switch.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SwitchDeclaration())),
-                new StandaloneEntry<>(HouseControls.PaneThumb.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PaneThumbDeclaration())),
-                new StandaloneEntry<>(HouseControls.Slider.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderDeclaration())),
-                new StandaloneEntry<>(HouseContainers.SliderGroup.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderGroupDeclaration())),
-                new StandaloneEntry<>(HouseContainers.Panel.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PanelDeclaration())),
-                new StandaloneEntry<>(HouseContainers.EdgeStrip.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.EdgeStripDeclaration())),
-                new StandaloneEntry<>(HouseContainers.Ground.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Ground())),
-                new StandaloneEntry<>(HouseContainers.SiteBar.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SiteBarDeclaration())),
-                new StandaloneEntry<>(HouseControls.Brand.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.BrandDeclaration())),
-                new StandaloneEntry<>(HouseContainers.Trail.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TrailDeclaration())),
-                new StandaloneEntry<>(HouseRegions.Quote.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Quote())),
-                new StandaloneEntry<>(HouseRegions.CodeBlock.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CodeBlock())),
-                new StandaloneEntry<>(HouseIcons.CloseIcon.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CloseIcon())),
-                new StandaloneEntry<>(HouseContainers.FloatingPane.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.FloatingPaneDeclaration())),
-                new StandaloneEntry<>(HouseContainers.FloatLayer.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.FloatLayerDeclaration())),
-                new StandaloneEntry<>(HouseContainers.ContextMenu.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ContextMenuDeclaration())),
-                new StandaloneEntry<>(HousePanes.MultiTabPane.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.MultiTabPaneDeclaration())),
-                new StandaloneEntry<>(HouseContainers.TabStrip.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TabStripDeclaration())),
-                new StandaloneEntry<>(HouseControls.Tab.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TabDeclaration())),
-                new StandaloneEntry<>(HousePanes.TabOpener.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TabOpenerDeclaration())),
-                new StandaloneEntry<>(HousePanes.TabPicker.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TabPickerDeclaration())),
-                new StandaloneEntry<>(HousePanes.AddTab.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.AddTabDeclaration())),
-                new StandaloneEntry<>(HousePanZoom.PanZoomBar.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PanZoomBarDeclaration())),
-                new StandaloneEntry<>(HousePreferences.PreferenceField.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PreferenceFieldDeclaration())),
-                new StandaloneEntry<>(HousePreferences.ChoiceWidget.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ChoiceWidgetDeclaration())),
-                new StandaloneEntry<>(HousePreferences.ToggleWidget.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleWidgetDeclaration())),
-                new StandaloneEntry<>(HousePreferences.ScaleWidget.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ScaleWidgetDeclaration())),
-                new StandaloneEntry<>(HousePreferences.SettingRow.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SettingRowDeclaration())),
-                new StandaloneEntry<>(HousePreferences.OverviewWidget.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.OverviewWidgetDeclaration())),
-                new StandaloneEntry<>(HousePreferences.ListMasterWidget.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ListMasterWidgetDeclaration())),
-                new StandaloneEntry<>(HouseSite.MpaChrome.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.MpaChromeDeclaration())),
-                new StandaloneEntry<>(HouseControls.PreferencesButton.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PreferencesButtonDeclaration())),
-                new StandaloneEntry<>(HouseSite.ThemeWidget.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ThemeWidgetDeclaration())),
-                new StandaloneEntry<>(HouseControlPanel.ControlPanel.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ControlPanelDeclaration())),
-                new StandaloneEntry<>(HouseRegions.SliderRack.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderRack())),
-                new StandaloneEntry<>(HouseContainers.PanelBar.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PanelBarDeclaration())),
-                new StandaloneEntry<>(HouseRegions.Section.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Section())),
-                new StandaloneEntry<>(HouseContainers.ActionBar.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ActionBarDeclaration())),
-                new StandaloneEntry<>(HouseContainers.TitleBar.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TitleBarDeclaration())));
+                new ComponentAssignment<>(HouseControls.PlainButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton(), List.of(
+                        new RoleAssignment<>(HouseDoing.Action.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()),
+                        new RoleAssignment<>(HouseDoing.Choice.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()),
+                        new RoleAssignment<>(HouseDoing.Cancel.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()),
+                        new RoleAssignment<>(HouseDoing.Go.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()),
+                        new RoleAssignment<>(HouseDoing.ZoomOut.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()),
+                        new RoleAssignment<>(HouseDoing.ZoomIn.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()),
+                        new RoleAssignment<>(HouseDoing.Fit.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()),
+                        new RoleAssignment<>(HouseDoing.Reset.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()),
+                        new RoleAssignment<>(HouseDoing.Toggle.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainButton()))),
+                new ComponentAssignment<>(HouseControls.PrimaryButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PrimaryButton(), List.of(
+                        new RoleAssignment<>(HouseDoing.Go.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PrimaryButton()))),
+                new ComponentAssignment<>(HouseControls.SecondaryButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SecondaryButton(), List.of()),
+                new ComponentAssignment<>(HouseControls.DangerButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.DangerButton(), List.of()),
+                new ComponentAssignment<>(HouseControls.WarningButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.WarningButton(), List.of()),
+                new ComponentAssignment<>(HouseControls.SuccessButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SuccessButton(), List.of()),
+                new ComponentAssignment<>(HouseControls.ToggleButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleButton(), List.of()),
+                new ComponentAssignment<>(HouseControls.CloseButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CloseButton(), List.of(
+                        new RoleAssignment<>(HouseDoing.Close.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CloseButton()))),
+                new ComponentAssignment<>(HouseControls.IconButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.IconButton(), List.of(
+                        new RoleAssignment<>(HouseDoing.Add.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.IconButton()))),
+                new ComponentAssignment<>(HouseText.Heading1.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading1(), List.of()),
+                new ComponentAssignment<>(HouseText.Heading2.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading2(), List.of()),
+                new ComponentAssignment<>(HouseText.Heading3.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading3(), List.of()),
+                new ComponentAssignment<>(HouseText.Heading4.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading4(), List.of(
+                        new RoleAssignment<>(HouseSaying.Title.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading4()))),
+                new ComponentAssignment<>(HouseText.Heading5.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading5(), List.of()),
+                new ComponentAssignment<>(HouseText.Heading6.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Heading6(), List.of()),
+                new ComponentAssignment<>(HouseText.Kicker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Kicker(), List.of(
+                        new RoleAssignment<>(HouseSaying.Name.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Kicker()),
+                        new RoleAssignment<>(HouseSaying.Title.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Kicker()),
+                        new RoleAssignment<>(HouseSaying.Prompt.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Kicker()),
+                        new RoleAssignment<>(HouseSaying.Category.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Kicker()),
+                        new RoleAssignment<>(HouseSaying.Status.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Kicker()),
+                        new RoleAssignment<>(HouseSaying.Subtitle.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Kicker()))),
+                new ComponentAssignment<>(HouseText.Caption.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Caption(), List.of(
+                        new RoleAssignment<>(HouseSaying.Hint.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Caption()),
+                        new RoleAssignment<>(HouseSaying.Note.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Caption()),
+                        new RoleAssignment<>(HouseSaying.Summary.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Caption()),
+                        new RoleAssignment<>(HouseSaying.Figure.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Caption()),
+                        new RoleAssignment<>(HouseSaying.Value.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Caption()))),
+                new ComponentAssignment<>(HouseText.Lede.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Lede(), List.of(
+                        new RoleAssignment<>(HouseSaying.Summary.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Lede()))),
+                new ComponentAssignment<>(HouseText.Label.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Label(), List.of(
+                        new RoleAssignment<>(HouseSaying.Name.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Label()),
+                        new RoleAssignment<>(HouseSaying.Title.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.LabelTitle()))),
+                new ComponentAssignment<>(HouseText.Readout.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Readout(), List.of(
+                        new RoleAssignment<>(HouseSaying.Value.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Readout()))),
+                new ComponentAssignment<>(HouseText.Badge.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Badge(), List.of(
+                        new RoleAssignment<>(HouseSaying.Tag.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Badge()))),
+                new ComponentAssignment<>(HouseText.Pill.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Pill(), List.of(
+                        new RoleAssignment<>(HouseSaying.Count.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Pill()))),
+                new ComponentAssignment<>(HouseText.Code.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Code(), List.of()),
+                new ComponentAssignment<>(HouseText.SuccessBadge.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SuccessBadge(), List.of()),
+                new ComponentAssignment<>(HouseText.WarningBadge.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.WarningBadge(), List.of()),
+                new ComponentAssignment<>(HouseText.DangerBadge.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.DangerBadge(), List.of()),
+                new ComponentAssignment<>(HouseText.Wordmark.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Wordmark(), List.of(
+                        new RoleAssignment<>(HouseSaying.Name.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Wordmark()))),
+                new ComponentAssignment<>(HouseControls.Link.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Link(), List.of(
+                        new RoleAssignment<>(HouseDoing.Open.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Link()))),
+                new ComponentAssignment<>(HouseControls.Crumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Crumb(), List.of(
+                        new RoleAssignment<>(HouseDoing.Step.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Crumb()))),
+                new ComponentAssignment<>(HouseControls.TextBox.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TextBox(), List.of()),
+                new ComponentAssignment<>(HouseControls.Checkbox.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Checkbox(), List.of()),
+                new ComponentAssignment<>(HouseControls.Range.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Range(), List.of(
+                        new RoleAssignment<>(HouseDoing.Adjust.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Range()))),
+                new ComponentAssignment<>(HouseControls.Select.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Select(), List.of(
+                        new RoleAssignment<>(HouseDoing.What.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Select()),
+                        new RoleAssignment<>(HouseDoing.How.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Select()))),
+                new ComponentAssignment<>(HouseContainers.Scrim.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Scrim(), List.of()),
+                new ComponentAssignment<>(HouseMarks.Separator.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Separator(), List.of()),
+                new ComponentAssignment<>(HouseMarks.Lamp.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Lamp(), List.of()),
+                new ComponentAssignment<>(HouseMarks.Detent.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Detent(), List.of(
+                        new RoleAssignment<>(HouseSaying.Rest.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Detent()))),
+                new ComponentAssignment<>(HouseMarks.Tick.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Tick(), List.of(
+                        new RoleAssignment<>(HouseSaying.Notch.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Tick()))),
+                new ComponentAssignment<>(HouseItems.MenuItem.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.MenuItem(), List.of(
+                        new RoleAssignment<>(HouseDoing.Choice.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.MenuItem()))),
+                new ComponentAssignment<>(HouseItems.ListRow.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ListRow(), List.of(
+                        new RoleAssignment<>(HouseDoing.Choice.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ListRow()))),
+                new ComponentAssignment<>(HouseItems.ChoiceOption.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ChoiceOption(), List.of(
+                        new RoleAssignment<>(HouseDoing.Choice.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ChoiceOption()),
+                        new RoleAssignment<>(HouseDoing.Style.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ChoiceOption()),
+                        new RoleAssignment<>(HouseDoing.Palette.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ChoiceOption()))),
+                new ComponentAssignment<>(HouseContainers.PlainCard.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainCard(), List.of()),
+                new ComponentAssignment<>(HouseContainers.ClickableCard.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ClickableCard(), List.of()),
+                new ComponentAssignment<>(HouseMarks.SliderRail.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderRail(), List.of()),
+                new ComponentAssignment<>(HouseMarks.SliderGroove.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderGroove(), List.of(
+                        new RoleAssignment<>(HouseSaying.Span.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderGroove()))),
+                new ComponentAssignment<>(HouseMarks.Fill.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Fill(), List.of(
+                        new RoleAssignment<>(HouseSaying.Level.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Fill()))),
+                new ComponentAssignment<>(HouseControls.SliderKnob.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderKnob(), List.of(
+                        new RoleAssignment<>(HouseDoing.Thumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderKnob()))),
+                new ComponentAssignment<>(HouseMarks.ToggleGroove.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleGroove(), List.of(
+                        new RoleAssignment<>(HouseSaying.Span.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleGroove()))),
+                new ComponentAssignment<>(HouseControls.ToggleKnob.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleKnob(), List.of(
+                        new RoleAssignment<>(HouseDoing.Thumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ToggleKnob()))),
+                new ComponentAssignment<>(HouseControls.Grip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Grip(), List.of()),
+                new ComponentAssignment<>(HouseControls.Switch.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Switch(), List.of(
+                        new RoleAssignment<>(HouseDoing.Toggle.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Switch()))),
+                new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PaneThumb(), List.of()),
+                new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Slider(), List.of()),
+                new ComponentAssignment<>(HouseContainers.SliderGroup.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderGroup(), List.of(
+                        new RoleAssignment<>(HouseDoing.Adjust.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderGroup()))),
+                new ComponentAssignment<>(HouseContainers.Panel.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Panel(), List.of()),
+                new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.EdgeStrip(), List.of()),
+                new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Ground(), List.of()),
+                new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SiteBar(), List.of()),
+                new ComponentAssignment<>(HouseControls.Brand.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Brand(), List.of(
+                        new RoleAssignment<>(HouseDoing.Home.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Brand()))),
+                new ComponentAssignment<>(HouseRegions.Quote.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Quote(), List.of()),
+                new ComponentAssignment<>(HouseRegions.CodeBlock.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CodeBlock(), List.of()),
+                new ComponentAssignment<>(HouseIcons.CloseIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CloseIcon(), List.of()),
+                new ComponentAssignment<>(HouseContainers.FloatingPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.FloatingPane(), List.of()),
+                new ComponentAssignment<>(HouseContainers.FloatLayer.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.FloatLayer(), List.of()),
+                new ComponentAssignment<>(HouseContainers.ContextMenu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ContextMenu(), List.of()),
+                new ComponentAssignment<>(HouseContainers.TabStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TabStrip(), List.of()),
+                new ComponentAssignment<>(HouseControls.Tab.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Tab(), List.of()),
+                new ComponentAssignment<>(HouseControls.PreferencesButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PreferencesButton(), List.of(
+                        new RoleAssignment<>(HouseDoing.Preferences.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PreferencesButton()))),
+                new ComponentAssignment<>(HouseRegions.SliderRack.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderRack(), List.of()),
+                new ComponentAssignment<>(HouseContainers.PanelBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PanelBar(), List.of()),
+                new ComponentAssignment<>(HouseRegions.Section.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Section(), List.of()),
+                new ComponentAssignment<>(HouseContainers.ActionBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ActionBar(), List.of()),
+                new ComponentAssignment<>(HouseContainers.TitleBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TitleBar(), List.of()));
     }
 }

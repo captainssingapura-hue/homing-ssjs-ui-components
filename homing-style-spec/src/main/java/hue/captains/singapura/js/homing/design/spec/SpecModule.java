@@ -1,23 +1,24 @@
 package hue.captains.singapura.js.homing.design.spec;
 
+import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 
 import java.util.List;
 
 /**
- * A jar's standalones in one style (RFC 0067, D53): for each top-level component it styles, and each component of their
- * design a functional role places, its one implementation or declaration standalone; everything else is reached by
- * pointing - a declaration's specs, an implementation's delegations - wherever it lives.
+ * A jar's assignments in one layer (RFC 0067, D53, D54): for each component it assigns, the implementation each of the
+ * component's castings wears. It assigns only components the component modules it names bring, so a jar styles nothing
+ * it does not say it styles: an extension names its own module and reaches none of the house's.
  *
- * @param <Sc> the style's scheme
- * @param <S>  the style
+ * @param <Sc> the layer's scheme
+ * @param <S>  the layer
  */
 public interface SpecModule<Sc extends ColorScheme, S extends DesignStyle<Sc>> {
-
-    /** The style its standalones are of. */
+    /** The layer its assignments are of. */
     S style();
-
-    /** Each component it gives a standalone, with that standalone. */
-    List<StandaloneEntry<Sc, S, ?>> standalones();
+    /** The component modules whose components it assigns: no other component's. */
+    List<? extends ComponentModule> modules();
+    /** Each component it assigns, with that assignment. */
+    List<ComponentAssignment<Sc, S, ?>> assignments();
 }

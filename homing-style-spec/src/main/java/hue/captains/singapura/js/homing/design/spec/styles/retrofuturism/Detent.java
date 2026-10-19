@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
-import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
@@ -11,7 +10,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import java.util.List;
 
 /** retro-futurism's implementation of detent: CSS of its own - its content apart, the colours it draws with typed here. */
-public record Detent() implements CssImplementation<BaseScheme, RetroFuturism, HouseMarks.Detent, RoleRoot> {
+public record Detent() implements CssImplementation<BaseScheme, RetroFuturism, HouseMarks.Detent> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.Muted());
     }

@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.design.semantic.TypeArguments;
 import hue.captains.singapura.js.homing.design.spec.CssResolution;
 import hue.captains.singapura.js.homing.design.spec.ElementPath;
 import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
-import hue.captains.singapura.js.homing.design.spec.Trace;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styling.CastingCss;
@@ -19,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The gauge, while today's stack stands (RFC 0067, D53): in every style, each element's content - what the typed spec
+ * The gauge, while today's stack stands (RFC 0067, D53, D54): in every style, each element's content - what the typed spec
  * stack's resolver finds for the implementation the element wears - is exactly the CSS today's registry gives the
  * element's casting. It goes when today's stack does.
  */
@@ -48,22 +47,22 @@ class TodayTest {
     }
 
     /**
-     * Each element's CSS is of the style, the component and the role today's is - so what today's jars are held to of
-     * their CSS (its rule, filled in for its casting; its colours imported both ways, D32) holds of the content here,
-     * whose text and colours are today's.
+     * Each element's CSS is of the layer and the component today's is (RFC 0067, D54): an implementation is its
+     * component's, whatever role it is worn in, so its role is no longer in its type - today's CSS of a role drawn as
+     * its component is, is the component's own here.
      */
     @Test
-    void everyElementInEveryStyle_wearsCssOfTodaysCasting() {
+    void everyElementInEveryStyle_wearsCssOfTodaysLayerAndComponent() {
         var wrong = new ArrayList<String>();
         for (DesignStyle<?> s : SPEC.styles())
             for (ElementPath e : SPEC.elements()) {
-                Trace.CssStep now = SPEC.trace(s, e).end();
+                SpecRegistry.Worn now = SPEC.worn(s, e);
                 List<Class<?>> then = TypeArguments.INSTANCE.of(TODAY.resolve(s, e.casting()).css().getClass(), CastingStyle.class);
-                List<Class<?>> mine = List.of(now.layer().getClass(), now.casting().component().getClass(), now.casting().role().getClass());
-                if (!mine.equals(then.subList(1, 4))) wrong.add(s.token() + " " + e.token() + ": " + names(mine) + ", today " + names(then.subList(1, 4)));
+                List<Class<?>> mine = List.of(now.layer().getClass(), now.component().getClass());
+                if (!mine.equals(then.subList(1, 3))) wrong.add(s.token() + " " + e.token() + ": " + names(mine) + ", today " + names(then.subList(1, 3)));
             }
         assertTrue(wrong.isEmpty(), wrong.size() + " differ:\n" + String.join("\n", wrong.subList(0, Math.min(40, wrong.size()))));
-        System.out.println("[today] " + SPEC.styles().size() * SPEC.elements().size() + " elements' CSS of today's style, component and role");
+        System.out.println("[today] " + SPEC.styles().size() * SPEC.elements().size() + " elements' CSS of today's layer and component");
     }
 
     private static List<String> names(List<Class<?>> types) { return types.stream().map(Class::getSimpleName).toList(); }

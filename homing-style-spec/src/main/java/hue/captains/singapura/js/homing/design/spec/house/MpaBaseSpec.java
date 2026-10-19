@@ -2,17 +2,22 @@ package hue.captains.singapura.js.homing.design.spec.house;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.design.spec.BaseSpecModule;
-import hue.captains.singapura.js.homing.design.spec.StandaloneEntry;
-import hue.captains.singapura.js.homing.design.spec.Target;
+import hue.captains.singapura.js.homing.design.spec.ComponentAssignment;
+import hue.captains.singapura.js.homing.design.spec.RoleAssignment;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseSite;
 import hue.captains.singapura.js.homing.ui.taxonomy.MpaComponentModule;
 
 import java.util.List;
 
-/** MpaComponentModule's standalones in Base, in the typed spec stack (RFC 0067, D53): its components', and those of their design a functional role places. */
+/**
+ * MpaComponentModule's components in Base, in the typed spec stack (RFC 0067, D53, D54): each component it brings - its own, and
+ * the parts that come in with them - and the implementation each of its castings wears, on its own and in each role it
+ * is cast in.
+ */
 public record MpaBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     public static final MpaBaseSpec INSTANCE = new MpaBaseSpec();
@@ -21,10 +26,11 @@ public record MpaBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     @Override public ComponentModule components() { return MpaComponentModule.INSTANCE; }
 
-    @Override public List<StandaloneEntry<BaseScheme, Base, ?>> standalones() {
+    @Override public List<ComponentAssignment<BaseScheme, Base, ?>> assignments() {
         return List.of(
-                new StandaloneEntry<>(HouseSite.MpaChrome.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.MpaChromeDeclaration())),
-                new StandaloneEntry<>(HouseControls.PreferencesButton.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesButtonDeclaration())),
-                new StandaloneEntry<>(HouseSite.ThemeWidget.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.ThemeWidgetDeclaration())));
+                new ComponentAssignment<>(HouseSite.MpaChrome.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.MpaChrome(), List.of()),
+                new ComponentAssignment<>(HouseControls.PreferencesButton.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesButton(), List.of(
+                        new RoleAssignment<>(HouseDoing.Preferences.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesButton()))),
+                new ComponentAssignment<>(HouseSite.ThemeWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ThemeWidget(), List.of()));
     }
 }

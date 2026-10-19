@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
 
-import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.color.ColorScale;
 import hue.captains.singapura.js.homing.design.spec.CssImplementation;
@@ -12,7 +11,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import java.util.List;
 
 /** neo-futurism's implementation of secondary-button: CSS of its own - its content apart, the colours it draws with typed here. */
-public record SecondaryButton() implements CssImplementation<BaseScheme, NeoFuturism, HouseControls.SecondaryButton, RoleRoot> {
+public record SecondaryButton() implements CssImplementation<BaseScheme, NeoFuturism, HouseControls.SecondaryButton> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new ButtonLabel(), new BaseColours.AccentEdge(), new BaseColours.Ring(), new BaseColours.ShadeSoft(), new BaseColours.GlowFaint(), new BaseColours.GlowDim(), new BaseColours.GlowSoft(), new BaseColours.GlowBright(), new ButtonGround());
     }

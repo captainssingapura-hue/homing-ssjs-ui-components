@@ -8,64 +8,21 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * How an element resolves in a style (RFC 0067, D53), step by step: from the top-level component's standalone, through
- * the declarations its slots are held in, to the implementation it wears, then along its delegations to the
- * implementation with CSS of its own - whose content a resolver finds.
+ * How a casting resolves in a style (RFC 0067, D54): the layers asked, from the style worn down, until the first that
+ * assigns its component - each one before it leaving the component, whole, to the layer it is written over - and the
+ * implementation that layer's assignment gives the casting. Its owner and its slot play no part: they are the layout's.
  *
  * @param style   the style worn
- * @param element the element
- * @param steps   each node reached, in order, with how it was reached; the last, and only the last, with CSS of its own
+ * @param casting the casting: a component on its own, or in a role with a look of its own
+ * @param passed  the layers asked that do not assign its component, in the order asked
+ * @param end     what it wears: the implementation, of the layer whose assignment gives it
  */
-public record Trace(DesignStyle<?> style, ElementPath element, List<Step> steps) implements ValueObject {
-
+public record Trace(DesignStyle<?> style, Casting casting, List<DesignStyle<?>> passed, SpecRegistry.Worn end) implements ValueObject {
     public Trace {
         Objects.requireNonNull(style, "Trace.style");
-        Objects.requireNonNull(element, "Trace.element");
-        steps = List.copyOf(steps);
-        if (steps.isEmpty() || !(steps.getLast() instanceof CssStep) || steps.stream().filter(s -> s instanceof CssStep).count() != 1)
-            throw new IllegalArgumentException(element.token() + " in " + style.token() + ": a trace ends at the one implementation with CSS of its own");
+        Objects.requireNonNull(casting, "Trace.casting");
+        passed = List.copyOf(passed);
+        Objects.requireNonNull(end, "Trace.end");
+        if (passed.contains(end.layer())) throw new IllegalArgumentException(casting.token() + " in " + style.token() + ": a layer passed gives nothing");
     }
-
-    /** How a step was reached. */
-    public enum Via {
-        /** The top-level component's standalone, the style's or the layer below's. */
-        STANDALONE,
-        /** A slot in a role with a look of its own: its spec's target. */
-        SAME_ROLE,
-        /** A slot whose role only places its part: the part's standalone in the style worn. */
-        PLACED,
-        /** A declaration's own implementation. */
-        OWN,
-        /** A delegation to another implementation of the same role, in the same style. */
-        DELEGATION,
-        /** A delegation from a role's implementation to its component's standalone. */
-        ROOT_DELEGATION,
-        /** A delegation to the same role in the style written under. */
-        PARENT_DELEGATION
-    }
-
-    /** One node reached. */
-    public sealed interface Step extends ValueObject permits DeclarationStep, DelegationStep, CssStep {
-
-        /** How it was reached. */
-        Via via();
-
-        /** The style it is of. */
-        DesignStyle<?> layer();
-
-        /** The casting it is of. */
-        Casting casting();
-    }
-
-    /** A declaration reached. */
-    public record DeclarationStep(Via via, DesignStyle<?> layer, Casting casting, CastingDeclaration<?, ?, ?, ?> declaration) implements Step {}
-
-    /** An implementation reached that delegates: the next step is where to. */
-    public record DelegationStep(Via via, DesignStyle<?> layer, Casting casting, Delegation<?, ?, ?, ?> impl) implements Step {}
-
-    /** The implementation reached with CSS of its own: what the element wears. */
-    public record CssStep(Via via, DesignStyle<?> layer, Casting casting, CssImplementation<?, ?, ?, ?> impl) implements Step {}
-
-    /** Where it ends: the implementation with CSS of its own. */
-    public CssStep end() { return (CssStep) steps.getLast(); }
 }

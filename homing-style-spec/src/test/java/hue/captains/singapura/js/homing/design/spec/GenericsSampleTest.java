@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
@@ -13,84 +13,56 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/** The types, as a declaration and its implementations are written: what compiles holds the rules the compiler is given. */
+/**
+ * The types, as an assignment and its implementations are written (RFC 0067, D54): what compiles holds the rules the
+ * compiler is given - an assignment names implementations of its own component and its own layer, an implementation of
+ * another component, or of another layer, not fitting it.
+ */
 class GenericsSampleTest {
 
-    record BasePlain() implements CssImplementation<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> {
+    record BasePlain() implements CssImplementation<BaseScheme, Base, HouseControls.PlainButton> {
         @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() { return List.of(new BaseColours.Border()); }
     }
 
-    record BasePlainAction() implements RootDelegation<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> {
-        @Override public CastingImplementation<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> to() { return new BasePlain(); }
-    }
+    record BasePlainGo() implements CssImplementation<BaseScheme, Base, HouseControls.PlainButton> {}
 
-    record EditorialPlainAction() implements ParentDelegation<BaseScheme, Base, Editorial, HouseControls.PlainButton, HouseDoing.Action> {
-        @Override public CastingImplementation<BaseScheme, Base, HouseControls.PlainButton, HouseDoing.Action> to() { return new BasePlainAction(); }
-    }
+    record EditorialPlain() implements CssImplementation<BaseScheme, Editorial, HouseControls.PlainButton> {}
 
-    record EditorialDialog() implements CssImplementation<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> {}
+    record EditorialActionBar() implements CssImplementation<BaseScheme, Editorial, HouseContainers.ActionBar> {}
 
-    record EditorialDialogDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> {
-        @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.Dialog, RoleRoot> own() { return new EditorialDialog(); }
-        @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.Dialog> parts() {
-            return new PartsSpec<>(List.of(
-                    new PartSpec.Standalone<>(HouseContainers.Dialog.INSTANCE, HouseContainers.ActionBar.INSTANCE, HouseShaping.Actions.INSTANCE)));
-        }
-    }
-
-    record EditorialActionBar() implements CssImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> {}
-
-    record EditorialActionBarDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> {
-        @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> own() { return new EditorialActionBar(); }
-        @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.ActionBar> parts() {
-            return new PartsSpec<>(List.of(
-                    new PartSpec.SameRole<>(HouseContainers.ActionBar.INSTANCE, HouseControls.PlainButton.INSTANCE, HouseDoing.Action.INSTANCE,
-                            new Target.Impl<>(new EditorialPlainAction()))));
-        }
-    }
-
-    record EditorialActionBarActions() implements RootDelegation<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> {
-        @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, RoleRoot> to() { return new EditorialActionBar(); }
-    }
-
-    record EditorialActionBarActionsDeclaration() implements CastingDeclaration<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> {
-        @Override public CastingImplementation<BaseScheme, Editorial, HouseContainers.ActionBar, HouseShaping.Actions> own() { return new EditorialActionBarActions(); }
-        @Override public PartsSpec<BaseScheme, Editorial, HouseContainers.ActionBar> parts() { return new EditorialActionBarDeclaration().parts(); }
+    @Test
+    void anAssignment_namesItsComponentsOwnImplementations_byValue() {
+        var base = new ComponentAssignment<>(HouseControls.PlainButton.INSTANCE, new BasePlain(), List.of(
+                new RoleAssignment<>(HouseDoing.Action.INSTANCE, new BasePlain()),
+                new RoleAssignment<>(HouseDoing.Go.INSTANCE, new BasePlainGo())));
+        assertEquals(List.of(new Casting(HouseControls.PlainButton.INSTANCE), new Casting(HouseControls.PlainButton.INSTANCE, HouseDoing.Action.INSTANCE),
+                new Casting(HouseControls.PlainButton.INSTANCE, HouseDoing.Go.INSTANCE)), base.castings());
+        assertEquals(Optional.of(new BasePlain()), base.of(new Casting(HouseControls.PlainButton.INSTANCE, HouseDoing.Action.INSTANCE)),
+                "a role drawn as its component is names the same implementation: no delegation");
+        assertEquals(Optional.of(new BasePlainGo()), base.of(new Casting(HouseControls.PlainButton.INSTANCE, HouseDoing.Go.INSTANCE)));
+        assertEquals(Optional.empty(), base.of(new Casting(HouseControls.PlainButton.INSTANCE, HouseDoing.Cancel.INSTANCE)));
+        assertEquals(List.of(new BasePlain(), new BasePlainGo()), base.implementations());
+        var editorial = new ComponentAssignment<>(HouseControls.PlainButton.INSTANCE, new EditorialPlain(), List.of(
+                new RoleAssignment<>(HouseDoing.Action.INSTANCE, new EditorialPlain()),
+                new RoleAssignment<>(HouseDoing.Go.INSTANCE, new EditorialPlain())));
+        assertEquals(List.of(new EditorialPlain()), editorial.implementations(), "two castings meant alike: one target");
     }
 
     @Test
-    void aDeclarationAndItsImplementations_compile_andRead() {
-        var dialog = new EditorialDialogDeclaration();
-        assertInstanceOf(PartSpec.Standalone.class, dialog.parts().parts().getFirst());
-        var bar = new EditorialActionBarDeclaration();
-        var spec = (PartSpec.SameRole<?, ?, ?, ?, ?>) bar.parts().parts().getFirst();
-        assertEquals(EditorialPlainAction.class, ((Target.Impl<?, ?, ?, ?>) spec.to()).impl().getClass());
-        assertEquals(BasePlainAction.class, new EditorialPlainAction().to().getClass());
-        assertEquals(BasePlain.class, new BasePlainAction().to().getClass());
+    void aCasting_isAssignedOnce() {
+        assertThrows(IllegalArgumentException.class, () -> new ComponentAssignment<>(HouseControls.PlainButton.INSTANCE, new BasePlain(), List.of(
+                new RoleAssignment<>(HouseDoing.Go.INSTANCE, new BasePlain()),
+                new RoleAssignment<>(HouseDoing.Go.INSTANCE, new BasePlainGo()))));
     }
 
     @Test
-    void anImplementation_isCssOrADelegation_byItsType() {
-        CastingImplementation<?, ?, ?, ?> impl = new EditorialPlainAction();
-        String what = switch (impl) {
-            case CssImplementation<?, ?, ?, ?> c -> "css";
-            case SameRoleDelegation<?, ?, ?, ?> d -> "same role";
-            case RootDelegation<?, ?, ?, ?> r -> "root";
-            case ParentDelegation<?, ?, ?, ?, ?> p -> "parent";
-        };
-        assertEquals("parent", what);
-    }
-
-    @Test
-    void aSlotsRole_decidesItsKind() {
-        assertThrows(IllegalArgumentException.class, () -> new PartSpec.Standalone<BaseScheme, Editorial, HouseContainers.ActionBar, HouseControls.PlainButton, HouseDoing.Action>(
-                HouseContainers.ActionBar.INSTANCE, HouseControls.PlainButton.INSTANCE, HouseDoing.Action.INSTANCE));
-        assertThrows(IllegalArgumentException.class, () -> new PartSpec.SameRole<>(HouseContainers.Dialog.INSTANCE, HouseContainers.ActionBar.INSTANCE,
-                HouseShaping.Actions.INSTANCE, new Target.Declared<>(new EditorialActionBarActionsDeclaration())));
+    void aRoleThatOnlyPlacesItsPart_isAssignedNoLook() {
+        assertThrows(IllegalArgumentException.class, () -> new ComponentAssignment<>(HouseContainers.ActionBar.INSTANCE, new EditorialActionBar(), List.of(
+                new RoleAssignment<>(HouseShaping.Actions.INSTANCE, new EditorialActionBar()))));
     }
 }

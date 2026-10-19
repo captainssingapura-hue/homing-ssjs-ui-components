@@ -2,19 +2,25 @@ package hue.captains.singapura.js.homing.design.spec.house;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.design.spec.BaseSpecModule;
-import hue.captains.singapura.js.homing.design.spec.StandaloneEntry;
-import hue.captains.singapura.js.homing.design.spec.Target;
+import hue.captains.singapura.js.homing.design.spec.ComponentAssignment;
+import hue.captains.singapura.js.homing.design.spec.RoleAssignment;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiPanesComponentModule;
 
 import java.util.List;
 
-/** UiPanesComponentModule's standalones in Base, in the typed spec stack (RFC 0067, D53): its components', and those of their design a functional role places. */
+/**
+ * UiPanesComponentModule's components in Base, in the typed spec stack (RFC 0067, D53, D54): each component it brings - its own, and
+ * the parts that come in with them - and the implementation each of its castings wears, on its own and in each role it
+ * is cast in.
+ */
 public record UiPanesBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     public static final UiPanesBaseSpec INSTANCE = new UiPanesBaseSpec();
@@ -23,17 +29,24 @@ public record UiPanesBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     @Override public ComponentModule components() { return UiPanesComponentModule.INSTANCE; }
 
-    @Override public List<StandaloneEntry<BaseScheme, Base, ?>> standalones() {
+    @Override public List<ComponentAssignment<BaseScheme, Base, ?>> assignments() {
         return List.of(
-                new StandaloneEntry<>(HousePanes.MultiTabPane.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.MultiTabPaneDeclaration())),
-                new StandaloneEntry<>(HousePanes.TabPicker.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabPickerDeclaration())),
-                new StandaloneEntry<>(HousePanes.SingleTabPane.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.SingleTabPaneDeclaration())),
-                new StandaloneEntry<>(HouseContainers.TabStrip.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabStripDeclaration())),
-                new StandaloneEntry<>(HouseControls.Tab.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabDeclaration())),
-                new StandaloneEntry<>(HousePanes.TabPane.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabPaneDeclaration())),
-                new StandaloneEntry<>(HousePanes.TabOpener.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.TabOpenerDeclaration())),
-                new StandaloneEntry<>(HousePanes.AddTab.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.AddTabDeclaration())),
-                new StandaloneEntry<>(HousePanes.PaneThumbs.INSTANCE, new Target.Declared<>(new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbsDeclaration())),
-                new StandaloneEntry<>(HouseRegions.StripTail.INSTANCE, new Target.Impl<>(new hue.captains.singapura.js.homing.design.spec.styles.base.StripTail())));
+                new ComponentAssignment<>(HousePanes.MultiTabPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.MultiTabPane(), List.of()),
+                new ComponentAssignment<>(HousePanes.SingleTabPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SingleTabPane(), List.of()),
+                new ComponentAssignment<>(HouseContainers.TabStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabStrip(), List.of()),
+                new ComponentAssignment<>(HouseControls.Tab.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Tab(), List.of()),
+                new ComponentAssignment<>(HousePanes.TabPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPane(), List.of()),
+                new ComponentAssignment<>(HousePanes.TabOpener.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabOpener(), List.of()),
+                new ComponentAssignment<>(HousePanes.TabPicker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker(), List.of(
+                        new RoleAssignment<>(HouseDoing.Picker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker()))),
+                new ComponentAssignment<>(HousePanes.AddTab.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.AddTab(), List.of()),
+                new ComponentAssignment<>(HouseIcons.ColumnIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ColumnIcon(), List.of()),
+                new ComponentAssignment<>(HouseIcons.RowIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.RowIcon(), List.of()),
+                new ComponentAssignment<>(HouseIcons.MergeIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.MergeIcon(), List.of()),
+                new ComponentAssignment<>(HouseIcons.DetachIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.DetachIcon(), List.of()),
+                new ComponentAssignment<>(HouseIcons.WithinIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.WithinIcon(), List.of()),
+                new ComponentAssignment<>(HouseRegions.StripTail.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.StripTail(), List.of()),
+                new ComponentAssignment<>(HousePanes.PaneThumbs.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs(), List.of(
+                        new RoleAssignment<>(HouseDoing.Where.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()))));
     }
 }

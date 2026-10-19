@@ -9,5 +9,5 @@ package hue.captains.singapura.js.homing.design.spec;
 public interface CssResolver {
 
     /** What there is of an implementation's content: found, nothing there, or there and not to be had. */
-    CssResolution resolve(CssImplementation<?, ?, ?, ?> impl);
+    CssResolution resolve(CssImplementation<?, ?, ?> impl);
 }

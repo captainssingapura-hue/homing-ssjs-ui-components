@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
-import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
@@ -11,7 +10,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import java.util.List;
 
 /** retro-futurism's implementation of ground: CSS of its own - its content apart, the colours it draws with typed here. */
-public record Ground() implements CssImplementation<BaseScheme, RetroFuturism, HouseContainers.Ground, RoleRoot> {
+public record Ground() implements CssImplementation<BaseScheme, RetroFuturism, HouseContainers.Ground> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.Ground(), new BaseColours.ScrollThumb(), new BaseColours.Text());
     }

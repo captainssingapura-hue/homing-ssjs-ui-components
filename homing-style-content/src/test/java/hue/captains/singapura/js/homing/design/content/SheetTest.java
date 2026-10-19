@@ -1,10 +1,10 @@
 package hue.captains.singapura.js.homing.design.content;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.js.homing.design.spec.PathMapping;
-import hue.captains.singapura.js.homing.design.spec.ReadPathMapping;
 import hue.captains.singapura.js.homing.design.spec.ReadSheet;
 import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
+import hue.captains.singapura.js.homing.design.spec.StyleClasses;
 import hue.captains.singapura.js.homing.design.spec.StyleSheet;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import hue.captains.singapura.js.homing.design.styling.ReadCss;
@@ -16,19 +16,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Each style's complete sheet as served (RFC 0067, D53), with its path mapping: the sheet reads as CSS; it rules
- * exactly the classes its mapping puts on elements, each once; no mark is left; no keyframes is named twice. Both are
- * written to target/sheets, the sheet and the mapping a page loads for the style.
+ * Each style's sheet as served (RFC 0071, RFC 0067 D54): it reads as CSS; it selects every casting's class once, by the
+ * rule of the implementation the casting wears; no mark is left; no keyframes is named twice; and the classes it selects
+ * by name no style - a style is the sheet's, never an element's. Each is written to {@code target/sheets}.
  */
 class SheetTest {
 
@@ -37,54 +37,56 @@ class SheetTest {
     private static final Path OUT = Path.of("target/sheets");
 
     @Test
-    void eachStyle_isServedWhole_withItsMapping() throws IOException {
+    void eachStyle_selectsEveryCastingOnce_atWhatItWears() throws IOException {
         Files.createDirectories(OUT);
-        try (Stream<Path> old = Files.list(OUT)) {
-            for (Path p : old.toList()) Files.delete(p);
-        }
+        try (Stream<Path> old = Files.list(OUT)) { for (Path p : old.toList()) Files.delete(p); }
         var problems = new ArrayList<String>();
         for (DesignStyle<?> s : SPEC.selectable()) {
             StyleSheet sheet = ReadSheet.INSTANCE.read(SPEC, s);
-            PathMapping mapping = ReadPathMapping.INSTANCE.read(SPEC, s);
             ReadCss.Read read = ReadCss.INSTANCE.read(sheet.css());
             read.problems().forEach(p -> problems.add(s.token() + ": " + p));
-            var ruled = new ArrayList<String>();
+            Map<String, StyleSheet.Rule> ruleOf = new HashMap<>();
+            for (StyleSheet.Rule r : sheet.rules())
+                for (String c : r.castings()) {
+                    StyleSheet.Rule before = ruleOf.put(c, r);
+                    if (before != null) problems.add(s.token() + ": " + c + " selected by " + before.name() + " and " + r.name());
+                }
+            for (Casting k : SPEC.castings()) {
+                String c = StyleClasses.INSTANCE.casting(k);
+                StyleSheet.Rule r = ruleOf.get(c);
+                if (r == null) problems.add(s.token() + ": " + c + " selected by no rule");
+                else if (r.end().impl().getClass() != SPEC.wears(s, k).getClass())
+                    problems.add(s.token() + ": " + c + " selected by " + r.name() + ", and wears " + SPEC.wears(s, k).getClass().getName());
+            }
+            if (ruleOf.size() != SPEC.castings().size()) problems.add(s.token() + ": selects " + ruleOf.size() + " of " + SPEC.castings().size() + " castings");
+            if (sheet.css().indexOf('$') >= 0) problems.add(s.token() + ": a mark is left at " + sheet.css().indexOf('$'));
             var keyframes = new HashSet<String>();
             for (ReadCss.Item item : read.items())
                 switch (item) {
-                    case ReadCss.Rule r -> ruled.add(r.selector().trim());
+                    case ReadCss.Rule r when r.selector().contains(".styled-") -> problems.add(s.token() + ": a selector names a style - " + r.selector().trim());
+                    case ReadCss.Rule r -> { }
                     case ReadCss.AtRule a when a.prelude().trim().startsWith("keyframes ") -> {
                         if (!keyframes.add(a.prelude().trim())) problems.add(s.token() + ": @" + a.prelude().trim() + " twice");
                     }
                     case ReadCss.AtRule a -> { }
                     case ReadCss.Declaration d -> problems.add(s.token() + ": " + d.property() + " declared outside any rule");
                 }
-            Set<String> classes = new LinkedHashSet<>(mapping.realClasses());
-            if (ruled.size() != new HashSet<>(ruled).size()) problems.add(s.token() + ": a class ruled twice");
-            Set<String> expected = new LinkedHashSet<>();
-            for (String c : classes) expected.add("." + c);
-            if (!new HashSet<>(ruled).equals(expected))
-                problems.add(s.token() + ": rules " + ruled.size() + " classes, its mapping puts " + classes.size() + " on elements");
-            if (sheet.css().indexOf('$') >= 0) problems.add(s.token() + ": a mark is left at " + sheet.css().indexOf('$'));
             Files.writeString(OUT.resolve(s.token() + ".css"), sheet.css());
-            Files.writeString(OUT.resolve(s.token() + ".js"), mapping.script());
-            System.out.println("[sheet] " + s.token() + ": " + sheet.rules().size() + " rules for " + mapping.classes().size() + " paths, "
+            System.out.println("[sheet] " + s.token() + ": " + sheet.rules().size() + " rules select " + ruleOf.size() + " castings, "
                     + sheet.css().length() + " characters (today's sheet " + TODAY.sheet(s).length() + ")");
         }
         assertTrue(problems.isEmpty(), String.join("\n", problems.subList(0, Math.min(40, problems.size()))));
         try (Stream<Path> written = Files.list(OUT)) {
-            assertEquals(SPEC.selectable().size() * 2L, written.count(), "a sheet and a mapping for each selectable style, none for the base");
+            assertEquals(SPEC.selectable().size(), written.count(), "a sheet for each selectable style, none for the base");
         }
     }
 
-    /** Every element's rule, as served, is its content with the marks filled in for the class it wears. */
+    /** A casting's class is the same in every style, and every element's is its casting's: an owner and a slot are the layout's. */
     @Test
-    void everyPath_findsItsRule() {
-        for (DesignStyle<?> s : SPEC.selectable()) {
-            StyleSheet sheet = ReadSheet.INSTANCE.read(SPEC, s);
-            List<String> without = ReadPathMapping.INSTANCE.read(SPEC, s).classes().entrySet().stream()
-                    .filter(e -> sheet.rule(e.getValue()).isEmpty()).map(e -> e.getKey() + " -> " + e.getValue()).toList();
-            assertEquals(List.of(), without, s.token());
-        }
+    void anElementsClass_isItsCastings_andNamesNoStyle() {
+        var castings = SPEC.castings().stream().map(StyleClasses.INSTANCE::casting).toList();
+        assertEquals(List.of(), castings.stream().filter(c -> c.contains("styled-") || !c.startsWith("c-")).toList());
+        assertEquals(new HashSet<>(castings), new HashSet<>(SPEC.elements().stream().map(StyleClasses.INSTANCE::element).toList()));
+        System.out.println("[sheet] " + SPEC.elements().size() + " elements wear " + castings.size() + " classes, one for each casting");
     }
 }

@@ -25,7 +25,8 @@ import java.util.List;
  * over. Not the element, not its class, not the style.
  *
  * <p>Every class is derived from a typed node, the same in every style ({@code StyleClasses}): an element's from its
- * element path, a state's from its word. A switch is then the sheet swapped, and no element written.
+ * casting - the path it is handed along says which, its owner and slot being the layout's (RFC 0067, D54) - a state's
+ * from its word. A switch is then the sheet swapped, and no element written.
  *
  * <p>It touches no document. All it writes goes through the surface it is given - three functions: add a class to an
  * element, remove one, show a style. In a browser the surface is an element's {@code classList} and the page's sheets;
@@ -74,11 +75,13 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
 
                 const MINT = Symbol("the style manager's");
 
-                /** A path's class: its top-level component, then each slot's part and role - p-dialog--action-bar_actions. */
+                /**
+                 * An element's class: its casting's - the part, then its role where the role has a look of its own -
+                 * c-plain-button, c-label_title. Its owner and its slot are the layout's: a top-level component, or a part
+                 * a role only places, looks as it does on its own.
+                 */
                 function elementClass(path) {
-                    const segments = [];
-                    for (let at = path; at !== null; at = at.parent) segments.unshift(at.parent === null ? at.part.token : at.part.token + "_" + at.role.token);
-                    return "p-" + segments.join("--");
+                    return "c-" + (path.parent === null || path.role.functional ? path.part.token : path.part.token + "_" + path.role.token);
                 }
 
                 /** A state's class: its word - s-disabled. The state at rest has none. */

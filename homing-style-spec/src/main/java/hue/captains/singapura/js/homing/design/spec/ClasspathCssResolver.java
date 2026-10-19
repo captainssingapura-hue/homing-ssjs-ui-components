@@ -30,7 +30,7 @@ public record ClasspathCssResolver(String prefix) implements CssResolver, ValueO
             throw new IllegalArgumentException("the resolver's prefix is refused:\n  " + String.join("\n  ", invalid.problems()));
     }
 
-    @Override public CssResolution resolve(CssImplementation<?, ?, ?, ?> impl) {
+    @Override public CssResolution resolve(CssImplementation<?, ?, ?> impl) {
         Class<?> type = impl.getClass();
         String resource = resource(type);
         URL where = loader(type).getResource(resource);

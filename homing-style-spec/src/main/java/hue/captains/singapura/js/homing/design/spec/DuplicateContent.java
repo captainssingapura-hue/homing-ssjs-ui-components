@@ -43,7 +43,7 @@ public record DuplicateContent() implements StatelessFunctionalObject {
         if (!(spec.resolver() instanceof ClasspathCssResolver classpath))
             throw new IllegalArgumentException("the registry's resolver, " + spec.resolver() + ", does not look on the classpath");
         var out = new ArrayList<Copies>();
-        for (CssImplementation<?, ?, ?, ?> impl : spec.cssImplementations()) {
+        for (CssImplementation<?, ?, ?> impl : spec.cssImplementations()) {
             String resource = classpath.resource(impl.getClass());
             try {
                 List<URL> where = Collections.list(loader.getResources(resource));

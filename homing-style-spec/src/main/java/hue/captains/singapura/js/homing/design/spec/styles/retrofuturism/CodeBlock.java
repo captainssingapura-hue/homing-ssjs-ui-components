@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec.styles.retrofuturism;
 
-import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
@@ -11,7 +10,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import java.util.List;
 
 /** retro-futurism's implementation of code-block: CSS of its own - its content apart, the colours it draws with typed here. */
-public record CodeBlock() implements CssImplementation<BaseScheme, RetroFuturism, HouseRegions.CodeBlock, RoleRoot> {
+public record CodeBlock() implements CssImplementation<BaseScheme, RetroFuturism, HouseRegions.CodeBlock> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.Recessed(), new BaseColours.Text(), new BaseColours.Border());
     }

@@ -1,12 +1,12 @@
 package hue.captains.singapura.js.homing.design.content;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.semantic.ColorTree;
 import hue.captains.singapura.js.homing.design.spec.CheckContent;
 import hue.captains.singapura.js.homing.design.spec.CssResolution;
 import hue.captains.singapura.js.homing.design.spec.DuplicateContent;
 import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
-import hue.captains.singapura.js.homing.design.spec.Trace;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import hue.captains.singapura.js.homing.design.styling.CheckDeclaration;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
@@ -36,18 +36,18 @@ class ContentTest {
     void everyImplementation_hasItsContent_heldWhole() {
         List<String> problems = CheckContent.INSTANCE.content(SPEC, TREE);
         assertTrue(problems.isEmpty(), problems.size() + " problems:\n" + String.join("\n", problems.subList(0, Math.min(40, problems.size()))));
-        System.out.println("[content] " + SPEC.cssEnds().size() + " implementations with CSS of their own: each has its content - marks, rule, colours both ways");
+        System.out.println("[content] " + SPEC.implementations().size() + " implementations: each has its content - marks, rule, colours both ways");
     }
 
     /** The check bites: an implementation's content held with one colour it uses left off its list is refused for it. */
     @Test
     void aColourUsedAndNotListed_isRefused() {
-        Trace.CssStep end = SPEC.cssEnds().stream().filter(e -> !e.impl().colours().isEmpty()).findFirst().orElseThrow();
+        SpecRegistry.Worn end = SPEC.implementations().stream().filter(e -> !e.impl().colours().isEmpty()).findFirst().orElseThrow();
         var found = (CssResolution.Found) SPEC.content(end.impl());
         List<? extends ColorLeaf<?, ?, ?>> listed = end.impl().colours();
-        List<String> held = CheckDeclaration.INSTANCE.content(SPEC.taxonomy(), TREE, end.layer(), end.casting(), found.resource(), found.text(), listed);
+        List<String> held = CheckDeclaration.INSTANCE.content(SPEC.taxonomy(), TREE, end.layer(), new Casting(end.component()), found.resource(), found.text(), listed);
         assertEquals(List.of(), held);
-        List<String> short1 = CheckDeclaration.INSTANCE.content(SPEC.taxonomy(), TREE, end.layer(), end.casting(), found.resource(), found.text(),
+        List<String> short1 = CheckDeclaration.INSTANCE.content(SPEC.taxonomy(), TREE, end.layer(), new Casting(end.component()), found.resource(), found.text(),
                 listed.subList(1, listed.size()));
         assertTrue(short1.stream().anyMatch(p -> p.contains("uses " + listed.getFirst().token() + ", which it does not import")), short1.toString());
     }

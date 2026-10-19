@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec.styles.base;
 
-import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.spec.CssImplementation;
 import hue.captains.singapura.js.homing.ui.styles.Base;
@@ -11,7 +10,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import java.util.List;
 
 /** base's implementation of boundary-line: CSS of its own - its content apart, the colours it draws with typed here. */
-public record BoundaryLine() implements CssImplementation<BaseScheme, Base, HouseMarks.BoundaryLine, RoleRoot> {
+public record BoundaryLine() implements CssImplementation<BaseScheme, Base, HouseMarks.BoundaryLine> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.Border(), new BaseColours.LineHovered(), new BaseColours.Accent());
     }

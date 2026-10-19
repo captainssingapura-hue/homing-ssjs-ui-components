@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import hue.captains.singapura.js.homing.ui.styles.Base;
@@ -34,14 +33,14 @@ class ResolverTest {
     private static final ClasspathCssResolver RESOLVER = (ClasspathCssResolver) SPEC.resolver();
 
     /** A test's own implementation, its content in the test's resources, under the house's prefix. */
-    record Sampled() implements CssImplementation<BaseScheme, Base, HouseControls.PlainButton, RoleRoot> {}
+    record Sampled() implements CssImplementation<BaseScheme, Base, HouseControls.PlainButton> {}
 
     @Test
     void everyElementInEveryStyle_nothingIsThere() {
         int looked = 0;
         for (DesignStyle<?> s : SPEC.styles())
             for (ElementPath e : SPEC.elements()) {
-                CssImplementation<?, ?, ?, ?> worn = SPEC.wears(s, e);
+                CssImplementation<?, ?, ?> worn = SPEC.wears(s, e);
                 CssResolution r = SPEC.content(s, e);
                 assertInstanceOf(CssResolution.Nothing.class, r, s.token() + " " + e.token());
                 assertEquals("homing-css/" + worn.getClass().getName().replace('.', '/') + ".css", r.resource(), s.token() + " " + e.token());
@@ -87,7 +86,7 @@ class ResolverTest {
 
     @Test
     void contentGivenTwice_isFound(@TempDir Path dir) throws IOException {
-        CssImplementation<?, ?, ?, ?> one = SPEC.cssImplementations().getFirst();
+        CssImplementation<?, ?, ?> one = SPEC.cssImplementations().getFirst();
         String resource = RESOLVER.resource(one.getClass());
         Path a = dir.resolve("a"), b = dir.resolve("b");
         for (Path root : List.of(a, b)) {
@@ -107,23 +106,21 @@ class ResolverTest {
     void aSheet_withoutItsContent_isNotServed() {
         for (DesignStyle<?> s : SPEC.selectable()) {
             var refused = assertThrows(IllegalStateException.class, () -> ReadSheet.INSTANCE.read(SPEC, s));
-            assertTrue(refused.getMessage().contains(SPEC.cssEnds(s).size() + " contents not to be had"), refused.getMessage().lines().findFirst().orElseThrow());
+            assertTrue(refused.getMessage().contains(SPEC.worn(s).size() + " contents not to be had"), refused.getMessage().lines().findFirst().orElseThrow());
         }
     }
 
     @Test
     void everyTrace_endsAtWhatTheElementWears() {
-        int steps = 0;
+        int passed = 0;
         for (DesignStyle<?> s : SPEC.styles())
             for (ElementPath e : SPEC.elements()) {
-                Trace t = SPEC.trace(s, e);
+                Trace t = SPEC.trace(s, e.casting());
                 assertEquals(SPEC.wears(s, e), t.end().impl(), s.token() + " " + e.token());
-                assertEquals(Trace.Via.STANDALONE, t.steps().getFirst().via(), s.token() + " " + e.token());
-                boolean placed = !e.parts().isEmpty() && e.parts().getLast().functional();
-                assertEquals(placed, t.steps().stream().anyMatch(st -> st.via() == Trace.Via.PLACED && st.casting().equals(e.casting()))
-                        || (placed && t.steps().stream().anyMatch(st -> st.via() == Trace.Via.PLACED)), s.token() + " " + e.token());
-                steps += t.steps().size();
+                assertEquals(e.casting(), t.casting(), s.token() + " " + e.token() + ": a trace is of the element's casting");
+                assertEquals(SPEC.layer(s, e.casting().cast()), t.end().layer(), s.token() + " " + e.token());
+                passed += t.passed().size();
             }
-        System.out.println("[resolver] " + SPEC.elements().size() * SPEC.styles().size() + " traces, " + steps + " steps");
+        System.out.println("[resolver] " + SPEC.elements().size() * SPEC.styles().size() + " traces, " + passed + " layers passed");
     }
 }

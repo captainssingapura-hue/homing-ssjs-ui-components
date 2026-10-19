@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
 
-import hue.captains.singapura.js.homing.component.taxonomy.RoleRoot;
 import hue.captains.singapura.js.homing.design.color.ColorLeaf;
 import hue.captains.singapura.js.homing.design.color.ColorScale;
 import hue.captains.singapura.js.homing.design.spec.CssImplementation;
@@ -12,7 +11,7 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import java.util.List;
 
 /** glassmorphism's implementation of primary-button: CSS of its own - its content apart, the colours it draws with typed here. */
-public record PrimaryButton() implements CssImplementation<BaseScheme, Glassmorphism, HouseControls.PrimaryButton, RoleRoot> {
+public record PrimaryButton() implements CssImplementation<BaseScheme, Glassmorphism, HouseControls.PrimaryButton> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
         return List.of(new BaseColours.Title(), new BaseColours.Ring(), new BaseColours.ShadeSoft(), new BaseColours.ShadeFirm(), new BaseColours.Sheen(), new ButtonGround(), new ButtonLabel());
     }
