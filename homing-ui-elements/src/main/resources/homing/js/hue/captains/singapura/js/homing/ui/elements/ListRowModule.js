@@ -8,37 +8,38 @@
 // monitor of it. A press is its click. Where it sits, and how deep, is its
 // list's.
 //
-//   var row = new ListRow(branch.elementMaker("row-0"), { text: "Appearance", selected: false }, ROLE.CHOICE);
+//   var row = new ListRow(branch.elementMaker("list-row"), new FixedListRow(), me.slot(SLOT_…));
 //   row.el  row.text  row.selected  row.current  row.keys
 //   row.setOnClick(handler)  row.setOnSelectedChanged(handler)  row.setOnCurrentChanged(handler)  row.setOnKeyboardChanged(handler)
+// On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
 class ListRow extends SimpleComponent {
-    static LEAF = "list-row";
     static TAG = "div";
     static AXES = Object.freeze({
         selected: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
             reflect: function (el, on) { el.setAttribute("aria-selected", on ? "true" : "false"); },
-            state: STATE.SELECTED
+            state: StateSelected
         }),
         current: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
             reflect: function (el, on) { if (on) el.setAttribute("aria-current", "true"); else el.removeAttribute("aria-current"); },
-            state: STATE.CURRENT
+            state: StateCurrent
         }),
         keys: Object.freeze({
-            values: STATE.KEYBOARD.values,
-            rest: STATE.KEYBOARD.rest,
-            reflect: function (el, at) { if (at === STATE.KEYBOARD.rest) el.removeAttribute("data-keys"); else el.setAttribute("data-keys", at); },
-            state: STATE.KEYBOARD
+            values: StateKeyboard.states,
+            rest: StateKeyboard.rest,
+            reflect: function (el, at) { if (at === StateKeyboard.rest) el.removeAttribute("data-keys"); else el.setAttribute("data-keys", at); },
+            state: StateKeyboard
         })
     });
-    static EVENTS = Object.freeze([EVENT.CLICK]);
-    static WORDS = Object.freeze(["text"]);
+    static EVENTS = Object.freeze([EventClick]);
     static BEHAVIOR = ItemBehavior;
+
+    constructor(make, fixed, place) { super(make, fixed, FixedListRow, place ?? manageListRow); }
 
     /** Its words, when it shows words. */
     get text() { return this.el.textContent; }
@@ -52,13 +53,14 @@ class ListRow extends SimpleComponent {
 
     /** Where the page's keys are, for what the row stands for: away, candidate, lent or held. */
     get keys() { return this._get("keys"); }
-    set keys(at) { this._set("keys", at == null ? STATE.KEYBOARD.rest : String(at)); }
+    set keys(at) { this._set("keys", at == null ? StateKeyboard.rest : String(at)); }
 
-    setOnClick(handler) { this._setOn(EVENT.CLICK, handler); }
-    setOnSelectedChanged(handler) { this._setOn(STATE.SELECTED.changed, handler); }
-    setOnCurrentChanged(handler) { this._setOn(STATE.CURRENT.changed, handler); }
-    setOnKeyboardChanged(handler) { this._setOn(STATE.KEYBOARD.changed, handler); }
+    setOnClick(handler) { this._setOn(EventClick, handler); }
+
+    /** A click, as its behaviour hears it, while it may be clicked. */
+    _clicked(ev) { this._fire(EventClick, ev); }
+    setOnSelectedChanged(handler) { this._setOn(StateSelected, handler); }
+    setOnCurrentChanged(handler) { this._setOn(StateCurrent, handler); }
+    setOnKeyboardChanged(handler) { this._setOn(StateKeyboard, handler); }
 }
 
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const ListRowFactory = new SimpleComponentFactory(ListRow);

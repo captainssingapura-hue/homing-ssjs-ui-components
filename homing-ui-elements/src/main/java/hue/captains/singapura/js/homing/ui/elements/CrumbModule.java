@@ -8,7 +8,6 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.server.HrefManager;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
@@ -22,16 +21,13 @@ public record CrumbModule() implements DomModule<CrumbModule>, ImplFor<HouseCont
         @Override public String summary() { return "One step of a trail back: its words, where it goes, and whether it is the page itself."; }
     }
 
-    /** Its companion: {@code CrumbFactory.create(branch, name)} makes the element it is realized on. */
-    public record CrumbFactory() implements Exportable._Constant<CrumbModule> {}
 
     public static final CrumbModule INSTANCE = new CrumbModule();
 
     @Override
     public ImportsFor<CrumbModule> imports() {
         return ImportsFor.<CrumbModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LinkBehaviorModule.LinkBehavior()), LinkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .build();
@@ -39,6 +35,6 @@ public record CrumbModule() implements DomModule<CrumbModule>, ImplFor<HouseCont
 
     @Override
     public ExportsOf<CrumbModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Crumb(), new CrumbFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new Crumb()));
     }
 }

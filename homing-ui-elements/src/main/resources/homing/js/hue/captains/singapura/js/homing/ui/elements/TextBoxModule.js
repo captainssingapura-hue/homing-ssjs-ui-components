@@ -5,29 +5,28 @@
 // events are the element's, dressed: a word typed its INPUT, the user done with
 // it (the element's change) its COMMIT.
 //
-//   var t = new TextBox(TextBoxFactory.create(branch, "name"), { value: "…", placeholder: "Your name" }, ROLE.STANDALONE);
+//   var t = new TextBox(branch.elementMaker("text-box"), new FixedTextBox(), me.slot(SLOT_…));
 //   t.value  t.placeholder  t.enabled  t.size
 //   t.setOnInput(handler)  t.setOnCommit(handler)  t.setOnEnabledChanged(handler)
+// On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
 class TextBox extends SimpleComponent {
-    static LEAF = "text-box";
     static TAG = "input";
     static AXES = Object.freeze({
         enabled: Object.freeze({
             values: Object.freeze([true, false]),
             rest: true,
             reflect: function (el, on) { el.disabled = !on; },
-            state: STATE.ENABLED
+            state: StateEnabled
         })
     });
-    static EVENTS = Object.freeze([EVENT.INPUT, EVENT.COMMIT]);
-    static DEGREES = Object.freeze(["size"]);
-    static WORDS = Object.freeze(["value", "placeholder"]);
+    static EVENTS = Object.freeze([EventInput, EventCommit]);
+    static DEGREES = Object.freeze([ExtentSize]);
     static BEHAVIOR = EditBehavior;
 
-    constructor(make, props, role) {
-        super(make, props, role);
+    constructor(make, fixed, place) {
+        super(make, fixed, FixedTextBox, place ?? manageTextBox);
         this.el.type = "text";
     }
 
@@ -39,21 +38,25 @@ class TextBox extends SimpleComponent {
     get placeholder() { return this.el.placeholder; }
     set placeholder(words) { if (words != null) this.el.placeholder = String(words); }
 
-    get size() { return this._degrees.size; }
-    set size(s) { this._degree("size", s); }
+    get size() { return this._degree(ExtentSize); }
+    set size(s) { this._setDegree(ExtentSize, s); }
 
     get enabled() { return this._get("enabled"); }
     set enabled(on) { this._set("enabled", !!on); }
 
     /** Its enabled changed - by a setter, or by nothing else an input has. */
-    setOnEnabledChanged(handler) { this._setOn(STATE.ENABLED.changed, handler); }
+    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** A word typed, the user still at it. */
-    setOnInput(handler) { this._setOn(EVENT.INPUT, handler); }
+    setOnInput(handler) { this._setOn(EventInput, handler); }
 
     /** The user done with its value. */
-    setOnCommit(handler) { this._setOn(EVENT.COMMIT, handler); }
+    setOnCommit(handler) { this._setOn(EventCommit, handler); }
+
+    /** A word typed, as its behaviour hears it: its input. */
+    _input(ev) { this._fire(EventInput, ev); }
+
+    /** The user done, as its behaviour hears it: its commit. */
+    _commit(ev) { this._fire(EventCommit, ev); }
 }
 
-/** Its companion: makes the <input> it is realized on, on its owner's branch, under its owner's name. */
-const TextBoxFactory = new SimpleComponentFactory(TextBox);

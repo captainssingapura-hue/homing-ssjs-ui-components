@@ -194,6 +194,8 @@ public final class HouseControls {
         @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_WAY; }
         @Override public List<EventType<?>> events() { return CLICKED; }
+        /** At a size, as its owner gives it. */
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** One step of a trail back. */
@@ -221,6 +223,8 @@ public final class HouseControls {
         @Override public List<EventType<?>> events() { return COMMITTED; }
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
+        /** At a size, as its owner gives it. */
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** Words the user types: a line of them, or as many as they write - the browser's own editing. */
@@ -229,6 +233,8 @@ public final class HouseControls {
         @Override public List<StateType<?>> states() { return AN_INPUT; }
         @Override public List<EventType<?>> events() { return EDITED; }
         @Override public Input parent() { return Input.INSTANCE; }
+        /** At a size, as its owner gives it. */
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** One thing on or off, by a mark in a box - the browser's own. */

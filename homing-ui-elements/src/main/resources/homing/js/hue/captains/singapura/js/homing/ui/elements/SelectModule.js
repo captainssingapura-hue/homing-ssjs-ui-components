@@ -5,27 +5,28 @@
 // operations, the list the browser opens is the browser's, and a pick made is
 // the element's change, dressed as its COMMIT.
 //
-//   var s = new Select(SelectFactory.create(branch, "style"), { options: [{ value: "a", label: "A" }, "b"], value: "a" }, ROLE.STANDALONE);
+//   var s = new Select(branch.elementMaker("select"), new FixedSelect(), me.slot(SLOT_…));
 //   s.options   [{ value, label }], a bare word its own label
 //   s.value  s.enabled  s.size
 //   s.setOnCommit(handler)  s.setOnEnabledChanged(handler)
+// On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
 class Select extends SimpleComponent {
-    static LEAF = "select";
     static TAG = "select";
     static AXES = Object.freeze({
         enabled: Object.freeze({
             values: Object.freeze([true, false]),
             rest: true,
             reflect: function (el, on) { el.disabled = !on; },
-            state: STATE.ENABLED
+            state: StateEnabled
         })
     });
-    static EVENTS = Object.freeze([EVENT.COMMIT]);
-    static DEGREES = Object.freeze(["size"]);
-    static WORDS = Object.freeze(["options", "value"]);
+    static EVENTS = Object.freeze([EventCommit]);
+    static DEGREES = Object.freeze([ExtentSize]);
     static BEHAVIOR = PickBehavior;
+
+    constructor(make, fixed, place) { super(make, fixed, FixedSelect, place ?? manageSelect); }
 
     /** What may be picked: the element's options, each its value and its label. */
     get options() { return Array.from(this.el.options).map(function (o) { return Object.freeze({ value: o.value, label: o.text }); }); }
@@ -43,18 +44,19 @@ class Select extends SimpleComponent {
     get value() { return this.el.value; }
     set value(v) { if (v != null) this.el.value = String(v); }
 
-    get size() { return this._degrees.size; }
-    set size(s) { this._degree("size", s); }
+    get size() { return this._degree(ExtentSize); }
+    set size(s) { this._setDegree(ExtentSize, s); }
 
     get enabled() { return this._get("enabled"); }
     set enabled(on) { this._set("enabled", !!on); }
 
     /** Its enabled changed - by a setter, or by nothing else an input has. */
-    setOnEnabledChanged(handler) { this._setOn(STATE.ENABLED.changed, handler); }
+    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** A pick made. */
-    setOnCommit(handler) { this._setOn(EVENT.COMMIT, handler); }
+    setOnCommit(handler) { this._setOn(EventCommit, handler); }
+
+    /** A pick made, as its behaviour hears it: its commit. */
+    _commit(ev) { this._fire(EventCommit, ev); }
 }
 
-/** Its companion: makes the <select> it is realized on, on its owner's branch, under its owner's name. */
-const SelectFactory = new SimpleComponentFactory(Select);

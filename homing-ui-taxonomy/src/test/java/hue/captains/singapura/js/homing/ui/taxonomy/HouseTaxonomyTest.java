@@ -176,7 +176,7 @@ class HouseTaxonomyTest {
         var close = HOUSE.partsOf(HouseContainers.TitleBar.INSTANCE).get(1);
         assertEquals(List.of(ExtentAxis.SIZE), HOUSE.extents(close), "a floating pane's close - its title bar's - is a button, and has a button's");
         var open = HOUSE.partsOf(HouseContainers.SummaryView.INSTANCE).get(3);
-        assertEquals(List.of(), HOUSE.extents(open), "a summary's link has none of its summary's: a part follows its own component");
+        assertEquals(List.of(ExtentAxis.SIZE), HOUSE.extents(open), "a summary's link has its own size and none of its summary's aspect: a part follows its own component");
     }
 
     /** A component's parts, each said as its token, how many, and what plays it. */

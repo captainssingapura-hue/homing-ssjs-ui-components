@@ -8,7 +8,6 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.server.HrefManager;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
@@ -22,16 +21,13 @@ public record LinkModule() implements DomModule<LinkModule>, ImplFor<HouseContro
         @Override public String summary() { return "A way to somewhere else: its words, and where it goes."; }
     }
 
-    /** Its companion: {@code LinkFactory.create(branch, name)} makes the element it is realized on. */
-    public record LinkFactory() implements Exportable._Constant<LinkModule> {}
 
     public static final LinkModule INSTANCE = new LinkModule();
 
     @Override
     public ImportsFor<LinkModule> imports() {
         return ImportsFor.<LinkModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LinkBehaviorModule.LinkBehavior()), LinkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .build();
@@ -39,6 +35,6 @@ public record LinkModule() implements DomModule<LinkModule>, ImplFor<HouseContro
 
     @Override
     public ExportsOf<LinkModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new Link(), new LinkFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new Link()));
     }
 }

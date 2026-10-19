@@ -3,7 +3,7 @@
 // the page itself. A simple component (SimpleComponent) on an <a>, in the
 // crumb's look:
 //
-//   var c = new Crumb(CrumbFactory.create(branch, "crumb-0"), { text: "Gallery", to: "/gallery" }, ROLE.STEP);
+//   var c = new Crumb(branch.elementMaker("crumb"), new FixedCrumb(), me.slot(SLOT_…));
 //   c.setOnClick(handler)          a click on it: handler.handle(ComponentEvent)
 //   c.setOnCurrentChanged(handler) it became the page, or stopped being it: handler.handle(StateChange)
 //   c.text = "…"                   its words
@@ -13,25 +13,26 @@
 //
 // A step with no way - the page itself, or a heading of the trail - is an <a>
 // with no href: words alone, never followed.
+// On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
 class Crumb extends SimpleComponent {
-    static LEAF = "crumb";
     static TAG = "a";
     static AXES = Object.freeze({
         current: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
             reflect: function (el, on) { if (on) el.setAttribute("aria-current", "page"); else el.removeAttribute("aria-current"); },
-            state: STATE.CURRENT
+            state: StateCurrent
         })
     });
-    static EVENTS = Object.freeze([EVENT.CLICK]);
-    static WORDS = Object.freeze(["text", "to"]);
+    static EVENTS = Object.freeze([EventClick]);
     static BEHAVIOR = LinkBehavior;
 
+    constructor(make, fixed, place) { super(make, fixed, FixedCrumb, place ?? manageCrumb); }
+
     get text() { return this.el.textContent; }
-    set text(words) { this._look.text(this.el, words == null ? "" : String(words)); }
+    set text(words) { this.el.textContent = words == null ? "" : String(words); }
 
     get to() { return this._to == null ? null : this._to; }
     set to(way) {
@@ -47,11 +48,12 @@ class Crumb extends SimpleComponent {
     set current(on) { this._set("current", !!on); }
 
     /** A click on it: the way is followed unless the handler prevents the raw event. */
-    setOnClick(handler) { this._setOn(EVENT.CLICK, handler); }
+    setOnClick(handler) { this._setOn(EventClick, handler); }
+
+    /** A click, as its behaviour hears it. */
+    _clicked(ev) { this._fire(EventClick, ev); }
 
     /** It became the page, or stopped being it - by its setter, the one way a crumb's changes. */
-    setOnCurrentChanged(handler) { this._setOn(STATE.CURRENT.changed, handler); }
+    setOnCurrentChanged(handler) { this._setOn(StateCurrent, handler); }
 }
 
-/** Its companion: makes the <a> it is realized on, on its owner's branch, under its owner's name. */
-const CrumbFactory = new SimpleComponentFactory(Crumb);

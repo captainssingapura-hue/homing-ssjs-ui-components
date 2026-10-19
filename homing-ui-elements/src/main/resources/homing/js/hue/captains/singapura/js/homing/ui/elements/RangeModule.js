@@ -5,28 +5,27 @@
 // dragging is the element's, dressed: the value moving its INPUT, let go its
 // COMMIT.
 //
-//   var r = new Range(RangeFactory.create(branch, "volume"), { min: 0, max: 100, value: 40 }, ROLE.STANDALONE);
+//   var r = new Range(branch.elementMaker("range"), new FixedRange(), me.slot(SLOT_…));
 //   r.min  r.max  r.step  r.value  r.enabled
 //   r.setOnInput(handler)  r.setOnCommit(handler)  r.setOnEnabledChanged(handler)
+// On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
 class Range extends SimpleComponent {
-    static LEAF = "range";
     static TAG = "input";
     static AXES = Object.freeze({
         enabled: Object.freeze({
             values: Object.freeze([true, false]),
             rest: true,
             reflect: function (el, on) { el.disabled = !on; },
-            state: STATE.ENABLED
+            state: StateEnabled
         })
     });
-    static EVENTS = Object.freeze([EVENT.INPUT, EVENT.COMMIT]);
-    static WORDS = Object.freeze(["min", "max", "step", "value"]);
+    static EVENTS = Object.freeze([EventInput, EventCommit]);
     static BEHAVIOR = EditBehavior;
 
-    constructor(make, props, role) {
-        super(make, props, role);
+    constructor(make, fixed, place) {
+        super(make, fixed, FixedRange, place ?? manageRange);
         this.el.type = "range";   // its bounds given first, so the value set is held to them
     }
 
@@ -47,14 +46,18 @@ class Range extends SimpleComponent {
     set enabled(on) { this._set("enabled", !!on); }
 
     /** Its enabled changed - by a setter, or by nothing else an input has. */
-    setOnEnabledChanged(handler) { this._setOn(STATE.ENABLED.changed, handler); }
+    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** The value moving, the user still at it. */
-    setOnInput(handler) { this._setOn(EVENT.INPUT, handler); }
+    setOnInput(handler) { this._setOn(EventInput, handler); }
 
     /** The user done: let go. */
-    setOnCommit(handler) { this._setOn(EVENT.COMMIT, handler); }
+    setOnCommit(handler) { this._setOn(EventCommit, handler); }
+
+    /** A word typed, as its behaviour hears it: its input. */
+    _input(ev) { this._fire(EventInput, ev); }
+
+    /** The user done, as its behaviour hears it: its commit. */
+    _commit(ev) { this._fire(EventCommit, ev); }
 }
 
-/** Its companion: makes the <input> it is realized on, on its owner's branch, under its owner's name. */
-const RangeFactory = new SimpleComponentFactory(Range);
