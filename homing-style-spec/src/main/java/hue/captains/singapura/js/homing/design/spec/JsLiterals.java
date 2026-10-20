@@ -37,4 +37,10 @@ public record JsLiterals() implements StatelessFunctionalObject {
         for (String w : token.split("-")) if (!w.isEmpty()) out.append(Character.toUpperCase(w.charAt(0))).append(w.substring(1));
         return out.toString();
     }
+
+    /** A token as a JS field's name: its first word as it is, each after capitalised - {@code split-beside} is {@code splitBeside}. */
+    public String camel(String token) {
+        String pascal = name(token);
+        return pascal.isEmpty() ? pascal : Character.toLowerCase(pascal.charAt(0)) + pascal.substring(1);
+    }
 }

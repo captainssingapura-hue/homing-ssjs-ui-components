@@ -29,7 +29,7 @@ public record Components() implements DualTree<Taxon> {
         return node instanceof ComponentBranch ? "new ComponentBranch(" + token + ", " + parent + ")"
                 : "new Component(" + token + ", " + parent + ", " + (node instanceof Composite<?>) + ")";
     }
-    @Override public List<String> kit() { return List.of("ComponentBranch", "Component", "Fixed", "Room"); }
+    @Override public List<String> kit() { return List.of("ComponentBranch", "Component", "Fixed", "FixedField", "Count", "Room"); }
 
     /**
      * Beside each component, its fixed type (D30) - {@code FixedPlainButton} beside {@code ComponentPlainButton} - and
@@ -37,7 +37,7 @@ public record Components() implements DualTree<Taxon> {
      */
     @Override public List<TreeDual.Companion> companions(Registration r, Taxon node) {
         if (!(node instanceof Component<?> c)) return List.of();
-        var out = new java.util.ArrayList<TreeDual.Companion>(List.of(FixedTypes.INSTANCE.companion(c, name(node))));
+        var out = new java.util.ArrayList<TreeDual.Companion>(List.of(FixedTypes.INSTANCE.companion(r.taxonomy(), c, name(node))));
         for (Room room : c.rooms()) {
             String n = room(c, room);
             out.add(new TreeDual.Companion(n, "const " + n + " = new Room(" + name(node) + ", " + JsLiterals.INSTANCE.string(room.name()) + ");"));

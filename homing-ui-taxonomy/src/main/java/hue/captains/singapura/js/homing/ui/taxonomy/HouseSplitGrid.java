@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
@@ -27,8 +28,8 @@ public final class HouseSplitGrid {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseDoing.Splitter.INSTANCE).any(),
-                           DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseShaping.Seam.INSTANCE).any());
+            return List.of(DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseDoing.Splitter.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseShaping.Seam.INSTANCE).any(Cardinality.DYNAMIC));
         }
     }
 
@@ -43,7 +44,7 @@ public final class HouseSplitGrid {
         /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseShaping.Cell.INSTANCE).any());
+            return List.of(DSL.part(HouseControls.PaneThumb.INSTANCE).as(HouseShaping.Cell.INSTANCE).any(Cardinality.DYNAMIC));
         }
     }
 

@@ -21,7 +21,7 @@ public record DualKit() implements StatelessFunctionalObject {
     /** The classes it gives, in its order. */
     public List<String> classes() {
         return List.of("ComponentBranch", "Component", "RoleBranch", "Role", "StateBranch", "StateType", "EventBranch", "EventType",
-                "Extent", "Count", "Slot", "Room", "ElementPath", "Style", "Fixed");
+                "Extent", "Count", "Slot", "Room", "ElementPath", "Style", "FixedField", "Fixed");
     }
 
     /** Its module. */
@@ -152,17 +152,50 @@ public record DualKit() implements StatelessFunctionalObject {
                 class Style {
                     constructor(t) { this.token = token("Style", t); Object.freeze(this); }
                 }
+                // A field of a component's fixed type (RFC 0071 port, question 5): a static part's choice - its role's name,
+                // its count, and the fixed types of the components that may play it, looked up as an object is made.
+                class FixedField {
+                    constructor(name, count, players) {
+                        if (typeof name !== "string" || !/^[a-z][A-Za-z0-9]*$/.test(name)) throw new TypeError("FixedField: its name is its role's, as a field's");
+                        if (!(count instanceof Count)) throw new TypeError("FixedField: " + name + "'s count is a Count");
+                        if (typeof players !== "function") throw new TypeError("FixedField: " + name + "'s players, a function of the fixed types that may play it");
+                        this.name = name; this.count = count; this.players = players;
+                        Object.freeze(this);
+                    }
+                }
                 // What every component's fixed type extends (D30): its dual's FixedPlainButton names the component and hands on
-                // what it is given. A component with nothing fixed has a type with no fields, refusing any argument.
+                // what it is given. Its fields are its type's FIELDS, derived from the component's static parts (RFC 0071
+                // port, question 5): each a part's choice, in its owner's order - one fixed object of a player's, or none
+                // where the part is optional; as many as its count, as a list. A component with nothing fixed has a type with
+                // no fields, refusing any argument.
                 class Fixed {
                     constructor(component, given) {
                         if (new.target === Fixed) throw new TypeError("Fixed: made only as a component's own fixed type");
                         if (!(component instanceof Component)) throw new TypeError(new.target.name + ": the fixed type of a Component");
-                        if (given.length !== 0) throw new TypeError(new.target.name + ": " + component.token + " has nothing fixed - its fixed object has no fields");
+                        const fields = new.target.FIELDS ?? [];
+                        if (!Array.isArray(fields) || !fields.every(f => f instanceof FixedField)) throw new TypeError(new.target.name + ": its FIELDS, each a FixedField");
+                        if (fields.length === 0 && given.length !== 0) throw new TypeError(new.target.name + ": " + component.token + " has nothing fixed - its fixed object has no fields");
+                        if (given.length !== fields.length)
+                            throw new TypeError(new.target.name + ": its fields are " + fields.map(f => f.name).join(", ") + " - " + fields.length + ", given " + given.length);
+                        fields.forEach((f, i) => {
+                            const players = f.players(), value = given[i];
+                            const played = v => players.some(P => v instanceof P);
+                            const said = new.target.name + "'s " + f.name + ": " + players.map(P => P.name).join(" or ");
+                            const least = f.count.min, most = f.count.max;
+                            if (most === 1) {
+                                if (value === null && least === 0) { this[f.name] = null; return; }
+                                if (!played(value)) throw new TypeError(said + (least === 0 ? ", or null for none" : ""));
+                                this[f.name] = value;
+                            } else {
+                                if (!Array.isArray(value) || value.length < least || (most !== null && value.length > most) || !value.every(played))
+                                    throw new TypeError(said + " - a list of " + least + ".." + (most === null ? "*" : most));
+                                this[f.name] = Object.freeze([...value]);
+                            }
+                        });
                         Object.freeze(this);
                     }
                 }
-                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, Room, ElementPath, Style, Fixed };
+                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, Room, ElementPath, Style, FixedField, Fixed };
                 """;
     }
 }

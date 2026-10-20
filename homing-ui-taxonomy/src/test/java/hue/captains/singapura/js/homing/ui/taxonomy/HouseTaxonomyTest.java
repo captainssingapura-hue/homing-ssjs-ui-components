@@ -180,6 +180,21 @@ class HouseTaxonomyTest {
     }
 
     /** A component's parts, each said as its token, how many, and what plays it. */
+    /**
+     * Static or dynamic (RFC 0071 port, question 5; the parts reviewed with the owner, 20 Oct): the nineteen parts made
+     * or dropped while their owner lives are dynamic - a part a state shows or hides is still static; every other part
+     * is static, the default, decided as its owner is made.
+     */
+    @Test
+    void theDynamicParts_theNineteenReviewed_everyOtherStatic() {
+        assertEquals(Set.of("context-menu-steward-popup", "context-menu-steward-specimen", "dialog-veil", "float-layer-float", "menu-item-leading",
+                        "multi-tab-pane-picker", "pane-thumbs-cell", "split-grid-mirror-cell", "slider-figure", "slider-notch", "split-grid-seam",
+                        "split-grid-splitter", "summary-view-open", "summary-view-summary", "summary-view-tag", "tab-strip-chip", "tab-strip-landing",
+                        "trail-step", "trail-break"),
+                HOUSE.parts().stream().filter(p -> p.cardinality().dynamic()).map(Part::token).collect(Collectors.toSet()));
+        assertEquals(78 - 19, HOUSE.parts().stream().filter(p -> !p.cardinality().dynamic()).count(), "the rest static - the 24 of the review, and every part that is one");
+    }
+
     private static List<String> said(Component<?> owner) {
         return HOUSE.partsOf(owner).stream().map(p -> p.token() + " " + p.cardinality().multiplicity() + " " + String.join(" | ", p.bases().stream().map(Component::token).toList())).toList();
     }

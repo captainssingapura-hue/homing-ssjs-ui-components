@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
@@ -57,9 +58,9 @@ public final class HouseContainers {
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
-                           DSL.part(HouseText.Badge.INSTANCE).as(HouseSaying.Tag.INSTANCE).optional(),
-                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(),
-                           DSL.part(HouseControls.Link.INSTANCE).as(HouseDoing.Open.INSTANCE).optional());
+                           DSL.part(HouseText.Badge.INSTANCE).as(HouseSaying.Tag.INSTANCE).optional(Cardinality.DYNAMIC),
+                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Summary.INSTANCE).optional(Cardinality.DYNAMIC),
+                           DSL.part(HouseControls.Link.INSTANCE).as(HouseDoing.Open.INSTANCE).optional(Cardinality.DYNAMIC));
         }
     }
 
@@ -71,7 +72,7 @@ public final class HouseContainers {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(Scrim.INSTANCE).as(HouseShaping.Veil.INSTANCE).optional(),
+            return List.of(DSL.part(Scrim.INSTANCE).as(HouseShaping.Veil.INSTANCE).optional(Cardinality.DYNAMIC),
                            DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Window.INSTANCE).one(),
                            DSL.part(ActionBar.INSTANCE).as(HouseShaping.Actions.INSTANCE).optional());
         }
@@ -99,7 +100,7 @@ public final class HouseContainers {
         /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Float.INSTANCE).any());
+            return List.of(DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Float.INSTANCE).any(Cardinality.DYNAMIC));
         }
     }
 
@@ -210,8 +211,8 @@ public final class HouseContainers {
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.Crumb.INSTANCE).as(HouseDoing.Step.INSTANCE).any(),
-                           DSL.part(HouseMarks.Delimiter.INSTANCE).as(HouseShaping.Break.INSTANCE).any());
+            return List.of(DSL.part(HouseControls.Crumb.INSTANCE).as(HouseDoing.Step.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(HouseMarks.Delimiter.INSTANCE).as(HouseShaping.Break.INSTANCE).any(Cardinality.DYNAMIC));
         }
     }
 
@@ -223,11 +224,11 @@ public final class HouseContainers {
         /** Lit while its pane is the one being worked in (D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(),
+            return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(Cardinality.DYNAMIC),
                            DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
                            DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
-                           DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional());
+                           DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional(Cardinality.DYNAMIC));
         }
         /** Its tail: the room at its end its count and its close sit in - its own. */
         @Override public List<Room> rooms() { return List.of(new Room("tail")); }

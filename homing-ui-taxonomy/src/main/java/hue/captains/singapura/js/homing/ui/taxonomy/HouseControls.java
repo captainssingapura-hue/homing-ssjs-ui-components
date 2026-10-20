@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
@@ -328,8 +329,8 @@ public final class HouseControls {
                            DSL.part(HouseMarks.SliderGroove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
                            DSL.part(HouseMarks.Fill.INSTANCE).as(HouseSaying.Level.INSTANCE).one(),
                            DSL.part(HouseMarks.Detent.INSTANCE).as(HouseSaying.Rest.INSTANCE).optional(),
-                           DSL.part(HouseMarks.Tick.INSTANCE).as(HouseSaying.Notch.INSTANCE).any(),
-                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Figure.INSTANCE).any(),
+                           DSL.part(HouseMarks.Tick.INSTANCE).as(HouseSaying.Notch.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Figure.INSTANCE).any(Cardinality.DYNAMIC),
                            DSL.part(SliderKnob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one(),
                            DSL.part(HouseIcons.GripIcon.INSTANCE, HouseIcons.SizeIcon.INSTANCE, HouseIcons.AspectIcon.INSTANCE,
                                     HouseIcons.ExtentIcon.INSTANCE, HouseIcons.LevelIcon.INSTANCE).as(HouseShaping.Measure.INSTANCE).optional(),

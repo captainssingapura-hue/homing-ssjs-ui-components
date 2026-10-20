@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
@@ -21,8 +22,8 @@ public final class HouseMenus {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseContainers.ContextMenu.INSTANCE).as(HouseShaping.Popup.INSTANCE).any(),
-                           DSL.part(HouseContainers.ContextMenu.INSTANCE).as(HouseShaping.Specimen.INSTANCE).any());
+            return List.of(DSL.part(HouseContainers.ContextMenu.INSTANCE).as(HouseShaping.Popup.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(HouseContainers.ContextMenu.INSTANCE).as(HouseShaping.Specimen.INSTANCE).any(Cardinality.DYNAMIC));
         }
     }
 }
