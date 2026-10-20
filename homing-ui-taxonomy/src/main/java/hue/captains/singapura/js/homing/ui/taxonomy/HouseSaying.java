@@ -28,7 +28,7 @@ public final class HouseSaying {
         @Override public Saying parent() { return Saying.INSTANCE; }
     }
 
-    /** Names a container: a card, a panel, a pane, a group, a setting. */
+    /** Names a container: a card, a pane, a group, a setting. */
     public record Title() implements Role<Naming> { public static final Title INSTANCE = new Title(); @Override public Naming parent() { return Naming.INSTANCE; } }
     /** Names one section of the owner. */
     public record Subtitle() implements Role<Naming> { public static final Subtitle INSTANCE = new Subtitle(); @Override public Naming parent() { return Naming.INSTANCE; } }

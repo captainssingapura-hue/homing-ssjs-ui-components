@@ -46,7 +46,6 @@ public record UiElementsStyleDeclaration() implements StyleDeclaration {
                 new PlainCard(),
                 new ClickableCard(),
                 new SummaryView(),
-                new Panel(),
                 new Scrim(),
                 new EdgeStrip(),
                 new Trail(),
@@ -54,7 +53,6 @@ public record UiElementsStyleDeclaration() implements StyleDeclaration {
                 new HeaderCell(),
                 new DataCell(),
                 new SiteBar(),
-                new PanelBar(),
                 new Label(),
                 new Heading1(),
                 new Heading2(),
@@ -123,7 +121,6 @@ public record UiElementsStyleDeclaration() implements StyleDeclaration {
                 new DropMarkLanding(),
                 new BrandHome(),
                 new TrailPath(),
-                new LabelTitle(),
-                new KickerTitle())));
+                new LabelTitle())));
     }
 }

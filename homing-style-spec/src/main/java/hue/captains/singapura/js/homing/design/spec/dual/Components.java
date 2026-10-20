@@ -33,7 +33,7 @@ public record Components() implements DualTree<Taxon> {
 
     /**
      * Beside each component, its fixed type (D30) - {@code FixedPlainButton} beside {@code ComponentPlainButton} - and
-     * each of its rooms (RFC 0067): {@code RoomPanelBody}, the panel's body, made by the kit.
+     * each of its rooms (RFC 0067): {@code RoomTabStripTail}, the tab strip's tail, made by the kit.
      */
     @Override public List<TreeDual.Companion> companions(Registration r, Taxon node) {
         if (!(node instanceof Component<?> c)) return List.of();
@@ -45,7 +45,7 @@ public record Components() implements DualTree<Taxon> {
         return List.copyOf(out);
     }
 
-    /** A room's name in the dual: {@code Room}, its component's name, its own - {@code RoomPanelBody}. */
+    /** A room's name in the dual: {@code Room}, its component's name, its own - {@code RoomTabStripTail}. */
     public String room(Component<?> component, Room room) {
         return "Room" + JsLiterals.INSTANCE.name(component.token()) + JsLiterals.INSTANCE.name(room.name());
     }

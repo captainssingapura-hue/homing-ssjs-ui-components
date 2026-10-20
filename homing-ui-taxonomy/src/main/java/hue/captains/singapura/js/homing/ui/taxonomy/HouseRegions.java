@@ -9,8 +9,8 @@ import java.util.List;
 
 /**
  * The house's regions: a document's blocks, each a look of its own. A stretch of a container's room with no look
- * but its owner's spacing is no region and no part - it is its owner's room (Component.rooms(): a panel's body, a
- * slider group's rack, a strip's tail, a site's page; owner, 20 Oct).
+ * but its owner's spacing is no region and no part - it is its owner's room (Component.rooms(): a strip's tail, a
+ * site's page; owner, 20 Oct).
  */
 public final class HouseRegions {
 

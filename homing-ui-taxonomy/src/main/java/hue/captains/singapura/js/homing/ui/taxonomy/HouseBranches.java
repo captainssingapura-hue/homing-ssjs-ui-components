@@ -117,7 +117,7 @@ public final class HouseBranches {
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
-    /** A container that fills what holds it, with no frame of its own: the page's ground, a panel. */
+    /** A container that fills what holds it, with no frame of its own: the page's ground. */
     public record Surface() implements L2_ComponentBranch<Container>, FamilyHead {
         public static final Surface INSTANCE = new Surface();
         @Override public Container parent() { return Container.INSTANCE; }
@@ -141,7 +141,7 @@ public final class HouseBranches {
         @Override public Root parent() { return Root.INSTANCE; }
     }
 
-    /** Words, and the numbers read as words - at a size: a panel's and a pane's title follow their own. */
+    /** Words, and the numbers read as words - at a size: a pane's title follows its own. */
     public record Text() implements L1_ComponentBranch<Root>, FamilyHead {
         public static final Text INSTANCE = new Text();
         @Override public Root parent() { return Root.INSTANCE; }

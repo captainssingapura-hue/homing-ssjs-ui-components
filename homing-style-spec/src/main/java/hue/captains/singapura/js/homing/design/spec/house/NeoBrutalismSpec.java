@@ -283,7 +283,6 @@ public record NeoBrutalismSpec() implements SpecModule<BaseScheme, NeoBrutalism>
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.Panel.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Panel(), List.of()),
                 new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.EdgeStrip(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.SiteBar(), List.of()),
@@ -316,7 +315,6 @@ public record NeoBrutalismSpec() implements SpecModule<BaseScheme, NeoBrutalism>
                         new RoleAssignment<>(HouseDoing.First.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PreferencesButton()),
                         new RoleAssignment<>(HouseDoing.Last.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PreferencesButton()),
                         new RoleAssignment<>(HouseDoing.More.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PreferencesButton()))),
-                new ComponentAssignment<>(HouseContainers.PanelBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PanelBar(), List.of()),
                 new ComponentAssignment<>(HouseContainers.ActionBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.ActionBar(), List.of()),
                 new ComponentAssignment<>(HouseContainers.TitleBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.TitleBar(), List.of()));
     }

@@ -65,23 +65,6 @@ public final class HouseContainers {
 
     // ── containers ───────────────────────────────────────────────────────
 
-    /**
-     * A panel that fills what holds it: a head that names it, and a body - its own room, which what is mounted in it
-     * fills. Its controls are the caller's, at the end of its head.
-     */
-    public record Panel() implements Composite<HouseBranches.Surface> {
-        public static final Panel INSTANCE = new Panel();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
-        /** How far off its plane the app sits it, and whether it is the current one - each said by the app, neither meaning anything by itself (D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Elevation.INSTANCE, HouseStates.Current.INSTANCE); }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(PanelBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional());
-        }
-        /** Its body: what is mounted in it fills it - its own. */
-        @Override public List<Room> rooms() { return List.of(new Room("body")); }
-    }
-
     /** A floating pane over a scrim, with a bar of actions. Its title and close are the pane's, its content the caller's. */
     public record Dialog() implements Composite<HouseBranches.Pane> {
         public static final Dialog INSTANCE = new Dialog();
@@ -131,18 +114,6 @@ public final class HouseContainers {
             return List.of(DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Title.INSTANCE).optional(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
         }
-    }
-
-    /** Heads a panel: its title, and at its end what acts on the panel - the caller's. */
-    public record PanelBar() implements Composite<HouseBranches.Bar> {
-        public static final PanelBar INSTANCE = new PanelBar();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Title.INSTANCE).optional());
-        }
-        /** Its end: the room at its end where what acts on the panel sits - the caller's, handed in; the room its own. */
-        @Override public List<Room> rooms() { return List.of(new Room("end")); }
     }
 
     // ── menus and layers ─────────────────────────────────────────────────

@@ -549,94 +549,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     // ── The panel: a head, a body, and what is mounted in it ──────────────
 
-    /**
-     * The panel: a column of head over body that fills what holds it — a cell,
-     * a pane, a page. Its corner, its rule and its edge are the container's,
-     * which is also where the keys mark comes from, so a panel that holds the
-     * keys says so without a word of its own; its gap is the panel's, and a
-     * design that draws no line under the head parts them with it.
-     */
-    public record el_panel() implements CssClass<ElementStyles> {
-        // The panel's depth is the design's to draw and the holder's to set: the shadow is worn plainly here, and
-        // the design answers it at ELEVATED and SUNKEN — in whatever plane it honestly uses for depth, or not at
-        // all. Nothing here says what a register MEANS; the app says that, in its own code.
-        @Override public String body() { return """
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            flex: 1 1 auto;
-            align-self: stretch;
-            min-width: 0;
-            min-height: 0;
-            overflow: hidden;
-            """;
-        }
-    }
-
-    /**
-     * The head: the bar that names the panel and carries what acts on it — its
-     * air, its gap, and the line under it, which is the design's own word about
-     * panels; the line's colour is the divider's, as a strip's is.
-     */
-    public record el_panel_head() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            flex: none;
-            display: flex;
-            align-items: center;
-            box-sizing: border-box;
-            min-width: 0;
-            user-select: none;
-            """;
-        }
-    }
-
-    /** The panel's name: a kicker, as a labelled region's is; it ellipsises rather than push out what acts on the panel. */
-    public record el_panel_title() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            margin: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            """;
-        }
-    }
-
-    /** The slot at the end of the head: what acts on the panel, pushed to the end and never squeezed. */
-    public record el_panel_slot() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            margin-inline-start: auto;
-            flex: none;
-            display: flex;
-            align-items: center;
-            """;
-        }
-    }
-
-    /**
-     * The body: what the head leaves, flush — for a panel that is filled by
-     * what is mounted in it, a dock or a grid, which scrolls on its own. It is
-     * the positioning context for what it holds, so a widget that fills its
-     * host by absolute inset fills THE BODY and never climbs over the head.
-     */
-    public record el_panel_body() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            flex: 1 1 auto;
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            min-width: 0;
-            min-height: 0;
-            overflow: hidden;
-            position: relative;
-            """;
-        }
-    }
-
-    /** The body of a panel that holds content rather than a widget: the design's air around it, its gap between the things in it, and the scroll. */
-    public record el_panel_body_air() implements CssClass<ElementStyles> {
-        @Override public String body() { return "overflow: auto;"; }
-    }
-
     // ── The browser's own controls ────────────────────────────────────────────
 
     /**
@@ -818,7 +730,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_off(),
                        new el_menu_item(), new el_menu_item_label(), new el_menu_item_hint(), new el_menu_item_disclose(), new el_menu_item_lead(), new el_choice_option(), new el_choice_option_note(),
                        new el_card(), new el_summary(), new el_summary_head(), new el_summary_title(), new el_summary_tag(), new el_summary_text(), new el_summary_foot(),
-                       new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(),
                        new el_checkbox(), new el_pane_thumb_name(), new el_switch(), new el_switch_groove(), new el_switch_knob(),
                        new el_strip(), new el_strip_hidden(), new el_strip_lip(),
                        new el_site_bar(), new el_site_bar_start(), new el_site_bar_way(), new el_site_bar_end(),

@@ -51,7 +51,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         return List.copyOf(out.values());
     }
 
-    /** Each room of the component's own as a constant - {@code const ROOM_BODY = RoomPanelBody;} - its node in the components' dual. */
+    /** Each room of the component's own as a constant - {@code const ROOM_TAIL = RoomTabStripTail;} - its node in the components' dual. */
     public List<SlotConstant> rooms(ComponentHeader h) {
         var out = new ArrayList<SlotConstant>();
         for (Room room : h.rooms()) {
@@ -96,7 +96,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         return out;
     }
 
-    /** The room nodes a header imports from the components' dual: {@code RoomPanelBody}. */
+    /** The room nodes a header imports from the components' dual: {@code RoomTabStripTail}. */
     public List<String> roomNodes(ComponentHeader h) { return h.rooms().stream().map(r -> Components.INSTANCE.room(h.component(), r)).toList(); }
 
     /**

@@ -83,10 +83,10 @@ class HouseComponentModulesTest {
     void theTwelveModules_readTheHouseWhole() {
         Taxonomy byModules = HouseTaxonomy.INSTANCE.read(HOUSE);
         int listed = HOUSE.stream().mapToInt(m -> m.components().size()).sum();
-        assertEquals(130, byModules.components().size(), "the twenty icons among them, each a leaf of the Icon branch (D52); the rooms no components (20 Oct)");
-        assertEquals(124, listed, "a hundred and twenty-four listed - a hundred and sixteen implemented, the panel's bar among them, the slider group dropped (20 Oct), the twenty icons by the icon's one class among them (D52), eight then realized inline by their owners - the rooms among them no components now (20 Oct)");
+        assertEquals(128, byModules.components().size(), "the twenty icons among them, each a leaf of the Icon branch (D52); the rooms no components (20 Oct)");
+        assertEquals(122, listed, "a hundred and twenty-two listed - a hundred and fourteen implemented, the slider group, the panel and its bar dropped (20 Oct), the twenty icons by the icon's one class among them (D52), eight then realized inline by their owners - the rooms among them no components now (20 Oct)");
         var bringers = ComponentModules.INSTANCE.bringers(HOUSE, byModules);
-        assertEquals(130, bringers.size(), "every component brought by a module: its own, or its owner's by a part");
+        assertEquals(128, bringers.size(), "every component brought by a module: its own, or its owner's by a part");
         assertEquals(UiElementsComponentModule.INSTANCE, bringers.get(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.HeaderCell.INSTANCE),
                 "a header cell, never listed: a part of the table ui-elements lists");
     }

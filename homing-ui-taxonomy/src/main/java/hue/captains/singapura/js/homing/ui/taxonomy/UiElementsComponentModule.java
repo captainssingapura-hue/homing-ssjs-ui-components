@@ -38,7 +38,7 @@ public record UiElementsComponentModule() implements ComponentModule {
                        HouseMarks.ToggleGroove.INSTANCE, HouseControls.ToggleKnob.INSTANCE,
                        HouseControls.Grip.INSTANCE, HouseControls.Switch.INSTANCE, HouseControls.PaneThumb.INSTANCE,
                        HouseControls.Slider.INSTANCE,
-                       HouseContainers.Panel.INSTANCE, HouseContainers.PanelBar.INSTANCE, HouseContainers.EdgeStrip.INSTANCE,
+                       HouseContainers.EdgeStrip.INSTANCE,
                        HouseContainers.Ground.INSTANCE, HouseContainers.SiteBar.INSTANCE, HouseControls.Brand.INSTANCE,
                        HouseContainers.Trail.INSTANCE, HouseRegions.Quote.INSTANCE, HouseRegions.CodeBlock.INSTANCE,
                        HouseRegions.Table.INSTANCE, HouseText.Strong.INSTANCE, HouseText.Muted.INSTANCE,

@@ -74,8 +74,7 @@ Shows something whole, for the user to look at or look through, rather than to e
 
 ## Surface
 
-Fills what holds it, with no frame of its own; what stands on it is the point - the page's ground,
-a panel.
+Fills what holds it, with no frame of its own; what stands on it is the point - the page's ground.
 
 ## Cluster
 

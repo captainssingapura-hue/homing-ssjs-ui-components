@@ -81,7 +81,7 @@ class HouseControllabilityTest {
 
     @Test
     void theCommonLeavesAlone_onThisClasspath() {
-        assertEquals(8, HouseControllability.INSTANCE.classification().declared().size(),
+        assertEquals(7, HouseControllability.INSTANCE.classification().declared().size(),
                 "no module that extends the house is here: the types of its leaves are declared beside them, and read where they are");
     }
 
@@ -90,7 +90,6 @@ class HouseControllabilityTest {
         var expected = new LinkedHashMap<String, String>();
         for (String b : List.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "slider"))
             expected.put(b, "switchable");
-        expected.put("panel", "emphasised");
         expected.put("edge-strip", "holdable");
         expected.put("dialog", "modal-overlay");
         expected.put("context-menu", "overlay");
@@ -151,7 +150,7 @@ class HouseControllabilityTest {
     void aTypeNamingADegree_andANodeClassifiedTwice_areRefused() {
         var degree = assertThrows(RefusedControls.class, () -> new ControlType("sized", List.of(HouseControlOptions.Size.INSTANCE)));
         assertTrue(degree.getMessage().contains("the axes are the component's own"), degree.getMessage());
-        var at = new ControlTypeAt(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.Panel.INSTANCE, HouseControllability.PLAIN);
+        var at = new ControlTypeAt(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.EdgeStrip.INSTANCE, HouseControllability.PLAIN);
         var twice = assertThrows(RefusedControls.class, () -> new ControlClassification(List.of(at, at), HouseControllability.PLAIN));
         assertTrue(twice.getMessage().contains("declared twice"), twice.getMessage());
     }

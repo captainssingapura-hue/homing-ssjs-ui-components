@@ -15,10 +15,6 @@ Enter or Space - it does its one thing, so the user can act on the thing it stan
 Sums one thing up - its title, how it is sorted, what it is about - and leads to it, so the user
 can choose among several at a glance. Shown on whatever holds it: a card, a pane, a dialog.
 
-## Panel
-
-Holds one concern of a view, named, filling the room it is given.
-
 ## Dialog
 
 Puts one matter to the user above the page, and holds the page back until it is settled.
@@ -47,11 +43,6 @@ over what it stands on.
 ## TitleBar
 
 Heads a pane that floats over the page: its title, its close, and where the hand takes it to move it.
-
-## PanelBar
-
-Heads a panel: its title, and at its end what acts on the panel, so the user knows what the panel holds and where
-to act on it.
 
 ## Ground
 

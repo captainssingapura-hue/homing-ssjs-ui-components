@@ -89,7 +89,6 @@ public record HouseControllability() implements StatelessFunctionalObject {
         var declared = new ArrayList<>(List.of(
                 new ControlTypeAt(HouseBranches.Button.INSTANCE, SWITCHABLE),
                 new ControlTypeAt(HouseControls.Slider.INSTANCE, SWITCHABLE),
-                new ControlTypeAt(HouseContainers.Panel.INSTANCE, EMPHASISED),
                 new ControlTypeAt(HouseContainers.EdgeStrip.INSTANCE, HOLDABLE),
                 new ControlTypeAt(HouseContainers.Dialog.INSTANCE, MODAL_OVERLAY),
                 new ControlTypeAt(HouseContainers.ContextMenu.INSTANCE, OVERLAY),

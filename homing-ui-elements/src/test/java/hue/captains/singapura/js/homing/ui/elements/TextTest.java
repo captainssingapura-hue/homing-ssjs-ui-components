@@ -69,7 +69,6 @@ class TextTest extends UiElementsJsTest {
 
     @Test
     void inARole_itsCastingsClassAlone() {
-        assertEquals("styled-kicker_title", str("worn(new Kicker(KickerFactory.create(branch, 'k'), { text: 'Guide' }, ROLE.TITLE))"));
         assertEquals("styled-heading4_title", str("worn(new Heading4(Heading4Factory.create(branch, 'h'), { text: 'A card' }, ROLE.TITLE))"));
         assertEquals("styled-badge_tag", str("worn(new Badge(BadgeFactory.create(branch, 'b'), { text: 'new' }, ROLE.TAG))"));
         assertEquals("styled-wordmark_name", str("worn(new Wordmark(WordmarkFactory.create(branch, 'w'), { text: 'Homing' }, ROLE.NAME))"));

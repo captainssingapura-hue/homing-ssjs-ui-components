@@ -283,7 +283,6 @@ public record EditorialSpec() implements SpecModule<BaseScheme, Editorial> {
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.Panel.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.Panel(), List.of()),
                 new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.EdgeStrip(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.SiteBar(), List.of()),
@@ -316,7 +315,6 @@ public record EditorialSpec() implements SpecModule<BaseScheme, Editorial> {
                         new RoleAssignment<>(HouseDoing.First.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.PreferencesButton()),
                         new RoleAssignment<>(HouseDoing.Last.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.PreferencesButton()),
                         new RoleAssignment<>(HouseDoing.More.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.PreferencesButton()))),
-                new ComponentAssignment<>(HouseContainers.PanelBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.PanelBar(), List.of()),
                 new ComponentAssignment<>(HouseContainers.ActionBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.ActionBar(), List.of()),
                 new ComponentAssignment<>(HouseContainers.TitleBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.TitleBar(), List.of()));
     }

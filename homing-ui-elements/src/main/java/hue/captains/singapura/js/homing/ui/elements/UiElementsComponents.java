@@ -74,12 +74,10 @@ public record UiElementsComponents() implements C0_Components<UiElementsComponen
                 ComponentEntry.of(this, new SwitchModule.Switch()),
                 ComponentEntry.of(this, new PaneThumbModule.PaneThumb()),
                 ComponentEntry.of(this, new SliderModule.Slider()),
-                ComponentEntry.of(this, new PanelModule.Panel()),
                 ComponentEntry.of(this, new EdgeStripModule.EdgeStrip()),
                 ComponentEntry.of(this, new GroundModule.Ground()),
                 ComponentEntry.of(this, new SiteBarModule.SiteBar()),
                 ComponentEntry.of(this, new BrandModule.Brand()),
-                ComponentEntry.of(this, new PanelBarModule.PanelBar()),
                 ComponentEntry.of(this, new TrailModule.Trail()));
     }
 }

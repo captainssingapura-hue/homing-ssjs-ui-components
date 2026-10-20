@@ -283,7 +283,6 @@ public record RetroFuturismSpec() implements SpecModule<BaseScheme, RetroFuturis
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.Panel.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Panel(), List.of()),
                 new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.EdgeStrip(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SiteBar(), List.of()),
@@ -316,7 +315,6 @@ public record RetroFuturismSpec() implements SpecModule<BaseScheme, RetroFuturis
                         new RoleAssignment<>(HouseDoing.First.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PreferencesButton()),
                         new RoleAssignment<>(HouseDoing.Last.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PreferencesButton()),
                         new RoleAssignment<>(HouseDoing.More.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PreferencesButton()))),
-                new ComponentAssignment<>(HouseContainers.PanelBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PanelBar(), List.of()),
                 new ComponentAssignment<>(HouseContainers.ActionBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ActionBar(), List.of()),
                 new ComponentAssignment<>(HouseContainers.TitleBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TitleBar(), List.of()));
     }

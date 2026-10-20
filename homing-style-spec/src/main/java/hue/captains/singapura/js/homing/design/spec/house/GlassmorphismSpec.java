@@ -283,7 +283,6 @@ public record GlassmorphismSpec() implements SpecModule<BaseScheme, Glassmorphis
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.Panel.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Panel(), List.of()),
                 new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.EdgeStrip(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.SiteBar(), List.of()),
@@ -316,7 +315,6 @@ public record GlassmorphismSpec() implements SpecModule<BaseScheme, Glassmorphis
                         new RoleAssignment<>(HouseDoing.First.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.PreferencesButton()),
                         new RoleAssignment<>(HouseDoing.Last.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.PreferencesButton()),
                         new RoleAssignment<>(HouseDoing.More.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.PreferencesButton()))),
-                new ComponentAssignment<>(HouseContainers.PanelBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.PanelBar(), List.of()),
                 new ComponentAssignment<>(HouseContainers.ActionBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.ActionBar(), List.of()),
                 new ComponentAssignment<>(HouseContainers.TitleBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.TitleBar(), List.of()));
     }
