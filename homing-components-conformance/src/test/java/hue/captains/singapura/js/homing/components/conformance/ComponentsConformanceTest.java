@@ -159,12 +159,11 @@ class ComponentsConformanceTest {
     /**
      * Drawn without the component the leaf declares: the float's bar its own strip. And every part its owner made
      * inline until the inline reading was withdrawn (owner, 20 Oct) - each to become a component of its own: the
-     * panel's bar now one (the old panel, not yet ported, does not use it); the lip, the title bar and the action bar, whose behaviour their owners hear, once a
+     * panel's bar now one, the panel ported on it; the lip, the title bar and the action bar, whose behaviour their owners hear, once a
      * component's own events are settled (RFC 0071 port, question 2). The rooms - a section, a rack, a tail, a widget's
      * slot - are no parts at all: their owners' own (Component.rooms()).
      */
     private static final List<String> COMPOSITION_LEDGER = List.of(
-            "PanelModule (Panel) never imports PanelBar, which its part head calls for",
             "EdgeStripModule (EdgeStrip): its part reveal is Lip, which no module implements - a part is a component of its own, never realized by its owner inline",
             "DialogModule (Dialog): its part actions is ActionBar, which no module implements - a part is a component of its own, never realized by its owner inline",
             "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
