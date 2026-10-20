@@ -144,10 +144,11 @@ class ComponentsConformanceTest {
      * Every implementation anchored at the house's taxonomy: a component's
      * module implements its leaf, one leaf one module one class, a shared base
      * only under its branch; and what a leaf's module imports of other
-     * components is what its parts declare - read through a part nothing
-     * implements, whose own parts its owner realizes inline. The leaves not yet
-     * composed as declared are held in the ledger, so the list only shrinks:
-     * each is a question for the design - the declaration or the code is wrong.
+     * components is what its parts declare, each a component of its own - a part
+     * nothing implements is never realized by its owner inline (owner, 20 Oct).
+     * The leaves not yet composed as declared are held in the ledger, so the
+     * list only shrinks: each is a question for the design - the declaration or
+     * the code is wrong.
      */
     @Test
     void everyImplementationIsAnchored_andComposedAsItsLeafDeclares() {
@@ -155,7 +156,23 @@ class ComponentsConformanceTest {
         assertEquals(COMPOSITION_LEDGER, problems, () -> "implementations against the taxonomy (" + problems.size() + "):\n" + String.join("\n", problems));
     }
 
-    /** Drawn without the component the leaf declares: the chip's keys the design's own, the float's bar its own strip. */
+    /**
+     * Drawn without the component the leaf declares: the float's bar its own strip. And every part its owner made
+     * inline until the inline reading was withdrawn (owner, 20 Oct) - each to become a component of its own: the
+     * rooms (section, rack, tail, widget slot) and the panel's bar first; the lip, the title bar and the action bar,
+     * whose behaviour their owners hear, once a component's own events are settled (RFC 0071 port, question 2).
+     */
     private static final List<String> COMPOSITION_LEDGER = List.of(
-            "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for");
+            "SliderGroupModule (SliderGroup): its part body is SliderRack, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "PanelModule (Panel): its part head is PanelBar, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "PanelModule (Panel): its part body is Section, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "EdgeStripModule (EdgeStrip): its part reveal is Lip, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "DialogModule (Dialog): its part actions is ActionBar, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "PreferencesViewModule (PreferencesView): its part index is WidgetSlot, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "PreferencesViewModule (PreferencesView): its part detail is WidgetSlot, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
+            "TabStripModule (TabStrip): its part foot is StripTail, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "MpaChromeModule (MpaChrome): its part page is WidgetSlot, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "PreferencesButtonModule (PreferencesButton): its part page is WidgetSlot, which no module implements - a part is a component of its own, never realized by its owner inline");
 }

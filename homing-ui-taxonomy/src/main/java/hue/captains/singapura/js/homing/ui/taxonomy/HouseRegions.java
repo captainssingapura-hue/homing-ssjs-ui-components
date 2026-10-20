@@ -23,7 +23,6 @@ public final class HouseRegions {
         @Override public Region parent() { return Region.INSTANCE; }
     }
 
-    /** A stretch of a view a widget is held in. */
     /** The end of a strip of tabs: the room its count and its close sit in. */
     public record StripTail() implements Leaf<Region> {
         public static final StripTail INSTANCE = new StripTail();
@@ -36,6 +35,7 @@ public final class HouseRegions {
         @Override public Region parent() { return Region.INSTANCE; }
     }
 
+    /** A stretch of a view a widget is held in. */
     public record WidgetSlot() implements Leaf<Region> {
         public static final WidgetSlot INSTANCE = new WidgetSlot();
         @Override public Region parent() { return Region.INSTANCE; }
