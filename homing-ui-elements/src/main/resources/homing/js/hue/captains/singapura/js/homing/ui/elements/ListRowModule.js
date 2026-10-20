@@ -3,8 +3,8 @@
 // row's look; what it shows is its owner's - its words, or the elements its
 // owner appends. Picked from its list (Selected, aria-selected); the one that
 // is where the user is (Current, aria-current); and where the page's keys
-// are, as its owner tells it (Keyboard: away, candidate, lent or held,
-// data-keys) - a row that stands for a member of the keyboard party, in a
+// are, as its owner tells it (Keyboard: away, candidate, lent or held) - a
+// row that stands for a member of the keyboard party, in a
 // monitor of it. A press is its click. Where it sits, and how deep, is its
 // list's.
 //
@@ -32,7 +32,6 @@ class ListRow extends SimpleComponent {
         keys: Object.freeze({
             values: StateKeyboard.states,
             rest: StateKeyboard.rest,
-            reflect: function (el, at) { if (at === StateKeyboard.rest) el.removeAttribute("data-keys"); else el.setAttribute("data-keys", at); },
             state: StateKeyboard
         })
     });

@@ -10,7 +10,6 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import java.util.List;
@@ -19,11 +18,11 @@ import java.util.List;
  * The clickable card: a card that is a button - the plain card's frame which, pressed by the hand or
  * by Enter or Space, does its one thing. A simple component on its own {@code <div role="button">},
  * made on the branch its owner hands it: handed the page's steward, a member of the keyboard party
- * under that branch's name.
+ * under that branch's name, told where the keys are on it and setting its own Keyboard state (RFC 0071, D16).
  */
 public record ClickableCardModule() implements DomModule<ClickableCardModule>, ImplFor<HouseContainers.ClickableCard> {
 
-    /** {@code new ClickableCard(branch, { size, aspect, keyboard, keyboardId })}; {@code root}, {@code size}, {@code aspect}, {@code setOnClick}, {@code key}, {@code dispose}. */
+    /** {@code new ClickableCard(branch, new FixedClickableCard(), place?)}; {@code joinKeys(steward, id?)}, once; {@code root}, {@code size}, {@code aspect}, {@code keys}, {@code setOnClick}, {@code key}, {@code dispose}. */
     public record ClickableCard() implements BranchComponent<ClickableCardModule>, NeedKeyboard {
         @Override public String summary() { return "A card that is a button: pressed, it does its one thing; it lifts under the hand and takes the keys."; }
         /** The card is a button to the keyboard too: through the party. */
@@ -35,7 +34,6 @@ public record ClickableCardModule() implements DomModule<ClickableCardModule>, I
     @Override
     public ImportsFor<ClickableCardModule> imports() {
         return ImportsFor.<ClickableCardModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CardBehaviorModule.CardBehavior()), CardBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))

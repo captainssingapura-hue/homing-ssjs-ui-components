@@ -2,64 +2,97 @@
 // ClickableCard — a card that is a button: the plain card's frame which, pressed
 // - by the hand, or Enter or Space - does its one thing, fired as its click. It
 // lifts under the hand, sinks under the press, takes the focus and shows where
-// the page's keys are. A simple component on a <div role="button">, in the
-// clickable card's look, made on the branch its owner hands it. Handed the
-// page's steward, it joins the keyboard party under that branch's name, or the
-// id it is given, and claims by the convention; one inside a pane or a dialog
-// is built without, and its holder hands it the keys (key). What is in it is
-// its caller's, as in the plain card.
+// the page's keys are. A composed component on the style manager (RFC 0071): it
+// takes a branch of its own and makes its <div role="button"> on it. What is in
+// it is its caller's, as in the plain card.
 //
-//   var card = new ClickableCard(branch.createBranch("open-grid"), { size, aspect, keyboard: steward, keyboardId? });
-//   card.setOnClick(handler)     handler.canHandle(EVENT.CLICK) true, handler.handle(event)
-//   card.el / card.root  card.size  card.aspect
-//   card.key(ev)                 a keydown from whoever holds the keys for it: Enter or Space on the
-//                                card is its click; true when taken. No keydown listener of its own
-//   card.dispose()               leaves the party, and dissolves its branch
+// Handed the page's steward - joinKeys(steward, id?), once - it joins the
+// keyboard party under that branch's name, or the id it is given, and claims by
+// the convention. Where the keys are on it is told it by the steward,
+// marked(state), and it sets its own Keyboard state - held, lent, candidate or
+// away - through its own reference (D16): nothing is written on it by anyone
+// else. One inside a pane or a dialog joins no steward, and its holder hands it
+// the keys (key).
+//
+//   var card = new ClickableCard(branch.createBranch("open-grid"), new FixedClickableCard(), me.slot(SLOT_…));
+//   card.joinKeys(steward, id?)   a member of the keyboard party, once
+//   card.setOnClick(handler)      handler.canHandle(EventClick) true, handler.handle(event)
+//   card.setOnKeyboardChanged(handler)   where the keys are on it changed, as the steward told it
+//   card.el / card.root  card.size  card.aspect  card.keys
+//   card.key(ev)                  a keydown from whoever holds the keys for it: Enter or Space on the
+//                                 card is its click; true when taken. No keydown listener of its own
+//   card.dispose()                leaves the party, and dissolves its branch
 // =============================================================================
 
 const _clickableCardOwner = Object.freeze({ toString: () => "clickableCard" });
 
 class ClickableCard extends SimpleComponent {
-    static LEAF = "clickable-card";
     static TAG = "div";
-    static EVENTS = Object.freeze([EVENT.CLICK]);
-    static DEGREES = Object.freeze(["size", "aspect"]);
+    static AXES = Object.freeze({
+        keys: Object.freeze({
+            values: StateKeyboard.states,
+            rest: StateKeyboard.rest,
+            state: StateKeyboard
+        })
+    });
+    static EVENTS = Object.freeze([EventClick]);
+    static DEGREES = Object.freeze([ExtentSize, ExtentAspect]);
     static BEHAVIOR = CardBehavior;
 
-    constructor(branch, props, role) {
-        if (!branch || typeof branch.elementMaker !== "function") throw new Error("[ClickableCard] a branch of its own is required");
-        var p = Object.assign({}, props || {}), kb = p.keyboard, kbId = p.keyboardId;
-        delete p.keyboard;
-        delete p.keyboardId;
+    constructor(branch, fixed, place) {
+        if (!branch || typeof branch.elementMaker !== "function")
+            throw new TypeError("[ClickableCard] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_clickableCardOwner);
-        super(branch.elementMaker("card"), p, role);
-        var self = this;
+        super(branch.elementMaker("card"), fixed, FixedClickableCard, place ?? manageClickableCard);
         css.addClass(this.el, el_card);   // what is inside fits it, and scrolls beyond it
         this.branch = branch;
         this.root = this.el;
         this._kb = null;
         this._kbId = null;
         this._offKeys = null;
-        if (kb) {   // the page's steward: a member of the keyboard party, claiming by the convention
-            this._kb = kb;
-            this._kbId = kb.join(kbId != null ? String(kbId) : branch.name, { keyDown: function (ev) { return self.key(ev); } });
-            this._offKeys = Keys.claimOn(this.el, kb, this._kbId, this._look.keys());
-        }
     }
 
-    get size() { return this._degrees.size; }
-    set size(s) { this._degree("size", s); }
+    /** A member of the page's keyboard party, once: under the branch's name, or the id given; claiming by the convention. */
+    joinKeys(steward, id) {
+        if (this._kb) throw new Error("[ClickableCard] a member of the keyboard party already: joined once, it stays");
+        if (!steward || typeof steward.join !== "function") throw new Error("[ClickableCard] joins the page's KeyboardSteward");
+        var self = this;
+        this._kb = steward;
+        this._kbId = steward.join(id != null ? String(id) : this.branch.name, {
+            keyDown: function (ev) { return self.key(ev); },
+            marked: function (at) { self._change("keys", at, null); }   // where the keys are on it, as the steward says: its own state
+        });
+        this._offKeys = Keys.claimOn(this.el, steward, this._kbId);
+        return this;
+    }
+
+    /** Where the page's keys are on it: away, candidate, lent or held - the steward's to say, its own to set. */
+    get keys() { return this._get("keys"); }
+
+    get size() { return this._degree(ExtentSize); }
+    set size(s) { this._setDegree(ExtentSize, s); }
 
     /** −1 the tallest the design allows, 0 square, 1 the widest. */
-    get aspect() { return this._degrees.aspect; }
-    set aspect(a) { this._degree("aspect", a); }
+    get aspect() { return this._degree(ExtentAspect); }
+    set aspect(a) { this._setDegree(ExtentAspect, a); }
 
     /** Pressed: what it does, once and for good. */
-    setOnClick(handler) { this._setOn(EVENT.CLICK, handler); }
+    setOnClick(handler) { this._setOn(EventClick, handler); }
 
-    /** A keydown from whoever holds the keys for the card: Enter or Space on the card itself is its click; true when taken. */
+    /** Where the keys are on it changed, as the steward told it. */
+    setOnKeyboardChanged(handler) { this._setOn(StateKeyboard, handler); }
+
+    /** A press, as its behaviour hears it: its click. */
+    _clicked(ev) { this._fire(EventClick, ev); }
+
+    /**
+     * A keydown from whoever holds the keys for the card: Enter or Space is its click; true when taken. One aimed at a
+     * control inside it is that control's. With the card holding the keys and nothing natively focused - its own root
+     * the steward never lets the browser focus - a key comes to it aimed at the page itself.
+     */
     key(ev) {
-        if (!ev || (ev.key !== "Enter" && ev.key !== " ") || ev.target !== this.el) return false;
+        if (!ev || (ev.key !== "Enter" && ev.key !== " ")) return false;
+        if (ev.target !== this.el && ev.target && this.el.contains(ev.target)) return false;
         this.el.click();
         return true;
     }

@@ -72,7 +72,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- The substrate, from the core repo. Its own version, not ours:
              this repo releases on its own clock. -->
-        <homing.core.version>LOCAL-SNAPSHOT</homing.core.version>
+        <homing.core.version>LOCAL-SNAPSHOT-T1</homing.core.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.14</jacoco.version>
         <graalvm.version>24.1.1</graalvm.version>
