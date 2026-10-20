@@ -6,8 +6,8 @@
 // leaf whose fixed object it is handed: new FixedCloseIcon() makes the close
 // icon. It places itself with the placement its owner hands it for the slot it
 // is in, or at the root with that leaf's own binding; its casting's class is
-// the style manager's, and so is its picture: what the leaf shows (its content,
-// D56) drawn on its element from the icon palette of the style worn, by the
+// the style manager's, and so is its picture: the leaf's, as the icon palette
+// of the style worn draws it (D56), drawn on its element by the
 // style manager, which redraws it when a switch draws it otherwise - the icon
 // writes nothing in its element. Its look, the same for every icon, gives it
 // the colour it is given. An icon shows one picture: a picture of another shape

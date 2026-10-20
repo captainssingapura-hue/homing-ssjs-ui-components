@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.design.styling.StyleManager;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
-import hue.captains.singapura.js.homing.ui.taxonomy.IconContent;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.IconLeaf;
 import org.junit.jupiter.api.Test;
 
@@ -21,15 +21,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * The house's icon palettes (RFC 0067, D56): every icon its picture in every style - a glyph, its style's own or base's,
- * or for an SVG none, the page drawing a placeholder; each glyph the one today's sheet of that style drew on the icon's
- * ::before, moved unchanged; a palette refused that leaves an icon without a picture, draws one no icon shows, or is a
- * style's twice; and the page's module, one object a picture, shared by the styles that draw it alike.
+ * The house's icon palettes (RFC 0067, D56): every icon its picture in every style - its style's own, or base's: a
+ * character, or for rotate and flip an SVG, the page drawing a placeholder; each character the one today's sheet of that
+ * style drew on the icon's ::before, moved unchanged; a palette refused that leaves an icon without a picture, draws one
+ * that is no icon, or is a style's twice; and the page's module, one object a picture, shared by the styles that draw it
+ * alike.
  */
 class HouseIconPalettesTest {
 
@@ -39,62 +41,63 @@ class HouseIconPalettesTest {
     private static final Pattern GLYPH = Pattern.compile("content:\\s*\"([^\"]*)\"");
 
     @Test
-    void everyIcon_hasItsPicture_inEveryStyle() {
+    void everyIcon_hasItsPicture_inEveryStyle_theSamplesSvgs() {
         assertEquals(20, PICTURES.icons().size());
         for (DesignStyle<?> s : SPEC.styles())
-            for (IconLeaf i : PICTURES.icons())
-                assertEquals(i.content() instanceof IconContent.Glyph, PICTURES.glyph(s, i).isPresent(), s.token() + " " + i.token());
+            for (IconLeaf i : PICTURES.icons()) {
+                boolean sample = i.equals(HouseIcons.RotateIcon.INSTANCE) || i.equals(HouseIcons.FlipIcon.INSTANCE);
+                assertEquals(sample, PICTURES.picture(s, i) instanceof IconPicture.Svg, s.token() + " " + i.token());
+            }
     }
 
     @Test
-    void eachGlyph_isTheOneTodaysSheetDrew_inThatStyle() throws IOException {
+    void eachCharacter_isTheOneTodaysSheetDrew_inThatStyle() throws IOException {
         var wrong = new ArrayList<String>();
         int checked = 0;
         for (DesignStyle<?> s : SPEC.styles())
             for (IconLeaf i : PICTURES.icons()) {
-                if (!(i.content() instanceof IconContent.Glyph)) continue;
+                if (!(PICTURES.picture(s, i) instanceof IconPicture.Glyph now)) continue;
                 String sheet = sheet(TODAY.resolve(s, new Casting(i)).css().getClass().getName());
                 Matcher m = GLYPH.matcher(sheet);
                 assertTrue(m.find(), s.token() + " " + i.token() + ": today's sheet draws no glyph");
-                String now = PICTURES.glyph(s, i).orElseThrow();
-                if (!m.group(1).equals(now)) wrong.add(s.token() + " " + i.token() + ": today " + m.group(1) + ", its palette " + now);
+                if (!m.group(1).equals(now.character())) wrong.add(s.token() + " " + i.token() + ": today " + m.group(1) + ", its palette " + now.character());
                 checked++;
             }
-        System.out.println("[icon-palettes] " + checked + " glyphs, each the one today's sheet drew");
+        System.out.println("[icon-palettes] " + checked + " characters, each the one today's sheet drew");
         assertEquals(List.of(), wrong);
     }
 
     @Test
     void aStyleDraws_onlyWhereItDiffers() {
-        IconLeaf check = PICTURES.icons().stream().filter(i -> i.content().name().equals("check")).findFirst().orElseThrow();
-        IconLeaf add = PICTURES.icons().stream().filter(i -> i.content().name().equals("add")).findFirst().orElseThrow();
-        assertEquals("✔", PICTURES.glyph(Sketchy.INSTANCE, check).orElseThrow());
-        assertTrue(PICTURES.own(Sketchy.INSTANCE, check));
-        assertEquals("+", PICTURES.glyph(Sketchy.INSTANCE, add).orElseThrow(), "sketchy draws base's plus");
-        assertTrue(!PICTURES.own(Sketchy.INSTANCE, add));
+        assertEquals(new IconPicture.Glyph("✔"), PICTURES.picture(Sketchy.INSTANCE, HouseIcons.CheckIcon.INSTANCE));
+        assertTrue(PICTURES.own(Sketchy.INSTANCE, HouseIcons.CheckIcon.INSTANCE));
+        assertEquals(new IconPicture.Glyph("+"), PICTURES.picture(Sketchy.INSTANCE, HouseIcons.AddIcon.INSTANCE), "sketchy draws base's plus");
+        assertFalse(PICTURES.own(Sketchy.INSTANCE, HouseIcons.AddIcon.INSTANCE));
     }
 
     @Test
-    void aPalette_isRefused_thatLeavesAnIconWithoutAPicture_drawsWhatNoIconShows_orIsAStylesTwice() {
+    void aPalette_isRefused_thatLeavesAnIconWithoutAPicture_drawsWhatIsNoIcon_orIsAStylesTwice() {
         var base = HouseIconPalettes.INSTANCE.base();
-        var less = new java.util.LinkedHashMap<>(base.glyphs());
-        less.remove(new IconContent.Glyph("check"));
+        var less = new java.util.LinkedHashMap<>(base.pictures());
+        less.remove(HouseIcons.CheckIcon.INSTANCE);
         assertThrows(IllegalArgumentException.class, () -> new IconPictures(PICTURES.icons(), new IconPalette(Base.INSTANCE, less), List.of()));
-        assertThrows(IllegalArgumentException.class, () -> new IconPictures(PICTURES.icons(), base,
-                List.of(new IconPalette(Sketchy.INSTANCE, Map.of(new IconContent.Glyph("nothing-shown"), "?")))));
+        var fewer = PICTURES.icons().stream().filter(i -> !i.equals(HouseIcons.CheckIcon.INSTANCE)).toList();
+        assertThrows(IllegalArgumentException.class, () -> new IconPictures(fewer, base, List.of()), "base draws an icon the instance does not register");
         assertThrows(IllegalArgumentException.class, () -> new IconPictures(PICTURES.icons(), base,
                 List.of(new IconPalette(Sketchy.INSTANCE, Map.of()), new IconPalette(Sketchy.INSTANCE, Map.of()))));
-        assertThrows(IllegalArgumentException.class, () -> new IconPalette(Sketchy.INSTANCE, Map.of(new IconContent.Glyph("check"), " ")));
+        assertThrows(IllegalArgumentException.class, () -> new IconPicture.Glyph(" "));
+        assertThrows(IllegalArgumentException.class, () -> new IconPicture.Svg("Rotate"));
     }
 
     @Test
     void thePagesModule_oneObjectAPicture_sharedByTheStylesThatDrawItAlike() {
         String js = IconPicturesScript.INSTANCE.script(PICTURES, SPEC.selectable());
-        assertEquals(7, count(js, "const GLYPH_CLOSE"), "base's cross, and five styles' and sketchy's own");
-        assertEquals(1, count(js, "const GLYPH_ADD "), "one plus, for every style");
-        assertEquals(1, count(js, "const SVG_ROTATE "), "the samples: one each, a placeholder in every style");
+        assertEquals(7, count(js, "const GLYPH_CLOSE_ICON"), "base's cross, and five styles' and sketchy's own");
+        assertEquals(1, count(js, "const GLYPH_ADD_ICON "), "one plus, for every style");
+        assertEquals(1, count(js, "const SVG_ROTATE_ICON "), "the samples: one each, a placeholder in every style");
         assertEquals(SPEC.selectable().size(), count(js, ", new Map(["));
         assertTrue(js.contains("export { iconPictures };"));
+        assertFalse(js.contains("content"), "a picture is no content");
         assertTrue(js.contains("CheckIcon as ComponentCheckIcon") && js.contains("Sketchy as StyleSketchy"), "each node imported by its name in its dual, as its prefixed name");
     }
 

@@ -26,20 +26,20 @@ import java.util.List;
  *
  * <p>A component never holds a managed object, only a reference to it: its states to set and read, a placement for each
  * part it makes, and its rooms' classes written as it places them - an element of its own inside it that is no part,
- * sharing its class (RFC 0067): {@code room(ROOM_BODY, element)}, once a room, the class its casting's and the room's
- * name, {@code c-panel__body}. Not the element, not its class, not the style.
+ * sharing its class (RFC 0067): {@code room(ROOM_TAIL, element)}, once a room, the class its casting's and the room's
+ * name, {@code c-tab-strip__tail}. Not the element, not its class, not the style.
  *
  * <p>Every class is derived from a typed node, the same in every style ({@code StyleClasses}): an element's from its
  * casting - the path it is handed along says which, its owner and slot being the layout's (RFC 0067, D54) - a state's
  * from its word. A switch is then the sheet swapped, and no class written.
  *
- * <p>A component that shows content - an icon, its picture (RFC 0067, D56) - has it drawn by the style manager, never by
- * itself: the style manager is handed a content provider, which says for a component and a style what its element shows,
+ * <p>A component that shows a picture - an icon (RFC 0067, D56) - has it drawn by the style manager, never by itself:
+ * the style manager is handed a picture provider, which says for a component and a style what its element shows,
  * and draws it as the element is placed. A switch redraws each element whose picture the new style draws otherwise, and
  * no other; still no class written.
  *
  * <p>It touches no document. All it writes goes through the surface it is given - three functions: add a class to an
- * element, remove one, show a style; and a fourth when it is handed a content provider, draw a picture on an element. In
+ * element, remove one, show a style; and a fourth when it is handed a picture provider, draw a picture on an element. In
  * a browser the surface is an element's {@code classList}, its content and the page's sheets; anywhere else, whatever
  * keeps them. It holds each element weakly. A managed object whose element is gone is taken out
  * by its clean-up worker, which sweeps the tree every ten seconds on the clock it is given - its parts with it; no
@@ -75,10 +75,10 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                 // parts; it does nothing else. Each element placed is a managed object, in charge of the element's style for
                 // as long as it lives, and the sub-manager of its parts. Every class is derived from a
                 // typed node, the same in every style: a switch is the sheet swapped, no class written. What a component
-                // shows - an icon's picture - it draws from the content provider it is handed, as the element is placed, and
+                // shows - an icon's picture - it draws from the picture provider it is handed, as the element is placed, and
                 // again on a switch where the new style draws it otherwise. It touches no document: all it writes goes
                 // through the surface it is given - add(element, class), remove(element, class), show(style), and
-                // draw(element, picture) with a content provider - and its clean-up worker runs on the clock it is given -
+                // draw(element, picture) with a picture provider - and its clean-up worker runs on the clock it is given -
                 // every(ms, task). Generated from Java; not to be edited.
                 """
                 + "import { Component, ElementPath, Slot, Room, StateType, Style } from " + js.string(DualKit.INSTANCE.address()) + ";\n"
@@ -221,25 +221,25 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
 
                 class StyleManager {
                     #surface; #style; #units = new Map(); #known = new WeakSet(); #swept = 0; #classes = new Map(); #roots = new Map();
-                    #below = new Map(); #states = new Set(); #styles = new Set(); #rooms = new Set(); #page; #content = null; #drawn = new WeakMap();
+                    #below = new Map(); #states = new Set(); #styles = new Set(); #rooms = new Set(); #page; #pictures = null; #drawn = new WeakMap();
 
                     /**
                      * @param surface what it writes through: add(element, class), remove(element, class), show(style) - and
-                     *                draw(element, picture), with a content provider
+                     *                draw(element, picture), with a picture provider
                      * @param clock   what runs its clean-up worker: every(ms, task) - in a browser a timer, anywhere else a tick
                      * @param style   the style the page wears first, a node of the styles' dual
-                     * @param content what components show, if any does: picture(component, style), the picture its element
-                     *                shows in the style, or null for a component that shows none - one object for one picture
+                     * @param pictures what components show, if any shows a picture: picture(component, style), the picture
+                     *                its element shows in the style, or null for a component that shows none - one object for one picture
                      */
-                    constructor(surface, clock, style, content) {
+                    constructor(surface, clock, style, pictures) {
                         for (const f of ["add", "remove", "show"]) if (surface === null || typeof surface !== "object" || typeof surface[f] !== "function")
                             throw new TypeError("StyleManager: its surface has add(element, class), remove(element, class) and show(style)");
-                        if (content !== undefined && content !== null) {
-                            if (typeof content !== "object" || typeof content.picture !== "function")
-                                throw new TypeError("StyleManager: its content provider has picture(component, style)");
+                        if (pictures !== undefined && pictures !== null) {
+                            if (typeof pictures !== "object" || typeof pictures.picture !== "function")
+                                throw new TypeError("StyleManager: its picture provider has picture(component, style)");
                             if (typeof surface.draw !== "function")
-                                throw new TypeError("StyleManager: handed a content provider, its surface has draw(element, picture)");
-                            this.#content = content;
+                                throw new TypeError("StyleManager: handed a picture provider, its surface has draw(element, picture)");
+                            this.#pictures = pictures;
                         }
                         if (clock === null || typeof clock !== "object" || typeof clock.every !== "function")
                             throw new TypeError("StyleManager: its clock has every(ms, task), to run its clean-up worker");
@@ -311,7 +311,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                         if (style !== from) {
                             this.#surface.show(style);
                             this.#style = style;
-                            if (this.#content !== null) redrawn = this.#redraw(this.#units);
+                            if (this.#pictures !== null) redrawn = this.#redraw(this.#units);
                         }
                         return Object.freeze({ from, to: style, redrawn });
                     }
@@ -323,7 +323,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                         enter(map, path, managed);
                         this.#known.add(element);
                         this.#surface.add(element, this.#classes.get(path));
-                        const picture = this.#content === null ? null : this.#content.picture(path.part, this.#style);
+                        const picture = this.#pictures === null ? null : this.#pictures.picture(path.part, this.#style);
                         if (picture !== null) { this.#drawn.set(managed, picture); this.#surface.draw(element, picture); }
                         return managed.reference;
                     }
@@ -336,7 +336,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                             if (element === undefined) continue;
                             const was = this.#drawn.get(m);
                             if (was !== undefined) {
-                                const now = this.#content.picture(m.path.part, this.#style);
+                                const now = this.#pictures.picture(m.path.part, this.#style);
                                 if (now === null) throw new TypeError("draw: " + m.path.part.token + " shows a picture in one style and none in " + this.#style.token);
                                 if (now !== was) { this.#drawn.set(m, now); this.#surface.draw(element, now); n++; }
                             }

@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.design.spec.DualRef;
 import hue.captains.singapura.js.homing.design.spec.JsLiterals;
 import hue.captains.singapura.js.homing.design.spec.dual.Components;
 import hue.captains.singapura.js.homing.design.spec.dual.Styles;
-import hue.captains.singapura.js.homing.ui.taxonomy.IconContent;
 import hue.captains.singapura.js.homing.ui.taxonomy.IconLeaf;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
@@ -16,8 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * The icons' pictures as the page has them (RFC 0067, D56): the content provider the page's style manager is handed -
- * for an icon and a style, the picture its element shows: a glyph's character, or an SVG's name, which the page draws a
+ * The icons' pictures as the page has them (RFC 0067, D56): the picture provider the page's style manager is handed -
+ * for an icon and a style, the picture its element shows: a character, or an SVG resource's name, which the page draws a
  * placeholder for until SVG pictures come; null for a component that shows none. Each picture is one object, shared by
  * every style that draws it alike, so a switch redraws an icon only where the new style draws it otherwise. Made from
  * the icon palettes, for the styles the page may wear; generated, never written by hand.
@@ -26,7 +25,7 @@ public record IconPicturesScript() implements StatelessFunctionalObject {
 
     public static final IconPicturesScript INSTANCE = new IconPicturesScript();
 
-    /** What the module exports: the content provider. */
+    /** What the module exports: the picture provider. */
     public static final String EXPORTED = "iconPictures";
 
     /** Its address: its class's canonical name, as every module's is. */
@@ -36,23 +35,26 @@ public record IconPicturesScript() implements StatelessFunctionalObject {
     public String script(IconPictures pictures, List<DesignStyle<?>> styles) {
         var js = JsLiterals.INSTANCE;
         var refs = DualRef.INSTANCE;
-        var constants = new LinkedHashMap<String, String>();   // a picture's constant, by what it is: one object for each
+        var constants = new LinkedHashMap<String, String>();   // a picture's constant, by its icon and what it is: one object for each
         var named = new LinkedHashMap<String, String>();       // its line
         var rows = new ArrayList<String>();
         for (DesignStyle<?> s : styles) {
             var cells = new ArrayList<String>();
             for (IconLeaf i : pictures.icons()) {
-                String content = i.content().name();
+                IconPicture picture = pictures.picture(s, i);
+                String own = pictures.own(s, i) ? "_" + constant(s.token()) : "";
                 String key, line, name;
-                if (i.content() instanceof IconContent.Svg) {
-                    key = "svg " + content;
-                    name = "SVG_" + constant(content);
-                    line = "Object.freeze({ content: " + js.string(content) + ", svg: " + js.string(content) + " })";
-                } else {
-                    String glyph = pictures.glyph(s, i).orElseThrow();
-                    key = "glyph " + content + " " + glyph;
-                    name = "GLYPH_" + constant(content) + (pictures.own(s, i) ? "_" + constant(s.token()) : "");
-                    line = "Object.freeze({ content: " + js.string(content) + ", glyph: " + js.string(glyph) + " })";
+                switch (picture) {
+                    case IconPicture.Glyph g -> {
+                        key = i.token() + " glyph " + g.character();
+                        name = "GLYPH_" + constant(i.token()) + own;
+                        line = "Object.freeze({ glyph: " + js.string(g.character()) + " })";
+                    }
+                    case IconPicture.Svg v -> {
+                        key = i.token() + " svg " + v.resource();
+                        name = "SVG_" + constant(i.token()) + own;
+                        line = "Object.freeze({ svg: " + js.string(v.resource()) + " })";
+                    }
                 }
                 if (!constants.containsKey(key)) {
                     if (named.containsKey(name)) throw new IllegalStateException("two pictures named " + name);
@@ -64,8 +66,8 @@ public record IconPicturesScript() implements StatelessFunctionalObject {
             rows.add("    [" + refs.of(s).imported() + ", new Map([" + String.join(", ", cells) + "])]");
         }
         var lines = new ArrayList<String>();
-        lines.add("// The icons' pictures (RFC 0067, D56): the content provider the page's style manager is handed - for an icon and a");
-        lines.add("// style, the picture its element shows: a glyph's character, or an SVG's name, drawn as a placeholder until SVG");
+        lines.add("// The icons' pictures (RFC 0067, D56): the picture provider the page's style manager is handed - for an icon and a");
+        lines.add("// style, the picture its element shows: a character, or an SVG resource's name, drawn as a placeholder until SVG");
         lines.add("// pictures come. Each picture one object, shared by every style that draws it alike. Generated from Java; not to be edited.");
         lines.add("import { " + String.join(", ", pictures.icons().stream().map(i -> refs.of(i)).map(r -> r.name() + " as " + r.imported()).toList())
                 + " } from " + js.string(Components.INSTANCE.address()) + ";");
