@@ -267,7 +267,6 @@ hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Brand	hue.capta
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.SiteBar	hue.captains.singapura.js.homing.design.styles.neobrutalism.SiteBar
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Quote	hue.captains.singapura.js.homing.design.styles.neobrutalism.Quote
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.CodeBlock	hue.captains.singapura.js.homing.design.styles.neobrutalism.CodeBlock
-hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.CloseIcon	hue.captains.singapura.js.homing.design.styles.neobrutalism.CloseIcon
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.FloatingPane	hue.captains.singapura.js.homing.design.styles.neobrutalism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.FloatLayer	hue.captains.singapura.js.homing.design.styles.neobrutalism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.ContextMenu	hue.captains.singapura.js.homing.design.styles.neobrutalism.ContextMenu
@@ -341,7 +340,6 @@ hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Brand	hue.captai
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.SiteBar	hue.captains.singapura.js.homing.design.styles.neofuturism.SiteBar
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Quote	hue.captains.singapura.js.homing.design.styles.neofuturism.Quote
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.CodeBlock	hue.captains.singapura.js.homing.design.styles.neofuturism.CodeBlock
-hue.captains.singapura.js.homing.design.spec.styles.neofuturism.CloseIcon	hue.captains.singapura.js.homing.design.styles.neofuturism.CloseIcon
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.FloatingPane	hue.captains.singapura.js.homing.design.styles.neofuturism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.FloatLayer	hue.captains.singapura.js.homing.design.styles.neofuturism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.ContextMenu	hue.captains.singapura.js.homing.design.styles.neofuturism.ContextMenu
@@ -415,7 +413,6 @@ hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Brand	hue.captai
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.SiteBar	hue.captains.singapura.js.homing.design.styles.neumorphism.SiteBar
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Quote	hue.captains.singapura.js.homing.design.styles.neumorphism.Quote
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.CodeBlock	hue.captains.singapura.js.homing.design.styles.neumorphism.CodeBlock
-hue.captains.singapura.js.homing.design.spec.styles.neumorphism.CloseIcon	hue.captains.singapura.js.homing.design.styles.neumorphism.CloseIcon
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.FloatingPane	hue.captains.singapura.js.homing.design.styles.neumorphism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.FloatLayer	hue.captains.singapura.js.homing.design.styles.neumorphism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.ContextMenu	hue.captains.singapura.js.homing.design.styles.neumorphism.ContextMenu
@@ -489,7 +486,6 @@ hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Brand	hue.capt
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.SiteBar	hue.captains.singapura.js.homing.design.styles.glassmorphism.SiteBar
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Quote	hue.captains.singapura.js.homing.design.styles.glassmorphism.Quote
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.CodeBlock	hue.captains.singapura.js.homing.design.styles.glassmorphism.CodeBlock
-hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.CloseIcon	hue.captains.singapura.js.homing.design.styles.glassmorphism.CloseIcon
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.FloatingPane	hue.captains.singapura.js.homing.design.styles.glassmorphism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.FloatLayer	hue.captains.singapura.js.homing.design.styles.glassmorphism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.ContextMenu	hue.captains.singapura.js.homing.design.styles.glassmorphism.ContextMenu
@@ -563,7 +559,6 @@ hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Brand	hue.capt
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SiteBar	hue.captains.singapura.js.homing.design.styles.retrofuturism.SiteBar
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Quote	hue.captains.singapura.js.homing.design.styles.retrofuturism.Quote
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CodeBlock	hue.captains.singapura.js.homing.design.styles.retrofuturism.CodeBlock
-hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CloseIcon	hue.captains.singapura.js.homing.design.styles.retrofuturism.CloseIcon
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.FloatingPane	hue.captains.singapura.js.homing.design.styles.retrofuturism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.FloatLayer	hue.captains.singapura.js.homing.design.styles.retrofuturism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ContextMenu	hue.captains.singapura.js.homing.design.styles.retrofuturism.ContextMenu
@@ -637,12 +632,6 @@ hue.captains.singapura.js.homing.design.spec.styles.sketchy.Brand	hue.captains.s
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.SiteBar	hue.captains.singapura.js.homing.design.styles.sketchy.SiteBar
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Quote	hue.captains.singapura.js.homing.design.styles.sketchy.Quote
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.CodeBlock	hue.captains.singapura.js.homing.design.styles.sketchy.CodeBlock
-hue.captains.singapura.js.homing.design.spec.styles.sketchy.CloseIcon	hue.captains.singapura.js.homing.design.styles.sketchy.CloseIcon
-hue.captains.singapura.js.homing.design.spec.styles.sketchy.PinIcon	hue.captains.singapura.js.homing.design.styles.sketchy.PinIcon
-hue.captains.singapura.js.homing.design.spec.styles.sketchy.CheckIcon	hue.captains.singapura.js.homing.design.styles.sketchy.CheckIcon
-hue.captains.singapura.js.homing.design.spec.styles.sketchy.GripIcon	hue.captains.singapura.js.homing.design.styles.sketchy.GripIcon
-hue.captains.singapura.js.homing.design.spec.styles.sketchy.DiscloseIcon	hue.captains.singapura.js.homing.design.styles.sketchy.DiscloseIcon
-hue.captains.singapura.js.homing.design.spec.styles.sketchy.SettingsIcon	hue.captains.singapura.js.homing.design.styles.sketchy.SettingsIcon
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.FloatingPane	hue.captains.singapura.js.homing.design.styles.sketchy.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.FloatLayer	hue.captains.singapura.js.homing.design.styles.sketchy.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.ContextMenu	hue.captains.singapura.js.homing.design.styles.sketchy.ContextMenu

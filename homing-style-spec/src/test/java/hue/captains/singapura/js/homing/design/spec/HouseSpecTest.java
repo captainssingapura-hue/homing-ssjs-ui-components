@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
 import hue.captains.singapura.js.homing.design.styling.StyleManager;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import hue.captains.singapura.js.homing.ui.taxonomy.IconLeaf;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -45,6 +46,9 @@ class HouseSpecTest {
                 String copied = copies.get(now);
                 assertNotNull(copied, now + " is a look with CSS, and copies none");
                 String today = TODAY.resolve(s, e.casting()).css().getClass().getName();
+                // D56: a style's own look of an icon differed from base's by its glyph alone, which is its icon palette's
+                // now (HouseIconPalettesTest) - so today's base look is the one an icon's stands for, in every style
+                if (e.casting().component() instanceof IconLeaf) today = TODAY.resolve(SPEC.base(), e.casting()).css().getClass().getName();
                 if (!copied.equals(today)) wrong.add(s.token() + " " + e.token() + ": " + now + " stands for " + copied + ", today " + today);
                 checked++;
             }

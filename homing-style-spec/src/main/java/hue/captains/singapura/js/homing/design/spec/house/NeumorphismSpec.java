@@ -9,7 +9,6 @@ import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
@@ -310,7 +309,6 @@ public record NeumorphismSpec() implements SpecModule<BaseScheme, Neumorphism> {
                         new RoleAssignment<>(HouseDoing.More.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Brand()))),
                 new ComponentAssignment<>(HouseRegions.Quote.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Quote(), List.of()),
                 new ComponentAssignment<>(HouseRegions.CodeBlock.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.CodeBlock(), List.of()),
-                new ComponentAssignment<>(HouseIcons.CloseIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.CloseIcon(), List.of()),
                 new ComponentAssignment<>(HouseContainers.FloatingPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.FloatingPane(), List.of()),
                 new ComponentAssignment<>(HouseContainers.FloatLayer.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.FloatLayer(), List.of()),
                 new ComponentAssignment<>(HouseContainers.ContextMenu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.ContextMenu(), List.of()),

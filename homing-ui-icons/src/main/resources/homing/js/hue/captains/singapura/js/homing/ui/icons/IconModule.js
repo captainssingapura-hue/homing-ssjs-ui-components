@@ -6,9 +6,12 @@
 // leaf whose fixed object it is handed: new FixedCloseIcon() makes the close
 // icon. It places itself with the placement its owner hands it for the slot it
 // is in, or at the root with that leaf's own binding; its casting's class is
-// the style manager's, whose look draws the picture on its ::before, in the
-// colour it is given. An icon shows one picture: a picture of another shape is
-// another icon, which the owner makes in its place.
+// the style manager's, and so is its picture: what the leaf shows (its content,
+// D56) drawn on its element from the icon palette of the style worn, by the
+// style manager, which redraws it when a switch draws it otherwise - the icon
+// writes nothing in its element. Its look, the same for every icon, gives it
+// the colour it is given. An icon shows one picture: a picture of another shape
+// is another icon, which the owner makes in its place.
 //
 // Its module is stamped with every icon leaf's header, merged (D19), and the
 // leaves it realizes - each one's node, fixed type and binding (LEAVES_IMPLEMENTED).

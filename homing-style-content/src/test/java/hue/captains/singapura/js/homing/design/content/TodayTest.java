@@ -10,6 +10,7 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styling.CastingCss;
 import hue.captains.singapura.js.homing.design.styling.StyleManager;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import hue.captains.singapura.js.homing.ui.taxonomy.IconLeaf;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -21,6 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * The gauge, while today's stack stands (RFC 0067, D53, D54): in every style, each element's content - what the typed spec
  * stack's resolver finds for the implementation the element wears - is exactly the CSS today's registry gives the
  * element's casting. It goes when today's stack does.
+ *
+ * <p>But for the icons (D56): an icon's look is base's in every style, the same for every icon, and what it shows is its
+ * icon palette's - so an icon element is held to today's base CSS for the icon, its comment and the glyph on its
+ * {@code ::before} aside. That each palette's glyph is the one today's sheet drew is HouseIconPalettesTest's.
  */
 class TodayTest {
 
@@ -33,11 +38,13 @@ class TodayTest {
         int held = 0;
         for (DesignStyle<?> s : SPEC.styles())
             for (ElementPath e : SPEC.elements()) {
-                CastingStyle<?, ?, ?, ?> today = TODAY.resolve(s, e.casting()).css();
-                String then = CastingCss.INSTANCE.read(today.getClass())
+                boolean icon = e.casting().component() instanceof IconLeaf;
+                CastingStyle<?, ?, ?, ?> today = TODAY.resolve(icon ? SPEC.base() : s, e.casting()).css();
+                String css = CastingCss.INSTANCE.read(today.getClass())
                         .orElseThrow(() -> new IllegalStateException(today.getClass().getName() + " has no CSS today"));
+                String then = icon ? withoutGlyph(css) : css;
                 switch (SPEC.content(s, e)) {
-                    case CssResolution.Found f when f.text().equals(then) -> held++;
+                    case CssResolution.Found f when (icon ? withoutGlyph(f.text()) : f.text()).equals(then) -> held++;
                     case CssResolution.Found f -> wrong.add(s.token() + " " + e.token() + ": " + f.resource() + " is not today's " + today.getClass().getName());
                     case CssResolution r -> wrong.add(s.token() + " " + e.token() + ": " + r);
                 }
@@ -57,12 +64,18 @@ class TodayTest {
         for (DesignStyle<?> s : SPEC.styles())
             for (ElementPath e : SPEC.elements()) {
                 SpecRegistry.Worn now = SPEC.worn(s, e);
-                List<Class<?>> then = TypeArguments.INSTANCE.of(TODAY.resolve(s, e.casting()).css().getClass(), CastingStyle.class);
+                boolean icon = e.casting().component() instanceof IconLeaf;
+                List<Class<?>> then = TypeArguments.INSTANCE.of(TODAY.resolve(icon ? SPEC.base() : s, e.casting()).css().getClass(), CastingStyle.class);
                 List<Class<?>> mine = List.of(now.layer().getClass(), now.component().getClass());
                 if (!mine.equals(then.subList(1, 3))) wrong.add(s.token() + " " + e.token() + ": " + names(mine) + ", today " + names(then.subList(1, 3)));
             }
         assertTrue(wrong.isEmpty(), wrong.size() + " differ:\n" + String.join("\n", wrong.subList(0, Math.min(40, wrong.size()))));
         System.out.println("[today] " + SPEC.styles().size() * SPEC.elements().size() + " elements' CSS of today's layer and component");
+    }
+
+    /** An icon's CSS without its leading comment and the glyph on its ::before: the rules its look has, the same for every icon. */
+    private static String withoutGlyph(String css) {
+        return css.replace("\r\n", "\n").replaceFirst("^/\\*.*?\\*/\n", "").replaceFirst("\n\n    &::before \\{\n        content: \"[^\"]*\";\n    }\n", "\n");
     }
 
     private static List<String> names(List<Class<?>> types) { return types.stream().map(Class::getSimpleName).toList(); }

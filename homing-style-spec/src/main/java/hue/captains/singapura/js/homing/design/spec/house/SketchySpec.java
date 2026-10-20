@@ -9,7 +9,6 @@ import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseMarks;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
@@ -310,12 +309,6 @@ public record SketchySpec() implements SpecModule<BaseScheme, Sketchy> {
                         new RoleAssignment<>(HouseDoing.More.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.Brand()))),
                 new ComponentAssignment<>(HouseRegions.Quote.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.Quote(), List.of()),
                 new ComponentAssignment<>(HouseRegions.CodeBlock.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.CodeBlock(), List.of()),
-                new ComponentAssignment<>(HouseIcons.CloseIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.CloseIcon(), List.of()),
-                new ComponentAssignment<>(HouseIcons.PinIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PinIcon(), List.of()),
-                new ComponentAssignment<>(HouseIcons.CheckIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.CheckIcon(), List.of()),
-                new ComponentAssignment<>(HouseIcons.GripIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.GripIcon(), List.of()),
-                new ComponentAssignment<>(HouseIcons.DiscloseIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.DiscloseIcon(), List.of()),
-                new ComponentAssignment<>(HouseIcons.SettingsIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.SettingsIcon(), List.of()),
                 new ComponentAssignment<>(HouseContainers.FloatingPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.FloatingPane(), List.of()),
                 new ComponentAssignment<>(HouseContainers.FloatLayer.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.FloatLayer(), List.of()),
                 new ComponentAssignment<>(HouseContainers.ContextMenu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.ContextMenu(), List.of()),
