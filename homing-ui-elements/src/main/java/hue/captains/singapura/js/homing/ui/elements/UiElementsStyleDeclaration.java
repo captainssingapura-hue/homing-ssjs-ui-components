@@ -46,7 +46,6 @@ public record UiElementsStyleDeclaration() implements StyleDeclaration {
                 new PlainCard(),
                 new ClickableCard(),
                 new SummaryView(),
-                new SliderGroup(),
                 new Panel(),
                 new Scrim(),
                 new EdgeStrip(),

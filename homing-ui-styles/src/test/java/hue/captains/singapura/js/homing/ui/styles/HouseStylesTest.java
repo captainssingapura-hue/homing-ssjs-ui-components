@@ -49,7 +49,7 @@ class HouseStylesTest {
         assertEquals(TAXONOMY.castings().size(), manager.implementations(Base.INSTANCE).size(), "the base layer is never absent (D26)");
         var go = TAXONOMY.castings().stream().filter(c -> c.token().equals("primary-button_go")).findFirst().orElseThrow();
         for (DesignStyle<?> s : HouseStyles.STYLES) {
-            assertEquals(122 + OWN_PICTURES.get(s.token()), manager.implementations(s).size(), s.token() + ": what it refines, its own and the modules' castings, and the icons it draws its own way (D52) - a section and a rack no more, rooms of their owners (20 Oct)");
+            assertEquals(120 + OWN_PICTURES.get(s.token()), manager.implementations(s).size(), s.token() + ": what it refines, its own and the modules' castings, and the icons it draws its own way (D52) - a section and a rack no more, rooms of their owners; the slider group and its Adjust casting dropped (20 Oct)");
             for (Component<?> b : BUTTONS)
                 assertEquals(s.token() + "'s own", manager.resolve(s, new Casting(b)).says(), s.token() + " draws " + b.token());
             assertTrue(manager.resolve(s, go).says().startsWith(s.token() + "'s own"), s.token() + " draws the primary button as Go too");

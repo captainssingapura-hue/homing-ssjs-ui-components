@@ -15,13 +15,13 @@ public final class HouseControlPanel {
 
     private HouseControlPanel() {}
 
-    /** The controls for a set of options: the degrees in one group of sliders, a button for each switch, one for each action and question. */
+    /** The controls for a set of options: a slider for each degree, a button for each switch, one for each action and question. */
     public record ControlPanel() implements Composite<HouseBranches.Cluster> {
         public static final ControlPanel INSTANCE = new ControlPanel();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Cluster parent() { return HouseBranches.Cluster.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseContainers.SliderGroup.INSTANCE).as(HouseDoing.Adjust.INSTANCE).optional(),
+            return List.of(DSL.part(HouseControls.Slider.INSTANCE).as(HouseShaping.Member.INSTANCE).any(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Toggle.INSTANCE).any(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Action.INSTANCE).any());
         }

@@ -65,22 +65,6 @@ public final class HouseContainers {
 
     // ── containers ───────────────────────────────────────────────────────
 
-    /** Sliders gathered under one header. */
-    public record SliderGroup() implements Composite<HouseBranches.Cluster>, WithRoles<HouseRoleSets.Changing> {
-        public static final SliderGroup INSTANCE = new SliderGroup();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Cluster parent() { return HouseBranches.Cluster.INSTANCE; }
-        @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
-        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
-                           DSL.part(HouseControls.Slider.INSTANCE).as(HouseShaping.Member.INSTANCE).any());
-        }
-        /** Its rack: its sliders, stacked or side by side, and the room between them - its own. */
-        @Override public List<Room> rooms() { return List.of(new Room("rack")); }
-    }
-
     /**
      * A panel that fills what holds it: a head that names it, and a body - its own room, which what is mounted in it
      * fills. Its controls are the caller's, at the end of its head.

@@ -96,7 +96,7 @@ class HouseControllabilityTest {
         expected.put("context-menu", "overlay");
         expected.put("floating-pane", "placeable");
         expected.put("close-icon", "plain");   // a part only, shown in what holds it: nothing to control but its colour (D52)
-        for (String p : List.of("plain-card", "clickable-card", "summary-view", "slider-group")) expected.put(p, "plain");
+        for (String p : List.of("plain-card", "clickable-card", "summary-view")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));
         assertEquals(expected, actual);

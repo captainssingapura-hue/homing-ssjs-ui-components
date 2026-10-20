@@ -15,10 +15,6 @@ Enter or Space - it does its one thing, so the user can act on the thing it stan
 Sums one thing up - its title, how it is sorted, what it is about - and leads to it, so the user
 can choose among several at a glance. Shown on whatever holds it: a card, a pane, a dialog.
 
-## SliderGroup
-
-Gathers sliders that set related values, under one heading, so they are set together.
-
 ## Panel
 
 Holds one concern of a view, named, filling the room it is given.

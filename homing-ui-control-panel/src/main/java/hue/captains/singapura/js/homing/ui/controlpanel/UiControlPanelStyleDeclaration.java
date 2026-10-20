@@ -18,7 +18,6 @@ public record UiControlPanelStyleDeclaration() implements StyleDeclaration {
     @Override public List<Provided<?, ?>> provided() {
         return List.of(new Provided<>(Base.INSTANCE, List.of(
                 new ControlPanel(),
-                new SliderGroupAdjust(),
                 new PlainButtonToggle())));
     }
 }

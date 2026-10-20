@@ -57,7 +57,6 @@ hue.captains.singapura.js.homing.design.spec.styles.base.Grip	hue.captains.singa
 hue.captains.singapura.js.homing.design.spec.styles.base.Switch	hue.captains.singapura.js.homing.design.styles.base.Switch
 hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumb	hue.captains.singapura.js.homing.design.styles.base.PaneThumb
 hue.captains.singapura.js.homing.design.spec.styles.base.Slider	hue.captains.singapura.js.homing.design.styles.base.Slider
-hue.captains.singapura.js.homing.design.spec.styles.base.SliderGroup	hue.captains.singapura.js.homing.design.styles.base.SliderGroup
 hue.captains.singapura.js.homing.design.spec.styles.base.Panel	hue.captains.singapura.js.homing.design.styles.base.Panel
 hue.captains.singapura.js.homing.design.spec.styles.base.EdgeStrip	hue.captains.singapura.js.homing.design.styles.base.EdgeStrip
 hue.captains.singapura.js.homing.design.spec.styles.base.Ground	hue.captains.singapura.js.homing.design.styles.base.Ground
@@ -182,7 +181,6 @@ hue.captains.singapura.js.homing.design.spec.styles.editorial.Grip	hue.captains.
 hue.captains.singapura.js.homing.design.spec.styles.editorial.Switch	hue.captains.singapura.js.homing.design.styles.editorial.Switch
 hue.captains.singapura.js.homing.design.spec.styles.editorial.PaneThumb	hue.captains.singapura.js.homing.design.styles.editorial.PaneThumb
 hue.captains.singapura.js.homing.design.spec.styles.editorial.Slider	hue.captains.singapura.js.homing.design.styles.editorial.Slider
-hue.captains.singapura.js.homing.design.spec.styles.editorial.SliderGroup	hue.captains.singapura.js.homing.design.styles.editorial.SliderGroup
 hue.captains.singapura.js.homing.design.spec.styles.editorial.Panel	hue.captains.singapura.js.homing.design.styles.editorial.Panel
 hue.captains.singapura.js.homing.design.spec.styles.editorial.EdgeStrip	hue.captains.singapura.js.homing.design.styles.editorial.EdgeStrip
 hue.captains.singapura.js.homing.design.spec.styles.editorial.Ground	hue.captains.singapura.js.homing.design.styles.editorial.Ground
@@ -253,7 +251,6 @@ hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Grip	hue.captai
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Switch	hue.captains.singapura.js.homing.design.styles.neobrutalism.Switch
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PaneThumb	hue.captains.singapura.js.homing.design.styles.neobrutalism.PaneThumb
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Slider	hue.captains.singapura.js.homing.design.styles.neobrutalism.Slider
-hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.SliderGroup	hue.captains.singapura.js.homing.design.styles.neobrutalism.SliderGroup
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Panel	hue.captains.singapura.js.homing.design.styles.neobrutalism.Panel
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.EdgeStrip	hue.captains.singapura.js.homing.design.styles.neobrutalism.EdgeStrip
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Ground	hue.captains.singapura.js.homing.design.styles.neobrutalism.Ground
@@ -324,7 +321,6 @@ hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Grip	hue.captain
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Switch	hue.captains.singapura.js.homing.design.styles.neofuturism.Switch
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.PaneThumb	hue.captains.singapura.js.homing.design.styles.neofuturism.PaneThumb
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Slider	hue.captains.singapura.js.homing.design.styles.neofuturism.Slider
-hue.captains.singapura.js.homing.design.spec.styles.neofuturism.SliderGroup	hue.captains.singapura.js.homing.design.styles.neofuturism.SliderGroup
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Panel	hue.captains.singapura.js.homing.design.styles.neofuturism.Panel
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.EdgeStrip	hue.captains.singapura.js.homing.design.styles.neofuturism.EdgeStrip
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Ground	hue.captains.singapura.js.homing.design.styles.neofuturism.Ground
@@ -395,7 +391,6 @@ hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Grip	hue.captain
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Switch	hue.captains.singapura.js.homing.design.styles.neumorphism.Switch
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.PaneThumb	hue.captains.singapura.js.homing.design.styles.neumorphism.PaneThumb
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Slider	hue.captains.singapura.js.homing.design.styles.neumorphism.Slider
-hue.captains.singapura.js.homing.design.spec.styles.neumorphism.SliderGroup	hue.captains.singapura.js.homing.design.styles.neumorphism.SliderGroup
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Panel	hue.captains.singapura.js.homing.design.styles.neumorphism.Panel
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.EdgeStrip	hue.captains.singapura.js.homing.design.styles.neumorphism.EdgeStrip
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Ground	hue.captains.singapura.js.homing.design.styles.neumorphism.Ground
@@ -466,7 +461,6 @@ hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Grip	hue.capta
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Switch	hue.captains.singapura.js.homing.design.styles.glassmorphism.Switch
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.PaneThumb	hue.captains.singapura.js.homing.design.styles.glassmorphism.PaneThumb
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Slider	hue.captains.singapura.js.homing.design.styles.glassmorphism.Slider
-hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.SliderGroup	hue.captains.singapura.js.homing.design.styles.glassmorphism.SliderGroup
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Panel	hue.captains.singapura.js.homing.design.styles.glassmorphism.Panel
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.EdgeStrip	hue.captains.singapura.js.homing.design.styles.glassmorphism.EdgeStrip
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Ground	hue.captains.singapura.js.homing.design.styles.glassmorphism.Ground
@@ -537,7 +531,6 @@ hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Grip	hue.capta
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Switch	hue.captains.singapura.js.homing.design.styles.retrofuturism.Switch
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PaneThumb	hue.captains.singapura.js.homing.design.styles.retrofuturism.PaneThumb
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Slider	hue.captains.singapura.js.homing.design.styles.retrofuturism.Slider
-hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.SliderGroup	hue.captains.singapura.js.homing.design.styles.retrofuturism.SliderGroup
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Panel	hue.captains.singapura.js.homing.design.styles.retrofuturism.Panel
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.EdgeStrip	hue.captains.singapura.js.homing.design.styles.retrofuturism.EdgeStrip
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Ground	hue.captains.singapura.js.homing.design.styles.retrofuturism.Ground
@@ -608,7 +601,6 @@ hue.captains.singapura.js.homing.design.spec.styles.sketchy.Grip	hue.captains.si
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Switch	hue.captains.singapura.js.homing.design.styles.sketchy.Switch
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.PaneThumb	hue.captains.singapura.js.homing.design.styles.sketchy.PaneThumb
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Slider	hue.captains.singapura.js.homing.design.styles.sketchy.Slider
-hue.captains.singapura.js.homing.design.spec.styles.sketchy.SliderGroup	hue.captains.singapura.js.homing.design.styles.sketchy.SliderGroup
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Panel	hue.captains.singapura.js.homing.design.styles.sketchy.Panel
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.EdgeStrip	hue.captains.singapura.js.homing.design.styles.sketchy.EdgeStrip
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Ground	hue.captains.singapura.js.homing.design.styles.sketchy.Ground

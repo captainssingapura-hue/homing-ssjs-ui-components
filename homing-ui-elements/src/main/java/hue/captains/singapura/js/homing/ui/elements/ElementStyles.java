@@ -389,64 +389,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     // ── Slider group ──────────────────────────────────────────────────────────
 
-    /**
-     * The group: sliders that share the keys, one holder in the party for
-     * all of them and one of them current. A column, the header then the
-     * body; its look - framed as a card is, ringed while it holds the keys -
-     * is the house's.
-     */
-    public record el_slider_group() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            min-width: 0;
-            """;
-        }
-    }
-
-    /** The header: the title; a press on it makes the group the holder of the keys. */
-    public record el_slider_group_header() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            flex: none;
-            display: flex;
-            align-items: baseline;
-            min-width: 0;
-            """;
-        }
-    }
-
-    /** The title in the header: a heading. */
-    public record el_slider_group_title() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            margin: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            """;
-        }
-    }
-
-    /** The body: the sliders, stacked. */
-    public record el_slider_group_body() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            """;
-        }
-    }
-
-    /** The body laid across: the sliders side by side, as faders on a mixer, each with the room its scale takes. */
-    public record el_slider_group_body_across() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            flex-direction: row;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            """;
-        }
-    }
-
     // ── Card ──────────────────────────────────────────────────────────────────
 
     /**
@@ -874,7 +816,6 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_vertical(), new el_slider_rail_vertical(), new el_slider_rail_ticked(), new el_slider_track_vertical(), new el_slider_fill_vertical(), new el_slider_detent_vertical(),
                        new el_slider_cap(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
                        new el_slider_off(),
-                       new el_slider_group(), new el_slider_group_header(), new el_slider_group_title(), new el_slider_group_body(), new el_slider_group_body_across(),
                        new el_menu_item(), new el_menu_item_label(), new el_menu_item_hint(), new el_menu_item_disclose(), new el_menu_item_lead(), new el_choice_option(), new el_choice_option_note(),
                        new el_card(), new el_summary(), new el_summary_head(), new el_summary_title(), new el_summary_tag(), new el_summary_text(), new el_summary_foot(),
                        new el_panel(), new el_panel_head(), new el_panel_title(), new el_panel_slot(), new el_panel_body(), new el_panel_body_air(),
