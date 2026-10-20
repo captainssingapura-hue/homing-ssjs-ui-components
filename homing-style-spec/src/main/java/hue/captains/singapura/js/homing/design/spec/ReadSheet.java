@@ -17,7 +17,8 @@ import java.util.regex.Pattern;
 /**
  * A style's sheet ({@link StyleSheet}), read off the registry as it is served (RFC 0071, RFC 0067 D54): for each
  * implementation a casting wears in the style, its content as the registry's resolver finds it, the marks filled in -
- * {@code $casting} the selector of the castings' classes that wear it ({@link StyleClasses}), {@code &$word} the state's
+ * {@code $casting} the selector of the castings' classes that wear it ({@link StyleClasses}), {@code $casting__name} the
+ * same for a room of the component's own - each casting's class and the room's name - {@code &$word} the state's
  * class, a keyframes of its own named after the implementation. Refused, every missing content named, unless every one is
  * found: a sheet is served whole or not at all. And only for a selectable style: the base layer has no sheet of its own -
  * its rules are in each sheet that wears them.
@@ -27,6 +28,7 @@ public record ReadSheet() implements StatelessFunctionalObject {
     public static final ReadSheet INSTANCE = new ReadSheet();
 
     private static final String CASTING = "$casting";
+    private static final Pattern ROOM = Pattern.compile("\\$casting__([a-z][a-z0-9]*(?:-[a-z0-9]+)*)");
     private static final Pattern STATE = Pattern.compile("&\\$([a-z][a-z0-9-]*)");
     private static final Pattern KEYFRAMES = Pattern.compile("@keyframes\\s+\\$([a-z][a-z0-9-]*)");
     private static final Pattern USE = Pattern.compile("\\$([a-z][a-z0-9-]*)");
@@ -43,7 +45,7 @@ public record ReadSheet() implements StatelessFunctionalObject {
             String name = name(end);
             List<String> castings = wearing.getOrDefault(end.impl().getClass(), List.of());
             switch (spec.content(end.impl())) {
-                case CssResolution.Found f -> rules.add(new StyleSheet.Rule(name, end, castings, filled(f.text(), selector(castings), name).strip()));
+                case CssResolution.Found f -> rules.add(new StyleSheet.Rule(name, end, castings, filled(f.text(), castings, name).strip()));
                 case CssResolution r -> missing.add(r.resource() + ": " + r.getClass().getSimpleName());
             }
         }
@@ -62,11 +64,16 @@ public record ReadSheet() implements StatelessFunctionalObject {
         return castings.size() == 1 ? "." + castings.getFirst() : ":is(" + String.join(", ", castings.stream().map(h -> "." + h).toList()) + ")";
     }
 
-    /** A content's marks filled in for a selector: {@code $casting} the selector, {@code &$word} the state's class, {@code $name} a keyframes named after the implementation. */
-    public String filled(String css, String selector, String keyframes) {
+    /**
+     * A content's marks filled in for the castings that wear it: {@code $casting} their selector, {@code $casting__name}
+     * the selector of their rooms of that name, {@code &$word} the state's class, {@code $name} a keyframes named after
+     * the implementation.
+     */
+    public String filled(String css, List<String> castings, String keyframes) {
         String out = KEYFRAMES.matcher(css).replaceAll(m -> "@keyframes " + Matcher.quoteReplacement(keyframes + "-" + m.group(1)));
         out = STATE.matcher(out).replaceAll(m -> Matcher.quoteReplacement("&." + StyleClasses.INSTANCE.state(m.group(1))));
-        out = out.replace(CASTING, selector);
+        out = ROOM.matcher(out).replaceAll(m -> Matcher.quoteReplacement(selector(castings.stream().map(c -> c + "__" + m.group(1)).toList())));
+        out = out.replace(CASTING, selector(castings));
         out = USE.matcher(out).replaceAll(m -> Matcher.quoteReplacement(keyframes + "-" + m.group(1)));
         return out;
     }

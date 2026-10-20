@@ -80,6 +80,7 @@ public record UiElementsComponents() implements C0_Components<UiElementsComponen
                 ComponentEntry.of(this, new GroundModule.Ground()),
                 ComponentEntry.of(this, new SiteBarModule.SiteBar()),
                 ComponentEntry.of(this, new BrandModule.Brand()),
+                ComponentEntry.of(this, new PanelBarModule.PanelBar()),
                 ComponentEntry.of(this, new TrailModule.Trail()));
     }
 }

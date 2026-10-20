@@ -19,7 +19,6 @@ public record UiPanesStyleDeclaration() implements StyleDeclaration {
         return List.of(new Provided<>(Base.INSTANCE, List.of(
                 new Tab(),
                 new TabStrip(),
-                new StripTail(),
                 new PaneThumbs(),
                 new AddTab(),
                 new TabOpener(),

@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.design.spec.dual;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
+import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
 import hue.captains.singapura.js.homing.design.spec.FixedTypes;
@@ -28,11 +29,25 @@ public record Components() implements DualTree<Taxon> {
         return node instanceof ComponentBranch ? "new ComponentBranch(" + token + ", " + parent + ")"
                 : "new Component(" + token + ", " + parent + ", " + (node instanceof Composite<?>) + ")";
     }
-    @Override public List<String> kit() { return List.of("ComponentBranch", "Component", "Fixed"); }
+    @Override public List<String> kit() { return List.of("ComponentBranch", "Component", "Fixed", "Room"); }
 
-    /** Beside each component, its fixed type (D30): {@code FixedPlainButton} beside {@code ComponentPlainButton}. */
+    /**
+     * Beside each component, its fixed type (D30) - {@code FixedPlainButton} beside {@code ComponentPlainButton} - and
+     * each of its rooms (RFC 0067): {@code RoomPanelBody}, the panel's body, made by the kit.
+     */
     @Override public List<TreeDual.Companion> companions(Registration r, Taxon node) {
-        return node instanceof Component<?> c ? List.of(FixedTypes.INSTANCE.companion(c, name(node))) : List.of();
+        if (!(node instanceof Component<?> c)) return List.of();
+        var out = new java.util.ArrayList<TreeDual.Companion>(List.of(FixedTypes.INSTANCE.companion(c, name(node))));
+        for (Room room : c.rooms()) {
+            String n = room(c, room);
+            out.add(new TreeDual.Companion(n, "const " + n + " = new Room(" + name(node) + ", " + JsLiterals.INSTANCE.string(room.name()) + ");"));
+        }
+        return List.copyOf(out);
+    }
+
+    /** A room's name in the dual: {@code Room}, its component's name, its own - {@code RoomPanelBody}. */
+    public String room(Component<?> component, Room room) {
+        return "Room" + JsLiterals.INSTANCE.name(component.token()) + JsLiterals.INSTANCE.name(room.name());
     }
     @Override public Set<Taxon> used(Registration r) { return new LinkedHashSet<>(r.taxonomy().components()); }
 }

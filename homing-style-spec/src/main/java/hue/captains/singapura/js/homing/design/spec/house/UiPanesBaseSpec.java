@@ -11,7 +11,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiPanesComponentModule;
 
 import java.util.List;
@@ -52,7 +51,6 @@ public record UiPanesBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                 new ComponentAssignment<>(HouseIcons.MergeIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.MergeIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.DetachIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.DetachIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.WithinIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.WithinIcon(), List.of()),
-                new ComponentAssignment<>(HouseRegions.StripTail.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.StripTail(), List.of()),
                 new ComponentAssignment<>(HousePanes.PaneThumbs.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs(), List.of(
                         new RoleAssignment<>(HouseDoing.Choice.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),
                         new RoleAssignment<>(HouseDoing.Style.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumbs()),

@@ -36,3 +36,8 @@ $casting {
         outline-offset: 2px;
     }
 }
+
+/* Its rack: its own room, its sliders stacked or side by side (a room, not a part - RFC 0067, 20 Oct). */
+$casting__rack {
+    gap: 8px;
+}

@@ -6,7 +6,6 @@ import hue.captains.singapura.js.homing.design.spec.ComponentAssignment;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseRegions;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiPreferencesComponentModule;
 
 import java.util.List;
@@ -33,7 +32,6 @@ public record UiPreferencesBaseSpec() implements BaseSpecModule<BaseScheme, Base
                 new ComponentAssignment<>(HousePreferences.ScaleWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ScaleWidget(), List.of()),
                 new ComponentAssignment<>(HousePreferences.SettingRow.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SettingRow(), List.of()),
                 new ComponentAssignment<>(HousePreferences.OverviewWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.OverviewWidget(), List.of()),
-                new ComponentAssignment<>(HousePreferences.ListMasterWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ListMasterWidget(), List.of()),
-                new ComponentAssignment<>(HouseRegions.WidgetSlot.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.WidgetSlot(), List.of()));
+                new ComponentAssignment<>(HousePreferences.ListMasterWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ListMasterWidget(), List.of()));
     }
 }

@@ -6,6 +6,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
+import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
 import hue.captains.singapura.tao.ontology.ValueObject;
@@ -31,10 +32,11 @@ import java.util.Optional;
  * @param states    the state types it declares, in the order it lists them, each with what it carries
  * @param events    the events it offers besides its states' changes
  * @param extents   the extents it varies along, its branches' first
+ * @param rooms     its rooms: elements of its own inside it that are no parts, sharing its class (RFC 0067)
  */
 public record ComponentHeader(Component<?> component, boolean composite, boolean topLevel, List<HeaderSlot> slots,
                               List<Component<?>> parts, List<HeaderState> states, List<EventType<?>> events,
-                              List<ExtentAxis> extents) implements ValueObject {
+                              List<ExtentAxis> extents, List<Room> rooms) implements ValueObject {
 
     public ComponentHeader {
         Objects.requireNonNull(component, "ComponentHeader.component");
@@ -43,6 +45,7 @@ public record ComponentHeader(Component<?> component, boolean composite, boolean
         states = List.copyOf(states);
         events = List.copyOf(events);
         extents = List.copyOf(extents);
+        rooms = List.copyOf(rooms);
     }
 
     /**

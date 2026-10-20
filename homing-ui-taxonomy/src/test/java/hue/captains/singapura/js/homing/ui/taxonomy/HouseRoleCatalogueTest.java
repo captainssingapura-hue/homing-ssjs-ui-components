@@ -88,6 +88,7 @@ class HouseRoleCatalogueTest {
         var unnamed = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
                 .map(f -> f.says().replace(" is named by no component", "")).toList();
         assertEquals(List.of("Placeholder", "Error", "Check", "Query", "Skip", "Increase", "Decrease", "Clear", "Remove", "Previous",
-                "Next", "First", "Last", "More", "Host", "Media", "Fallback", "Dock", "Group", "Opener", "Pull", "Scroll"), unnamed);
+                "Next", "First", "Last", "More", "Foot", "Page", "Host", "Index", "Detail", "Media", "Fallback", "Dock", "Group", "Opener", "Pull", "Scroll"), unnamed,
+                "a strip's foot, a site's page, a view's index and detail unnamed since the rooms left the parts (20 Oct)");
     }
 }

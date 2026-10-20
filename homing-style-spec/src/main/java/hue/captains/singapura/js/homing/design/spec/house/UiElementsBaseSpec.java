@@ -355,9 +355,7 @@ public record UiElementsBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                 new ComponentAssignment<>(HouseText.Strong.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Strong(), List.of()),
                 new ComponentAssignment<>(HouseText.Muted.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Muted(), List.of()),
                 new ComponentAssignment<>(HouseMarks.Indicator.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Indicator(), List.of()),
-                new ComponentAssignment<>(HouseRegions.SliderRack.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SliderRack(), List.of()),
                 new ComponentAssignment<>(HouseContainers.PanelBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PanelBar(), List.of()),
-                new ComponentAssignment<>(HouseRegions.Section.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Section(), List.of()),
                 new ComponentAssignment<>(HouseControls.Lip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Lip(), List.of()),
                 new ComponentAssignment<>(HouseContainers.HeaderCell.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.HeaderCell(), List.of()),
                 new ComponentAssignment<>(HouseContainers.DataCell.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.DataCell(), List.of()));

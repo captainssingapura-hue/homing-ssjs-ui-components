@@ -163,6 +163,9 @@ class SimpleComponent {
     /** A placement along a slot the component declares, for one part it makes: its reference's, used once. */
     _slot(slot) { return this.#styles.slot(slot); }
 
+    /** A room of its own placed - an element of its own inside it that is no part (RFC 0067): its reference writes the room's class, once. */
+    _room(room, element) { this.#styles.room(room, element); }
+
     static _value(Leaf, axis, value) {
         var a = (Leaf.AXES || {})[axis];
         if (!a) throw new Error("[" + Leaf.name + "] has no axis '" + axis + "'");

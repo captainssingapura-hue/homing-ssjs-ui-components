@@ -22,3 +22,10 @@ $casting {
         border-color: var(--fp-accent);
     }
 }
+
+/* Its body: its own room, what is mounted in it filling it (a room, not a part - RFC 0067, 20 Oct). */
+$casting__body {
+    padding-block: 12px;
+    padding-inline: 14px;
+    gap: 12px;
+}

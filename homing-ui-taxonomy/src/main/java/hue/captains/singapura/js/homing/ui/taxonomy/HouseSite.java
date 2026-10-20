@@ -4,6 +4,8 @@ import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Room;
+
 import java.util.List;
 
 /**
@@ -28,9 +30,10 @@ public final class HouseSite {
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseContainers.SiteBar.INSTANCE).as(HouseShaping.Head.INSTANCE).one(),
-                           DSL.part(HouseControls.PreferencesButton.INSTANCE).as(HouseDoing.Preferences.INSTANCE).optional(),
-                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Page.INSTANCE).one());
+                           DSL.part(HouseControls.PreferencesButton.INSTANCE).as(HouseDoing.Preferences.INSTANCE).optional());
         }
+        /** Its page: the room what the site shows is put in - its own. */
+        @Override public List<Room> rooms() { return List.of(new Room("page")); }
     }
 
     /** The theme chosen: a style, and a palette for it. */

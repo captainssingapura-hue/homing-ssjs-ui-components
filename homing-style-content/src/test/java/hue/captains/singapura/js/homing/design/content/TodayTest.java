@@ -26,6 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <p>But for the icons (D56): an icon's look is base's in every style, the same for every icon, and what it shows is its
  * icon palette's - so an icon element is held to today's base CSS for the icon, its comment and the glyph on its
  * {@code ::before} aside. That each palette's glyph is the one today's sheet drew is HouseIconPalettesTest's.
+ *
+ * <p>And for the rooms (owner, 20 Oct): a panel's body, a slider group's rack and a strip's tail are no parts now but
+ * their owners' own, their rules in their owners' looks ({@code $casting__name}) - copied verbatim from the leaves' when
+ * they moved - so an owner's look is held to today's with its rooms' rules aside.
  */
 class TodayTest {
 
@@ -44,7 +48,7 @@ class TodayTest {
                         .orElseThrow(() -> new IllegalStateException(today.getClass().getName() + " has no CSS today"));
                 String then = icon ? withoutGlyph(css) : css;
                 switch (SPEC.content(s, e)) {
-                    case CssResolution.Found f when (icon ? withoutGlyph(f.text()) : f.text()).equals(then) -> held++;
+                    case CssResolution.Found f when roomsAside(icon ? withoutGlyph(f.text()) : f.text()).equals(roomsAside(then)) -> held++;
                     case CssResolution.Found f -> wrong.add(s.token() + " " + e.token() + ": " + f.resource() + " is not today's " + today.getClass().getName());
                     case CssResolution r -> wrong.add(s.token() + " " + e.token() + ": " + r);
                 }
@@ -76,6 +80,11 @@ class TodayTest {
     /** An icon's CSS without its leading comment and the glyph on its ::before: the rules its look has, the same for every icon. */
     private static String withoutGlyph(String css) {
         return css.replace("\r\n", "\n").replaceFirst("^/\\*.*?\\*/\n", "").replaceFirst("\n\n    &::before \\{\n        content: \"[^\"]*\";\n    }\n", "\n");
+    }
+
+    /** A look with its rooms' rules aside - each {@code $casting__name} rule and its comment - its ends trimmed. */
+    private static String roomsAside(String css) {
+        return css.replace("\r\n", "\n").replaceAll("\\n/\\*(?:(?!\\*/)[\\s\\S])*\\*/\\n\\$casting__[a-z0-9-]+ \\{[^}]*\\}\\n", "\n").strip();
     }
 
     private static List<String> names(List<Class<?>> types) { return types.stream().map(Class::getSimpleName).toList(); }

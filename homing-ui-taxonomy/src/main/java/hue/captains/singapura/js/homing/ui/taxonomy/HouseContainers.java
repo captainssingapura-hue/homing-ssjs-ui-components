@@ -9,6 +9,8 @@ import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Room;
+
 import java.util.List;
 
 /**
@@ -73,14 +75,15 @@ public final class HouseContainers {
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Heading4.INSTANCE).as(HouseSaying.Title.INSTANCE).one(),
-                           DSL.part(HouseRegions.SliderRack.INSTANCE).as(HouseShaping.Body.INSTANCE).one(),
                            DSL.part(HouseControls.Slider.INSTANCE).as(HouseShaping.Member.INSTANCE).any());
         }
+        /** Its rack: its sliders, stacked or side by side, and the room between them - its own. */
+        @Override public List<Room> rooms() { return List.of(new Room("rack")); }
     }
 
     /**
-     * A panel that fills what holds it: a head that names it, and a body - a section of its room, which what is
-     * mounted in it fills. Its controls are the caller's, at the end of its head.
+     * A panel that fills what holds it: a head that names it, and a body - its own room, which what is mounted in it
+     * fills. Its controls are the caller's, at the end of its head.
      */
     public record Panel() implements Composite<HouseBranches.Surface> {
         public static final Panel INSTANCE = new Panel();
@@ -89,9 +92,10 @@ public final class HouseContainers {
         /** How far off its plane the app sits it, and whether it is the current one - each said by the app, neither meaning anything by itself (D12). */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Elevation.INSTANCE, HouseStates.Current.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(PanelBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional(),
-                           DSL.part(HouseRegions.Section.INSTANCE).as(HouseShaping.Body.INSTANCE).one());
+            return List.of(DSL.part(PanelBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional());
         }
+        /** Its body: what is mounted in it fills it - its own. */
+        @Override public List<Room> rooms() { return List.of(new Room("body")); }
     }
 
     /** A floating pane over a scrim, with a bar of actions. Its title and close are the pane's, its content the caller's. */
@@ -153,6 +157,8 @@ public final class HouseContainers {
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Title.INSTANCE).optional());
         }
+        /** Its end: the room at its end where what acts on the panel sits - the caller's, handed in; the room its own. */
+        @Override public List<Room> rooms() { return List.of(new Room("end")); }
     }
 
     // ── menus and layers ─────────────────────────────────────────────────
@@ -264,10 +270,11 @@ public final class HouseContainers {
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(),
                            DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
-                           DSL.part(HouseRegions.StripTail.INSTANCE).as(HouseShaping.Foot.INSTANCE).one(),
                            DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
                            DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional());
         }
+        /** Its tail: the room at its end its count and its close sit in - its own. */
+        @Override public List<Room> rooms() { return List.of(new Room("tail")); }
     }
 }

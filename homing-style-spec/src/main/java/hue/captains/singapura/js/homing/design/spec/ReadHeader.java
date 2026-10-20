@@ -49,7 +49,7 @@ public record ReadHeader() implements StatelessFunctionalObject {
                     s instanceof Pseudo p ? Optional.of(p.pseudoClass()) : Optional.empty(), level));
         }
         return new ComponentHeader(component, component instanceof Composite<?>, top.contains(component), slots, List.copyOf(parts),
-                states, component.events(), taxonomy.extents(component));
+                states, component.events(), taxonomy.extents(component), component.rooms());
     }
 
     /** Every component's header, the taxonomy's components in its order. */

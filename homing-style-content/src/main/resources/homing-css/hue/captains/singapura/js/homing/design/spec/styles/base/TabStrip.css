@@ -12,3 +12,10 @@ $casting {
         background-color: var(--fp-accent-tint-hint);
     }
 }
+
+/* Its tail: its own room, its count and its close at its end (a room, not a part - RFC 0067, 20 Oct). */
+$casting__tail {
+    padding-block: 0;
+    padding-inline: 8px;
+    gap: 8px;
+}

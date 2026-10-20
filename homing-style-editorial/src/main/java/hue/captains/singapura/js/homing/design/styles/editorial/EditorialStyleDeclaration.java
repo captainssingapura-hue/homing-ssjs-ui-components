@@ -58,8 +58,6 @@ public record EditorialStyleDeclaration() implements StyleDeclaration {
                 new TitleBar(),
                 new PanelBar(),
                 new FloatLayer(),
-                new Section(),
-                new SliderRack(),
                 new Label(),
                 new Heading1(),
                 new Heading2(),

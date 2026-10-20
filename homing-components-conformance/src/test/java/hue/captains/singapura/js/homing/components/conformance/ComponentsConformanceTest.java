@@ -116,7 +116,7 @@ class ComponentsConformanceTest {
         assertEquals(List.of("server", "ui-elements", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split-grid", "ui-pan-zoom", "ui-panes", "ui-monitors", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the base first, which sizing requires (sizing ships no component); the elements require it too (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate, the preferences the split grid their view is laid out by; docking catalogues nothing - the desk, its hand, its floater and its docking are statics; the control panel, a widget, last");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
         assertEquals(13, root.vehicleCount());
-        assertEquals(98, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 66 elements (the browser's own text box, checkbox, range and select, the switch and its groove and knob, the slider's rail, groove, fill and knob, a grip, nine buttons, nineteen texts - code, a table cell's words (D42) and a badge of each tone among them - a heading for each of six levels among them - a link, a crumb, a scrim, a separator, a delimiter, the brand's mark, a pane's thumbnail, the plain and the clickable card, the summary's view, a menu's item, a list's row and a choice's option, a lamp, a drop mark, a detent, a tick and a boundary line, the slider and its group, the panel and the edge strip, the ground, the site bar, the brand and the trail), 1 icon, 1 dialog, 8 preferences (a setting's row among them), 2 pan-zoom (the view and its bar), 7 panes (the tab, a component of its own now, the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 2 floating, 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
+        assertEquals(99, root.componentCount(), "the components declared so far - the panel's bar among them (20 Oct): 1 base (the keyboard steward), 66 elements (the browser's own text box, checkbox, range and select, the switch and its groove and knob, the slider's rail, groove, fill and knob, a grip, nine buttons, nineteen texts - code, a table cell's words (D42) and a badge of each tone among them - a heading for each of six levels among them - a link, a crumb, a scrim, a separator, a delimiter, the brand's mark, a pane's thumbnail, the plain and the clickable card, the summary's view, a menu's item, a list's row and a choice's option, a lamp, a drop mark, a detent, a tick and a boundary line, the slider and its group, the panel and the edge strip, the ground, the site bar, the brand and the trail), 1 icon, 1 dialog, 8 preferences (a setting's row among them), 2 pan-zoom (the view and its bar), 7 panes (the tab, a component of its own now, the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 2 floating, 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
         assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.TOP_LEVEL));
@@ -159,20 +159,14 @@ class ComponentsConformanceTest {
     /**
      * Drawn without the component the leaf declares: the float's bar its own strip. And every part its owner made
      * inline until the inline reading was withdrawn (owner, 20 Oct) - each to become a component of its own: the
-     * rooms (section, rack, tail, widget slot) and the panel's bar first; the lip, the title bar and the action bar,
-     * whose behaviour their owners hear, once a component's own events are settled (RFC 0071 port, question 2).
+     * panel's bar now one (the old panel, not yet ported, does not use it); the lip, the title bar and the action bar, whose behaviour their owners hear, once a
+     * component's own events are settled (RFC 0071 port, question 2). The rooms - a section, a rack, a tail, a widget's
+     * slot - are no parts at all: their owners' own (Component.rooms()).
      */
     private static final List<String> COMPOSITION_LEDGER = List.of(
-            "SliderGroupModule (SliderGroup): its part body is SliderRack, which no module implements - a part is a component of its own, never realized by its owner inline",
-            "PanelModule (Panel): its part head is PanelBar, which no module implements - a part is a component of its own, never realized by its owner inline",
-            "PanelModule (Panel): its part body is Section, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "PanelModule (Panel) never imports PanelBar, which its part head calls for",
             "EdgeStripModule (EdgeStrip): its part reveal is Lip, which no module implements - a part is a component of its own, never realized by its owner inline",
             "DialogModule (Dialog): its part actions is ActionBar, which no module implements - a part is a component of its own, never realized by its owner inline",
-            "PreferencesViewModule (PreferencesView): its part index is WidgetSlot, which no module implements - a part is a component of its own, never realized by its owner inline",
-            "PreferencesViewModule (PreferencesView): its part detail is WidgetSlot, which no module implements - a part is a component of its own, never realized by its owner inline",
             "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
-            "TabStripModule (TabStrip): its part foot is StripTail, which no module implements - a part is a component of its own, never realized by its owner inline",
-            "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline",
-            "MpaChromeModule (MpaChrome): its part page is WidgetSlot, which no module implements - a part is a component of its own, never realized by its owner inline",
-            "PreferencesButtonModule (PreferencesButton): its part page is WidgetSlot, which no module implements - a part is a component of its own, never realized by its owner inline");
+            "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline");
 }

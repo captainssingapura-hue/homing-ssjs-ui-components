@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.page;
 
 import hue.captains.singapura.js.homing.design.spec.JsLiterals;
+import hue.captains.singapura.js.homing.design.spec.dual.Components;
 import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.ElementPaths;
 import hue.captains.singapura.js.homing.design.spec.dual.States;
@@ -24,7 +25,9 @@ import java.util.List;
  * path to the live instances at it, there being any number of each: three dialogs open, a tab strip's every tab.
  *
  * <p>A component never holds a managed object, only a reference to it: its states to set and read, a placement for each
- * part it makes. Not the element, not its class, not the style.
+ * part it makes, and its rooms' classes written as it places them - an element of its own inside it that is no part,
+ * sharing its class (RFC 0067): {@code room(ROOM_BODY, element)}, once a room, the class its casting's and the room's
+ * name, {@code c-panel__body}. Not the element, not its class, not the style.
  *
  * <p>Every class is derived from a typed node, the same in every style ({@code StyleClasses}): an element's from its
  * casting - the path it is handed along says which, its owner and slot being the layout's (RFC 0067, D54) - a state's
@@ -60,7 +63,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
     }
 
     /** What a component's reference gives it, and nothing more. */
-    public List<String> reference() { return List.of("component", "slot", "set", "state"); }
+    public List<String> reference() { return List.of("component", "slot", "set", "state", "room"); }
 
     /** Its module. */
     public String script() {
@@ -78,7 +81,8 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                 // draw(element, picture) with a content provider - and its clean-up worker runs on the clock it is given -
                 // every(ms, task). Generated from Java; not to be edited.
                 """
-                + "import { Component, ElementPath, Slot, StateType, Style } from " + js.string(DualKit.INSTANCE.address()) + ";\n"
+                + "import { Component, ElementPath, Slot, Room, StateType, Style } from " + js.string(DualKit.INSTANCE.address()) + ";\n"
+                + "import * as COMPONENTS from " + js.string(Components.INSTANCE.address()) + ";\n"
                 + "import * as PATHS from " + js.string(ElementPaths.INSTANCE.address()) + ";\n"
                 + "import * as STATES from " + js.string(States.INSTANCE.address()) + ";\n"
                 + "import * as STYLES from " + js.string(Styles.INSTANCE.address()) + ";\n"
@@ -141,6 +145,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                         this.page = page;
                         this.held = new Map();
                         this.parts = new Map();
+                        this.rooms = new Set();
                         this.reference = new Reference(MINT, this);
                         Object.freeze(this);
                     }
@@ -173,6 +178,16 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                     }
 
                     state(type) { return this.held.has(type) ? this.held.get(type) : type.rest; }
+
+                    /** A room of its component's own placed: its element given the room's class - once a room. */
+                    room(room, element) {
+                        if (!(room instanceof Room) || !this.page.rooms(room)) throw new TypeError("room: a room of the components' dual");
+                        if (room.owner !== this.path.part) throw new TypeError("room: " + room.name + " is " + room.owner.token + "'s, and this element " + this.path.part.token + "'s");
+                        if (element === null || (typeof element !== "object" && typeof element !== "function")) throw new TypeError("room: an element is an object");
+                        if (this.rooms.has(room)) throw new TypeError("room: " + room.name + " is placed already: a room is one element of its owner's");
+                        this.rooms.add(room);
+                        this.page.add(element, this.page.classOf(this.path) + "__" + room.name);
+                    }
                 }
 
                 /**
@@ -199,11 +214,14 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
 
                     /** The state the element is in of a type: the one set, or the one at rest. */
                     state(type) { return this.#managed.state(type); }
+
+                    /** A room of the component's own placed: an element of its own, inside it, given the room's class - once a room. */
+                    room(room, element) { this.#managed.room(room, element); }
                 }
 
                 class StyleManager {
                     #surface; #style; #units = new Map(); #known = new WeakSet(); #swept = 0; #classes = new Map(); #roots = new Map();
-                    #below = new Map(); #states = new Set(); #styles = new Set(); #page; #content = null; #drawn = new WeakMap();
+                    #below = new Map(); #states = new Set(); #styles = new Set(); #rooms = new Set(); #page; #content = null; #drawn = new WeakMap();
 
                     /**
                      * @param surface what it writes through: add(element, class), remove(element, class), show(style) - and
@@ -237,6 +255,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                         }
                         for (const s of Object.values(STATES)) if (s instanceof StateType) this.#states.add(s);
                         for (const s of Object.values(STYLES)) if (s instanceof Style) this.#styles.add(s);
+                        for (const n of Object.values(COMPONENTS)) if (n instanceof Room) this.#rooms.add(n);
                         if (!this.#styles.has(style)) throw new TypeError("StyleManager: it starts in a style of the styles' dual");
                         this.#surface = surface;
                         this.#style = style;
@@ -246,6 +265,8 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                             manage: (element, path, map) => this.#manage(element, path, map),
                             below: (path, slot) => this.#child(path, slot),
                             draws: type => this.#states.has(type),
+                            rooms: room => this.#rooms.has(room),
+                            classOf: path => this.#classes.get(path),
                         });
                         surface.show(style);
                         clock.every(SWEEP_EVERY, () => { this.#swept += sweep(this.#units); });

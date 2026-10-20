@@ -4,42 +4,18 @@ import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Region;
 
 import java.util.List;
 
 /**
- * The house's regions: stretches of a container's room with no frame of their own - a panel's
- * body is played by a {@link Section}, the preferences' index and detail each by a {@link
- * WidgetSlot}.
+ * The house's regions: a document's blocks, each a look of its own. A stretch of a container's room with no look
+ * but its owner's spacing is no region and no part - it is its owner's room (Component.rooms(): a panel's body, a
+ * slider group's rack, a strip's tail, a site's page; owner, 20 Oct).
  */
 public final class HouseRegions {
 
     private HouseRegions() {}
 
-    /** A stretch of a container's room: a head, a body, a foot. */
-    public record Section() implements Leaf<Region> {
-        public static final Section INSTANCE = new Section();
-        @Override public Region parent() { return Region.INSTANCE; }
-    }
-
-    /** The end of a strip of tabs: the room its count and its close sit in. */
-    public record StripTail() implements Leaf<Region> {
-        public static final StripTail INSTANCE = new StripTail();
-        @Override public Region parent() { return Region.INSTANCE; }
-    }
-
-    /** A slider group's sliders, stacked or side by side: the room between them. */
-    public record SliderRack() implements Leaf<Region> {
-        public static final SliderRack INSTANCE = new SliderRack();
-        @Override public Region parent() { return Region.INSTANCE; }
-    }
-
-    /** A stretch of a view a widget is held in. */
-    public record WidgetSlot() implements Leaf<Region> {
-        public static final WidgetSlot INSTANCE = new WidgetSlot();
-        @Override public Region parent() { return Region.INSTANCE; }
-    }
     // ── a document's blocks: a quote, a block of code, a table - its cells are containers (HouseContainers) ──
 
     /** Words quoted from elsewhere, set off from the text round them. */

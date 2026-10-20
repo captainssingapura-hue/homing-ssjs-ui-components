@@ -21,7 +21,7 @@ public record DualKit() implements StatelessFunctionalObject {
     /** The classes it gives, in its order. */
     public List<String> classes() {
         return List.of("ComponentBranch", "Component", "RoleBranch", "Role", "StateBranch", "StateType", "EventBranch", "EventType",
-                "Extent", "Count", "Slot", "ElementPath", "Style", "Fixed");
+                "Extent", "Count", "Slot", "Room", "ElementPath", "Style", "Fixed");
     }
 
     /** Its module. */
@@ -119,6 +119,14 @@ public record DualKit() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
                 }
+                class Room {
+                    constructor(owner, name) {
+                        if (!(owner instanceof Component)) throw new TypeError("Room: its owner is a Component");
+                        if (typeof name !== "string" || !/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(name)) throw new TypeError("Room: its name is lower-case words joined by hyphens");
+                        this.owner = owner; this.name = name;
+                        Object.freeze(this);
+                    }
+                }
                 class Slot {
                     constructor(owner, part, role, count) {
                         if (!(owner instanceof Component) || !owner.composite) throw new TypeError("Slot: its owner is a composite Component");
@@ -154,7 +162,7 @@ public record DualKit() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
                 }
-                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, ElementPath, Style, Fixed };
+                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, Room, ElementPath, Style, Fixed };
                 """;
     }
 }

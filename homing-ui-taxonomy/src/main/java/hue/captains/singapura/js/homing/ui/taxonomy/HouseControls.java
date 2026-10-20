@@ -298,8 +298,7 @@ public final class HouseControls {
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseIcons.SettingsIcon.INSTANCE).as(HouseShaping.Face.INSTANCE).one(),
-                           DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional(),
-                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Page.INSTANCE).optional());
+                           DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional());
         }
     }
 

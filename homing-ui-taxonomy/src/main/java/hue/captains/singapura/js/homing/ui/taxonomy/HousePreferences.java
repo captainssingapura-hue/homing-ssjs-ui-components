@@ -97,9 +97,7 @@ public final class HousePreferences {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.View parent() { return HouseBranches.View.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseSplitGrid.SplitGrid.INSTANCE).as(HouseShaping.Layout.INSTANCE).one(),
-                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Index.INSTANCE).one(),
-                           DSL.part(HouseRegions.WidgetSlot.INSTANCE).as(HouseShaping.Detail.INSTANCE).one());
+            return List.of(DSL.part(HouseSplitGrid.SplitGrid.INSTANCE).as(HouseShaping.Layout.INSTANCE).one());
         }
     }
 

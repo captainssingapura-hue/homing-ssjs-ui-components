@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
+import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.design.spec.dual.Components;
 import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
@@ -50,6 +51,16 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         return List.copyOf(out.values());
     }
 
+    /** Each room of the component's own as a constant - {@code const ROOM_BODY = RoomPanelBody;} - its node in the components' dual. */
+    public List<SlotConstant> rooms(ComponentHeader h) {
+        var out = new ArrayList<SlotConstant>();
+        for (Room room : h.rooms()) {
+            String name = "ROOM_" + room.name().toUpperCase(Locale.ROOT).replace('-', '_');
+            out.add(new SlotConstant(name, "const " + name + " = " + Components.INSTANCE.room(h.component(), room) + ";"));
+        }
+        return List.copyOf(out);
+    }
+
     /** Each slot as its own constant, made by the kit: its owner, its part and its role - the imported nodes - and how many the part is. */
     public List<SlotConstant> slots(ComponentHeader h) {
         var refOf = DualRef.INSTANCE;
@@ -74,6 +85,20 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         }).toList();
     }
 
+    /** Each slot's and each room's constant in a merged stamp, its owner's name before its own: {@code ROOM_PANEL_BODY}. */
+    private List<SlotConstant> mergedAll(ComponentHeader h) {
+        String owner = h.component().token().toUpperCase(Locale.ROOT).replace('-', '_');
+        var out = new ArrayList<>(merged(h));
+        for (SlotConstant s : rooms(h)) {
+            String name = "ROOM_" + owner + "_" + s.name().substring("ROOM_".length());
+            out.add(new SlotConstant(name, "const " + name + s.line().substring(("const " + s.name()).length())));
+        }
+        return out;
+    }
+
+    /** The room nodes a header imports from the components' dual: {@code RoomPanelBody}. */
+    public List<String> roomNodes(ComponentHeader h) { return h.rooms().stream().map(r -> Components.INSTANCE.room(h.component(), r)).toList(); }
+
     /**
      * The name a top-level component's binding is stamped under: {@code manage}, then the component's name -
      * {@code manageDialog}. One for each component a module implements, so several never meet.
@@ -95,11 +120,12 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         List<DualRef.Ref> refs = refs(h);
         for (DualTree<?> tree : ReadDual.INSTANCE.trees()) {
             var names = new ArrayList<>(refs.stream().filter(r -> r.tree().equals(tree)).map(r -> r.name() + " as " + r.imported()).toList());
-            if (tree instanceof Components) names.addAll(fixed(h));
+            if (tree instanceof Components) { names.addAll(fixed(h)); names.addAll(roomNodes(h)); }
             if (!names.isEmpty()) lines.add("import { " + String.join(", ", names) + " } from " + js.string(tree.address()) + ";");
         }
         if (h.topLevel()) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
         for (SlotConstant s : slots(h)) lines.add(s.line());
+        for (SlotConstant s : rooms(h)) lines.add(s.line());
         if (h.topLevel())
             lines.add("const " + manage(h) + " = " + PageStyleManager.EXPORTED + ".unit(" + DualRef.INSTANCE.of(h.component()).imported() + ");");
         return String.join("\n", lines) + "\n";
@@ -123,13 +149,13 @@ public record HeaderStamp() implements StatelessFunctionalObject {
             var names = new LinkedHashSet<String>();
             for (ComponentHeader h : headers) {
                 for (DualRef.Ref r : refs(h)) if (r.tree().equals(tree)) names.add(r.name() + " as " + r.imported());
-                if (tree instanceof Components) names.addAll(fixed(h));
+                if (tree instanceof Components) { names.addAll(fixed(h)); names.addAll(roomNodes(h)); }
             }
             if (!names.isEmpty()) lines.add("import { " + String.join(", ", names) + " } from " + js.string(tree.address()) + ";");
         }
         if (headers.stream().anyMatch(ComponentHeader::topLevel)) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
         var constants = new LinkedHashMap<String, String>();
-        for (ComponentHeader h : headers) for (SlotConstant s : merged(h)) {
+        for (ComponentHeader h : headers) for (SlotConstant s : mergedAll(h)) {
             String was = constants.putIfAbsent(s.name(), s.line());
             if (was != null && !was.equals(s.line()))
                 throw new IllegalArgumentException("two slots stamped as " + s.name() + " in one module: " + was + " and " + s.line());
