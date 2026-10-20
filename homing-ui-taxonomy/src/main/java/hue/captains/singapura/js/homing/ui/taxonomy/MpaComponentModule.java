@@ -14,7 +14,6 @@ public record MpaComponentModule() implements ComponentModule {
     public static final MpaComponentModule INSTANCE = new MpaComponentModule();
 
     @Override public List<? extends Component<?>> components() {
-        return List.of(HouseSite.MpaChrome.INSTANCE, HouseControls.PreferencesButton.INSTANCE,
-                       HouseSite.ThemeWidget.INSTANCE);
+        return List.of(HouseControls.PreferencesButton.INSTANCE);
     }
 }

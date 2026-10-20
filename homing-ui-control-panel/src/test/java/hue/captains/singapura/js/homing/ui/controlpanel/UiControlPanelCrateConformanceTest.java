@@ -14,7 +14,6 @@ import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiElementsComponentModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.UiControlPanelComponentModule;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsStyleDeclaration;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsStyleDeclaration;
 import hue.captains.singapura.js.homing.ui.jarinstance.JarInstance;
@@ -37,7 +36,7 @@ class UiControlPanelCrateConformanceTest {
     /** The jar's own instance (D51): the catalogue a page has is made from its taxonomy. */
     @BeforeAll
     static void theJarsInstance_installed() {
-        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiControlPanelComponentModule.INSTANCE),
+        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE),
                 List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE));
     }
 

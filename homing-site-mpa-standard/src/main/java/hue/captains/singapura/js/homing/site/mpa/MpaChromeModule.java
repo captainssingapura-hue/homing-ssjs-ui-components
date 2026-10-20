@@ -2,13 +2,11 @@ package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.SiteBarModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseSite;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ import java.util.List;
  * router wrote, the preferences, and whether the page fills the viewport - attaches its root, and
  * mounts the app in its slot.</p>
  */
-public record MpaChromeModule() implements Widget<MpaChromeModule.Chrome, MpaChromeModule>, ImplFor<HouseSite.MpaChrome> {
+public record MpaChromeModule() implements Widget<MpaChromeModule.Chrome, MpaChromeModule> {
 
     /**
      * What the server stamps into the page for the chrome, as a frozen object: {@code { brand: { label,

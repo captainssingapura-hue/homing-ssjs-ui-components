@@ -105,12 +105,6 @@ public final class HouseBranches {
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
-    /** A container that edits one setting. */
-    public record Field() implements L2_ComponentBranch<Container>, FamilyHead {
-        public static final Field INSTANCE = new Field();
-        @Override public Container parent() { return Container.INSTANCE; }
-    }
-
     /** A container that shows something whole: a picture, a set of settings, a monitor. */
     public record View() implements L2_ComponentBranch<Container>, FamilyHead {
         public static final View INSTANCE = new View();
@@ -120,12 +114,6 @@ public final class HouseBranches {
     /** A container that fills what holds it, with no frame of its own: the page's ground. */
     public record Surface() implements L2_ComponentBranch<Container>, FamilyHead {
         public static final Surface INSTANCE = new Surface();
-        @Override public Container parent() { return Container.INSTANCE; }
-    }
-
-    /** A container that holds a set of controls as one: a group of sliders, a control panel. */
-    public record Cluster() implements L2_ComponentBranch<Container>, FamilyHead {
-        public static final Cluster INSTANCE = new Cluster();
         @Override public Container parent() { return Container.INSTANCE; }
     }
 

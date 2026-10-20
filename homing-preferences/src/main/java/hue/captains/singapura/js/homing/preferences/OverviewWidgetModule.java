@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.component.Widget;
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -17,7 +16,6 @@ import hue.captains.singapura.js.homing.ui.elements.SeparatorModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 import java.util.List;
 
@@ -29,7 +27,7 @@ import java.util.List;
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 21,
         reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own and writes text of its own: it waits for the designed containers, the widget slot and the content components to draw only components.")
-public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule>, ImplFor<HousePreferences.OverviewWidget> {
+public record OverviewWidgetModule() implements Widget<Widget._None, OverviewWidgetModule> {
 
     /** The class. */
     public record OverviewWidget() implements Widget._Class<Widget._None, OverviewWidgetModule> {}

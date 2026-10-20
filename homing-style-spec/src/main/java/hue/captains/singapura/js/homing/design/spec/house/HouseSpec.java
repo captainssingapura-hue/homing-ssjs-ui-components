@@ -29,13 +29,11 @@ public record HouseSpec() implements StatelessFunctionalObject {
             UiDialogBaseSpec.INSTANCE,
             UiFloatingBaseSpec.INSTANCE,
             UiMenuBaseSpec.INSTANCE,
-            UiMonitorsBaseSpec.INSTANCE,
             UiPanesBaseSpec.INSTANCE,
             UiPanZoomBaseSpec.INSTANCE,
             UiSplitGridBaseSpec.INSTANCE,
             UiPreferencesBaseSpec.INSTANCE,
-            MpaBaseSpec.INSTANCE,
-            UiControlPanelBaseSpec.INSTANCE);
+            MpaBaseSpec.INSTANCE);
 
     /** Each house style's assignments. */
     public static final List<SpecModule<BaseScheme, ?>> STYLES = List.of(

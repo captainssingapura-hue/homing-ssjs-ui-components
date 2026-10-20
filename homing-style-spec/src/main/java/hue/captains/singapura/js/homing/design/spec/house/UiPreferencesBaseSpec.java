@@ -25,13 +25,6 @@ public record UiPreferencesBaseSpec() implements BaseSpecModule<BaseScheme, Base
 
     @Override public List<ComponentAssignment<BaseScheme, Base, ?>> assignments() {
         return List.of(
-                new ComponentAssignment<>(HousePreferences.PreferencesView.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesView(), List.of()),
-                new ComponentAssignment<>(HousePreferences.PreferenceField.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PreferenceField(), List.of()),
-                new ComponentAssignment<>(HousePreferences.ChoiceWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ChoiceWidget(), List.of()),
-                new ComponentAssignment<>(HousePreferences.ToggleWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ToggleWidget(), List.of()),
-                new ComponentAssignment<>(HousePreferences.ScaleWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ScaleWidget(), List.of()),
-                new ComponentAssignment<>(HousePreferences.SettingRow.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SettingRow(), List.of()),
-                new ComponentAssignment<>(HousePreferences.OverviewWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.OverviewWidget(), List.of()),
-                new ComponentAssignment<>(HousePreferences.ListMasterWidget.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ListMasterWidget(), List.of()));
+                new ComponentAssignment<>(HousePreferences.SettingRow.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SettingRow(), List.of()));
     }
 }

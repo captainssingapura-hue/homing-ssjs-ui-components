@@ -88,8 +88,6 @@ hue.captains.singapura.js.homing.design.spec.styles.base.FloatingPane	hue.captai
 hue.captains.singapura.js.homing.design.spec.styles.base.FloatLayer	hue.captains.singapura.js.homing.design.styles.base.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenuSteward	hue.captains.singapura.js.homing.design.styles.base.ContextMenuSteward
 hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenu	hue.captains.singapura.js.homing.design.styles.base.ContextMenu
-hue.captains.singapura.js.homing.design.spec.styles.base.FocusMonitor	hue.captains.singapura.js.homing.design.styles.base.FocusMonitor
-hue.captains.singapura.js.homing.design.spec.styles.base.StewardMonitor	hue.captains.singapura.js.homing.design.styles.base.StewardMonitor
 hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker	hue.captains.singapura.js.homing.design.styles.base.TabPicker
 hue.captains.singapura.js.homing.design.spec.styles.base.MultiTabPane	hue.captains.singapura.js.homing.design.styles.base.MultiTabPane
 hue.captains.singapura.js.homing.design.spec.styles.base.SingleTabPane	hue.captains.singapura.js.homing.design.styles.base.SingleTabPane
@@ -109,18 +107,8 @@ hue.captains.singapura.js.homing.design.spec.styles.base.PanZoomBar	hue.captains
 hue.captains.singapura.js.homing.design.spec.styles.base.SplitGrid	hue.captains.singapura.js.homing.design.styles.base.SplitGrid
 hue.captains.singapura.js.homing.design.spec.styles.base.SplitGridMirror	hue.captains.singapura.js.homing.design.styles.base.SplitGridMirror
 hue.captains.singapura.js.homing.design.spec.styles.base.GridCell	hue.captains.singapura.js.homing.design.styles.base.GridCell
-hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesView	hue.captains.singapura.js.homing.design.styles.base.PreferencesView
-hue.captains.singapura.js.homing.design.spec.styles.base.PreferenceField	hue.captains.singapura.js.homing.design.styles.base.PreferenceField
-hue.captains.singapura.js.homing.design.spec.styles.base.ChoiceWidget	hue.captains.singapura.js.homing.design.styles.base.ChoiceWidget
-hue.captains.singapura.js.homing.design.spec.styles.base.ToggleWidget	hue.captains.singapura.js.homing.design.styles.base.ToggleWidget
-hue.captains.singapura.js.homing.design.spec.styles.base.ScaleWidget	hue.captains.singapura.js.homing.design.styles.base.ScaleWidget
 hue.captains.singapura.js.homing.design.spec.styles.base.SettingRow	hue.captains.singapura.js.homing.design.styles.base.SettingRow
-hue.captains.singapura.js.homing.design.spec.styles.base.OverviewWidget	hue.captains.singapura.js.homing.design.styles.base.OverviewWidget
-hue.captains.singapura.js.homing.design.spec.styles.base.ListMasterWidget	hue.captains.singapura.js.homing.design.styles.base.ListMasterWidget
 hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesButton	hue.captains.singapura.js.homing.design.styles.base.PreferencesButton
-hue.captains.singapura.js.homing.design.spec.styles.base.MpaChrome	hue.captains.singapura.js.homing.design.styles.base.MpaChrome
-hue.captains.singapura.js.homing.design.spec.styles.base.ThemeWidget	hue.captains.singapura.js.homing.design.styles.base.ThemeWidget
-hue.captains.singapura.js.homing.design.spec.styles.base.ControlPanel	hue.captains.singapura.js.homing.design.styles.base.ControlPanel
 hue.captains.singapura.js.homing.design.spec.styles.base.Lip	hue.captains.singapura.js.homing.design.styles.base.Lip
 hue.captains.singapura.js.homing.design.spec.styles.base.HeaderCell	hue.captains.singapura.js.homing.design.styles.base.HeaderCell
 hue.captains.singapura.js.homing.design.spec.styles.base.DataCell	hue.captains.singapura.js.homing.design.styles.base.DataCell

@@ -28,9 +28,9 @@ public record HouseTaxonomy() implements StatelessFunctionalObject {
      */
     public static final List<ComponentModule> MODULES = List.of(
             UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiDialogComponentModule.INSTANCE,
-            UiFloatingComponentModule.INSTANCE, UiMenuComponentModule.INSTANCE, UiMonitorsComponentModule.INSTANCE,
+            UiFloatingComponentModule.INSTANCE, UiMenuComponentModule.INSTANCE,
             UiPanesComponentModule.INSTANCE, UiPanZoomComponentModule.INSTANCE, UiSplitGridComponentModule.INSTANCE,
-            UiPreferencesComponentModule.INSTANCE, MpaComponentModule.INSTANCE, UiControlPanelComponentModule.INSTANCE);
+            UiPreferencesComponentModule.INSTANCE, MpaComponentModule.INSTANCE);
 
     /**
      * The taxonomy of the component modules given, in the house's words: their components, a flat list, explicitly -

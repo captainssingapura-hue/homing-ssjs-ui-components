@@ -1,13 +1,11 @@
 package hue.captains.singapura.js.homing.preferences;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
 import hue.captains.singapura.js.homing.ui.elements.Heading4Module;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.elements.LedeModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -32,7 +30,7 @@ import java.util.List;
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 21,
         reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own and touches components' elements: it waits for the designed containers and the content components to draw only components.")
-public record PreferenceFieldModule() implements Widget<Widget._None, PreferenceFieldModule>, ImplFor<HousePreferences.PreferenceField> {
+public record PreferenceFieldModule() implements Widget<Widget._None, PreferenceFieldModule> {
 
     /** The class. */
     public record PreferenceField() implements Widget._Class<Widget._None, PreferenceFieldModule> {

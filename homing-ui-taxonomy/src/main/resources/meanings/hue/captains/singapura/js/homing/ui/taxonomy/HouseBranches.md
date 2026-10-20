@@ -64,10 +64,6 @@ Shares a room between several things, each given its share; where it is resizabl
 
 A thin band along an edge that carries controls or a way through, never the content itself.
 
-## Field
-
-Lets the user set one setting, and says what it is and how it stands.
-
 ## View
 
 Shows something whole, for the user to look at or look through, rather than to edit.
@@ -75,10 +71,6 @@ Shows something whole, for the user to look at or look through, rather than to e
 ## Surface
 
 Fills what holds it, with no frame of its own; what stands on it is the point - the page's ground.
-
-## Cluster
-
-Holds a set of controls as one, so the user works them together and the keys pass between them.
 
 ## Chooser
 

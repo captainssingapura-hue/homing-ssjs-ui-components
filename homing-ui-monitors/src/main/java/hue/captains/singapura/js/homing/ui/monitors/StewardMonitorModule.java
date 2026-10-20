@@ -1,11 +1,9 @@
 package hue.captains.singapura.js.homing.ui.monitors;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.ui.elements.LampModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMonitors;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
@@ -26,7 +24,7 @@ import java.util.List;
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 10,
         reason = "It makes its own elements, reaches the document, wears classes of its own, writes attributes and writes text of its own: it waits for the content components to draw only components, and for a party that says where the browser's focus moves.")
-public record StewardMonitorModule() implements Widget<Widget._None, StewardMonitorModule>, ImplFor<HouseMonitors.StewardMonitor> {
+public record StewardMonitorModule() implements Widget<Widget._None, StewardMonitorModule> {
 
     /** A widget: {@code new StewardMonitor(branch, params)}; {@code lamp()}, {@code broken()}, {@code refresh()}, {@code dispose()}. */
     public record StewardMonitor() implements Widget._Class<Widget._None, StewardMonitorModule> {

@@ -17,21 +17,7 @@ public record UiPreferencesStyleDeclaration() implements StyleDeclaration {
 
     @Override public List<Provided<?, ?>> provided() {
         return List.of(new Provided<>(Base.INSTANCE, List.of(
-                new PreferenceField(),
-                new ChoiceWidget(),
-                new ScaleWidget(),
-                new ToggleWidget(),
-                new ListMasterWidget(),
-                new OverviewWidget(),
-                new PreferencesView(),
                 new SettingRow(),
-                new KickerCategory(),
-                new LedeSummary(),
-                new PlainButtonReset(),
-                new ChoiceOptionChoice(),
-                new RangeAdjust(),
-                new SwitchToggle(),
-                new ListRowChoice(),
                 new CaptionValue())));
     }
 }

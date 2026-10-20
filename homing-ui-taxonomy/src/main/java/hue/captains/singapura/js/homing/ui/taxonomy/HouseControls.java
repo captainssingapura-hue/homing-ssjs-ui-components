@@ -289,7 +289,7 @@ public final class HouseControls {
         }
     }
 
-    /** The button that opens a site's preferences in a dialog, a slot its page: what is shown there is a widget, the site's. */
+    /** The button that opens a site's preferences: what its click opens is its owner's. */
     public record PreferencesButton() implements Composite<Button>, WithRoles<HouseRoleSets.Going> {
         public static final PreferencesButton INSTANCE = new PreferencesButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
@@ -297,8 +297,7 @@ public final class HouseControls {
         @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseIcons.SettingsIcon.INSTANCE).as(HouseShaping.Face.INSTANCE).one(),
-                           DSL.part(HouseContainers.Dialog.INSTANCE).as(HouseShaping.Window.INSTANCE).optional());
+            return List.of(DSL.part(HouseIcons.SettingsIcon.INSTANCE).as(HouseShaping.Face.INSTANCE).one());
         }
     }
 

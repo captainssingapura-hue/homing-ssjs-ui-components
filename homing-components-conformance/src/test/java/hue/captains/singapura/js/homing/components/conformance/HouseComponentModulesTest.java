@@ -12,7 +12,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.UiPreferencesComponentModule
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
 import hue.captains.singapura.js.homing.ui.taxonomy.MpaComponentModule;
 import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
-import hue.captains.singapura.js.homing.ui.taxonomy.UiControlPanelComponentModule;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiDialogComponentModule;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
@@ -24,7 +23,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsCrate;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiMenuComponentModule;
 import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
-import hue.captains.singapura.js.homing.ui.taxonomy.UiMonitorsComponentModule;
 import hue.captains.singapura.js.homing.ui.monitors.UiMonitorsCrate;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiPanesComponentModule;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
@@ -46,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The house's components taxonomy read from its jars' component modules (the components taxonomy by module): a flat
- * list of twelve, registered explicitly, reads the house whole - each jar's module listing every component its crate
+ * list of ten, registered explicitly, reads the house whole - each jar's module listing every component its crate
  * implements, the rest coming in as parts. There is no other list of the house's components (D51).
  */
 class HouseComponentModulesTest {
@@ -61,13 +59,11 @@ class HouseComponentModulesTest {
         out.put(UiDialogCrate.INSTANCE, UiDialogComponentModule.INSTANCE);
         out.put(UiFloatingCrate.INSTANCE, UiFloatingComponentModule.INSTANCE);
         out.put(UiMenuCrate.INSTANCE, UiMenuComponentModule.INSTANCE);
-        out.put(UiMonitorsCrate.INSTANCE, UiMonitorsComponentModule.INSTANCE);
         out.put(UiPanesCrate.INSTANCE, UiPanesComponentModule.INSTANCE);
         out.put(UiPanZoomCrate.INSTANCE, UiPanZoomComponentModule.INSTANCE);
         out.put(UiSplitGridCrate.INSTANCE, UiSplitGridComponentModule.INSTANCE);
         out.put(UiPreferencesCrate.INSTANCE, UiPreferencesComponentModule.INSTANCE);
         out.put(MpaCrate.INSTANCE, MpaComponentModule.INSTANCE);
-        out.put(UiControlPanelCrate.INSTANCE, UiControlPanelComponentModule.INSTANCE);
         return out;
     }
 
@@ -80,13 +76,13 @@ class HouseComponentModulesTest {
     }
 
     @Test
-    void theTwelveModules_readTheHouseWhole() {
+    void theTenModules_readTheHouseWhole() {
         Taxonomy byModules = HouseTaxonomy.INSTANCE.read(HOUSE);
         int listed = HOUSE.stream().mapToInt(m -> m.components().size()).sum();
-        assertEquals(128, byModules.components().size(), "the twenty icons among them, each a leaf of the Icon branch (D52); the rooms no components (20 Oct)");
-        assertEquals(122, listed, "a hundred and twenty-two listed - a hundred and fourteen implemented, the slider group, the panel and its bar dropped (20 Oct), the twenty icons by the icon's one class among them (D52), eight then realized inline by their owners - the rooms among them no components now (20 Oct)");
+        assertEquals(116, byModules.components().size(), "the twenty icons among them, each a leaf of the Icon branch (D52); the rooms no components, nor the twelve widgets (20 Oct)");
+        assertEquals(110, listed, "a hundred and ten listed - a hundred and two implemented, the slider group, the panel and its bar dropped, the twelve widgets no components - the monitors' and the control panel's jars listing none (20 Oct), the twenty icons by the icon's one class among them (D52), eight then realized inline by their owners - the rooms among them no components now (20 Oct)");
         var bringers = ComponentModules.INSTANCE.bringers(HOUSE, byModules);
-        assertEquals(128, bringers.size(), "every component brought by a module: its own, or its owner's by a part");
+        assertEquals(116, bringers.size(), "every component brought by a module: its own, or its owner's by a part");
         assertEquals(UiElementsComponentModule.INSTANCE, bringers.get(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.HeaderCell.INSTANCE),
                 "a header cell, never listed: a part of the table ui-elements lists");
     }

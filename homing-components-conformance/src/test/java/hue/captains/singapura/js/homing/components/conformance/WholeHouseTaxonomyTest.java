@@ -29,24 +29,23 @@ class WholeHouseTaxonomyTest {
 
     @Test
     void everyModulesComponents_areDefinedInTheHousesTaxonomy() {
-        var holders = List.of("HouseSite", "HousePreferences", "HousePanes", "HouseSplitGrid", "HouseControlPanel", "HousePanZoom",
-                              "HouseMenus", "HouseMonitors");
+        var holders = List.of("HousePreferences", "HousePanes", "HouseSplitGrid", "HousePanZoom", "HouseMenus");
         var leaves = new LinkedHashMap<String, Integer>();
         for (Component<?> c : HOUSE.components()) {
             String holder = c.getClass().getEnclosingClass().getSimpleName();
             if (holders.contains(holder)) leaves.merge(holder, 1, Integer::sum);
         }
-        assertEquals(26, leaves.values().stream().mapToInt(Integer::intValue).sum(), "26 leaves the modules' components are - the dock grid retired, its docks a split grid's residents; the float layer common now: " + leaves);
-        assertEquals(128, HOUSE.components().size(), "with the 102 common ones - the twenty icons (D52), a table cell's words, the edge strip's lip, the rooms no components (20 Oct), the card plain or clickable and the summary's view, the slider's rail, knob and groove apart from the toggle's, the brand's mark and a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
+        assertEquals(14, leaves.values().stream().mapToInt(Integer::intValue).sum(), "14 leaves the modules' components are - the dock grid retired, its docks a split grid's residents; the float layer common now; the twelve widgets no components (20 Oct): " + leaves);
+        assertEquals(116, HOUSE.components().size(), "with the 102 common ones - the twenty icons (D52), a table cell's words, the edge strip's lip, the rooms no components (20 Oct), the card plain or clickable and the summary's view, the slider's rail, knob and groove apart from the toggle's, the brand's mark and a pane's thumbnail among them, a thumbnail's and a grid's mirror's; a tab, its strip and where a dragged one lands; a site's brand and its preferences button; the page's ground and the site's bar; a floating pane's title bar, and the layer floating panes are stacked on; the browser's own text box and checkbox; a heading for each level of a page's outline; a document's code, quote and table, and a badge per tone");
     }
 
     @Test
     void theWholeHouse_isReadAsItWasBeforeItWasCut() {
-        assertEquals(25, HOUSE.branches().size(), "the icons a branch of the mark (D52); the headings a branch of the text; the input, the way and the selector under the control, the surface, the cluster and the chooser under the container, each heading a family");
-        assertEquals(128, HOUSE.components().size(), "the icons each a leaf, the icon gone (D52); a table cell's words a text cell (D42); the edge strip's lip; the rooms no components, their owners' own (20 Oct); a document table's cells containers, their words strong or muted; the summary card ditched: the card plain or clickable, the summary a view of its own; the slider's rail, knob and groove and the toggle's parts of their own; the brand's mark a part of its own; the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents; the ground, the site bar and the title bar added (the panel's bar too, dropped with the panel, 20 Oct), and a text box and a checkbox; the heading a leaf per level; prose a leaf per element");
+        assertEquals(23, HOUSE.branches().size(), "the icons a branch of the mark (D52); the headings a branch of the text; the input, the way and the selector under the control, the surface and the chooser under the container, each heading a family - the field and the cluster gone with the widgets (20 Oct)");
+        assertEquals(116, HOUSE.components().size(), "the icons each a leaf, the icon gone (D52); a table cell's words a text cell (D42); the edge strip's lip; the rooms no components, their owners' own (20 Oct); a document table's cells containers, their words strong or muted; the summary card ditched: the card plain or clickable, the summary a view of its own; the slider's rail, knob and groove and the toggle's parts of their own; the brand's mark a part of its own; the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents; the ground, the site bar and the title bar added (the panel's bar too, dropped with the panel, 20 Oct), and a text box and a checkbox; the heading a leaf per level; prose a leaf per element");
         assertEquals(95, HOUSE.roles().size(), "the catalogue beside the tree: what an icon is to its owner among them (D52)");
-        assertEquals(111, HOUSE.parts().size(), "the close button's face, the close icon (D52); a header cell's title and a data cell's value, each a text cell (D42); the slots, each a part once its owner is appended - the strip's tabs, its tail a room now; the edge strip's lip; the overview's separators between its settings; the steward monitor's lamp; the slider's rail and the brand's mark among them; the preferences' view laid out by a split grid among them, and the grid's line in two roles; a table's header and data cells");
-        assertEquals(48, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the close button among them, its face its own part (D52); the table's two cells among them; the components that have parts - the steward monitor among them, its lamp; the slider's knob none: its mark the slider's symbol");
+        assertEquals(78, HOUSE.parts().size(), "the widgets' parts and the preferences button's dialog gone (20 Oct); the close button's face, the close icon (D52); a header cell's title and a data cell's value, each a text cell (D42); the slots, each a part once its owner is appended - the strip's tabs, its tail a room now; the edge strip's lip; the slider's rail and the brand's mark among them; the grid's line in two roles; a table's header and data cells");
+        assertEquals(36, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the close button among them, its face its own part (D52); the table's two cells among them; the components that have parts - the widgets no more (20 Oct); the slider's knob none: its mark the slider's symbol");
     }
 
     /** Every node of the whole house a stateless functional object, as jOntology judges one: the extensions' too. */
@@ -76,9 +75,10 @@ class WholeHouseTaxonomyTest {
      */
     @Test
     void everyRoleNamed_butTheWordsKeptForWhatIsToCome() {
-        assertEquals(List.of("placeholder", "error", "check", "query", "skip", "increase", "decrease", "clear", "remove",
-                             "previous", "next", "first", "last", "more", "foot", "page", "host", "index", "detail", "media", "fallback",
-                             "dock", "group", "opener", "pull", "scroll"),
+        assertEquals(List.of("subtitle", "category", "placeholder", "status", "error", "check", "style", "palette", "query", "skip",
+                             "toggle", "adjust", "reset", "increase", "decrease", "clear", "remove", "preferences", "previous", "next", "first",
+                             "last", "more", "foot", "page", "host", "index", "detail", "setting", "layout", "body", "media", "fallback",
+                             "member", "entry", "dock", "group", "opener", "pull", "scroll"),
                 HOUSE.roles().stream().filter(r -> HOUSE.partsNaming(r).isEmpty()).map(r -> r.name().value()).toList());
     }
 
@@ -93,7 +93,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(25 + 128 + 22 + 95 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
+        assertEquals(23 + 116 + 22 + 95 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 
@@ -113,12 +113,12 @@ class WholeHouseTaxonomyTest {
         for (String o : List.of("context-menu", "float-layer", "tab-opener")) expected.put(o, "overlay");
         expected.put("svg-pan-zoom", "zoomable");
         for (String a : List.of("split-grid", "split-grid-mirror", "pane-thumbs")) expected.put(a, "arrangeable");
-        for (String m : List.of("focus-monitor", "steward-monitor", "context-menu-steward")) expected.put(m, "monitor");
-        for (String p : List.of("list-master-widget", "add-tab", "pan-zoom-bar", "mpa-chrome")) expected.put(p, "plain");
+        expected.put("context-menu-steward", "monitor");
+        for (String p : List.of("add-tab", "pan-zoom-bar")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));
         assertEquals(expected, actual);
-        assertEquals(7 + 8, HouseControllability.INSTANCE.classification().declared().size(), "the common seven - the panel, the one emphasised, dropped (20 Oct) - and eight the modules declare - the split grid's mirror, a control, arranged as the grid is");
+        assertEquals(7 + 6, HouseControllability.INSTANCE.classification().declared().size(), "the common seven - the panel, the one emphasised, dropped (20 Oct) - and six the modules declare, the monitors no components (20 Oct) - the split grid's mirror, a control, arranged as the grid is");
         for (Component<?> leaf : HOUSE.components())
             assertTrue(HouseControllability.INSTANCE.findControlType(HOUSE, leaf) != null, leaf + " has a type");
     }

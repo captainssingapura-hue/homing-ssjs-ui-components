@@ -1,10 +1,8 @@
 package hue.captains.singapura.js.homing.preferences;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.elements.SwitchModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -19,7 +17,7 @@ import java.util.List;
  * in the store. Params: {@code name, label, summary?, default?, on?, off?} —
  * the last two the words shown beside the switch in each state.
  */
-public record ToggleWidgetModule() implements Widget<Widget._None, ToggleWidgetModule>, ImplFor<HousePreferences.ToggleWidget> {
+public record ToggleWidgetModule() implements Widget<Widget._None, ToggleWidgetModule> {
 
     /** The class. */
     public record ToggleWidget() implements Widget._Class<Widget._None, ToggleWidgetModule> {}

@@ -17,13 +17,6 @@ public record MpaStyleDeclaration() implements StyleDeclaration {
 
     @Override public List<Provided<?, ?>> provided() {
         return List.of(new Provided<>(Base.INSTANCE, List.of(
-                new PreferencesButton(),
-                new MpaChrome(),
-                new ThemeWidget(),
-                new PreferencesButtonPreferences(),
-                new KickerStatus(),
-                new ChoiceOptionStyle(),
-                new KickerSubtitle(),
-                new ChoiceOptionPalette())));
+                new PreferencesButton())));
     }
 }

@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.KeyboardStewardModule;
 import hue.captains.singapura.js.homing.component.keyboard.focusParty;
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -13,7 +12,6 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.ListRowModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseMonitors;
 
 import java.util.List;
 
@@ -27,7 +25,7 @@ import java.util.List;
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 32,
         reason = "It makes its own elements, reaches the document, places elements, wears classes of its own, writes attributes, writes styles and writes text of its own: it waits for the designed containers and the content components to draw only components, and for a party that says where the browser's focus moves.")
-public record FocusMonitorModule() implements Widget<Widget._None, FocusMonitorModule>, ImplFor<HouseMonitors.FocusMonitor> {
+public record FocusMonitorModule() implements Widget<Widget._None, FocusMonitorModule> {
 
     /** A widget: {@code new FocusMonitor(branch, params)}; {@code refresh()}, {@code holderRow()}, {@code candidateRow()}, {@code dispose()}. */
     public record FocusMonitor() implements Widget._Class<Widget._None, FocusMonitorModule> {

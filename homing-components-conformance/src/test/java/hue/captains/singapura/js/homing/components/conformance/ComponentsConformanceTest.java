@@ -160,12 +160,15 @@ class ComponentsConformanceTest {
      * Drawn without the component the leaf declares: the float's bar its own strip. And every part its owner made
      * inline until the inline reading was withdrawn (owner, 20 Oct) - each to become a component of its own: the
      * lip, the title bar and the action bar, whose behaviour their owners hear, once a
-     * component's own events are settled (RFC 0071 port, question 2). The rooms - a strip's tail, a site's page - are no
+     * component's own events are settled (RFC 0071 port, question 2). And the preferences button's old module, which still
+     * opens the dialog its taxonomy no longer gives it (owner, 20 Oct): ported, it hands its click to its owner, the site's
+     * chrome - a widget - which opens it. The rooms - a strip's tail, the one left - are no
      * parts at all: their owners' own (Component.rooms()).
      */
     private static final List<String> COMPOSITION_LEDGER = List.of(
             "EdgeStripModule (EdgeStrip): its part reveal is Lip, which no module implements - a part is a component of its own, never realized by its owner inline",
             "DialogModule (Dialog): its part actions is ActionBar, which no module implements - a part is a component of its own, never realized by its owner inline",
             "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
-            "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline");
+            "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline",
+            "PreferencesButtonModule (PreferencesButton) imports Dialog (DialogModule), which none of its parts declares");
 }

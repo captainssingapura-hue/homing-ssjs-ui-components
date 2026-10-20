@@ -14,9 +14,6 @@ public record UiPreferencesComponentModule() implements ComponentModule {
     public static final UiPreferencesComponentModule INSTANCE = new UiPreferencesComponentModule();
 
     @Override public List<? extends Component<?>> components() {
-        return List.of(HousePreferences.PreferencesView.INSTANCE, HousePreferences.PreferenceField.INSTANCE,
-                       HousePreferences.ChoiceWidget.INSTANCE, HousePreferences.ToggleWidget.INSTANCE,
-                       HousePreferences.ScaleWidget.INSTANCE, HousePreferences.SettingRow.INSTANCE,
-                       HousePreferences.OverviewWidget.INSTANCE, HousePreferences.ListMasterWidget.INSTANCE);
+        return List.of(HousePreferences.SettingRow.INSTANCE);
     }
 }
