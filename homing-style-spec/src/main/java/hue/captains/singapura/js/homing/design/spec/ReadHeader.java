@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
+import hue.captains.singapura.js.homing.component.taxonomy.Classed;
 import hue.captains.singapura.js.homing.component.taxonomy.Flag;
 import hue.captains.singapura.js.homing.component.taxonomy.Importances;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
@@ -40,7 +41,11 @@ public record ReadHeader() implements StatelessFunctionalObject {
                 parts.add(player);
             }
         var states = new ArrayList<ComponentHeader.HeaderState>();
-        for (StateType<?> s : component.states() == null ? List.<StateType<?>>of() : component.states()) {
+        for (StateType<?> each : component.states() == null ? List.<StateType<?>>of() : component.states()) {
+            if (!(each instanceof Classed<?> s)) {   // drawn by what it moves or shows: no values to class, no words, no level
+                states.add(new ComponentHeader.HeaderState(each, List.of(), Map.of(), false, Optional.empty(), Optional.empty()));
+                continue;
+            }
             Map<StateValue, String> words = new LinkedHashMap<>();
             List<StateValue> allowed = s.values();
             for (StateValue v : allowed.subList(1, allowed.size())) words.put(v, s.word(v));

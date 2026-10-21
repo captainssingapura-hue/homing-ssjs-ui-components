@@ -21,7 +21,8 @@ public record DualKit() implements StatelessFunctionalObject {
     /** The classes it gives, in its order. */
     public List<String> classes() {
         return List.of("ComponentBranch", "Component", "RoleBranch", "Role", "StateBranch", "StateType", "EventBranch", "EventType",
-                "Extent", "Count", "Room", "ElementPath", "Style", "FixedField", "Fixed");
+                "Extent", "Count", "Room", "ElementPath", "Style", "FixedField", "Fixed",
+                "Point", "Span", "Ranges", "Valued", "Between", "Rises", "Falls", "NamedChange", "StateClasses");
     }
 
     /** Its module. */
@@ -73,24 +74,126 @@ public record DualKit() implements StatelessFunctionalObject {
                 class StateBranch {
                     constructor(t, parent) { this.token = token("StateBranch", t); this.parent = parentOf("StateBranch", parent, StateBranch); Object.freeze(this); }
                 }
-                class StateType {
-                    constructor(t, parent, states, words, flagged, browser, level) {
-                        this.token = token("StateType", t);
-                        if (!(parent instanceof StateBranch)) throw new TypeError("StateType " + t + ": its parent is a StateBranch");
-                        this.parent = parent;
-                        if (!Array.isArray(states) || states.length < 2 || new Set(states).size !== states.length)
-                            throw new TypeError("StateType " + t + ": two states at least, each once - the one at rest first");
-                        this.states = Object.freeze(states.slice());
-                        this.rest = states[0];
-                        for (const s of Object.keys(words)) if (s === this.rest || states.indexOf(s) < 0)
-                            throw new TypeError("StateType " + t + ": a word for " + s + ", which is no state of it but the one at rest");
+                // What a type of state may be (RFC 0069, amended 21 Oct), each checked as it is made and frozen: a finite set of
+                // ranges - a named value, or the numbers between two bounds - or a value object, a text; its named changes; and,
+                // for a type whose look is a class, what its classes are said by.
+                const NAMED = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
+                class Point {
+                    constructor(value) {
+                        if (typeof value !== "string" || !NAMED.test(value)) throw new TypeError("Point: a named value, lower case words joined by a dash, not " + value);
+                        this.value = value;
+                        Object.freeze(this);
+                    }
+                    holds(v) { return v === this.value; }
+                }
+                class Span {
+                    constructor(least, most, whole) {
+                        if (!Number.isFinite(least) || !Number.isFinite(most) || !(least < most)) throw new TypeError("Span: finite bounds, its least below its most, not " + least + " to " + most);
+                        this.whole = flag("Span", "whole numbers only", whole);
+                        if (whole && !(Number.isInteger(least) && Number.isInteger(most))) throw new TypeError("Span: whole numbers have whole bounds, not " + least + " to " + most);
+                        this.least = least;
+                        this.most = most;
+                        Object.freeze(this);
+                    }
+                    holds(v) { return typeof v === "number" && v >= this.least && v <= this.most && (!this.whole || Number.isInteger(v)); }
+                }
+                class Ranges {
+                    constructor(ranges, rest) {
+                        if (!Array.isArray(ranges) || !ranges.every(r => r instanceof Point || r instanceof Span)) throw new TypeError("Ranges: its ranges, each a Point or a Span");
+                        const named = ranges.filter(r => r instanceof Point).map(r => r.value), spans = ranges.filter(r => r instanceof Span);
+                        if (new Set(named).size !== named.length) throw new TypeError("Ranges: a named value twice");
+                        for (let i = 0; i < spans.length; i++) for (let j = 0; j < i; j++)
+                            if (spans[i].least <= spans[j].most && spans[j].least <= spans[i].most) throw new TypeError("Ranges: two spans that meet");
+                        if (named.length < 2 && spans.length === 0) throw new TypeError("Ranges: two values at least");
+                        this.ranges = Object.freeze(ranges.slice());
+                        if (!this.allows(rest)) throw new TypeError("Ranges: its rest is one of its values, not " + rest);
+                        this.rest = rest;
+                        this.named = Object.freeze(named);
+                        this.continuous = spans.length > 0;
+                        Object.freeze(this);
+                    }
+                    allows(v) { return this.ranges.some(r => r.holds(v)); }
+                }
+                class Valued {
+                    constructor(kind) {
+                        if (kind !== "text") throw new TypeError("Valued: a text, not " + kind);
+                        this.kind = kind;
+                        this.rest = "";
+                        Object.freeze(this);
+                    }
+                    allows(v) { return typeof v === "string"; }
+                }
+                class Between {
+                    constructor(from, to) {
+                        if (typeof from !== "string" || typeof to !== "string" || from === to) throw new TypeError("Between: two different named values, not " + from + " and " + to);
+                        this.from = from;
+                        this.to = to;
+                        Object.freeze(this);
+                    }
+                    fits(before, after) { return before === this.from && after === this.to; }
+                }
+                class Rises {
+                    constructor() { Object.freeze(this); }
+                    fits(before, after) { return typeof before === "number" && typeof after === "number" && after > before; }
+                }
+                class Falls {
+                    constructor() { Object.freeze(this); }
+                    fits(before, after) { return typeof before === "number" && typeof after === "number" && after < before; }
+                }
+                class NamedChange {
+                    constructor(name, transition) {
+                        if (typeof name !== "string" || !NAMED.test(name)) throw new TypeError("NamedChange: lower case words joined by a dash, not " + name);
+                        if (!(transition instanceof Between || transition instanceof Rises || transition instanceof Falls)) throw new TypeError("NamedChange " + name + ": a Between, a Rises or a Falls");
+                        this.name = name;
+                        this.transition = transition;
+                        Object.freeze(this);
+                    }
+                }
+                class StateClasses {
+                    constructor(words, flagged, browser, level) {
                         this.words = Object.freeze(Object.assign({}, words));
-                        this.flag = flag("StateType " + t, "a yes or a no", flagged);
-                        if (browser !== null && typeof browser !== "string") throw new TypeError("StateType " + t + ": the browser's pseudo-class, or none");
+                        this.flag = flag("StateClasses", "a yes or a no", flagged);
+                        if (browser !== null && typeof browser !== "string") throw new TypeError("StateClasses: the browser's pseudo-class, or none");
                         this.browser = browser;
                         this.level = level;
                         Object.freeze(this);
                     }
+                }
+                class StateType {
+                    constructor(t, parent, domain, changes, classes) {
+                        this.token = token("StateType", t);
+                        if (!(parent instanceof StateBranch)) throw new TypeError("StateType " + t + ": its parent is a StateBranch");
+                        this.parent = parent;
+                        if (!(domain instanceof Ranges || domain instanceof Valued)) throw new TypeError("StateType " + t + ": its domain, Ranges or Valued");
+                        this.domain = domain;
+                        if (!Array.isArray(changes) || !changes.every(c => c instanceof NamedChange) || new Set(changes.map(c => c.name)).size !== changes.length)
+                            throw new TypeError("StateType " + t + ": its named changes, each a NamedChange, each name once");
+                        for (const c of changes) {
+                            const x = c.transition;
+                            if (x instanceof Between ? !(domain.allows(x.from) && domain.allows(x.to)) : !(domain instanceof Ranges && domain.continuous))
+                                throw new TypeError("StateType " + t + ": its change " + c.name + " does not fit its domain");
+                        }
+                        this.changes = Object.freeze(changes.slice());
+                        if (classes !== null && !(classes instanceof StateClasses)) throw new TypeError("StateType " + t + ": its classes, a StateClasses, or none");
+                        this.classed = classes !== null;
+                        if (this.classed && !(domain instanceof Ranges && !domain.continuous)) throw new TypeError("StateType " + t + ": classed, and its values not all named");
+                        // what the page needs of it: its named values, the one at rest first, where its look is a class
+                        this.states = this.classed ? domain.named : Object.freeze([]);
+                        this.rest = domain.rest;
+                        if (this.classed && this.states[0] !== this.rest) throw new TypeError("StateType " + t + ": a classed type rests at its first value");
+                        const words = this.classed ? classes.words : {};
+                        for (const s of Object.keys(words)) if (s === this.rest || this.states.indexOf(s) < 0)
+                            throw new TypeError("StateType " + t + ": a word for " + s + ", which is no state of it but the one at rest");
+                        this.words = this.classed ? classes.words : Object.freeze({});
+                        this.flag = this.classed && classes.flag;
+                        this.browser = this.classed ? classes.browser : null;
+                        this.level = this.classed ? classes.level : null;
+                        Object.freeze(this);
+                    }
+                    /** Whether a value is one it allows. */
+                    allows(value) { return this.domain.allows(value); }
+                    /** Its named change, by its name; none for a name it has not. */
+                    change(name) { return this.changes.find(c => c.name === name) ?? null; }
                 }
                 class EventBranch {
                     constructor(t, parent) { this.token = token("EventBranch", t); this.parent = parentOf("EventBranch", parent, EventBranch); Object.freeze(this); }
@@ -185,7 +288,8 @@ public record DualKit() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
                 }
-                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Room, ElementPath, Style, FixedField, Fixed };
+                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Room, ElementPath, Style, FixedField, Fixed,
+                    Point, Span, Ranges, Valued, Between, Rises, Falls, NamedChange, StateClasses };
                 """;
     }
 }

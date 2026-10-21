@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.look;
 
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
+import hue.captains.singapura.js.homing.component.taxonomy.Classed;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
@@ -51,7 +52,8 @@ public record StatesAndEventsModule() implements EsModule<StatesAndEventsModule>
     public List<String> selfContent(ModuleNameResolver resolver) {
         Taxonomy house = InstalledStyling.get().taxonomy();
         var states = new ArrayList<String>();
-        for (StateType<?> s : house.states().types()) {
+        for (StateType<?> t : house.states().types()) {
+            if (!(t instanceof Classed<?> s)) continue;   // the old look draws classes: its classed states alone
             String token = s.name().value();
             List<StateValue> values = s.values();
             states.add(constant(token) + ": Object.freeze({ token: " + quoted(token)

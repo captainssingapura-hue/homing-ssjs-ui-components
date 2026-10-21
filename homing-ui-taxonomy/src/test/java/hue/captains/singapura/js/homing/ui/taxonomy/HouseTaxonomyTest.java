@@ -164,7 +164,7 @@ class HouseTaxonomyTest {
         assertEquals(List.of("horizontal", "vertical"), tokens(HouseStates.Orientation.INSTANCE), "laid along, unless stood up");
     }
 
-    private static List<String> tokens(hue.captains.singapura.js.homing.component.taxonomy.StateType<?> type) {
+    private static List<String> tokens(hue.captains.singapura.js.homing.component.taxonomy.Classed<?> type) {
         return type.values().stream().map(hue.captains.singapura.js.homing.component.taxonomy.StateValue::token).toList();
     }
 

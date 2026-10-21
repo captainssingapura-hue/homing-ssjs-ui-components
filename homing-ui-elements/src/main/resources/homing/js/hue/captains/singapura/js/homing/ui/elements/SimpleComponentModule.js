@@ -119,7 +119,7 @@ class SimpleComponent {
         this._state[axis] = v;
         var a = Leaf.AXES[axis];
         if (typeof a.reflect === "function") a.reflect(this.el, v);
-        if (a.state) this.#styles.set(a.state, a.state.flag ? String(v) : v);
+        if (a.state && a.state.classed) this.#styles.set(a.state, a.state.flag ? String(v) : v);   // a class only for a classed state (RFC 0069, amended)
         if (this._behavior && typeof this._behavior.changed === "function") this._behavior.changed(axis, v);
         if (a.state && this._handlers.has(a.state)) this._handlers.get(a.state).handle(new StateChange(a.state, this, raw, was));
     }

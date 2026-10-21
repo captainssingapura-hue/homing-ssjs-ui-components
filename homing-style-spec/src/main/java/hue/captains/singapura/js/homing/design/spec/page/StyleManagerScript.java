@@ -172,6 +172,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
 
                     set(type, state) {
                         if (!(type instanceof StateType) || !this.page.draws(type)) throw new TypeError("set: a state type of the states' dual");
+                        if (!type.classed) throw new TypeError("set: " + type.token + " writes no class - a state that is not classed is drawn by what it moves or shows");
                         if (type.browser !== null) throw new TypeError("set: " + type.token + " is the browser's to draw (" + type.browser + "), never the page's");
                         if (type.states.indexOf(state) < 0) throw new TypeError("set: " + type.token + " is " + type.states.join(" or ") + ", not " + state);
                         const was = this.state(type);

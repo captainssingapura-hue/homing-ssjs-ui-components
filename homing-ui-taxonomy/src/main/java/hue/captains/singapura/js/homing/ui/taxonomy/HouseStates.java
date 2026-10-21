@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Classed;
 import hue.captains.singapura.js.homing.component.taxonomy.Flag;
 import hue.captains.singapura.js.homing.component.taxonomy.Importance;
 import hue.captains.singapura.js.homing.component.taxonomy.L1_StateBranch;
@@ -120,7 +121,7 @@ public final class HouseStates {
     }
 
     /** How much of the group it speaks for is chosen: none, some or all. The mixed checkbox's, never a plain one's. */
-    public record Coverage() implements StateType<Picking>, Importance.Tertiary {
+    public record Coverage() implements Classed<Picking>, Importance.Tertiary {
         public static final Coverage INSTANCE = new Coverage();
         private static final List<StateValue> VALUES = List.of(new StateValue("none"), new StateValue("some"), new StateValue("all"));
         @Override public Picking parent() { return Picking.INSTANCE; }
@@ -222,7 +223,7 @@ public final class HouseStates {
     }
 
     /** Where the page's keys are, as the keyboard's steward says: away, candidate, lent or held. */
-    public record Keyboard() implements StateType<Interaction>, Importance.Secondary {
+    public record Keyboard() implements Classed<Interaction>, Importance.Secondary {
         public static final Keyboard INSTANCE = new Keyboard();
         private static final List<StateValue> VALUES = List.of(new StateValue("away"), new StateValue("candidate"),
                 new StateValue("lent"), new StateValue("held"));
@@ -241,7 +242,7 @@ public final class HouseStates {
     // ── physical ─────────────────────────────────────────────────────────
 
     /** How far off its own plane it sits: flat, elevated or sunken. */
-    public record Elevation() implements StateType<Physical>, Importance.Senary {
+    public record Elevation() implements Classed<Physical>, Importance.Senary {
         public static final Elevation INSTANCE = new Elevation();
         private static final List<StateValue> VALUES = List.of(new StateValue("flat"), new StateValue("elevated"), new StateValue("sunken"));
         @Override public Physical parent() { return Physical.INSTANCE; }
@@ -250,7 +251,7 @@ public final class HouseStates {
     }
 
     /** Which way a thing laid along a line runs: horizontal, or vertical - stood up, as a fader. */
-    public record Orientation() implements StateType<Physical>, Importance.Senary {
+    public record Orientation() implements Classed<Physical>, Importance.Senary {
         public static final Orientation INSTANCE = new Orientation();
         private static final List<StateValue> VALUES = List.of(new StateValue("horizontal"), new StateValue("vertical"));
         @Override public Physical parent() { return Physical.INSTANCE; }
