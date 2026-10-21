@@ -114,7 +114,7 @@ class HouseStylesTest {
     void everyStyle_drawsEveryIcon_andItsCrossIsItsOwn() {
         StyleManager manager = HouseStyles.INSTANCE.styling().manager();
         var icons = TAXONOMY.components().stream().filter(c -> TAXONOMY.parent(c) == HouseBranches.Icon.INSTANCE).toList();
-        assertEquals(20, icons.size(), "the house's fifteen and the panes' five");
+        assertEquals(21, icons.size(), "the house's sixteen - the pacman among them (21 Oct) - and the panes' five");
         for (DesignStyle<?> s : HouseStyles.STYLES)
             for (Component<?> icon : icons) assertTrue(manager.rule(s, new Casting(icon)).contains("content: \""), s.token() + " draws " + icon.token());
         var crosses = new java.util.LinkedHashMap<String, String>();

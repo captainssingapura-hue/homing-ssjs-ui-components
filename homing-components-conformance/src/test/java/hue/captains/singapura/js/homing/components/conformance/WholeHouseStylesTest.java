@@ -27,7 +27,7 @@ class WholeHouseStylesTest {
     void theHousesInstance_holdsToTheCentralRules_overTheWholeHouse() {
         Styling styling = HouseStyles.INSTANCE.styling();
         StyleManager manager = styling.manager();
-        assertEquals(161, HOUSE.castings().size(), "the rooms no castings, their owners' own; the slider group and its casting as what adjusts dropped, the panel, its bar and the kicker as a title; the twelve widgets no components, and the thirteen castings only a widget's role made (20 Oct); the text cell on its own, as a title and as a value (D42); each icon once, its look its own whatever role it plays (D52); the whole house's castings, the house's own and every extension's");
+        assertEquals(162, HOUSE.castings().size(), "the pacman icon's among them (21 Oct); the rooms no castings, their owners' own; the slider group and its casting as what adjusts dropped, the panel, its bar and the kicker as a title; the twelve widgets no components, and the thirteen castings only a widget's role made (20 Oct); the text cell on its own, as a title and as a value (D42); each icon once, its look its own whatever role it plays (D52); the whole house's castings, the house's own and every extension's");
         assertEquals(HOUSE.castings().size(), manager.implementations(Base.INSTANCE).size(), "Base's for every one of them, from the jar that adds it");
         for (DesignStyle<?> s : styling.styles()) {
             String sheet = styling.styleSheet(s.token());

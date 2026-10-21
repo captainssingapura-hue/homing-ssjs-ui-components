@@ -91,6 +91,11 @@ public final class HouseIcons {
         public static final LevelIcon INSTANCE = new LevelIcon();
     }
 
+    /** Play: the round eater, mouth open, going along its way - for a game, or anything made for the fun of it. */
+    public record PacmanIcon() implements IconLeaf {
+        public static final PacmanIcon INSTANCE = new PacmanIcon();
+    }
+
     // ── the panes': how a room is parted among its panes, and where the work is ──
 
     /** Columns: the room parted side by side, and a new one beside what is here. */

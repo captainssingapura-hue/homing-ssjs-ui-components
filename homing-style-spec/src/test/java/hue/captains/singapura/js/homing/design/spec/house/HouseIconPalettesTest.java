@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The house's icon palettes (RFC 0067, D56): every icon its picture in every style - its style's own, or base's: a
- * character, or for rotate and flip an SVG, the page drawing a placeholder; each character the one today's sheet of that
+ * character, or for rotate, flip and the pacman an SVG - sketchy drawing its own pacman; each character the one today's sheet of that
  * style drew on the icon's ::before, moved unchanged; a palette refused that leaves an icon without a picture, draws one
  * that is no icon, or is a style's twice; and the page's module, one object a picture, shared by the styles that draw it
  * alike.
@@ -41,12 +41,12 @@ class HouseIconPalettesTest {
     private static final Pattern GLYPH = Pattern.compile("content:\\s*\"([^\"]*)\"");
 
     @Test
-    void everyIcon_hasItsPicture_inEveryStyle_theSamplesSvgs() {
-        assertEquals(20, PICTURES.icons().size());
+    void everyIcon_hasItsPicture_inEveryStyle_threeSvgs() {
+        assertEquals(21, PICTURES.icons().size(), "the pacman among them (21 Oct)");
         for (DesignStyle<?> s : SPEC.styles())
             for (IconLeaf i : PICTURES.icons()) {
-                boolean sample = i.equals(HouseIcons.RotateIcon.INSTANCE) || i.equals(HouseIcons.FlipIcon.INSTANCE);
-                assertEquals(sample, PICTURES.picture(s, i) instanceof IconPicture.Svg, s.token() + " " + i.token());
+                boolean svg = i.equals(HouseIcons.RotateIcon.INSTANCE) || i.equals(HouseIcons.FlipIcon.INSTANCE) || i.equals(HouseIcons.PacmanIcon.INSTANCE);
+                assertEquals(svg, PICTURES.picture(s, i) instanceof IconPicture.Svg, s.token() + " " + i.token());
             }
     }
 
@@ -94,7 +94,9 @@ class HouseIconPalettesTest {
         String js = IconPicturesScript.INSTANCE.script(PICTURES, SPEC.selectable());
         assertEquals(7, count(js, "const GLYPH_CLOSE_ICON"), "base's cross, and five styles' and sketchy's own");
         assertEquals(1, count(js, "const GLYPH_ADD_ICON "), "one plus, for every style");
-        assertEquals(1, count(js, "const SVG_ROTATE_ICON "), "the samples: one each, a placeholder in every style");
+        assertEquals(1, count(js, "const SVG_ROTATE_ICON "), "rotate: one picture, base's, in every style");
+        assertEquals(1, count(js, "const SVG_PACMAN_ICON "), "base's pacman, for every style but sketchy");
+        assertEquals(1, count(js, "const SVG_PACMAN_ICON_SKETCHY "), "sketchy's own pacman");
         assertEquals(SPEC.selectable().size(), count(js, ", new Map(["));
         assertTrue(js.contains("export { iconPictures };"));
         assertFalse(js.contains("content"), "a picture is no content");

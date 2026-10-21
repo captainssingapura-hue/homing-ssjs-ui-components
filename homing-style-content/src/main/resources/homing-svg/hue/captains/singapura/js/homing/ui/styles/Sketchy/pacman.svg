@@ -1,0 +1,8 @@
+<!-- The pacman icon in sketchy, its own: drawn by hand - its body in the accent, outlined in the text's colour, its mouth wider; its eye in the text's colour; a trail of small pellets in the success ink, and a big one in the danger ink, each the palette's (RFC 0067, D56). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em">
+    <path d="M 9.5 12 L 14.8 6.7 A 7.5 7.5 0 1 0 14.8 17.3 Z" style="fill: var(--fp-accent); stroke: var(--fp-text)" stroke-width="1.3" stroke-linejoin="round"/>
+    <circle cx="9.6" cy="7.9" r="1.1" style="fill: var(--fp-text); stroke: none"/>
+    <circle cx="17.4" cy="12" r="0.9" style="fill: var(--fp-success-ink); stroke: none"/>
+    <circle cx="19.8" cy="12" r="0.9" style="fill: var(--fp-success-ink); stroke: none"/>
+    <circle cx="22.1" cy="12" r="1.5" style="fill: var(--fp-danger-ink); stroke: var(--fp-text)" stroke-width="0.6"/>
+</svg>

@@ -16,6 +16,7 @@ import hue.captains.singapura.js.homing.design.spec.house.IconPicturesScript;
 import hue.captains.singapura.js.homing.design.spec.house.IconSvg;
 import hue.captains.singapura.js.homing.design.spec.house.IconSvgs;
 import hue.captains.singapura.js.homing.ui.styles.Base;
+import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.design.styling.CheckDeclaration;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import org.junit.jupiter.api.Test;
@@ -88,11 +89,18 @@ class ContentTest {
         assertEquals(List.of(), IconSvgs.INSTANCE.problems(PICTURES, SPEC.styles(), TREE));
         IconSvg rotate = IconSvgs.INSTANCE.find(Base.INSTANCE, new IconPicture.Svg("rotate")).orElseThrow();
         String flip = IconSvgs.INSTANCE.resource(Base.INSTANCE, new IconPicture.Svg("flip"));
-        assertEquals(List.of(rotate.resource(), flip), IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles()), "base's two, drawn in every style");
+        IconSvg pacman = IconSvgs.INSTANCE.find(Base.INSTANCE, new IconPicture.Svg("pacman")).orElseThrow();
+        IconSvg sketchy = IconSvgs.INSTANCE.find(Sketchy.INSTANCE, new IconPicture.Svg("pacman")).orElseThrow();
+        assertEquals(java.util.Set.of(rotate.resource(), flip, pacman.resource(), sketchy.resource()), java.util.Set.copyOf(IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles())),
+                "base's three, and sketchy's own pacman");
         assertEquals(List.of(flip), IconSvgs.INSTANCE.awaiting(PICTURES, SPEC.styles()), "flip's not here yet: drawn as its placeholder");
         assertEquals(List.of("text", "accent"), rotate.colours(), "its arc in the text's colour, its head in the accent");
+        assertEquals(List.of("accent", "text", "danger-ink"), pacman.colours(), "its body, its eye, its pellets");
+        assertEquals(List.of("accent", "text", "success-ink", "danger-ink"), sketchy.colours(), "its body outlined, its eye, its trail, its big pellet");
         String js = IconPicturesScript.INSTANCE.script(PICTURES, SPEC.selectable());
         assertTrue(js.contains("svg: \"rotate\", markup: " + JsLiterals.INSTANCE.string(rotate.markup())), "rotate's markup, as it is");
+        assertTrue(js.contains("svg: \"pacman\", markup: " + JsLiterals.INSTANCE.string(pacman.markup())), "base's pacman, as it is");
+        assertTrue(js.contains("svg: \"pacman\", markup: " + JsLiterals.INSTANCE.string(sketchy.markup())), "sketchy's own, as it is");
         assertTrue(js.contains("Object.freeze({ svg: \"flip\" })"), "flip's name alone");
         System.out.println("[content] " + IconSvgs.INSTANCE.drawn(PICTURES, SPEC.styles()).size() + " SVG pictures drawn: rotate's held whole, naming "
                 + rotate.colours() + "; flip's awaiting its resource");

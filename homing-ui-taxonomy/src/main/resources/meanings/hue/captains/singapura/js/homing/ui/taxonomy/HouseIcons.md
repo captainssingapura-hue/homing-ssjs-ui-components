@@ -60,6 +60,10 @@ More or less of what it means: the extent axis.
 
 How much of it: a level, a volume, a gain.
 
+## PacmanIcon
+
+Play: the round eater, mouth open, going along its way - for a game, or anything made for the fun of it.
+
 ## ColumnIcon
 
 Columns: the room parted side by side, and a new one beside what is here.

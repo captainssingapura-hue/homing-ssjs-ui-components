@@ -54,6 +54,7 @@ public record HouseIconPalettes() implements StatelessFunctionalObject {
         p.put(HouseIcons.MergeIcon.INSTANCE, new Glyph("▣"));
         p.put(HouseIcons.DetachIcon.INSTANCE, new Glyph("⧉"));
         p.put(HouseIcons.WithinIcon.INSTANCE, new Glyph("◉"));
+        p.put(HouseIcons.PacmanIcon.INSTANCE, new Svg("pacman"));
         return new IconPalette(Base.INSTANCE, p);
     }
 
@@ -76,6 +77,7 @@ public record HouseIconPalettes() implements StatelessFunctionalObject {
         p.put(HouseIcons.GripIcon.INSTANCE, new Glyph("⁘"));
         p.put(HouseIcons.DiscloseIcon.INSTANCE, new Glyph("➤"));
         p.put(HouseIcons.SettingsIcon.INSTANCE, new Glyph("⚒"));
+        p.put(HouseIcons.PacmanIcon.INSTANCE, new Svg("pacman"));   // its own pacman, drawn by hand
         return p;
     }
 

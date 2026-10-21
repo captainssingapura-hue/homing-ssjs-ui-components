@@ -31,6 +31,7 @@ public record UiIconsStyleDeclaration() implements StyleDeclaration {
                 new SizeIcon(),
                 new AspectIcon(),
                 new ExtentIcon(),
-                new LevelIcon())));
+                new LevelIcon(),
+                new PacmanIcon())));
     }
 }
