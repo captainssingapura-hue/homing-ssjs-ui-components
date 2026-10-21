@@ -80,7 +80,8 @@ public record FixedTypes() implements StatelessFunctionalObject {
 
     /**
      * A component's fixed type, as its dual declares it: the kit's {@code Fixed} for the component's node, named in the
-     * dual - {@code class FixedPlainButton extends Fixed}, handing on what it is given - with its fields where its static
+     * dual - {@code class FixedPlainButton extends Fixed}, saying its component ({@code static COMPONENT}), by which its
+     * owner places a part it makes, and handing on what it is given - with its fields where its static
      * parts leave a choice, each the kit's {@code FixedField} for it to check: its name, its count - its fewest and its most,
      * {@code null} for none - and its players' fixed types, looked up as an object is made.
      *
@@ -93,6 +94,6 @@ public record FixedTypes() implements StatelessFunctionalObject {
         String declared = fields.isEmpty() ? "" : "static FIELDS = [" + String.join(", ", fields.stream().map(f -> "new FixedField("
                 + js.string(f.name()) + ", new Count(" + f.least() + ", " + (f.most() == null ? "null" : f.most()) + "), () => ["
                 + String.join(", ", f.players().stream().map(this::name).toList()) + "])").toList()) + "]; ";
-        return new TreeDual.Companion(n, "class " + n + " extends Fixed { " + declared + "constructor(...given) { super(" + node + ", given); } }");
+        return new TreeDual.Companion(n, "class " + n + " extends Fixed { static COMPONENT = " + node + "; " + declared + "constructor(...given) { super(" + node + ", given); } }");
     }
 }

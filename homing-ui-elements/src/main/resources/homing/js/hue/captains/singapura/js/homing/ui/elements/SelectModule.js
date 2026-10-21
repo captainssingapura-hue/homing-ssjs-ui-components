@@ -5,7 +5,7 @@
 // operations, the list the browser opens is the browser's, and a pick made is
 // the element's change, dressed as its COMMIT.
 //
-//   var s = new Select(branch.elementMaker("select"), new FixedSelect(), me.slot(SLOT_…));
+//   var s = new Select(branch.elementMaker("select"), new FixedSelect(), me.place(FixedSelect));
 //   s.options   [{ value, label }], a bare word its own label
 //   s.value  s.enabled  s.size
 //   s.setOnCommit(handler)  s.setOnEnabledChanged(handler)

@@ -4,7 +4,7 @@
 // On the style manager (RFC 0071): its module stamped with its header (D19),
 // its states set through its reference.
 //
-//   var m = new Tick(branch.elementMaker("x"), new FixedTick(), me.slot(SLOT_…));
+//   var m = new Tick(branch.elementMaker("x"), new FixedTick(), me.place(FixedTick));
 // =============================================================================
 
 class Tick extends SimpleComponent {

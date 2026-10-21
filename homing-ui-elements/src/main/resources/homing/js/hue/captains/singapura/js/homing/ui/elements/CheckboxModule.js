@@ -5,7 +5,7 @@
 // turns it on the element, and the component takes it as its checked, its
 // Checked state's class held while it holds; a setter turns the element's.
 //
-//   var c = new Checkbox(branch.elementMaker("checkbox"), new FixedCheckbox(), me.slot(SLOT_…));
+//   var c = new Checkbox(branch.elementMaker("checkbox"), new FixedCheckbox(), me.place(FixedCheckbox));
 //   c.checked  c.enabled
 //   c.setOnCheckedChanged(handler)   by the user (the DOM event carried) or a setter
 //   c.setOnCommit(handler)           the user done: a tick turned

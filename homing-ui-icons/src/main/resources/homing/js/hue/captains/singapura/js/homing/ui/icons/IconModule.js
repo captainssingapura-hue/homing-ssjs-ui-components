@@ -16,7 +16,7 @@
 // Its module is stamped with every icon leaf's header, merged (D19), and the
 // leaves it realizes - each one's node, fixed type and binding (LEAVES_IMPLEMENTED).
 //
-//   var icon = new Icon(branch.elementMaker("cross"), new FixedCloseIcon(), me.slot(SLOT_…));
+//   var icon = new Icon(branch.elementMaker("cross"), new FixedCloseIcon(), me.place(FixedCloseIcon));
 //     icon.el          the element, for its owner to lay out
 //     icon.icon        the icon it is: its leaf's node, ComponentCloseIcon
 //     icon.extent = 1  how much of its colour's meaning it carries (the keys mark's degree)

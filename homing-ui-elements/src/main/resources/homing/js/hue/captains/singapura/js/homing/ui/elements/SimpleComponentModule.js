@@ -51,7 +51,7 @@
 //   class PlainButton extends Button {
 //       constructor(make, fixed, place) { super(make, fixed, FixedPlainButton, place ?? managePlainButton); }
 //   }
-//   var b = new PlainButton(branch.elementMaker("save"), new FixedPlainButton(), me.slot(SLOT_ACTION_BAR_PLAIN_BUTTON_ACTIONS));
+//   var b = new PlainButton(branch.elementMaker("save"), new FixedPlainButton(), me.place(FixedPlainButton));
 //     make    the maker its owner's branch issues: it makes the <TAG>, once
 //     fixed   what is immutable for its life: an object of its own fixed type,
 //             made by its dual (D30) - none of a bag of named values
@@ -160,8 +160,8 @@ class SimpleComponent {
         CssClassManagerInstance[_COMPONENT_DEGREE_SETTER[extent.token]](this.el, v === extent.rest ? null : v);
     }
 
-    /** A placement along a slot the component declares, for one part it makes: its reference's, used once. */
-    _slot(slot) { return this.#styles.slot(slot); }
+    /** A placement for one part it makes, by the part's fixed type - and its role, only where that player fills two places: its reference's, used once. */
+    _place(fixed, role) { return this.#styles.place(fixed, role); }
 
     /** A room of its own placed - an element of its own inside it that is no part (RFC 0067): its reference writes the room's class, once. */
     _room(room, element) { this.#styles.room(room, element); }

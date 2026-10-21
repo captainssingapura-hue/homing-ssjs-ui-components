@@ -5,7 +5,7 @@
 // events are the element's, dressed: a word typed its INPUT, the user done with
 // it (the element's change) its COMMIT.
 //
-//   var t = new TextBox(branch.elementMaker("text-box"), new FixedTextBox(), me.slot(SLOT_…));
+//   var t = new TextBox(branch.elementMaker("text-box"), new FixedTextBox(), me.place(FixedTextBox));
 //   t.value  t.placeholder  t.enabled  t.size
 //   t.setOnInput(handler)  t.setOnCommit(handler)  t.setOnEnabledChanged(handler)
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.

@@ -3,7 +3,7 @@
 // On the style manager (RFC 0071): its module stamped with its header (D19),
 // its fixed type and its binding the header's.
 //
-//   var b = new PlainButton(branch.elementMaker("go"), new FixedPlainButton(), me.slot(SLOT_…));   in a slot
+//   var b = new PlainButton(branch.elementMaker("go"), new FixedPlainButton(), me.place(FixedPlainButton));   in a slot
 //   var b = new PlainButton(branch.elementMaker("go"), new FixedPlainButton());                     at the root
 //   b.label = "Go"   b.enabled = false   b.size = -1
 //   b.setOnClick(handler)

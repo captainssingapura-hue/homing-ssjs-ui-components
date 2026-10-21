@@ -7,7 +7,7 @@
 // slot by its own reference. It drives the one view it is wired to, once and for
 // good, as a handler is set: what it is wired to never changes.
 //
-//   var bar = new PanZoomBar(branch.createBranch("zoom"), new FixedPanZoomBar(), me.slot(SLOT_…));
+//   var bar = new PanZoomBar(branch.createBranch("zoom"), new FixedPanZoomBar(), me.place(FixedPanZoomBar));
 //   bar.drive(view)    the view it drives: zoomIn, zoomOut, fit, view, onChange - once
 //   bar.root           its row
 //   bar.dispose()      stops following the view, and dissolves its branch
@@ -39,13 +39,13 @@ class PanZoomBar extends SimpleComponent {
         css.addClass(this.el, pz_bar);
         this.el.setAttribute("role", "group");
         this.el.setAttribute("aria-label", "Zoom");
-        this._out = this._button("out", "−", "Zoom out", SLOT_PAN_ZOOM_BAR_PLAIN_BUTTON_ZOOM_OUT, new PanZoomPress(this, "zoomOut"));
+        this._out = this._button("out", "−", "Zoom out", RoleZoomOut, new PanZoomPress(this, "zoomOut"));
         // the zoom, read out by the house's readout - an output, which says its changes to whoever cannot see them
-        this._readout = new Readout(branch.elementMaker("readout"), new FixedReadout(), this._slot(SLOT_PAN_ZOOM_BAR_READOUT_VALUE));
+        this._readout = new Readout(branch.elementMaker("readout"), new FixedReadout(), this._place(FixedReadout));
         css.addClass(this._readout.el, pz_readout);
         this.el.appendChild(this._readout.el);
-        this._in = this._button("in", "+", "Zoom in", SLOT_PAN_ZOOM_BAR_PLAIN_BUTTON_ZOOM_IN, new PanZoomPress(this, "zoomIn"));
-        this._fit = this._button("fit", "Fit", "Fit the whole", SLOT_PAN_ZOOM_BAR_PLAIN_BUTTON_FIT, new PanZoomPress(this, "fit"));
+        this._in = this._button("in", "+", "Zoom in", RoleZoomIn, new PanZoomPress(this, "zoomIn"));
+        this._fit = this._button("fit", "Fit", "Fit the whole", RoleFit, new PanZoomPress(this, "fit"));
         this.root = this.el;
     }
 
@@ -66,8 +66,9 @@ class PanZoomBar extends SimpleComponent {
         this.branch.dissolve();
     }
 
-    _button(name, label, said, slot, press) {
-        var button = new PlainButton(this.branch.elementMaker(name), new FixedPlainButton(), this._slot(slot));
+    _button(name, label, said, role, press) {
+        // its three buttons each a plain button, so each placed in the role it plays
+        var button = new PlainButton(this.branch.elementMaker(name), new FixedPlainButton(), this._place(FixedPlainButton, role));
         button.label = label;
         button.size = -1;
         button.setOnClick(press);

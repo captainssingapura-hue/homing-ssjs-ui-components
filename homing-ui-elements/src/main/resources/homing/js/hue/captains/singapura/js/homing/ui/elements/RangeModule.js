@@ -5,7 +5,7 @@
 // dragging is the element's, dressed: the value moving its INPUT, let go its
 // COMMIT.
 //
-//   var r = new Range(branch.elementMaker("range"), new FixedRange(), me.slot(SLOT_…));
+//   var r = new Range(branch.elementMaker("range"), new FixedRange(), me.place(FixedRange));
 //   r.min  r.max  r.step  r.value  r.enabled
 //   r.setOnInput(handler)  r.setOnCommit(handler)  r.setOnEnabledChanged(handler)
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.

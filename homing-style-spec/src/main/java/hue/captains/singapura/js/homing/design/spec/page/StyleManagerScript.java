@@ -19,8 +19,9 @@ import java.util.List;
  *
  * <p>Each element placed becomes a managed object, in charge of everything about the element's style for as long as it
  * lives: the class it is given, the states it is in - and, for a composite, its parts, being their sub-manager. A
- * composite asks its own reference for a placement along each slot it declares - {@code slot(slot)}, one placement a
- * part, used once - and hands it to the part. So the managed objects are a tree beside the tree of element paths, one
+ * composite asks its own reference for a placement for each part it makes, by the part's fixed type - {@code
+ * place(FixedCloseIcon)}, the role said only where one player fills two places of it - one placement a part, used once -
+ * and hands it to the part. So the managed objects are a tree beside the tree of element paths, one
  * for each live unit: the style manager keeps the units, each managed object its parts - each in a map from an element
  * path to the live instances at it, there being any number of each: three dialogs open, a tab strip's every tab.
  *
@@ -63,7 +64,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
     }
 
     /** What a component's reference gives it, and nothing more. */
-    public List<String> reference() { return List.of("component", "slot", "set", "state", "room"); }
+    public List<String> reference() { return List.of("component", "place", "set", "state", "room"); }
 
     /** Its module. */
     public String script() {
@@ -81,7 +82,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                 // draw(element, picture) with a picture provider - and its clean-up worker runs on the clock it is given -
                 // every(ms, task). Generated from Java; not to be edited.
                 """
-                + "import { Component, ElementPath, Slot, Room, StateType, Style } from " + js.string(DualKit.INSTANCE.address()) + ";\n"
+                + "import { Component, ElementPath, Fixed, Role, Room, StateType, Style } from " + js.string(DualKit.INSTANCE.address()) + ";\n"
                 + "import * as COMPONENTS from " + js.string(Components.INSTANCE.address()) + ";\n"
                 + "import * as PATHS from " + js.string(ElementPaths.INSTANCE.address()) + ";\n"
                 + "import * as STATES from " + js.string(States.INSTANCE.address()) + ";\n"
@@ -150,12 +151,17 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
 
-                    /** A placement along a slot this element's component declares: element to reference, used once. */
-                    slot(slot) {
-                        if (!(slot instanceof Slot)) throw new TypeError("slot: a part is placed along a slot its owner declares");
-                        if (slot.owner !== this.path.part)
-                            throw new TypeError("slot: the slot is " + slot.owner.token + "'s, and this element " + this.path.part.token + "'s");
-                        const path = this.page.below(this.path, slot), parts = this.parts, page = this.page;
+                    /**
+                     * A placement for a part this element's component declares, found by the part's fixed type - or the fixed
+                     * object it is handed - and, only where that player fills two places of it, the role it plays there:
+                     * element to reference, used once.
+                     */
+                    place(fixed, role) {
+                        const part = fixed instanceof Fixed ? fixed.constructor.COMPONENT
+                                : typeof fixed === "function" && fixed.prototype instanceof Fixed ? fixed.COMPONENT : undefined;
+                        if (!(part instanceof Component)) throw new TypeError("place: a part is placed by its fixed type - FixedCloseIcon - or the fixed object it is handed");
+                        if (role !== undefined && !(role instanceof Role)) throw new TypeError("place: the role it plays, where it is said, is a Role");
+                        const path = this.page.below(this.path, part, role), parts = this.parts, page = this.page;
                         let used = false;
                         return Object.freeze(function place(element) {
                             if (used) throw new TypeError("a placement places one element, once: its owner asks its reference for another");
@@ -206,8 +212,8 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                     /** The component the element is of. */
                     get component() { return this.#managed.path.part; }
 
-                    /** A placement along a slot the component declares, for one part: element to the part's reference, used once. */
-                    slot(slot) { return this.#managed.slot(slot); }
+                    /** A placement for one part the component makes, by its fixed type, and its role where it must be said: element to the part's reference, used once. */
+                    place(fixed, role) { return this.#managed.place(fixed, role); }
 
                     /** Puts the element in a state of a type the page draws: its old state's class off, its new one's on. */
                     set(type, state) { this.#managed.set(type, state); }
@@ -263,7 +269,7 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                             add: (element, c) => surface.add(element, c),
                             remove: (element, c) => surface.remove(element, c),
                             manage: (element, path, map) => this.#manage(element, path, map),
-                            below: (path, slot) => this.#child(path, slot),
+                            below: (path, part, role) => this.#child(path, part, role),
                             draws: type => this.#states.has(type),
                             rooms: room => this.#rooms.has(room),
                             classOf: path => this.#classes.get(path),
@@ -345,9 +351,17 @@ public record StyleManagerScript() implements StatelessFunctionalObject {
                         return n;
                     }
 
-                    #child(path, slot) {
-                        const child = this.#below.get(path)?.get(slot.part)?.get(slot.role);
-                        if (child === undefined) throw new TypeError("part: " + slot.part.token + " in " + slot.role.token + " is no part of " + path.part.token + " the page registers");
+                    /** The path of a part below its owner's: the part's one place there, or the one its role says where it fills two. */
+                    #child(path, part, role) {
+                        const roles = this.#below.get(path)?.get(part);
+                        if (roles === undefined) throw new TypeError("part: " + part.token + " is no part of " + path.part.token + " the page registers");
+                        if (role === undefined) {
+                            if (roles.size > 1)
+                                throw new TypeError("part: " + part.token + " plays " + [...roles.keys()].map(r => r.token).join(" and ") + " in " + path.part.token + " - say which");
+                            return roles.values().next().value;
+                        }
+                        const child = roles.get(role);
+                        if (child === undefined) throw new TypeError("part: " + part.token + " in " + role.token + " is no part of " + path.part.token + " the page registers");
                         return child;
                     }
                 }

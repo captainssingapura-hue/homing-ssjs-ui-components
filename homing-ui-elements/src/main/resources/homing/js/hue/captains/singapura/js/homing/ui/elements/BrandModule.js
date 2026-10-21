@@ -6,7 +6,7 @@
 // house's wordmark cast as its name, in the ink of what it stands on - each
 // placed along its slot by its own reference.
 //
-//   var brand = new Brand(branch.createBranch("brand"), new FixedBrand(), me.slot(SLOT_…));
+//   var brand = new Brand(branch.createBranch("brand"), new FixedBrand(), me.place(FixedBrand));
 //   brand.label = "Homing"   the site's name; "site" until given
 //   brand.home = "/"         where it goes, through the href manager; "/" until given
 //   brand.root               the <a>
@@ -27,9 +27,9 @@ class Brand extends SimpleComponent {
         branch.activate(_brandOwner);
         super(branch.elementMaker("brand"), fixed, FixedBrand, place ?? manageBrand);
         css.addClass(this.el, el_brand);
-        var mark = new BrandMark(branch.elementMaker("mark"), new FixedBrandMark(), this._slot(SLOT_BRAND_BRAND_MARK_SYMBOL));   // its colour is its mark's
+        var mark = new BrandMark(branch.elementMaker("mark"), new FixedBrandMark(), this._place(FixedBrandMark));   // its colour is its mark's
         css.addClass(mark.el, el_brand_mark);
-        this._word = new Wordmark(branch.elementMaker("word"), new FixedWordmark(), this._slot(SLOT_BRAND_WORDMARK_NAME));
+        this._word = new Wordmark(branch.elementMaker("word"), new FixedWordmark(), this._place(FixedWordmark));
         this.el.appendChild(mark.el);
         this.el.appendChild(this._word.el);
         this.root = this.el;

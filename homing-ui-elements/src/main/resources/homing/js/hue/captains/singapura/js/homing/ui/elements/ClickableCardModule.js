@@ -14,7 +14,7 @@
 // else. One inside a pane or a dialog joins no steward, and its holder hands it
 // the keys (key).
 //
-//   var card = new ClickableCard(branch.createBranch("open-grid"), new FixedClickableCard(), me.slot(SLOT_…));
+//   var card = new ClickableCard(branch.createBranch("open-grid"), new FixedClickableCard(), me.place(FixedClickableCard));
 //   card.joinKeys(steward, id?)   a member of the keyboard party, once
 //   card.setOnClick(handler)      handler.canHandle(EventClick) true, handler.handle(event)
 //   card.setOnKeyboardChanged(handler)   where the keys are on it changed, as the steward told it

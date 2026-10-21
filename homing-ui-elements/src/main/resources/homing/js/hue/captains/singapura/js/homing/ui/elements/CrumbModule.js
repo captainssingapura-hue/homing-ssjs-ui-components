@@ -3,7 +3,7 @@
 // the page itself. A simple component (SimpleComponent) on an <a>, in the
 // crumb's look:
 //
-//   var c = new Crumb(branch.elementMaker("crumb"), new FixedCrumb(), me.slot(SLOT_…));
+//   var c = new Crumb(branch.elementMaker("crumb"), new FixedCrumb(), me.place(FixedCrumb));
 //   c.setOnClick(handler)          a click on it: handler.handle(ComponentEvent)
 //   c.setOnCurrentChanged(handler) it became the page, or stopped being it: handler.handle(StateChange)
 //   c.text = "…"                   its words

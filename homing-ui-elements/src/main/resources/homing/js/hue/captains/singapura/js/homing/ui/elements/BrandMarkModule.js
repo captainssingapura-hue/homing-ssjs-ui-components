@@ -7,7 +7,7 @@
 // On the style manager (RFC 0071): its module stamped with its header (D19),
 // its states set through its reference.
 //
-//   var m = new BrandMark(branch.elementMaker("x"), new FixedBrandMark(), me.slot(SLOT_…));
+//   var m = new BrandMark(branch.elementMaker("x"), new FixedBrandMark(), me.place(FixedBrandMark));
 // =============================================================================
 
 class BrandMark extends SimpleComponent {

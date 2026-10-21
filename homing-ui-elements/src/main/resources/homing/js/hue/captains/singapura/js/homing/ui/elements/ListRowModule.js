@@ -8,7 +8,7 @@
 // monitor of it. A press is its click. Where it sits, and how deep, is its
 // list's.
 //
-//   var row = new ListRow(branch.elementMaker("list-row"), new FixedListRow(), me.slot(SLOT_…));
+//   var row = new ListRow(branch.elementMaker("list-row"), new FixedListRow(), me.place(FixedListRow));
 //   row.el  row.text  row.selected  row.current  row.keys
 //   row.setOnClick(handler)  row.setOnSelectedChanged(handler)  row.setOnCurrentChanged(handler)  row.setOnKeyboardChanged(handler)
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.

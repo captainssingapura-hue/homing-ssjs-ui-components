@@ -7,7 +7,7 @@
 // as the way home; its trail, the house's, cast as the path - each placed along
 // its slot by its own reference.
 //
-//   var bar = new SiteBar(branch.createBranch("bar"), new FixedSiteBar(), me.slot(SLOT_…));
+//   var bar = new SiteBar(branch.createBranch("bar"), new FixedSiteBar(), me.place(FixedSiteBar));
 //   bar.root          the bar, a <header>
 //   bar.brand         its brand: bar.brand.label, bar.brand.home
 //   bar.trail         its trail: trail.draw(crumbs) draws the way afresh
@@ -29,9 +29,9 @@ class SiteBar extends SimpleComponent {
         super(branch.elementMaker("bar"), fixed, FixedSiteBar, place ?? manageSiteBar);
         css.addClass(this.el, el_site_bar);
         this.root = this.el;
-        this.brand = new Brand(branch.createBranch("brand"), new FixedBrand(), this._slot(SLOT_SITE_BAR_BRAND_HOME));
+        this.brand = new Brand(branch.createBranch("brand"), new FixedBrand(), this._place(FixedBrand));
         this._hold(this.brand, el_site_bar_start);
-        this.trail = new Trail(branch.createBranch("trail"), new FixedTrail(), this._slot(SLOT_SITE_BAR_TRAIL_PATH));
+        this.trail = new Trail(branch.createBranch("trail"), new FixedTrail(), this._place(FixedTrail));
         this._hold(this.trail, el_site_bar_way);
     }
 

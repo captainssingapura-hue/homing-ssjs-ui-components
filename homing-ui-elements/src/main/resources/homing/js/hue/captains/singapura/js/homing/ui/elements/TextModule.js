@@ -8,7 +8,7 @@
 // (ExtentSize); its element wears the provided layout class el_text, the
 // style-agnostic manager's, which no style ever changes.
 //
-//   var k = new Kicker(branch.elementMaker("kicker"), new FixedKicker(), me.slot(SLOT_…));
+//   var k = new Kicker(branch.elementMaker("kicker"), new FixedKicker(), me.place(FixedKicker));
 //   k.text = "Settings"     the words
 //   k.size = -1             −1 the smallest … 1 the biggest; 0 regular, the rest
 // =============================================================================

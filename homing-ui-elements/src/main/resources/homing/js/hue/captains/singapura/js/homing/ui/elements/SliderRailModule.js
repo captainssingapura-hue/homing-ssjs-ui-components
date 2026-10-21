@@ -4,7 +4,7 @@
 // component on a <div>, in the slider rail's look - its measure is its look's,
 // grown by its size. The slider sets whether it takes the hand.
 //
-//   var x = new SliderRail(branch.elementMaker("slider-rail"), new FixedSliderRail(), me.slot(SLOT_…));
+//   var x = new SliderRail(branch.elementMaker("slider-rail"), new FixedSliderRail(), me.place(FixedSliderRail));
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 

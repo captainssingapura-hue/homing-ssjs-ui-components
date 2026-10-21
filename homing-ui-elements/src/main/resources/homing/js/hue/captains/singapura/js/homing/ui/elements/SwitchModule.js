@@ -8,7 +8,7 @@
 // off is disabled, each set through its reference; a press turns it - its
 // groove turning with it - and is its COMMIT.
 //
-//   var s = new Switch(branch.createBranch("dark"), new FixedSwitch(), me.slot(SLOT_…));
+//   var s = new Switch(branch.createBranch("dark"), new FixedSwitch(), me.place(FixedSwitch));
 //   s.root                           the <button>
 //   s.checked  s.enabled  s.text     its words beside the groove
 //   s.setOnCheckedChanged(handler)   turned, by a press (the DOM event carried) or a setter
@@ -44,9 +44,9 @@ class Switch extends SimpleComponent {
         this.el.type = "button";
         this.el.setAttribute("role", "switch");
         css.addClass(this.el, el_switch);
-        this._groove = new ToggleGroove(branch.elementMaker("groove"), new FixedToggleGroove(), this._slot(SLOT_SWITCH_TOGGLE_GROOVE_SPAN));
+        this._groove = new ToggleGroove(branch.elementMaker("groove"), new FixedToggleGroove(), this._place(FixedToggleGroove));
         css.addClass(this._groove.el, el_switch_groove);
-        var knob = new ToggleKnob(branch.elementMaker("knob"), new FixedToggleKnob(), this._slot(SLOT_SWITCH_TOGGLE_KNOB_THUMB));
+        var knob = new ToggleKnob(branch.elementMaker("knob"), new FixedToggleKnob(), this._place(FixedToggleKnob));
         css.addClass(knob.el, el_switch_knob);
         this._groove.el.appendChild(knob.el);
         this.el.appendChild(this._groove.el);

@@ -9,7 +9,7 @@
 // (Selected, aria-selected), as its owner says, set through its reference; a
 // press is its click. Where it sits is its owner's.
 //
-//   var opt = new ChoiceOption(branch.createBranch("opt-0"), new FixedChoiceOption(new FixedCaption()), me.slot(SLOT_…));
+//   var opt = new ChoiceOption(branch.createBranch("opt-0"), new FixedChoiceOption(new FixedCaption()), me.place(FixedChoiceOption));
 //   opt.label = "Dark"   opt.note = "for the night"   opt.selected = true
 //   opt.el / opt.root
 //   opt.setOnClick(handler)  opt.setOnSelectedChanged(handler)
@@ -43,7 +43,7 @@ class ChoiceOption extends SimpleComponent {
         this.el.appendChild(this._label);
         this._note = null;
         if (this.fixed.note !== null) {   // its note, the house's caption cast as a note: at its end
-            this._note = new Caption(branch.elementMaker("note"), this.fixed.note, this._slot(SLOT_CHOICE_OPTION_CAPTION_NOTE));
+            this._note = new Caption(branch.elementMaker("note"), this.fixed.note, this._place(this.fixed.note));
             css.addClass(this._note.el, el_choice_option_note);
             this.el.appendChild(this._note.el);
         }

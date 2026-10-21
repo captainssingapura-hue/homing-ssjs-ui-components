@@ -3,7 +3,7 @@
 // range. A simple component on a <div>, in the slider groove's look; the slider
 // places it across its rail. It has no state and offers nothing.
 //
-//   var x = new SliderGroove(branch.elementMaker("slider-groove"), new FixedSliderGroove(), me.slot(SLOT_…));
+//   var x = new SliderGroove(branch.elementMaker("slider-groove"), new FixedSliderGroove(), me.place(FixedSliderGroove));
 // On the style manager (RFC 0071): its module stamped with its header (D19).
 // =============================================================================
 

@@ -8,7 +8,7 @@
 // never stretch it; what is inside scrolls beyond it. It is still under the
 // hand: a card that does something when pressed is the clickable card.
 //
-//   var card = new PlainCard(branch.elementMaker("plain-card"), new FixedPlainCard(), me.slot(SLOT_…));
+//   var card = new PlainCard(branch.elementMaker("plain-card"), new FixedPlainCard(), me.place(FixedPlainCard));
 //   card.el.appendChild(new SummaryView(branch.createBranch("summary"), { title: "Grid" }).root);
 //   card.el  card.size  card.aspect
 // On the style manager (RFC 0071): its module stamped with its header (D19).

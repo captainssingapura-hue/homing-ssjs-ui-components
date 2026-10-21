@@ -8,7 +8,7 @@
 // On the style manager (RFC 0071): its module stamped with its header (D19),
 // its states set through its reference.
 //
-//   var m = new Delimiter(branch.elementMaker("x"), new FixedDelimiter(), me.slot(SLOT_…));
+//   var m = new Delimiter(branch.elementMaker("x"), new FixedDelimiter(), me.place(FixedDelimiter));
 // =============================================================================
 
 class Delimiter extends SimpleComponent {

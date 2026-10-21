@@ -4,7 +4,7 @@
 // its module stamped with its header (D19), its pressed set through its
 // reference, which the style draws.
 //
-//   var t = new ToggleButton(branch.elementMaker("bold"), new FixedToggleButton(), me.slot(SLOT_…));
+//   var t = new ToggleButton(branch.elementMaker("bold"), new FixedToggleButton(), me.place(FixedToggleButton));
 //   t.pressed = true      t.setOnPressedChanged(handler)   t.setOnClick(handler)
 // =============================================================================
 

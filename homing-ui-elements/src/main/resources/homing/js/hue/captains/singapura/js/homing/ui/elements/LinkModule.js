@@ -2,7 +2,7 @@
 // Link — a way to somewhere else: its words, where it goes, and a click. A
 // simple component (SimpleComponent) on an <a>, in the link's look:
 //
-//   var l = new Link(branch.elementMaker("link"), new FixedLink(), me.slot(SLOT_…));
+//   var l = new Link(branch.elementMaker("link"), new FixedLink(), me.place(FixedLink));
 //   l.setOnClick(handler)   a click on it: handler.handle(ComponentEvent) - the way
 //                           is followed unless the handler prevents the raw event
 //   l.text = "…"            its words

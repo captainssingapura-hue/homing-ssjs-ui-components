@@ -104,7 +104,7 @@ class HeaderTest {
                 if (!names.add(r.imported())) problems.add(h.component().token() + ": " + r.imported() + " imported twice");
                 imports++;
             }
-            for (HeaderStamp.SlotConstant s : HeaderStamp.INSTANCE.slots(h))
+            for (HeaderStamp.Constant s : HeaderStamp.INSTANCE.rooms(h))
                 if (!names.add(s.name())) problems.add(h.component().token() + ": " + s.name() + " stamped twice");
             String stamp = HeaderStamp.INSTANCE.stamp(h, PAGE);
             String binding = "const " + HeaderStamp.INSTANCE.manage(h) + " = " + PageStyleManager.EXPORTED + ".unit("

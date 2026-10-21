@@ -3,7 +3,7 @@
 // the switch is on. A simple component on a <span>, in the toggle groove's look;
 // its switch sets it on as the switch is.
 //
-//   var x = new ToggleGroove(branch.elementMaker("toggle-groove"), new FixedToggleGroove(), me.slot(SLOT_…));
+//   var x = new ToggleGroove(branch.elementMaker("toggle-groove"), new FixedToggleGroove(), me.place(FixedToggleGroove));
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 

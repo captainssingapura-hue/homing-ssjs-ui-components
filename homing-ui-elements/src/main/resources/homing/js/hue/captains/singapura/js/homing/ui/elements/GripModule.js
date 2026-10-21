@@ -2,7 +2,7 @@
 // Grip — what the user takes hold of to move the thing it is on. A simple
 // component on a <div>, in the grip's look; its owner moves what it is on.
 //
-//   var x = new Grip(branch.elementMaker("grip"), new FixedGrip(), me.slot(SLOT_…));
+//   var x = new Grip(branch.elementMaker("grip"), new FixedGrip(), me.place(FixedGrip));
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 

@@ -4,7 +4,7 @@
 // dimmed, blurred or left as it is, is its style's. It shows no words and has
 // no state; it offers a press:
 //
-//   var s = new Scrim(branch.elementMaker("scrim"), new FixedScrim(), me.slot(SLOT_…));
+//   var s = new Scrim(branch.elementMaker("scrim"), new FixedScrim(), me.place(FixedScrim));
 //   s.setOnPress(handler)   the hand came down on it: handler.handle(ComponentEvent)
 //
 // Where it is - over the whole page, beneath the dialog - is its owner's, by its

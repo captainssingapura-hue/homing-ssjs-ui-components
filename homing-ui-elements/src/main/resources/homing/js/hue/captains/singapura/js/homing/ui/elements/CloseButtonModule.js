@@ -6,7 +6,7 @@
 // the placement its own reference gives. On the style manager (RFC 0071): its
 // module stamped with its header (D19).
 //
-//   var c = new CloseButton(branch.createBranch("close"), new FixedCloseButton(), me.slot(SLOT_…));
+//   var c = new CloseButton(branch.createBranch("close"), new FixedCloseButton(), me.place(FixedCloseButton));
 //   c.setOnClick(handler)   c.enabled   c.size   c.label - its name, "Close" unless given
 //   c.face                  its face: the close icon
 // =============================================================================
@@ -19,7 +19,7 @@ class CloseButton extends Button {
             throw new TypeError("[CloseButton] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_closeButtonOwner);
         super(branch.elementMaker("button"), fixed, FixedCloseButton, place ?? manageCloseButton);
-        this._face = new Icon(branch.elementMaker("face"), new FixedCloseIcon(), this._slot(SLOT_CLOSE_BUTTON_CLOSE_ICON_FACE));
+        this._face = new Icon(branch.elementMaker("face"), new FixedCloseIcon(), this._place(FixedCloseIcon));
         this.el.appendChild(this._face.el);
         this.label = "";
     }

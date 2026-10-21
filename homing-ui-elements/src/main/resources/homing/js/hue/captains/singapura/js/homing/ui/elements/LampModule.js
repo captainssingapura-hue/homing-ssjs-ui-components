@@ -5,7 +5,7 @@
 // On the style manager (RFC 0071): its module stamped with its header (D19),
 // its states set through its reference.
 //
-//   var lamp = new Lamp(branch.elementMaker("lamp"), new FixedLamp(), me.slot(SLOT_…));
+//   var lamp = new Lamp(branch.elementMaker("lamp"), new FixedLamp(), me.place(FixedLamp));
 //   lamp.text  lamp.current  lamp.invalid
 //   lamp.setOnCurrentChanged(handler)  lamp.setOnInvalidChanged(handler)
 // =============================================================================

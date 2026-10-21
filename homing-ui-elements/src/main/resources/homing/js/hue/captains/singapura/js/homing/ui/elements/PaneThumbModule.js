@@ -7,7 +7,7 @@
 // is its owner's placement; whether it is the one its owner's cursor is at, its
 // Current state, set through its reference (aria-current written with it).
 //
-//   var t = new PaneThumb(branch.createBranch("cell-0"), new FixedPaneThumb(), me.slot(SLOT_…));
+//   var t = new PaneThumb(branch.createBranch("cell-0"), new FixedPaneThumb(), me.place(FixedPaneThumb));
 //   t.name = "Editor"   t.current = true   t.root
 //   t.setOnCurrentChanged(handler)
 // =============================================================================
@@ -31,7 +31,7 @@ class PaneThumb extends SimpleComponent {
             throw new TypeError("[PaneThumb] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_paneThumbOwner);
         super(branch.elementMaker("thumb"), fixed, FixedPaneThumb, place ?? managePaneThumb);
-        this._name = new Kicker(branch.elementMaker("name"), new FixedKicker(), this._slot(SLOT_PANE_THUMB_KICKER_NAME));   // its name, a kicker cast as its name
+        this._name = new Kicker(branch.elementMaker("name"), new FixedKicker(), this._place(FixedKicker));   // its name, a kicker cast as its name
         css.addClass(this._name.el, el_pane_thumb_name);
         this.el.appendChild(this._name.el);
         this.root = this.el;

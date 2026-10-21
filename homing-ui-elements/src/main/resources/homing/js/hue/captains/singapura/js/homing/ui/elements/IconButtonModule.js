@@ -5,12 +5,12 @@
 // component: it takes a branch of its own and makes on it its element and its
 // face's. Which icon its face is, is static (RFC 0071 port, question 5): its
 // fixed object holds the icon's own, chosen once for its life, and the face is
-// placed along that icon's slot by the placement its own reference gives - in
-// the void role, which only places it. It has no role set: what holds it places
+// placed as that icon by the placement its own reference gives - in the void
+// role, which only places it. It has no role set: what holds it places
 // it in the void role, its icon saying what it does. On the style manager
 // (RFC 0071): its module stamped with its header (D19).
 //
-//   var b = new IconButton(branch.createBranch("add"), new FixedIconButton(new FixedAddIcon()), me.slot(SLOT_…));
+//   var b = new IconButton(branch.createBranch("add"), new FixedIconButton(new FixedAddIcon()), me.place(FixedIconButton));
 //   b.label = "Add a tab"   its name: aria-label, and its tooltip
 //   b.setOnClick(handler)   b.enabled   b.size
 //   b.face                  its face: the icon its fixed object chose
@@ -24,10 +24,9 @@ class IconButton extends Button {
             throw new TypeError("[IconButton] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_iconButtonOwner);
         super(branch.elementMaker("button"), fixed, FixedIconButton, place ?? manageIconButton);
-        // its face: the icon its fixed object chose - which it has checked is one of the icons - along that icon's slot
+        // its face: the icon its fixed object chose - which it has checked is one of the icons - placed as that icon
         var chosen = this.fixed.voidRole;
-        var along = SLOTS_ICON_BUTTON_VOID_ROLE.find(function (row) { return chosen instanceof row[0]; })[1];
-        this._face = new Icon(branch.elementMaker("face"), chosen, this._slot(along));
+        this._face = new Icon(branch.elementMaker("face"), chosen, this._place(chosen));
         this.el.appendChild(this._face.el);
     }
 

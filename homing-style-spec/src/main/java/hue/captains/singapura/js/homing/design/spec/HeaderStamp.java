@@ -1,13 +1,11 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
 import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.design.spec.dual.Components;
-import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.js.homing.design.spec.page.PageStyleManager;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
@@ -22,17 +20,19 @@ import java.util.Locale;
  * What the server stamps into a component's implementation module (RFC 0071, D19): its header, made from the component's
  * declarations alone - nothing but names the implementation uses directly. Each node the component declares - itself, its
  * parts, their roles, its state types, its events, its extents - is imported from its tree's JS dual under its own name,
- * the module and the name both a pure function of the node ({@link DualRef}); each of its slots is a constant of its own,
- * made by the kit's constructor ({@link DualKit}). A top-level component's header also binds the page's style manager to
- * it: its implementation hands over its element at the root through that binding, and never imports the style manager.
- * No string is looked up, and none is written but a module's address.
+ * the module and the name both a pure function of the node ({@link DualRef}); and its parts' fixed types, by which it
+ * places each part it makes - {@code this._place(FixedCloseIcon)}, its role said only where one player fills two places
+ * of it ({@code this._place(FixedPlainButton, RoleZoomIn)}). No slot is stamped (owner, 21 Oct): a module implements one
+ * component, so the owner is the module's own, and the part is the one it makes. A top-level component's header also
+ * binds the page's style manager to it: its implementation hands over its element at the root through that binding, and
+ * never imports the style manager. No string is looked up, and none is written but a module's address.
  */
 public record HeaderStamp() implements StatelessFunctionalObject {
 
     public static final HeaderStamp INSTANCE = new HeaderStamp();
 
-    /** One constant a slot is stamped as: its name, and its line. */
-    public record SlotConstant(String name, String line) {}
+    /** One constant a header stamps - a room's: its name, and its line. */
+    public record Constant(String name, String line) {}
 
     /** Every node the header imports, each once, in its order: the component, each slot's part and role, its state types, events, extents. */
     public List<DualRef.Ref> refs(ComponentHeader h) {
@@ -51,64 +51,13 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         return List.copyOf(out.values());
     }
 
-    /** Each room of the component's own as a constant, its owner's name first - {@code const ROOM_TAB_STRIP_TAIL = RoomTabStripTail;} - its node in the components' dual. */
-    public List<SlotConstant> rooms(ComponentHeader h) {
-        var out = new ArrayList<SlotConstant>();
+    /** Each room of the component's own as a constant - {@code const ROOM_TAIL = RoomTabStripTail;} - its node in the components' dual. */
+    public List<Constant> rooms(ComponentHeader h) {
+        var out = new ArrayList<Constant>();
         for (Room room : h.rooms()) {
-            String name = "ROOM_" + owner(h) + "_" + room.name().toUpperCase(Locale.ROOT).replace('-', '_');
-            out.add(new SlotConstant(name, "const " + name + " = " + Components.INSTANCE.room(h.component(), room) + ";"));
+            String name = "ROOM_" + room.name().toUpperCase(Locale.ROOT).replace('-', '_');
+            out.add(new Constant(name, "const " + name + " = " + Components.INSTANCE.room(h.component(), room) + ";"));
         }
-        return List.copyOf(out);
-    }
-
-    /**
-     * Each slot as its own constant, made by the kit: its owner, its part and its role - the imported nodes - and how many
-     * the part is. Its name its owner's first, then its part's and its role's - {@code SLOT_CLOSE_BUTTON_CLOSE_ICON_FACE} -
-     * in every stamp alike (owner, 21 Oct): two owners in one module may each have a slot of one token.
-     */
-    public List<SlotConstant> slots(ComponentHeader h) {
-        var refOf = DualRef.INSTANCE;
-        var out = new ArrayList<SlotConstant>();
-        for (ComponentHeader.HeaderSlot s : h.slots()) {
-            String name = "SLOT_" + owner(h) + "_" + s.token().toUpperCase(Locale.ROOT).replace('-', '_');
-            out.add(new SlotConstant(name, "const " + name + " = new Slot(" + refOf.of(h.component()).imported() + ", " + refOf.of(s.part()).imported()
-                    + ", " + refOf.of(s.role()).imported() + ", " + count(s.cardinality()) + ");"));
-        }
-        return List.copyOf(out);
-    }
-
-    /** A component's name as its constants begin: {@code CLOSE_BUTTON}. */
-    private static String owner(ComponentHeader h) { return h.component().token().toUpperCase(Locale.ROOT).replace('-', '_'); }
-
-    /** Each slot's, each room's and each choice table's constant of a header - named alike in a stamp of one header or of several. */
-    private List<SlotConstant> constants(ComponentHeader h) {
-        var out = new ArrayList<>(slots(h));
-        out.addAll(rooms(h));
-        out.addAll(choices(h, slots(h)));
-        return out;
-    }
-
-    /**
-     * For each part its type leaves a choice of - several players, one chosen in its owner's fixed object: an icon
-     * button's icon - the part's slots by the chosen player's fixed type, its owner's name then its role's after
-     * {@code SLOTS_}: {@code const SLOTS_ICON_BUTTON_VOID_ROLE = [[FixedAddIcon, SLOT_ICON_BUTTON_ADD_ICON_VOID_ROLE], …];}. The owner places the part along the slot
-     * of the player its fixed object holds, which the fixed object has checked is one of them.
-     *
-     * @param named the slots' constants, in its slots' order
-     */
-    private List<SlotConstant> choices(ComponentHeader h, List<SlotConstant> named) {
-        var byRole = new LinkedHashMap<String, List<String>>();
-        for (int i = 0; i < h.slots().size(); i++) {
-            ComponentHeader.HeaderSlot s = h.slots().get(i);
-            if (s.alternatives() < 2) continue;
-            byRole.computeIfAbsent(s.role().name().value(), r -> new ArrayList<>())
-                    .add("[" + FixedTypes.INSTANCE.name(s.part()) + ", " + named.get(i).name() + "]");
-        }
-        var out = new ArrayList<SlotConstant>();
-        byRole.forEach((role, rows) -> {
-            String name = "SLOTS_" + owner(h) + "_" + role.toUpperCase(Locale.ROOT).replace('-', '_');
-            out.add(new SlotConstant(name, "const " + name + " = [" + String.join(", ", rows) + "];"));
-        });
         return List.copyOf(out);
     }
 
@@ -122,8 +71,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
     public String manage(ComponentHeader h) { return "manage" + JsLiterals.INSTANCE.name(h.component().token()); }
 
     /**
-     * The stamp as the module would begin: its imports, tree by tree, then a constant for each slot, and for each part
-     * its type leaves a choice of, its slots by player ({@link #choices}); and, for a top-level
+     * The stamp as the module would begin: its imports, tree by tree, then a constant for each room; and, for a top-level
      * component, the page's style manager imported and bound to it - {@code const manageDialog =
      * styleManager.unit(ComponentDialog);} - the one way its implementation hands over its element at the root. A
      * component only ever a part has none: its owner hands it its reference.
@@ -133,7 +81,6 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         var lines = new ArrayList<String>();
         lines.add("// Stamped by the server (RFC 0071, D19): " + h.component().token() + "'s header, made from its declarations - "
                 + (h.composite() ? "a composite" : "a leaf") + (h.topLevel() ? ", top-level." : ", only ever a part."));
-        if (!h.slots().isEmpty()) lines.add("import { Slot, Count } from " + js.string(DualKit.INSTANCE.address()) + ";");
         List<DualRef.Ref> refs = refs(h);
         for (DualTree<?> tree : ReadDual.INSTANCE.trees()) {
             var names = new ArrayList<>(refs.stream().filter(r -> r.tree().equals(tree)).map(r -> r.name() + " as " + r.imported()).toList());
@@ -141,7 +88,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
             if (!names.isEmpty()) lines.add("import { " + String.join(", ", names) + " } from " + js.string(tree.address()) + ";");
         }
         if (h.topLevel()) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
-        for (SlotConstant s : constants(h)) lines.add(s.line());
+        for (Constant s : rooms(h)) lines.add(s.line());
         if (h.topLevel())
             lines.add("const " + manage(h) + " = " + PageStyleManager.EXPORTED + ".unit(" + DualRef.INSTANCE.of(h.component()).imported() + ");");
         return String.join("\n", lines) + "\n";
@@ -149,9 +96,9 @@ public record HeaderStamp() implements StatelessFunctionalObject {
 
     /**
      * The stamp of a module that implements several components - a branch's base, every leaf under it; the icons' one
-     * class - their headers merged (D19): each tree's imports once, two headers naming one node; the kit's and the page's
-     * style manager's once; each slot's constant once, its owner's name before it ({@link #merged}); a
-     * binding for each top-level component, each under its own name. One header is stamped as it is.
+     * class - their headers merged (D19): each tree's imports once, two headers naming one node; the page's style
+     * manager's once; each room's constant once, two rooms of one name refused; a binding for each top-level component,
+     * each under its own name. One header is stamped as it is.
      */
     public String stamp(List<ComponentHeader> headers, PageStyleManager page) {
         if (headers.isEmpty()) throw new IllegalArgumentException("a stamp is of one header at least");
@@ -160,7 +107,6 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         var lines = new ArrayList<String>();
         lines.add("// Stamped by the server (RFC 0071, D19): the headers of " + String.join(", ", headers.stream().map(h -> h.component().token()).toList())
                 + ", merged - each made from its declarations.");
-        if (headers.stream().anyMatch(h -> !h.slots().isEmpty())) lines.add("import { Slot, Count } from " + js.string(DualKit.INSTANCE.address()) + ";");
         for (DualTree<?> tree : ReadDual.INSTANCE.trees()) {
             var names = new LinkedHashSet<String>();
             for (ComponentHeader h : headers) {
@@ -171,10 +117,10 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         }
         if (headers.stream().anyMatch(ComponentHeader::topLevel)) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
         var constants = new LinkedHashMap<String, String>();
-        for (ComponentHeader h : headers) for (SlotConstant s : constants(h)) {
+        for (ComponentHeader h : headers) for (Constant s : rooms(h)) {
             String was = constants.putIfAbsent(s.name(), s.line());
             if (was != null && !was.equals(s.line()))
-                throw new IllegalArgumentException("two slots stamped as " + s.name() + " in one module: " + was + " and " + s.line());
+                throw new IllegalArgumentException("two rooms stamped as " + s.name() + " in one module: " + was + " and " + s.line());
         }
         lines.addAll(constants.values());
         for (ComponentHeader h : headers) if (h.topLevel())
@@ -200,7 +146,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
     /** The name the leaves a one-class module realizes are stamped under. */
     public static final String LEAVES = "LEAVES_IMPLEMENTED";
 
-    /** The fixed types it imports (D30): its component's, then each part's, each once - every one an owner may make. */
+    /** The fixed types it imports (D30): its component's, then each part's, each once - every one an owner may make, and places by. */
     public List<String> fixed(ComponentHeader h) {
         var out = new LinkedHashSet<String>();
         out.add(FixedTypes.INSTANCE.name(h.component()));
@@ -209,15 +155,4 @@ public record HeaderStamp() implements StatelessFunctionalObject {
     }
 
     private static void add(LinkedHashMap<String, DualRef.Ref> out, DualRef.Ref r) { out.putIfAbsent(r.imported(), r); }
-
-    /** How many a part is, made by the kit: its least and its most, none for no bound. */
-    private static String count(Cardinality c) {
-        return switch (c) {
-            case Cardinality.Fixed f -> "new Count(" + f.count() + ", " + f.count() + ")";
-            case Cardinality.Varying v -> "new Count(" + v.min() + ", " + switch (v.max()) {
-                case Cardinality.AtMost a -> String.valueOf(a.count());
-                case Cardinality.Unbounded u -> "null";
-            } + ")";
-        };
-    }
 }

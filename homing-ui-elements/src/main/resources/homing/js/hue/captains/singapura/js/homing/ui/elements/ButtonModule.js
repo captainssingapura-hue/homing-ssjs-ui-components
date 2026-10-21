@@ -8,7 +8,7 @@
 // every leaf's header (D19), so the nodes it names - StateEnabled, EventClick,
 // ExtentSize - are the duals':
 //
-//   var b = new DangerButton(branch.elementMaker("delete"), new FixedDangerButton(), me.slot(SLOT_…));
+//   var b = new DangerButton(branch.elementMaker("delete"), new FixedDangerButton(), me.place(FixedDangerButton));
 //   b.setOnClick(handler)          a press, while it is enabled: handler.handle(ComponentEvent)
 //   b.setOnEnabledChanged(handler) its enabled changed: handler.handle(StateChange), previous the old value
 //   b.enabled = false    off: inert, and it says so - the element disabled, and

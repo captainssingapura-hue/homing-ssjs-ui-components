@@ -5,7 +5,7 @@
 // Its state is the slider's to set - off, the current of a group, dragged - and
 // its standing, given once; each held as its state's class while it holds.
 //
-//   var x = new SliderKnob(branch.elementMaker("slider-knob"), new FixedSliderKnob(), me.slot(SLOT_…));
+//   var x = new SliderKnob(branch.elementMaker("slider-knob"), new FixedSliderKnob(), me.place(FixedSliderKnob));
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 

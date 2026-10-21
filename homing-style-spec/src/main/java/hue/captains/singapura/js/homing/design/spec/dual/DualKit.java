@@ -21,7 +21,7 @@ public record DualKit() implements StatelessFunctionalObject {
     /** The classes it gives, in its order. */
     public List<String> classes() {
         return List.of("ComponentBranch", "Component", "RoleBranch", "Role", "StateBranch", "StateType", "EventBranch", "EventType",
-                "Extent", "Count", "Slot", "Room", "ElementPath", "Style", "FixedField", "Fixed");
+                "Extent", "Count", "Room", "ElementPath", "Style", "FixedField", "Fixed");
     }
 
     /** Its module. */
@@ -127,17 +127,6 @@ public record DualKit() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
                 }
-                class Slot {
-                    constructor(owner, part, role, count) {
-                        if (!(owner instanceof Component) || !owner.composite) throw new TypeError("Slot: its owner is a composite Component");
-                        if (!(part instanceof Component)) throw new TypeError("Slot: its part is a Component");
-                        if (part === owner) throw new TypeError("Slot: " + owner.token + " is no part of itself");
-                        if (!(role instanceof Role)) throw new TypeError("Slot: its role is a Role");
-                        if (!(count instanceof Count)) throw new TypeError("Slot: how many it is, a Count");
-                        this.owner = owner; this.part = part; this.role = role; this.count = count;
-                        Object.freeze(this);
-                    }
-                }
                 class ElementPath {
                     constructor(parent, part, role) {
                         if (parent !== null && !(parent instanceof ElementPath)) throw new TypeError("ElementPath: its parent is an ElementPath, or none for a top-level component");
@@ -172,6 +161,7 @@ public record DualKit() implements StatelessFunctionalObject {
                     constructor(component, given) {
                         if (new.target === Fixed) throw new TypeError("Fixed: made only as a component's own fixed type");
                         if (!(component instanceof Component)) throw new TypeError(new.target.name + ": the fixed type of a Component");
+                        if (new.target.COMPONENT !== component) throw new TypeError(new.target.name + ": says it is the fixed type of " + (new.target.COMPONENT && new.target.COMPONENT.token) + ", and is made as " + component.token + "'s");
                         const fields = new.target.FIELDS ?? [];
                         if (!Array.isArray(fields) || !fields.every(f => f instanceof FixedField)) throw new TypeError(new.target.name + ": its FIELDS, each a FixedField");
                         if (fields.length === 0 && given.length !== 0) throw new TypeError(new.target.name + ": " + component.token + " has nothing fixed - its fixed object has no fields");
@@ -195,7 +185,7 @@ public record DualKit() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
                 }
-                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Slot, Room, ElementPath, Style, FixedField, Fixed };
+                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Room, ElementPath, Style, FixedField, Fixed };
                 """;
     }
 }

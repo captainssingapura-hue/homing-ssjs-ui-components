@@ -7,7 +7,7 @@
 // On the style manager (RFC 0071): its module stamped with its header (D19),
 // its states set through its reference.
 //
-//   var line = new BoundaryLine(branch.elementMaker("line-0"), new FixedBoundaryLine(), me.slot(SLOT_…));
+//   var line = new BoundaryLine(branch.elementMaker("line-0"), new FixedBoundaryLine(), me.place(FixedBoundaryLine));
 //   line.orientation = "vertical"   line.dragging
 //   line.setOnOrientationChanged(handler)  line.setOnDraggingChanged(handler)
 // =============================================================================

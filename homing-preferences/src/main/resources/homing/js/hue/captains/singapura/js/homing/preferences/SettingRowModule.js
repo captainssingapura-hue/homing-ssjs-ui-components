@@ -4,7 +4,7 @@
 // of its own and makes on it its row, its name, and its value - the house's
 // caption cast as a value - placed along its slot by its own reference.
 //
-//   var row = new SettingRow(branch.createBranch("row-theme"), new FixedSettingRow(), me.slot(SLOT_…));
+//   var row = new SettingRow(branch.createBranch("row-theme"), new FixedSettingRow(), me.place(FixedSettingRow));
 //   row.label = "Theme"   row.value = "Harbour"   row.root
 // =============================================================================
 
@@ -24,7 +24,7 @@ class SettingRow extends SimpleComponent {
         this._label = branch.createElement("label", "span");
         this.el.appendChild(this._label);
         // its value, the house's caption cast as a value: at its end
-        this._value = new Caption(branch.elementMaker("value"), new FixedCaption(), this._slot(SLOT_SETTING_ROW_CAPTION_VALUE));
+        this._value = new Caption(branch.elementMaker("value"), new FixedCaption(), this._place(FixedCaption));
         css.addClass(this._value.el, pv_setting_row_value);
         this.el.appendChild(this._value.el);
         this.root = this.el;

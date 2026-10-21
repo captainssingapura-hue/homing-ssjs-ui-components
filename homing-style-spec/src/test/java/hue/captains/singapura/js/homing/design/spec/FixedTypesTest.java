@@ -51,9 +51,9 @@ class FixedTypesTest {
 
     @Test
     void theDualsType_saysItsFields_forTheKitToCheck() {
-        assertEquals("class FixedPlainButton extends Fixed { constructor(...given) { super(PlainButton, given); } }",
+        assertEquals("class FixedPlainButton extends Fixed { static COMPONENT = PlainButton; constructor(...given) { super(PlainButton, given); } }",   // its component said, an owner placing its part by it (21 Oct)
                 FIXED.companion(HOUSE, HouseControls.PlainButton.INSTANCE, "PlainButton").declaration());
-        assertEquals("class FixedChoiceOption extends Fixed { static FIELDS = [new FixedField(\"note\", new Count(0, 1), () => [FixedCaption])]; "
+        assertEquals("class FixedChoiceOption extends Fixed { static COMPONENT = ChoiceOption; static FIELDS = [new FixedField(\"note\", new Count(0, 1), () => [FixedCaption])]; "
                         + "constructor(...given) { super(ChoiceOption, given); } }",
                 FIXED.companion(HOUSE, HouseItems.ChoiceOption.INSTANCE, "ChoiceOption").declaration());
     }
