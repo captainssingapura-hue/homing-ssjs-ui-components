@@ -10,13 +10,10 @@ import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
 import hue.captains.singapura.js.homing.design.spec.JsLiterals;
 import hue.captains.singapura.js.homing.design.spec.house.HouseIconPalettes;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
-import hue.captains.singapura.js.homing.design.spec.house.IconPicture;
 import hue.captains.singapura.js.homing.design.spec.house.IconPictures;
 import hue.captains.singapura.js.homing.design.spec.house.IconPicturesScript;
 import hue.captains.singapura.js.homing.design.spec.house.IconSvg;
 import hue.captains.singapura.js.homing.design.spec.house.IconSvgs;
-import hue.captains.singapura.js.homing.ui.styles.Base;
-import hue.captains.singapura.js.homing.ui.styles.Sketchy;
 import hue.captains.singapura.js.homing.design.styling.CheckDeclaration;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import org.junit.jupiter.api.Test;
@@ -87,10 +84,10 @@ class ContentTest {
     @Test
     void everySvgPicture_isHeldWhole_itsColoursThePalettes() {
         assertEquals(List.of(), IconSvgs.INSTANCE.problems(PICTURES, SPEC.styles(), TREE));
-        IconSvg rotate = IconSvgs.INSTANCE.find(Base.INSTANCE, new IconPicture.Svg("rotate")).orElseThrow();
-        String flip = IconSvgs.INSTANCE.resource(Base.INSTANCE, new IconPicture.Svg("flip"));
-        IconSvg pacman = IconSvgs.INSTANCE.find(Base.INSTANCE, new IconPicture.Svg("pacman")).orElseThrow();
-        IconSvg sketchy = IconSvgs.INSTANCE.find(Sketchy.INSTANCE, new IconPicture.Svg("pacman")).orElseThrow();
+        IconSvg rotate = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.base.RotateSvg()).orElseThrow();
+        String flip = IconSvgs.INSTANCE.resource(new hue.captains.singapura.js.homing.design.spec.styles.base.FlipSvg());
+        IconSvg pacman = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.base.PacmanSvg()).orElseThrow();
+        IconSvg sketchy = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg()).orElseThrow();
         assertEquals(java.util.Set.of(rotate.resource(), flip, pacman.resource(), sketchy.resource()), java.util.Set.copyOf(IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles())),
                 "base's three, and sketchy's own pacman");
         assertEquals(List.of(flip), IconSvgs.INSTANCE.awaiting(PICTURES, SPEC.styles()), "flip's not here yet: drawn as its placeholder");

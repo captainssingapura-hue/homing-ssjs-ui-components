@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.spec.house.IconPicture.Glyph;
 import hue.captains.singapura.js.homing.design.spec.house.IconPicture.Svg;
 import hue.captains.singapura.js.homing.ui.styles.Base;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.styles.NeoBrutalism;
 import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
@@ -32,14 +33,14 @@ public record HouseIconPalettes() implements StatelessFunctionalObject {
     public static final HouseIconPalettes INSTANCE = new HouseIconPalettes();
 
     /** Base's palette: every icon. */
-    public IconPalette base() {
-        var p = new LinkedHashMap<IconLeaf, IconPicture>();
+    public IconPalette<BaseScheme> base() {
+        var p = new LinkedHashMap<IconLeaf, IconPicture<? super BaseScheme>>();
         p.put(HouseIcons.AddIcon.INSTANCE, new Glyph("+"));
         p.put(HouseIcons.RemoveIcon.INSTANCE, new Glyph("−"));
         p.put(HouseIcons.CloseIcon.INSTANCE, new Glyph("✕"));
         p.put(HouseIcons.ResetIcon.INSTANCE, new Glyph("↺"));
-        p.put(HouseIcons.RotateIcon.INSTANCE, new Svg("rotate"));
-        p.put(HouseIcons.FlipIcon.INSTANCE, new Svg("flip"));
+        p.put(HouseIcons.RotateIcon.INSTANCE, new Svg<>(new hue.captains.singapura.js.homing.design.spec.styles.base.RotateSvg()));
+        p.put(HouseIcons.FlipIcon.INSTANCE, new Svg<>(new hue.captains.singapura.js.homing.design.spec.styles.base.FlipSvg()));
         p.put(HouseIcons.PinIcon.INSTANCE, new Glyph("⌖"));
         p.put(HouseIcons.CheckIcon.INSTANCE, new Glyph("✓"));
         p.put(HouseIcons.GripIcon.INSTANCE, new Glyph("⠿"));
@@ -54,30 +55,30 @@ public record HouseIconPalettes() implements StatelessFunctionalObject {
         p.put(HouseIcons.MergeIcon.INSTANCE, new Glyph("▣"));
         p.put(HouseIcons.DetachIcon.INSTANCE, new Glyph("⧉"));
         p.put(HouseIcons.WithinIcon.INSTANCE, new Glyph("◉"));
-        p.put(HouseIcons.PacmanIcon.INSTANCE, new Svg("pacman"));
-        return new IconPalette(Base.INSTANCE, p);
+        p.put(HouseIcons.PacmanIcon.INSTANCE, new Svg<>(new hue.captains.singapura.js.homing.design.spec.styles.base.PacmanSvg()));
+        return new IconPalette<>(Base.INSTANCE, p);
     }
 
     /** Each style's palette that draws something of its own. */
-    public List<IconPalette> styles() {
+    public List<IconPalette<?>> styles() {
         return List.of(
-                new IconPalette(Glassmorphism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("×"))),
-                new IconPalette(NeoBrutalism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("╳"))),
-                new IconPalette(NeoFuturism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("⨯"))),
-                new IconPalette(Neumorphism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("✗"))),
-                new IconPalette(RetroFuturism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("✘"))),
-                new IconPalette(Sketchy.INSTANCE, sketchy()));
+                new IconPalette<>(Glassmorphism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("×"))),
+                new IconPalette<>(NeoBrutalism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("╳"))),
+                new IconPalette<>(NeoFuturism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("⨯"))),
+                new IconPalette<>(Neumorphism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("✗"))),
+                new IconPalette<>(RetroFuturism.INSTANCE, Map.of(HouseIcons.CloseIcon.INSTANCE, new Glyph("✘"))),
+                new IconPalette<>(Sketchy.INSTANCE, sketchy()));
     }
 
-    private static Map<IconLeaf, IconPicture> sketchy() {
-        var p = new LinkedHashMap<IconLeaf, IconPicture>();
+    private static Map<IconLeaf, IconPicture<? super BaseScheme>> sketchy() {
+        var p = new LinkedHashMap<IconLeaf, IconPicture<? super BaseScheme>>();
         p.put(HouseIcons.CloseIcon.INSTANCE, new Glyph("✖"));
         p.put(HouseIcons.PinIcon.INSTANCE, new Glyph("⚲"));
         p.put(HouseIcons.CheckIcon.INSTANCE, new Glyph("✔"));
         p.put(HouseIcons.GripIcon.INSTANCE, new Glyph("⁘"));
         p.put(HouseIcons.DiscloseIcon.INSTANCE, new Glyph("➤"));
         p.put(HouseIcons.SettingsIcon.INSTANCE, new Glyph("⚒"));
-        p.put(HouseIcons.PacmanIcon.INSTANCE, new Svg("pacman"));   // its own pacman, drawn by hand
+        p.put(HouseIcons.PacmanIcon.INSTANCE, new Svg<>(new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg()));   // its own, drawn by hand
         return p;
     }
 

@@ -80,13 +80,13 @@ class HouseIconPalettesTest {
         var base = HouseIconPalettes.INSTANCE.base();
         var less = new java.util.LinkedHashMap<>(base.pictures());
         less.remove(HouseIcons.CheckIcon.INSTANCE);
-        assertThrows(IllegalArgumentException.class, () -> new IconPictures(PICTURES.icons(), new IconPalette(Base.INSTANCE, less), List.of()));
+        assertThrows(IllegalArgumentException.class, () -> new IconPictures(PICTURES.icons(), new IconPalette<>(Base.INSTANCE, less), List.of()));
         var fewer = PICTURES.icons().stream().filter(i -> !i.equals(HouseIcons.CheckIcon.INSTANCE)).toList();
         assertThrows(IllegalArgumentException.class, () -> new IconPictures(fewer, base, List.of()), "base draws an icon the instance does not register");
         assertThrows(IllegalArgumentException.class, () -> new IconPictures(PICTURES.icons(), base,
-                List.of(new IconPalette(Sketchy.INSTANCE, Map.of()), new IconPalette(Sketchy.INSTANCE, Map.of()))));
+                List.of(new IconPalette<>(Sketchy.INSTANCE, Map.of()), new IconPalette<>(Sketchy.INSTANCE, Map.of()))));
         assertThrows(IllegalArgumentException.class, () -> new IconPicture.Glyph(" "));
-        assertThrows(IllegalArgumentException.class, () -> new IconPicture.Svg("Rotate"));
+        assertThrows(NullPointerException.class, () -> new IconPicture.Svg<>(null), "an SVG picture imports its SVG");
     }
 
     @Test
@@ -132,6 +132,22 @@ class HouseIconPalettesTest {
         var taken = new ArrayList<String>();
         refused.forEach((why, text) -> { try { new IconSvg(why + ".svg", text); taken.add(why); } catch (IllegalArgumentException e) { /* refused */ } });
         assertEquals(List.of(), taken, "each refused");
+    }
+
+    /** An SVG's file is held to the colours its SVG imports, both ways (owner, 21 Oct: SvgWithColorScheme, imported by the picture). */
+    @Test
+    void anSvgsFile_isHeldToTheColoursItImports_bothWays() {
+        java.util.function.Function<String, IconSvg> naming = colours -> new IconSvg("named.svg", "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\">"
+                + java.util.Arrays.stream(colours.split(" ")).map(c -> "<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-" + c + ")\"/>").reduce("", String::concat) + "</svg>");
+        var rotate = new hue.captains.singapura.js.homing.design.spec.styles.base.RotateSvg();
+        assertEquals(List.of("text", "accent"), IconSvgs.INSTANCE.imported(rotate));
+        assertEquals(List.of(), IconSvgs.INSTANCE.against(naming.apply("text accent"), rotate), "what it imports, each named");
+        assertEquals(List.of(), IconSvgs.INSTANCE.against(naming.apply("accent text"), rotate), "in whatever order");
+        List<String> more = IconSvgs.INSTANCE.against(naming.apply("text accent success-ink"), rotate);
+        assertTrue(more.size() == 1 && more.getFirst().contains("names --fp-success-ink, which RotateSvg does not import"), more.toString());
+        List<String> fewer = IconSvgs.INSTANCE.against(naming.apply("text"), rotate);
+        assertTrue(fewer.size() == 1 && fewer.getFirst().contains("imports accent, which it never names"), fewer.toString());
+        assertEquals("pacman", new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg().name(), "its name, its class's without Svg");
     }
 
     private static int count(String text, String what) { return text.split(Pattern.quote(what), -1).length - 1; }

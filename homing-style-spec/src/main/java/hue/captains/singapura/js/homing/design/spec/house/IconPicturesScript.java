@@ -42,7 +42,7 @@ public record IconPicturesScript() implements StatelessFunctionalObject {
         for (DesignStyle<?> s : styles) {
             var cells = new ArrayList<String>();
             for (IconLeaf i : pictures.icons()) {
-                IconPicture picture = pictures.picture(s, i);
+                IconPicture<?> picture = pictures.picture(s, i);
                 String own = pictures.own(s, i) ? "_" + constant(s.token()) : "";
                 String key, line, name;
                 switch (picture) {
@@ -51,14 +51,13 @@ public record IconPicturesScript() implements StatelessFunctionalObject {
                         name = "GLYPH_" + constant(i.token()) + own;
                         line = "Object.freeze({ glyph: " + js.string(g.character()) + " })";
                     }
-                    case IconPicture.Svg v -> {
-                        DesignStyle<?> drawer = pictures.drawer(s, i);
-                        key = i.token() + " svg " + drawer.token() + " " + v.resource();
+                    case IconPicture.Svg<?> v -> {
+                        key = i.token() + " svg " + v.svg().getClass().getName();
                         name = "SVG_" + constant(i.token()) + own;
-                        // its markup, where its resource is there; else none, and the page draws its placeholder
-                        line = IconSvgs.INSTANCE.find(drawer, v)
-                                .map(svg -> "Object.freeze({ svg: " + js.string(v.resource()) + ", markup: " + js.string(svg.markup()) + " })")
-                                .orElse("Object.freeze({ svg: " + js.string(v.resource()) + " })");
+                        // its markup, where its file is there; else its name alone, and the page draws its placeholder
+                        line = IconSvgs.INSTANCE.find(v.svg())
+                                .map(svg -> "Object.freeze({ svg: " + js.string(v.svg().name()) + ", markup: " + js.string(svg.markup()) + " })")
+                                .orElse("Object.freeze({ svg: " + js.string(v.svg().name()) + " })");
                     }
                 }
                 if (!constants.containsKey(key)) {

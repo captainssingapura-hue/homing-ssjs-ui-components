@@ -1,25 +1,27 @@
 package hue.captains.singapura.js.homing.design.spec.house;
 
+import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.tao.ontology.ValueObject;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 /**
- * A picture a style's icon palette draws an icon as (RFC 0067, D56): a character, or an SVG resource of the style's, its
- * colours the palette's variables, written in it (owner, 21 Oct). Which, icon by icon, is the style's: an icon carries its
- * meaning alone, the same in every style, and says nothing of how it is drawn. An SVG picture is its style's resource
- * ({@link IconSvgs}), put in the icon's element as it is ({@link IconSvg}); where it is not there yet, the page draws a
- * placeholder in its place.
+ * A picture a style's icon palette draws an icon as (RFC 0067, D56): a character, or an SVG picture in a colour scheme,
+ * its colours the palette's variables, written in it (owner, 21 Oct). Which, icon by icon, is the style's: an icon carries
+ * its meaning alone, the same in every style, and says nothing of how it is drawn. An SVG picture imports its SVG
+ * ({@link SvgWithColorScheme}) - its file found by {@link IconSvgs}, put in the icon's element as it is ({@link IconSvg});
+ * where the file is not there yet, the page draws a placeholder in its place.
+ *
+ * @param <SC> the colour scheme it is drawn in: a character's any
  */
-public sealed interface IconPicture extends ValueObject permits IconPicture.Glyph, IconPicture.Svg {
+public sealed interface IconPicture<SC extends ColorScheme> extends ValueObject permits IconPicture.Glyph, IconPicture.Svg {
 
     /**
-     * A picture drawn as a character.
+     * A picture drawn as a character: in every scheme, naming no colour.
      *
      * @param character what is drawn: something to see, no white space in it
      */
-    record Glyph(String character) implements IconPicture {
+    record Glyph(String character) implements IconPicture<ColorScheme> {
         public Glyph {
             Objects.requireNonNull(character, "Glyph.character");
             if (character.isBlank() || character.codePoints().anyMatch(Character::isWhitespace))
@@ -28,17 +30,13 @@ public sealed interface IconPicture extends ValueObject permits IconPicture.Glyp
     }
 
     /**
-     * A picture drawn as an SVG resource.
+     * A picture drawn as an SVG: the SVG it imports, in its scheme.
      *
-     * @param resource its name: lower-case words joined by hyphens
+     * @param svg the SVG, its colours typed by its scheme
      */
-    record Svg(String resource) implements IconPicture {
-        private static final Pattern NAME = Pattern.compile("[a-z][a-z0-9]*(-[a-z0-9]+)*");
-
+    record Svg<SC extends ColorScheme>(SvgWithColorScheme<SC> svg) implements IconPicture<SC> {
         public Svg {
-            Objects.requireNonNull(resource, "Svg.resource");
-            if (!NAME.matcher(resource).matches())
-                throw new IllegalArgumentException("Svg: '" + resource + "' is no resource's name - lower-case words joined by hyphens");
+            Objects.requireNonNull(svg, "Svg.svg");
         }
     }
 }

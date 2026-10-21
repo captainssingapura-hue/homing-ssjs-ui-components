@@ -18,7 +18,7 @@ import java.util.Objects;
  * @param base   base's palette
  * @param styles each style's palette that draws something of its own
  */
-public record IconPictures(List<IconLeaf> icons, IconPalette base, List<IconPalette> styles) implements ValueObject {
+public record IconPictures(List<IconLeaf> icons, IconPalette<?> base, List<IconPalette<?>> styles) implements ValueObject {
 
     public IconPictures {
         Objects.requireNonNull(icons, "IconPictures.icons");
@@ -28,10 +28,10 @@ public record IconPictures(List<IconLeaf> icons, IconPalette base, List<IconPale
         styles = List.copyOf(styles);
         var problems = new ArrayList<String>();
         for (IconLeaf i : icons) if (!base.pictures().containsKey(i)) problems.add("base's palette draws no picture of " + i.token());
-        var palettes = new ArrayList<IconPalette>(styles);
+        var palettes = new ArrayList<IconPalette<?>>(styles);
         palettes.add(base);
         var styled = new HashSet<DesignStyle<?>>();
-        for (IconPalette p : palettes) {
+        for (IconPalette<?> p : palettes) {
             if (!styled.add(p.style())) problems.add(p.style().token() + " has two icon palettes");
             for (IconLeaf i : p.pictures().keySet())
                 if (!icons.contains(i)) problems.add(p.style().token() + "'s palette draws " + i.token() + ", which is no icon the instance registers");
@@ -40,9 +40,9 @@ public record IconPictures(List<IconLeaf> icons, IconPalette base, List<IconPale
     }
 
     /** What an icon is drawn as in a style: the style's own picture, else base's. */
-    public IconPicture picture(DesignStyle<?> style, IconLeaf icon) {
+    public IconPicture<?> picture(DesignStyle<?> style, IconLeaf icon) {
         if (!icons.contains(icon)) throw new IllegalArgumentException(icon.token() + " is no icon the instance registers");
-        IconPicture own = styles.stream().filter(p -> p.style().equals(style)).findFirst().map(p -> p.pictures().get(icon)).orElse(null);
+        IconPicture<?> own = styles.stream().filter(p -> p.style().equals(style)).findFirst().map(p -> p.pictures().get(icon)).orElse(null);
         return own != null ? own : base.pictures().get(icon);
     }
 
