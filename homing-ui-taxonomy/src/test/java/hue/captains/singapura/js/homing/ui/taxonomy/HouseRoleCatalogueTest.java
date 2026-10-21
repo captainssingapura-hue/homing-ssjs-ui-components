@@ -26,13 +26,13 @@ class HouseRoleCatalogueTest {
     private static final RoleCatalogue CATALOGUE = HouseRoleCatalogue.INSTANCE.read();
 
     @Test
-    void threeTopBranches_nineteenBeneath_ninetyFiveRoles() {
+    void threeTopBranches_nineteenBeneath_ninetySixRoles() {
         assertEquals(List.of(HouseSaying.Saying.INSTANCE, HouseDoing.Doing.INSTANCE, HouseShaping.Shaping.INSTANCE),
                 CATALOGUE.children(RoleRoot.INSTANCE));
         assertEquals(22, CATALOGUE.branches().size());
         assertEquals(19, CATALOGUE.branches().stream().filter(b -> b.level() == 2).count());
-        assertEquals(95, CATALOGUE.roles().size());
-        assertEquals(95, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
+        assertEquals(96, CATALOGUE.roles().size(), "the void role among them (21 Oct)");
+        assertEquals(96, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
     }
 
     @Test
@@ -64,10 +64,12 @@ class HouseRoleCatalogueTest {
     }
 
     @Test
-    void everyRoleSitsTwoLevelsDown_underSaying_Doing_orShaping() {
+    void everyRoleSitsTwoLevelsDown_underSaying_Doing_orShaping_butTheVoidRole() {
         Map<String, Long> perTop = new LinkedHashMap<>();
         for (Role<?> r : CATALOGUE.roles()) {
             RoleBranch branch = CATALOGUE.parent(r);
+            // the void role says nothing, so it is of no family: right under Shaping, whose roles only place (21 Oct)
+            if (r.equals(HouseShaping.VoidRole.INSTANCE)) { assertEquals(HouseShaping.Shaping.INSTANCE, branch); continue; }
             assertEquals(2, branch.level(), r + " is filed at level 2");
             perTop.merge(CATALOGUE.parent(branch).name().value(), 1L, Long::sum);
         }
@@ -88,8 +90,8 @@ class HouseRoleCatalogueTest {
         var unnamed = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
                 .map(f -> f.says().replace(" is named by no component", "")).toList();
         assertEquals(List.of("Subtitle", "Category", "Placeholder", "Status", "Error", "Check", "Style", "Palette", "Query", "Skip", "Toggle", "Adjust",
-                "Reset", "Increase", "Decrease", "Clear", "Remove", "Preferences", "Previous", "Next", "First", "Last", "More", "Foot", "Page", "Host",
+                "Reset", "Increase", "Decrease", "Clear", "Add", "Remove", "Preferences", "Previous", "Next", "First", "Last", "More", "Foot", "Page", "Host",
                 "Index", "Detail", "Setting", "Layout", "Body", "Media", "Fallback", "Member", "Entry", "Dock", "Group", "Opener", "Pull", "Scroll"), unnamed,
-                "a strip's foot, a site's page, a view's index and detail unnamed since the rooms left the parts; the words only widgets said - a subtitle, a status, a setting, an entry, a member and the rest - since the widgets are no components (20 Oct)");
+                "a strip's foot, a site's page, a view's index and detail unnamed since the rooms left the parts; the words only widgets said - a subtitle, a status, a setting, an entry, a member and the rest - since the widgets are no components (20 Oct); add since the tab strip's plus is placed in the void role (21 Oct)");
     }
 }

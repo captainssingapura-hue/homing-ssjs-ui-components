@@ -255,7 +255,7 @@ public final class HouseContainers {
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(Cardinality.DYNAMIC),
-                           DSL.part(HouseControls.IconButton.INSTANCE).as(HouseDoing.Add.INSTANCE).optional(),
+                           DSL.part(HouseControls.IconButton.INSTANCE).as(HouseShaping.VoidRole.INSTANCE).optional(),   // the plus: its icon says it adds (21 Oct)
                            DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
                            DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional(Cardinality.DYNAMIC));

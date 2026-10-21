@@ -99,8 +99,8 @@ public record HeaderStamp() implements StatelessFunctionalObject {
 
     /**
      * For each part its type leaves a choice of - several players, one chosen in its owner's fixed object: an icon
-     * button's face - the part's slots by the chosen player's fixed type, its role's name after {@code SLOTS_}:
-     * {@code const SLOTS_FACE = [[FixedAddIcon, SLOT_ADD_ICON_FACE], …];}. The owner places the part along the slot
+     * button's icon - the part's slots by the chosen player's fixed type, its role's name after {@code SLOTS_}:
+     * {@code const SLOTS_VOID_ROLE = [[FixedAddIcon, SLOT_ADD_ICON_VOID_ROLE], …];}. The owner places the part along the slot
      * of the player its fixed object holds, which the fixed object has checked is one of them.
      *
      * @param named  the slots' constants, in its slots' order: a single stamp's, or a merged one's

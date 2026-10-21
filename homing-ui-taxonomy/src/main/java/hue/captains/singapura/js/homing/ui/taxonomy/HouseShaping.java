@@ -22,6 +22,15 @@ public final class HouseShaping {
         @Override public boolean functional() { return true; }
     }
 
+    /**
+     * No role: the part is placed where its owner puts it, and nothing more is said of it - its look its own, whatever holds it. For a part whose owner does not care what role it plays. The icon button in what holds it, and the icon in an icon button (owner, 21 Oct). Filed under Shaping, so
+     * it only places: a part in it wears its own look, and no style draws one for it.
+     */
+    public record VoidRole() implements Role<Shaping> {
+        public static final VoidRole INSTANCE = new VoidRole();
+        @Override public Shaping parent() { return Shaping.INSTANCE; }
+    }
+
     // ── Picturing — where its icons sit on the owner ─────────────────────
 
     /**

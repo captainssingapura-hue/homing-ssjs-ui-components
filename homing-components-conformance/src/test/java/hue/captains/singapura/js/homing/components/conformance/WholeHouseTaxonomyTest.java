@@ -43,7 +43,7 @@ class WholeHouseTaxonomyTest {
     void theWholeHouse_isReadAsItWasBeforeItWasCut() {
         assertEquals(22, HOUSE.branches().size(), "the split gone with the split grid, a layout (21 Oct); " + "the icons a branch of the mark (D52); the headings a branch of the text; the input, the way and the selector under the control, the surface and the chooser under the container, each heading a family - the field and the cluster gone with the widgets (20 Oct)");
         assertEquals(118, HOUSE.components().size(), "the icons each a leaf, the icon gone (D52); a table cell's words a text cell (D42); the edge strip's lip; the rooms no components, their owners' own (20 Oct); a document table's cells containers, their words strong or muted; the summary card ditched: the card plain or clickable, the summary a view of its own; the slider's rail, knob and groove and the toggle's parts of their own; the brand's mark a part of its own; the split pane retired - its uses widgets with a fixed split grid - and the dock grid - its docks a split grid's residents; the ground, the site bar and the title bar added (the panel's bar too, dropped with the panel, 20 Oct), and a text box and a checkbox; the heading a leaf per level; prose a leaf per element");
-        assertEquals(97, HOUSE.roles().size(), "the catalogue beside the tree: what an icon is to its owner among them (D52); the umbrella and the sub-container (21 Oct)");
+        assertEquals(98, HOUSE.roles().size(), "the catalogue beside the tree: what an icon is to its owner among them (D52); the umbrella and the sub-container, and the void role (21 Oct)");
         assertEquals(80, HOUSE.parts().size(), "the widgets' parts and the preferences button's dialog gone (20 Oct); the split grid's two lines the layouts' styling's, with its umbrellas and sub-containers (21 Oct); the close button's face, the close icon (D52); a header cell's title and a data cell's value, each a text cell (D42); the slots, each a part once its owner is appended - the strip's tabs, its tail a room now; the edge strip's lip; the slider's rail and the brand's mark among them; the grid's line in two roles; a table's header and data cells");
         assertEquals(36, HOUSE.parts().stream().map(Part::owner).distinct().count(), "the close button among them, its face its own part (D52); the table's two cells among them; the components that have parts - the widgets no more (20 Oct); the slider's knob none: its mark the slider's symbol");
     }
@@ -76,7 +76,7 @@ class WholeHouseTaxonomyTest {
     @Test
     void everyRoleNamed_butTheWordsKeptForWhatIsToCome() {
         assertEquals(List.of("subtitle", "category", "placeholder", "status", "error", "check", "style", "palette", "query", "skip",
-                             "toggle", "adjust", "reset", "increase", "decrease", "clear", "remove", "preferences", "previous", "next", "first",
+                             "toggle", "adjust", "reset", "increase", "decrease", "clear", "add", "remove", "preferences", "previous", "next", "first",
                              "last", "more", "foot", "page", "host", "index", "detail", "setting", "layout", "body", "media", "fallback",
                              "member", "entry", "dock", "group", "opener", "pull", "scroll"),
                 HOUSE.roles().stream().filter(r -> HOUSE.partsNaming(r).isEmpty()).map(r -> r.name().value()).toList());
@@ -93,7 +93,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(22 + 118 + 22 + 97 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
+        assertEquals(22 + 118 + 22 + 98 + 8 + 22 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 

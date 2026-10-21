@@ -106,7 +106,6 @@ public record RetroFuturismStyleDeclaration() implements StyleDeclaration {
                 new PrimaryButtonGo(),
                 new PlainButtonAction(),
                 new CrumbStep(),
-                new IconButtonAdd(),
                 new PillCount(),
                 new BrandHome(),
                 new LabelTitle(),

@@ -106,7 +106,6 @@ public record EditorialStyleDeclaration() implements StyleDeclaration {
                 new PrimaryButtonGo(),
                 new PlainButtonAction(),
                 new CrumbStep(),
-                new IconButtonAdd(),
                 new PillCount(),
                 new BrandHome(),
                 new LabelTitle(),

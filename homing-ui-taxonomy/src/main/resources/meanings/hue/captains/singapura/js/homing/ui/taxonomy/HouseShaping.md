@@ -5,6 +5,10 @@
 A part that makes up its owner's room: its bands, its layers, what it shows, its members, the
 lines between them, and what the hand takes hold of.
 
+## VoidRole
+
+No role: the part is placed where its owner puts it, and nothing more is said of it - its look its own, whatever holds it. For a part whose owner does not care what role it plays.
+
 ## Bands
 
 Strips of the owner's room, each with a job of its own.

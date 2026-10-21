@@ -130,16 +130,19 @@ public final class HouseControls {
         @Override public Button parent() { return Button.INSTANCE; }
     }
 
-    /** The function of a button, the look of an icon: its face an icon, its part - which icon, chosen once in its fixed object. */
-    public record IconButton() implements Composite<Button>, WithRoles<HouseRoleSets.Managing> {
+    /**
+     * The function of a button, the look of an icon: its face an icon, its part - which icon, chosen once in its fixed
+     * object. It has no role set: what holds it places it, in the void role, its icon saying what it does (owner, 21 Oct);
+     * its icon is placed in the void role too.
+     */
+    public record IconButton() implements Composite<Button> {
         public static final IconButton INSTANCE = new IconButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
         @Override public List<EventType<?>> events() { return CLICKED; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
-        @Override public HouseRoleSets.Managing roleSet() { return HouseRoleSets.Managing.INSTANCE; }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.anyOf(HouseBranches.Icon.INSTANCE).as(HouseShaping.Face.INSTANCE).one());
+            return List.of(DSL.anyOf(HouseBranches.Icon.INSTANCE).as(HouseShaping.VoidRole.INSTANCE).one());
         }
     }
 

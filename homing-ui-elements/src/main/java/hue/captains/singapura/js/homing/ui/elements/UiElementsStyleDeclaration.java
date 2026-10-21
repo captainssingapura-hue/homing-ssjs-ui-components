@@ -119,7 +119,6 @@ public record UiElementsStyleDeclaration() implements StyleDeclaration {
                 new PrimaryButtonGo(),
                 new PlainButtonAction(),
                 new CrumbStep(),
-                new IconButtonAdd(),
                 new PillCount(),
                 new DropMarkLanding(),
                 new BrandHome(),
