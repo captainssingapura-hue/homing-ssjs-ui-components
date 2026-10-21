@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 
 import java.util.List;
 
-/** base's preferences: three sliders, each set to your liking - their lines in the text's colour, their knobs in the accent, ringed in the text's colour. */
+/** base's preferences: three sliders, each set to your liking - their lines in the colour it is given, their knobs in the accent, ringed in it. */
 public record PreferencesSvg() implements SvgWithColorScheme<BaseScheme> {
     @Override public List<Palettable<? super BaseScheme, ?>> colours() {
-        return List.of(new BaseColours.Text(), new BaseColours.Accent());
+        return List.of(new BaseColours.Accent());
     }
 }

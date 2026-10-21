@@ -91,11 +91,11 @@ class ContentTest {
         IconSvg preferences = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesSvg()).orElseThrow();
         assertEquals(java.util.Set.of(rotate.resource(), flip, pacman.resource(), sketchy.resource(), preferences.resource()), java.util.Set.copyOf(IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles())),
                 "base's four, and sketchy's own pacman");
-        assertEquals(List.of("text", "accent"), preferences.colours(), "the sliders' lines and rings, their knobs");
+        assertEquals(List.of("accent"), preferences.colours(), "the sliders' knobs; their lines and rings in the colour it is given");
         assertEquals(List.of(flip), IconSvgs.INSTANCE.awaiting(PICTURES, SPEC.styles()), "flip's not here yet: drawn as its placeholder");
-        assertEquals(List.of("text", "accent"), rotate.colours(), "its arc in the text's colour, its head in the accent");
-        assertEquals(List.of("accent", "text", "danger-ink"), pacman.colours(), "its body, its eye, its pellets");
-        assertEquals(List.of("accent", "text", "success-ink", "danger-ink"), sketchy.colours(), "its body outlined, its eye, its trail, its big pellet");
+        assertEquals(List.of("accent"), rotate.colours(), "its head in the accent; its arc in the colour it is given");
+        assertEquals(List.of("accent", "danger-ink"), pacman.colours(), "its body, its pellets; its eye in the colour it is given");
+        assertEquals(List.of("accent", "success-ink", "danger-ink"), sketchy.colours(), "its body, its trail, its big pellet; its outline and eye in the colour it is given");
         String js = IconPicturesScript.INSTANCE.script(PICTURES, SPEC.selectable());
         assertTrue(js.contains("svg: \"rotate\", markup: " + JsLiterals.INSTANCE.string(rotate.markup())), "rotate's markup, as it is");
         assertTrue(js.contains("svg: \"pacman\", markup: " + JsLiterals.INSTANCE.string(pacman.markup())), "base's pacman, as it is");

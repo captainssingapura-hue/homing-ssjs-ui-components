@@ -114,11 +114,16 @@ class HouseIconPalettesTest {
         IconSvg whole = new IconSvg("whole.svg", "<!-- a comment -->\n" + in.apply("\n    " + shape + "\n"));
         assertEquals(List.of("text"), whole.colours());
         assertFalse(whole.markup().contains("comment") || whole.markup().contains("\n"), "its markup without its comments or the space between its tags");
+        assertTrue(whole.markup().startsWith("<svg fill=\"currentColor\" "), "its svg filling in the colour the icon is given: each shape's default");
+        // by default a shape takes the colour its icon is given (owner, 21 Oct): saying nothing, or currentColor outright
+        IconSvg given = new IconSvg("given.svg", in.apply("<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: currentColor\"/>"
+                + "<path d=\"M 2 22 L 22 2\" stroke=\"currentColor\"/>"));
+        assertEquals(List.of(), given.colours(), "the colour it is given is no palette's: nothing to import");
         var refused = new java.util.LinkedHashMap<String, String>();
         refused.put("a class", in.apply("<path class=\"line\" d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-text)\"/>"));
+        refused.put("a literal colour in an attribute", in.apply("<path d=\"M 2 2 L 22 22\" fill=\"#000\"/>"));
         refused.put("a literal colour", in.apply("<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: #000\"/>"));
         refused.put("a colour in an attribute", in.apply("<path d=\"M 2 2 L 22 22\" fill=\"none\" stroke=\"var(--fp-text)\"/>"));
-        refused.put("no fill said", in.apply("<path d=\"M 2 2 L 22 22\" style=\"stroke: var(--fp-text)\"/>"));
         refused.put("something besides its colours in its style", in.apply("<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-text); opacity: .5\"/>"));
         refused.put("a script", in.apply(shape + "<script>alert(1)</script>"));
         refused.put("a text", in.apply(shape + "<text>R</text>"));
@@ -140,13 +145,14 @@ class HouseIconPalettesTest {
         java.util.function.Function<String, IconSvg> naming = colours -> new IconSvg("named.svg", "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\">"
                 + java.util.Arrays.stream(colours.split(" ")).map(c -> "<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-" + c + ")\"/>").reduce("", String::concat) + "</svg>");
         var rotate = new hue.captains.singapura.js.homing.design.spec.styles.base.RotateSvg();
-        assertEquals(List.of("text", "accent"), IconSvgs.INSTANCE.imported(rotate));
-        assertEquals(List.of(), IconSvgs.INSTANCE.against(naming.apply("text accent"), rotate), "what it imports, each named");
-        assertEquals(List.of(), IconSvgs.INSTANCE.against(naming.apply("accent text"), rotate), "in whatever order");
-        List<String> more = IconSvgs.INSTANCE.against(naming.apply("text accent success-ink"), rotate);
-        assertTrue(more.size() == 1 && more.getFirst().contains("names --fp-success-ink, which RotateSvg does not import"), more.toString());
-        List<String> fewer = IconSvgs.INSTANCE.against(naming.apply("text"), rotate);
-        assertTrue(fewer.size() == 1 && fewer.getFirst().contains("imports accent, which it never names"), fewer.toString());
+        var pacman = new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg();
+        assertEquals(List.of("accent", "success-ink", "danger-ink"), IconSvgs.INSTANCE.imported(pacman));
+        assertEquals(List.of(), IconSvgs.INSTANCE.against(naming.apply("accent success-ink danger-ink"), pacman), "what it imports, each named");
+        assertEquals(List.of(), IconSvgs.INSTANCE.against(naming.apply("danger-ink accent success-ink"), pacman), "in whatever order");
+        List<String> more = IconSvgs.INSTANCE.against(naming.apply("accent success-ink danger-ink text"), pacman);
+        assertTrue(more.size() == 1 && more.getFirst().contains("names --fp-text, which PacmanSvg does not import"), more.toString());
+        List<String> fewer = IconSvgs.INSTANCE.against(naming.apply("accent danger-ink"), pacman);
+        assertTrue(fewer.size() == 1 && fewer.getFirst().contains("imports success-ink, which it never names"), fewer.toString());
         assertEquals("pacman", new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg().name(), "its name, its class's without Svg");
     }
 

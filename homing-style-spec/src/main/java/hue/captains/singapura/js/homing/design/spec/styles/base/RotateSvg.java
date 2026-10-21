@@ -7,9 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 
 import java.util.List;
 
-/** base's rotate: a turn clockwise - its arc in the text's colour, its head in the accent. */
+/** base's rotate: a turn clockwise - its arc in the colour it is given, its head in the accent. */
 public record RotateSvg() implements SvgWithColorScheme<BaseScheme> {
     @Override public List<Palettable<? super BaseScheme, ?>> colours() {
-        return List.of(new BaseColours.Text(), new BaseColours.Accent());
+        return List.of(new BaseColours.Accent());
     }
 }

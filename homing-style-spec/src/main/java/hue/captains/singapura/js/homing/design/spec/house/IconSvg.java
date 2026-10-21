@@ -19,11 +19,12 @@ import java.util.regex.Pattern;
 
 /**
  * An SVG picture of an icon, read from its resource and held whole (RFC 0067, D56): put in the icon's element as it is,
- * never shown as an image or a mask, so it follows the colour palette - its colours the palette's variables, written in
- * it, no class on it (owner, 21 Oct). Whole means: an {@code svg} of SVG's, a box of its own ({@code viewBox}) and one
- * character's size ({@code 1em} each way); inside, only shapes and groups; every shape saying its fill and its stroke,
- * each none or a palette's colour, {@code style="stroke: var(--fp-text)"} - so none falls back on a colour no one chose;
- * no class, no id, nothing that runs or links. Which palette colours it names, and that the style drawing it sees each,
+ * never shown as an image or a mask, so it follows what holds it and the colour palette (owner, 21 Oct): by default it
+ * takes the colour its icon is given - a shape that says nothing fills in it and draws no stroke, as a character does,
+ * and {@code currentColor} says it outright, a stroke in the colour it is given; else a palette's colour by variable,
+ * written in it, {@code style="fill: var(--fp-accent)"} - no class on it, and no colour no one chose. Whole means: an
+ * {@code svg} of SVG's, a box of its own ({@code viewBox}) and one character's size ({@code 1em} each way), saying no
+ * colour of its own; inside, only shapes and groups; no class, no id, nothing that runs or links. Which palette colours it names, and that the style drawing it sees each,
  * is for the colour tree ({@link IconSvgs#problems}).
  *
  * @param resource where it was read: {@code homing-svg/…/Base/rotate.svg}
@@ -47,9 +48,13 @@ public record IconSvg(String resource, String text) implements ValueObject {
         if (!problems.isEmpty()) throw new IllegalArgumentException(resource + ": " + String.join("; ", problems));
     }
 
-    /** What the page puts in the icon's element: its text, its comments gone and the space between its tags. */
+    /**
+     * What the page puts in the icon's element: its text, its comments gone and the space between its tags, its svg
+     * filling in the colour the icon is given - the default each shape that says nothing takes.
+     */
     public String markup() {
-        return text.replaceAll("(?s)<!--.*?-->", "").replaceAll(">\\s+<", "><").replaceAll("\\s+", " ").trim();
+        String bare = text.replaceAll("(?s)<!--.*?-->", "").replaceAll(">\\s+<", "><").replaceAll("\\s+", " ").trim();
+        return bare.replaceFirst("<svg\\b", "<svg fill=\"currentColor\"");
     }
 
     /** The palette's colours it names, each once, in the order it names them: {@code text}, {@code accent}. */
@@ -113,13 +118,17 @@ public record IconSvg(String resource, String text) implements ValueObject {
         }
     }
 
-    /** A shape says its fill and its stroke, each none or a palette's colour; and nothing else in its style. */
+    /**
+     * A shape's fill and its stroke: each none, the colour it is given ({@code currentColor}) or a palette's colour in its
+     * style - or unsaid, as its svg gives it: a fill in the colour it is given, no stroke. Nothing else in its style.
+     */
     private static void painted(Element e, List<String> out) {
         String tag = e.getLocalName();
         var said = new java.util.HashMap<String, String>();
         for (String a : List.of("fill", "stroke")) if (e.hasAttribute(a)) {
             said.put(a, e.getAttribute(a).trim());
-            if (!said.get(a).equals("none")) out.add(tag + ": its " + a + " attribute is " + said.get(a) + " - an attribute says none; a colour is said in its style, var(--fp-…)");
+            if (!said.get(a).equals("none") && !said.get(a).equals("currentColor"))
+                out.add(tag + ": its " + a + " attribute is " + said.get(a) + " - an attribute says none or currentColor; a palette's colour is said in its style, var(--fp-…)");
         }
         String style = e.getAttribute("style");
         int at = 0;
@@ -131,9 +140,8 @@ public record IconSvg(String resource, String text) implements ValueObject {
         if (!style.substring(at).isBlank()) out.add(tag + ": its style is not to be read from '" + style.substring(at).trim() + "'");
         for (String a : List.of("fill", "stroke")) {
             String v = said.get(a);
-            if (v == null) out.add(tag + ": says no " + a + " - none, or a palette's colour, var(--fp-…)");
-            else if (!v.equals("none") && !PALETTE.matcher(v).matches())
-                out.add(tag + ": its " + a + " is " + v + " - none, or a palette's colour, var(--fp-…)");
+            if (v != null && !v.equals("none") && !v.equals("currentColor") && !PALETTE.matcher(v).matches())
+                out.add(tag + ": its " + a + " is " + v + " - none, the colour it is given (currentColor), or a palette's colour, var(--fp-…)");
         }
     }
 }

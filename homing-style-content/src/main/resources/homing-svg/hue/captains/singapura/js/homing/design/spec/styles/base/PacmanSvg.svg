@@ -1,7 +1,7 @@
-<!-- The pacman icon in base: the round eater, mouth open, going along its way - its body in the accent, its eye in the text's colour, the pellets ahead of it in the danger ink, each the palette's (RFC 0067, D56). -->
+<!-- The pacman icon in base: the round eater, mouth open, going along its way - its body in the accent, its eye in the colour it is given, the pellets ahead of it in the danger ink, each the palette's (RFC 0067, D56). -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em">
     <path d="M 9 12 L 15.55 7.41 A 8 8 0 1 0 15.55 16.59 Z" style="fill: var(--fp-accent); stroke: none"/>
-    <circle cx="9.4" cy="7.4" r="1.2" style="fill: var(--fp-text); stroke: none"/>
+    <circle cx="9.4" cy="7.4" r="1.2"/>
     <circle cx="18.6" cy="12" r="1.4" style="fill: var(--fp-danger-ink); stroke: none"/>
     <circle cx="22.2" cy="12" r="1.4" style="fill: var(--fp-danger-ink); stroke: none"/>
 </svg>
