@@ -39,13 +39,13 @@ class PanZoomBar extends SimpleComponent {
         css.addClass(this.el, pz_bar);
         this.el.setAttribute("role", "group");
         this.el.setAttribute("aria-label", "Zoom");
-        this._out = this._button("out", "−", "Zoom out", SLOT_PLAIN_BUTTON_ZOOM_OUT, new PanZoomPress(this, "zoomOut"));
+        this._out = this._button("out", "−", "Zoom out", SLOT_PAN_ZOOM_BAR_PLAIN_BUTTON_ZOOM_OUT, new PanZoomPress(this, "zoomOut"));
         // the zoom, read out by the house's readout - an output, which says its changes to whoever cannot see them
-        this._readout = new Readout(branch.elementMaker("readout"), new FixedReadout(), this._slot(SLOT_READOUT_VALUE));
+        this._readout = new Readout(branch.elementMaker("readout"), new FixedReadout(), this._slot(SLOT_PAN_ZOOM_BAR_READOUT_VALUE));
         css.addClass(this._readout.el, pz_readout);
         this.el.appendChild(this._readout.el);
-        this._in = this._button("in", "+", "Zoom in", SLOT_PLAIN_BUTTON_ZOOM_IN, new PanZoomPress(this, "zoomIn"));
-        this._fit = this._button("fit", "Fit", "Fit the whole", SLOT_PLAIN_BUTTON_FIT, new PanZoomPress(this, "fit"));
+        this._in = this._button("in", "+", "Zoom in", SLOT_PAN_ZOOM_BAR_PLAIN_BUTTON_ZOOM_IN, new PanZoomPress(this, "zoomIn"));
+        this._fit = this._button("fit", "Fit", "Fit the whole", SLOT_PAN_ZOOM_BAR_PLAIN_BUTTON_FIT, new PanZoomPress(this, "fit"));
         this.root = this.el;
     }
 

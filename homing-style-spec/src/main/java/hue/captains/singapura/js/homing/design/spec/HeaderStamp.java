@@ -51,62 +51,52 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         return List.copyOf(out.values());
     }
 
-    /** Each room of the component's own as a constant - {@code const ROOM_TAIL = RoomTabStripTail;} - its node in the components' dual. */
+    /** Each room of the component's own as a constant, its owner's name first - {@code const ROOM_TAB_STRIP_TAIL = RoomTabStripTail;} - its node in the components' dual. */
     public List<SlotConstant> rooms(ComponentHeader h) {
         var out = new ArrayList<SlotConstant>();
         for (Room room : h.rooms()) {
-            String name = "ROOM_" + room.name().toUpperCase(Locale.ROOT).replace('-', '_');
+            String name = "ROOM_" + owner(h) + "_" + room.name().toUpperCase(Locale.ROOT).replace('-', '_');
             out.add(new SlotConstant(name, "const " + name + " = " + Components.INSTANCE.room(h.component(), room) + ";"));
         }
         return List.copyOf(out);
     }
 
-    /** Each slot as its own constant, made by the kit: its owner, its part and its role - the imported nodes - and how many the part is. */
+    /**
+     * Each slot as its own constant, made by the kit: its owner, its part and its role - the imported nodes - and how many
+     * the part is. Its name its owner's first, then its part's and its role's - {@code SLOT_CLOSE_BUTTON_CLOSE_ICON_FACE} -
+     * in every stamp alike (owner, 21 Oct): two owners in one module may each have a slot of one token.
+     */
     public List<SlotConstant> slots(ComponentHeader h) {
         var refOf = DualRef.INSTANCE;
         var out = new ArrayList<SlotConstant>();
         for (ComponentHeader.HeaderSlot s : h.slots()) {
-            String name = "SLOT_" + s.token().toUpperCase(Locale.ROOT).replace('-', '_');
+            String name = "SLOT_" + owner(h) + "_" + s.token().toUpperCase(Locale.ROOT).replace('-', '_');
             out.add(new SlotConstant(name, "const " + name + " = new Slot(" + refOf.of(h.component()).imported() + ", " + refOf.of(s.part()).imported()
                     + ", " + refOf.of(s.role()).imported() + ", " + count(s.cardinality()) + ");"));
         }
         return List.copyOf(out);
     }
 
-    /**
-     * Each slot as its constant in a merged stamp: its owner's name before the slot's - {@code SLOT_CLOSE_BUTTON_CLOSE_ICON_FACE}
-     * - since two owners under one branch may each have a slot of one token, the close button's face and the icon button's.
-     */
-    public List<SlotConstant> merged(ComponentHeader h) {
-        String owner = h.component().token().toUpperCase(Locale.ROOT).replace('-', '_');
-        return slots(h).stream().map(s -> {
-            String name = "SLOT_" + owner + "_" + s.name().substring("SLOT_".length());
-            return new SlotConstant(name, "const " + name + s.line().substring(("const " + s.name()).length()));
-        }).toList();
-    }
+    /** A component's name as its constants begin: {@code CLOSE_BUTTON}. */
+    private static String owner(ComponentHeader h) { return h.component().token().toUpperCase(Locale.ROOT).replace('-', '_'); }
 
-    /** Each slot's and each room's constant in a merged stamp, its owner's name before its own: {@code ROOM_PANEL_BODY}. */
-    private List<SlotConstant> mergedAll(ComponentHeader h) {
-        String owner = h.component().token().toUpperCase(Locale.ROOT).replace('-', '_');
-        var out = new ArrayList<>(merged(h));
-        for (SlotConstant s : rooms(h)) {
-            String name = "ROOM_" + owner + "_" + s.name().substring("ROOM_".length());
-            out.add(new SlotConstant(name, "const " + name + s.line().substring(("const " + s.name()).length())));
-        }
-        out.addAll(choices(h, merged(h), owner + "_"));
+    /** Each slot's, each room's and each choice table's constant of a header - named alike in a stamp of one header or of several. */
+    private List<SlotConstant> constants(ComponentHeader h) {
+        var out = new ArrayList<>(slots(h));
+        out.addAll(rooms(h));
+        out.addAll(choices(h, slots(h)));
         return out;
     }
 
     /**
      * For each part its type leaves a choice of - several players, one chosen in its owner's fixed object: an icon
-     * button's icon - the part's slots by the chosen player's fixed type, its role's name after {@code SLOTS_}:
-     * {@code const SLOTS_VOID_ROLE = [[FixedAddIcon, SLOT_ADD_ICON_VOID_ROLE], …];}. The owner places the part along the slot
+     * button's icon - the part's slots by the chosen player's fixed type, its owner's name then its role's after
+     * {@code SLOTS_}: {@code const SLOTS_ICON_BUTTON_VOID_ROLE = [[FixedAddIcon, SLOT_ICON_BUTTON_ADD_ICON_VOID_ROLE], …];}. The owner places the part along the slot
      * of the player its fixed object holds, which the fixed object has checked is one of them.
      *
-     * @param named  the slots' constants, in its slots' order: a single stamp's, or a merged one's
-     * @param prefix before the role's name: none, or a merged stamp's owner's name
+     * @param named the slots' constants, in its slots' order
      */
-    private List<SlotConstant> choices(ComponentHeader h, List<SlotConstant> named, String prefix) {
+    private List<SlotConstant> choices(ComponentHeader h, List<SlotConstant> named) {
         var byRole = new LinkedHashMap<String, List<String>>();
         for (int i = 0; i < h.slots().size(); i++) {
             ComponentHeader.HeaderSlot s = h.slots().get(i);
@@ -116,7 +106,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         }
         var out = new ArrayList<SlotConstant>();
         byRole.forEach((role, rows) -> {
-            String name = "SLOTS_" + prefix + role.toUpperCase(Locale.ROOT).replace('-', '_');
+            String name = "SLOTS_" + owner(h) + "_" + role.toUpperCase(Locale.ROOT).replace('-', '_');
             out.add(new SlotConstant(name, "const " + name + " = [" + String.join(", ", rows) + "];"));
         });
         return List.copyOf(out);
@@ -151,9 +141,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
             if (!names.isEmpty()) lines.add("import { " + String.join(", ", names) + " } from " + js.string(tree.address()) + ";");
         }
         if (h.topLevel()) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
-        for (SlotConstant s : slots(h)) lines.add(s.line());
-        for (SlotConstant s : rooms(h)) lines.add(s.line());
-        for (SlotConstant s : choices(h, slots(h), "")) lines.add(s.line());
+        for (SlotConstant s : constants(h)) lines.add(s.line());
         if (h.topLevel())
             lines.add("const " + manage(h) + " = " + PageStyleManager.EXPORTED + ".unit(" + DualRef.INSTANCE.of(h.component()).imported() + ");");
         return String.join("\n", lines) + "\n";
@@ -183,7 +171,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         }
         if (headers.stream().anyMatch(ComponentHeader::topLevel)) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
         var constants = new LinkedHashMap<String, String>();
-        for (ComponentHeader h : headers) for (SlotConstant s : mergedAll(h)) {
+        for (ComponentHeader h : headers) for (SlotConstant s : constants(h)) {
             String was = constants.putIfAbsent(s.name(), s.line());
             if (was != null && !was.equals(s.line()))
                 throw new IllegalArgumentException("two slots stamped as " + s.name() + " in one module: " + was + " and " + s.line());

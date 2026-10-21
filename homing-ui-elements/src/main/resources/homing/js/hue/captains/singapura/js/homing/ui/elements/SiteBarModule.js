@@ -29,9 +29,9 @@ class SiteBar extends SimpleComponent {
         super(branch.elementMaker("bar"), fixed, FixedSiteBar, place ?? manageSiteBar);
         css.addClass(this.el, el_site_bar);
         this.root = this.el;
-        this.brand = new Brand(branch.createBranch("brand"), new FixedBrand(), this._slot(SLOT_BRAND_HOME));
+        this.brand = new Brand(branch.createBranch("brand"), new FixedBrand(), this._slot(SLOT_SITE_BAR_BRAND_HOME));
         this._hold(this.brand, el_site_bar_start);
-        this.trail = new Trail(branch.createBranch("trail"), new FixedTrail(), this._slot(SLOT_TRAIL_PATH));
+        this.trail = new Trail(branch.createBranch("trail"), new FixedTrail(), this._slot(SLOT_SITE_BAR_TRAIL_PATH));
         this._hold(this.trail, el_site_bar_way);
     }
 

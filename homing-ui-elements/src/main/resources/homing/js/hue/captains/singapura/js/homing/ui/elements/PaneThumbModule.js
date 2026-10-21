@@ -31,7 +31,7 @@ class PaneThumb extends SimpleComponent {
             throw new TypeError("[PaneThumb] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_paneThumbOwner);
         super(branch.elementMaker("thumb"), fixed, FixedPaneThumb, place ?? managePaneThumb);
-        this._name = new Kicker(branch.elementMaker("name"), new FixedKicker(), this._slot(SLOT_KICKER_NAME));   // its name, a kicker cast as its name
+        this._name = new Kicker(branch.elementMaker("name"), new FixedKicker(), this._slot(SLOT_PANE_THUMB_KICKER_NAME));   // its name, a kicker cast as its name
         css.addClass(this._name.el, el_pane_thumb_name);
         this.el.appendChild(this._name.el);
         this.root = this.el;

@@ -34,7 +34,7 @@ class SummaryView extends SimpleComponent {
         css.addClass(this.el, el_summary);
         this._head = branch.createElement("head", "div");
         css.addClass(this._head, el_summary_head);
-        this._title = new Heading4(branch.elementMaker("title"), new FixedHeading4(), this._slot(SLOT_HEADING4_TITLE));
+        this._title = new Heading4(branch.elementMaker("title"), new FixedHeading4(), this._slot(SLOT_SUMMARY_VIEW_HEADING4_TITLE));
         css.addClass(this._title.el, el_summary_title);
         this._head.appendChild(this._title.el);
         this.el.appendChild(this._head);
@@ -54,7 +54,7 @@ class SummaryView extends SimpleComponent {
     set tag(words) {
         if (words == null || words === "") { if (this._tag) this._tag.text = ""; return; }
         if (!this._tag) {
-            this._tag = new Badge(this.branch.elementMaker("tag"), new FixedBadge(), this._slot(SLOT_BADGE_TAG));
+            this._tag = new Badge(this.branch.elementMaker("tag"), new FixedBadge(), this._slot(SLOT_SUMMARY_VIEW_BADGE_TAG));
             css.addClass(this._tag.el, el_summary_tag);
             this._head.appendChild(this._tag.el);
             this._tag.size = this.size;
@@ -67,7 +67,7 @@ class SummaryView extends SimpleComponent {
     set text(words) {
         if (words == null || words === "") { if (this._text) this._text.text = ""; return; }
         if (!this._text) {
-            this._text = new Caption(this.branch.elementMaker("text"), new FixedCaption(), this._slot(SLOT_CAPTION_SUMMARY));
+            this._text = new Caption(this.branch.elementMaker("text"), new FixedCaption(), this._slot(SLOT_SUMMARY_VIEW_CAPTION_SUMMARY));
             css.addClass(this._text.el, el_summary_text);
             this.el.insertBefore(this._text.el, this._foot);
             this._text.size = this.size;
@@ -82,7 +82,7 @@ class SummaryView extends SimpleComponent {
         if (!this._link) {
             this._foot = this.branch.createElement("foot", "div");
             css.addClass(this._foot, el_summary_foot);
-            this._link = new Link(this.branch.elementMaker("link"), new FixedLink(), this._slot(SLOT_LINK_OPEN));
+            this._link = new Link(this.branch.elementMaker("link"), new FixedLink(), this._slot(SLOT_SUMMARY_VIEW_LINK_OPEN));
             this._foot.appendChild(this._link.el);
             this.el.appendChild(this._foot);
             this._link.size = this.size;

@@ -46,11 +46,11 @@ class Trail extends SimpleComponent {
         while (this.root.firstChild) this.root.removeChild(this.root.firstChild);
         for (var i = 0; i < crumbs.length; i++) {
             if (i > 0) {
-                var sep = new Delimiter(this._steps.elementMaker("sep-" + i), new FixedDelimiter(), this._slot(SLOT_DELIMITER_BREAK));
+                var sep = new Delimiter(this._steps.elementMaker("sep-" + i), new FixedDelimiter(), this._slot(SLOT_TRAIL_DELIMITER_BREAK));
                 this.root.appendChild(sep.el);
             }
             var last = i === crumbs.length - 1, linked = !last && typeof crumbs[i].to === "string";
-            var crumb = new Crumb(this._steps.elementMaker("crumb-" + i), new FixedCrumb(), this._slot(SLOT_CRUMB_STEP));
+            var crumb = new Crumb(this._steps.elementMaker("crumb-" + i), new FixedCrumb(), this._slot(SLOT_TRAIL_CRUMB_STEP));
             crumb.text = crumbs[i].text;
             if (linked) crumb.to = crumbs[i].to;
             crumb.current = last;

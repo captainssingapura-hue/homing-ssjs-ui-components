@@ -26,7 +26,7 @@ class IconButton extends Button {
         super(branch.elementMaker("button"), fixed, FixedIconButton, place ?? manageIconButton);
         // its face: the icon its fixed object chose - which it has checked is one of the icons - along that icon's slot
         var chosen = this.fixed.voidRole;
-        var along = SLOTS_VOID_ROLE.find(function (row) { return chosen instanceof row[0]; })[1];
+        var along = SLOTS_ICON_BUTTON_VOID_ROLE.find(function (row) { return chosen instanceof row[0]; })[1];
         this._face = new Icon(branch.elementMaker("face"), chosen, this._slot(along));
         this.el.appendChild(this._face.el);
     }

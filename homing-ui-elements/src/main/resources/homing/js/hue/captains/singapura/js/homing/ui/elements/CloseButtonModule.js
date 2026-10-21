@@ -19,7 +19,7 @@ class CloseButton extends Button {
             throw new TypeError("[CloseButton] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_closeButtonOwner);
         super(branch.elementMaker("button"), fixed, FixedCloseButton, place ?? manageCloseButton);
-        this._face = new Icon(branch.elementMaker("face"), new FixedCloseIcon(), this._slot(SLOT_CLOSE_ICON_FACE));
+        this._face = new Icon(branch.elementMaker("face"), new FixedCloseIcon(), this._slot(SLOT_CLOSE_BUTTON_CLOSE_ICON_FACE));
         this.el.appendChild(this._face.el);
         this.label = "";
     }

@@ -43,7 +43,7 @@ class ChoiceOption extends SimpleComponent {
         this.el.appendChild(this._label);
         this._note = null;
         if (this.fixed.note !== null) {   // its note, the house's caption cast as a note: at its end
-            this._note = new Caption(branch.elementMaker("note"), this.fixed.note, this._slot(SLOT_CAPTION_NOTE));
+            this._note = new Caption(branch.elementMaker("note"), this.fixed.note, this._slot(SLOT_CHOICE_OPTION_CAPTION_NOTE));
             css.addClass(this._note.el, el_choice_option_note);
             this.el.appendChild(this._note.el);
         }

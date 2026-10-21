@@ -51,7 +51,7 @@
 //   class PlainButton extends Button {
 //       constructor(make, fixed, place) { super(make, fixed, FixedPlainButton, place ?? managePlainButton); }
 //   }
-//   var b = new PlainButton(branch.elementMaker("save"), new FixedPlainButton(), me.slot(SLOT_PLAIN_BUTTON_ACTIONS));
+//   var b = new PlainButton(branch.elementMaker("save"), new FixedPlainButton(), me.slot(SLOT_ACTION_BAR_PLAIN_BUTTON_ACTIONS));
 //     make    the maker its owner's branch issues: it makes the <TAG>, once
 //     fixed   what is immutable for its life: an object of its own fixed type,
 //             made by its dual (D30) - none of a bag of named values

@@ -44,9 +44,9 @@ class Switch extends SimpleComponent {
         this.el.type = "button";
         this.el.setAttribute("role", "switch");
         css.addClass(this.el, el_switch);
-        this._groove = new ToggleGroove(branch.elementMaker("groove"), new FixedToggleGroove(), this._slot(SLOT_TOGGLE_GROOVE_SPAN));
+        this._groove = new ToggleGroove(branch.elementMaker("groove"), new FixedToggleGroove(), this._slot(SLOT_SWITCH_TOGGLE_GROOVE_SPAN));
         css.addClass(this._groove.el, el_switch_groove);
-        var knob = new ToggleKnob(branch.elementMaker("knob"), new FixedToggleKnob(), this._slot(SLOT_TOGGLE_KNOB_THUMB));
+        var knob = new ToggleKnob(branch.elementMaker("knob"), new FixedToggleKnob(), this._slot(SLOT_SWITCH_TOGGLE_KNOB_THUMB));
         css.addClass(knob.el, el_switch_knob);
         this._groove.el.appendChild(knob.el);
         this.el.appendChild(this._groove.el);
