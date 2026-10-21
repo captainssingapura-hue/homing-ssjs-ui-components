@@ -39,7 +39,6 @@ public record GlassmorphismStyleDeclaration() implements StyleDeclaration {
                 new PaneThumb(),
                 new Tab(),
                 new Brand(),
-                new PreferencesButton(),
                 new MenuItem(),
                 new ListRow(),
                 new ChoiceOption(),

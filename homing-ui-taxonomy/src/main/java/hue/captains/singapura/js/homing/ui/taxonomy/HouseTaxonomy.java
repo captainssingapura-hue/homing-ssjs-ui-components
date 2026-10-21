@@ -30,7 +30,7 @@ public record HouseTaxonomy() implements StatelessFunctionalObject {
             UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiDialogComponentModule.INSTANCE,
             UiFloatingComponentModule.INSTANCE, UiMenuComponentModule.INSTANCE,
             UiPanesComponentModule.INSTANCE, UiPanZoomComponentModule.INSTANCE, UiSplitGridComponentModule.INSTANCE,
-            UiPreferencesComponentModule.INSTANCE, MpaComponentModule.INSTANCE);
+            UiPreferencesComponentModule.INSTANCE);   // the site jar's preferences button retired (21 Oct): it brings no component
 
     /**
      * The taxonomy of the component modules given, in the house's words: their components, a flat list, explicitly -

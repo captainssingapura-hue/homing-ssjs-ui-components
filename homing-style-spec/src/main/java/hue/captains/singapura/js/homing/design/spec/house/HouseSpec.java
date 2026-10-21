@@ -32,8 +32,7 @@ public record HouseSpec() implements StatelessFunctionalObject {
             UiPanesBaseSpec.INSTANCE,
             UiPanZoomBaseSpec.INSTANCE,
             UiSplitGridBaseSpec.INSTANCE,
-            UiPreferencesBaseSpec.INSTANCE,
-            MpaBaseSpec.INSTANCE);
+            UiPreferencesBaseSpec.INSTANCE);   // the site jar's base gone with its preferences button (21 Oct)
 
     /** Each house style's assignments. */
     public static final List<SpecModule<BaseScheme, ?>> STYLES = List.of(

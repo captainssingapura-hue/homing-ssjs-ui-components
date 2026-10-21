@@ -10,8 +10,6 @@ import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CrateEntry;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiPreferencesComponentModule;
 import hue.captains.singapura.js.homing.preferences.UiPreferencesCrate;
-import hue.captains.singapura.js.homing.ui.taxonomy.MpaComponentModule;
-import hue.captains.singapura.js.homing.site.mpa.MpaCrate;
 import hue.captains.singapura.js.homing.ui.controlpanel.UiControlPanelCrate;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiDialogComponentModule;
 import hue.captains.singapura.js.homing.ui.dialog.UiDialogCrate;
@@ -44,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The house's components taxonomy read from its jars' component modules (the components taxonomy by module): a flat
- * list of ten, registered explicitly, reads the house whole - each jar's module listing every component its crate
+ * list of nine - the site jar's gone with its preferences button (21 Oct) - registered explicitly, reads the house whole - each jar's module listing every component its crate
  * implements, the rest coming in as parts. There is no other list of the house's components (D51).
  */
 class HouseComponentModulesTest {
@@ -63,7 +61,6 @@ class HouseComponentModulesTest {
         out.put(UiPanZoomCrate.INSTANCE, UiPanZoomComponentModule.INSTANCE);
         out.put(UiSplitGridCrate.INSTANCE, UiSplitGridComponentModule.INSTANCE);
         out.put(UiPreferencesCrate.INSTANCE, UiPreferencesComponentModule.INSTANCE);
-        out.put(MpaCrate.INSTANCE, MpaComponentModule.INSTANCE);
         return out;
     }
 
@@ -76,7 +73,7 @@ class HouseComponentModulesTest {
     }
 
     @Test
-    void theTenModules_readTheHouseWhole() {
+    void theNineModules_readTheHouseWhole() {
         Taxonomy byModules = HouseTaxonomy.INSTANCE.read(HOUSE);
         int listed = HOUSE.stream().mapToInt(m -> m.components().size()).sum();
         assertEquals(118, byModules.components().size(), "the twenty icons among them, each a leaf of the Icon branch (D52); the rooms no components, nor the twelve widgets (20 Oct), nor the split grid, a layout (21 Oct)");

@@ -46,6 +46,7 @@ public record HouseIconPalettes() implements StatelessFunctionalObject {
         p.put(HouseIcons.GripIcon.INSTANCE, new Glyph("⠿"));
         p.put(HouseIcons.DiscloseIcon.INSTANCE, new Glyph("▸"));
         p.put(HouseIcons.SettingsIcon.INSTANCE, new Glyph("⚙"));
+        p.put(HouseIcons.PreferencesIcon.INSTANCE, new Svg<>(new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesSvg()));
         p.put(HouseIcons.SizeIcon.INSTANCE, new Glyph("⤢"));
         p.put(HouseIcons.AspectIcon.INSTANCE, new Glyph("⬌"));
         p.put(HouseIcons.ExtentIcon.INSTANCE, new Glyph("◐"));

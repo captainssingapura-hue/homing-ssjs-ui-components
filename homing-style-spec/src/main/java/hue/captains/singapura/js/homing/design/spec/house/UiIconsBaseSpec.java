@@ -36,6 +36,7 @@ public record UiIconsBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                 new ComponentAssignment<>(HouseIcons.GripIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.GripIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.DiscloseIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.DiscloseIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.SettingsIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SettingsIcon(), List.of()),
+                new ComponentAssignment<>(HouseIcons.PreferencesIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.SizeIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SizeIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.AspectIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.AspectIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.ExtentIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ExtentIcon(), List.of()),

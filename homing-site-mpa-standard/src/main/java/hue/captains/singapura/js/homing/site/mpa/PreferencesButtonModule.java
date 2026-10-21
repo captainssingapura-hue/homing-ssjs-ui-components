@@ -1,10 +1,10 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.ui.look.IconsModule;
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.WidgetSlotModule;
@@ -29,12 +29,19 @@ import java.util.List;
  * that Enter stays the tree's. Nothing is written here: every widget
  * writes through the steward, and the page follows the store as it always
  * has, so a theme picked in the dialog is worn behind it as it is picked.</p>
+ *
+ * <p>No component (owner, 21 Oct): the preferences button retired from the taxonomy - the chrome opens the preferences
+ * from an icon button wearing the preferences icon, when the chrome is ported. Until then this is the chrome's own
+ * piece, a button and the dialog it opens, shaped as a widget is.</p>
  */
-public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule>, ImplFor<HouseControls.PreferencesButton> {
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 15,
+        reason = "It draws its own button - its wrap, its mark, its words - by hand: when the chrome is ported, an icon button wearing the preferences icon (21 Oct).")
+public record PreferencesButtonModule() implements DomModule<PreferencesButtonModule> {
 
-    /** The class. */
+    /** The class: the chrome's own piece, no component - shaped as a widget is. */
     public record PreferencesButton() implements BranchComponent<PreferencesButtonModule> {
         @Override public String summary() { return "The button on the bar, and the dialog it opens."; }
+        @Override public Shape shape() { return Shape.WIDGET; }
     }
 
     public static final PreferencesButtonModule INSTANCE = new PreferencesButtonModule();

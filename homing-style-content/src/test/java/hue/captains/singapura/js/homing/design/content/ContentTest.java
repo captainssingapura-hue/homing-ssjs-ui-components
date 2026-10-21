@@ -88,8 +88,10 @@ class ContentTest {
         String flip = IconSvgs.INSTANCE.resource(new hue.captains.singapura.js.homing.design.spec.styles.base.FlipSvg());
         IconSvg pacman = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.base.PacmanSvg()).orElseThrow();
         IconSvg sketchy = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg()).orElseThrow();
-        assertEquals(java.util.Set.of(rotate.resource(), flip, pacman.resource(), sketchy.resource()), java.util.Set.copyOf(IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles())),
-                "base's three, and sketchy's own pacman");
+        IconSvg preferences = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesSvg()).orElseThrow();
+        assertEquals(java.util.Set.of(rotate.resource(), flip, pacman.resource(), sketchy.resource(), preferences.resource()), java.util.Set.copyOf(IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles())),
+                "base's four, and sketchy's own pacman");
+        assertEquals(List.of("text", "accent"), preferences.colours(), "the sliders' lines and rings, their knobs");
         assertEquals(List.of(flip), IconSvgs.INSTANCE.awaiting(PICTURES, SPEC.styles()), "flip's not here yet: drawn as its placeholder");
         assertEquals(List.of("text", "accent"), rotate.colours(), "its arc in the text's colour, its head in the accent");
         assertEquals(List.of("accent", "text", "danger-ink"), pacman.colours(), "its body, its eye, its pellets");

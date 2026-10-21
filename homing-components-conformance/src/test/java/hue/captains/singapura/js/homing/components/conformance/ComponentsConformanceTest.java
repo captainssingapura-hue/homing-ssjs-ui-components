@@ -169,6 +169,5 @@ class ComponentsConformanceTest {
             "EdgeStripModule (EdgeStrip): its part reveal is Lip, which no module implements - a part is a component of its own, never realized by its owner inline",
             "DialogModule (Dialog): its part actions is ActionBar, which no module implements - a part is a component of its own, never realized by its owner inline",
             "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
-            "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline",
-            "PreferencesButtonModule (PreferencesButton) imports Dialog (DialogModule), which none of its parts declares");
+            "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline");   // the preferences button's gone with it, no component (21 Oct)
 }

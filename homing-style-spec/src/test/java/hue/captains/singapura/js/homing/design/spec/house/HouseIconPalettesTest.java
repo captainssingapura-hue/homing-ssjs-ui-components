@@ -41,11 +41,11 @@ class HouseIconPalettesTest {
     private static final Pattern GLYPH = Pattern.compile("content:\\s*\"([^\"]*)\"");
 
     @Test
-    void everyIcon_hasItsPicture_inEveryStyle_threeSvgs() {
-        assertEquals(21, PICTURES.icons().size(), "the pacman among them (21 Oct)");
+    void everyIcon_hasItsPicture_inEveryStyle_fourSvgs() {
+        assertEquals(22, PICTURES.icons().size(), "the pacman and the preferences among them (21 Oct)");
         for (DesignStyle<?> s : SPEC.styles())
             for (IconLeaf i : PICTURES.icons()) {
-                boolean svg = i.equals(HouseIcons.RotateIcon.INSTANCE) || i.equals(HouseIcons.FlipIcon.INSTANCE) || i.equals(HouseIcons.PacmanIcon.INSTANCE);
+                boolean svg = i.equals(HouseIcons.RotateIcon.INSTANCE) || i.equals(HouseIcons.FlipIcon.INSTANCE) || i.equals(HouseIcons.PacmanIcon.INSTANCE) || i.equals(HouseIcons.PreferencesIcon.INSTANCE);
                 assertEquals(svg, PICTURES.picture(s, i) instanceof IconPicture.Svg, s.token() + " " + i.token());
             }
     }

@@ -293,18 +293,6 @@ public final class HouseControls {
         }
     }
 
-    /** The button that opens a site's preferences: what its click opens is its owner's. */
-    public record PreferencesButton() implements Composite<Button>, WithRoles<HouseRoleSets.Going> {
-        public static final PreferencesButton INSTANCE = new PreferencesButton();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public Button parent() { return Button.INSTANCE; }
-        @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseIcons.SettingsIcon.INSTANCE).as(HouseShaping.Face.INSTANCE).one());
-        }
-    }
-
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
     public record Switch() implements Composite<Input>, WithRoles<HouseRoleSets.Changing> {
         public static final Switch INSTANCE = new Switch();

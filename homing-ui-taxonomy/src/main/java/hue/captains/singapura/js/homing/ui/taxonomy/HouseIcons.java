@@ -71,6 +71,11 @@ public final class HouseIcons {
         public static final SettingsIcon INSTANCE = new SettingsIcon();
     }
 
+    /** Your preferences: how the site behaves for you, each set to your liking. */
+    public record PreferencesIcon() implements IconLeaf {
+        public static final PreferencesIcon INSTANCE = new PreferencesIcon();
+    }
+
     /** Bigger or smaller: the size axis. */
     public record SizeIcon() implements IconLeaf {
         public static final SizeIcon INSTANCE = new SizeIcon();
