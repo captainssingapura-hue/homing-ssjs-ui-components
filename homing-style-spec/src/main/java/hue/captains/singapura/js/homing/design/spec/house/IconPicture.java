@@ -7,9 +7,10 @@ import java.util.regex.Pattern;
 
 /**
  * A picture a style's icon palette draws an icon as (RFC 0067, D56): a character, or an SVG resource of the style's, its
- * shapes coloured by the palette's classes. Which, icon by icon, is the style's: an icon carries its meaning alone, the
- * same in every style, and says nothing of how it is drawn. No SVG resource is drawn yet: the page draws a placeholder in
- * its place.
+ * colours the palette's variables, written in it (owner, 21 Oct). Which, icon by icon, is the style's: an icon carries its
+ * meaning alone, the same in every style, and says nothing of how it is drawn. An SVG picture is its style's resource
+ * ({@link IconSvgs}), put in the icon's element as it is ({@link IconSvg}); where it is not there yet, the page draws a
+ * placeholder in its place.
  */
 public sealed interface IconPicture extends ValueObject permits IconPicture.Glyph, IconPicture.Svg {
 

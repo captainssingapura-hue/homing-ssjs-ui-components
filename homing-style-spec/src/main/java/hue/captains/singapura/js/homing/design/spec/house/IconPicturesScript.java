@@ -16,8 +16,9 @@ import java.util.Map;
 
 /**
  * The icons' pictures as the page has them (RFC 0067, D56): the picture provider the page's style manager is handed -
- * for an icon and a style, the picture its element shows: a character, or an SVG resource's name, which the page draws a
- * placeholder for until SVG pictures come; null for a component that shows none. Each picture is one object, shared by
+ * for an icon and a style, the picture its element shows: a character, or an SVG picture - its resource's name and its
+ * markup, put in the element as it is ({@link IconSvg}), or its name alone where its resource is not there yet, the page
+ * drawing a placeholder; null for a component that shows none. Each picture is one object, shared by
  * every style that draws it alike, so a switch redraws an icon only where the new style draws it otherwise. Made from
  * the icon palettes, for the styles the page may wear; generated, never written by hand.
  */
@@ -51,9 +52,13 @@ public record IconPicturesScript() implements StatelessFunctionalObject {
                         line = "Object.freeze({ glyph: " + js.string(g.character()) + " })";
                     }
                     case IconPicture.Svg v -> {
-                        key = i.token() + " svg " + v.resource();
+                        DesignStyle<?> drawer = pictures.drawer(s, i);
+                        key = i.token() + " svg " + drawer.token() + " " + v.resource();
                         name = "SVG_" + constant(i.token()) + own;
-                        line = "Object.freeze({ svg: " + js.string(v.resource()) + " })";
+                        // its markup, where its resource is there; else none, and the page draws its placeholder
+                        line = IconSvgs.INSTANCE.find(drawer, v)
+                                .map(svg -> "Object.freeze({ svg: " + js.string(v.resource()) + ", markup: " + js.string(svg.markup()) + " })")
+                                .orElse("Object.freeze({ svg: " + js.string(v.resource()) + " })");
                     }
                 }
                 if (!constants.containsKey(key)) {
@@ -67,8 +72,9 @@ public record IconPicturesScript() implements StatelessFunctionalObject {
         }
         var lines = new ArrayList<String>();
         lines.add("// The icons' pictures (RFC 0067, D56): the picture provider the page's style manager is handed - for an icon and a");
-        lines.add("// style, the picture its element shows: a character, or an SVG resource's name, drawn as a placeholder until SVG");
-        lines.add("// pictures come. Each picture one object, shared by every style that draws it alike. Generated from Java; not to be edited.");
+        lines.add("// style, the picture its element shows: a character, or an SVG picture - its name and its markup, put in the element as");
+        lines.add("// it is; its name alone, drawn as a placeholder, where its resource is not there yet. Each picture one object, shared by");
+        lines.add("// every style that draws it alike. Generated from Java; not to be edited.");
         lines.add("import { " + String.join(", ", pictures.icons().stream().map(i -> refs.of(i)).map(r -> r.name() + " as " + r.imported()).toList())
                 + " } from " + js.string(Components.INSTANCE.address()) + ";");
         lines.add("import { " + String.join(", ", styles.stream().map(s -> refs.of(s)).map(r -> r.name() + " as " + r.imported()).toList())

@@ -46,6 +46,9 @@ public record IconPictures(List<IconLeaf> icons, IconPalette base, List<IconPale
         return own != null ? own : base.pictures().get(icon);
     }
 
+    /** The style whose palette draws an icon in a style: the style itself where it draws it its own way, else base. */
+    public DesignStyle<?> drawer(DesignStyle<?> style, IconLeaf icon) { return own(style, icon) ? style : base.style(); }
+
     /** Whether a style draws an icon its own way: its palette has a picture of its own for it. */
     public boolean own(DesignStyle<?> style, IconLeaf icon) {
         return styles.stream().anyMatch(p -> p.style().equals(style) && p.pictures().containsKey(icon));

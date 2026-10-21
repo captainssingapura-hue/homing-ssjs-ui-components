@@ -101,6 +101,37 @@ class HouseIconPalettesTest {
         assertTrue(js.contains("CheckIcon as ComponentCheckIcon") && js.contains("Sketchy as StyleSketchy"), "each node imported by its name in its dual, as its prefixed name");
     }
 
+    /**
+     * An SVG picture is held whole as it is read (owner, 21 Oct: its colours the palette's variables, written in it, no
+     * class): a picture as the house draws one is taken, and each way a text falls short of one is refused for it.
+     */
+    @Test
+    void anSvgPicture_isRefused_thatIsNotWhole() {
+        String shape = "<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-text)\"/>";
+        java.util.function.Function<String, String> in = inside -> "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\">" + inside + "</svg>";
+        IconSvg whole = new IconSvg("whole.svg", "<!-- a comment -->\n" + in.apply("\n    " + shape + "\n"));
+        assertEquals(List.of("text"), whole.colours());
+        assertFalse(whole.markup().contains("comment") || whole.markup().contains("\n"), "its markup without its comments or the space between its tags");
+        var refused = new java.util.LinkedHashMap<String, String>();
+        refused.put("a class", in.apply("<path class=\"line\" d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-text)\"/>"));
+        refused.put("a literal colour", in.apply("<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: #000\"/>"));
+        refused.put("a colour in an attribute", in.apply("<path d=\"M 2 2 L 22 22\" fill=\"none\" stroke=\"var(--fp-text)\"/>"));
+        refused.put("no fill said", in.apply("<path d=\"M 2 2 L 22 22\" style=\"stroke: var(--fp-text)\"/>"));
+        refused.put("something besides its colours in its style", in.apply("<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-text); opacity: .5\"/>"));
+        refused.put("a script", in.apply(shape + "<script>alert(1)</script>"));
+        refused.put("a text", in.apply(shape + "<text>R</text>"));
+        refused.put("an id", in.apply("<g id=\"x\">" + shape + "</g>"));
+        refused.put("something that runs", in.apply("<g onclick=\"go()\">" + shape + "</g>"));
+        refused.put("nothing drawn", in.apply(""));
+        refused.put("no size of a character", in.apply(shape).replace("width=\"1em\"", "width=\"24\""));
+        refused.put("no box of its own", in.apply(shape).replace(" viewBox=\"0 0 24 24\"", ""));
+        refused.put("no SVG's", "<svg viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\">" + shape + "</svg>");
+        refused.put("not to be read", "<svg");
+        var taken = new ArrayList<String>();
+        refused.forEach((why, text) -> { try { new IconSvg(why + ".svg", text); taken.add(why); } catch (IllegalArgumentException e) { /* refused */ } });
+        assertEquals(List.of(), taken, "each refused");
+    }
+
     private static int count(String text, String what) { return text.split(Pattern.quote(what), -1).length - 1; }
 
     private static String sheet(String className) throws IOException {

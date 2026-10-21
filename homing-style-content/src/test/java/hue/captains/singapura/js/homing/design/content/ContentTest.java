@@ -7,7 +7,15 @@ import hue.captains.singapura.js.homing.design.spec.CheckContent;
 import hue.captains.singapura.js.homing.design.spec.CssResolution;
 import hue.captains.singapura.js.homing.design.spec.DuplicateContent;
 import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
+import hue.captains.singapura.js.homing.design.spec.JsLiterals;
+import hue.captains.singapura.js.homing.design.spec.house.HouseIconPalettes;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
+import hue.captains.singapura.js.homing.design.spec.house.IconPicture;
+import hue.captains.singapura.js.homing.design.spec.house.IconPictures;
+import hue.captains.singapura.js.homing.design.spec.house.IconPicturesScript;
+import hue.captains.singapura.js.homing.design.spec.house.IconSvg;
+import hue.captains.singapura.js.homing.design.spec.house.IconSvgs;
+import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.design.styling.CheckDeclaration;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import org.junit.jupiter.api.Test;
@@ -23,14 +31,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The house's content held to the registry (RFC 0067, D53): every implementation with CSS of its own has its content,
- * read and held whole as core holds an implementation's CSS - its marks, its casting's rule, its colours both ways; the
- * jar ships nothing else; and the classpath put together here gives no content twice.
+ * read and held whole as core holds an implementation's CSS - its marks, its casting's rule, its colours both ways; every
+ * SVG picture here held whole, its colours the palette's (D56); the jar ships nothing else; and the classpath put
+ * together here gives no content twice.
  */
 class ContentTest {
 
     private static final SpecRegistry SPEC = HouseSpec.INSTANCE.registry();
     private static final ColorTree TREE = BaseColours.TREE;
     private static final Path SHIPPED = Path.of("src/main/resources");
+    private static final IconPictures PICTURES = HouseIconPalettes.INSTANCE.read(SPEC.taxonomy());
 
     @Test
     void everyImplementation_hasItsContent_heldWhole() {
@@ -58,10 +68,34 @@ class ContentTest {
         try (Stream<Path> walk = Files.walk(SHIPPED)) {
             shipped = walk.filter(Files::isRegularFile).map(p -> SHIPPED.relativize(p).toString().replace('\\', '/')).sorted().toList();
         }
-        List<String> problems = CheckContent.INSTANCE.leftOver(SPEC, shipped);
+        List<String> sheets = shipped.stream().filter(p -> !p.startsWith(IconSvgs.PREFIX)).toList();
+        List<String> svgs = shipped.stream().filter(p -> p.startsWith(IconSvgs.PREFIX)).toList();
+        List<String> problems = CheckContent.INSTANCE.leftOver(SPEC, sheets);
         assertTrue(problems.isEmpty(), problems.size() + " left over:\n" + String.join("\n", problems.subList(0, Math.min(40, problems.size()))));
-        assertEquals(CheckContent.INSTANCE.expected(SPEC).size(), shipped.size(), "one file for each implementation with CSS of its own");
-        System.out.println("[content] " + shipped.size() + " files shipped, none left over");
+        assertEquals(CheckContent.INSTANCE.expected(SPEC).size(), sheets.size(), "one file for each implementation with CSS of its own");
+        List<String> pictures = IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles());
+        assertEquals(List.of(), svgs.stream().filter(p -> !pictures.contains(p)).toList(), "every SVG shipped the picture of an icon some palette draws");
+        System.out.println("[content] " + shipped.size() + " files shipped - " + sheets.size() + " sheets, " + svgs.size() + " SVG pictures - none left over");
+    }
+
+    /**
+     * Every SVG picture a palette draws whose resource is here is held whole - shapes only, each saying its fill and its
+     * stroke, none or a palette's colour - and each colour it names is a palettable colour its style's scheme sees; the one
+     * not here yet is flip's, drawn as its placeholder; and the page's module carries rotate's markup as it is.
+     */
+    @Test
+    void everySvgPicture_isHeldWhole_itsColoursThePalettes() {
+        assertEquals(List.of(), IconSvgs.INSTANCE.problems(PICTURES, SPEC.styles(), TREE));
+        IconSvg rotate = IconSvgs.INSTANCE.find(Base.INSTANCE, new IconPicture.Svg("rotate")).orElseThrow();
+        String flip = IconSvgs.INSTANCE.resource(Base.INSTANCE, new IconPicture.Svg("flip"));
+        assertEquals(List.of(rotate.resource(), flip), IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles()), "base's two, drawn in every style");
+        assertEquals(List.of(flip), IconSvgs.INSTANCE.awaiting(PICTURES, SPEC.styles()), "flip's not here yet: drawn as its placeholder");
+        assertEquals(List.of("text", "accent"), rotate.colours(), "its arc in the text's colour, its head in the accent");
+        String js = IconPicturesScript.INSTANCE.script(PICTURES, SPEC.selectable());
+        assertTrue(js.contains("svg: \"rotate\", markup: " + JsLiterals.INSTANCE.string(rotate.markup())), "rotate's markup, as it is");
+        assertTrue(js.contains("Object.freeze({ svg: \"flip\" })"), "flip's name alone");
+        System.out.println("[content] " + IconSvgs.INSTANCE.drawn(PICTURES, SPEC.styles()).size() + " SVG pictures drawn: rotate's held whole, naming "
+                + rotate.colours() + "; flip's awaiting its resource");
     }
 
     @Test

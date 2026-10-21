@@ -1,0 +1,5 @@
+<!-- The rotate icon in base: a turn clockwise - its arc in the text's colour, its head in the accent, each the palette's (RFC 0067, D56). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em">
+    <path d="M 15.5 5.94 A 7 7 0 1 1 8.5 5.94" style="fill: none; stroke: var(--fp-text)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M 12.2 3.8 L 9.6 9.4 L 5.9 3.0 Z" style="fill: var(--fp-accent); stroke: none"/>
+</svg>
