@@ -20,7 +20,7 @@ const _panZoomBarOwner = Object.freeze({ toString: () => "pan-zoom-bar" });
 /** A press on one of the bar's buttons: the view told to zoom out, zoom in or fit. */
 class PanZoomPress {
     constructor(bar, act) { this._bar = bar; this._act = act; Object.freeze(this); }
-    canHandle(type) { return type === EventClick; }
+    canHandle(type) { return type === StateClicks; }
     handle() { if (this._bar._view) this._bar._view[this._act](); }
 }
 
@@ -71,7 +71,7 @@ class PanZoomBar extends SimpleComponent {
         var button = new PlainButton(this.branch.elementMaker(name), new FixedPlainButton(), this._place(FixedPlainButton, role));
         button.label = label;
         button.size = -1;
-        button.setOnClick(press);
+        button.onChange(StateClicks, press);   // a press, its clicks counted up
         button.el.setAttribute("aria-label", said);
         this.el.appendChild(button.el);
         return button;

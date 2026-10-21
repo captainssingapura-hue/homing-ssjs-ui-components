@@ -6,7 +6,7 @@
 //   var b = new PrimaryButton(branch.elementMaker("go"), new FixedPrimaryButton(), me.place(FixedPrimaryButton));   in a slot
 //   var b = new PrimaryButton(branch.elementMaker("go"), new FixedPrimaryButton());                     at the root
 //   b.label = "Go"   b.enabled = false   b.size = -1   b.extent = 0.6
-//   b.setOnClick(handler)
+//   b.onChange(StateClicks, listener)   a press: its clicks counted up
 // =============================================================================
 
 class PrimaryButton extends Button {

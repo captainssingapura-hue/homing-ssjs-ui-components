@@ -5,14 +5,13 @@
 // the house's - its groove (a ToggleGroove, as its span) and its knob in it (a
 // ToggleKnob, as its thumb) - each placed along its slot by its own reference,
 // and its words beside them. Its state rides on its button: on is aria-checked,
-// off is disabled, each set through its reference; a press turns it - its
-// groove turning with it - and is its COMMIT.
+// off is disabled, each set through its reference; a press turns it, its
+// groove turning with it.
 //
 //   var s = new Switch(branch.createBranch("dark"), new FixedSwitch(), me.place(FixedSwitch));
 //   s.root                           the <button>
 //   s.checked  s.enabled  s.text     its words beside the groove
 //   s.onChange(StateChecked, listener)   turned, by a press or a setter
-//   s.setOnCommit(handler)           the user done: a press
 // =============================================================================
 
 const _switchOwner = Object.freeze({ toString: () => "switch" });
@@ -33,7 +32,6 @@ class Switch extends SimpleComponent {
             state: StateChecked
         })
     });
-    static EVENTS = Object.freeze([EventCommit]);
     static BEHAVIOR = TurnBehavior;
 
     constructor(branch, fixed, place) {
@@ -65,13 +63,6 @@ class Switch extends SimpleComponent {
     get text() { return this._word.textContent; }
     set text(words) { this._word.textContent = words == null ? "" : String(words); }
 
-    /** The user done: a press. */
-    setOnCommit(handler) { this._setOn(EventCommit, handler); }
-
-    /** A press, as its behaviour hears it: while it is enabled, turned - its groove with it - then its commit. */
-    _turned(ev) {
-        if (!this.enabled) return;
-        this._change("checked", !this.checked);
-        this._fire(EventCommit, ev);
-    }
+    /** A press, as its behaviour hears it: while it is enabled, turned - its groove with it. */
+    _turned() { if (this.enabled) this._change("checked", !this.checked); }
 }

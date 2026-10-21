@@ -12,6 +12,6 @@ class CardBehavior {
     constructor(el, card) {
         el.setAttribute("role", "button");
         el.tabIndex = 0;
-        el.addEventListener("click", function (ev) { card._clicked(ev); });
+        el.addEventListener("click", function (ev) { card._clicked(); });
     }
 }

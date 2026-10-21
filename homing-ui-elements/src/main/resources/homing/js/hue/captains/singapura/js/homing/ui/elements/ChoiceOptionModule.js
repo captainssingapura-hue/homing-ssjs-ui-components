@@ -7,12 +7,13 @@
 // static (RFC 0071 port, question 5): its fixed object holds the note's own, or
 // null, and the note is made with the choice, for its life. The one picked
 // (Selected, aria-selected), as its owner says, set through its reference; a
-// press is its click. Where it sits is its owner's.
+// press on it is its owner's to hear, whose selection changes. Where it sits
+// is its owner's.
 //
 //   var opt = new ChoiceOption(branch.createBranch("opt-0"), new FixedChoiceOption(new FixedCaption()), me.place(FixedChoiceOption));
 //   opt.label = "Dark"   opt.note = "for the night"   opt.selected = true
 //   opt.el / opt.root
-//   opt.setOnClick(handler)  opt.onChange(StateSelected, listener)
+//   opt.onChange(StateSelected, listener)
 // =============================================================================
 
 const _choiceOptionOwner = Object.freeze({ toString: () => "choiceOption" });
@@ -27,7 +28,6 @@ class ChoiceOption extends SimpleComponent {
             state: StateSelected
         })
     });
-    static EVENTS = Object.freeze([EventClick]);
     static BEHAVIOR = ItemBehavior;
 
     constructor(branch, fixed, place) {
@@ -62,9 +62,4 @@ class ChoiceOption extends SimpleComponent {
 
     get selected() { return this._get("selected"); }
     set selected(on) { this._set("selected", !!on); }
-
-    setOnClick(handler) { this._setOn(EventClick, handler); }
-
-    /** A press, as its behaviour hears it. */
-    _clicked(ev) { this._fire(EventClick, ev); }
 }

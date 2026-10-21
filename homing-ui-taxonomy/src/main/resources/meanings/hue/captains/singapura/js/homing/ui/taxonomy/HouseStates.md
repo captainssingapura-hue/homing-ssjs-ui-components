@@ -38,6 +38,15 @@ focused on it, or holding the page's keys in it.
 
 Where the component sits in the depth of the page, as its holder decides.
 
+## Counting
+
+How often a thing was done to the component: how many times it was clicked.
+
+## Given
+
+What the user has given the component: the words typed into it, the option chosen of those it
+offers.
+
 ## Enabled
 
 Whether the user can use the component at all. True at rest; false, it takes no press and no keys,
@@ -135,6 +144,12 @@ listened to.
 
 Held by the user's hand and being moved, from the press that grabbed it until it is let go.
 
+## Held
+
+Held down by the user's hand, as the component has it: up at rest, down from its press until its
+release. Unlike the browser's own down, it is the component's, and what holding it means is the
+component's to say.
+
 ## Elevation
 
 How far off its own plane the component sits: flat, lifted towards the user or pressed in, its holder
@@ -143,3 +158,20 @@ deciding what that says.
 ## Orientation
 
 Which way a component laid along a line runs: across the page, or stood up, as a fader is.
+
+## Clicks
+
+How many times the component has been clicked, from none: a click is its going up. Nothing it shows
+changes as it counts.
+
+## DraftText
+
+The words typed into the component so far, the user still at them: none at rest.
+
+## CommittedText
+
+The words the user is done typing, by Enter or by leaving the component: none at rest.
+
+## ChosenOption
+
+The option chosen of those the component offers, by its value: none at rest.

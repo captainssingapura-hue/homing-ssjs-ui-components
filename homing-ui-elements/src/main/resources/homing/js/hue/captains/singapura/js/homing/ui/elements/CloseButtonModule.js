@@ -7,7 +7,7 @@
 // module stamped with its header (D19).
 //
 //   var c = new CloseButton(branch.createBranch("close"), new FixedCloseButton(), me.place(FixedCloseButton));
-//   c.setOnClick(handler)   c.enabled   c.size   c.label - its name, "Close" unless given
+//   c.onChange(StateClicks, listener)   c.clicks   c.enabled   c.size   c.label - its name, "Close" unless given
 //   c.face                  its face: the close icon
 // =============================================================================
 

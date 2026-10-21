@@ -17,7 +17,10 @@ public final class HouseItems {
 
     private HouseItems() {}
 
-    /** Pressed and let go: each item's one event, besides its states' changes. */
+    /**
+     * Pressed and let go: the menu item's one event, until it is ported. A click on the list row or the choice option is
+     * no event of theirs: what holds them hears it, and its selection changes (RFC 0069, amended 21 Oct).
+     */
     private static final List<EventType<?>> CLICKED = List.of(HouseEvents.Click.INSTANCE);
 
     /** One choice of a menu, with its glyph, its hint and its way into a submenu. Its name is its own text. */
@@ -44,7 +47,6 @@ public final class HouseItems {
         /** The pointer over it; picked from the list; the one that is where the user is; where the page's keys are, as its owner tells it. */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Selected.INSTANCE,
                 HouseStates.Current.INSTANCE, HouseStates.Keyboard.INSTANCE); }
-        @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
     /** One choice of a setting, with a note on what it means. */
@@ -55,7 +57,6 @@ public final class HouseItems {
         @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
         /** The pointer over it; the focus on it; the one picked. */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Selected.INSTANCE); }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).optional());
         }

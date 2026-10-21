@@ -9,6 +9,10 @@
 
 class ScrimBehavior {
     constructor(el, scrim) {
-        el.addEventListener("mousedown", function (ev) { scrim._pressed(ev); });
+        el.addEventListener("mousedown", function () {
+            scrim._pressed();
+            // let go anywhere: the hand's release, heard once for this press
+            el.ownerDocument.addEventListener("mouseup", function () { scrim._released(); }, { once: true });
+        });
     }
 }

@@ -8,7 +8,6 @@
 //   var c = new Checkbox(branch.elementMaker("checkbox"), new FixedCheckbox(), me.place(FixedCheckbox));
 //   c.checked  c.enabled
 //   c.onChange(StateChecked, listener)   by the user or a setter
-//   c.setOnCommit(handler)           the user done: a tick turned
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
@@ -28,7 +27,6 @@ class Checkbox extends SimpleComponent {
             state: StateChecked
         })
     });
-    static EVENTS = Object.freeze([EventCommit]);
     static BEHAVIOR = CheckBehavior;
 
     constructor(make, fixed, place) {
@@ -43,13 +41,7 @@ class Checkbox extends SimpleComponent {
     get enabled() { return this._get("enabled"); }
     set enabled(on) { this._set("enabled", !!on); }
 
-    /** The user done: a tick turned on the element. */
-    setOnCommit(handler) { this._setOn(EventCommit, handler); }
-
-    /** A tick turned on the element, as its behaviour hears it: its checked, then its commit. */
-    _ticked(on, ev) {
-        this._change("checked", on);
-        this._fire(EventCommit, ev);
-    }
+    /** A tick turned on the element, as its behaviour hears it: its checked. */
+    _ticked(on) { this._change("checked", on); }
 }
 

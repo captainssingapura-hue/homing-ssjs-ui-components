@@ -10,6 +10,6 @@
 
 class LinkBehavior {
     constructor(el, link) {
-        el.addEventListener("click", function (ev) { link._clicked(ev); });
+        el.addEventListener("click", function (ev) { link._clicked(); });
     }
 }

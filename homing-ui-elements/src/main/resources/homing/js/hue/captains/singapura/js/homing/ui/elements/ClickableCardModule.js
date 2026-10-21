@@ -1,6 +1,6 @@
 // =============================================================================
 // ClickableCard — a card that is a button: the plain card's frame which, pressed
-// - by the hand, or Enter or Space - does its one thing, fired as its click. It
+// - by the hand, or Enter or Space - does its one thing: its clicks counted up. It
 // lifts under the hand, sinks under the press, takes the focus and shows where
 // the page's keys are. A composed component on the style manager (RFC 0071): it
 // takes a branch of its own and makes its <div role="button"> on it. What is in
@@ -16,9 +16,9 @@
 //
 //   var card = new ClickableCard(branch.createBranch("open-grid"), new FixedClickableCard(), me.place(FixedClickableCard));
 //   card.joinKeys(steward, id?)   a member of the keyboard party, once
-//   card.setOnClick(handler)      handler.canHandle(EventClick) true, handler.handle(event)
+//   card.onChange(StateClicks, listener)   pressed: its clicks counted up
 //   card.onChange(StateKeyboard, listener)   where the keys are on it changed, as the steward told it
-//   card.el / card.root  card.size  card.aspect  card.keys
+//   card.el / card.root  card.size  card.aspect  card.keys  card.clicks
 //   card.key(ev)                  a keydown from whoever holds the keys for it: Enter or Space on the
 //                                 card is its click; true when taken. No keydown listener of its own
 //   card.dispose()                leaves the party, and dissolves its branch
@@ -33,9 +33,9 @@ class ClickableCard extends SimpleComponent {
             values: StateKeyboard.states,
             rest: StateKeyboard.rest,
             state: StateKeyboard
-        })
+        }),
+        clicks: Object.freeze({ rest: 0, state: StateClicks })   // counted up by its behaviour, never set: no class
     });
-    static EVENTS = Object.freeze([EventClick]);
     static DEGREES = Object.freeze([ExtentSize, ExtentAspect]);
     static BEHAVIOR = CardBehavior;
 
@@ -60,7 +60,7 @@ class ClickableCard extends SimpleComponent {
         this._kb = steward;
         this._kbId = steward.join(id != null ? String(id) : this.branch.name, {
             keyDown: function (ev) { return self.key(ev); },
-            marked: function (at) { self._change("keys", at, null); }   // where the keys are on it, as the steward says: its own state
+            marked: function (at) { self._change("keys", at); }   // where the keys are on it, as the steward says: its own state
         });
         this._offKeys = Keys.claimOn(this.el, steward, this._kbId);
         return this;
@@ -76,11 +76,11 @@ class ClickableCard extends SimpleComponent {
     get aspect() { return this._degree(ExtentAspect); }
     set aspect(a) { this._setDegree(ExtentAspect, a); }
 
-    /** Pressed: what it does, once and for good. */
-    setOnClick(handler) { this._setOn(EventClick, handler); }
+    /** How many times it was pressed, from none: a click is its going up. */
+    get clicks() { return this._get("clicks"); }
 
-    /** A press, as its behaviour hears it: its click. */
-    _clicked(ev) { this._fire(EventClick, ev); }
+    /** A press, as its behaviour hears it: its clicks counted up. */
+    _clicked() { this._change("clicks", this.clicks + 1); }
 
     /**
      * A keydown from whoever holds the keys for the card: Enter or Space is its click; true when taken. One aimed at a

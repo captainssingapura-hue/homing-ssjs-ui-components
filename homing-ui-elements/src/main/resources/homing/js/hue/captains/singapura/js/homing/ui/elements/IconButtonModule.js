@@ -12,7 +12,7 @@
 //
 //   var b = new IconButton(branch.createBranch("add"), new FixedIconButton(new FixedAddIcon()), me.place(FixedIconButton));
 //   b.label = "Add a tab"   its name: aria-label, and its tooltip
-//   b.setOnClick(handler)   b.enabled   b.size
+//   b.onChange(StateClicks, listener)   b.clicks   b.enabled   b.size
 //   b.face                  its face: the icon its fixed object chose
 // =============================================================================
 

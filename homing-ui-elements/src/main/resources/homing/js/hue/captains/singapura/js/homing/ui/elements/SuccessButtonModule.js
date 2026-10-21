@@ -6,7 +6,7 @@
 //   var b = new SuccessButton(branch.elementMaker("go"), new FixedSuccessButton(), me.place(FixedSuccessButton));   in a slot
 //   var b = new SuccessButton(branch.elementMaker("go"), new FixedSuccessButton());                     at the root
 //   b.label = "Go"   b.enabled = false   b.size = -1   b.extent = 0.6
-//   b.setOnClick(handler)
+//   b.onChange(StateClicks, listener)   a press: its clicks counted up
 // =============================================================================
 
 class SuccessButton extends Button {

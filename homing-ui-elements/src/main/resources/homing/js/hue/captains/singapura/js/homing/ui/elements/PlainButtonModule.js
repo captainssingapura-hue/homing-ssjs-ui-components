@@ -6,7 +6,7 @@
 //   var b = new PlainButton(branch.elementMaker("go"), new FixedPlainButton(), me.place(FixedPlainButton));   in a slot
 //   var b = new PlainButton(branch.elementMaker("go"), new FixedPlainButton());                     at the root
 //   b.label = "Go"   b.enabled = false   b.size = -1
-//   b.setOnClick(handler)
+//   b.onChange(StateClicks, listener)   a press: its clicks counted up
 // =============================================================================
 
 class PlainButton extends Button {

@@ -10,6 +10,6 @@
 class ToggleButtonBehavior {
     constructor(el, toggle) {
         el.type = "button";
-        el.addEventListener("click", function (ev) { toggle._pressed(ev); });
+        el.addEventListener("click", function (ev) { toggle._pressed(); });
     }
 }

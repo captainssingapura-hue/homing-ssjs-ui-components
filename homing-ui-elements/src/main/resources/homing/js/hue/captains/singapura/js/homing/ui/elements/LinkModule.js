@@ -1,10 +1,11 @@
 // =============================================================================
-// Link — a way to somewhere else: its words, where it goes, and a click. A
+// Link — a way to somewhere else: its words, where it goes, and its clicks. A
 // simple component (SimpleComponent) on an <a>, in the link's look:
 //
 //   var l = new Link(branch.elementMaker("link"), new FixedLink(), me.place(FixedLink));
-//   l.setOnClick(handler)   a click on it: handler.handle(ComponentEvent) - the way
-//                           is followed unless the handler prevents the raw event
+//   l.onChange(StateClicks, listener)   a click on it: its clicks counted up, and the
+//                           way followed, as the browser follows one
+//   l.clicks                how many times it was clicked, from none
 //   l.text = "…"            its words
 //   l.to                    where it goes, set through the href manager. Given
 //                           once it stays: a way is changed, never taken away
@@ -16,7 +17,9 @@
 
 class Link extends SimpleComponent {
     static TAG = "a";
-    static EVENTS = Object.freeze([EventClick]);
+    static AXES = Object.freeze({
+        clicks: Object.freeze({ rest: 0, state: StateClicks })   // counted up by its behaviour, never set: no class
+    });
     static DEGREES = Object.freeze([ExtentSize]);
     static BEHAVIOR = LinkBehavior;
 
@@ -38,10 +41,10 @@ class Link extends SimpleComponent {
     get size() { return this._degree(ExtentSize); }
     set size(s) { this._setDegree(ExtentSize, s); }
 
-    /** A click on it: the way is followed unless the handler prevents the raw event. */
-    setOnClick(handler) { this._setOn(EventClick, handler); }
+    /** How many times it was clicked, from none: a click is its going up. */
+    get clicks() { return this._get("clicks"); }
 
-    /** A click, as its behaviour hears it. */
-    _clicked(ev) { this._fire(EventClick, ev); }
+    /** A click, as its behaviour hears it: its clicks counted up. */
+    _clicked() { this._change("clicks", this.clicks + 1); }
 }
 

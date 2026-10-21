@@ -24,14 +24,14 @@ class EditBehavior {
 
 class PickBehavior {
     constructor(el, select) {
-        el.addEventListener("change", function (ev) { select._commit(ev); });
+        el.addEventListener("change", function () { select._picked(); });
     }
 }
 
 class TurnBehavior {
     constructor(el, sw) {
         this._switch = sw;
-        el.addEventListener("click", function (ev) { sw._turned(ev); });
+        el.addEventListener("click", function () { sw._turned(); });
     }
 
     /** Its groove turned with it: on as the switch is. */
@@ -40,6 +40,6 @@ class TurnBehavior {
 
 class CheckBehavior {
     constructor(el, box) {
-        el.addEventListener("change", function (ev) { box._ticked(!!el.checked, ev); });
+        el.addEventListener("change", function () { box._ticked(!!el.checked); });
     }
 }

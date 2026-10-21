@@ -13,7 +13,8 @@
 class ItemBehavior {
     constructor(el, item) {
         var axes = item.constructor.AXES || {};
-        el.addEventListener("click", function (ev) { if (!("enabled" in axes) || item._get("enabled")) item._clicked(ev); });
+        if (typeof item._clicked === "function")   // an item whose click is its holder's - the list row, the choice option - hears none (RFC 0069, amended)
+            el.addEventListener("click", function (ev) { if (!("enabled" in axes) || item._get("enabled")) item._clicked(ev); });
         if ("pointed" in axes) el.addEventListener("pointerenter", function (ev) { item._change("pointed", true); });
     }
 }

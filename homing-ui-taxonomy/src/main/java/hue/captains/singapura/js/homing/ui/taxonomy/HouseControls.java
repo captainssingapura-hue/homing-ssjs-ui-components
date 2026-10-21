@@ -27,19 +27,16 @@ public final class HouseControls {
 
     private HouseControls() {}
 
-    /** What every button has: it may be off; and the browser's - the pointer over it, its focus shown, the hand down on it. */
-    private static final List<StateType<?>> A_BUTTON = List.of(HouseStates.Enabled.INSTANCE,
+    /** What every button has: it may be off; how many times it was clicked; and the browser's - the pointer over it, its focus shown, the hand down on it. */
+    private static final List<StateType<?>> A_BUTTON = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Clicks.INSTANCE,
             HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE);
 
-    /** What a toggle has besides: it may be on. */
+    /** What a toggle has instead of a count: it may be on - what its click flips. */
     private static final List<StateType<?>> A_TOGGLE = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Pressed.INSTANCE,
             HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE);
 
-    /** What every button offers: it is clicked. */
-    private static final List<EventType<?>> CLICKED = List.of(HouseEvents.Click.INSTANCE);
-
-    /** A crumb's state: whether it is the step that is this page. */
-    private static final List<StateType<?>> A_CRUMB = List.of(HouseStates.Current.INSTANCE,
+    /** A crumb's states: whether it is the step that is this page; how many times it was clicked. */
+    private static final List<StateType<?>> A_CRUMB = List.of(HouseStates.Current.INSTANCE, HouseStates.Clicks.INSTANCE,
             HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
 
     /** What the browser's own inputs have: they may be off; their focus shown. */
@@ -49,18 +46,26 @@ public final class HouseControls {
     private static final List<StateType<?>> A_CHECK = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Checked.INSTANCE,
             HouseStates.Focused.INSTANCE);
 
-    /** What is edited: its value changing, the user still at it, and the user done with it. */
+    /**
+     * What the range offers: its value changing, the user still at it, and the user done with it - events until its
+     * value is a state, which waits on where a state's bounds are (the port journal).
+     */
     private static final List<EventType<?>> EDITED = List.of(HouseEvents.Input.INSTANCE, HouseEvents.Commit.INSTANCE);
 
-    /** What is picked: the user done with it. */
-    private static final List<EventType<?>> COMMITTED = List.of(HouseEvents.Commit.INSTANCE);
+    /** What a text box has besides: what is typed so far, and what the user is done typing. */
+    private static final List<StateType<?>> A_TEXT_BOX = List.of(HouseStates.Enabled.INSTANCE, HouseStates.DraftText.INSTANCE,
+            HouseStates.CommittedText.INSTANCE, HouseStates.Focused.INSTANCE);
+
+    /** What a select has besides: the option chosen. */
+    private static final List<StateType<?>> A_SELECT = List.of(HouseStates.Enabled.INSTANCE, HouseStates.ChosenOption.INSTANCE,
+            HouseStates.Focused.INSTANCE);
 
     /** What the slider's knob has: it may be off; it stands up or lies along; its focus shown; the current of a group; dragged. */
     private static final List<StateType<?>> A_SLIDER_KNOB = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Orientation.INSTANCE,
             HouseStates.Focused.INSTANCE, HouseStates.Current.INSTANCE, HouseStates.Dragging.INSTANCE);
 
-    /** What a way somewhere has: the browser's - the pointer over it, its focus shown. */
-    private static final List<StateType<?>> A_WAY = List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
+    /** What a way somewhere has: how many times it was clicked; the browser's - the pointer over it, its focus shown. */
+    private static final List<StateType<?>> A_WAY = List.of(HouseStates.Clicks.INSTANCE, HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
 
     /** What the brand has: its focus shown. */
     private static final List<StateType<?>> A_BRAND = List.of(HouseStates.Focused.INSTANCE);
@@ -71,7 +76,6 @@ public final class HouseControls {
     public record PlainButton() implements Leaf<Button>, WithRoles<HouseRoleSets.PlainButton> {
         public static final PlainButton INSTANCE = new PlainButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public HouseRoleSets.PlainButton roleSet() { return HouseRoleSets.PlainButton.INSTANCE; }
     }
@@ -80,7 +84,6 @@ public final class HouseControls {
     public record PrimaryButton() implements Leaf<Button>, WithRoles<HouseRoleSets.Committing> {
         public static final PrimaryButton INSTANCE = new PrimaryButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public HouseRoleSets.Committing roleSet() { return HouseRoleSets.Committing.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
@@ -90,7 +93,6 @@ public final class HouseControls {
     public record SecondaryButton() implements Leaf<Button> {
         public static final SecondaryButton INSTANCE = new SecondaryButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -99,7 +101,6 @@ public final class HouseControls {
     public record DangerButton() implements Leaf<Button> {
         public static final DangerButton INSTANCE = new DangerButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -108,7 +109,6 @@ public final class HouseControls {
     public record WarningButton() implements Leaf<Button> {
         public static final WarningButton INSTANCE = new WarningButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -117,7 +117,6 @@ public final class HouseControls {
     public record SuccessButton() implements Leaf<Button> {
         public static final SuccessButton INSTANCE = new SuccessButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -126,7 +125,6 @@ public final class HouseControls {
     public record ToggleButton() implements Leaf<Button> {
         public static final ToggleButton INSTANCE = new ToggleButton();
         @Override public List<StateType<?>> states() { return A_TOGGLE; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
     }
 
@@ -138,7 +136,6 @@ public final class HouseControls {
     public record IconButton() implements Composite<Button> {
         public static final IconButton INSTANCE = new IconButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<Slot<?>> parts() {
@@ -151,7 +148,6 @@ public final class HouseControls {
         public static final CloseButton INSTANCE = new CloseButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public List<StateType<?>> states() { return A_BUTTON; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public HouseRoleSets.Managing roleSet() { return HouseRoleSets.Managing.INSTANCE; }
         /** Its face the close icon: the same cross wherever something closes, drawn once in each style. */
@@ -199,7 +195,6 @@ public final class HouseControls {
         @Override public Way parent() { return Way.INSTANCE; }
         @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_WAY; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         /** At a size, as its owner gives it. */
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
@@ -210,7 +205,6 @@ public final class HouseControls {
         @Override public Way parent() { return Way.INSTANCE; }
         @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
         @Override public List<StateType<?>> states() { return A_CRUMB; }
-        @Override public List<EventType<?>> events() { return CLICKED; }
     }
 
     /** A value picked along a scale. */
@@ -225,8 +219,7 @@ public final class HouseControls {
     /** A value picked from a list that drops down. */
     public record Select() implements Leaf<Input>, WithRoles<HouseRoleSets.Choosing> {
         public static final Select INSTANCE = new Select();
-        @Override public List<StateType<?>> states() { return AN_INPUT; }
-        @Override public List<EventType<?>> events() { return COMMITTED; }
+        @Override public List<StateType<?>> states() { return A_SELECT; }
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
         /** At a size, as its owner gives it. */
@@ -236,8 +229,7 @@ public final class HouseControls {
     /** Words the user types: a line of them, or as many as they write - the browser's own editing. */
     public record TextBox() implements Leaf<Input> {
         public static final TextBox INSTANCE = new TextBox();
-        @Override public List<StateType<?>> states() { return AN_INPUT; }
-        @Override public List<EventType<?>> events() { return EDITED; }
+        @Override public List<StateType<?>> states() { return A_TEXT_BOX; }
         @Override public Input parent() { return Input.INSTANCE; }
         /** At a size, as its owner gives it. */
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
@@ -247,7 +239,6 @@ public final class HouseControls {
     public record Checkbox() implements Leaf<Input> {
         public static final Checkbox INSTANCE = new Checkbox();
         @Override public List<StateType<?>> states() { return A_CHECK; }
-        @Override public List<EventType<?>> events() { return COMMITTED; }
         @Override public Input parent() { return Input.INSTANCE; }
     }
 
@@ -297,7 +288,6 @@ public final class HouseControls {
     public record Switch() implements Composite<Input>, WithRoles<HouseRoleSets.Changing> {
         public static final Switch INSTANCE = new Switch();
         @Override public List<StateType<?>> states() { return A_CHECK; }
-        @Override public List<EventType<?>> events() { return COMMITTED; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }

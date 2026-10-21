@@ -4,7 +4,9 @@ import hue.captains.singapura.js.homing.component.taxonomy.Classed;
 import hue.captains.singapura.js.homing.component.taxonomy.Flag;
 import hue.captains.singapura.js.homing.component.taxonomy.Importance;
 import hue.captains.singapura.js.homing.component.taxonomy.L1_StateBranch;
+import hue.captains.singapura.js.homing.component.taxonomy.NamedChange;
 import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
+import hue.captains.singapura.js.homing.component.taxonomy.StateDomain;
 import hue.captains.singapura.js.homing.component.taxonomy.StateRoot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
@@ -24,9 +26,10 @@ import java.util.Map;
  * {@link Flag}, false at rest unless it says otherwise; the rest are named. A design answers each
  * value but the rest by its word: the established design word where there is one - Enabled's false
  * is {@code disabled}, Hovered's true {@code hover}, Down's true {@code active} - and the type's name
- * and the value's otherwise ({@code busy-true}). Each type's change is an
- * event a component offers by having the type; no tree holds it. What each means is in {@code
- * meanings/.../HouseStates.md}.</p>
+ * and the value's otherwise ({@code busy-true}). A type whose look is no class - a count, a text, a
+ * held hand - is no {@code Classed}: its values are its domain's, and what it moves or shows draws it.
+ * A change of a type of state is an event; a component declares its states, and nothing else (RFC
+ * 0069, amended 21 Oct). What each means is in {@code meanings/.../HouseStates.md}.</p>
  */
 public final class HouseStates {
 
@@ -79,6 +82,18 @@ public final class HouseStates {
     /** Where it sits in the page's depth. */
     public record Physical() implements L1_StateBranch<StateRoot> {
         public static final Physical INSTANCE = new Physical();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** How often a thing was done to it. */
+    public record Counting() implements L1_StateBranch<StateRoot> {
+        public static final Counting INSTANCE = new Counting();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** What the user has given it: the words typed, the option chosen. */
+    public record Given() implements L1_StateBranch<StateRoot> {
+        public static final Given INSTANCE = new Given();
         @Override public StateRoot parent() { return StateRoot.INSTANCE; }
     }
 
@@ -239,6 +254,18 @@ public final class HouseStates {
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "dragging"); }
     }
 
+    /** Held down by the hand, as the component has it: up at rest; down by its press, up again by its release. Drawn by nothing of its own. */
+    public record Held() implements StateType<Interaction> {
+        public static final Held INSTANCE = new Held();
+        public static final StateValue UP = new StateValue("up"), DOWN = new StateValue("down");
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Point(UP), new StateDomain.Point(DOWN)), new StateDomain.Named(UP));
+        private static final List<NamedChange> CHANGES = List.of(new NamedChange("press", new NamedChange.Between(UP, DOWN)),
+                new NamedChange("release", new NamedChange.Between(DOWN, UP)));
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+        @Override public List<NamedChange> changes() { return CHANGES; }
+    }
+
     // ── physical ─────────────────────────────────────────────────────────
 
     /** How far off its own plane it sits: flat, elevated or sunken. */
@@ -259,6 +286,41 @@ public final class HouseStates {
         @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "vertical"); }
     }
 
+    // ── counting ─────────────────────────────────────────────────────────
+
+    /** How many times it has been clicked, from none: a click is its going up. Nothing it shows changes - no class. */
+    public record Clicks() implements StateType<Counting> {
+        public static final Clicks INSTANCE = new Clicks();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        private static final List<NamedChange> CHANGES = List.of(new NamedChange("click", new NamedChange.Rises()));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+        @Override public List<NamedChange> changes() { return CHANGES; }
+    }
+
+    // ── given ────────────────────────────────────────────────────────────
+
+    /** What is typed in it so far, the user still at it: a text, none at rest. What it shows is the words themselves - no class. */
+    public record DraftText() implements StateType<Given> {
+        public static final DraftText INSTANCE = new DraftText();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
+    /** What the user is done typing - by Enter, or by leaving it: a text, none at rest. No class. */
+    public record CommittedText() implements StateType<Given> {
+        public static final CommittedText INSTANCE = new CommittedText();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
+    /** The option chosen of those it offers: its value, a text; none at rest. What it shows is the option itself - no class. */
+    public record ChosenOption() implements StateType<Given> {
+        public static final ChosenOption INSTANCE = new ChosenOption();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
     /** Every type of the tree, branch by branch. */
     public static final List<StateType<?>> ALL = List.of(
             Enabled.INSTANCE, ReadOnly.INSTANCE, Busy.INSTANCE,
@@ -267,6 +329,8 @@ public final class HouseStates {
             Required.INSTANCE, Invalid.INSTANCE,
             Current.INSTANCE, Highlighted.INSTANCE, Pointed.INSTANCE,
             Empty.INSTANCE,
-            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE,
-            Elevation.INSTANCE, Orientation.INSTANCE);
+            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, Held.INSTANCE,
+            Elevation.INSTANCE, Orientation.INSTANCE,
+            Clicks.INSTANCE,
+            DraftText.INSTANCE, CommittedText.INSTANCE, ChosenOption.INSTANCE);
 }

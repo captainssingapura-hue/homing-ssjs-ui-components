@@ -4,7 +4,7 @@
 // crumb's look:
 //
 //   var c = new Crumb(branch.elementMaker("crumb"), new FixedCrumb(), me.place(FixedCrumb));
-//   c.setOnClick(handler)          a click on it: handler.handle(ComponentEvent)
+//   c.onChange(StateClicks, listener)  a click on it: its clicks counted up
 //   c.onChange(StateCurrent, listener) it became the page, or stopped being it: listener.handle(StateChange)
 //   c.text = "…"                   its words
 //   c.to                           where it goes, through the href manager; given once, it stays
@@ -24,9 +24,9 @@ class Crumb extends SimpleComponent {
             rest: false,
             reflect: function (el, on) { if (on) el.setAttribute("aria-current", "page"); else el.removeAttribute("aria-current"); },
             state: StateCurrent
-        })
+        }),
+        clicks: Object.freeze({ rest: 0, state: StateClicks })   // counted up by its behaviour, never set: no class
     });
-    static EVENTS = Object.freeze([EventClick]);
     static BEHAVIOR = LinkBehavior;
 
     constructor(make, fixed, place) { super(make, fixed, FixedCrumb, place ?? manageCrumb); }
@@ -47,10 +47,10 @@ class Crumb extends SimpleComponent {
     get current() { return this._get("current"); }
     set current(on) { this._set("current", !!on); }
 
-    /** A click on it: the way is followed unless the handler prevents the raw event. */
-    setOnClick(handler) { this._setOn(EventClick, handler); }
+    /** How many times it was clicked, from none: a click is its going up. */
+    get clicks() { return this._get("clicks"); }
 
-    /** A click, as its behaviour hears it. */
-    _clicked(ev) { this._fire(EventClick, ev); }
+    /** A click, as its behaviour hears it: its clicks counted up. */
+    _clicked() { this._change("clicks", this.clicks + 1); }
 }
 

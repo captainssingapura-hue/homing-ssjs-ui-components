@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
-import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
@@ -37,11 +36,12 @@ public final class HouseContainers {
     public record ClickableCard() implements Leaf<HouseBranches.Card> {
         public static final ClickableCard INSTANCE = new ClickableCard();
         @Override public HouseBranches.Card parent() { return HouseBranches.Card.INSTANCE; }
-        /** The pointer over it; the focus on it; where the page's keys are, held by the steward on its root (D12); the hand down on it. */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE,
+        /**
+         * How many times it was pressed - its one thing; the pointer over it; the focus on it; where the page's keys are,
+         * held by the steward on its root (D12); the hand down on it.
+         */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Clicks.INSTANCE, HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE,
                 HouseStates.Keyboard.INSTANCE, HouseStates.Down.INSTANCE); }
-        /** Pressed and let go: its one thing. */
-        @Override public List<EventType<?>> events() { return List.of(HouseEvents.Click.INSTANCE); }
     }
 
     // ── views ────────────────────────────────────────────────────────────
@@ -164,7 +164,8 @@ public final class HouseContainers {
     public record Scrim() implements Leaf<HouseBranches.Layer> {
         public static final Scrim INSTANCE = new Scrim();
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
-        @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE); }
+        /** Held by the hand: its press, and its release - what its owner makes of it is its owner's. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Held.INSTANCE); }
     }
 
     // ── bars ─────────────────────────────────────────────────────────────

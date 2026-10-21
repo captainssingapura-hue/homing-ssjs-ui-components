@@ -13,6 +13,6 @@
 class ButtonBehavior {
     constructor(el, button) {
         el.type = "button";
-        el.addEventListener("click", function (ev) { button._pressed(ev); });
+        el.addEventListener("click", function (ev) { button._pressed(); });
     }
 }
