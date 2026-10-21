@@ -93,12 +93,6 @@ public final class HouseBranches {
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
-    /** A container that divides its room between others. */
-    public record Split() implements L2_ComponentBranch<Container>, FamilyHead {
-        public static final Split INSTANCE = new Split();
-        @Override public Container parent() { return Container.INSTANCE; }
-    }
-
     /** A thin container along an edge: a strip, a bar of actions. */
     public record Bar() implements L2_ComponentBranch<Container>, FamilyHead {
         public static final Bar INSTANCE = new Bar();
@@ -111,7 +105,7 @@ public final class HouseBranches {
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
-    /** A container that fills what holds it, with no frame of its own: the page's ground. */
+    /** A container that fills what holds it, with no frame of its own: the page's ground, the plain container, a grid's cell. */
     public record Surface() implements L2_ComponentBranch<Container>, FamilyHead {
         public static final Surface INSTANCE = new Surface();
         @Override public Container parent() { return Container.INSTANCE; }

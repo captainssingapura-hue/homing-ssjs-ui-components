@@ -67,7 +67,8 @@ public record ReadSpec() implements StatelessFunctionalObject {
         }
         Map<Component<?>, ComponentModule> bringers = ComponentModules.INSTANCE.bringers(registered, taxonomy);
         var top = new LinkedHashSet<Component<?>>();
-        for (ComponentModule m : registered) top.addAll(m.components());
+        for (ComponentModule m : registered)   // the layouts' styling is never a unit on a page: no top-level component
+            for (Component<?> c : m.components()) if (!(c instanceof hue.captains.singapura.js.homing.component.taxonomy.LayoutStyling<?>)) top.add(c);
 
         var assignments = new LinkedHashMap<DesignStyle<?>, Map<Component<?>, ComponentAssignment<?, ?, ?>>>();
         assignments.put(base, new LinkedHashMap<>());
@@ -106,7 +107,7 @@ public record ReadSpec() implements StatelessFunctionalObject {
 
         Map<Component<?>, ComponentAssignment<?, ?, ?>> onBase = assignments.get(base);
         for (Component<?> c : taxonomy.components())
-            if (!onBase.containsKey(c) && !(c instanceof VirtualComponent<?>))
+            if (!onBase.containsKey(c) && !(c instanceof VirtualComponent<?>) && !(c instanceof hue.captains.singapura.js.homing.component.taxonomy.LayoutStyling<?>))
                 problems.add(c.token() + " has no assignment in the base: the base assigns every component");
         for (DesignStyle<?> s : order)
             for (ComponentAssignment<?, ?, ?> a : assignments.get(s).values()) {

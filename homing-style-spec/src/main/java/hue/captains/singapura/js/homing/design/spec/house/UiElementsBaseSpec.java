@@ -264,6 +264,8 @@ public record UiElementsBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                         new RoleAssignment<>(HouseDoing.Where.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ChoiceOption()),
                         new RoleAssignment<>(HouseDoing.Picker.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ChoiceOption()),
                         new RoleAssignment<>(HouseDoing.Query.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ChoiceOption()))),
+                new ComponentAssignment<>(HouseContainers.PlainContainer.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PlainContainer(), List.of()),
+                new ComponentAssignment<>(HouseContainers.GridCell.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.GridCell(), List.of()),
                 new ComponentAssignment<>(HouseContainers.PlainCard.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PlainCard(), List.of()),
                 new ComponentAssignment<>(HouseContainers.ClickableCard.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ClickableCard(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SummaryView.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SummaryView(), List.of()),

@@ -83,6 +83,10 @@ Lays the owner's regions out, and keeps them laid out as they change.
 
 What the owner holds between its head and its foot: the content it is there for.
 
+## Umbrella
+
+Holds a layout, round the whole of it: the room about it is the umbrella's.
+
 ## Media
 
 A picture or a film that stands for the owner or shows it: a card's cover, an item's thumbnail, a
@@ -117,6 +121,10 @@ One tabbed pane, in one region of the owner.
 ## Cell
 
 One region of a grid, drawn to show its place.
+
+## SubContainer
+
+Stands at one of a layout's positions, holding what is placed there - the same kind at every position.
 
 ## Group
 

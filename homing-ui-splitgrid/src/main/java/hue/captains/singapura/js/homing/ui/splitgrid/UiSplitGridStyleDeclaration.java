@@ -17,9 +17,6 @@ public record UiSplitGridStyleDeclaration() implements StyleDeclaration {
 
     @Override public List<Provided<?, ?>> provided() {
         return List.of(new Provided<>(Base.INSTANCE, List.of(
-                new SplitGrid(),
-                new SplitGridMirror(),
-                new GridCell(),
-                new BoundaryLineSplitter())));
+                new SplitGridMirror())));
     }
 }

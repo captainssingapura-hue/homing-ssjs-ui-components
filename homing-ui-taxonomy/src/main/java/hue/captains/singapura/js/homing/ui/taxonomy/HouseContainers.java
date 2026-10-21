@@ -66,6 +66,36 @@ public final class HouseContainers {
 
     // ── containers ───────────────────────────────────────────────────────
 
+    /** A container that shows nothing of itself: a layout's umbrella, or a sub-container at its positions - its look its spacing alone. */
+    public record PlainContainer() implements Leaf<HouseBranches.Surface> {
+        public static final PlainContainer INSTANCE = new PlainContainer();
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+    }
+
+    /** One cell of the split grid, the sub-container at each of its positions: what it holds draws, its room its own. */
+    public record GridCell() implements Leaf<HouseBranches.Surface> {
+        public static final GridCell INSTANCE = new GridCell();
+        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+    }
+
+    /**
+     * The layouts' styling (owner, 21 Oct): a component the design alone sees. A layout is no component - strictly
+     * style-agnostic, one of the flat list of layouts (HouseLayouts) - so this owns what layouts place, for their design:
+     * the umbrella containers, the sub-containers and the splitter, each cast by its parts and designed as any part is.
+     * It has no casting and no look of its own, and no module implements it.
+     */
+    public record LayoutStyling() implements hue.captains.singapura.js.homing.component.taxonomy.LayoutStyling<HouseBranches.Container> {
+        public static final LayoutStyling INSTANCE = new LayoutStyling();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Container parent() { return HouseBranches.Container.INSTANCE; }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.part(PlainContainer.INSTANCE, PlainCard.INSTANCE, ClickableCard.INSTANCE).as(HouseShaping.Umbrella.INSTANCE).any(),
+                           DSL.part(PlainContainer.INSTANCE, GridCell.INSTANCE).as(HouseShaping.SubContainer.INSTANCE).any(),
+                           DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseDoing.Splitter.INSTANCE).any(),
+                           DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseShaping.Seam.INSTANCE).any());
+        }
+    }
+
     /** A floating pane over a scrim, with a bar of actions. Its title and close are the pane's, its content the caller's. */
     public record Dialog() implements Composite<HouseBranches.Pane> {
         public static final Dialog INSTANCE = new Dialog();

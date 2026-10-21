@@ -81,7 +81,7 @@ class HouseControllabilityTest {
 
     @Test
     void theCommonLeavesAlone_onThisClasspath() {
-        assertEquals(7, HouseControllability.INSTANCE.classification().declared().size(),
+        assertEquals(6, HouseControllability.INSTANCE.classification().declared().size(),
                 "no module that extends the house is here: the types of its leaves are declared beside them, and read where they are");
     }
 

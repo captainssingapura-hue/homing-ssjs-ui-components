@@ -102,6 +102,8 @@ public final class HouseShaping {
     public record Layout() implements Role<Contents> { public static final Layout INSTANCE = new Layout(); @Override public Contents parent() { return Contents.INSTANCE; } }
     /** What the owner holds between its head and its foot. */
     public record Body() implements Role<Contents> { public static final Body INSTANCE = new Body(); @Override public Contents parent() { return Contents.INSTANCE; } }
+    /** The container a layout is placed in, round the whole of it. */
+    public record Umbrella() implements Role<Contents> { public static final Umbrella INSTANCE = new Umbrella(); @Override public Contents parent() { return Contents.INSTANCE; } }
     /** A picture or a film that stands for the owner or shows it. */
     public record Media() implements Role<Contents> { public static final Media INSTANCE = new Media(); @Override public Contents parent() { return Contents.INSTANCE; } }
     /** Stands in for the owner's media when it cannot be shown. */
@@ -125,6 +127,8 @@ public final class HouseShaping {
     public record Dock() implements Role<Members> { public static final Dock INSTANCE = new Dock(); @Override public Members parent() { return Members.INSTANCE; } }
     /** One region of a grid, drawn. */
     public record Cell() implements Role<Members> { public static final Cell INSTANCE = new Cell(); @Override public Members parent() { return Members.INSTANCE; } }
+    /** The container at one of a layout's positions, one kind at all of them. */
+    public record SubContainer() implements Role<Members> { public static final SubContainer INSTANCE = new SubContainer(); @Override public Members parent() { return Members.INSTANCE; } }
     /** A run of the owner's members under a heading of their own. */
     public record Group() implements Role<Members> { public static final Group INSTANCE = new Group(); @Override public Members parent() { return Members.INSTANCE; } }
     /** Heads one column of the owner's cells. */

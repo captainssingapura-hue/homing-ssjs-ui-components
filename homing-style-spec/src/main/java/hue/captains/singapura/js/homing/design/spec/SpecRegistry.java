@@ -165,6 +165,9 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
             out.add(at);
             walk(at, t, new HashSet<>(Set.of(t)), out);
         }
+        // the layouts' styling: never on a page, no element of its own - its parts' elements, each cast for its design
+        for (Component<?> t : taxonomy.components())
+            if (t instanceof hue.captains.singapura.js.homing.component.taxonomy.LayoutStyling<?>) walk(new ElementPath(t, List.of()), t, new HashSet<>(Set.of(t)), out);
         return List.copyOf(out);
     }
 

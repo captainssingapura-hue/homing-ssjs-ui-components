@@ -15,7 +15,6 @@ public record UiSplitGridComponentModule() implements ComponentModule {
     public static final UiSplitGridComponentModule INSTANCE = new UiSplitGridComponentModule();
 
     @Override public List<? extends Component<?>> components() {
-        return List.of(HouseSplitGrid.SplitGrid.INSTANCE, HouseSplitGrid.SplitGridMirror.INSTANCE,
-                       HouseSplitGrid.GridCell.INSTANCE);
+        return List.of(HouseSplitGrid.SplitGridMirror.INSTANCE);
     }
 }

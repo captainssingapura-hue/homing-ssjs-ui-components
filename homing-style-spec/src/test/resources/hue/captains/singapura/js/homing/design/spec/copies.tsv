@@ -104,9 +104,9 @@ hue.captains.singapura.js.homing.design.spec.styles.base.DetachIcon	hue.captains
 hue.captains.singapura.js.homing.design.spec.styles.base.WithinIcon	hue.captains.singapura.js.homing.design.styles.base.WithinIcon
 hue.captains.singapura.js.homing.design.spec.styles.base.SvgPanZoom	hue.captains.singapura.js.homing.design.styles.base.SvgPanZoom
 hue.captains.singapura.js.homing.design.spec.styles.base.PanZoomBar	hue.captains.singapura.js.homing.design.styles.base.PanZoomBar
-hue.captains.singapura.js.homing.design.spec.styles.base.SplitGrid	hue.captains.singapura.js.homing.design.styles.base.SplitGrid
 hue.captains.singapura.js.homing.design.spec.styles.base.SplitGridMirror	hue.captains.singapura.js.homing.design.styles.base.SplitGridMirror
 hue.captains.singapura.js.homing.design.spec.styles.base.GridCell	hue.captains.singapura.js.homing.design.styles.base.GridCell
+hue.captains.singapura.js.homing.design.spec.styles.base.PlainContainer	hue.captains.singapura.js.homing.design.styles.base.PlainContainer
 hue.captains.singapura.js.homing.design.spec.styles.base.SettingRow	hue.captains.singapura.js.homing.design.styles.base.SettingRow
 hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesButton	hue.captains.singapura.js.homing.design.styles.base.PreferencesButton
 hue.captains.singapura.js.homing.design.spec.styles.base.Lip	hue.captains.singapura.js.homing.design.styles.base.Lip

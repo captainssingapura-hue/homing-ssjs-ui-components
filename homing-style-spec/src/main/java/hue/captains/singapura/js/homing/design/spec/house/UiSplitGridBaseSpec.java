@@ -25,8 +25,6 @@ public record UiSplitGridBaseSpec() implements BaseSpecModule<BaseScheme, Base> 
 
     @Override public List<ComponentAssignment<BaseScheme, Base, ?>> assignments() {
         return List.of(
-                new ComponentAssignment<>(HouseSplitGrid.SplitGrid.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SplitGrid(), List.of()),
-                new ComponentAssignment<>(HouseSplitGrid.SplitGridMirror.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SplitGridMirror(), List.of()),
-                new ComponentAssignment<>(HouseSplitGrid.GridCell.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.GridCell(), List.of()));
+                new ComponentAssignment<>(HouseSplitGrid.SplitGridMirror.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SplitGridMirror(), List.of()));
     }
 }

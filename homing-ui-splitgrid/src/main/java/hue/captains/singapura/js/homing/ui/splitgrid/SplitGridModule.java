@@ -1,7 +1,5 @@
 package hue.captains.singapura.js.homing.ui.splitgrid;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseSplitGrid;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.core.DomModule;
@@ -25,10 +23,12 @@ import java.util.List;
  * arrangement as one {@code SplitGridEvents} object. It never knows what a
  * cell holds. A branch component.
  */
-public record SplitGridModule() implements DomModule<SplitGridModule>, ImplFor<HouseSplitGrid.SplitGrid> {
+public record SplitGridModule() implements DomModule<SplitGridModule> {
 
     /** The class: {@code new SplitGrid(branch, {host, layout, resizable?, minCellPx?, onEvent?})}; {@code cell}, {@code cells}, {@code layout}, {@code setRatios}, {@code subdivide}, {@code remove}, {@code dispose}. */
     public record SplitGrid() implements BranchComponent<SplitGridModule> {
+        /** A layout, no component (owner, 21 Oct): the house's one dynamic layout, its styling the layouts'. */
+        @Override public Shape shape() { return Shape.LAYOUT; }
         @Override public String summary() { return "A grid of cells split and re-split, the arrangement a tree; resizable, its lines moved by hand."; }
     }
 

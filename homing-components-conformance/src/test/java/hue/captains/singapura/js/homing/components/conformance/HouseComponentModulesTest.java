@@ -79,10 +79,10 @@ class HouseComponentModulesTest {
     void theTenModules_readTheHouseWhole() {
         Taxonomy byModules = HouseTaxonomy.INSTANCE.read(HOUSE);
         int listed = HOUSE.stream().mapToInt(m -> m.components().size()).sum();
-        assertEquals(116, byModules.components().size(), "the twenty icons among them, each a leaf of the Icon branch (D52); the rooms no components, nor the twelve widgets (20 Oct)");
-        assertEquals(110, listed, "a hundred and ten listed - a hundred and two implemented, the slider group, the panel and its bar dropped, the twelve widgets no components - the monitors' and the control panel's jars listing none (20 Oct), the twenty icons by the icon's one class among them (D52), eight then realized inline by their owners - the rooms among them no components now (20 Oct)");
+        assertEquals(117, byModules.components().size(), "the twenty icons among them, each a leaf of the Icon branch (D52); the rooms no components, nor the twelve widgets (20 Oct), nor the split grid, a layout (21 Oct)");
+        assertEquals(111, listed, "a hundred and eleven listed - the plain container, the grid cell and the layouts' styling common, the split grid a layout (21 Oct); - a hundred and two implemented, the slider group, the panel and its bar dropped, the twelve widgets no components - the monitors' and the control panel's jars listing none (20 Oct), the twenty icons by the icon's one class among them (D52), eight then realized inline by their owners - the rooms among them no components now (20 Oct)");
         var bringers = ComponentModules.INSTANCE.bringers(HOUSE, byModules);
-        assertEquals(116, bringers.size(), "every component brought by a module: its own, or its owner's by a part");
+        assertEquals(117, bringers.size(), "every component brought by a module: its own, or its owner's by a part");
         assertEquals(UiElementsComponentModule.INSTANCE, bringers.get(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.HeaderCell.INSTANCE),
                 "a header cell, never listed: a part of the table ui-elements lists");
     }

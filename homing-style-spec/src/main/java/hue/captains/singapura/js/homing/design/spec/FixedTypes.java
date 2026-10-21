@@ -54,7 +54,10 @@ public record FixedTypes() implements StatelessFunctionalObject {
     public String name(Component<?> component) { return "Fixed" + JsLiterals.INSTANCE.name(component.token()); }
 
     /** The fields of a component's fixed type, derived from its static parts, in the order of its slots. */
-    public List<Field> fields(Taxonomy taxonomy, Component<?> component) { return fields(taxonomy, component, new HashSet<>()); }
+    public List<Field> fields(Taxonomy taxonomy, Component<?> component) {
+        if (component instanceof hue.captains.singapura.js.homing.component.taxonomy.LayoutStyling<?>) return List.of();   // never made: nothing fixed
+        return fields(taxonomy, component, new HashSet<>());
+    }
 
     private List<Field> fields(Taxonomy taxonomy, Component<?> component, Set<Component<?>> above) {
         if (!above.add(component)) throw new IllegalArgumentException(component.token() + " holds itself, through its static parts: no fixed type ends");

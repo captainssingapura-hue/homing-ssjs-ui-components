@@ -10,28 +10,14 @@ import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import java.util.List;
 
 /**
- * The house's split grid: the grid, its shape drawn small, and a cell of it. Defined here, with the house's other
+ * The house's split grid's components: its shape drawn small. The split grid itself is a layout, no component - one of
+ * the flat list of layouts (HouseLayouts); its cell a common container (owner, 21 Oct). Defined here, with the house's other
  * components, whether or not its implementation is on the classpath; implemented - and drawn by Base - in {@code
  * homing-ui-splitgrid} (RFC 0067, appendix The Style Jars, D40).
  */
 public final class HouseSplitGrid {
 
     private HouseSplitGrid() {}
-
-    /**
-     * A grid of cells split in both directions, a boundary line where two meet - the grid's part, in the
-     * house's look: a splitter where the grid is resizable, the hand moving it; a seam where it is not.
-     * Its cells are its own.
-     */
-    public record SplitGrid() implements Composite<HouseBranches.Split> {
-        public static final SplitGrid INSTANCE = new SplitGrid();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Split parent() { return HouseBranches.Split.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseDoing.Splitter.INSTANCE).any(Cardinality.DYNAMIC),
-                           DSL.part(HouseMarks.BoundaryLine.INSTANCE).as(HouseShaping.Seam.INSTANCE).any(Cardinality.DYNAMIC));
-        }
-    }
 
     /**
      * A split grid's shape, drawn small: a control - it takes the keys, and its cursor picks a pane -
@@ -48,9 +34,4 @@ public final class HouseSplitGrid {
         }
     }
 
-    /** One cell of a grid. */
-    public record GridCell() implements Leaf<HouseBranches.Region> {
-        public static final GridCell INSTANCE = new GridCell();
-        @Override public HouseBranches.Region parent() { return HouseBranches.Region.INSTANCE; }
-    }
 }

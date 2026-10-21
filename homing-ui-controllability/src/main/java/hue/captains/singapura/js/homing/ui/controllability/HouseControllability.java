@@ -92,7 +92,6 @@ public record HouseControllability() implements StatelessFunctionalObject {
                 new ControlTypeAt(HouseContainers.EdgeStrip.INSTANCE, HOLDABLE),
                 new ControlTypeAt(HouseContainers.Dialog.INSTANCE, MODAL_OVERLAY),
                 new ControlTypeAt(HouseContainers.ContextMenu.INSTANCE, OVERLAY),
-                new ControlTypeAt(HouseBranches.Split.INSTANCE, ARRANGEABLE),
                 new ControlTypeAt(HouseContainers.FloatingPane.INSTANCE, PLACEABLE)));   // an icon a part only, plain: nothing to control but its colour (D52)
         var extensions = new ArrayList<ControllabilityExtension>();
         ServiceLoader.load(ControllabilityExtension.class, HouseControllability.class.getClassLoader()).forEach(extensions::add);

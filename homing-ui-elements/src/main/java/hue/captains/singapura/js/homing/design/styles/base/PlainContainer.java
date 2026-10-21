@@ -5,14 +5,11 @@ import hue.captains.singapura.js.homing.design.styles.CastingStyle;
 import hue.captains.singapura.js.homing.design.styles.StylingRes;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseSplitGrid;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/**
- * The split grid in the base layer: no look of its own - its cells and its lines draw; its frame is flat; every style's
- * alike.
- */
-public record SplitGrid() implements CastingStyle<BaseScheme, Base, HouseSplitGrid.SplitGrid, RoleRoot> {
-    @Override public StylingRes<BaseScheme, HouseSplitGrid.SplitGrid> style() {
+/** The plain container in the base layer: nothing of itself - its spacing alone, which a style may give; base gives none. */
+public record PlainContainer() implements CastingStyle<BaseScheme, Base, HouseContainers.PlainContainer, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseContainers.PlainContainer> style() {
         return new StylingRes.CssContent<>();
     }
 }

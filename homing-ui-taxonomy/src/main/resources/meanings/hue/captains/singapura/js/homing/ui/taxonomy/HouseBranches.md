@@ -56,10 +56,6 @@ Offers the user a set of choices for as long as they need them, then gets out of
 
 Holds what is shown over the page, apart from its flow, for as long as it is needed.
 
-## Split
-
-Shares a room between several things, each given its share; where it is resizable, the user changes the shares.
-
 ## Bar
 
 A thin band along an edge that carries controls or a way through, never the content itself.

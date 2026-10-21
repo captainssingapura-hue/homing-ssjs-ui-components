@@ -74,3 +74,16 @@ Heads a document table's column, or its row: room for the words that say what th
 ## DataCell
 
 Holds one fact of a document's table, where its row and its column meet: room for what it holds.
+
+## PlainContainer
+
+Holds what is placed in it and shows nothing of itself: the room about what it holds is all it gives.
+
+## GridCell
+
+Holds one region of a split grid, in its place among the others.
+
+## LayoutStyling
+
+Styles what layouts place - the containers round them and at their positions, and the splitters between - so each is
+designed; it is never shown itself.
