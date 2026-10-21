@@ -93,7 +93,33 @@ public record HeaderStamp() implements StatelessFunctionalObject {
             String name = "ROOM_" + owner + "_" + s.name().substring("ROOM_".length());
             out.add(new SlotConstant(name, "const " + name + s.line().substring(("const " + s.name()).length())));
         }
+        out.addAll(choices(h, merged(h), owner + "_"));
         return out;
+    }
+
+    /**
+     * For each part its type leaves a choice of - several players, one chosen in its owner's fixed object: an icon
+     * button's face - the part's slots by the chosen player's fixed type, its role's name after {@code SLOTS_}:
+     * {@code const SLOTS_FACE = [[FixedAddIcon, SLOT_ADD_ICON_FACE], …];}. The owner places the part along the slot
+     * of the player its fixed object holds, which the fixed object has checked is one of them.
+     *
+     * @param named  the slots' constants, in its slots' order: a single stamp's, or a merged one's
+     * @param prefix before the role's name: none, or a merged stamp's owner's name
+     */
+    private List<SlotConstant> choices(ComponentHeader h, List<SlotConstant> named, String prefix) {
+        var byRole = new LinkedHashMap<String, List<String>>();
+        for (int i = 0; i < h.slots().size(); i++) {
+            ComponentHeader.HeaderSlot s = h.slots().get(i);
+            if (s.alternatives() < 2) continue;
+            byRole.computeIfAbsent(s.role().name().value(), r -> new ArrayList<>())
+                    .add("[" + FixedTypes.INSTANCE.name(s.part()) + ", " + named.get(i).name() + "]");
+        }
+        var out = new ArrayList<SlotConstant>();
+        byRole.forEach((role, rows) -> {
+            String name = "SLOTS_" + prefix + role.toUpperCase(Locale.ROOT).replace('-', '_');
+            out.add(new SlotConstant(name, "const " + name + " = [" + String.join(", ", rows) + "];"));
+        });
+        return List.copyOf(out);
     }
 
     /** The room nodes a header imports from the components' dual: {@code RoomTabStripTail}. */
@@ -106,7 +132,8 @@ public record HeaderStamp() implements StatelessFunctionalObject {
     public String manage(ComponentHeader h) { return "manage" + JsLiterals.INSTANCE.name(h.component().token()); }
 
     /**
-     * The stamp as the module would begin: its imports, tree by tree, then a constant for each slot; and, for a top-level
+     * The stamp as the module would begin: its imports, tree by tree, then a constant for each slot, and for each part
+     * its type leaves a choice of, its slots by player ({@link #choices}); and, for a top-level
      * component, the page's style manager imported and bound to it - {@code const manageDialog =
      * styleManager.unit(ComponentDialog);} - the one way its implementation hands over its element at the root. A
      * component only ever a part has none: its owner hands it its reference.
@@ -126,6 +153,7 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         if (h.topLevel()) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
         for (SlotConstant s : slots(h)) lines.add(s.line());
         for (SlotConstant s : rooms(h)) lines.add(s.line());
+        for (SlotConstant s : choices(h, slots(h), "")) lines.add(s.line());
         if (h.topLevel())
             lines.add("const " + manage(h) + " = " + PageStyleManager.EXPORTED + ".unit(" + DualRef.INSTANCE.of(h.component()).imported() + ");");
         return String.join("\n", lines) + "\n";

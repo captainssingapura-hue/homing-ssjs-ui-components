@@ -1,34 +1,36 @@
 // =============================================================================
-// IconButton — a button that is an icon alone: a Button (a simple component)
-// whose face is an Icon, its part, made by its caller and handed in. Which
-// icon it is is the icon's business, never the button's: the button holds
-// whatever icon it is given, and its words are its name, said to whoever
-// cannot see the icon, and shown by the browser to whoever points at it: its
-// tooltip.
+// IconButton — the function of a button, the look of an icon: a press does one
+// thing, named by the icon it wears and by its words, said to whoever cannot
+// see the icon. A Button whose face is a part, an icon - so a composed
+// component: it takes a branch of its own and makes on it its element and its
+// face's. Which icon its face is, is static (RFC 0071 port, question 5): its
+// fixed object holds the icon's own, chosen once for its life, and the face is
+// placed along that icon's slot by the placement its own reference gives. On
+// the style manager (RFC 0071): its module stamped with its header (D19).
 //
-//   var plus = new Icon(branch.createElement("plus", Icon.TAG), ICON.ADD_ICON, ROLE.FACE);
-//   var b = new IconButton(IconButtonFactory.create(branch, "add"),
-//                          { icon: plus, label: "Add a tab" }, ROLE.ADD);
-//   b.icon               the Icon it holds: another icon is another Icon, which its caller mounts
-//   b.label = "Add"      its name: aria-label, and its tooltip
-//   b.enabled  b.size
-//   b.setOnClick(handler)  a press, while it is enabled
+//   var b = new IconButton(branch.createBranch("add"), new FixedIconButton(new FixedAddIcon()), me.slot(SLOT_…));
+//   b.label = "Add a tab"   its name: aria-label, and its tooltip
+//   b.setOnClick(handler)   b.enabled   b.size
+//   b.face                  its face: the icon its fixed object chose
 // =============================================================================
 
-class IconButton extends Button {
-    static LEAF = "icon-button";
-    static PARTS = Object.freeze(["icon"]);
+const _iconButtonOwner = Object.freeze({ toString: () => "icon-button" });
 
-    constructor(make, props, role) {
-        var icon = props ? props.icon : null;
-        if (!(icon instanceof Icon)) throw new Error("[IconButton] its face is an Icon its caller makes and hands in: { icon }");
-        super(make, props, role);
-        this._icon = icon;
-        css.addClass(this.el, el_icon_button);   // its face laid out: the icon centred in its box, whatever the icon
-        this.el.appendChild(icon.el);
+class IconButton extends Button {
+    constructor(branch, fixed, place) {
+        if (!branch || typeof branch.elementMaker !== "function")
+            throw new TypeError("[IconButton] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
+        branch.activate(_iconButtonOwner);
+        super(branch.elementMaker("button"), fixed, FixedIconButton, place ?? manageIconButton);
+        // its face: the icon its fixed object chose - which it has checked is one of the icons - along that icon's slot
+        var chosen = this.fixed.face;
+        var along = SLOTS_FACE.find(function (row) { return chosen instanceof row[0]; })[1];
+        this._face = new Icon(branch.elementMaker("face"), chosen, this._slot(along));
+        this.el.appendChild(this._face.el);
     }
 
-    get icon() { return this._icon; }
+    /** Its face: the icon its fixed object chose. */
+    get face() { return this._face; }
 
     get label() { return this.el.getAttribute("aria-label") || ""; }
     set label(words) {
@@ -37,6 +39,3 @@ class IconButton extends Button {
         this.el.setAttribute("title", name);   // the browser's own tooltip: no caption of the house's to draw
     }
 }
-
-/** Its companion: makes the <button> it is realized on, on its owner's branch, under its owner's name. */
-const IconButtonFactory = new SimpleComponentFactory(IconButton);

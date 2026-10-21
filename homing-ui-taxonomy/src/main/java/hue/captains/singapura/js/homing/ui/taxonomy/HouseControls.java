@@ -130,7 +130,7 @@ public final class HouseControls {
         @Override public Button parent() { return Button.INSTANCE; }
     }
 
-    /** A button that is an icon alone: the icon its part, whichever icon it is. */
+    /** The function of a button, the look of an icon: its face an icon, its part - which icon, chosen once in its fixed object. */
     public record IconButton() implements Composite<Button>, WithRoles<HouseRoleSets.Managing> {
         public static final IconButton INSTANCE = new IconButton();
         @Override public List<StateType<?>> states() { return A_BUTTON; }

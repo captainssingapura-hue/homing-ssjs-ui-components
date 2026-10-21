@@ -32,7 +32,7 @@ Turns one thing on or off, and shows which it is, each time it is pressed.
 
 ## IconButton
 
-Does one thing named by a glyph alone, where the glyph is known well enough to need no words.
+Has the function of a button and the look of an icon: does one thing, named by the icon it wears, where the icon is known well enough to need no words shown.
 
 ## CloseButton
 
