@@ -9,7 +9,7 @@
 //
 //   var line = new BoundaryLine(branch.elementMaker("line-0"), new FixedBoundaryLine(), me.place(FixedBoundaryLine));
 //   line.orientation = "vertical"   line.dragging
-//   line.setOnOrientationChanged(handler)  line.setOnDraggingChanged(handler)
+//   line.onChange(StateOrientation, listener)  line.onChange(StateDragging, listener)
 // =============================================================================
 
 class BoundaryLine extends SimpleComponent {
@@ -42,7 +42,4 @@ class BoundaryLine extends SimpleComponent {
     /** In the hand: its owner's handle moving it. */
     get dragging() { return this._get("dragging"); }
     set dragging(on) { this._set("dragging", !!on); }
-
-    setOnOrientationChanged(handler) { this._setOn(StateOrientation, handler); }
-    setOnDraggingChanged(handler) { this._setOn(StateDragging, handler); }
 }

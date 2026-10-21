@@ -23,8 +23,5 @@ class ToggleGroove extends SimpleComponent {
     /** On, as its switch is: its Checked state's class. */
     get checked() { return this._get("checked"); }
     set checked(on) { this._set("checked", !!on); }
-
-    /** Turned on or off: by its switch. */
-    setOnCheckedChanged(handler) { this._setOn(StateChecked, handler); }
 }
 

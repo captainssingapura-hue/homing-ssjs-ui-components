@@ -59,17 +59,5 @@ class SliderKnob extends SimpleComponent {
 
     get size() { return this._degree(ExtentSize); }
     set size(s) { this._setDegree(ExtentSize, s); }
-
-    /** Its enabled changed: by its slider. */
-    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
-
-    /** Its standing changed: given once, so never after it is made. */
-    setOnOrientationChanged(handler) { this._setOn(StateOrientation, handler); }
-
-    /** Made the current of a group, or no longer: by its slider. */
-    setOnCurrentChanged(handler) { this._setOn(StateCurrent, handler); }
-
-    /** The hand on it, or off it: by its slider. */
-    setOnDraggingChanged(handler) { this._setOn(StateDragging, handler); }
 }
 

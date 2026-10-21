@@ -9,39 +9,46 @@
 // its own tree on it: another standard.) A simple component is three:
 //
 //   the component  its state - one value on each axis, kept here and nowhere
-//                  else, changed only by its setters - its degrees, its words,
-//                  and the handlers set on its events;
+//                  else, changed only by its setters and its behaviour - its
+//                  degrees, its words, and the listeners that hear it change;
 //   its style      its reference: its casting's class put on as it is placed,
-//                  once, by the style manager; a state's class while it holds,
-//                  set through the reference (D12, D13); its degrees the
+//                  once, by the style manager; a classed state's class while it
+//                  holds, set through the reference (D12, D13); its degrees the
 //                  style-agnostic manager's, a number on its element;
 //   its behaviour  the leaf's BEHAVIOR: what the element does, its listeners. It
-//                  reads the state, changes it through the component, and has
-//                  the component fire its events; it never touches the style.
+//                  reads the state and changes it through the component; it
+//                  never touches the style.
 //
-// An AXIS is a sum type of mutually exclusive values: enabled is true or false.
-// An axis that is one of the house's states names its state type - a node its
-// header imports, state: StateEnabled - and setting it sets the state through
-// the reference, a yes or a no as "true" or "false"; the browser's own states
-// (hovered, focused, down) are never an axis. Its change is an event the
-// component offers, its type the state type itself. Setting a value stores it,
-// writes its reflection and sets its state, tells the behaviour (changed(axis,
-// value)), and fires the change to its handler, if one is set, with the previous
-// value: from a setter with no DOM event, from the behaviour with the one that
-// made it. The same value again does nothing.
+// An AXIS is one of its states: a value of a type of state - a node its header
+// imports, state: StateEnabled - one of the values the type allows (RFC 0069,
+// amended 21 Oct): enabled is true or false, a count of clicks a whole number
+// from 0, a draft a text. Setting a value stores it, writes its reflection, sets
+// the state's class through the reference where the type is classed - a yes or a
+// no as "true" or "false" - and nowhere else, tells the behaviour (changed(axis,
+// value)), and tells the change to whoever hears it. The same value again does
+// nothing: a change is between two different values. The browser's own states
+// (hovered, focused, down) are never an axis.
 //
-// Its EVENTS are the others it offers - [EventClick], nodes its header imports -
-// each dressed from the raw DOM event into a ComponentEvent that carries it. A
-// handler is set by an explicit setter per event (setOnClick,
-// setOnEnabledChanged): it is asked canHandle(type) first, refused unless it
-// answers true, refused if it is a closure - a function, or a bare object of
-// functions - and refused for an event that has one already: zero or one per
-// event, and once for good. It is called with handle(event).
+// A change is HEARD one way: onChange(on, listener) - on one of its state types,
+// every change of it; on one of that type's named changes - StateClicks.change(
+// "click") - that change alone. The listener is asked canHandle(on) first,
+// refused unless it answers true, refused if it is a closure - a function, or a
+// bare object of functions - and refused where one is set already: zero or one
+// for each, and once for good. It is handed a StateChange - its type, its
+// component, the value before and the value after, the named changes it is - the
+// type's listener first, then each named change's. No change carries its cause:
+// the browser's events are no component's; what one means to a component is a
+// change of a state of its own.
+//
+// Its EVENTS are what it still offers that is no change of a state - [EventClick]
+// - each dressed from the raw DOM event into a ComponentEvent, heard by its own
+// setter (setOnClick), with the same refusals: each goes as it moves to a state.
 //
 // What a leaf declares, as statics:
 //   TAG       the element it takes: "button"
-//   AXES      { axis: { values, rest, reflect?(el, value), state? } }
-//   EVENTS    the events it offers besides its states' changes: [EventClick]
+//   AXES      { axis: { values?, rest, reflect?(el, value), state? } } - its
+//             values where no type of state says them
+//   EVENTS    what it offers that is no change of a state: [EventClick]
 //   DEGREES   the extents it varies by, nodes its header imports: [ExtentSize]
 //   BEHAVIOR  its behaviour's class: new BEHAVIOR(el, component)
 // an accessor for each axis, degree and word, a setter for each event, and a
@@ -93,6 +100,7 @@ class SimpleComponent {
         this._state = {};
         for (var a in axes) this._state[a] = axes[a].rest;
         this._handlers = new Map();
+        this._listeners = new Map();
         this._degrees = new Map();
         (Leaf.DEGREES || []).forEach(function (x) { self._degrees.set(x, x.rest); });
         for (var r in axes) if (typeof axes[r].reflect === "function") axes[r].reflect(el, this._state[r]);
@@ -105,23 +113,50 @@ class SimpleComponent {
         return this._state[axis];
     }
 
-    /** A value on an axis, from a setter: changed with no DOM event. */
-    _set(axis, value) { this._change(axis, value, null); }
+    /** A value on an axis, from a setter. */
+    _set(axis, value) { this._change(axis, value); }
 
     /**
-     * A value on an axis: stored, its reflection written, its state set through the reference, told to the
-     * behaviour, and - for a state, with a handler set for its change - fired with the previous value and the
-     * DOM event that made it, if one did. The same value again does nothing.
+     * A value on an axis: stored, its reflection written, its state's class set through the reference where its type
+     * is classed, told to the behaviour, and - for a state - its change told to whoever hears it. The same value again
+     * does nothing.
      */
-    _change(axis, value, raw) {
+    _change(axis, value) {
         var Leaf = this.constructor, v = SimpleComponent._value(Leaf, axis, value), was = this._state[axis];
         if (was === v) return;
         this._state[axis] = v;
         var a = Leaf.AXES[axis];
         if (typeof a.reflect === "function") a.reflect(this.el, v);
-        if (a.state && a.state.classed) this.#styles.set(a.state, a.state.flag ? String(v) : v);   // a class only for a classed state (RFC 0069, amended)
+        if (a.state && a.state.classed) this.#styles.set(a.state, SimpleComponent._said(a.state, v));   // a class only for a classed state (RFC 0069, amended)
         if (this._behavior && typeof this._behavior.changed === "function") this._behavior.changed(axis, v);
-        if (a.state && this._handlers.has(a.state)) this._handlers.get(a.state).handle(new StateChange(a.state, this, raw, was));
+        if (a.state) this._tell(a.state, was, v);
+    }
+
+    /** A change of one of its states, told: the type's listener first, then each of the named changes it is. */
+    _tell(type, before, after) {
+        var b = SimpleComponent._said(type, before), x = SimpleComponent._said(type, after);
+        var named = type.changes.filter(function (c) { return c.transition.fits(b, x); });
+        var change = new StateChange(type, this, before, after, named), listeners = this._listeners;
+        if (listeners.has(type)) listeners.get(type).handle(change);
+        named.forEach(function (c) { if (listeners.has(c)) listeners.get(c).handle(change); });
+    }
+
+    /**
+     * A listener for the changes of one of its states - on its type, every change; on one of the type's named
+     * changes, that one alone - once and for good: asked first whether it hears it, then held to being an object of
+     * a class, then refused where one is set already.
+     */
+    onChange(on, listener) {
+        var Leaf = this.constructor, type = SimpleComponent._typeOf(Leaf, on);
+        var what = type === null ? String(on && (on.token || on.name)) : on === type ? type.token : type.token + "'s " + on.name;
+        if (type === null) throw new Error("[" + Leaf.name + "] has no state " + what + ": it is heard changing its own states alone");
+        if (!listener || typeof listener.canHandle !== "function" || listener.canHandle(on) !== true)
+            throw new Error("[" + Leaf.name + "] a listener says it hears " + what + ": canHandle(" + what + ") answers true");
+        if (typeof listener === "function" || Object.getPrototypeOf(listener) === Object.prototype || Object.getPrototypeOf(listener) === null)
+            throw new Error("[" + Leaf.name + "] a listener is an object of a class declared for it, never a closure");
+        if (typeof listener.handle !== "function") throw new Error("[" + Leaf.name + "] a listener hears: handle(change)");
+        if (this._listeners.has(on)) throw new Error("[" + Leaf.name + "] has its listener for " + what + " already: set once, it stays");
+        this._listeners.set(on, listener);
     }
 
     /** One of its events, dressed from the DOM event that made it, to its handler if one is set. */
@@ -166,20 +201,30 @@ class SimpleComponent {
     /** A room of its own placed - an element of its own inside it that is no part (RFC 0067): its reference writes the room's class, once. */
     _room(room, element) { this.#styles.room(room, element); }
 
+    /** A value on an axis: one of its values, where it lists them; else one its type of state allows. */
     static _value(Leaf, axis, value) {
         var a = (Leaf.AXES || {})[axis];
         if (!a) throw new Error("[" + Leaf.name + "] has no axis '" + axis + "'");
-        if (a.values.indexOf(value) < 0) throw new Error("[" + Leaf.name + "] " + axis + " is one of " + a.values.join(", ") + ", not " + value);
+        if (a.values ? a.values.indexOf(value) < 0 : !(a.state && a.state.allows(SimpleComponent._said(a.state, value))))
+            throw new Error("[" + Leaf.name + "] " + axis + " is " + (a.values ? "one of " + a.values.join(", ") : "a value its state " + (a.state ? a.state.token : "") + " allows") + ", not " + value);
         return value;
     }
 
-    /** Whether the leaf offers the event: one of its EVENTS, or the change of one of its states - its state type. */
-    static _offers(Leaf, type) {
-        if ((Leaf.EVENTS || []).indexOf(type) >= 0) return true;
+    /** A value as its type of state says it: a yes or a no as "true" or "false", the rest as they are. */
+    static _said(type, value) { return type.flag ? String(value) : value; }
+
+    /** The state type a listener may be set on: one of its states', for the type or a named change of it; else none. */
+    static _typeOf(Leaf, on) {
         var axes = Leaf.AXES || {};
-        for (var a in axes) if (axes[a].state && axes[a].state === type) return true;
-        return false;
+        for (var a in axes) {
+            var s = axes[a].state;
+            if (s && (s === on || s.changes.indexOf(on) >= 0)) return s;
+        }
+        return null;
     }
+
+    /** Whether the leaf offers the event: one of its EVENTS - a change of a state is heard by onChange. */
+    static _offers(Leaf, type) { return (Leaf.EVENTS || []).indexOf(type) >= 0; }
 }
 
 /** One of a component's events, dressed from the DOM event that made it: its type, its component, and the raw event, or null. */
@@ -192,11 +237,17 @@ class ComponentEvent {
     }
 }
 
-/** A state's change: a ComponentEvent of its state type, carrying the state's previous value. What it became is the component's attribute. */
-class StateChange extends ComponentEvent {
-    constructor(type, source, raw, previous) {
-        super(type, source, raw);
-        this.previous = previous;
+/**
+ * A change of one state of one component (RFC 0069, amended 21 Oct): its type, its component, the value before and the
+ * value after - two different values, as the component has them - and the named changes of its type it is. No cause.
+ */
+class StateChange {
+    constructor(type, source, before, after, named) {
+        this.type = type;
+        this.source = source;
+        this.before = before;
+        this.after = after;
+        this.named = Object.freeze(named.slice());
         Object.freeze(this);
     }
 }

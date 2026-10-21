@@ -5,7 +5,7 @@
 // reference, which the style draws.
 //
 //   var t = new ToggleButton(branch.elementMaker("bold"), new FixedToggleButton(), me.place(FixedToggleButton));
-//   t.pressed = true      t.setOnPressedChanged(handler)   t.setOnClick(handler)
+//   t.pressed = true      t.onChange(StatePressed, listener)   t.setOnClick(handler)
 // =============================================================================
 
 class ToggleButton extends Button {
@@ -24,13 +24,10 @@ class ToggleButton extends Button {
     get pressed() { return this._get("pressed"); }
     set pressed(v) { this._set("pressed", !!v); }
 
-    /** Its pressed changed: by a press, or by a setter. */
-    setOnPressedChanged(handler) { this._setOn(StatePressed, handler); }
-
     /** A press, as its behaviour hears it: while it is enabled, its pressed turned over, then its click. */
     _pressed(ev) {
         if (!this.enabled) return;
-        this._change("pressed", !this.pressed, ev);
+        this._change("pressed", !this.pressed);
         this._fire(EventClick, ev);
     }
 }

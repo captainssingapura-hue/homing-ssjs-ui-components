@@ -7,7 +7,7 @@
 //
 //   var t = new TextBox(branch.elementMaker("text-box"), new FixedTextBox(), me.place(FixedTextBox));
 //   t.value  t.placeholder  t.enabled  t.size
-//   t.setOnInput(handler)  t.setOnCommit(handler)  t.setOnEnabledChanged(handler)
+//   t.setOnInput(handler)  t.setOnCommit(handler)  t.onChange(StateEnabled, listener)
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
@@ -43,9 +43,6 @@ class TextBox extends SimpleComponent {
 
     get enabled() { return this._get("enabled"); }
     set enabled(on) { this._set("enabled", !!on); }
-
-    /** Its enabled changed - by a setter, or by nothing else an input has. */
-    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** A word typed, the user still at it. */
     setOnInput(handler) { this._setOn(EventInput, handler); }

@@ -9,7 +9,7 @@
 //
 //   var t = new PaneThumb(branch.createBranch("cell-0"), new FixedPaneThumb(), me.place(FixedPaneThumb));
 //   t.name = "Editor"   t.current = true   t.root
-//   t.setOnCurrentChanged(handler)
+//   t.onChange(StateCurrent, listener)
 // =============================================================================
 
 const _paneThumbOwner = Object.freeze({ toString: () => "paneThumb" });
@@ -44,7 +44,4 @@ class PaneThumb extends SimpleComponent {
     /** The one its owner's cursor is at. */
     get current() { return this._get("current"); }
     set current(on) { this._set("current", !!on); }
-
-    /** Made the one its owner's cursor is at, or no longer: by its owner. */
-    setOnCurrentChanged(handler) { this._setOn(StateCurrent, handler); }
 }

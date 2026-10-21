@@ -29,8 +29,5 @@ class SliderRail extends SimpleComponent {
 
     get size() { return this._degree(ExtentSize); }
     set size(s) { this._setDegree(ExtentSize, s); }
-
-    /** Its enabled changed: by its slider. */
-    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 }
 

@@ -14,6 +14,6 @@ class ItemBehavior {
     constructor(el, item) {
         var axes = item.constructor.AXES || {};
         el.addEventListener("click", function (ev) { if (!("enabled" in axes) || item._get("enabled")) item._clicked(ev); });
-        if ("pointed" in axes) el.addEventListener("pointerenter", function (ev) { item._change("pointed", true, ev); });
+        if ("pointed" in axes) el.addEventListener("pointerenter", function (ev) { item._change("pointed", true); });
     }
 }

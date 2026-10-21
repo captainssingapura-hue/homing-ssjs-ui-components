@@ -8,7 +8,7 @@
 //   var s = new Select(branch.elementMaker("select"), new FixedSelect(), me.place(FixedSelect));
 //   s.options   [{ value, label }], a bare word its own label
 //   s.value  s.enabled  s.size
-//   s.setOnCommit(handler)  s.setOnEnabledChanged(handler)
+//   s.setOnCommit(handler)  s.onChange(StateEnabled, listener)
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
@@ -49,9 +49,6 @@ class Select extends SimpleComponent {
 
     get enabled() { return this._get("enabled"); }
     set enabled(on) { this._set("enabled", !!on); }
-
-    /** Its enabled changed - by a setter, or by nothing else an input has. */
-    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** A pick made. */
     setOnCommit(handler) { this._setOn(EventCommit, handler); }

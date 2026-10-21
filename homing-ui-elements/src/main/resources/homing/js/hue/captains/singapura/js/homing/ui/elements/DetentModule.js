@@ -6,7 +6,7 @@
 // its states set through its reference.
 //
 //   var detent = new Detent(branch.elementMaker("detent"), new FixedDetent(), me.place(FixedDetent));
-//   detent.dragging  detent.setOnDraggingChanged(handler)
+//   detent.dragging  detent.onChange(StateDragging, listener)
 // =============================================================================
 
 class Detent extends SimpleComponent {
@@ -26,6 +26,4 @@ class Detent extends SimpleComponent {
     /** Shown: what rests on it is in the hand. */
     get dragging() { return this._get("dragging"); }
     set dragging(on) { this._set("dragging", !!on); }
-
-    setOnDraggingChanged(handler) { this._setOn(StateDragging, handler); }
 }

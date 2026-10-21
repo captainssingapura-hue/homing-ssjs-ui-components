@@ -12,7 +12,7 @@
 //   var opt = new ChoiceOption(branch.createBranch("opt-0"), new FixedChoiceOption(new FixedCaption()), me.place(FixedChoiceOption));
 //   opt.label = "Dark"   opt.note = "for the night"   opt.selected = true
 //   opt.el / opt.root
-//   opt.setOnClick(handler)  opt.setOnSelectedChanged(handler)
+//   opt.setOnClick(handler)  opt.onChange(StateSelected, listener)
 // =============================================================================
 
 const _choiceOptionOwner = Object.freeze({ toString: () => "choiceOption" });
@@ -64,7 +64,6 @@ class ChoiceOption extends SimpleComponent {
     set selected(on) { this._set("selected", !!on); }
 
     setOnClick(handler) { this._setOn(EventClick, handler); }
-    setOnSelectedChanged(handler) { this._setOn(StateSelected, handler); }
 
     /** A press, as its behaviour hears it. */
     _clicked(ev) { this._fire(EventClick, ev); }

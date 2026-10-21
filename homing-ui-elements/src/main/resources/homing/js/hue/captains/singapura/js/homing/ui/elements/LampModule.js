@@ -7,7 +7,7 @@
 //
 //   var lamp = new Lamp(branch.elementMaker("lamp"), new FixedLamp(), me.place(FixedLamp));
 //   lamp.text  lamp.current  lamp.invalid
-//   lamp.setOnCurrentChanged(handler)  lamp.setOnInvalidChanged(handler)
+//   lamp.onChange(StateCurrent, listener)  lamp.onChange(StateInvalid, listener)
 // =============================================================================
 
 class Lamp extends SimpleComponent {
@@ -41,7 +41,4 @@ class Lamp extends SimpleComponent {
     /** Broken: what it watches is refused. */
     get invalid() { return this._get("invalid"); }
     set invalid(on) { this._set("invalid", !!on); }
-
-    setOnCurrentChanged(handler) { this._setOn(StateCurrent, handler); }
-    setOnInvalidChanged(handler) { this._setOn(StateInvalid, handler); }
 }

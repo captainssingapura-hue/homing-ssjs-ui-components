@@ -10,7 +10,7 @@
 //
 //   var b = new DangerButton(branch.elementMaker("delete"), new FixedDangerButton(), me.place(FixedDangerButton));
 //   b.setOnClick(handler)          a press, while it is enabled: handler.handle(ComponentEvent)
-//   b.setOnEnabledChanged(handler) its enabled changed: handler.handle(StateChange), previous the old value
+//   b.onChange(StateEnabled, listener) its enabled changed: listener.handle(StateChange), its value before and after
 //   b.enabled = false    off: inert, and it says so - the element disabled, and
 //                        the state set through its reference, which the style draws
 //   b.size = -1          −1 the smallest … 1 the biggest; 0 regular, the rest
@@ -51,9 +51,6 @@ class Button extends SimpleComponent {
 
     /** A press, while it is enabled. */
     setOnClick(handler) { this._setOn(EventClick, handler); }
-
-    /** Its enabled changed - by a setter, or by nothing else a button has. */
-    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** A press, as its behaviour hears it: its click, while it is enabled. */
     _pressed(ev) { if (this.enabled) this._fire(EventClick, ev); }

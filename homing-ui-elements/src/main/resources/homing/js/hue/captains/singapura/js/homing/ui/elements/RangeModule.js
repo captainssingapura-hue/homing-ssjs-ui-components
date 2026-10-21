@@ -7,7 +7,7 @@
 //
 //   var r = new Range(branch.elementMaker("range"), new FixedRange(), me.place(FixedRange));
 //   r.min  r.max  r.step  r.value  r.enabled
-//   r.setOnInput(handler)  r.setOnCommit(handler)  r.setOnEnabledChanged(handler)
+//   r.setOnInput(handler)  r.setOnCommit(handler)  r.onChange(StateEnabled, listener)
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
@@ -44,9 +44,6 @@ class Range extends SimpleComponent {
 
     get enabled() { return this._get("enabled"); }
     set enabled(on) { this._set("enabled", !!on); }
-
-    /** Its enabled changed - by a setter, or by nothing else an input has. */
-    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** The value moving, the user still at it. */
     setOnInput(handler) { this._setOn(EventInput, handler); }

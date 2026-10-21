@@ -11,7 +11,7 @@
 //   var s = new Switch(branch.createBranch("dark"), new FixedSwitch(), me.place(FixedSwitch));
 //   s.root                           the <button>
 //   s.checked  s.enabled  s.text     its words beside the groove
-//   s.setOnCheckedChanged(handler)   turned, by a press (the DOM event carried) or a setter
+//   s.onChange(StateChecked, listener)   turned, by a press or a setter
 //   s.setOnCommit(handler)           the user done: a press
 // =============================================================================
 
@@ -65,19 +65,13 @@ class Switch extends SimpleComponent {
     get text() { return this._word.textContent; }
     set text(words) { this._word.textContent = words == null ? "" : String(words); }
 
-    /** Turned, by a press or a setter. */
-    setOnCheckedChanged(handler) { this._setOn(StateChecked, handler); }
-
     /** The user done: a press. */
     setOnCommit(handler) { this._setOn(EventCommit, handler); }
-
-    /** Its enabled changed - by a setter, or by nothing else a switch has. */
-    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 
     /** A press, as its behaviour hears it: while it is enabled, turned - its groove with it - then its commit. */
     _turned(ev) {
         if (!this.enabled) return;
-        this._change("checked", !this.checked, ev);
+        this._change("checked", !this.checked);
         this._fire(EventCommit, ev);
     }
 }

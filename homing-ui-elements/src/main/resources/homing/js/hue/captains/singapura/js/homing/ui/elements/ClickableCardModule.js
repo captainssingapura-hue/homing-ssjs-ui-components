@@ -17,7 +17,7 @@
 //   var card = new ClickableCard(branch.createBranch("open-grid"), new FixedClickableCard(), me.place(FixedClickableCard));
 //   card.joinKeys(steward, id?)   a member of the keyboard party, once
 //   card.setOnClick(handler)      handler.canHandle(EventClick) true, handler.handle(event)
-//   card.setOnKeyboardChanged(handler)   where the keys are on it changed, as the steward told it
+//   card.onChange(StateKeyboard, listener)   where the keys are on it changed, as the steward told it
 //   card.el / card.root  card.size  card.aspect  card.keys
 //   card.key(ev)                  a keydown from whoever holds the keys for it: Enter or Space on the
 //                                 card is its click; true when taken. No keydown listener of its own
@@ -78,9 +78,6 @@ class ClickableCard extends SimpleComponent {
 
     /** Pressed: what it does, once and for good. */
     setOnClick(handler) { this._setOn(EventClick, handler); }
-
-    /** Where the keys are on it changed, as the steward told it. */
-    setOnKeyboardChanged(handler) { this._setOn(StateKeyboard, handler); }
 
     /** A press, as its behaviour hears it: its click. */
     _clicked(ev) { this._fire(EventClick, ev); }

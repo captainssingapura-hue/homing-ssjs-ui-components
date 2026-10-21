@@ -5,7 +5,7 @@
 //
 //   var c = new Crumb(branch.elementMaker("crumb"), new FixedCrumb(), me.place(FixedCrumb));
 //   c.setOnClick(handler)          a click on it: handler.handle(ComponentEvent)
-//   c.setOnCurrentChanged(handler) it became the page, or stopped being it: handler.handle(StateChange)
+//   c.onChange(StateCurrent, listener) it became the page, or stopped being it: listener.handle(StateChange)
 //   c.text = "…"                   its words
 //   c.to                           where it goes, through the href manager; given once, it stays
 //   c.current = true               the step that is this page - aria-current="page",
@@ -52,8 +52,5 @@ class Crumb extends SimpleComponent {
 
     /** A click, as its behaviour hears it. */
     _clicked(ev) { this._fire(EventClick, ev); }
-
-    /** It became the page, or stopped being it - by its setter, the one way a crumb's changes. */
-    setOnCurrentChanged(handler) { this._setOn(StateCurrent, handler); }
 }
 

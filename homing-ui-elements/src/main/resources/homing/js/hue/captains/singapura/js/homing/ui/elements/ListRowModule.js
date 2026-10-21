@@ -10,7 +10,7 @@
 //
 //   var row = new ListRow(branch.elementMaker("list-row"), new FixedListRow(), me.place(FixedListRow));
 //   row.el  row.text  row.selected  row.current  row.keys
-//   row.setOnClick(handler)  row.setOnSelectedChanged(handler)  row.setOnCurrentChanged(handler)  row.setOnKeyboardChanged(handler)
+//   row.setOnClick(handler)  row.onChange(StateSelected, listener)  row.onChange(StateCurrent, listener)  row.onChange(StateKeyboard, listener)
 // On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
@@ -58,8 +58,5 @@ class ListRow extends SimpleComponent {
 
     /** A click, as its behaviour hears it, while it may be clicked. */
     _clicked(ev) { this._fire(EventClick, ev); }
-    setOnSelectedChanged(handler) { this._setOn(StateSelected, handler); }
-    setOnCurrentChanged(handler) { this._setOn(StateCurrent, handler); }
-    setOnKeyboardChanged(handler) { this._setOn(StateKeyboard, handler); }
 }
 

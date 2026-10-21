@@ -23,8 +23,5 @@ class Grip extends SimpleComponent {
     /** Whether it takes the hand: off, aria-disabled. */
     get enabled() { return this._get("enabled"); }
     set enabled(on) { this._set("enabled", !!on); }
-
-    /** Its enabled changed: by its owner. */
-    setOnEnabledChanged(handler) { this._setOn(StateEnabled, handler); }
 }
 
