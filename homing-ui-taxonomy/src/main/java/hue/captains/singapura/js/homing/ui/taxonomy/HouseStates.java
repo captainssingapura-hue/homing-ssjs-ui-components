@@ -150,6 +150,16 @@ public final class HouseStates {
     }
 
     /** Picked from among its kind: an option, a tab, a day, a row. */
+    /**
+     * Which of its tabs is the one in use, picked by the user: its id, a text; none at rest. What it shows is that tab's -
+     * no class of its own (owner, 22 Oct).
+     */
+    public record ActiveTab() implements StateType<Picking> {
+        public static final ActiveTab INSTANCE = new ActiveTab();
+        @Override public Picking parent() { return Picking.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
     public record Selected() implements Flag<Picking>, Importance.Tertiary {
         public static final Selected INSTANCE = new Selected();
         @Override public Picking parent() { return Picking.INSTANCE; }
@@ -331,6 +341,16 @@ public final class HouseStates {
         @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
     }
 
+    /**
+     * The order its tabs stand in, as the user has moved them: their ids, each once; none at rest. What it shows is its
+     * tabs where they stand - no class (owner, 22 Oct).
+     */
+    public record TabOrder() implements StateType<Given> {
+        public static final TabOrder INSTANCE = new TabOrder();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.NAMES); }
+    }
+
     /** The option chosen of those it offers: its value, a text; none at rest. What it shows is the option itself - no class. */
     public record ChosenOption() implements StateType<Given> {
         public static final ChosenOption INSTANCE = new ChosenOption();
@@ -354,7 +374,7 @@ public final class HouseStates {
     /** Every type of the tree, branch by branch. */
     public static final List<StateType<?>> ALL = List.of(
             Enabled.INSTANCE, ReadOnly.INSTANCE, Busy.INSTANCE,
-            Pressed.INSTANCE, Checked.INSTANCE, Coverage.INSTANCE, Selected.INSTANCE,
+            Pressed.INSTANCE, Checked.INSTANCE, Coverage.INSTANCE, ActiveTab.INSTANCE, Selected.INSTANCE,
             Expanded.INSTANCE, Shown.INSTANCE,
             Required.INSTANCE, Invalid.INSTANCE,
             Current.INSTANCE, Highlighted.INSTANCE, Pointed.INSTANCE,
@@ -362,6 +382,6 @@ public final class HouseStates {
             Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
             Clicks.INSTANCE, TabAddControl.INSTANCE,
-            DraftText.INSTANCE, CommittedText.INSTANCE, ChosenOption.INSTANCE,
+            DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }

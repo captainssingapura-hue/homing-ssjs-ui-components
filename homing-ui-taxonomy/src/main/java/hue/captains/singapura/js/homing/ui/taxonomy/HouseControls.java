@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
+import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
@@ -256,19 +257,20 @@ public final class HouseControls {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Selector parent() { return Selector.INSTANCE; }
         /**
-         * The pointer over it; the one in use; where the keys are - held while the cursor is on its strip, lent while what
-         * it holds has them; in the hand; the hand down on it; held by the hand, not on its cross - its press what selects
-         * it; and the clicks of its cross, which it keeps and passes on, handling none: whoever holds it decides what a
-         * close is, and it never closes itself (owner, 22 Oct).
+         * The pointer over it; the one in use; where the keys are - held while the cursor is on its bar, lent while what
+         * it holds has them; in the hand; the hand down on it; and held by the hand, as it has it - what its bar hears, its
+         * press what selects it. The bar that holds it sets the rest (owner, 22 Oct). Its cross's clicks come with its
+         * cross's step.
          */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Selected.INSTANCE,
-                HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Held.INSTANCE,
-                HouseStates.Clicks.INSTANCE); }
+                HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Held.INSTANCE); }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseIcons.WithinIcon.INSTANCE).as(HouseShaping.Keys.INSTANCE).one(),
                            DSL.part(CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
         }
+        /** Its label: the room its name is written in, in its own look - no part (22 Oct). */
+        @Override public List<Room> rooms() { return List.of(new Room("label")); }
     }
 
     /** A site's mark and name, a way home. */

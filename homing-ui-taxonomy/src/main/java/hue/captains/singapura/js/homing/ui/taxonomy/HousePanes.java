@@ -53,10 +53,12 @@ public final class HousePanes {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
         /**
-         * Where the page's keys are, held by the steward on its root (RFC 0067, D12); and the adds asked of it, its bar's
-         * passed on, handled by none: it manages no tab in or out - its caller does (owner, 22 Oct).
+         * Where the page's keys are, held by the steward on its root (RFC 0067, D12); the adds asked of it, its bar's
+         * passed on, handled by none: it manages no tab in or out - its caller does; and the order its tabs stand in, its
+         * bar's passed on - the one change on its bar its caller hears: which tab is in use is its own (owner, 22 Oct).
          */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE, HouseStates.TabAddControl.INSTANCE); }
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE, HouseStates.TabAddControl.INSTANCE,
+                HouseStates.TabOrder.INSTANCE); }
         /** Its slot: where what it shows is mounted by its caller, one at a time - its own element, no part (22 Oct). */
         @Override public List<Room> rooms() { return List.of(new Room("slot")); }
         @Override public List<Slot<?>> parts() {

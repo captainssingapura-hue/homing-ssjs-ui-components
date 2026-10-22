@@ -253,10 +253,12 @@ public final class HouseContainers {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
         /**
-         * Lit while its pane is the one being worked in (D12); and the adds asked of it - its plus pressed, passed on and
-         * handled by none: what is added is its owner's caller's to decide (owner, 22 Oct).
+         * Lit while its pane is the one being worked in (D12); the adds asked of it - its plus pressed, passed on and
+         * handled by none: what is added is its owner's caller's to decide; which of its tabs is in use; and the order its
+         * tabs stand in. Its chips are its own, and so are their states (owner, 22 Oct).
          */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.TabAddControl.INSTANCE); }
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.TabAddControl.INSTANCE,
+                HouseStates.ActiveTab.INSTANCE, HouseStates.TabOrder.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(Cardinality.DYNAMIC),
                            DSL.part(HouseControls.IconButton.INSTANCE).as(HouseShaping.VoidRole.INSTANCE).one(),   // its one plus, a regular button: its icon says it adds (21, 22 Oct)

@@ -22,11 +22,13 @@
 // An AXIS is one of its states: a value of a type of state - a node its header
 // imports, state: StateEnabled - one of the values the type allows (RFC 0069,
 // amended 21 Oct): enabled is true or false, a count of clicks a whole number
-// from 0, a draft a text. Setting a value stores it, writes its reflection, sets
+// from 0, a draft a text, a tab order a list of names - kept frozen. Setting a
+// value stores it, writes its reflection, sets
 // the state's class through the reference where the type is classed - a yes or a
 // no as "true" or "false" - and nowhere else, tells the behaviour (changed(axis,
 // value)), and tells the change to whoever hears it. The same value again does
-// nothing: a change is between two different values. The browser's own states
+// nothing: a change is between two different values - the same as its type says,
+// an order of names the same names in the same order. The browser's own states
 // (hovered, focused, down) are never an axis.
 //
 // A change is HEARD one way: onChange(on, listener) - on one of its state types,
@@ -116,10 +118,9 @@ class SimpleComponent {
      * does nothing.
      */
     _change(axis, value) {
-        var Leaf = this.constructor, v = SimpleComponent._value(Leaf, axis, value), was = this._state[axis];
-        if (was === v) return;
+        var Leaf = this.constructor, v = SimpleComponent._value(Leaf, axis, value), was = this._state[axis], a = Leaf.AXES[axis];
+        if (a.state ? a.state.same(SimpleComponent._said(a.state, was), SimpleComponent._said(a.state, v)) : was === v) return;
         this._state[axis] = v;
-        var a = Leaf.AXES[axis];
         if (typeof a.reflect === "function") a.reflect(this.el, v);
         if (a.state && a.state.classed) this.#styles.set(a.state, SimpleComponent._said(a.state, v));   // a class only for a classed state (RFC 0069, amended)
         if (this._behavior && typeof this._behavior.changed === "function") this._behavior.changed(axis, v);
@@ -173,13 +174,13 @@ class SimpleComponent {
     /** A room of its own placed - an element of its own inside it that is no part (RFC 0067): its reference writes the room's class, once. */
     _room(room, element) { this.#styles.room(room, element); }
 
-    /** A value on an axis: one of its values, where it lists them; else one its type of state allows. */
+    /** A value on an axis: one of its values, where it lists them; else one its type of state allows, as its type keeps it - an order frozen. */
     static _value(Leaf, axis, value) {
         var a = (Leaf.AXES || {})[axis];
         if (!a) throw new Error("[" + Leaf.name + "] has no axis '" + axis + "'");
         if (a.values ? a.values.indexOf(value) < 0 : !(a.state && a.state.allows(SimpleComponent._said(a.state, value))))
             throw new Error("[" + Leaf.name + "] " + axis + " is " + (a.values ? "one of " + a.values.join(", ") : "a value its state " + (a.state ? a.state.token : "") + " allows") + ", not " + value);
-        return value;
+        return a.state && !a.state.flag ? a.state.domain.kept(value) : value;
     }
 
     /** A value as its type of state says it: a yes or a no as "true" or "false", the rest as they are. */

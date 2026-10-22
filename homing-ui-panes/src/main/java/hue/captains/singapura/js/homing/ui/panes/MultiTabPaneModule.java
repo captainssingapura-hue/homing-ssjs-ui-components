@@ -22,11 +22,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * {@code MultiTabPane}, a pane of tabs: its bar over its slot, where what it shows is mounted by its caller, one at a
- * time. Ported a step at a time (RFC 0071): for now its bar with its one plus, whose presses it passes on as its own
- * {@code TabAddControl}, and its slot, empty. It manages no tab in or out - its caller does (owner, 22 Oct). Its
- * chips, the tabs it captures and shows, its keys and its menus come as they are ported; what it declares of them
- * below waits for that.
+ * {@code MultiTabPane}, a pane of tabs: its bar over its slot, where what each tab shows is mounted by its caller, the
+ * tab in use's alone. Ported a step at a time (RFC 0071): the tabs it holds given once - {@code hold(tabs)} - and what
+ * each shows mounted - {@code mount(id, element)} - going with its tab wherever the tab is moved. The bar is its own:
+ * its caller hears the order of its tabs ({@code TabOrder}) once a drag has changed it, and its plus's presses, passed
+ * on as its {@code TabAddControl}. It manages no tab in or out - its caller does (owner, 22 Oct). Its keys and its
+ * menus come as they are ported; what it declares of them below waits for that.
  */
 public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, ImplFor<HousePanes.MultiTabPane> {
 

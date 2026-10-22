@@ -75,7 +75,8 @@ public record DualKit() implements StatelessFunctionalObject {
                     constructor(t, parent) { this.token = token("StateBranch", t); this.parent = parentOf("StateBranch", parent, StateBranch); Object.freeze(this); }
                 }
                 // What a type of state may be (RFC 0069, amended 21 Oct), each checked as it is made and frozen: a finite set of
-                // ranges - a named value, or the numbers between two bounds - or a value object, a text; its named changes; and,
+                // ranges - a named value, or the numbers between two bounds - or a value object, a text or an order of names; its
+                // named changes; and,
                 // for a type whose look is a class, what its classes are said by.
                 const NAMED = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
                 class Point {
@@ -113,15 +114,26 @@ public record DualKit() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
                     allows(v) { return this.ranges.some(r => r.holds(v)); }
+                    /** Whether two of its values are one. */
+                    same(a, b) { return a === b; }
+                    /** A value as it is kept: as it is. */
+                    kept(v) { return v; }
                 }
+                // A value object: a text, any - the empty one its rest; or an order of names, each once and none blank - none its
+                // rest - kept frozen, and the same as another of the same names in the same order.
                 class Valued {
                     constructor(kind) {
-                        if (kind !== "text") throw new TypeError("Valued: a text, not " + kind);
+                        if (kind !== "text" && kind !== "names") throw new TypeError("Valued: a text or an order of names, not " + kind);
                         this.kind = kind;
-                        this.rest = "";
+                        this.rest = kind === "text" ? "" : Object.freeze([]);
                         Object.freeze(this);
                     }
-                    allows(v) { return typeof v === "string"; }
+                    allows(v) {
+                        if (this.kind === "text") return typeof v === "string";
+                        return Array.isArray(v) && v.every(n => typeof n === "string" && n.trim() !== "") && new Set(v).size === v.length;
+                    }
+                    same(a, b) { return this.kind === "text" ? a === b : a.length === b.length && a.every((n, i) => n === b[i]); }
+                    kept(v) { return this.kind === "text" || Object.isFrozen(v) ? v : Object.freeze(v.slice()); }
                 }
                 class Between {
                     constructor(from, to) {
@@ -192,6 +204,8 @@ public record DualKit() implements StatelessFunctionalObject {
                     }
                     /** Whether a value is one it allows. */
                     allows(value) { return this.domain.allows(value); }
+                    /** Whether two of its values are one: a change is between two that are not. */
+                    same(a, b) { return this.domain.same(a, b); }
                     /** Its named change, by its name; none for a name it has not. */
                     change(name) { return this.changes.find(c => c.name === name) ?? null; }
                 }

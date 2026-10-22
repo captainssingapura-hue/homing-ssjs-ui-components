@@ -190,3 +190,12 @@ it is applied to - a size, an aspect, a colour, a loudness. What a degree is rea
 
 How many times a tab was asked to be added - its plus pressed: from none, each ask its going up. What
 is added, if anything, is for whoever holds the component to decide.
+
+## ActiveTab
+
+Which of the tabs the component holds is the one in use, picked by the user: that tab's id. What
+the component shows is that tab's.
+
+## TabOrder
+
+The order the tabs the component holds stand in, as the user has moved them: their ids, each once.

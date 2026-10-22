@@ -46,7 +46,7 @@ public record States() implements DualTree<StateNode> {
         return "new StateType(" + token + ", " + parent + ", " + domain(s.domain()) + ", [" + changes + "], " + classes + ")";
     }
 
-    /** A domain as the kit makes it: {@code new Ranges([new Point("up"), new Point("down")], "up")}, {@code new Valued("text")}. */
+    /** A domain as the kit makes it: {@code new Ranges([new Point("up"), new Point("down")], "up")}, {@code new Valued("text")}, {@code new Valued("names")}. */
     private static String domain(StateDomain d) {
         var js = JsLiterals.INSTANCE;
         return switch (d) {
@@ -58,12 +58,13 @@ public record States() implements DualTree<StateNode> {
         };
     }
 
-    /** A value as the page has it: a named one its token, a number itself, a text a string. */
+    /** A value as the page has it: a named one its token, a number itself, a text a string, an order of names a frozen list of strings. */
     private static String value(StateDomain.Value v) {
         return switch (v) {
             case StateDomain.Named n -> JsLiterals.INSTANCE.string(n.value().token());
             case StateDomain.Number n -> number(n.value());
             case StateDomain.Text t -> JsLiterals.INSTANCE.string(t.value());
+            case StateDomain.Names n -> "Object.freeze([" + String.join(", ", n.names().stream().map(JsLiterals.INSTANCE::string).toList()) + "])";
         };
     }
 

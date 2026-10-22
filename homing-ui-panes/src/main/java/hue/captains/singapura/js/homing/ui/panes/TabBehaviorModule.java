@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 
 import java.util.List;
 
-/** What a tab does: the hand down on it, not on its cross, is its Press; a right-click asks its owner's opener for its menu. */
+/** What a tab does: the hand down on it is its press, and up again, wherever it is by then, its release - each told to the tab. */
 public record TabBehaviorModule() implements DomModule<TabBehaviorModule> {
 
     /** {@code new TabBehavior(el, tab)}. */

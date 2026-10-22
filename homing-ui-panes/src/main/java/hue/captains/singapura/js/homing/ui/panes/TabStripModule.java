@@ -7,22 +7,23 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.IconButtonModule;
-import hue.captains.singapura.js.homing.ui.elements.MarkBehaviorModule;
 import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import java.util.List;
 
 /**
- * {@code TabStrip}, the bar over a multi-tab pane, ported a step at a time (RFC 0071): its one plus for now - a
- * regular button, the house's icon button - whose presses it passes on as its own {@code TabAddControl}, handling
- * none (owner, 22 Oct). Its chips, its count and the drag along its row come as they are ported.
+ * {@code TabStrip}, the bar over a multi-tab pane, ported a step at a time (RFC 0071): a chip for each tab it holds -
+ * its own, made by it, pressed to be the one in use and dragged along it - and its one plus, a regular button, the
+ * house's icon button. Its chips' states are its own (owner, 22 Oct): its owner hears which tab is in use
+ * ({@code ActiveTab}), the order of its tabs once a drag has changed it ({@code TabOrder}), and its plus's presses,
+ * passed on as its {@code TabAddControl}, handling none. Its count and its landing come as they are ported.
  */
 public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<HouseContainers.TabStrip> {
 
-    /** A composed component: {@code new TabStrip(branch, new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), place?)}; {@code onChange(StateTabAddControl, listener)}; {@code adds}, {@code current}, {@code dispose}. */
+    /** A composed component: {@code new TabStrip(branch, new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), place?)}; {@code hold(tabs)}; {@code onChange(StateActiveTab | StateTabOrder | StateTabAddControl, listener)}; {@code active}, {@code order}, {@code adds}, {@code current}, {@code dispose}. */
     public record TabStrip() implements BranchComponent<TabStripModule> {
-        @Override public String summary() { return "The bar over a multi-tab pane: its one plus, whose presses it passes on as the adds asked of it."; }
+        @Override public String summary() { return "The bar over a multi-tab pane: its tabs' chips, pressed and dragged along it, and its one plus, whose presses it passes on."; }
     }
 
     public static final TabStripModule INSTANCE = new TabStripModule();
@@ -31,7 +32,8 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
     public ImportsFor<TabStripModule> imports() {
         return ImportsFor.<TabStripModule>builder()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabStripBehaviorModule.TabStripBehavior()), TabStripBehaviorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton()), IconButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneStyles.mtp_strip(), new PaneStyles.mtp_rail_add()), PaneStyles.INSTANCE))
                 .build();
