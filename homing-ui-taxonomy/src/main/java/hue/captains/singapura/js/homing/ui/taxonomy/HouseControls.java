@@ -258,12 +258,13 @@ public final class HouseControls {
         @Override public Selector parent() { return Selector.INSTANCE; }
         /**
          * The pointer over it; the one in use; where the keys are - held while the cursor is on its bar, lent while what
-         * it holds has them; in the hand; the hand down on it; and held by the hand, as it has it - what its bar hears, its
-         * press what selects it. The bar that holds it sets the rest (owner, 22 Oct). Its cross's clicks come with its
-         * cross's step.
+         * it holds has them; in the hand; the hand down on it; held by the hand, as it has it - what its bar hears, its
+         * press what selects it; and its close asked - its cross's clicks, passed on, handled by none. The bar that holds it
+         * sets the rest (owner, 22 Oct).
          */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Selected.INSTANCE,
-                HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Held.INSTANCE); }
+                HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Held.INSTANCE,
+                HouseStates.ChipCloseControl.INSTANCE); }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseIcons.WithinIcon.INSTANCE).as(HouseShaping.Keys.INSTANCE).one(),

@@ -75,8 +75,8 @@ public record DualKit() implements StatelessFunctionalObject {
                     constructor(t, parent) { this.token = token("StateBranch", t); this.parent = parentOf("StateBranch", parent, StateBranch); Object.freeze(this); }
                 }
                 // What a type of state may be (RFC 0069, amended 21 Oct), each checked as it is made and frozen: a finite set of
-                // ranges - a named value, or the numbers between two bounds - or a value object, a text or an order of names; its
-                // named changes; and,
+                // ranges - a named value, or the numbers between two bounds - or a value object, a text, an order of names or a
+                // count for each name; its named changes; and,
                 // for a type whose look is a class, what its classes are said by.
                 const NAMED = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/;
                 class Point {
@@ -119,21 +119,34 @@ public record DualKit() implements StatelessFunctionalObject {
                     /** A value as it is kept: as it is. */
                     kept(v) { return v; }
                 }
-                // A value object: a text, any - the empty one its rest; or an order of names, each once and none blank - none its
-                // rest - kept frozen, and the same as another of the same names in the same order.
+                // A value object: a text, any - the empty one its rest; an order of names, each once and none blank - none its
+                // rest - kept frozen, and the same as another of the same names in the same order; or a count for each name, a
+                // whole number from none, or null for a name not counted - no name its rest - kept frozen, and the same as
+                // another of the same names, each with the same count or none, whatever their order.
+                const VALUED = Object.freeze(["text", "names", "counts"]);
                 class Valued {
                     constructor(kind) {
-                        if (kind !== "text" && kind !== "names") throw new TypeError("Valued: a text or an order of names, not " + kind);
+                        if (VALUED.indexOf(kind) < 0) throw new TypeError("Valued: a text, an order of names or a count for each name, not " + kind);
                         this.kind = kind;
-                        this.rest = kind === "text" ? "" : Object.freeze([]);
+                        this.rest = kind === "text" ? "" : kind === "names" ? Object.freeze([]) : Object.freeze({});
                         Object.freeze(this);
                     }
                     allows(v) {
                         if (this.kind === "text") return typeof v === "string";
-                        return Array.isArray(v) && v.every(n => typeof n === "string" && n.trim() !== "") && new Set(v).size === v.length;
+                        if (this.kind === "names") return Array.isArray(v) && v.every(n => typeof n === "string" && n.trim() !== "") && new Set(v).size === v.length;
+                        return v !== null && typeof v === "object" && !Array.isArray(v) && Object.keys(v).every(n => n.trim() !== ""
+                            && (v[n] === null || (Number.isInteger(v[n]) && v[n] >= 0)));
                     }
-                    same(a, b) { return this.kind === "text" ? a === b : a.length === b.length && a.every((n, i) => n === b[i]); }
-                    kept(v) { return this.kind === "text" || Object.isFrozen(v) ? v : Object.freeze(v.slice()); }
+                    same(a, b) {
+                        if (this.kind === "text") return a === b;
+                        if (this.kind === "names") return a.length === b.length && a.every((n, i) => n === b[i]);
+                        const ka = Object.keys(a);
+                        return ka.length === Object.keys(b).length && ka.every(n => Object.prototype.hasOwnProperty.call(b, n) && a[n] === b[n]);
+                    }
+                    kept(v) {
+                        if (this.kind === "text" || Object.isFrozen(v)) return v;
+                        return Object.freeze(this.kind === "names" ? v.slice() : Object.assign({}, v));
+                    }
                 }
                 class Between {
                     constructor(from, to) {

@@ -199,3 +199,14 @@ the component shows is that tab's.
 ## TabOrder
 
 The order the tabs the component holds stand in, as the user has moved them: their ids, each once.
+
+## ChipCloseControl
+
+How many times a tab's close was asked of its chip - its cross pressed: from none, each ask its going
+up. What a close is, the bar holding the chip decides.
+
+## TabCloseControl
+
+For each tab the component holds, how many times its close was asked - or none, for a tab that cannot
+be closed. Each change is one tab's. What a close is, if anything, is for whoever holds the component
+to decide.

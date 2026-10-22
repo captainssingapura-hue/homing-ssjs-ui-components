@@ -60,10 +60,10 @@ class UiPanesCrateConformanceTest {
                                                   TabModule.INSTANCE.imports(), TabPaneModule.INSTANCE.imports())
                 .flatMap(im -> im.getAllImports().values().stream())
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
-        // the bar ported a step at a time (22 Oct): what its old chips, count, cross and drag wore waits for their port - and,
-        // its chips ported with neither, the icon a chip held and its cross, each with its own step
+        // the bar ported a step at a time (22 Oct): what its old count, close and landing wore waits for their port - and the
+        // icon a chip held, with its own step
         var waiting = java.util.Set.of("mtp_rail", "mtp_strip_tail", "mtp_bar_close", "mtp_pill", "mtp_drop_mark",
-                "mtp_chip_icon", "mtp_chip_icon_on", "mtp_chip_close");
+                "mtp_chip_icon", "mtp_chip_icon_on");
         var unimported = new java.util.TreeSet<String>();
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses())
             if (!imported.contains(c.getClass().getSimpleName())) unimported.add(c.getClass().getSimpleName());

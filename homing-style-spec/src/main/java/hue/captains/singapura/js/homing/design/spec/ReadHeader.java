@@ -53,8 +53,17 @@ public record ReadHeader() implements StatelessFunctionalObject {
             states.add(new ComponentHeader.HeaderState(s, allowed, words, s instanceof Flag<?>,
                     s instanceof Pseudo p ? Optional.of(p.pseudoClass()) : Optional.empty(), level));
         }
+        var chosen = new LinkedHashSet<Component<?>>();
+        for (Component<?> part : parts) choices(taxonomy, part, chosen);
+        chosen.removeAll(parts);
         return new ComponentHeader(component, component instanceof Composite<?>, top.contains(component), slots, List.copyOf(parts),
-                states, taxonomy.extents(component), component.rooms());
+                states, taxonomy.extents(component), component.rooms(), List.copyOf(chosen));
+    }
+
+    /** The players of the choices a component's fixed type leaves, and theirs, all the way down: into the set given. */
+    private void choices(Taxonomy taxonomy, Component<?> component, LinkedHashSet<Component<?>> into) {
+        for (FixedTypes.Field f : FixedTypes.INSTANCE.fields(taxonomy, component))
+            for (Component<?> player : f.players()) if (into.add(player)) choices(taxonomy, player, into);
     }
 
     /** Every component's header, the taxonomy's components in its order. */

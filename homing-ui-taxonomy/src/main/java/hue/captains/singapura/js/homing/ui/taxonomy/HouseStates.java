@@ -325,6 +325,28 @@ public final class HouseStates {
         @Override public StateDomain domain() { return DOMAIN; }
     }
 
+    /**
+     * How many times its close was asked - its cross pressed: from none, each ask its going up. What a close is, the bar
+     * that holds it decides; nothing it shows changes - no class (owner, 22 Oct).
+     */
+    public record ChipCloseControl() implements StateType<Counting> {
+        public static final ChipCloseControl INSTANCE = new ChipCloseControl();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
+    /**
+     * For each tab it holds, how many times its close was asked: by the tab's id, a count from none - or none, for a tab
+     * that cannot be closed. Each change is one tab's: its close asked once more, or the tab put in. What a close is, its
+     * caller decides; nothing it shows changes - no class (owner, 22 Oct).
+     */
+    public record TabCloseControl() implements StateType<Counting> {
+        public static final TabCloseControl INSTANCE = new TabCloseControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
     // ── given ────────────────────────────────────────────────────────────
 
     /** What is typed in it so far, the user still at it: a text, none at rest. What it shows is the words themselves - no class. */
@@ -381,7 +403,7 @@ public final class HouseStates {
             Empty.INSTANCE,
             Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
-            Clicks.INSTANCE, TabAddControl.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE,
             DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }

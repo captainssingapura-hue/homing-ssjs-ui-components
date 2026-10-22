@@ -6,17 +6,20 @@
 // own step - and for each its caller mounts what it shows: an element, which
 // goes with its tab wherever the tab is moved along the bar. The bar is its
 // own, and so is all that goes on on it - which tab is in use, the chips held
-// and moved: what its caller hears is the one change that matters to it, the
-// order of its tabs (TabOrder), told once a drag ends, if it changed it. A
-// press on its bar's plus is passed on - its own TabAddControl going up - and
-// what is added, if anything, is its caller's to decide. Its keys come as they
-// are ported.
+// and moved: what its caller hears are the changes that matter to it - the
+// order of its tabs (TabOrder), told once a drag ends, if it changed it, and
+// the closes asked of each tab (TabCloseControl), its bar's crosses', passed on.
+// A press on its bar's plus is passed on - its own TabAddControl going up. What
+// is closed or added, if anything, is its caller's to decide: it never closes a
+// tab itself. Its keys come as they are ported.
 //
 //   var pane = new MultiTabPane(branch.createBranch("pane"),
 //                  new FixedMultiTabPane(new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), null), me.place(FixedMultiTabPane));
-//   pane.hold([{ id: "alpha", title: "Alpha" }, ...])   the tabs it holds, once: the first in use
+//   pane.hold([{ id: "alpha", title: "Alpha", closable? }, ...])   the tabs it holds, once: the first in use
 //   pane.mount("alpha", element)   what a tab shows, its caller's: in the slot while its tab is in use
 //   pane.onChange(StateTabOrder, listener)   its tabs in another order: before and after
+//   pane.onChange(StateTabCloseControl, listener)   a tab's close asked, or a tab put in: before and after
+//   pane.closes    how many times each tab's close was asked, by its id - null for one that cannot be closed
 //   pane.onChange(StateTabAddControl, listener)   its bar's plus pressed: the count up by one
 //   pane.order     its tabs' ids, in the order they stand
 //   pane.active    the tab in use, by its id
@@ -44,6 +47,13 @@ class MultiTabPaneShow {
     handle(change) { this._pane._show(change.after); }
 }
 
+/** A close asked of one of its bar's tabs: its own, told to its caller. */
+class MultiTabPaneClose {
+    constructor(pane) { this._pane = pane; Object.freeze(this); }
+    canHandle(type) { return type === StateTabCloseControl; }
+    handle(change) { this._pane._closesNow(change.after); }
+}
+
 /** Its bar's tabs in another order: its own order, told to its caller. */
 class MultiTabPaneOrder {
     constructor(pane) { this._pane = pane; Object.freeze(this); }
@@ -56,7 +66,8 @@ class MultiTabPane extends SimpleComponent {
     static AXES = Object.freeze({
         keys: Object.freeze({ values: StateKeyboard.states, rest: StateKeyboard.rest, state: StateKeyboard }),
         adds: Object.freeze({ rest: 0, state: StateTabAddControl }),   // its bar's adds, passed on: no class
-        order: Object.freeze({ rest: StateTabOrder.rest, state: StateTabOrder })   // its bar's order, passed on: no class
+        order: Object.freeze({ rest: StateTabOrder.rest, state: StateTabOrder }),   // its bar's order, passed on: no class
+        closes: Object.freeze({ rest: StateTabCloseControl.rest, state: StateTabCloseControl })   // its bar's closes asked, passed on: no class
     });
     static BEHAVIOR = MarkBehavior;
 
@@ -73,6 +84,7 @@ class MultiTabPane extends SimpleComponent {
         this._strip.onChange(StateTabAddControl, new MultiTabPaneAdd(this));
         this._strip.onChange(StateActiveTab, new MultiTabPaneShow(this));
         this._strip.onChange(StateTabOrder, new MultiTabPaneOrder(this));
+        this._strip.onChange(StateTabCloseControl, new MultiTabPaneClose(this));
         this.el.appendChild(this._strip.el);
         // its slot: its own element, where what the tab in use shows is - empty until its caller mounts it
         this._slot = branch.createElement("slot", "div");
@@ -107,6 +119,9 @@ class MultiTabPane extends SimpleComponent {
     /** Its tabs' ids, in the order they stand on its bar. */
     get order() { return this._get("order"); }
 
+    /** How many times each tab's close was asked, by its id - null for a tab that cannot be closed. */
+    get closes() { return this._get("closes"); }
+
     /** The tab in use on its bar, by its id. */
     get active() { return this._strip.active; }
 
@@ -131,6 +146,9 @@ class MultiTabPane extends SimpleComponent {
 
     /** Its bar's tabs in another order, as its listener hears it. */
     _ordered(order) { this._change("order", order); }
+
+    /** A close asked of one of its bar's tabs, or a tab put in, as its listener hears it. */
+    _closesNow(closes) { this._change("closes", closes); }
 
     /** A tab in use: what it shows put in its slot - the only thing there - or the slot empty. */
     _show(id) {

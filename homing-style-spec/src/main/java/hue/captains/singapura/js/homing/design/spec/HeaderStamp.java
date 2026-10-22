@@ -142,11 +142,16 @@ public record HeaderStamp() implements StatelessFunctionalObject {
     /** The name the leaves a one-class module realizes are stamped under. */
     public static final String LEAVES = "LEAVES_IMPLEMENTED";
 
-    /** The fixed types it imports (D30): its component's, then each part's, each once - every one an owner may make, and places by. */
+    /**
+     * The fixed types it imports (D30): its component's, then each part's, each once - every one an owner may make, and
+     * places by - then those its parts' choices take, all the way down: a bar makes its chips' fixed objects, each with
+     * its cross's (22 Oct).
+     */
     public List<String> fixed(ComponentHeader h) {
         var out = new LinkedHashSet<String>();
         out.add(FixedTypes.INSTANCE.name(h.component()));
         for (ComponentHeader.HeaderSlot s : h.slots()) out.add(FixedTypes.INSTANCE.name(s.part()));
+        for (Component<?> c : h.chosen()) out.add(FixedTypes.INSTANCE.name(c));
         return List.copyOf(out);
     }
 

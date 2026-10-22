@@ -17,12 +17,13 @@ import java.util.List;
  * its own, made by it, pressed to be the one in use and slid along it as a browser's tab is, the chips it passes stepping
  * aside, eased - and its one plus, a regular button, the
  * house's icon button. Its chips' states are its own (owner, 22 Oct): its owner hears which tab is in use
- * ({@code ActiveTab}), the order of its tabs once a drag has changed it ({@code TabOrder}), and its plus's presses,
- * passed on as its {@code TabAddControl}, handling none. Its count and its landing come as they are ported.
+ * ({@code ActiveTab}), the order of its tabs once a drag has changed it ({@code TabOrder}), the closes asked of each
+ * tab, its chips' crosses' ({@code TabCloseControl}), and its plus's presses, passed on as its {@code TabAddControl} -
+ * handling none. Its count and its landing come as they are ported.
  */
 public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<HouseContainers.TabStrip> {
 
-    /** A composed component: {@code new TabStrip(branch, new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), place?)}; {@code hold(tabs)}; {@code onChange(StateActiveTab | StateTabOrder | StateTabAddControl, listener)}; {@code active}, {@code order}, {@code adds}, {@code current}, {@code dispose}. */
+    /** A composed component: {@code new TabStrip(branch, new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), place?)}; {@code hold(tabs)}; {@code onChange(StateActiveTab | StateTabOrder | StateTabCloseControl | StateTabAddControl, listener)}; {@code active}, {@code order}, {@code closes}, {@code adds}, {@code current}, {@code dispose}. */
     public record TabStrip() implements BranchComponent<TabStripModule> {
         @Override public String summary() { return "The bar over a multi-tab pane: its tabs' chips, pressed and dragged along it, and its one plus, whose presses it passes on."; }
     }

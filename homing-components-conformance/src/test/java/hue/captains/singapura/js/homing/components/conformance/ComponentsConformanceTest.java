@@ -172,7 +172,5 @@ class ComponentsConformanceTest {
             // the bar ported a step at a time (22 Oct): its plus, then its chips - its count and its landing come with their steps
             "TabStripModule (TabStrip) never imports Pill, which its part count calls for",
             "TabStripModule (TabStrip) never imports DropMark, which its part landing calls for",
-            // the tab ported with its bar's chips (22 Oct): its cross comes with its own step
-            "TabModule (Tab) never imports CloseButton, which its part close calls for",
             "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline");   // the preferences button's gone with it, no component (21 Oct)
 }

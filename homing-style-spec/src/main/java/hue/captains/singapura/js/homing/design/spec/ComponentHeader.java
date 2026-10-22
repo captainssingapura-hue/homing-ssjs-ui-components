@@ -31,10 +31,12 @@ import java.util.Optional;
  * @param states    the state types it declares, in the order it lists them, each with what it carries
  * @param extents   the extents it varies along, its branches' first
  * @param rooms     its rooms: elements of its own inside it that are no parts, sharing its class (RFC 0067)
+ * @param chosen    the players of the choices its parts' fixed types leave, all the way down, each once: whose fixed
+ *                  objects it may make, to make a part's - a bar making a chip with its cross (22 Oct)
  */
 public record ComponentHeader(Component<?> component, boolean composite, boolean topLevel, List<HeaderSlot> slots,
                               List<Component<?>> parts, List<HeaderState> states,
-                              List<ExtentAxis> extents, List<Room> rooms) implements ValueObject {
+                              List<ExtentAxis> extents, List<Room> rooms, List<Component<?>> chosen) implements ValueObject {
 
     public ComponentHeader {
         Objects.requireNonNull(component, "ComponentHeader.component");
@@ -43,6 +45,7 @@ public record ComponentHeader(Component<?> component, boolean composite, boolean
         states = List.copyOf(states);
         extents = List.copyOf(extents);
         rooms = List.copyOf(rooms);
+        chosen = List.copyOf(chosen);
     }
 
     /**
