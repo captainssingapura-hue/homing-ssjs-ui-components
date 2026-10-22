@@ -2,7 +2,6 @@ package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.ui.elements.SwitchModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -33,7 +32,6 @@ public record ToggleWidgetModule() implements Widget<Widget._None, ToggleWidgetM
                 .add(new ModuleImports<>(List.of(new PreferenceSteward.PreferenceViewInstance()), PreferenceSteward.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SwitchModule.Switch()), SwitchModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .build();
     }
 

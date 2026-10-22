@@ -14,7 +14,6 @@ import hue.captains.singapura.js.homing.ui.elements.ChoiceOptionModule;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookModule;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -50,7 +49,6 @@ public record ThemeWidgetModule() implements Widget<Widget._None, ThemeWidgetMod
                         new PreferencesStyles.pv_options(),
                         new PreferencesStyles.pv_option()
                 ), PreferencesStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ChoiceOptionModule.ChoiceOption()), ChoiceOptionModule.INSTANCE))
                 .build();
     }

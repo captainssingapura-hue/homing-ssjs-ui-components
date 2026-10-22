@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.design.spec.SpecModule;
 import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseEvents;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRoleCatalogue;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
@@ -46,7 +45,7 @@ public record HouseSpec() implements StatelessFunctionalObject {
 
     /** The house, read and held, its content found on the classpath under {@code homing-css/}. */
     public SpecRegistry registry() {
-        return ReadSpec.INSTANCE.read(BASE, STYLES, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL, HouseEvents.ALL,
+        return ReadSpec.INSTANCE.read(BASE, STYLES, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL,
                 new ClasspathCssResolver("homing-css/"));
     }
 }

@@ -30,10 +30,7 @@ public record SimpleComponentModule() implements DomModule<SimpleComponentModule
      */
     public record SimpleComponentFactory() implements Exportable._Class<SimpleComponentModule> {}
 
-    /** One of a component's events, dressed from the DOM's: {@code type}, {@code source}, {@code raw}. */
-    public record ComponentEvent() implements Exportable._Class<SimpleComponentModule> {}
-
-    /** A state's change: a {@code ComponentEvent} of its state type, with the state's {@code previous} value. */
+    /** A change of one of its states (RFC 0069, amended): {@code type}, {@code source}, {@code before}, {@code after}, {@code named}. */
     public record StateChange() implements Exportable._Class<SimpleComponentModule> {}
 
     public static final SimpleComponentModule INSTANCE = new SimpleComponentModule();
@@ -46,5 +43,5 @@ public record SimpleComponentModule() implements DomModule<SimpleComponentModule
                 .build();
     }
 
-    @Override public ExportsOf<SimpleComponentModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new SimpleComponent(), new ComponentEvent(), new StateChange())); }
+    @Override public ExportsOf<SimpleComponentModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new SimpleComponent(), new StateChange())); }
 }

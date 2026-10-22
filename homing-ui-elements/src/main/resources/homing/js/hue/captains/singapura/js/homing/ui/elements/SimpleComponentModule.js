@@ -40,18 +40,13 @@
 // the browser's events are no component's; what one means to a component is a
 // change of a state of its own.
 //
-// Its EVENTS are what it still offers that is no change of a state - [EventClick]
-// - each dressed from the raw DOM event into a ComponentEvent, heard by its own
-// setter (setOnClick), with the same refusals: each goes as it moves to a state.
-//
 // What a leaf declares, as statics:
 //   TAG       the element it takes: "button"
 //   AXES      { axis: { values?, rest, reflect?(el, value), state? } } - its
 //             values where no type of state says them
-//   EVENTS    what it offers that is no change of a state: [EventClick]
 //   DEGREES   the extents it varies by, nodes its header imports: [ExtentSize]
 //   BEHAVIOR  its behaviour's class: new BEHAVIOR(el, component)
-// an accessor for each axis, degree and word, a setter for each event, and a
+// an accessor for each axis, degree and word, and a
 // constructor of its own - the one every component has (D29), (make, fixed,
 // place?) - that hands its own fixed type and its own binding on:
 //
@@ -99,7 +94,6 @@ class SimpleComponent {
         var axes = Leaf.AXES || {};
         this._state = {};
         for (var a in axes) this._state[a] = axes[a].rest;
-        this._handlers = new Map();
         this._listeners = new Map();
         this._degrees = new Map();
         (Leaf.DEGREES || []).forEach(function (x) { self._degrees.set(x, x.rest); });
@@ -159,28 +153,6 @@ class SimpleComponent {
         this._listeners.set(on, listener);
     }
 
-    /** One of its events, dressed from the DOM event that made it, to its handler if one is set. */
-    _fire(type, raw) {
-        var h = this._handlers.get(type);
-        if (h) h.handle(new ComponentEvent(type, this, raw));
-    }
-
-    /**
-     * A handler for one of its events, once and for good: asked first whether it handles the type,
-     * then held to being an object of a class, then refused if the event has one already.
-     */
-    _setOn(type, handler) {
-        var Leaf = this.constructor, what = type && type.token ? type.token : String(type);
-        if (!handler || typeof handler.canHandle !== "function" || handler.canHandle(type) !== true)
-            throw new Error("[" + Leaf.name + "] a handler says it handles " + what + ": canHandle(" + what + ") answers true");
-        if (typeof handler === "function" || Object.getPrototypeOf(handler) === Object.prototype || Object.getPrototypeOf(handler) === null)
-            throw new Error("[" + Leaf.name + "] a handler is an object of a class declared for it, never a closure");
-        if (typeof handler.handle !== "function") throw new Error("[" + Leaf.name + "] a handler handles: handle(event)");
-        if (!SimpleComponent._offers(Leaf, type)) throw new Error("[" + Leaf.name + "] offers no " + what);
-        if (this._handlers.has(type)) throw new Error("[" + Leaf.name + "] has its handler for " + what + " already: set once, it stays");
-        this._handlers.set(type, handler);
-    }
-
     /** A degree, one of the extents it varies by. */
     _degree(extent) {
         if (!this._degrees.has(extent)) throw new Error("[" + this.constructor.name + "] varies by no " + (extent && extent.token));
@@ -221,19 +193,6 @@ class SimpleComponent {
             if (s && (s === on || s.changes.indexOf(on) >= 0)) return s;
         }
         return null;
-    }
-
-    /** Whether the leaf offers the event: one of its EVENTS - a change of a state is heard by onChange. */
-    static _offers(Leaf, type) { return (Leaf.EVENTS || []).indexOf(type) >= 0; }
-}
-
-/** One of a component's events, dressed from the DOM event that made it: its type, its component, and the raw event, or null. */
-class ComponentEvent {
-    constructor(type, source, raw) {
-        this.type = type;
-        this.source = source;
-        this.raw = raw == null ? null : raw;
-        if (new.target === ComponentEvent) Object.freeze(this);
     }
 }
 

@@ -93,6 +93,12 @@ select drops, a sidebar unfolded. Said on what opens it, so the user knows befor
 The component is on view over the page for the time being: a dialog, a popover, a tooltip, a menu.
 Said on what is opened, as Expanded is said on what opens it.
 
+## Presence
+
+Whether the component is still there, or its user has sent it away: open at rest, dismissed once it
+is. A component that can also run out would end apart - expired - so that two ways of going end in
+two states.
+
 ## Required
 
 The user must give the component's value before what it belongs to can be sent.

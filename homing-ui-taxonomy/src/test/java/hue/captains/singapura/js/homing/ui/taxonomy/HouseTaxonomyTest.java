@@ -49,7 +49,7 @@ class HouseTaxonomyTest {
     /**
      * Every node the house declares is a stateless functional object, as jOntology judges one: held
      * here, at build time, since a read no longer judges state and a running server has no enforcer.
-     * The trees of states and of events too.
+     * The tree of states too.
      */
     @Test
     void everyNode_isStateless() {
@@ -60,8 +60,6 @@ class HouseTaxonomyTest {
         nodes.addAll(HOUSE.roles());
         nodes.addAll(HOUSE.states().branches());
         nodes.addAll(HOUSE.states().types());
-        nodes.addAll(HOUSE.events().branches());
-        nodes.addAll(HOUSE.events().types());
         var enforcer = new OntologyEnforcer();
         var violations = nodes.stream().map(Object::getClass).distinct()
                 .flatMap(c -> enforcer.enforce(c).stream().map(v -> c.getName() + ": " + v.message()))
@@ -133,27 +131,22 @@ class HouseTaxonomyTest {
         HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
         HOUSE.states().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
-        HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
-        HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(22 + 118 + 22 + 98 + 11 + 28 + 7 + 14, nodes.size());
+        assertEquals(22 + 118 + 22 + 98 + 11 + 29, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
     }
 
     /**
-     * The trees of states and of events are whole in the base, as the catalogue is - read whether or
-     * not a component has their types, filed by what they are about. The tree files a state's types,
+     * The tree of states is whole in the base, as the catalogue is - read whether or not a component
+     * has its types, filed by what they are about. The tree files a state's types,
      * never its values: each type has its values, the one at rest first.
      */
     @Test
-    void theStatesAndEvents_wholeInTheBase_filedByWhatTheyAreAbout() {
+    void theStates_wholeInTheBase_filedByWhatTheyAreAbout() {
         assertEquals(List.of("availability", "picking", "disclosure", "validity", "place", "content", "interaction", "physical", "counting", "given", "measure"),
                 HOUSE.states().branches().stream().map(b -> b.name().value()).toList());
         assertEquals(HouseStates.ALL, HOUSE.states().types(), "every type, whether or not a component has it yet");
-        assertEquals(List.of("pointing", "dragging", "editing", "asking", "loading", "timing", "scrolling"),
-                HOUSE.events().branches().stream().map(b -> b.name().value()).toList());
-        assertEquals(HouseEvents.ALL, HOUSE.events().types());
         assertEquals(List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Held.INSTANCE),
                 HOUSE.states().children(HouseStates.Interaction.INSTANCE), "what the hand and the keys do, folded into the tree - the hand's drag among them, and its hold as a component has it");
         assertEquals(List.of("true", "false"), tokens(HouseStates.Enabled.INSTANCE), "enabled at rest");

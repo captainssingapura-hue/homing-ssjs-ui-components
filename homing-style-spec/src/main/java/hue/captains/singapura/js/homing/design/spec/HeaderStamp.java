@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
 import hue.captains.singapura.js.homing.component.taxonomy.Room;
@@ -19,7 +18,7 @@ import java.util.Locale;
 /**
  * What the server stamps into a component's implementation module (RFC 0071, D19): its header, made from the component's
  * declarations alone - nothing but names the implementation uses directly. Each node the component declares - itself, its
- * parts, their roles, its state types, its events, its extents - is imported from its tree's JS dual under its own name,
+ * parts, their roles, its state types, its extents - is imported from its tree's JS dual under its own name,
  * the module and the name both a pure function of the node ({@link DualRef}); and its parts' fixed types, by which it
  * places each part it makes - {@code this._place(FixedCloseIcon)}, its role said only where one player fills two places
  * of it ({@code this._place(FixedPlainButton, RoleZoomIn)}). No slot is stamped (owner, 21 Oct): a module implements one
@@ -34,20 +33,17 @@ public record HeaderStamp() implements StatelessFunctionalObject {
     /** One constant a header stamps - a room's: its name, and its line. */
     public record Constant(String name, String line) {}
 
-    /** Every node the header imports, each once, in its order: the component, each slot's part and role, its state types, events, extents. */
+    /** Every node the header imports, each once, in its order: the component, each slot's part and role, its state types, extents. */
     public List<DualRef.Ref> refs(ComponentHeader h) {
         var out = new LinkedHashMap<String, DualRef.Ref>();
         var refs = DualRef.INSTANCE;
         add(out, refs.of(h.component()));
         for (ComponentHeader.HeaderSlot s : h.slots()) { add(out, refs.of(s.part())); add(out, refs.of(s.role())); }
         for (ComponentHeader.HeaderState s : h.states()) add(out, refs.of(s.type()));
-        for (EventType<?> e : h.events()) add(out, refs.of(e));
         for (ExtentAxis x : h.extents()) add(out, refs.of(x));
-        // what its parts fire and change, so an owner can handle each - a press on the button it holds (port journal)
-        for (Component<?> p : h.parts()) {
-            for (EventType<?> e : p.events()) add(out, refs.of(e));
+        // what its parts' states are, so an owner can hear each change - its button's clicks (RFC 0069, amended)
+        for (Component<?> p : h.parts())
             for (var s : p.states()) if (!(s instanceof Pseudo)) add(out, refs.of(s));
-        }
         return List.copyOf(out.values());
     }
 

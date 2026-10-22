@@ -11,7 +11,6 @@ import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.styles.Editorial;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseEvents;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRoleCatalogue;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
@@ -107,7 +106,7 @@ class ReadSpecTest {
 
     private static void refused(List<? extends BaseSpecModule<?, ?>> bases, List<? extends SpecModule<?, ?>> styles, String says) {
         var e = assertThrows(IllegalArgumentException.class, () -> ReadSpec.INSTANCE.read(bases, styles, HouseRoleCatalogue.INSTANCE.roles(),
-                HouseStates.ALL, HouseEvents.ALL, new ClasspathCssResolver("homing-css/")));
+                HouseStates.ALL, new ClasspathCssResolver("homing-css/")));
         assertTrue(e.getMessage().contains(says), "refused, and saying \"" + says + "\":\n" + e.getMessage());
     }
 

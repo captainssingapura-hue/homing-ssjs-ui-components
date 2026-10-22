@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
-import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
@@ -256,11 +255,14 @@ public final class HouseControls {
         public static final Tab INSTANCE = new Tab();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Selector parent() { return Selector.INSTANCE; }
-        /** The pointer over it; the one in use; where the keys are - held while the cursor is on its strip, lent while what it holds has them; in the hand; the hand down on it. */
+        /**
+         * The pointer over it; the one in use; where the keys are - held while the cursor is on its strip, lent while what
+         * it holds has them; in the hand; the hand down on it; held by the hand, not on its cross - its press what selects
+         * it; and its presence - its cross pressed, it is dismissed (RFC 0069, amended).
+         */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Selected.INSTANCE,
-                HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE); }
-        /** The hand down on it, not on its cross: what selects it; its cross pressed: it asks to go. */
-        @Override public List<EventType<?>> events() { return List.of(HouseEvents.Press.INSTANCE, HouseEvents.Dismiss.INSTANCE); }
+                HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Held.INSTANCE,
+                HouseStates.Presence.INSTANCE); }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseIcons.WithinIcon.INSTANCE).as(HouseShaping.Keys.INSTANCE).one(),

@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
-import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.Room;
@@ -21,7 +20,7 @@ import java.util.Optional;
 /**
  * A component's header (RFC 0071, D19): what the server stamps into the module that implements it, derived from the
  * taxonomy and from nothing else - what the component is, and nothing of how it is built. Its marker, its slots, exactly
- * its parts, its state types with what each carries, its events and its extents. The same wherever the component is made
+ * its parts, its state types with what each carries, and its extents. The same wherever the component is made
  * and whatever role it plays; it names no class.
  *
  * @param component the component
@@ -30,12 +29,11 @@ import java.util.Optional;
  * @param slots     each player of each part it declares, in the part's role, in its parts' order
  * @param parts     its parts, each once, in its slots' order
  * @param states    the state types it declares, in the order it lists them, each with what it carries
- * @param events    the events it offers besides its states' changes
  * @param extents   the extents it varies along, its branches' first
  * @param rooms     its rooms: elements of its own inside it that are no parts, sharing its class (RFC 0067)
  */
 public record ComponentHeader(Component<?> component, boolean composite, boolean topLevel, List<HeaderSlot> slots,
-                              List<Component<?>> parts, List<HeaderState> states, List<EventType<?>> events,
+                              List<Component<?>> parts, List<HeaderState> states,
                               List<ExtentAxis> extents, List<Room> rooms) implements ValueObject {
 
     public ComponentHeader {
@@ -43,7 +41,6 @@ public record ComponentHeader(Component<?> component, boolean composite, boolean
         slots = List.copyOf(slots);
         parts = List.copyOf(parts);
         states = List.copyOf(states);
-        events = List.copyOf(events);
         extents = List.copyOf(extents);
         rooms = List.copyOf(rooms);
     }

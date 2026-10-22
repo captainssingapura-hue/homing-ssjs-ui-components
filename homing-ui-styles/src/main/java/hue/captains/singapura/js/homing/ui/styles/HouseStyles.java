@@ -79,7 +79,7 @@ public record HouseStyles() implements StylingInstance {
         var modules = HouseModules.INSTANCE;
         var base = new ArrayList<BaseModule<BaseScheme, Base>>(modules.base());
         base.addAll(more);
-        return new StyleRegistryBuilder<>(base, modules.roles(), modules.states(), modules.events())
+        return new StyleRegistryBuilder<>(base, modules.roles(), modules.states())
                 .style(Editorial.INSTANCE, modules.style(Editorial.INSTANCE))
                 .style(NeoBrutalism.INSTANCE, modules.style(NeoBrutalism.INSTANCE))
                 .style(NeoFuturism.INSTANCE, modules.style(NeoFuturism.INSTANCE))

@@ -24,7 +24,7 @@ import java.util.Optional;
 
 /**
  * A component's header ({@link ComponentHeader}), read off the taxonomy (RFC 0071, D19): its parts' players in their
- * roles, its declared state types with what each carries, its events, its extents - nothing written by hand.
+ * roles, its declared state types with what each carries, its extents - nothing written by hand.
  */
 public record ReadHeader() implements StatelessFunctionalObject {
 
@@ -54,7 +54,7 @@ public record ReadHeader() implements StatelessFunctionalObject {
                     s instanceof Pseudo p ? Optional.of(p.pseudoClass()) : Optional.empty(), level));
         }
         return new ComponentHeader(component, component instanceof Composite<?>, top.contains(component), slots, List.copyOf(parts),
-                states, component.events(), taxonomy.extents(component), component.rooms());
+                states, taxonomy.extents(component), component.rooms());
     }
 
     /** Every component's header, the taxonomy's components in its order. */

@@ -4,7 +4,6 @@ import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModules;
-import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
@@ -47,7 +46,7 @@ public record ReadSpec() implements StatelessFunctionalObject {
 
     /** The registry of the base modules and the style modules, with the instance's words and the resolver of their content, registered explicitly. */
     public SpecRegistry read(List<? extends BaseSpecModule<?, ?>> bases, List<? extends SpecModule<?, ?>> styles,
-                             List<? extends Role<?>> roles, List<? extends StateType<?>> states, List<? extends EventType<?>> events,
+                             List<? extends Role<?>> roles, List<? extends StateType<?>> states,
                              CssResolver resolver) {
         var problems = new ArrayList<String>();
         if (bases.isEmpty()) refuse(List.of("no base module: the base layer assigns every component"));
@@ -59,7 +58,7 @@ public record ReadSpec() implements StatelessFunctionalObject {
         List<ComponentModule> registered = bases.stream().<ComponentModule>map(BaseSpecModule::components).toList();
         Taxonomy taxonomy;
         try {
-            taxonomy = ComponentModules.INSTANCE.read(registered, roles, states, events);
+            taxonomy = ComponentModules.INSTANCE.read(registered, roles, states);
         } catch (RuntimeException e) {
             problems.add(e.getMessage());
             refuse(problems);

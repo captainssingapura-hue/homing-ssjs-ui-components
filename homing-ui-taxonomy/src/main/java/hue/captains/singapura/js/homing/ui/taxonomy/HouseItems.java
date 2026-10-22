@@ -3,7 +3,6 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
-import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
@@ -12,16 +11,13 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches.Item;
 
 import java.util.List;
 
-/** The house's items: one of many alike, in a menu, a list or a set of choices. */
+/**
+ * The house's items: one of many alike, in a menu, a list or a set of choices. A click on an item is no event of its own:
+ * what holds it hears it, and its selection changes (RFC 0069, amended 21 Oct).
+ */
 public final class HouseItems {
 
     private HouseItems() {}
-
-    /**
-     * Pressed and let go: the menu item's one event, until it is ported. A click on the list row or the choice option is
-     * no event of theirs: what holds them hears it, and its selection changes (RFC 0069, amended 21 Oct).
-     */
-    private static final List<EventType<?>> CLICKED = List.of(HouseEvents.Click.INSTANCE);
 
     /** One choice of a menu, with its glyph, its hint and its way into a submenu. Its name is its own text. */
     public record MenuItem() implements Composite<Item>, WithRoles<HouseRoleSets.Choosing> {
@@ -31,7 +27,6 @@ public final class HouseItems {
         @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
         /** The pointer over it; usable, or off; where its menu's cursor is - the one Enter would pick. */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Enabled.INSTANCE, HouseStates.Pointed.INSTANCE); }
-        @Override public List<EventType<?>> events() { return CLICKED; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.anyOf(HouseBranches.Icon.INSTANCE).as(HouseShaping.Leading.INSTANCE).optional(Cardinality.DYNAMIC),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Hint.INSTANCE).optional(),

@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.js.homing.component.taxonomy.EventNode;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.RoleNode;
 import hue.captains.singapura.js.homing.component.taxonomy.StateNode;
@@ -8,7 +7,6 @@ import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.spec.dual.Components;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
-import hue.captains.singapura.js.homing.design.spec.dual.Events;
 import hue.captains.singapura.js.homing.design.spec.dual.Extents;
 import hue.captains.singapura.js.homing.design.spec.dual.Roles;
 import hue.captains.singapura.js.homing.design.spec.dual.States;
@@ -36,7 +34,6 @@ public record DualRef() implements StatelessFunctionalObject {
             case Taxon t -> ref(Components.INSTANCE, t.token());
             case RoleNode r -> ref(Roles.INSTANCE, r.name().value());
             case StateNode s -> ref(States.INSTANCE, s.name().value());
-            case EventNode e -> ref(Events.INSTANCE, e.name().value());
             case ExtentAxis x -> ref(Extents.INSTANCE, Extents.INSTANCE.token(x));
             case DesignStyle<?> s -> ref(Styles.INSTANCE, s.token());
             default -> throw new IllegalArgumentException(node + " is a node of no tree the page names");

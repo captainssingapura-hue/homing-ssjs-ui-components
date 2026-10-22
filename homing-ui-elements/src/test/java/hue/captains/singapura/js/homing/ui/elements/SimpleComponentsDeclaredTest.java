@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Every simple component of the crate held to its leaf (Implementing Components, rule 6): the
- * states its class has and the events it offers are exactly those its leaf names from the house's
+ * states its class has are exactly those its leaf names from the house's
  * trees, each with its explicit setter, and its companion beside it makes the element it takes. A
  * simple component is a leaf's module exporting its companion; the check reads the JavaScript as a
  * page runs it.
@@ -92,14 +92,10 @@ class SimpleComponentsDeclaredTest extends UiElementsJsTest {
             String cls = leaf.getClass().getSimpleName();
             // a pseudo state is the browser's: no axis, no setter of the component's (RFC 0067, appendix Two Classes per Leaf, D12)
             Set<String> states = new TreeSet<>(leaf.states().stream().filter(s -> !(s instanceof Pseudo)).map(s -> s.name().value()).toList());
-            Set<String> events = new TreeSet<>(leaf.events().stream().map(e -> e.name().value()).toList());
             Set<String> hasStates = tokens("Object.values(" + cls + ".AXES || {}).filter(function (a) { return a.state; }).map(function (a) { return a.state.token; })");
-            Set<String> hasEvents = tokens("(" + cls + ".EVENTS || []).map(function (e) { return e.token; })");
             if (!states.equals(hasStates)) problems.add(cls + " has the states " + hasStates + ", its leaf names " + states);
-            if (!events.equals(hasEvents)) problems.add(cls + " offers the events " + hasEvents + ", its leaf names " + events);
             var setters = new TreeSet<String>();
             for (String s : states) setters.add("setOn" + pascal(s) + "Changed");
-            for (String e : events) setters.add("setOn" + pascal(e));
             Set<String> has = tokens("(function () { var out = []; for (var p = " + cls + ".prototype; p && p !== Object.prototype; p = Object.getPrototypeOf(p))"
                     + " Object.getOwnPropertyNames(p).forEach(function (n) { if (/^setOn/.test(n) && out.indexOf(n) < 0) out.push(n); }); return out; })()");
             if (!setters.equals(has)) problems.add(cls + " has the setters " + has + ", its leaf calls for " + setters);

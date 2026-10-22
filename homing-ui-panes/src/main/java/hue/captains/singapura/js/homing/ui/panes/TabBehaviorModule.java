@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -20,7 +19,6 @@ public record TabBehaviorModule() implements DomModule<TabBehaviorModule> {
     @Override
     public ImportsFor<TabBehaviorModule> imports() {
         return ImportsFor.<TabBehaviorModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .build();
     }
 

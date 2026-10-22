@@ -71,7 +71,7 @@ class HeaderTest {
     @Test
     void everyComponent_hasItsHeader_readOffTheTaxonomy() {
         var problems = new ArrayList<String>();
-        int slots = 0, states = 0, events = 0, browsers = 0;
+        int slots = 0, states = 0, browsers = 0;
         for (ComponentHeader h : ReadHeader.INSTANCE.readAll(SPEC.taxonomy(), SPEC.top())) {
             Component<?> c = h.component();
             List<String> mine = h.slots().stream().map(ComponentHeader.HeaderSlot::token).toList();
@@ -83,12 +83,11 @@ class HeaderTest {
                 problems.add(c.token() + ": states other than it declares");
             slots += h.slots().size();
             states += h.states().size();
-            events += h.events().size();
             browsers += (int) h.states().stream().filter(s -> s.browser().isPresent()).count();
         }
         assertTrue(problems.isEmpty(), String.join("\n", problems));
         System.out.println("[header] " + SPEC.taxonomy().components().size() + " headers: " + slots + " slots, " + states + " state types ("
-                + browsers + " the browser's), " + events + " events");
+                + browsers + " the browser's)");
     }
 
     /** Every name a header imports is in its dual: the duals suffice for every component, and its imports are its declarations'. */

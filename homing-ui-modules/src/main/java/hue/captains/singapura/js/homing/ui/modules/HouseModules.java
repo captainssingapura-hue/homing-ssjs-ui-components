@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.ui.modules;
 
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
-import hue.captains.singapura.js.homing.component.taxonomy.EventType;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
@@ -37,7 +36,6 @@ import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
 import hue.captains.singapura.js.homing.ui.styles.Neumorphism;
 import hue.captains.singapura.js.homing.ui.styles.RetroFuturism;
 import hue.captains.singapura.js.homing.ui.styles.Sketchy;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseEvents;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRoleCatalogue;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
@@ -51,7 +49,7 @@ import java.util.Map;
  * gathered from the jars as they stand - the files stay where they are, each jar's style declaration as it is. The base
  * modules: each house component module with its components' looks in Base, from every house jar's declaration, each look
  * in the bundle of the component whose design it is of; then each house style's module, from its own jar. Beside them
- * the house's words - its role catalogue and its trees of states and events, whole. Nothing is found on the classpath
+ * the house's words - its role catalogue and its tree of states, whole. Nothing is found on the classpath
  * (D51): a downstream's base modules are registered by the instance beside these.
  */
 public record HouseModules() implements StatelessFunctionalObject {
@@ -93,7 +91,4 @@ public record HouseModules() implements StatelessFunctionalObject {
 
     /** The house's tree of states, whole. */
     public List<StateType<?>> states() { return HouseStates.ALL; }
-
-    /** The house's tree of events, whole. */
-    public List<EventType<?>> events() { return HouseEvents.ALL; }
 }

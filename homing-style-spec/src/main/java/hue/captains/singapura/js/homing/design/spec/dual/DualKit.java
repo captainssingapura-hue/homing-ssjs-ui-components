@@ -20,7 +20,7 @@ public record DualKit() implements StatelessFunctionalObject {
 
     /** The classes it gives, in its order. */
     public List<String> classes() {
-        return List.of("ComponentBranch", "Component", "RoleBranch", "Role", "StateBranch", "StateType", "EventBranch", "EventType",
+        return List.of("ComponentBranch", "Component", "RoleBranch", "Role", "StateBranch", "StateType",
                 "Extent", "Count", "Room", "ElementPath", "Style", "FixedField", "Fixed",
                 "Point", "Span", "Ranges", "Valued", "Between", "Rises", "Falls", "NamedChange", "StateClasses");
     }
@@ -195,17 +195,6 @@ public record DualKit() implements StatelessFunctionalObject {
                     /** Its named change, by its name; none for a name it has not. */
                     change(name) { return this.changes.find(c => c.name === name) ?? null; }
                 }
-                class EventBranch {
-                    constructor(t, parent) { this.token = token("EventBranch", t); this.parent = parentOf("EventBranch", parent, EventBranch); Object.freeze(this); }
-                }
-                class EventType {
-                    constructor(t, parent) {
-                        this.token = token("EventType", t);
-                        if (!(parent instanceof EventBranch)) throw new TypeError("EventType " + t + ": its parent is an EventBranch");
-                        this.parent = parent;
-                        Object.freeze(this);
-                    }
-                }
                 class Extent {
                     constructor(t, rest) {
                         this.token = token("Extent", t);
@@ -288,7 +277,7 @@ public record DualKit() implements StatelessFunctionalObject {
                         Object.freeze(this);
                     }
                 }
-                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, EventBranch, EventType, Extent, Count, Room, ElementPath, Style, FixedField, Fixed,
+                export { ComponentBranch, Component, RoleBranch, Role, StateBranch, StateType, Extent, Count, Room, ElementPath, Style, FixedField, Fixed,
                     Point, Span, Ranges, Valued, Between, Rises, Falls, NamedChange, StateClasses };
                 """;
     }

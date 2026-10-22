@@ -58,8 +58,6 @@ class WholeHouseTaxonomyTest {
         nodes.addAll(HOUSE.roles());
         nodes.addAll(HOUSE.states().branches());
         nodes.addAll(HOUSE.states().types());
-        nodes.addAll(HOUSE.events().branches());
-        nodes.addAll(HOUSE.events().types());
         var enforcer = new OntologyEnforcer();
         var violations = nodes.stream().map(Object::getClass).distinct()
                 .flatMap(c -> enforcer.enforce(c).stream().map(v -> c.getName() + ": " + v.message()))
@@ -91,9 +89,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
         HOUSE.states().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
-        HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
-        HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(22 + 118 + 22 + 98 + 11 + 28 + 7 + 14, nodes.size(), "no module adds a state or an event: the house's trees are whole");
+        assertEquals(22 + 118 + 22 + 98 + 11 + 29, nodes.size(), "no module adds a state: the house's trees are whole");
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 

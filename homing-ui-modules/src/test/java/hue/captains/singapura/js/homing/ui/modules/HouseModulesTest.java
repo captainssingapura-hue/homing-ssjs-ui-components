@@ -57,7 +57,7 @@ class HouseModulesTest {
 
     @Test
     void theBuilderTakesThem_theHousesTaxonomyAsItReadsItself() {
-        StyleManager styles = new StyleRegistryBuilder<>(MODULES.base(), MODULES.roles(), MODULES.states(), MODULES.events())
+        StyleManager styles = new StyleRegistryBuilder<>(MODULES.base(), MODULES.roles(), MODULES.states())
                 .style(Editorial.INSTANCE, MODULES.style(Editorial.INSTANCE))
                 .style(Sketchy.INSTANCE, MODULES.style(Sketchy.INSTANCE))
                 .build();

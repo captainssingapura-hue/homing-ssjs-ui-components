@@ -5,7 +5,6 @@ import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyCompone
 import hue.captains.singapura.js.homing.ui.elements.RangeModule;
 import hue.captains.singapura.js.homing.ui.elements.ReadoutModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.core.ExportsOf;
@@ -34,7 +33,6 @@ public record ScaleWidgetModule() implements Widget<Widget._None, ScaleWidgetMod
     public ImportsFor<ScaleWidgetModule> imports() {
         return ImportsFor.<ScaleWidgetModule>builder()
                 .add(new ModuleImports<>(List.of(new RangeModule.Range()), RangeModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferenceFieldModule.PreferenceField()), PreferenceFieldModule.INSTANCE))
