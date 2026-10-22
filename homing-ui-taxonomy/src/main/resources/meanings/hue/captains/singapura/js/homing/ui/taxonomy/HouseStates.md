@@ -215,3 +215,13 @@ to decide.
 
 How many times the close of a pane that floats was asked - its head's close pressed: from none, each
 ask its going up. What a close is, if anything, is for whoever holds the pane to decide.
+
+## TabCarry
+
+Which of the tabs the component holds the hand carries off it - torn off its bar, its chip gone from
+the row: that tab's id, or none.
+
+## TabDetachControl
+
+For each tab the component holds, how many times it was detached - let go afloat off its bar - or none,
+for a tab that cannot be detached. Each change is one tab's.

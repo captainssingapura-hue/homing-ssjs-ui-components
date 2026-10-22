@@ -266,11 +266,12 @@ public final class HouseContainers {
         /**
          * Lit while its pane is the one being worked in (D12); the adds asked of it - its plus pressed, passed on and
          * handled by none: what is added is its owner's caller's to decide; which of its tabs is in use; the order its
-         * tabs stand in; and the closes asked of each, its chips' crosses' passed on, handled by none. Its chips are its
-         * own, and so are their states (owner, 22 Oct).
+         * tabs stand in; the closes asked of each, its chips' crosses' passed on, handled by none; and the tab the hand
+         * carries off it, torn off - its owner's to take on (23 Oct). Its chips are its own, and so are their states (owner,
+         * 22 Oct).
          */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.TabAddControl.INSTANCE,
-                HouseStates.ActiveTab.INSTANCE, HouseStates.TabOrder.INSTANCE, HouseStates.TabCloseControl.INSTANCE); }
+                HouseStates.ActiveTab.INSTANCE, HouseStates.TabOrder.INSTANCE, HouseStates.TabCloseControl.INSTANCE, HouseStates.TabCarry.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(Cardinality.DYNAMIC),
                            DSL.part(HouseControls.IconButton.INSTANCE).as(HouseShaping.VoidRole.INSTANCE).one(),   // its one plus, a regular button: its icon says it adds (21, 22 Oct)

@@ -36,10 +36,9 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripBehaviorModule.TabStripBehavior()), TabStripBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabDragModule.TabDrag()), TabDragModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabStripSlideModule.TabStripSlide()), TabStripSlideModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton()), IconButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_strip(), new PaneStyles.mtp_rail_add(), new PaneStyles.mtp_strip_loose(),
-                        new PaneStyles.mtp_chip_dragging(), new PaneStyles.mtp_chip_shifted()), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_strip(), new PaneStyles.mtp_rail_add()), PaneStyles.INSTANCE))
                 .build();
     }
 

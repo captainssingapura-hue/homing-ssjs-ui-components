@@ -1,6 +1,5 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.ui.elements.MarkBehaviorModule;
 import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
@@ -65,7 +64,8 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
     public ImportsFor<MultiTabPaneModule> imports() {
         return ImportsFor.<MultiTabPaneModule>builder()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MultiTabPaneBehaviorModule.MultiTabPaneBehavior()), MultiTabPaneBehaviorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripModule.TabStrip()), TabStripModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneStyles.mtp_tab_content(), new PaneStyles.mtp_tab_content_hidden(), new PaneStyles.mtp_pane(), new PaneStyles.mtp_content(), new PaneStyles.mtp_empty()), PaneStyles.INSTANCE))

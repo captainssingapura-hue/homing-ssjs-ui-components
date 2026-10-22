@@ -270,6 +270,16 @@ public final class HouseStates {
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "dragging"); }
     }
 
+    /**
+     * Which of its tabs the hand carries off it - torn off a bar, its chip gone from the row: the tab's id; none at rest.
+     * What it shows is the tab where the hand has it - no class (owner, 23 Oct).
+     */
+    public record TabCarry() implements StateType<Interaction> {
+        public static final TabCarry INSTANCE = new TabCarry();
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
     /** Held down by the hand, as the component has it: up at rest; down by its press, up again by its release. Drawn by nothing of its own. */
     public record Held() implements StateType<Interaction> {
         public static final Held INSTANCE = new Held();
@@ -358,6 +368,17 @@ public final class HouseStates {
         @Override public StateDomain domain() { return DOMAIN; }
     }
 
+    /**
+     * For each tab it holds, how many times it was detached - let go afloat off its bar: by the tab's id, a count from
+     * none - or none, for a tab that cannot be detached. Each change is one tab's: detached once more, or the tab put in or
+     * taken out. Nothing it shows changes by it - no class (owner, 23 Oct).
+     */
+    public record TabDetachControl() implements StateType<Counting> {
+        public static final TabDetachControl INSTANCE = new TabDetachControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
     // ── given ────────────────────────────────────────────────────────────
 
     /** What is typed in it so far, the user still at it: a text, none at rest. What it shows is the words themselves - no class. */
@@ -412,9 +433,9 @@ public final class HouseStates {
             Required.INSTANCE, Invalid.INSTANCE,
             Current.INSTANCE, Highlighted.INSTANCE, Pointed.INSTANCE,
             Empty.INSTANCE,
-            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, Held.INSTANCE,
+            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, TabCarry.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
-            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE,
             DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }

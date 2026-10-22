@@ -55,16 +55,19 @@ public final class HousePanes {
         /**
          * Where the page's keys are, held by the steward on its root (RFC 0067, D12); the adds asked of it, its bar's
          * passed on, handled by none: it manages no tab in or out - its caller does; the order its tabs stand in, its
-         * bar's passed on; and the closes asked of each of its tabs, its bar's passed on, handled by none: what a close is,
-         * its caller decides. Which tab is in use is its own (owner, 22 Oct).
+         * bar's passed on; the closes asked of each of its tabs, its bar's passed on, handled by none: what a close is,
+         * its caller decides; and the detaches of each, its own - its virtual detach manager's (23 Oct). Which tab is in use,
+         * and the tab the hand carries, are its own (owner, 22 Oct).
          */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE, HouseStates.TabAddControl.INSTANCE,
-                HouseStates.TabOrder.INSTANCE, HouseStates.TabCloseControl.INSTANCE); }
+                HouseStates.TabOrder.INSTANCE, HouseStates.TabCloseControl.INSTANCE, HouseStates.TabDetachControl.INSTANCE); }
         /** Its slot: where what it shows is mounted by its caller, one at a time - its own element, no part (22 Oct). */
         @Override public List<Room> rooms() { return List.of(new Room("slot")); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseContainers.TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one(),
-                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).optional());
+                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).optional(),
+                           // a floater for each tab torn off its bar - its own, made and dropped as the hand carries them (23 Oct)
+                           DSL.part(HouseContainers.FloatingPane.INSTANCE).as(HouseShaping.Float.INSTANCE).any(Cardinality.DYNAMIC));
         }
     }
 

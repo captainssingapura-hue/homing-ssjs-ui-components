@@ -15,11 +15,21 @@
 // its chips' crosses (TabCloseControl): a count for each tab, none for one that
 // cannot be closed, whose chip has no cross - and the adds asked of it, its plus
 // pressed (TabAddControl). It handles none of them: what is closed or added is
-// its owner's caller's to decide. Its count and its landing come as they are ported.
+// its owner's caller's to decide. A chip held and moved across the bar past 24px
+// - where it can be detached - is torn off (owner, 23 Oct): out of the row, the
+// others closing the gap, eased; and the bar says which tab the hand carries
+// (TabCarry) for its owner to take on - it takes it back under the hand
+// (capture), lets it go afloat (release), or docks it again (attach). Its count
+// and its landing come as they are ported.
 //
 //   var strip = new TabStrip(branch.createBranch("bar"), new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), me.place(FixedTabStrip));
-//   strip.add({ id: "alpha", title: "Alpha", closable? })   a tab put in, at its end: the one in use
+//   strip.add({ id: "alpha", title: "Alpha", closable?, detachable? })   a tab put in, at its end: the one in use
 //   strip.remove("alpha")   a tab taken out
+//   strip.onChange(StateTabCarry, listener)    a tab torn off, the hand carrying it - or none again
+//   strip.capture("alpha", x, y)   a tab carried or afloat taken back onto the bar under the hand, the hand still down
+//   strip.release("alpha")         the tab carried let go afloat: out of the order, still held
+//   strip.attach("alpha")          a tab afloat docked again, at the end: the one in use
+//   strip.closeAsked("alpha")      a close asked of a tab from elsewhere - its owner's floater's
 //   strip.onChange(StateActiveTab, listener)   another tab in use: its id before and after
 //   strip.onChange(StateTabOrder, listener)    its tabs in another order: before and after
 //   strip.onChange(StateTabCloseControl, listener)   a tab's close asked, or a tab put in: before and after
@@ -36,93 +46,6 @@ class TabStripAdd {
     constructor(strip) { this._strip = strip; Object.freeze(this); }
     canHandle(type) { return type === StateClicks; }
     handle() { this._strip._asked(); }
-}
-
-/**
- * A chip slid along its bar, as a browser's tab bar slides one: lifted where it lies, it goes where the hand goes along the
- * row - the press kept as an offset within it - never before the first chip's place nor past the last's; the place it is
- * nearest is where it will land, and the chips between its own place and that one step aside, one place over, eased by
- * their look. Let go, they are back at once - the row is about to be arranged, and none must be seen sliding to where it
- * already is - and the chip settles onto its place from where the hand left it, eased as its look eases it, still lifted
- * and above the others; only there is it put at rest (owner, 22 Oct: "moved to position first then put to at-rest") -
- * at once, where there is nothing to ease, or when another chip is pressed or the tabs change meanwhile. Nothing is
- * placed by hand: the chip in the hand carries --mtp-drag-x, a chip stepping aside --mtp-shift-x, each read by the class
- * that places it. The bar's alone.
- */
-class TabStripSlide {
-    /**
-     * @param strip the bar
-     * @param row   its chips, as they stand
-     * @param from  the place of the chip slid
-     * @param x     where the hand went down on it
-     */
-    constructor(strip, row, from, x) {
-        this._strip = strip;
-        this._row = row;
-        this._slots = row.map(function (c) { var r = c.el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; });
-        this.from = from;
-        this.dest = from;
-        this._grab = x - this._slots[from].left;
-        this._left = this._slots[from].left;
-        this._chip = row[from];
-        this._easing = null;   // its settling, while it eases onto its place
-        this._rested = false;
-        this._chip.dragging = true;
-        css.addClass(this._chip.el, mtp_chip_dragging);   // lifted over the row along it: the bar's placing
-        css.addClass(strip.el, mtp_strip_loose);   // nothing clipped meanwhile
-    }
-
-    /** The hand at x: the chip under it, within the row; the chips between its place and the one it is nearest, aside. */
-    to(x) {
-        var slots = this._slots;
-        this._left = TabDrag.clamp(x - this._grab, slots, 0);
-        this._chip.el.style.setProperty("--mtp-drag-x", (this._left - slots[this.from].left) + "px");
-        var d = TabDrag.dest(this._left, slots, 0);
-        if (d !== this.dest) { this.dest = d; this._aside(d, false); }
-    }
-
-    /** Let go: no longer under the hand, the others back at once - but still lifted, above them; the place it lands at. */
-    end() {
-        this._chip.el.style.removeProperty("--mtp-drag-x");
-        this._aside(this.from, true);
-        return this.dest;
-    }
-
-    /**
-     * Once the row is arranged: from where the hand left it onto its place, eased as its look eases it - still lifted,
-     * above the others - and put at rest once there; at rest at once where there is nothing to ease.
-     */
-    settle() {
-        var el = this._chip.el, dx = this._left - this._slots[this.dest].left, self = this;
-        var d = String(getComputedStyle(el).transitionDuration || "").split(",")[0].trim();
-        var ms = d.endsWith("ms") ? parseFloat(d) : parseFloat(d) * 1000;
-        if (!(Math.abs(dx) > 0.5) || !(ms > 0) || typeof el.animate !== "function") { this.rest(); return; }
-        this._easing = el.animate([{ translate: dx + "px 0" }, { translate: "0 0" }], { duration: ms, easing: "ease" });
-        this._easing.onfinish = function () { self._easing = null; self.rest(); };
-    }
-
-    /** At rest, once: out of the hand, its lift and its place over the row given up, the bar no longer loose - its easing, if any is left, over at once. */
-    rest() {
-        if (this._rested) return;
-        this._rested = true;
-        if (this._easing !== null) { this._easing.onfinish = null; this._easing.cancel(); this._easing = null; }
-        css.removeClass(this._chip.el, mtp_chip_dragging);
-        css.removeClass(this._strip.el, mtp_strip_loose);
-        this._chip.dragging = false;
-    }
-
-    /** The chips between its place and `to`, one place over; the rest where they stand - at once, the drag over. */
-    _aside(to, over) {
-        var pitch = TabDrag.pitch(this._slots);
-        for (var j = 0; j < this._row.length; j++) {
-            if (j === this.from) continue;
-            var s = TabDrag.shift(j, this.from, to), el = this._row[j].el;
-            if (s !== 0) { css.addClass(el, mtp_chip_shifted); el.style.setProperty("--mtp-shift-x", (s * pitch) + "px"); continue; }
-            css.removeClass(el, mtp_chip_shifted);
-            el.style.removeProperty("--mtp-shift-x");
-            if (over && typeof el.getAnimations === "function") el.getAnimations().forEach(function (a) { a.cancel(); });   // whatever it eased towards, it is there now
-        }
-    }
 }
 
 /** One of its chips' crosses pressed: told to the strip, by the chip's tab id. */
@@ -151,12 +74,16 @@ class TabStrip extends SimpleComponent {
         adds: Object.freeze({ rest: 0, state: StateTabAddControl }),   // its plus's presses, passed on: no class
         active: Object.freeze({ rest: StateActiveTab.rest, state: StateActiveTab }),   // the tab in use, by its id: no class
         order: Object.freeze({ rest: StateTabOrder.rest, state: StateTabOrder }),   // its tabs' ids, in order: no class
-        closes: Object.freeze({ rest: StateTabCloseControl.rest, state: StateTabCloseControl })   // the closes asked of each tab, passed on: no class
+        closes: Object.freeze({ rest: StateTabCloseControl.rest, state: StateTabCloseControl }),   // the closes asked of each tab, passed on: no class
+        carried: Object.freeze({ rest: StateTabCarry.rest, state: StateTabCarry })   // the tab the hand carries off it, for its owner: no class
     });
     static BEHAVIOR = TabStripBehavior;
 
     /** How far the hand moves a held chip before it is in the hand, in pixels: a press that wanders less is a press. */
     static DRAG_FROM = 4;
+
+    /** How far across the bar a held chip's middle goes before it is torn off, in pixels. */
+    static ESCAPE = 24;
 
     /** A tab's id: lower case words joined by a dash - its chip's branch is named for it. */
     static ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -172,6 +99,8 @@ class TabStrip extends SimpleComponent {
         this._chips = new Map();   // its tabs' ids to their chips: its own
         this._closes = new Map();   // its tabs' ids to how many times each one's close was asked - none for one that cannot be closed: its own, a view of it told
         this._row = [];   // its tabs' ids as its chips stand now, a drag moving them
+        this._titles = new Map();   // its tabs' ids to their titles: a chip made again from them, taken back
+        this._tearable = new Set();   // the tabs that can be detached: torn off by the hand
         this._grabbed = null;   // the id of the chip held, or none
         this._slide = null;   // its slide, once the chip held has moved past its start
         this._settling = null;   // the slide let go, its chip easing onto its place until it is at rest
@@ -194,21 +123,29 @@ class TabStrip extends SimpleComponent {
     add(tab) {
         var t = tab || {};
         if (typeof t.id !== "string" || !TabStrip.ID.test(t.id)) throw new TypeError("[TabStrip] a tab's id is lower case words joined by a dash, not " + t.id);
-        if (this._chips.has(t.id)) throw new Error("[TabStrip] holds a tab " + t.id + " already");
+        if (this._closes.has(t.id)) throw new Error("[TabStrip] holds a tab " + t.id + " already");
         if (t.closable !== undefined && typeof t.closable !== "boolean") throw new TypeError("[TabStrip] whether a tab can be closed is true or false, or unsaid - it can");
+        if (t.detachable !== undefined && typeof t.detachable !== "boolean") throw new TypeError("[TabStrip] whether a tab can be detached is true or false, or unsaid - it can");
         this._letGo();
-        var closable = t.closable !== false;
-        var chip = new Tab(this.branch.createBranch("tab-" + t.id), new FixedTab(closable ? new FixedCloseButton() : null), this._place(FixedTab));
-        chip.title = t.title;
-        chip.onChange(StateHeld, new TabStripHeld(this, t.id));
-        if (closable) chip.onChange(StateChipCloseControl, new TabStripClose(this, t.id));
-        this.el.insertBefore(chip.el, this._plus.el);
-        this._chips.set(t.id, chip);
+        this._titles.set(t.id, t.title);
+        if (t.detachable !== false) this._tearable.add(t.id);
+        this._closes.set(t.id, t.closable !== false ? { times: 0 } : null);
+        this.el.insertBefore(this._chip(t.id).el, this._plus.el);
         this._row = this._row.concat([t.id]);
         this._change("order", this._row);
-        this._closes.set(t.id, closable ? { times: 0 } : null);
         this._change("closes", this._closesNow());
         this._select(t.id);
+    }
+
+    /** A chip of a tab it holds, made - its cross where it can be closed - and heard: held, and its close asked. */
+    _chip(id) {
+        var closable = this._closes.get(id) !== null;
+        var chip = new Tab(this.branch.createBranch("tab-" + id), new FixedTab(closable ? new FixedCloseButton() : null), this._place(FixedTab));
+        chip.title = this._titles.get(id);
+        chip.onChange(StateHeld, new TabStripHeld(this, id));
+        if (closable) chip.onChange(StateChipCloseControl, new TabStripClose(this, id));
+        this._chips.set(id, chip);
+        return chip;
     }
 
     /**
@@ -217,17 +154,67 @@ class TabStrip extends SimpleComponent {
      * A slide in progress is let go where it began, first.
      */
     remove(id) {
-        if (!this._chips.has(id)) throw new Error("[TabStrip] holds no tab " + id);
+        if (!this._closes.has(id)) throw new Error("[TabStrip] holds no tab " + id);
         this._letGo();
+        if (this.carried === id) this._change("carried", "");
         var at = this._row.indexOf(id), was = this.active === id;
-        this._chips.get(id).dispose();
-        this._chips.delete(id);
+        if (this._chips.has(id)) { this._chips.get(id).dispose(); this._chips.delete(id); }
         this._row = this._row.filter(function (o) { return o !== id; });
         this._change("order", this._row);
         this._closes.delete(id);
+        this._titles.delete(id);
+        this._tearable.delete(id);
         this._change("closes", this._closesNow());
         if (was) this._select(this._row[at] ?? this._row[at - 1] ?? null);
     }
+
+    /**
+     * A tab carried off it, or afloat, taken back by its owner onto the bar under the hand - at the place nearest it -
+     * the hand still down: in use, held, and sliding under the hand from there, as if it had never left. Its order is told
+     * when the hand lets go, if it changed.
+     */
+    capture(id, x, y) {
+        if (!this._closes.has(id) || this._chips.has(id)) throw new Error("[TabStrip] carries no tab " + id + ", and has none afloat");
+        this._letGo();
+        var chips = this._chips, at = this._row.filter(function (o) { var r = chips.get(o).el.getBoundingClientRect(); return x > r.left + r.width / 2; }).length;
+        var chip = this._chip(id), row = this._row.slice();
+        this.el.insertBefore(chip.el, at < row.length ? chips.get(row[at]).el : this._plus.el);
+        row.splice(at, 0, id);
+        this._row = row;
+        if (this.carried === id) this._change("carried", "");
+        this._select(id);
+        this._grabbed = id;
+        this._behavior.from(x, y);
+        this._behavior.grab();
+        this._slide = new TabStripSlide(this, row.map(function (o) { return chips.get(o); }), at, x);
+        this._slide.to(x);
+    }
+
+    /** The tab the hand carries let go afloat, by its owner: carried no more, out of its order - still held. */
+    release(id) {
+        if (this.carried !== id) throw new Error("[TabStrip] carries no tab " + id);
+        this._change("carried", "");
+        this._change("order", this._row);
+    }
+
+    /** A tab afloat docked again by its owner, at its end: its chip made again, in its order, the one in use. */
+    attach(id) {
+        if (!this._closes.has(id) || this._chips.has(id) || this.carried === id) throw new Error("[TabStrip] has no tab " + id + " afloat");
+        this._letGo();
+        this.el.insertBefore(this._chip(id).el, this._plus.el);
+        this._row = this._row.concat([id]);
+        this._change("order", this._row);
+        this._select(id);
+    }
+
+    /** A close asked of one of its tabs from elsewhere - its owner's floater's: one more close asked, as its cross's would be. */
+    closeAsked(id) {
+        if (!this._closes.has(id) || this._closes.get(id) === null) throw new Error("[TabStrip] has no tab " + id + " that can be closed");
+        this._closeAsked(id);
+    }
+
+    /** The tab the hand carries off it, by its id; none while it carries none. */
+    get carried() { return this._get("carried"); }
 
     /** The tab in use, by its id; none while it holds none. */
     get active() { return this._get("active"); }
@@ -299,15 +286,49 @@ class TabStrip extends SimpleComponent {
         if (settling !== null) settling.rest();
     }
 
-    /** The hand moved, a chip held: past its start, the chip slides - lifted where it lies, under the hand from then on. */
-    _dragTo(x, moved) {
-        if (this._grabbed === null) return;
+    /**
+     * The hand moved, a chip held - by how much since it went down, along the bar and across it: past its start, the chip
+     * slides - lifted where it lies, under the hand from then on; past ESCAPE across the bar, where its tab can be
+     * detached, it is torn off.
+     */
+    _dragTo(x, moved, across) {
+        var id = this._grabbed;
+        if (id === null) return;
+        var dy = Number(across) || 0;
         if (this._slide === null) {
-            if (Math.abs(moved) < TabStrip.DRAG_FROM) return;
+            if (Math.abs(moved) < TabStrip.DRAG_FROM && Math.abs(dy) < TabStrip.DRAG_FROM) return;
             var chips = this._chips;
-            this._slide = new TabStripSlide(this, this._row.map(function (o) { return chips.get(o); }), this._row.indexOf(this._grabbed), x - moved);
+            this._slide = new TabStripSlide(this, this._row.map(function (o) { return chips.get(o); }), this._row.indexOf(id), x - moved);
         }
+        if (this._tearable.has(id) && Math.abs(dy) > TabStrip.ESCAPE) { this._tear(id); return; }
         this._slide.to(x);
+    }
+
+    /** The hand let go, as its behaviour hears it: the chip held let go. */
+    _letGoAt() { if (this._grabbed !== null) this._released(this._grabbed); }
+
+    /**
+     * A chip torn off: out of the hand and out of the row - dropped, the others closing the gap, eased from where they
+     * stood - the one now in its place in use, were it in use; and the tab the hand carries, said: its owner's to take on.
+     */
+    _tear(id) {
+        var slide = this._slide, chips = this._chips, others = this._row.filter(function (o) { return o !== id; }), before = new Map();
+        this._grabbed = null;
+        this._slide = null;
+        this._behavior.drop();
+        slide.end();
+        slide.rest();
+        others.forEach(function (o) { before.set(o, chips.get(o).el.getBoundingClientRect().left); });
+        var at = this._row.indexOf(id), was = this.active === id;
+        chips.get(id).dispose();
+        chips.delete(id);
+        this._row = others;
+        others.forEach(function (o) {
+            var el = chips.get(o).el, dx = before.get(o) - el.getBoundingClientRect().left, ms = TabStripSlide._ease(el);
+            if (Math.abs(dx) > 0.5 && ms > 0 && typeof el.animate === "function") el.animate([{ translate: dx + "px 0" }, { translate: "0 0" }], { duration: ms, easing: "ease" });
+        });
+        if (was) this._select(this._row[at] ?? this._row[at - 1] ?? null);
+        this._change("carried", id);
     }
 
     /** A tab made the one in use: its chip selected, every other not - or none, none selected. */
