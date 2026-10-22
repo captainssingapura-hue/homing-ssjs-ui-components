@@ -36,6 +36,8 @@ public record UiPanesBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                 new ComponentAssignment<>(HouseControls.Tab.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Tab(), List.of()),
                 new ComponentAssignment<>(HousePanes.TabPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TabPane(), List.of()),
                 new ComponentAssignment<>(HousePanes.AddTab.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.AddTab(), List.of()),
+                new ComponentAssignment<>(HouseContainers.FloatingPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.FloatingPane(), List.of()),
+                new ComponentAssignment<>(HouseContainers.TitleBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TitleBar(), List.of()),
                 new ComponentAssignment<>(HouseIcons.ColumnIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ColumnIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.RowIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.RowIcon(), List.of()),
                 new ComponentAssignment<>(HouseIcons.MergeIcon.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.MergeIcon(), List.of()),

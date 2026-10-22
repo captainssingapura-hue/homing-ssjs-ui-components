@@ -25,8 +25,6 @@ public record UiFloatingBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     @Override public List<ComponentAssignment<BaseScheme, Base, ?>> assignments() {
         return List.of(
-                new ComponentAssignment<>(HouseContainers.FloatingPane.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.FloatingPane(), List.of()),
-                new ComponentAssignment<>(HouseContainers.FloatLayer.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.FloatLayer(), List.of()),
-                new ComponentAssignment<>(HouseContainers.TitleBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.TitleBar(), List.of()));
+                new ComponentAssignment<>(HouseContainers.FloatLayer.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.FloatLayer(), List.of()));   // the floating pane and its head the panes' (23 Oct)
     }
 }

@@ -16,7 +16,7 @@ import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.PrimaryButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.ScrimModule;
-import hue.captains.singapura.js.homing.ui.floating.FloatingPaneModule;
+import hue.captains.singapura.js.homing.ui.panes.FloatingPaneModule;
 
 import java.util.List;
 

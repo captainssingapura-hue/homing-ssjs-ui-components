@@ -37,7 +37,7 @@ public record FloatLayerModule() implements DomModule<FloatLayerModule>, ImplFor
     @Override
     public ImportsFor<FloatLayerModule> imports() {
         return ImportsFor.<FloatLayerModule>builder()
-                .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new hue.captains.singapura.js.homing.ui.panes.FloatingPaneModule.FloatingPane()), hue.captains.singapura.js.homing.ui.panes.FloatingPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatEventsModule.FloatEvents()), FloatEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))

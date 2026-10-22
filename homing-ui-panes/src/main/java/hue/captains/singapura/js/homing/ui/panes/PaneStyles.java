@@ -341,9 +341,114 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
+    // ── the floating pane: moved from the floating jar with it (23 Oct) ──
+
+    /**
+     * The frame: a raised box above the desk with the overlay's shadow, at the
+     * place and measure its user gave it — {@code --fp-x}, {@code --fp-y},
+     * {@code --fp-w}, {@code --fp-h} — and on the stack at {@code --fp-z}.
+     * Its rule carries the ring on focus; its corner and rule are a container's.
+     */
+    public record fp_frame() implements CssClass<PaneStyles> {
+        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--fp-x"), new CssVar("--fp-y"), new CssVar("--fp-w"), new CssVar("--fp-h"), new CssVar("--fp-z")); }
+        @Override public String body() { return """
+            position: absolute;
+            left: var(--fp-x);
+            top: var(--fp-y);
+            inline-size: var(--fp-w);
+            block-size: var(--fp-h);
+            z-index: var(--fp-z);
+            pointer-events: auto;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+            """;
+        }
+    }
+
+    /** The head: the inverted bar that names the pane and moves it; a pane's air is its head's. */
+    public record fp_head() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            flex: none;
+            display: flex;
+            align-items: center;
+            min-width: 0;
+            user-select: none;
+            touch-action: none;
+            """;
+        }
+    }
+
+    /**
+     * The pane's icon, before its title: the holder's element — a favicon,
+     * whatever it is made of — one line of the title high, never squeezed.
+     * Hidden until the pane has one.
+     */
+    public record fp_icon() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            display: none;
+            flex: none;
+            align-items: center;
+            justify-content: center;
+            inline-size: 1.25em;
+            block-size: 1.25em;
+            line-height: 1;
+            overflow: hidden;
+            pointer-events: none;
+            """;
+        }
+    }
+
+    /** The icon, when the pane has one. */
+    public record fp_icon_on() implements CssClass<PaneStyles> {
+        @Override public String body() { return "display: inline-flex;"; }
+    }
+
+    /** The title, one line, cut with an ellipsis. */
+    public record fp_title() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            """;
+        }
+    }
+
+    /** The body: what the pane holds, filling what the head leaves, scrolling beyond it; and the positioning context for it, so a widget that fills its host by absolute inset fills THE BODY and never climbs over the head. */
+    public record fp_body() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+            position: relative;
+            """;
+        }
+    }
+
+    /** The grip: the corner that sizes the pane; draws nothing, catches the hand. */
+    public record fp_grip() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 16px;
+            height: 16px;
+            cursor: nwse-resize;
+            touch-action: none;
+            """;
+        }
+    }
+
     @Override
     public List<CssClass<PaneStyles>> cssClasses() {
-        return List.of(new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_dragging(), new mtp_chip_shifted(),
+        return List.of(new fp_frame(), new fp_head(), new fp_icon(), new fp_icon_on(), new fp_title(), new fp_body(), new fp_grip(),
+                       new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_dragging(), new mtp_chip_shifted(),
                        new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(),
                        new mtp_opener(), new mtp_opener_note(), new mtp_opener_grid(),

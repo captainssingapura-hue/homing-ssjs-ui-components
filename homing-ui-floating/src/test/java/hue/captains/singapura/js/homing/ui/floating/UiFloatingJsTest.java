@@ -20,7 +20,9 @@ public abstract class UiFloatingJsTest extends JsModuleTestBase {
 
     @BeforeAll
     static void theJarsInstance_installed() {
-        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiFloatingComponentModule.INSTANCE),
-                List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiFloatingStyleDeclaration.INSTANCE));
+        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, hue.captains.singapura.js.homing.ui.taxonomy.UiPanesComponentModule.INSTANCE,
+                        UiFloatingComponentModule.INSTANCE),
+                List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, hue.captains.singapura.js.homing.ui.panes.UiPanesStyleDeclaration.INSTANCE,
+                        UiFloatingStyleDeclaration.INSTANCE));   // the layer's floats, the floating pane, the panes' (23 Oct)
     }
 }

@@ -14,6 +14,6 @@ public record UiFloatingComponentModule() implements ComponentModule {
     public static final UiFloatingComponentModule INSTANCE = new UiFloatingComponentModule();
 
     @Override public List<? extends Component<?>> components() {
-        return List.of(HouseContainers.FloatingPane.INSTANCE, HouseContainers.FloatLayer.INSTANCE);
+        return List.of(HouseContainers.FloatLayer.INSTANCE);   // the floating pane the panes' now, beside the chip it shares (23 Oct)
     }
 }

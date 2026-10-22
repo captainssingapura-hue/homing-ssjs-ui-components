@@ -9,7 +9,8 @@ import java.util.List;
 /**
  * homing-ui-panes's declaration of what it provides for styles (RFC 0067, appendix The Style Jars): Base's
  * implementation of every casting the jar brings into being - its components', the parts it draws inline, the castings
- * its parts add - 18, each a class of its own in hue.captains.singapura.js.homing.design.styles.base.
+ * its parts add - 18, each a class of its own in hue.captains.singapura.js.homing.design.styles.base - the floating pane and
+ * its head among them, moved here with them (23 Oct).
  */
 public record UiPanesStyleDeclaration() implements StyleDeclaration {
 
@@ -21,6 +22,8 @@ public record UiPanesStyleDeclaration() implements StyleDeclaration {
                 new TabStrip(),
                 new PaneThumbs(),
                 new AddTab(),
+                new FloatingPane(),
+                new TitleBar(),
                 new MultiTabPane(),
                 new SingleTabPane(),
                 new TabPane(),

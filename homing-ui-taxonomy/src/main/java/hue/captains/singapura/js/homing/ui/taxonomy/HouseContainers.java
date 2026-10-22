@@ -115,11 +115,17 @@ public final class HouseContainers {
         public static final FloatingPane INSTANCE = new FloatingPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
-        /** The current one, lit under the hand through its head, and in the hand - each its script's to say (D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.Highlighted.INSTANCE, HouseStates.Dragging.INSTANCE); }
+        /**
+         * The current one - its caller's to say; lit under the hand; in the hand, moved by its head; and the closes asked of
+         * it, its head's close's passed on, handled by none: what a close is, its caller decides (D12; owner, 23 Oct).
+         */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.Highlighted.INSTANCE, HouseStates.Dragging.INSTANCE,
+                HouseStates.FloatCloseControl.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(TitleBar.INSTANCE).as(HouseShaping.Head.INSTANCE).optional());
         }
+        /** Its body: the room what it shows is mounted in by its caller - its own, no part (23 Oct). */
+        @Override public List<Room> rooms() { return List.of(new Room("body")); }
     }
 
     /** The layer floating panes are stacked on: a desk of its own, recessed, or laid over what it is on. */
@@ -139,10 +145,15 @@ public final class HouseContainers {
         public static final TitleBar INSTANCE = new TitleBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
-        /** In the hand while its pane is moved by it (D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Dragging.INSTANCE); }
+        /**
+         * In the hand while its pane is moved by it (D12); held by the hand, as it has it - what its pane hears and moves
+         * by; and the closes asked of its pane, its close's clicks passed on, handled by none (owner, 23 Oct).
+         */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Dragging.INSTANCE, HouseStates.Held.INSTANCE, HouseStates.FloatCloseControl.INSTANCE); }
+        /** What names its pane - its title, or the chip of the one tab its pane holds (23 Oct) - and its close. */
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Title.INSTANCE).optional(),
+                           DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).optional(),
                            DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional());
         }
     }

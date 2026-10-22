@@ -17,7 +17,7 @@ public record UiPanesComponentModule() implements ComponentModule {
     @Override public List<? extends Component<?>> components() {
         return List.of(HousePanes.MultiTabPane.INSTANCE, HousePanes.SingleTabPane.INSTANCE,
                        HouseContainers.TabStrip.INSTANCE, HouseControls.Tab.INSTANCE, HousePanes.TabPane.INSTANCE,
-                       HousePanes.AddTab.INSTANCE,
+                       HousePanes.AddTab.INSTANCE, HouseContainers.FloatingPane.INSTANCE, HouseContainers.TitleBar.INSTANCE,
                        HouseIcons.ColumnIcon.INSTANCE, HouseIcons.RowIcon.INSTANCE, HouseIcons.MergeIcon.INSTANCE, HouseIcons.DetachIcon.INSTANCE,
                        HouseIcons.WithinIcon.INSTANCE);
     }
