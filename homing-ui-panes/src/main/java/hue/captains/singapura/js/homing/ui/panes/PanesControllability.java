@@ -7,11 +7,10 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
 import java.util.List;
 
-/** How the panes' leaves are controlled: the thumbnails arranged, the opener opened over the pane and closed. */
+/** How the panes' leaves are controlled: the thumbnails arranged. */
 public record PanesControllability() implements ControllabilityExtension {
 
     @Override public List<ControlTypeAt> classification() {
-        return List.of(new ControlTypeAt(HousePanes.TabOpener.INSTANCE, HouseControllability.OVERLAY),
-                       new ControlTypeAt(HousePanes.PaneThumbs.INSTANCE, HouseControllability.ARRANGEABLE));
+        return List.of(new ControlTypeAt(HousePanes.PaneThumbs.INSTANCE, HouseControllability.ARRANGEABLE));
     }
 }

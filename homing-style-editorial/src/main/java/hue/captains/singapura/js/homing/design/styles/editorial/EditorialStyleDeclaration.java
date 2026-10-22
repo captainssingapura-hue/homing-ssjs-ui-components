@@ -112,9 +112,6 @@ public record EditorialStyleDeclaration() implements StyleDeclaration {
                 new SelectWhat(),
                 new SelectHow(),
                 new PlainButtonGo(),
-                new KickerPrompt(),
-                new PlainButtonChoice(),
-                new PlainButtonCancel(),
                 new PlainButtonZoomOut(),
                 new PlainButtonZoomIn(),
                 new PlainButtonFit())));

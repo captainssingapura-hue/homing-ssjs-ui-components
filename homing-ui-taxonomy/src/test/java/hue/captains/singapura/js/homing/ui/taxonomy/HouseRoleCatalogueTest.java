@@ -89,9 +89,9 @@ class HouseRoleCatalogueTest {
     void theWholeHouse_leavesTheseWordsUnnamed_theCatalogueAheadOfIt() {
         var unnamed = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
                 .map(f -> f.says().replace(" is named by no component", "")).toList();
-        assertEquals(List.of("Subtitle", "Category", "Placeholder", "Status", "Error", "Check", "Style", "Palette", "Query", "Skip", "Toggle", "Adjust",
+        assertEquals(List.of("Subtitle", "Category", "Prompt", "Placeholder", "Status", "Error", "Check", "Style", "Palette", "Picker", "Query", "Cancel", "Skip", "Toggle", "Adjust",
                 "Reset", "Increase", "Decrease", "Clear", "Add", "Remove", "Preferences", "Previous", "Next", "First", "Last", "More", "Foot", "Page", "Host",
                 "Index", "Detail", "Setting", "Layout", "Body", "Media", "Fallback", "Member", "Entry", "Dock", "Group", "Opener", "Pull", "Scroll"), unnamed,
-                "a strip's foot, a site's page, a view's index and detail unnamed since the rooms left the parts; the words only widgets said - a subtitle, a status, a setting, an entry, a member and the rest - since the widgets are no components (20 Oct); add since the tab strip's plus is placed in the void role (21 Oct)");
+                "a strip's foot, a site's page, a view's index and detail unnamed since the rooms left the parts; the words only widgets said - a subtitle, a status, a setting, an entry, a member and the rest - since the widgets are no components (20 Oct); add since the tab strip's plus is placed in the void role (21 Oct); a prompt, a picker and a cancel since the tab picker and the tab opener are widgets (22 Oct)");
     }
 }

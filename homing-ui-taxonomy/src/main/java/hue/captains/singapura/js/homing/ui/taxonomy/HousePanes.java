@@ -10,8 +10,9 @@ import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 import java.util.List;
 
 /**
- * The house's tabbed panes: the panes of many tabs and of one, a tab whole, the thumbnails of the panes and the ways to
- * open a tab. The tab, the strip it sits in and where a dragged tab would land are the common tree's, so the styles can
+ * The house's tabbed panes: the panes of many tabs and of one, a tab whole, the thumbnails of the panes and the way to
+ * add a tab. What a new tab is to hold is its caller's to decide - a workspace, an app - by a widget of its own, the
+ * pane dumb (owner, 22 Oct): no picker or opener is a component. The tab, the strip it sits in and where a dragged tab would land are the common tree's, so the styles can
  * answer them. Defined here, with the house's other components, whether or not its implementation is on the classpath;
  * implemented - and drawn by Base - in {@code homing-ui-panes} (RFC 0067, appendix The Style Jars, D40).
  */
@@ -43,31 +44,9 @@ public final class HousePanes {
         }
     }
 
-    /** What an empty pane offers to open. */
-    public record TabOpener() implements Composite<HouseBranches.Chooser> {
-        public static final TabOpener INSTANCE = new TabOpener();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Prompt.INSTANCE).one(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Choice.INSTANCE).any());
-        }
-    }
 
-    /** The list of a pane's tabs, to pick from. */
-    public record TabPicker() implements Composite<HouseBranches.Chooser>, WithRoles<HouseRoleSets.Choosing> {
-        public static final TabPicker INSTANCE = new TabPicker();
-        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public HouseBranches.Chooser parent() { return HouseBranches.Chooser.INSTANCE; }
-        @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
-        @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseText.Kicker.INSTANCE).as(HouseSaying.Prompt.INSTANCE).one(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Choice.INSTANCE).any(),
-                           DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Cancel.INSTANCE).one());
-        }
-    }
 
-    /** A pane of many tabs: its strip, its picker, a note when it holds none. It holds its pages. */
+    /** A pane of many tabs: its strip, a note when it holds none. It holds its pages; what a new one is to hold is its caller's. */
     public record MultiTabPane() implements Composite<HouseBranches.Pane> {
         public static final MultiTabPane INSTANCE = new MultiTabPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
@@ -76,7 +55,6 @@ public final class HousePanes {
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseContainers.TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one(),
-                           DSL.part(TabPicker.INSTANCE).as(HouseDoing.Picker.INSTANCE).optional(Cardinality.DYNAMIC),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).optional());
         }
     }
