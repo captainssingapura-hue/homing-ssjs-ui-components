@@ -1,0 +1,4 @@
+<!-- The add icon in base: a plus, its two strokes crossing at the picture's centre, in the colour it is given (RFC 0067, D56) - drawn, not a character, so no font moves it off its box's middle. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em">
+    <path d="M 12 5 L 12 19 M 5 12 L 19 12" style="fill: none; stroke: currentColor" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

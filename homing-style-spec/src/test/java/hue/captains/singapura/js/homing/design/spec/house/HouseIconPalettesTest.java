@@ -41,11 +41,12 @@ class HouseIconPalettesTest {
     private static final Pattern GLYPH = Pattern.compile("content:\\s*\"([^\"]*)\"");
 
     @Test
-    void everyIcon_hasItsPicture_inEveryStyle_fourSvgs() {
+    void everyIcon_hasItsPicture_inEveryStyle_fiveSvgs() {
         assertEquals(22, PICTURES.icons().size(), "the pacman and the preferences among them (21 Oct)");
         for (DesignStyle<?> s : SPEC.styles())
             for (IconLeaf i : PICTURES.icons()) {
-                boolean svg = i.equals(HouseIcons.RotateIcon.INSTANCE) || i.equals(HouseIcons.FlipIcon.INSTANCE) || i.equals(HouseIcons.PacmanIcon.INSTANCE) || i.equals(HouseIcons.PreferencesIcon.INSTANCE);
+                boolean svg = i.equals(HouseIcons.RotateIcon.INSTANCE) || i.equals(HouseIcons.FlipIcon.INSTANCE) || i.equals(HouseIcons.PacmanIcon.INSTANCE) || i.equals(HouseIcons.PreferencesIcon.INSTANCE)
+                        || i.equals(HouseIcons.AddIcon.INSTANCE);   // the plus drawn: a character sat off its box's middle (22 Oct)
                 assertEquals(svg, PICTURES.picture(s, i) instanceof IconPicture.Svg, s.token() + " " + i.token());
             }
     }
@@ -71,7 +72,7 @@ class HouseIconPalettesTest {
     void aStyleDraws_onlyWhereItDiffers() {
         assertEquals(new IconPicture.Glyph("✔"), PICTURES.picture(Sketchy.INSTANCE, HouseIcons.CheckIcon.INSTANCE));
         assertTrue(PICTURES.own(Sketchy.INSTANCE, HouseIcons.CheckIcon.INSTANCE));
-        assertEquals(new IconPicture.Glyph("+"), PICTURES.picture(Sketchy.INSTANCE, HouseIcons.AddIcon.INSTANCE), "sketchy draws base's plus");
+        assertEquals(new IconPicture.Svg<>(new hue.captains.singapura.js.homing.design.spec.styles.base.AddSvg()), PICTURES.picture(Sketchy.INSTANCE, HouseIcons.AddIcon.INSTANCE), "sketchy draws base's plus");
         assertFalse(PICTURES.own(Sketchy.INSTANCE, HouseIcons.AddIcon.INSTANCE));
     }
 
@@ -93,7 +94,7 @@ class HouseIconPalettesTest {
     void thePagesModule_oneObjectAPicture_sharedByTheStylesThatDrawItAlike() {
         String js = IconPicturesScript.INSTANCE.script(PICTURES, SPEC.selectable());
         assertEquals(7, count(js, "const GLYPH_CLOSE_ICON"), "base's cross, and five styles' and sketchy's own");
-        assertEquals(1, count(js, "const GLYPH_ADD_ICON "), "one plus, for every style");
+        assertEquals(1, count(js, "const SVG_ADD_ICON "), "one plus, drawn, for every style");
         assertEquals(1, count(js, "const SVG_ROTATE_ICON "), "rotate: one picture, base's, in every style");
         assertEquals(1, count(js, "const SVG_PACMAN_ICON "), "base's pacman, for every style but sketchy");
         assertEquals(1, count(js, "const SVG_PACMAN_ICON_SKETCHY "), "sketchy's own pacman");

@@ -89,8 +89,10 @@ class ContentTest {
         IconSvg pacman = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.base.PacmanSvg()).orElseThrow();
         IconSvg sketchy = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg()).orElseThrow();
         IconSvg preferences = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.base.PreferencesSvg()).orElseThrow();
-        assertEquals(java.util.Set.of(rotate.resource(), flip, pacman.resource(), sketchy.resource(), preferences.resource()), java.util.Set.copyOf(IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles())),
-                "base's four, and sketchy's own pacman");
+        IconSvg add = IconSvgs.INSTANCE.find(new hue.captains.singapura.js.homing.design.spec.styles.base.AddSvg()).orElseThrow();
+        assertEquals(java.util.Set.of(rotate.resource(), flip, pacman.resource(), sketchy.resource(), preferences.resource(), add.resource()), java.util.Set.copyOf(IconSvgs.INSTANCE.expected(PICTURES, SPEC.styles())),
+                "base's five - the plus drawn now, a character sat off its box's middle (22 Oct) - and sketchy's own pacman");
+        assertEquals(List.of(), add.colours(), "the plus in the colour it is given, and nothing else");
         assertEquals(List.of("accent"), preferences.colours(), "the sliders' knobs; their lines and rings in the colour it is given");
         assertEquals(List.of(flip), IconSvgs.INSTANCE.awaiting(PICTURES, SPEC.styles()), "flip's not here yet: drawn as its placeholder");
         assertEquals(List.of("accent"), rotate.colours(), "its head in the accent; its arc in the colour it is given");
