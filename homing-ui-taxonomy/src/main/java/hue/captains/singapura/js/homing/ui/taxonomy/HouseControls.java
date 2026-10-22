@@ -258,11 +258,12 @@ public final class HouseControls {
         /**
          * The pointer over it; the one in use; where the keys are - held while the cursor is on its strip, lent while what
          * it holds has them; in the hand; the hand down on it; held by the hand, not on its cross - its press what selects
-         * it; and its presence - its cross pressed, it is dismissed (RFC 0069, amended).
+         * it; and the clicks of its cross, which it keeps and passes on, handling none: whoever holds it decides what a
+         * close is, and it never closes itself (owner, 22 Oct).
          */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Selected.INSTANCE,
                 HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Held.INSTANCE,
-                HouseStates.Presence.INSTANCE); }
+                HouseStates.Clicks.INSTANCE); }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE, ExtentAxis.ASPECT); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseIcons.WithinIcon.INSTANCE).as(HouseShaping.Keys.INSTANCE).one(),

@@ -76,6 +76,12 @@ public final class HousePanes {
         public static final TabPane INSTANCE = new TabPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
+        /**
+         * The clicks of its close: one button, as its caller has it, pressed by its chip's cross and by its menu's close
+         * alike. It handles nothing: its caller closes the widget it lends its panel to, then the tab pane - which never
+         * closes itself (owner, 22 Oct).
+         */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Clicks.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).one());
         }

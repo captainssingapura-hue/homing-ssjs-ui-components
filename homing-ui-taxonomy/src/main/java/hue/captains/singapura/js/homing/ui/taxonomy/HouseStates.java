@@ -186,17 +186,6 @@ public final class HouseStates {
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "invalid"); }
     }
 
-    /** Whether it is still there, or its user has sent it away: open at rest; dismissed by its dismissal. No class - it is gone. */
-    public record Presence() implements StateType<Disclosure> {
-        public static final Presence INSTANCE = new Presence();
-        public static final StateValue OPEN = new StateValue("open"), DISMISSED = new StateValue("dismissed");
-        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Point(OPEN), new StateDomain.Point(DISMISSED)), new StateDomain.Named(OPEN));
-        private static final List<NamedChange> CHANGES = List.of(new NamedChange("dismiss", new NamedChange.Between(OPEN, DISMISSED)));
-        @Override public Disclosure parent() { return Disclosure.INSTANCE; }
-        @Override public StateDomain domain() { return DOMAIN; }
-        @Override public List<NamedChange> changes() { return CHANGES; }
-    }
-
     // ── place ────────────────────────────────────────────────────────────
 
     /** The one of its kind that is where the user is: the trail's step that is this page. */
@@ -355,7 +344,7 @@ public final class HouseStates {
     public static final List<StateType<?>> ALL = List.of(
             Enabled.INSTANCE, ReadOnly.INSTANCE, Busy.INSTANCE,
             Pressed.INSTANCE, Checked.INSTANCE, Coverage.INSTANCE, Selected.INSTANCE,
-            Expanded.INSTANCE, Shown.INSTANCE, Presence.INSTANCE,
+            Expanded.INSTANCE, Shown.INSTANCE,
             Required.INSTANCE, Invalid.INSTANCE,
             Current.INSTANCE, Highlighted.INSTANCE, Pointed.INSTANCE,
             Empty.INSTANCE,
