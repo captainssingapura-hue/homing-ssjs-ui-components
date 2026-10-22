@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
+import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
@@ -51,8 +52,13 @@ public final class HousePanes {
         public static final MultiTabPane INSTANCE = new MultiTabPane();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
-        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
+        /**
+         * Where the page's keys are, held by the steward on its root (RFC 0067, D12); and the adds asked of it, its bar's
+         * passed on, handled by none: it manages no tab in or out - its caller does (owner, 22 Oct).
+         */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE, HouseStates.TabAddControl.INSTANCE); }
+        /** Its slot: where what it shows is mounted by its caller, one at a time - its own element, no part (22 Oct). */
+        @Override public List<Room> rooms() { return List.of(new Room("slot")); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseContainers.TabStrip.INSTANCE).as(HouseShaping.Tabs.INSTANCE).one(),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Note.INSTANCE).optional());

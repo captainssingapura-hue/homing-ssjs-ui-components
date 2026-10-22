@@ -304,6 +304,17 @@ public final class HouseStates {
         @Override public List<NamedChange> changes() { return CHANGES; }
     }
 
+    /**
+     * How many times a tab was asked to be added - the plus pressed: from none, each ask its going up. What is added is
+     * its caller's to decide; nothing it shows changes - no class (owner, 22 Oct).
+     */
+    public record TabAddControl() implements StateType<Counting> {
+        public static final TabAddControl INSTANCE = new TabAddControl();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
     // ── given ────────────────────────────────────────────────────────────
 
     /** What is typed in it so far, the user still at it: a text, none at rest. What it shows is the words themselves - no class. */
@@ -350,7 +361,7 @@ public final class HouseStates {
             Empty.INSTANCE,
             Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
-            Clicks.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE,
             DraftText.INSTANCE, CommittedText.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }

@@ -60,7 +60,11 @@ class UiPanesCrateConformanceTest {
                                                   TabModule.INSTANCE.imports(), TabPaneModule.INSTANCE.imports())
                 .flatMap(im -> im.getAllImports().values().stream())
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
+        // the bar ported a step at a time (22 Oct): what its old chips, count, cross and drag wore waits for their port - a list that only shrinks
+        var waiting = java.util.Set.of("mtp_rail", "mtp_strip_loose", "mtp_strip_tail", "mtp_bar_close", "mtp_pill", "mtp_drop_mark", "mtp_chip_shifted", "mtp_chip_dragging");
+        var unimported = new java.util.TreeSet<String>();
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses())
-            assertTrue(imported.contains(c.getClass().getSimpleName()), c.getClass().getSimpleName() + " is declared but not imported");
+            if (!imported.contains(c.getClass().getSimpleName())) unimported.add(c.getClass().getSimpleName());
+        assertEquals(new java.util.TreeSet<>(waiting), unimported, "declared, and imported by none but those waiting for the bar's port");
     }
 }

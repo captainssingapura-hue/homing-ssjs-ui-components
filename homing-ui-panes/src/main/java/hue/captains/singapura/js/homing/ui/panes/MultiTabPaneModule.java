@@ -1,19 +1,16 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
+import hue.captains.singapura.js.homing.ui.elements.MarkBehaviorModule;
+import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
 import hue.captains.singapura.js.homing.component.BranchComponent;
-import hue.captains.singapura.js.homing.component.keyboard.FocusPartyModule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
-import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.Modifier;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
-import hue.captains.singapura.js.homing.component.keyboard.focusParty;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
@@ -25,33 +22,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * {@code MultiTabPane}, one pane of tabs. {@code new MultiTabPane(branch,
- * {host, …})} builds a strip of chips over one content area on the
- * sub-branch the caller made for it, appends it to the host, and is a HOST
- * of a desk's tab-panes (RFC 0066 E3, appendix "tab-panes"): {@code take},
- * {@code letGo}, {@code removeTab} (a close), {@code switchTab},
- * {@code moveTab}, the readers, {@code dispose}. A branch component.
- *
- * <p>A tab is a {@link TabPaneModule.TabPane}: its chip and its pane are its
- * own, minted once under its desk, and placed here as they are — held, never
- * owned. The law: a tab's widget is logically focusable — a member of the
- * dock's branch of the focus party, exposing its membership as
- * {@code focus}, and answering {@code activate()}; what it contains
- * natively is its own, encapsulated; {@code take} refuses a tab-pane whose
- * widget is not, and adopts its membership from wherever it was. The pane
- * is a member holding the dock's branch; its keys, while it holds them, are
- * the container's own — the tabs walked, reordered and detached, the widget
- * entered, the pane yielded — and a chip takes no native focus. The pane
- * never calls {@code setActive}: that is the holder's, told through
- * {@code TabActivated}.</p>
- *
- * <p>Every mutation the pane makes is one {@link PaneEvent} on one sink,
- * {@code onEvent(ev)}: a frozen object tagged by kind whose fields are the
- * record's components, built by {@link PaneEventsModule} — removed, moved on
- * its rail, activated, add and detach requested; an arrival and a move from
- * host to host are the desk's. The shape is data, so an event goes into a
- * log or a checkpoint as it is. The strip, its chips and the drag that
- * reorders are {@link TabStrip}'s.</p>
+ * {@code MultiTabPane}, a pane of tabs: its bar over its slot, where what it shows is mounted by its caller, one at a
+ * time. Ported a step at a time (RFC 0071): for now its bar with its one plus, whose presses it passes on as its own
+ * {@code TabAddControl}, and its slot, empty. It manages no tab in or out - its caller does (owner, 22 Oct). Its
+ * chips, the tabs it captures and shows, its keys and its menus come as they are ported; what it declares of them
+ * below waits for that.
  */
 public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, ImplFor<HousePanes.MultiTabPane> {
 
@@ -87,22 +62,11 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
     @Override
     public ImportsFor<MultiTabPaneModule> imports() {
         return ImportsFor.<MultiTabPaneModule>builder()
-                .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripModule.TabStrip()), TabStripModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys(), new PaneKeysModule.PaneSchemes()), PaneKeysModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneMenusModule.PaneMenus()), PaneMenusModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneTabsModule.PaneTabs()), PaneTabsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneEventsModule.PaneEvents()), PaneEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(
-                        new PaneStyles.mtp_pane(),
-                        new PaneStyles.mtp_content(),
-                        new PaneStyles.mtp_tab_content_hidden(),
-                        new PaneStyles.mtp_empty()
-                ), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_pane(), new PaneStyles.mtp_content(), new PaneStyles.mtp_empty()), PaneStyles.INSTANCE))
                 .build();
     }
 

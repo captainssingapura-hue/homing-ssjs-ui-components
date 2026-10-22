@@ -39,9 +39,7 @@ class TabMenuTest {
     void thePaneDeclaresTheNeed_andItsJsOpensTheSameKind() {
         assertEquals(java.util.Set.of(TabMenu.INSTANCE, SplitMenu.INSTANCE), new MultiTabPaneModule.MultiTabPane().required(),
                 "a chip's menu, and its strip's own ground's - the room it sits in, answered by the desk's docking when it resides in a split grid");
-        String js = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/MultiTabPaneModule.js"));
-        assertTrue(js.contains("static MENU = \"" + TabMenu.INSTANCE.kind() + "\";"), "the JS constant is the Java kind");
-        assertTrue(js.contains("PaneMenus.forChip(this, tp.id, MultiTabPane.MENU)"), "the pane names its kind by its constant, never a loose string");
+        // the pane ported a step at a time (22 Oct): it opens no menu yet - its menus come with the context menu's port
         String menus = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/PaneMenusModule.js"));
         assertTrue(menus.contains("pane._menus.open(kind,"), "and PaneMenus opens the kind it was handed, never one of its own");
         // a site that serves the pane's crate holds the kind, listing nothing

@@ -252,16 +252,18 @@ public final class HouseContainers {
         public static final TabStrip INSTANCE = new TabStrip();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
-        /** Lit while its pane is the one being worked in (D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE); }
+        /**
+         * Lit while its pane is the one being worked in (D12); and the adds asked of it - its plus pressed, passed on and
+         * handled by none: what is added is its owner's caller's to decide (owner, 22 Oct).
+         */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Current.INSTANCE, HouseStates.TabAddControl.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.Tab.INSTANCE).as(HouseShaping.Chip.INSTANCE).any(Cardinality.DYNAMIC),
-                           DSL.part(HouseControls.IconButton.INSTANCE).as(HouseShaping.VoidRole.INSTANCE).optional(),   // the plus: its icon says it adds (21 Oct)
+                           DSL.part(HouseControls.IconButton.INSTANCE).as(HouseShaping.VoidRole.INSTANCE).one(),   // its one plus, a regular button: its icon says it adds (21, 22 Oct)
                            DSL.part(HouseText.Pill.INSTANCE).as(HouseSaying.Count.INSTANCE).one(),
-                           DSL.part(HouseControls.CloseButton.INSTANCE).as(HouseDoing.Close.INSTANCE).optional(),
                            DSL.part(HouseMarks.DropMark.INSTANCE).as(HouseSaying.Landing.INSTANCE).optional(Cardinality.DYNAMIC));
         }
-        /** Its tail: the room at its end its count and its close sit in - its own. */
+        /** Its tail: the room at its end its count sits in - its own. A floating pane's close is its own, no bar's (22 Oct). */
         @Override public List<Room> rooms() { return List.of(new Room("tail")); }
     }
 }

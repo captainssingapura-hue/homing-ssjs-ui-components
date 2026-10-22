@@ -169,5 +169,9 @@ class ComponentsConformanceTest {
             "EdgeStripModule (EdgeStrip): its part reveal is Lip, which no module implements - a part is a component of its own, never realized by its owner inline",
             "DialogModule (Dialog): its part actions is ActionBar, which no module implements - a part is a component of its own, never realized by its owner inline",
             "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
+            // the bar ported a step at a time (22 Oct): its one plus first - its chips, its count and its landing come with their steps
+            "TabStripModule (TabStrip) never imports Tab, which its part chip calls for",
+            "TabStripModule (TabStrip) never imports Pill, which its part count calls for",
+            "TabStripModule (TabStrip) never imports DropMark, which its part landing calls for",
             "FloatingPaneModule (FloatingPane): its part head is TitleBar, which no module implements - a part is a component of its own, never realized by its owner inline");   // the preferences button's gone with it, no component (21 Oct)
 }

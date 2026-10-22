@@ -185,3 +185,8 @@ The option chosen of those the component offers, by its value: none at rest.
 
 How far along a scale the component stands, from −1 to 1, at rest 0: an idea of arithmetic, whatever
 it is applied to - a size, an aspect, a colour, a loudness. What a degree is read as is its caller's.
+
+## TabAddControl
+
+How many times a tab was asked to be added - its plus pressed: from none, each ask its going up. What
+is added, if anything, is for whoever holds the component to decide.
