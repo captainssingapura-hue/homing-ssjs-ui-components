@@ -46,11 +46,9 @@ public final class HouseControls {
     private static final List<StateType<?>> A_CHECK = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Checked.INSTANCE,
             HouseStates.Focused.INSTANCE);
 
-    /**
-     * What the range offers: its value changing, the user still at it, and the user done with it - events until its
-     * value is a state, which waits on where a state's bounds are (the port journal).
-     */
-    private static final List<EventType<?>> EDITED = List.of(HouseEvents.Input.INSTANCE, HouseEvents.Commit.INSTANCE);
+    /** What the range has: it may be off; its degree; whether the hand holds it; its focus shown. */
+    private static final List<StateType<?>> A_RANGE = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Degree.INSTANCE,
+            HouseStates.Dragging.INSTANCE, HouseStates.Focused.INSTANCE);
 
     /** What a text box has besides: what is typed so far, and what the user is done typing. */
     private static final List<StateType<?>> A_TEXT_BOX = List.of(HouseStates.Enabled.INSTANCE, HouseStates.DraftText.INSTANCE,
@@ -207,11 +205,10 @@ public final class HouseControls {
         @Override public List<StateType<?>> states() { return A_CRUMB; }
     }
 
-    /** A value picked along a scale. */
+    /** A degree picked along the browser's own slider: what it is read as - a volume, a gain - is its caller's. */
     public record Range() implements Leaf<Input>, WithRoles<HouseRoleSets.Changing> {
         public static final Range INSTANCE = new Range();
-        @Override public List<StateType<?>> states() { return AN_INPUT; }
-        @Override public List<EventType<?>> events() { return EDITED; }
+        @Override public List<StateType<?>> states() { return A_RANGE; }
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
     }

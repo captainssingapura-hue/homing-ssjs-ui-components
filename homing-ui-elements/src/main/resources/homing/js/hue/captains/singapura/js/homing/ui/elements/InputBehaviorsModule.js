@@ -22,6 +22,17 @@ class EditBehavior {
     }
 }
 
+class SlideBehavior {
+    constructor(el, range) {
+        el.addEventListener("input", function () { range._moved(); });
+        el.addEventListener("mousedown", function () {
+            range._taken();
+            // let go anywhere: the hand's release, heard once for this press
+            el.ownerDocument.addEventListener("mouseup", function () { range._let(); }, { once: true });
+        });
+    }
+}
+
 class PickBehavior {
     constructor(el, select) {
         el.addEventListener("change", function () { select._picked(); });

@@ -11,14 +11,14 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 import java.util.List;
 
 /**
- * What the button leaves share, as declarations: a simple component on a {@code <button>}, on the axis {@code enabled},
+ * What the button leaves share, as declarations: a simple component on a {@code <button>}, on the axes {@code enabled} and {@code clicks},
  * with a size and a label, and the behaviour that is theirs. Never made on its own: each leaf is, with its own fixed
  * type and binding. Stamped with every leaf's header (RFC 0071, D19), it names the duals' nodes - {@code StateEnabled},
- * {@code EventClick}, {@code ExtentSize} - and no flat table.
+ * {@code StateClicks}, {@code ExtentSize} - and no flat table.
  */
 public record ButtonModule() implements DomModule<ButtonModule>, ImplForBranch<HouseBranches.Button> {
 
-    /** The base: {@code class XButton extends Button}; {@code enabled}, {@code size}, {@code label}. */
+    /** The base: {@code class XButton extends Button}; {@code enabled}, {@code clicks}, {@code size}, {@code label}. */
     public record Button() implements Exportable._Class<ButtonModule> {}
 
     public static final ButtonModule INSTANCE = new ButtonModule();

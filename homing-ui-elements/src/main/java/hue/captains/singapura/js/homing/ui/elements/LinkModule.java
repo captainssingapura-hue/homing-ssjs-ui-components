@@ -15,7 +15,7 @@ import java.util.List;
 /** The link: a simple component on an {@code <a>}, its words and the way it goes, and a click; worn in its own look. A way to somewhere else. */
 public record LinkModule() implements DomModule<LinkModule>, ImplFor<HouseControls.Link> {
 
-    /** An element component: {@code new Link(el, { text, to, size }, role)} on the element its companion makes; {@code setOnClick(handler)}; {@code text}, {@code to}, {@code size}. */
+    /** An element component: {@code new Link(make, new FixedLink(), place?)}; {@code onChange(StateClicks, listener)}; {@code text}, {@code to}, {@code size}, {@code clicks}. */
     public record Link() implements ElementComponent<LinkModule> {
         @Override public String tag() { return "a"; }
         @Override public String summary() { return "A way to somewhere else: its words, and where it goes."; }

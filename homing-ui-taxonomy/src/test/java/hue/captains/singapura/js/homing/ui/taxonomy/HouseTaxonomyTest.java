@@ -135,7 +135,7 @@ class HouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         HOUSE.events().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.events().types().forEach(e -> nodes.add(HOUSE.meaning(e).markdown()));
-        assertEquals(22 + 118 + 22 + 98 + 10 + 27 + 7 + 14, nodes.size());
+        assertEquals(22 + 118 + 22 + 98 + 11 + 28 + 7 + 14, nodes.size());
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
@@ -148,7 +148,7 @@ class HouseTaxonomyTest {
      */
     @Test
     void theStatesAndEvents_wholeInTheBase_filedByWhatTheyAreAbout() {
-        assertEquals(List.of("availability", "picking", "disclosure", "validity", "place", "content", "interaction", "physical", "counting", "given"),
+        assertEquals(List.of("availability", "picking", "disclosure", "validity", "place", "content", "interaction", "physical", "counting", "given", "measure"),
                 HOUSE.states().branches().stream().map(b -> b.name().value()).toList());
         assertEquals(HouseStates.ALL, HOUSE.states().types(), "every type, whether or not a component has it yet");
         assertEquals(List.of("pointing", "dragging", "editing", "asking", "loading", "timing", "scrolling"),

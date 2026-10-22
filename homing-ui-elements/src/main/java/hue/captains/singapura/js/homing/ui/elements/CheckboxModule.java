@@ -14,7 +14,7 @@ import java.util.List;
 /** The checkbox: a simple component on a {@code <input>}, riding on the browser's own; worn in its own look. One thing on or off, by a mark in a box: the browser's own. */
 public record CheckboxModule() implements DomModule<CheckboxModule>, ImplFor<HouseControls.Checkbox> {
 
-    /** An element component: {@code new Checkbox(make, new FixedCheckbox(), place?)}; {@code setOnCheckedChanged(handler)}, {@code setOnCommit(handler)}; {@code checked}, {@code enabled}. */
+    /** An element component: {@code new Checkbox(make, new FixedCheckbox(), place?)}; {@code onChange(StateChecked, listener)}; {@code checked}, {@code enabled}. */
     public record Checkbox() implements ElementComponent<CheckboxModule> {
         @Override public String tag() { return "input"; }
         @Override public String summary() { return "One thing on or off, by a mark in a box: the browser's own."; }

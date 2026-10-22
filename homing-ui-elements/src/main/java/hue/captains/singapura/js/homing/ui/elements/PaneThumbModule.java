@@ -13,7 +13,7 @@ import java.util.List;
 /** The pane's thumbnail: a pane picked by a small picture of where it is, with its name - a simple component on its own {@code <div>}, its name a kicker. */
 public record PaneThumbModule() implements DomModule<PaneThumbModule>, ImplFor<HouseControls.PaneThumb> {
 
-    /** {@code new PaneThumb(branch, { name, current }, role?)}; {@code root}, {@code name}, {@code current}, {@code setOnCurrentChanged}. */
+    /** {@code new PaneThumb(branch, new FixedPaneThumb(), place?)}; {@code root}, {@code name}, {@code current}, {@code onChange(StateCurrent, listener)}. */
     public record PaneThumb() implements BranchComponent<PaneThumbModule> {
         @Override public String summary() { return "A pane, picked by a small picture of where it is, with its name."; }
     }

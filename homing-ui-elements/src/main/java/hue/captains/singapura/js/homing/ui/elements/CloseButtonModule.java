@@ -15,7 +15,7 @@ import java.util.List;
 /** The close button: the button's declarations, its face the close icon - each style's own cross, its look (D52) - made on its own branch and placed along its slot, and its words its name; worn in its own look. */
 public record CloseButtonModule() implements DomModule<CloseButtonModule>, ImplFor<HouseControls.CloseButton> {
 
-    /** An element component: {@code new CloseButton(branch, new FixedCloseButton(), place?)} - a composed component, its face its part, made on its branch; {@code setOnClick(handler)}; {@code enabled}, {@code size}, {@code label} - its name. */
+    /** An element component: {@code new CloseButton(branch, new FixedCloseButton(), place?)} - a composed component, its face its part, made on its branch; {@code onChange(StateClicks, listener)}; {@code clicks}, {@code enabled}, {@code size}, {@code label} - its name. */
     public record CloseButton() implements ElementComponent<CloseButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "The button that closes what holds it: a cross, each style its own, named for whoever cannot see it."; }

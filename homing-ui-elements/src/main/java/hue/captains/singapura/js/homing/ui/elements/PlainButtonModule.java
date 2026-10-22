@@ -14,7 +14,7 @@ import java.util.List;
 /** The plain button: the button's declarations, worn in its own look. */
 public record PlainButtonModule() implements DomModule<PlainButtonModule>, ImplFor<HouseControls.PlainButton> {
 
-    /** An element component: {@code new PlainButton(make, new FixedPlainButton(), place?)}, made and placed by itself; {@code setOnClick(handler)}; {@code enabled}, {@code size}, {@code label}. */
+    /** An element component: {@code new PlainButton(make, new FixedPlainButton(), place?)}, made and placed by itself; {@code onChange(StateClicks, listener)}; {@code clicks}, {@code enabled}, {@code size}, {@code label}. */
     public record PlainButton() implements ElementComponent<PlainButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "A button that does one ordinary thing, with nothing to warn of and nothing to lead with."; }

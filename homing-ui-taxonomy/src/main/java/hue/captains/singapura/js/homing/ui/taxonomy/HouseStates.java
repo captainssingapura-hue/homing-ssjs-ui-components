@@ -97,6 +97,12 @@ public final class HouseStates {
         @Override public StateRoot parent() { return StateRoot.INSTANCE; }
     }
 
+    /** How far along a scale it stands. */
+    public record Measure() implements L1_StateBranch<StateRoot> {
+        public static final Measure INSTANCE = new Measure();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
     // ── availability ─────────────────────────────────────────────────────
 
     /** Usable: true at rest; off, it is inert and says so. */
@@ -321,6 +327,19 @@ public final class HouseStates {
         @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
     }
 
+    // ── measure ──────────────────────────────────────────────────────────
+
+    /**
+     * How far along a scale it stands, from −1 to 1, at rest 0: a mathematical idea, whatever it is applied to - a size,
+     * an aspect, a colour, a loudness (owner, 22 Oct). Its step, and what its caller reads it as, are not its own. No class.
+     */
+    public record Degree() implements StateType<Measure> {
+        public static final Degree INSTANCE = new Degree();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(-1, 1, false)), new StateDomain.Number(0));
+        @Override public Measure parent() { return Measure.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
     /** Every type of the tree, branch by branch. */
     public static final List<StateType<?>> ALL = List.of(
             Enabled.INSTANCE, ReadOnly.INSTANCE, Busy.INSTANCE,
@@ -332,5 +351,6 @@ public final class HouseStates {
             Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
             Clicks.INSTANCE,
-            DraftText.INSTANCE, CommittedText.INSTANCE, ChosenOption.INSTANCE);
+            DraftText.INSTANCE, CommittedText.INSTANCE, ChosenOption.INSTANCE,
+            Degree.INSTANCE);
 }

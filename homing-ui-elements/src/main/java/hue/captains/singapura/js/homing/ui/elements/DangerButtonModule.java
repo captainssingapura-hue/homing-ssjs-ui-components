@@ -14,7 +14,7 @@ import java.util.List;
 /** The danger button: the button's declarations, worn in its own look. */
 public record DangerButtonModule() implements DomModule<DangerButtonModule>, ImplFor<HouseControls.DangerButton> {
 
-    /** An element component: {@code new DangerButton(make, new FixedDangerButton(), place?)}, made and placed by itself; {@code setOnClick(handler)}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
+    /** An element component: {@code new DangerButton(make, new FixedDangerButton(), place?)}, made and placed by itself; {@code onChange(StateClicks, listener)}; {@code clicks}, {@code enabled}, {@code size}, {@code extent}, {@code label}. */
     public record DangerButton() implements ElementComponent<DangerButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "A button that destroys, or cannot be undone."; }

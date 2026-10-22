@@ -14,7 +14,7 @@ import java.util.List;
 /** The scrim: a simple component on a {@code <div>}, the veil over the page behind a dialog, and a press; worn in its own look. */
 public record ScrimModule() implements DomModule<ScrimModule>, ImplFor<HouseContainers.Scrim> {
 
-    /** An element component: {@code new Scrim(el, {}, role)} on the element its companion makes; {@code setOnPress(handler)}. */
+    /** An element component: {@code new Scrim(make, new FixedScrim(), place?)}; {@code onChange(StateHeld, listener)} - its press and its release; {@code held}. */
     public record Scrim() implements ElementComponent<ScrimModule> {
         @Override public String tag() { return "div"; }
         @Override public String summary() { return "The veil over the page behind a dialog: the hand coming down on it is a press."; }

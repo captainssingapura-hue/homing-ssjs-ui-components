@@ -22,7 +22,7 @@ import java.util.List;
  */
 public record ClickableCardModule() implements DomModule<ClickableCardModule>, ImplFor<HouseContainers.ClickableCard> {
 
-    /** {@code new ClickableCard(branch, new FixedClickableCard(), place?)}; {@code joinKeys(steward, id?)}, once; {@code root}, {@code size}, {@code aspect}, {@code keys}, {@code setOnClick}, {@code key}, {@code dispose}. */
+    /** {@code new ClickableCard(branch, new FixedClickableCard(), place?)}; {@code joinKeys(steward, id?)}, once; {@code root}, {@code size}, {@code aspect}, {@code keys}, {@code clicks}, {@code onChange(StateClicks, listener)}, {@code key}, {@code dispose}. */
     public record ClickableCard() implements BranchComponent<ClickableCardModule>, NeedKeyboard {
         @Override public String summary() { return "A card that is a button: pressed, it does its one thing; it lifts under the hand and takes the keys."; }
         /** The card is a button to the keyboard too: through the party. */

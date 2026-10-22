@@ -78,6 +78,7 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(TextBoxModule.INSTANCE),
                 CrateEntry.of(CheckboxModule.INSTANCE),
                 CrateEntry.of(RangeModule.INSTANCE),
+                CrateEntry.of(DegreeScaleModule.INSTANCE),   // a range's degree read on its caller's scale
                 CrateEntry.of(SelectModule.INSTANCE),
                 CrateEntry.of(ScrimBehaviorModule.INSTANCE),
                 CrateEntry.of(ScrimModule.INSTANCE),

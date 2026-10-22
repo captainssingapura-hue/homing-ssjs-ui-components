@@ -144,6 +144,10 @@ listened to.
 
 Held by the user's hand and being moved, from the press that grabbed it until it is let go.
 
+## Measure
+
+How far along a scale the component stands, whatever the scale is for.
+
 ## Held
 
 Held down by the user's hand, as the component has it: up at rest, down from its press until its
@@ -175,3 +179,8 @@ The words the user is done typing, by Enter or by leaving the component: none at
 ## ChosenOption
 
 The option chosen of those the component offers, by its value: none at rest.
+
+## Degree
+
+How far along a scale the component stands, from −1 to 1, at rest 0: an idea of arithmetic, whatever
+it is applied to - a size, an aspect, a colour, a loudness. What a degree is read as is its caller's.

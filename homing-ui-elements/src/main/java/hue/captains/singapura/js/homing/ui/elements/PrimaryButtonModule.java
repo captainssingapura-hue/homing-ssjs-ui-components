@@ -14,7 +14,7 @@ import java.util.List;
 /** The primary button: the button's declarations, worn in its own look. */
 public record PrimaryButtonModule() implements DomModule<PrimaryButtonModule>, ImplFor<HouseControls.PrimaryButton> {
 
-    /** An element component: {@code new PrimaryButton(make, new FixedPrimaryButton(), place?)}, made and placed by itself; {@code setOnClick(handler)}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
+    /** An element component: {@code new PrimaryButton(make, new FixedPrimaryButton(), place?)}, made and placed by itself; {@code onChange(StateClicks, listener)}; {@code clicks}, {@code enabled}, {@code size}, {@code extent}, {@code label}. */
     public record PrimaryButton() implements ElementComponent<PrimaryButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "The button a view leads with: the action most users came for."; }

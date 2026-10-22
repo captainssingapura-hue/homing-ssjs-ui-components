@@ -14,7 +14,7 @@ import java.util.List;
 /** The secondary button: the button's declarations, worn in its own look. */
 public record SecondaryButtonModule() implements DomModule<SecondaryButtonModule>, ImplFor<HouseControls.SecondaryButton> {
 
-    /** An element component: {@code new SecondaryButton(make, new FixedSecondaryButton(), place?)}, made and placed by itself; {@code setOnClick(handler)}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
+    /** An element component: {@code new SecondaryButton(make, new FixedSecondaryButton(), place?)}, made and placed by itself; {@code onChange(StateClicks, listener)}; {@code clicks}, {@code enabled}, {@code size}, {@code extent}, {@code label}. */
     public record SecondaryButton() implements ElementComponent<SecondaryButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "A button beside the primary one: offered, not urged."; }

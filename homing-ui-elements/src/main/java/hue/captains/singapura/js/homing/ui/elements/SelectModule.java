@@ -14,7 +14,7 @@ import java.util.List;
 /** The select: a simple component on a {@code <select>}, riding on the browser's own; worn in its own look. A value picked from a list that drops down: the browser's own. */
 public record SelectModule() implements DomModule<SelectModule>, ImplFor<HouseControls.Select> {
 
-    /** An element component: {@code new Select(make, new FixedSelect(), place?)}; {@code setOnCommit(handler)}; {@code options}, {@code value}, {@code enabled}, {@code size}. */
+    /** An element component: {@code new Select(make, new FixedSelect(), place?)}; {@code onChange(StateChosenOption, listener)}; {@code options}, {@code value}, {@code chosen}, {@code enabled}, {@code size}. */
     public record Select() implements ElementComponent<SelectModule> {
         @Override public String tag() { return "select"; }
         @Override public String summary() { return "A value picked from a list that drops down: the browser's own."; }

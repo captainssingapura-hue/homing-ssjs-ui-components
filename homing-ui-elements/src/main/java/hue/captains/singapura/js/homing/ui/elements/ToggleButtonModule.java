@@ -14,7 +14,7 @@ import java.util.List;
 /** The toggle button: the button's declarations on one more axis, on, which a press turns over; worn in its own look. */
 public record ToggleButtonModule() implements DomModule<ToggleButtonModule>, ImplFor<HouseControls.ToggleButton> {
 
-    /** An element component: {@code new ToggleButton(el, { label, pressed, size }, role)} on the element its companion makes; {@code setOnPressedChanged(handler)}, {@code setOnClick(handler)}; {@code on}, {@code enabled}, {@code size}, {@code label}. */
+    /** An element component: {@code new ToggleButton(make, new FixedToggleButton(), place?)}; {@code onChange(StatePressed, listener)}; {@code pressed}, {@code enabled}, {@code size}, {@code label}. */
     public record ToggleButton() implements ElementComponent<ToggleButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "A button that is on or off: a press turns it over, and on it stays pressed."; }

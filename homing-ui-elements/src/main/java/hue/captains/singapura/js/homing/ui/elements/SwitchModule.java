@@ -16,7 +16,7 @@ import java.util.List;
  */
 public record SwitchModule() implements DomModule<SwitchModule>, ImplFor<HouseControls.Switch> {
 
-    /** {@code new Switch(branch, new FixedSwitch(), place?)}; {@code root}, {@code checked}, {@code enabled}, {@code text}, {@code setOnCheckedChanged}, {@code setOnCommit}. */
+    /** {@code new Switch(branch, new FixedSwitch(), place?)}; {@code root}, {@code checked}, {@code enabled}, {@code text}, {@code onChange(StateChecked, listener)}. */
     public record Switch() implements BranchComponent<SwitchModule> {
         @Override public String summary() { return "A setting on or off: a knob sliding in a groove, the whole a control."; }
     }

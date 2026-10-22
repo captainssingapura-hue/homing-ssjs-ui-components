@@ -14,7 +14,7 @@ import java.util.List;
 /** The text box: a simple component on a {@code <input>}, riding on the browser's own; worn in its own look. Words the user types, on one line: the browser's own editing. */
 public record TextBoxModule() implements DomModule<TextBoxModule>, ImplFor<HouseControls.TextBox> {
 
-    /** An element component: {@code new TextBox(make, new FixedTextBox(), place?)}; {@code setOnInput(handler)}, {@code setOnCommit(handler)}; {@code value}, {@code placeholder}, {@code enabled}, {@code size}. */
+    /** An element component: {@code new TextBox(make, new FixedTextBox(), place?)}; {@code onChange(StateDraftText, listener)}, {@code onChange(StateCommittedText, listener)}; {@code value}, {@code draft}, {@code committed}, {@code placeholder}, {@code enabled}, {@code size}. */
     public record TextBox() implements ElementComponent<TextBoxModule> {
         @Override public String tag() { return "input"; }
         @Override public String summary() { return "Words the user types, on one line: the browser's own editing."; }
