@@ -22,9 +22,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * {@code MultiTabPane}, a pane of tabs: its bar over its slot, where what each tab shows is mounted by its caller, the
- * tab in use's alone. Ported a step at a time (RFC 0071): the tabs it holds given once - {@code hold(tabs)} - and what
- * each shows mounted - {@code mount(id, element)} - going with its tab wherever the tab is moved. The bar is its own:
+ * {@code MultiTabPane}, a pane of tabs: its bar over its slot. A tab is where a widget is shown (owner, 22 Oct): its
+ * caller puts tabs in and takes them out, one at a time - {@code add(tab)}, {@code remove(id)} - and mounts in each tab's
+ * own otherwise empty pane a widget's root, which the widget alone manages, its branch of the page grafted -
+ * {@code mount(id, root, party?)}; the tab in use's pane shown, the others hidden, never detached. The bar is its own:
  * its caller hears the order of its tabs ({@code TabOrder}) once a drag has changed it, and its plus's presses, passed
  * on as its {@code TabAddControl}. It manages no tab in or out - its caller does (owner, 22 Oct). Its keys and its
  * menus come as they are ported; what it declares of them below waits for that.
@@ -67,7 +68,7 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripModule.TabStrip()), TabStripModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_pane(), new PaneStyles.mtp_content(), new PaneStyles.mtp_empty()), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_tab_content(), new PaneStyles.mtp_tab_content_hidden(), new PaneStyles.mtp_pane(), new PaneStyles.mtp_content(), new PaneStyles.mtp_empty()), PaneStyles.INSTANCE))
                 .build();
     }
 

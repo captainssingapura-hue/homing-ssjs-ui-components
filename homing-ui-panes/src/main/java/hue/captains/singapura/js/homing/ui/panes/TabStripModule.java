@@ -23,7 +23,7 @@ import java.util.List;
  */
 public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<HouseContainers.TabStrip> {
 
-    /** A composed component: {@code new TabStrip(branch, new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), place?)}; {@code hold(tabs)}; {@code onChange(StateActiveTab | StateTabOrder | StateTabCloseControl | StateTabAddControl, listener)}; {@code active}, {@code order}, {@code closes}, {@code adds}, {@code current}, {@code dispose}. */
+    /** A composed component: {@code new TabStrip(branch, new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), place?)}; {@code add(tab)}, {@code remove(id)}; {@code onChange(StateActiveTab | StateTabOrder | StateTabCloseControl | StateTabAddControl, listener)}; {@code active}, {@code order}, {@code closes}, {@code adds}, {@code current}, {@code dispose}. */
     public record TabStrip() implements BranchComponent<TabStripModule> {
         @Override public String summary() { return "The bar over a multi-tab pane: its tabs' chips, pressed and dragged along it, and its one plus, whose presses it passes on."; }
     }

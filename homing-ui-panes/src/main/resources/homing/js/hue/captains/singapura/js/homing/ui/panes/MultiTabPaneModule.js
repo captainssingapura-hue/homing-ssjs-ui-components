@@ -1,10 +1,14 @@
 // =============================================================================
-// MultiTabPane — a pane of tabs: its bar over its slot, where what each tab
-// shows is mounted, one at a time - the tab in use's. Ported (RFC 0071) a step
-// at a time. It manages no tab in or out (owner, 22 Oct): its caller does. The
-// tabs it holds are given once, for now - taking tabs in and out comes with its
-// own step - and for each its caller mounts what it shows: an element, which
-// goes with its tab wherever the tab is moved along the bar. The bar is its
+// MultiTabPane — a pane of tabs: its bar over its slot. A tab is where a widget
+// is shown (owner, 22 Oct): its caller opens and closes widgets, and puts their
+// tabs in and takes them out - add(tab), remove(id) - one at a time; the pane
+// manages no tab in or out of its own. Each tab has a pane of its own, empty
+// but for what its caller mounts in it - a widget's root, which the widget alone
+// manages, and the widget's own branch of the page, grafted - in the slot, and
+// shown while the tab is in use: never detached, only hidden, so a widget is
+// never rebuilt. A tab put in is the one in use; a tab in use taken out hands
+// over to the one now in its place, else the one before. Ported (RFC 0071) a
+// step at a time. The bar is its
 // own, and so is all that goes on on it - which tab is in use, the chips held
 // and moved: what its caller hears are the changes that matter to it - the
 // order of its tabs (TabOrder), told once a drag ends, if it changed it, and
@@ -15,8 +19,9 @@
 //
 //   var pane = new MultiTabPane(branch.createBranch("pane"),
 //                  new FixedMultiTabPane(new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), null), me.place(FixedMultiTabPane));
-//   pane.hold([{ id: "alpha", title: "Alpha", closable? }, ...])   the tabs it holds, once: the first in use
-//   pane.mount("alpha", element)   what a tab shows, its caller's: in the slot while its tab is in use
+//   pane.add({ id: "alpha", title: "Alpha", closable? })   a tab put in, its pane empty: the one in use
+//   pane.mount("alpha", root, party?)   what a tab shows: a widget's root in its pane, its branch of the page grafted
+//   pane.remove("alpha")   a tab taken out: its widget's root and branch let go - the widget's still, its caller's
 //   pane.onChange(StateTabOrder, listener)   its tabs in another order: before and after
 //   pane.onChange(StateTabCloseControl, listener)   a tab's close asked, or a tab put in: before and after
 //   pane.closes    how many times each tab's close was asked, by its id - null for one that cannot be closed
@@ -78,7 +83,7 @@ class MultiTabPane extends SimpleComponent {
         super(branch.elementMaker("pane"), fixed, FixedMultiTabPane, place ?? manageMultiTabPane);
         this.branch = branch;
         css.addClass(this.el, mtp_pane);
-        this._shows = new Map();   // its tabs' ids to what each shows, its caller's - none until mounted
+        this._tabs = new Map();   // its tabs' ids to each one's own: its branch, its pane, and the root mounted in it - none until mounted
         // its bar, the tab strip its fixed object holds: which tab is in use heard, its order and what it asks for passed on, a level up
         this._strip = new TabStrip(branch.createBranch("strip"), this.fixed.tabs, this._place(this.fixed.tabs));
         this._strip.onChange(StateTabAddControl, new MultiTabPaneAdd(this));
@@ -100,20 +105,53 @@ class MultiTabPane extends SimpleComponent {
         this.root = this.el;
     }
 
-    /** The tabs it holds, given once, in order - each an id and its title: its bar's chips, the first in use, its slot empty for each until mounted. */
-    hold(tabs) {
-        if (this._shows.size > 0) throw new Error("[MultiTabPane] holds its tabs already: taking tabs in and out comes with its own step");
-        if (Array.isArray(tabs)) for (var t of tabs) if (t && typeof t.id === "string") this._shows.set(t.id, null);
-        try { this._strip.hold(tabs); } catch (e) { this._shows.clear(); throw e; }
+    /**
+     * A tab put in by its caller, at its bar's end - its id, its title, whether it can be closed: its own pane made in the
+     * slot, empty until its caller mounts in it; the tab the one in use. Refused for an id it holds.
+     */
+    add(tab) {
+        var id = tab && tab.id;
+        if (this._tabs.has(id)) throw new Error("[MultiTabPane] holds a tab " + id + " already");
+        if (typeof id !== "string" || !TabStrip.ID.test(id)) throw new TypeError("[MultiTabPane] a tab's id is lower case words joined by a dash, not " + id);
+        var branch = this.branch.createBranch("tab-" + id);
+        branch.activate(_multiTabPaneOwner, "multi-tab-pane tab " + id);   // the tab's own: its pane, and the widget grafted on it
+        var pane = branch.createElement("pane", "div");
+        css.addClass(pane, mtp_tab_content);
+        css.addClass(pane, mtp_tab_content_hidden);
+        this._slot.appendChild(pane);
+        this._tabs.set(id, { branch: branch, pane: pane, root: null, grafted: false });
+        try { this._strip.add(tab); }
+        catch (e) { this._tabs.delete(id); branch.dissolve(); throw e; }
     }
 
-    /** What one of its tabs shows, its caller's element: in its slot while that tab is in use. Once a tab. */
-    mount(id, element) {
-        if (!this._shows.has(id)) throw new Error("[MultiTabPane] holds no tab " + id);
-        if (this._shows.get(id) !== null) throw new Error("[MultiTabPane] shows something for " + id + " already");
-        if (!element || element.nodeType !== 1) throw new TypeError("[MultiTabPane] what a tab shows is an element");
-        this._shows.set(id, element);
-        if (id === this.active) this._show(id);
+    /**
+     * What one of its tabs shows, mounted by its caller: a widget's root - its own, which it alone manages - in the tab's
+     * pane, and the widget's own branch of the page, where it has one, grafted on the tab's. Once a tab.
+     */
+    mount(id, root, party) {
+        var t = this._tabs.get(id);
+        if (t === undefined) throw new Error("[MultiTabPane] holds no tab " + id);
+        if (t.root !== null) throw new Error("[MultiTabPane] shows something for " + id + " already");
+        if (!root || root.nodeType !== 1) throw new TypeError("[MultiTabPane] what a tab shows is a widget's root, an element");
+        if (party != null) { t.branch.graft("widget", party); t.grafted = true; }
+        t.root = root;
+        t.pane.appendChild(root);
+    }
+
+    /**
+     * A tab taken out by its caller - once its widget is closed, or as it moves elsewhere: the widget's root out of its
+     * pane and its branch of the page let go, both the widget's still; the tab's pane gone; the tab out of its bar, which
+     * hands over the tab in use. Refused for a tab it does not hold.
+     */
+    remove(id) {
+        var t = this._tabs.get(id);
+        if (t === undefined) throw new Error("[MultiTabPane] holds no tab " + id);
+        if (t.root !== null) t.pane.removeChild(t.root);
+        if (t.grafted) t.branch.detach("widget");
+        this._tabs.delete(id);
+        this._strip.remove(id);
+        t.branch.dissolve();
+        this._show(this.active);
     }
 
     /** Its tabs' ids, in the order they stand on its bar. */
@@ -138,8 +176,13 @@ class MultiTabPane extends SimpleComponent {
         this._note.text = words == null ? "" : String(words);
     }
 
-    /** It and everything on its branch go together; what its tabs show is its caller's. */
-    dispose() { this._strip.dispose(); this.branch.dissolve(); }
+    /** It and everything on its branch go together; what its tabs show is its caller's: let go, first. */
+    dispose() {
+        this._tabs.forEach(function (t) { if (t.root !== null) t.pane.removeChild(t.root); if (t.grafted) t.branch.detach("widget"); });
+        this._tabs.clear();
+        this._strip.dispose();
+        this.branch.dissolve();
+    }
 
     /** Its bar's plus pressed, as its listener hears it: one more add asked. */
     _asked() { this._change("adds", this.adds + 1); }
@@ -150,11 +193,9 @@ class MultiTabPane extends SimpleComponent {
     /** A close asked of one of its bar's tabs, or a tab put in, as its listener hears it. */
     _closesNow(closes) { this._change("closes", closes); }
 
-    /** A tab in use: what it shows put in its slot - the only thing there - or the slot empty. */
+    /** A tab in use: its pane shown, every other hidden - none hidden, never detached; the slot empty while it holds none. */
     _show(id) {
-        var shown = this._shows.get(id) ?? null, slot = this._slot;
-        while (slot.firstChild) slot.removeChild(slot.firstChild);
-        if (shown !== null) slot.appendChild(shown);
-        css.toggleClass(slot, mtp_empty, shown === null);
+        this._tabs.forEach(function (t, tid) { css.toggleClass(t.pane, mtp_tab_content_hidden, tid !== id); });
+        css.toggleClass(this._slot, mtp_empty, this._tabs.size === 0);
     }
 }

@@ -1,6 +1,9 @@
 // =============================================================================
 // TabStrip — the bar over a multi-tab pane: a chip for each tab it holds, then
-// its one plus. Ported (RFC 0071) a step at a time. The bar owns its chips
+// its one plus. Ported (RFC 0071) a step at a time. Which tabs it holds is its
+// owner's to say, one at a time - add(tab), remove(id) (owner, 22 Oct): a tab
+// put in is the one in use; a tab in use taken out hands over to the one now in
+// its place, else the one before; the last may go. The bar owns its chips
 // (owner, 22 Oct): it makes them, and every move of theirs is its own - a press
 // on a chip makes it the one in use; held and moved along the bar, the chip
 // slides as a browser's tab does: it goes where the hand goes, the chips it
@@ -15,7 +18,8 @@
 // its owner's caller's to decide. Its count and its landing come as they are ported.
 //
 //   var strip = new TabStrip(branch.createBranch("bar"), new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), me.place(FixedTabStrip));
-//   strip.hold([{ id: "alpha", title: "Alpha", closable? }, ...])   the tabs it holds, once: the first in use
+//   strip.add({ id: "alpha", title: "Alpha", closable? })   a tab put in, at its end: the one in use
+//   strip.remove("alpha")   a tab taken out
 //   strip.onChange(StateActiveTab, listener)   another tab in use: its id before and after
 //   strip.onChange(StateTabOrder, listener)    its tabs in another order: before and after
 //   strip.onChange(StateTabCloseControl, listener)   a tab's close asked, or a tab put in: before and after
@@ -139,6 +143,9 @@ class TabStrip extends SimpleComponent {
     /** How far the hand moves a held chip before it is in the hand, in pixels: a press that wanders less is a press. */
     static DRAG_FROM = 4;
 
+    /** A tab's id: lower case words joined by a dash - its chip's branch is named for it. */
+    static ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
     constructor(branch, fixed, place) {
         if (!branch || typeof branch.elementMaker !== "function")
             throw new TypeError("[TabStrip] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
@@ -163,37 +170,50 @@ class TabStrip extends SimpleComponent {
     }
 
     /**
-     * The tabs it holds, given once, in order - each an id, a name of the tab's own, its title, and whether it can be
-     * closed, unless it cannot (closable: false): a chip made for each, before its plus, with its cross where it can be
-     * closed; each put in among the closes it holds, one change each; and the first in use. Taking tabs in and out comes
-     * with its own step.
+     * A tab put in, at its end, by its owner: its id - lower case words joined by a dash, none it holds - its title, and
+     * whether it can be closed, unless it cannot (closable: false). Its chip is made, before the plus, with its cross where
+     * it can be closed; the tab is put in its order and among its closes, one change each; and it is the one in use. A
+     * slide in progress is let go where it began, first.
      */
-    hold(tabs) {
-        if (this._chips.size > 0) throw new Error("[TabStrip] holds its tabs already: taking tabs in and out comes with its own step");
-        if (!Array.isArray(tabs) || tabs.length === 0) throw new TypeError("[TabStrip] holds tabs: a list of { id, title }, one at least");
-        var ids = tabs.map(function (t) { return t && t.id; });
-        if (!StateTabOrder.allows(ids)) throw new TypeError("[TabStrip] each tab's id a name, each once - not " + ids.join(", "));
-        if (!tabs.every(function (t) { return t.closable === undefined || typeof t.closable === "boolean"; }))
-            throw new TypeError("[TabStrip] whether a tab can be closed is true or false, or unsaid - it can");
-        for (var t of tabs) {
-            var closable = t.closable !== false;
-            var tab = new Tab(this.branch.createBranch("tab-" + t.id), new FixedTab(closable ? new FixedCloseButton() : null), this._place(FixedTab));
-            tab.title = t.title;
-            tab.onChange(StateHeld, new TabStripHeld(this, t.id));
-            if (closable) tab.onChange(StateChipCloseControl, new TabStripClose(this, t.id));
-            this.el.insertBefore(tab.el, this._plus.el);
-            this._chips.set(t.id, tab);
-        }
-        this._row = ids.slice();
-        this._change("order", ids);
-        for (var u of tabs) {   // each tab put in among the closes, one change each
-            this._closes.set(u.id, u.closable !== false ? { times: 0 } : null);
-            this._change("closes", this._closesNow());
-        }
-        this._select(ids[0]);
+    add(tab) {
+        var t = tab || {};
+        if (typeof t.id !== "string" || !TabStrip.ID.test(t.id)) throw new TypeError("[TabStrip] a tab's id is lower case words joined by a dash, not " + t.id);
+        if (this._chips.has(t.id)) throw new Error("[TabStrip] holds a tab " + t.id + " already");
+        if (t.closable !== undefined && typeof t.closable !== "boolean") throw new TypeError("[TabStrip] whether a tab can be closed is true or false, or unsaid - it can");
+        this._letGo();
+        var closable = t.closable !== false;
+        var chip = new Tab(this.branch.createBranch("tab-" + t.id), new FixedTab(closable ? new FixedCloseButton() : null), this._place(FixedTab));
+        chip.title = t.title;
+        chip.onChange(StateHeld, new TabStripHeld(this, t.id));
+        if (closable) chip.onChange(StateChipCloseControl, new TabStripClose(this, t.id));
+        this.el.insertBefore(chip.el, this._plus.el);
+        this._chips.set(t.id, chip);
+        this._row = this._row.concat([t.id]);
+        this._change("order", this._row);
+        this._closes.set(t.id, closable ? { times: 0 } : null);
+        this._change("closes", this._closesNow());
+        this._select(t.id);
     }
 
-    /** The tab in use, by its id; none before it holds any. */
+    /**
+     * A tab taken out, by its owner: its chip and everything on its branch gone; out of its order and its closes, one
+     * change each; and, were it in use, the one now in its place in use, else the one before - none when it was the last.
+     * A slide in progress is let go where it began, first.
+     */
+    remove(id) {
+        if (!this._chips.has(id)) throw new Error("[TabStrip] holds no tab " + id);
+        this._letGo();
+        var at = this._row.indexOf(id), was = this.active === id;
+        this._chips.get(id).dispose();
+        this._chips.delete(id);
+        this._row = this._row.filter(function (o) { return o !== id; });
+        this._change("order", this._row);
+        this._closes.delete(id);
+        this._change("closes", this._closesNow());
+        if (was) this._select(this._row[at] ?? this._row[at - 1] ?? null);
+    }
+
+    /** The tab in use, by its id; none while it holds none. */
     get active() { return this._get("active"); }
 
     /** Its tabs' ids, in the order they stand on it. */
@@ -265,9 +285,18 @@ class TabStrip extends SimpleComponent {
         this._slide.to(x);
     }
 
-    /** A tab made the one in use: its chip selected, every other not. */
+    /** A tab made the one in use: its chip selected, every other not - or none, none selected. */
     _select(id) {
         this._chips.forEach(function (tab, t) { tab.selected = t === id; });
-        this._change("active", id);
+        this._change("active", id === null ? "" : id);
+    }
+
+    /** A slide in progress let go where it began: the chips back, nothing arranged, no order told - its tabs are about to change. */
+    _letGo() {
+        var slide = this._slide;
+        this._grabbed = null;
+        this._slide = null;
+        this._behavior.drop();
+        if (slide !== null) slide.end();
     }
 }
