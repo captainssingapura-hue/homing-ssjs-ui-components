@@ -43,7 +43,9 @@ class TabStripAdd {
  * row - the press kept as an offset within it - never before the first chip's place nor past the last's; the place it is
  * nearest is where it will land, and the chips between its own place and that one step aside, one place over, eased by
  * their look. Let go, they are back at once - the row is about to be arranged, and none must be seen sliding to where it
- * already is - and the chip settles onto its place from where the hand left it, eased as its look eases it. Nothing is
+ * already is - and the chip settles onto its place from where the hand left it, eased as its look eases it, still lifted
+ * and above the others; only there is it put at rest (owner, 22 Oct: "moved to position first then put to at-rest") -
+ * at once, where there is nothing to ease, or when another chip is pressed or the tabs change meanwhile. Nothing is
  * placed by hand: the chip in the hand carries --mtp-drag-x, a chip stepping aside --mtp-shift-x, each read by the class
  * that places it. The bar's alone.
  */
@@ -63,6 +65,8 @@ class TabStripSlide {
         this._grab = x - this._slots[from].left;
         this._left = this._slots[from].left;
         this._chip = row[from];
+        this._easing = null;   // its settling, while it eases onto its place
+        this._rested = false;
         this._chip.dragging = true;
         css.addClass(this._chip.el, mtp_chip_dragging);   // lifted over the row along it: the bar's placing
         css.addClass(strip.el, mtp_strip_loose);   // nothing clipped meanwhile
@@ -77,23 +81,34 @@ class TabStripSlide {
         if (d !== this.dest) { this.dest = d; this._aside(d, false); }
     }
 
-    /** Let go: out of the hand, the others back at once; the place it lands at. */
+    /** Let go: no longer under the hand, the others back at once - but still lifted, above them; the place it lands at. */
     end() {
         this._chip.el.style.removeProperty("--mtp-drag-x");
         this._aside(this.from, true);
-        css.removeClass(this._chip.el, mtp_chip_dragging);
-        css.removeClass(this._strip.el, mtp_strip_loose);
-        this._chip.dragging = false;
         return this.dest;
     }
 
-    /** Once the row is arranged: from where the hand left it onto its place, eased as its look eases it. */
+    /**
+     * Once the row is arranged: from where the hand left it onto its place, eased as its look eases it - still lifted,
+     * above the others - and put at rest once there; at rest at once where there is nothing to ease.
+     */
     settle() {
-        var el = this._chip.el, dx = this._left - this._slots[this.dest].left;
-        if (!(Math.abs(dx) > 0.5) || typeof el.animate !== "function") return;
+        var el = this._chip.el, dx = this._left - this._slots[this.dest].left, self = this;
         var d = String(getComputedStyle(el).transitionDuration || "").split(",")[0].trim();
         var ms = d.endsWith("ms") ? parseFloat(d) : parseFloat(d) * 1000;
-        if (ms > 0) el.animate([{ translate: dx + "px 0" }, { translate: "0 0" }], { duration: ms, easing: "ease" });
+        if (!(Math.abs(dx) > 0.5) || !(ms > 0) || typeof el.animate !== "function") { this.rest(); return; }
+        this._easing = el.animate([{ translate: dx + "px 0" }, { translate: "0 0" }], { duration: ms, easing: "ease" });
+        this._easing.onfinish = function () { self._easing = null; self.rest(); };
+    }
+
+    /** At rest, once: out of the hand, its lift and its place over the row given up, the bar no longer loose - its easing, if any is left, over at once. */
+    rest() {
+        if (this._rested) return;
+        this._rested = true;
+        if (this._easing !== null) { this._easing.onfinish = null; this._easing.cancel(); this._easing = null; }
+        css.removeClass(this._chip.el, mtp_chip_dragging);
+        css.removeClass(this._strip.el, mtp_strip_loose);
+        this._chip.dragging = false;
     }
 
     /** The chips between its place and `to`, one place over; the rest where they stand - at once, the drag over. */
@@ -159,6 +174,7 @@ class TabStrip extends SimpleComponent {
         this._row = [];   // its tabs' ids as its chips stand now, a drag moving them
         this._grabbed = null;   // the id of the chip held, or none
         this._slide = null;   // its slide, once the chip held has moved past its start
+        this._settling = null;   // the slide let go, its chip easing onto its place until it is at rest
         // its one plus: an icon button, its face the icon its fixed object holds - the add icon
         var plus = this.fixed.voidRole;
         this._plus = new IconButton(branch.createBranch("plus"), plus, this._place(plus));
@@ -229,7 +245,7 @@ class TabStrip extends SimpleComponent {
     set current(on) { this._set("current", !!on); }
 
     /** It and everything on its branch go together. */
-    dispose() { this._behavior.drop(); this.branch.dissolve(); }
+    dispose() { this._letGo(); this.branch.dissolve(); }
 
     /** Its plus pressed, as its listener hears it: one more add asked. */
     _asked() { this._change("adds", this.adds + 1); }
@@ -249,13 +265,14 @@ class TabStrip extends SimpleComponent {
 
     /** A chip held: made the one in use, and grabbed - the hand's moves heard until it lets go. */
     _pressed(id) {
+        this._rest();
         this._select(id);
         this._grabbed = id;
         this._slide = null;
         this._behavior.grab();
     }
 
-    /** A chip let go: slid, it lands on the place it is nearest - the row arranged, the chip settling onto it - and its order is told, if it changed. */
+    /** A chip let go: slid, it lands on the place it is nearest - the row arranged, the chip settling onto it, at rest once there - and its order is told, if it changed. */
     _released(id) {
         if (this._grabbed !== id) return;
         var slide = this._slide;
@@ -270,8 +287,16 @@ class TabStrip extends SimpleComponent {
             this._row = row;
             this.el.insertBefore(this._chips.get(id).el, to + 1 < row.length ? this._chips.get(row[to + 1]).el : this._plus.el);
         }
+        this._settling = slide;
         slide.settle();
         this._change("order", this._row);
+    }
+
+    /** A chip settling put at rest at once: another pressed, or its tabs about to change. */
+    _rest() {
+        var settling = this._settling;
+        this._settling = null;
+        if (settling !== null) settling.rest();
     }
 
     /** The hand moved, a chip held: past its start, the chip slides - lifted where it lies, under the hand from then on. */
@@ -291,12 +316,13 @@ class TabStrip extends SimpleComponent {
         this._change("active", id === null ? "" : id);
     }
 
-    /** A slide in progress let go where it began: the chips back, nothing arranged, no order told - its tabs are about to change. */
+    /** A slide in progress let go where it began, and a chip settling, at rest at once: the chips back, nothing arranged, no order told - its tabs are about to change. */
     _letGo() {
         var slide = this._slide;
         this._grabbed = null;
         this._slide = null;
         this._behavior.drop();
-        if (slide !== null) slide.end();
+        this._rest();
+        if (slide !== null) { slide.end(); slide.rest(); }
     }
 }
