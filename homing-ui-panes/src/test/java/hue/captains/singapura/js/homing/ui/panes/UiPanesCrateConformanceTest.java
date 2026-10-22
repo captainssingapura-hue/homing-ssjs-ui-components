@@ -62,7 +62,7 @@ class UiPanesCrateConformanceTest {
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
         // the bar ported a step at a time (22 Oct): what its old chips, count, cross and drag wore waits for their port - and,
         // its chips ported with neither, the icon a chip held and its cross, each with its own step
-        var waiting = java.util.Set.of("mtp_rail", "mtp_strip_loose", "mtp_strip_tail", "mtp_bar_close", "mtp_pill", "mtp_drop_mark", "mtp_chip_shifted", "mtp_chip_dragging",
+        var waiting = java.util.Set.of("mtp_rail", "mtp_strip_tail", "mtp_bar_close", "mtp_pill", "mtp_drop_mark",
                 "mtp_chip_icon", "mtp_chip_icon_on", "mtp_chip_close");
         var unimported = new java.util.TreeSet<String>();
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses())

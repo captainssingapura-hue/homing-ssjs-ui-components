@@ -14,7 +14,8 @@ import java.util.List;
 
 /**
  * {@code TabStrip}, the bar over a multi-tab pane, ported a step at a time (RFC 0071): a chip for each tab it holds -
- * its own, made by it, pressed to be the one in use and dragged along it - and its one plus, a regular button, the
+ * its own, made by it, pressed to be the one in use and slid along it as a browser's tab is, the chips it passes stepping
+ * aside, eased - and its one plus, a regular button, the
  * house's icon button. Its chips' states are its own (owner, 22 Oct): its owner hears which tab is in use
  * ({@code ActiveTab}), the order of its tabs once a drag has changed it ({@code TabOrder}), and its plus's presses,
  * passed on as its {@code TabAddControl}, handling none. Its count and its landing come as they are ported.
@@ -34,8 +35,10 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripBehaviorModule.TabStripBehavior()), TabStripBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabDragModule.TabDrag()), TabDragModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton()), IconButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_strip(), new PaneStyles.mtp_rail_add()), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_strip(), new PaneStyles.mtp_rail_add(), new PaneStyles.mtp_strip_loose(),
+                        new PaneStyles.mtp_chip_dragging(), new PaneStyles.mtp_chip_shifted()), PaneStyles.INSTANCE))
                 .build();
     }
 

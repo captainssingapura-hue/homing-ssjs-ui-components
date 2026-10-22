@@ -2,8 +2,10 @@
 // TabStrip — the bar over a multi-tab pane: a chip for each tab it holds, then
 // its one plus. Ported (RFC 0071) a step at a time. The bar owns its chips
 // (owner, 22 Oct): it makes them, and every move of theirs is its own - a press
-// on a chip makes it the one in use; held and moved along the bar, the chip is
-// in the hand and the others make way, and let go it stays where it is. Its
+// on a chip makes it the one in use; held and moved along the bar, the chip
+// slides as a browser's tab does: it goes where the hand goes, the chips it
+// passes step aside, eased by their look, and let go it settles onto the place
+// it is nearest. Its
 // chips' states are its business alone: what its owner hears are the bar's own
 // changes - which tab is in use (ActiveTab), the order of its tabs (TabOrder),
 // told once a drag ends, if it changed anything - and the adds asked of it, its
@@ -27,6 +29,78 @@ class TabStripAdd {
     constructor(strip) { this._strip = strip; Object.freeze(this); }
     canHandle(type) { return type === StateClicks; }
     handle() { this._strip._asked(); }
+}
+
+/**
+ * A chip slid along its bar, as a browser's tab bar slides one: lifted where it lies, it goes where the hand goes along the
+ * row - the press kept as an offset within it - never before the first chip's place nor past the last's; the place it is
+ * nearest is where it will land, and the chips between its own place and that one step aside, one place over, eased by
+ * their look. Let go, they are back at once - the row is about to be arranged, and none must be seen sliding to where it
+ * already is - and the chip settles onto its place from where the hand left it, eased as its look eases it. Nothing is
+ * placed by hand: the chip in the hand carries --mtp-drag-x, a chip stepping aside --mtp-shift-x, each read by the class
+ * that places it. The bar's alone.
+ */
+class TabStripSlide {
+    /**
+     * @param strip the bar
+     * @param row   its chips, as they stand
+     * @param from  the place of the chip slid
+     * @param x     where the hand went down on it
+     */
+    constructor(strip, row, from, x) {
+        this._strip = strip;
+        this._row = row;
+        this._slots = row.map(function (c) { var r = c.el.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; });
+        this.from = from;
+        this.dest = from;
+        this._grab = x - this._slots[from].left;
+        this._left = this._slots[from].left;
+        this._chip = row[from];
+        this._chip.dragging = true;
+        css.addClass(this._chip.el, mtp_chip_dragging);   // lifted over the row along it: the bar's placing
+        css.addClass(strip.el, mtp_strip_loose);   // nothing clipped meanwhile
+    }
+
+    /** The hand at x: the chip under it, within the row; the chips between its place and the one it is nearest, aside. */
+    to(x) {
+        var slots = this._slots;
+        this._left = TabDrag.clamp(x - this._grab, slots, 0);
+        this._chip.el.style.setProperty("--mtp-drag-x", (this._left - slots[this.from].left) + "px");
+        var d = TabDrag.dest(this._left, slots, 0);
+        if (d !== this.dest) { this.dest = d; this._aside(d, false); }
+    }
+
+    /** Let go: out of the hand, the others back at once; the place it lands at. */
+    end() {
+        this._chip.el.style.removeProperty("--mtp-drag-x");
+        this._aside(this.from, true);
+        css.removeClass(this._chip.el, mtp_chip_dragging);
+        css.removeClass(this._strip.el, mtp_strip_loose);
+        this._chip.dragging = false;
+        return this.dest;
+    }
+
+    /** Once the row is arranged: from where the hand left it onto its place, eased as its look eases it. */
+    settle() {
+        var el = this._chip.el, dx = this._left - this._slots[this.dest].left;
+        if (!(Math.abs(dx) > 0.5) || typeof el.animate !== "function") return;
+        var d = String(getComputedStyle(el).transitionDuration || "").split(",")[0].trim();
+        var ms = d.endsWith("ms") ? parseFloat(d) : parseFloat(d) * 1000;
+        if (ms > 0) el.animate([{ translate: dx + "px 0" }, { translate: "0 0" }], { duration: ms, easing: "ease" });
+    }
+
+    /** The chips between its place and `to`, one place over; the rest where they stand - at once, the drag over. */
+    _aside(to, over) {
+        var pitch = TabDrag.pitch(this._slots);
+        for (var j = 0; j < this._row.length; j++) {
+            if (j === this.from) continue;
+            var s = TabDrag.shift(j, this.from, to), el = this._row[j].el;
+            if (s !== 0) { css.addClass(el, mtp_chip_shifted); el.style.setProperty("--mtp-shift-x", (s * pitch) + "px"); continue; }
+            css.removeClass(el, mtp_chip_shifted);
+            el.style.removeProperty("--mtp-shift-x");
+            if (over && typeof el.getAnimations === "function") el.getAnimations().forEach(function (a) { a.cancel(); });   // whatever it eased towards, it is there now
+        }
+    }
 }
 
 /** One of its chips held, or let go: told to the strip, by the chip's tab id. */
@@ -65,6 +139,7 @@ class TabStrip extends SimpleComponent {
         this._chips = new Map();   // its tabs' ids to their chips: its own
         this._row = [];   // its tabs' ids as its chips stand now, a drag moving them
         this._grabbed = null;   // the id of the chip held, or none
+        this._slide = null;   // its slide, once the chip held has moved past its start
         // its one plus: an icon button, its face the icon its fixed object holds - the add icon
         var plus = this.fixed.voidRole;
         this._plus = new IconButton(branch.createBranch("plus"), plus, this._place(plus));
@@ -118,36 +193,38 @@ class TabStrip extends SimpleComponent {
     _pressed(id) {
         this._select(id);
         this._grabbed = id;
+        this._slide = null;
         this._behavior.grab();
     }
 
-    /** A chip let go: out of the hand where it stands, and its order told if the drag changed it. */
+    /** A chip let go: slid, it lands on the place it is nearest - the row arranged, the chip settling onto it - and its order is told, if it changed. */
     _released(id) {
         if (this._grabbed !== id) return;
+        var slide = this._slide;
         this._grabbed = null;
+        this._slide = null;
         this._behavior.drop();
-        this._chips.get(id).dragging = false;
+        if (slide === null) return;
+        var to = slide.end();
+        if (to !== slide.from) {
+            var row = this._row.filter(function (o) { return o !== id; });
+            row.splice(to, 0, id);
+            this._row = row;
+            this.el.insertBefore(this._chips.get(id).el, to + 1 < row.length ? this._chips.get(row[to + 1]).el : this._plus.el);
+        }
+        slide.settle();
         this._change("order", this._row);
     }
 
-    /**
-     * The hand moved, a chip held: past its start, the chip is in the hand; and it stands among the others where the
-     * hand is - after each whose middle the hand has passed.
-     */
+    /** The hand moved, a chip held: past its start, the chip slides - lifted where it lies, under the hand from then on. */
     _dragTo(x, moved) {
-        var id = this._grabbed;
-        if (id === null) return;
-        var chip = this._chips.get(id), chips = this._chips;
-        if (!chip.dragging) {
+        if (this._grabbed === null) return;
+        if (this._slide === null) {
             if (Math.abs(moved) < TabStrip.DRAG_FROM) return;
-            chip.dragging = true;
+            var chips = this._chips;
+            this._slide = new TabStripSlide(this, this._row.map(function (o) { return chips.get(o); }), this._row.indexOf(this._grabbed), x - moved);
         }
-        var others = this._row.filter(function (o) { return o !== id; });
-        var at = others.filter(function (o) { var r = chips.get(o).el.getBoundingClientRect(); return x > r.left + r.width / 2; }).length;
-        if (at === this._row.indexOf(id)) return;
-        others.splice(at, 0, id);
-        this._row = others;
-        this.el.insertBefore(chip.el, at + 1 < others.length ? chips.get(others[at + 1]).el : this._plus.el);
+        this._slide.to(x);
     }
 
     /** A tab made the one in use: its chip selected, every other not. */
