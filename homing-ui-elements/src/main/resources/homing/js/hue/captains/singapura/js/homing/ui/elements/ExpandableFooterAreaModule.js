@@ -34,7 +34,7 @@ class ExpandableFooterArea extends SimpleComponent {
     });
     static BEHAVIOR = ExpandableFooterAreaBehavior;
     /** How long the pointer rests on it before it opens, and how long after the last reason before it closes. */
-    static OPEN_MS = 300;
+    static OPEN_MS = 150;   // quick to answer the pointer (owner, 23 Oct): a rest, not a wait
     static CLOSE_MS = 400;
 
     constructor(branch, fixed, place) {
