@@ -29,6 +29,7 @@ public record Components() implements DualTree<Taxon> {
         return node instanceof ComponentBranch ? "new ComponentBranch(" + token + ", " + parent + ")"
                 : "new Component(" + token + ", " + parent + ", " + (node instanceof Composite<?>) + ")";
     }
+    @Override public List<String> valuesKit() { return FixedValuesKit.INSTANCE.classes(); }
     @Override public List<String> kit() { return List.of("ComponentBranch", "Component", "Fixed", "FixedField", "Count", "Room"); }
 
     /**

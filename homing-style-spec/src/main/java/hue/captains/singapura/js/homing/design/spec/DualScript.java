@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
+import hue.captains.singapura.js.homing.design.spec.dual.FixedValuesKit;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
@@ -23,6 +24,8 @@ public record DualScript() implements StatelessFunctionalObject {
         lines.add("// The JS dual of the " + dual.tree().name() + " tree (RFC 0071), generated from Java: the " + dual.nodes().size() + " of its "
                 + dual.inTree() + " nodes the registered components' declarations use, and those above them.");
         lines.add("import { " + String.join(", ", dual.tree().kit()) + " } from " + JsLiterals.INSTANCE.string(DualKit.INSTANCE.address()) + ";");
+        if (!dual.tree().valuesKit().isEmpty())
+            lines.add("import { " + String.join(", ", dual.tree().valuesKit()) + " } from " + JsLiterals.INSTANCE.string(FixedValuesKit.INSTANCE.address()) + ";");
         var refs = new LinkedHashMap<String, DualRef.Ref>();
         for (TreeDual.Node n : dual.nodes()) for (Object o : n.refers()) { DualRef.Ref r = DualRef.INSTANCE.of(o); refs.putIfAbsent(r.imported(), r); }
         for (DualTree<?> other : ReadDual.INSTANCE.trees()) {

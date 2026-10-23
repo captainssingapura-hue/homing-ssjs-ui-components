@@ -50,6 +50,9 @@ public sealed interface DualTree<N> extends StatelessFunctionalObject permits Co
     /** The kit's classes its dual is made with ({@link DualKit}). */
     List<String> kit();
 
+    /** The classes of the values' kit its nodes' companions are made with: a fixed type's values; none by default. */
+    default List<String> valuesKit() { return List.of(); }
+
     /** What its dual declares beside a node, exported under its own name: none, unless the tree says. */
     default List<TreeDual.Companion> companions(Registration registration, N node) { return List.of(); }
 

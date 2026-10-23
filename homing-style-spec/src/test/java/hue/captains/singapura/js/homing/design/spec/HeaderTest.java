@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.design.spec.dual.DualKit;
+import hue.captains.singapura.js.homing.design.spec.dual.FixedValuesKit;
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
 import hue.captains.singapura.js.homing.design.spec.dual.Registration;
 import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
@@ -32,13 +33,18 @@ class HeaderTest {
     /** Where the test says the page's style manager is. */
     private static final PageStyleManager PAGE = new PageStyleManager("/module?class=hue.captains.singapura.js.homing.design.spec.page.PageStyles");
 
-    /** Every object a module makes is made by one of the kit's constructors, each one the module imports; none made by hand. */
+    /**
+     * Every object a module makes is made by one of the kit's constructors - or the values' kit's - each one the module
+     * imports from its kit; none made by hand.
+     */
     private static void madeByTheKit(String who, String script, List<String> problems) {
         String kitImport = script.lines().filter(l -> l.startsWith("import ") && l.contains(DualKit.INSTANCE.address())).findFirst().orElse("");
+        String valuesImport = script.lines().filter(l -> l.startsWith("import ") && l.contains(FixedValuesKit.INSTANCE.address())).findFirst().orElse("");
         for (Matcher m = MADE.matcher(script); m.find(); ) {
             String c = m.group(1);
-            if (!DualKit.INSTANCE.classes().contains(c)) problems.add(who + ": makes a " + c + ", no class of the kit's");
-            else if (!kitImport.matches(".*[{ ,]" + c + "[ ,}].*")) problems.add(who + ": makes a " + c + " it does not import");
+            boolean kit = DualKit.INSTANCE.classes().contains(c), values = FixedValuesKit.INSTANCE.classes().contains(c);
+            if (!kit && !values) problems.add(who + ": makes a " + c + ", no class of the kit's");
+            else if (!(kit ? kitImport : valuesImport).matches(".*[{ ,]" + c + "[ ,}].*")) problems.add(who + ": makes a " + c + " it does not import");
         }
         if (script.contains("Object.freeze(")) problems.add(who + ": an object made by hand");
     }
@@ -167,6 +173,7 @@ class HeaderTest {
         var out = java.nio.file.Path.of("target/js");
         java.nio.file.Files.createDirectories(out);
         java.nio.file.Files.writeString(out.resolve(DualKit.class.getCanonicalName() + ".js"), DualKit.INSTANCE.script());
+        java.nio.file.Files.writeString(out.resolve(FixedValuesKit.class.getCanonicalName() + ".js"), FixedValuesKit.INSTANCE.script());
         for (TreeDual d : duals().values())
             java.nio.file.Files.writeString(out.resolve(d.tree().getClass().getCanonicalName() + ".js"), DualScript.INSTANCE.script(d));
         int headers = 0;

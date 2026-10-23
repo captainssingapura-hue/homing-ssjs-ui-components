@@ -16,6 +16,7 @@
 // its least, never past what holds it - and nothing told.
 //
 //   var pane = new FloatingPane(branch.createBranch("notes"), new FixedFloatingPane(new FixedTitleBar(new FixedLabel(), null, new FixedCloseButton())));
+//   new FixedFloatingPane(head, { size: { least: { w: 200, h: 120 }, most: { w: 900 } } })   its size's bounds, immutable; left out, 160 x 96 and no most
 //   pane.title = "Notes"     its head's title, or its head's chip's name
 //   pane.at(40, 30)  pane.size(320, 200)  pane.z = 2  pane.bounds → { x, y, w, h }
 //   pane.mount(root, party?)  what it shows: a widget's root in its body, the widget's branch of the page grafted
@@ -61,9 +62,8 @@ class FloatingPane extends SimpleComponent {
 
     /** How far the hand moves the head before the pane is in the hand, in pixels: a press that wanders less is a press. */
     static DRAG_FROM = 3;
-    /** How much of its head stays within what holds it, inline, and how little it may be, in pixels. */
+    /** How much of its head stays within what holds it, inline, in pixels. */
     static KEEP = 48;
-    static LEAST = Object.freeze({ w: 160, h: 96 });
     /** The sides it is sized from, each a handle: its edges, then its corners. */
     static SIDES = Object.freeze(["n", "s", "e", "w", "ne", "nw", "se", "sw"]);
     static _HANDLE = Object.freeze({ n: fp_size_n, s: fp_size_s, e: fp_size_e, w: fp_size_w, ne: fp_size_ne, nw: fp_size_nw, se: fp_size_se, sw: fp_size_sw });
@@ -73,6 +73,10 @@ class FloatingPane extends SimpleComponent {
             throw new TypeError("[FloatingPane] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_floatingPaneOwner);
         super(branch.elementMaker("frame"), fixed, FixedFloatingPane, place ?? manageFloatingPane);
+        // its size's bounds, its fixed object's: immutable for its life, its most none or at least its least
+        var size = this.fixed.size;
+        if ((size.most.w !== null && size.most.w < size.least.w) || (size.most.h !== null && size.most.h < size.least.h))
+            throw new RangeError("[FloatingPane] its most size is at least its least: " + JSON.stringify(size));
         this.branch = branch;
         css.addClass(this.el, fp_frame);
         // its head, where its fixed object holds one: the house's title bar, which it moves by
@@ -117,10 +121,11 @@ class FloatingPane extends SimpleComponent {
     /** Its place within what holds it, kept so that some of its head stays within it. */
     at(x, y) { this._box.x = Number(x) || 0; this._box.y = Number(y) || 0; this._keep(); this._write(); return this; }
 
-    /** Its measure, never under its least. */
+    /** Its measure, never under its least nor over its most. */
     size(w, h) {
-        this._box.w = Math.max(FloatingPane.LEAST.w, Number(w) || 0);
-        this._box.h = Math.max(FloatingPane.LEAST.h, Number(h) || 0);
+        var least = this.fixed.size.least, most = this.fixed.size.most;
+        this._box.w = Math.max(least.w, Math.min(Number(w) || 0, most.w ?? Infinity));
+        this._box.h = Math.max(least.h, Math.min(Number(h) || 0, most.h ?? Infinity));
         this._keep();
         this._write();
         return this;
@@ -190,18 +195,19 @@ class FloatingPane extends SimpleComponent {
 
     /**
      * The hand moved, a handle held - by how much since it went down: the sides the handle is on follow it, the others kept;
-     * never under its least, never past what holds it, once that has a size. Nothing told: a widget that cares watches its
-     * own size.
+     * never under its least nor over its most, never past what holds it, once that has a size. Nothing told: a widget that
+     * cares watches its own size.
      */
     _sized(dx, dy) {
         var g = this._sizing;
         if (g === null) return;
-        var least = FloatingPane.LEAST, holder = this.el.offsetParent, b = this._box;
+        var least = this.fixed.size.least, mw = this.fixed.size.most.w ?? Infinity, mh = this.fixed.size.most.h ?? Infinity;
+        var holder = this.el.offsetParent, b = this._box, right = g.x + g.w, foot = g.y + g.h;
         var W = holder && holder.clientWidth > 0 ? holder.clientWidth : Infinity, H = holder && holder.clientHeight > 0 ? holder.clientHeight : Infinity;
-        if (g.side.includes("e")) b.w = Math.max(least.w, Math.min(g.w + dx, W - g.x));
-        if (g.side.includes("w")) { var left = Math.max(0, Math.min(g.x + dx, g.x + g.w - least.w)); b.w = g.x + g.w - left; b.x = left; }
-        if (g.side.includes("s")) b.h = Math.max(least.h, Math.min(g.h + dy, H - g.y));
-        if (g.side.includes("n")) { var top = Math.max(0, Math.min(g.y + dy, g.y + g.h - least.h)); b.h = g.y + g.h - top; b.y = top; }
+        if (g.side.includes("e")) b.w = Math.max(least.w, Math.min(g.w + dx, mw, W - g.x));
+        if (g.side.includes("w")) { var left = Math.max(0, right - mw, Math.min(g.x + dx, right - least.w)); b.w = right - left; b.x = left; }
+        if (g.side.includes("s")) b.h = Math.max(least.h, Math.min(g.h + dy, mh, H - g.y));
+        if (g.side.includes("n")) { var top = Math.max(0, foot - mh, Math.min(g.y + dy, foot - least.h)); b.h = foot - top; b.y = top; }
         this._write();
     }
 

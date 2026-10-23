@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec.dual;
 
+import hue.captains.singapura.js.homing.design.spec.JsLiterals;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.List;
  * a branch or a leaf of each tree, an extent, a path, a style - one for a slot and one for its count, and the one every
  * component's fixed type extends (D30). Each instance is made by its
  * constructor, which checks what it is given - a token a token, a parent a branch of its own tree, a slot's owner a
- * composite - and frozen. Nothing in a dual or a header is an object made by hand.
+ * composite - and frozen. Nothing in a dual or a header is an object made by hand. The checks of a fixed type's values
+ * are a kit of their own, {@link FixedValuesKit}.
  */
 public record DualKit() implements StatelessFunctionalObject {
 
@@ -27,7 +29,7 @@ public record DualKit() implements StatelessFunctionalObject {
 
     /** Its module. */
     public String script() {
-        return """
+        return "import { FixedGroup } from " + JsLiterals.INSTANCE.string(FixedValuesKit.INSTANCE.address()) + ";\n" + """
                 // The kit every tree's JS dual and every header is made with (RFC 0071): one class for each kind of node, a
                 // slot and its count - each instance checked as it is made, and frozen. Generated from Java; not to be edited.
                 const TOKEN = /^[a-z][a-z0-9-]*$/;
@@ -275,7 +277,8 @@ public record DualKit() implements StatelessFunctionalObject {
                 // what it is given. Its fields are its type's FIELDS, derived from the component's static parts (RFC 0071
                 // port, question 5): each a part's choice, in its owner's order - one fixed object of a player's, or none
                 // where the part is optional; as many as its count, as a list. A component with nothing fixed has a type with
-                // no fields, refusing any argument.
+                // no fields, refusing any argument. After its fields, its values, where its type has any (VALUES, a FixedGroup):
+                // one plain object, or nothing for every default - each one checked, frozen, and kept on it by its name.
                 class Fixed {
                     constructor(component, given) {
                         if (new.target === Fixed) throw new TypeError("Fixed: made only as a component's own fixed type");
@@ -283,9 +286,11 @@ public record DualKit() implements StatelessFunctionalObject {
                         if (new.target.COMPONENT !== component) throw new TypeError(new.target.name + ": says it is the fixed type of " + (new.target.COMPONENT && new.target.COMPONENT.token) + ", and is made as " + component.token + "'s");
                         const fields = new.target.FIELDS ?? [];
                         if (!Array.isArray(fields) || !fields.every(f => f instanceof FixedField)) throw new TypeError(new.target.name + ": its FIELDS, each a FixedField");
-                        if (fields.length === 0 && given.length !== 0) throw new TypeError(new.target.name + ": " + component.token + " has nothing fixed - its fixed object has no fields");
-                        if (given.length !== fields.length)
-                            throw new TypeError(new.target.name + ": its fields are " + fields.map(f => f.name).join(", ") + " - " + fields.length + ", given " + given.length);
+                        const values = new.target.VALUES ?? null;
+                        if (values !== null && !(values instanceof FixedGroup)) throw new TypeError(new.target.name + ": its VALUES, a FixedGroup");
+                        if (fields.length === 0 && values === null && given.length !== 0) throw new TypeError(new.target.name + ": " + component.token + " has nothing fixed - its fixed object has no fields");
+                        if (given.length !== fields.length && !(values !== null && given.length === fields.length + 1))
+                            throw new TypeError(new.target.name + ": its fields are " + fields.map(f => f.name).join(", ") + " - " + fields.length + (values !== null ? ", then its values" : "") + ", given " + given.length);
                         fields.forEach((f, i) => {
                             const players = f.players(), value = given[i];
                             const played = v => players.some(P => v instanceof P);
@@ -301,6 +306,13 @@ public record DualKit() implements StatelessFunctionalObject {
                                 this[f.name] = Object.freeze([...value]);
                             }
                         });
+                        if (values !== null) {
+                            const kept = values.take(given[fields.length], new.target.name);
+                            for (const name of Object.keys(kept)) {
+                                if (fields.some(f => f.name === name)) throw new TypeError(new.target.name + ": its value " + name + " is named as one of its fields");
+                                this[name] = kept[name];
+                            }
+                        }
                         Object.freeze(this);
                     }
                 }

@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
+import hue.captains.singapura.js.homing.component.taxonomy.FixedValue;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
@@ -27,6 +28,11 @@ import java.util.Set;
  * object); and a part that leaves no choice of its own but whose own fixed type has fields, nested. A dynamic part has
  * no field: its owner makes and drops it while it lives. A component whose static parts leave nothing to choose has a
  * type with no fields, refusing any argument.</p>
+ *
+ * <p>After its fields, its values (owner, 23 Oct): what it is made with that is no part's choice, declared by the
+ * component itself, immutable for its life - one plain object after its fields, or nothing for every default, checked
+ * and frozen by the kit. A part whose own type has values leaves a choice as one with fields does: its owner's type has a
+ * field for it. A value is never named as a field.</p>
  */
 public record FixedTypes() implements StatelessFunctionalObject {
 
@@ -67,7 +73,7 @@ public record FixedTypes() implements StatelessFunctionalObject {
             if (count.dynamic()) continue;
             List<Component<?>> players = new ArrayList<>(p.bases());
             boolean several = players.size() > 1;
-            boolean nested = !several && !fields(taxonomy, players.get(0), new HashSet<>(above)).isEmpty();
+            boolean nested = !several && (!fields(taxonomy, players.get(0), new HashSet<>(above)).isEmpty() || !players.get(0).fixedValues().isEmpty());
             String name = JsLiterals.INSTANCE.camel(p.role().name().value());
             switch (count) {
                 case Cardinality.Fixed f -> { if (several || nested) out.add(new Field(name, f.count(), f.count(), players)); }
@@ -75,6 +81,8 @@ public record FixedTypes() implements StatelessFunctionalObject {
             }
         }
         above.remove(component);
+        for (FixedValue v : component.fixedValues())
+            if (out.stream().anyMatch(f -> f.name().equals(v.name()))) throw new IllegalArgumentException(component.token() + ": its value " + v.name() + " is named as one of its fields");
         return List.copyOf(out);
     }
 
@@ -94,6 +102,22 @@ public record FixedTypes() implements StatelessFunctionalObject {
         String declared = fields.isEmpty() ? "" : "static FIELDS = [" + String.join(", ", fields.stream().map(f -> "new FixedField("
                 + js.string(f.name()) + ", new Count(" + f.least() + ", " + (f.most() == null ? "null" : f.most()) + "), () => ["
                 + String.join(", ", f.players().stream().map(this::name).toList()) + "])").toList()) + "]; ";
+        List<FixedValue> values = component.fixedValues();
+        if (!values.isEmpty()) declared += "static VALUES = " + value(new FixedValue.Group("values", values)) + "; ";
         return new TreeDual.Companion(n, "class " + n + " extends Fixed { static COMPONENT = " + node + "; " + declared + "constructor(...given) { super(" + node + ", given); } }");
+    }
+
+    /** A value as the kit checks it: {@code new FixedWhole("w", 160, false)}, a group's values within it. */
+    private String value(FixedValue v) {
+        var js = JsLiterals.INSTANCE;
+        return switch (v) {
+            case FixedValue.Whole w -> "new FixedWhole(" + js.string(w.name()) + ", " + w.byDefault() + ", " + w.orNone() + ")";
+            case FixedValue.YesNo y -> "new FixedYesNo(" + js.string(y.name()) + ", " + y.byDefault() + ", " + y.orNone() + ")";
+            case FixedValue.Text t -> "new FixedText(" + js.string(t.name()) + ", " + (t.byDefault() == null ? "null" : js.string(t.byDefault())) + ", " + t.orNone() + ")";
+            case FixedValue.OneOf o -> "new FixedOneOf(" + js.string(o.name()) + ", [" + String.join(", ", o.names().stream().map(js::string).toList()) + "], "
+                    + (o.byDefault() == null ? "null" : js.string(o.byDefault())) + ", " + o.orNone() + ")";
+            case FixedValue.Element e -> "new FixedElement(" + js.string(e.name()) + ")";
+            case FixedValue.Group g -> "new FixedGroup(" + js.string(g.name()) + ", [" + String.join(", ", g.values().stream().map(this::value).toList()) + "])";
+        };
     }
 }

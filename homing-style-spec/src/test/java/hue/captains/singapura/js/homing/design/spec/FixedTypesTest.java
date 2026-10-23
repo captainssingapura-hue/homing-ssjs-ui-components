@@ -63,6 +63,14 @@ class FixedTypesTest {
                 FIXED.companion(HOUSE, HouseItems.ChoiceOption.INSTANCE, "ChoiceOption").declaration());
     }
 
+    @Test
+    void itsValues_saidAfterItsFields_asTheKitChecksThem() {
+        String d = FIXED.companion(HOUSE, HouseContainers.FloatingPane.INSTANCE, "FloatingPane").declaration();
+        assertTrue(d.contains("static VALUES = new FixedGroup(\"values\", [new FixedGroup(\"size\", [new FixedGroup(\"least\", [new FixedWhole(\"w\", 160, false), "
+                + "new FixedWhole(\"h\", 96, false)]), new FixedGroup(\"most\", [new FixedWhole(\"w\", null, true), new FixedWhole(\"h\", null, true)])])]); "), d);
+        assertTrue(!FIXED.companion(HOUSE, HouseControls.PlainButton.INSTANCE, "PlainButton").declaration().contains("VALUES"), "no values, none said");
+    }
+
     private static List<String> said(Component<?> c) {
         return FIXED.fields(HOUSE, c).stream().map(f -> f.name() + " " + f.least() + ".." + (f.most() == null ? "*" : f.most()) + " "
                 + String.join("|", f.players().stream().map(Component::token).toList())).toList();

@@ -4,6 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
+import hue.captains.singapura.js.homing.component.taxonomy.FixedValue;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
 import hue.captains.singapura.js.homing.component.taxonomy.PartOnly;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
@@ -132,6 +133,12 @@ public final class HouseContainers {
         }
         /** Its body: the room what it shows is mounted in by its caller - its own, no part (23 Oct). */
         @Override public List<Room> rooms() { return List.of(new Room("body")); }
+        /** Its size's bounds, immutable for its life: never under its least, never over its most - none for no most (owner, 23 Oct). */
+        @Override public List<FixedValue> fixedValues() {
+            return List.of(new FixedValue.Group("size", List.of(
+                    new FixedValue.Group("least", List.of(new FixedValue.Whole("w", 160, false), new FixedValue.Whole("h", 96, false))),
+                    new FixedValue.Group("most", List.of(new FixedValue.Whole("w", null, true), new FixedValue.Whole("h", null, true))))));
+        }
     }
 
     /** The layer floating panes are stacked on: a desk of its own, recessed, or laid over what it is on. */
