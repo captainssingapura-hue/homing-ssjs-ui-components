@@ -91,7 +91,7 @@ class HouseControllabilityTest {
         for (String b : List.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "slider"))
             expected.put(b, "switchable");
         expected.put("edge-strip", "holdable");
-        expected.put("dialog", "modal-overlay");
+        expected.put("modal-window", "overlay");   // the dialog reduced: always modal, opened and closed (23 Oct)
         expected.put("context-menu", "overlay");
         expected.put("floating-pane", "placeable");
         expected.put("close-icon", "plain");   // a part only, shown in what holds it: nothing to control but its colour (D52)
@@ -114,7 +114,7 @@ class HouseControllabilityTest {
         assertEquals(List.of("colour", "size", "enabled"), optionsOf("danger-button"));
         assertEquals(List.of("size", "aspect"), optionsOf("clickable-card"));
         assertEquals(List.of("size"), optionsOf("summary-view"));
-        assertEquals(List.of("open-modal", "open", "close"), optionsOf("dialog").subList(optionsOf("dialog").size() - 3, optionsOf("dialog").size()));
+        assertEquals(List.of("open", "close"), optionsOf("modal-window").subList(optionsOf("modal-window").size() - 2, optionsOf("modal-window").size()));
     }
 
     private static List<String> optionsOf(String token) {

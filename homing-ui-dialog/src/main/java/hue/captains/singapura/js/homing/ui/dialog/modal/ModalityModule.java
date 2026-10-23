@@ -1,4 +1,4 @@
-package hue.captains.singapura.js.homing.ui.dialog;
+package hue.captains.singapura.js.homing.ui.dialog.modal;
 
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;

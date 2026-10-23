@@ -19,8 +19,8 @@ class WholeHouseControlsTest {
     static void theHousesInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling()); }
 
     @Test
-    void theDialog_isAModalOverlay() {
+    void theModalWindow_isAnOverlay() {   // the dialog reduced: always modal, opened and closed (23 Oct)
         String js = String.join("\n", ControlCatalogueModule.INSTANCE.selfContent(null)) + "\n" + String.join("\n", ControlLeavesModule.INSTANCE.selfContent(null));
-        assertTrue(java.util.regex.Pattern.compile("\\[\"modal-overlay\", \\[[^\\]]*\"dialog\"").matcher(js).find(), js);
+        assertTrue(java.util.regex.Pattern.compile("\\[\"overlay\", \\[[^\\]]*\"modal-window\"").matcher(js).find(), js);
     }
 }

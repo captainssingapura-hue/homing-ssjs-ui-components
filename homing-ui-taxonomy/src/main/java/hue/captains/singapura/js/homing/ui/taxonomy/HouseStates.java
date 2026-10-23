@@ -358,7 +358,7 @@ public final class HouseStates {
     }
 
     /**
-     * How many times its close was asked - a floating pane's, its head's close pressed: from none, each ask its going up.
+     * How many times its close was asked - a floating pane's, its head's close pressed; a modal window's, its window's: from none, each ask its going up.
      * What a close is, its caller decides; nothing it shows changes - no class (owner, 23 Oct).
      */
     public record FloatCloseControl() implements StateType<Counting> {
@@ -408,6 +408,16 @@ public final class HouseStates {
      */
     public record LayerCloseControl() implements StateType<Counting> {
         public static final LayerCloseControl INSTANCE = new LayerCloseControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
+    /**
+     * For each action a footer holds, how many times it was pressed: by the action's name, a count from none. Each change
+     * is one action's. What an action does, the footer's holder decides; nothing it shows changes - no class (owner, 23 Oct).
+     */
+    public record ActionControl() implements StateType<Counting> {
+        public static final ActionControl INSTANCE = new ActionControl();
         @Override public Counting parent() { return Counting.INSTANCE; }
         @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
     }
@@ -478,7 +488,7 @@ public final class HouseStates {
             Empty.INSTANCE,
             Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, TabCarry.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
-            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE, LayerCloseControl.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE, LayerCloseControl.INSTANCE, ActionControl.INSTANCE,
             DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, FloatOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }

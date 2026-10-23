@@ -13,7 +13,7 @@ import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.icons.IconModule;
-import hue.captains.singapura.js.homing.ui.dialog.DialogModule;
+import hue.captains.singapura.js.homing.ui.dialog.modal.ModalWindowModule;
 import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public record PreferencesButtonModule() implements DomModule<PreferencesButtonMo
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DialogModule.Dialog()), DialogModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ModalWindowModule.ModalWindow()), ModalWindowModule.INSTANCE))   // its script, unported, still makes the old dialog (23 Oct)
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

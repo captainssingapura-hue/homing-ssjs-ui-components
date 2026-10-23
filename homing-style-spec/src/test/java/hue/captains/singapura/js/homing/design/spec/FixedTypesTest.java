@@ -43,7 +43,7 @@ class FixedTypesTest {
         var face = FIXED.fields(HOUSE, HouseControls.IconButton.INSTANCE);
         assertEquals(1, face.size());
         assertTrue(face.get(0).single() && face.get(0).least() == 1 && face.get(0).players().size() == 22, "the icon button's face: one of the twenty icons");
-        assertEquals(List.of("window 1..1 floating-pane", "actions 0..1 action-bar"), said(HouseContainers.Dialog.INSTANCE),
+        assertEquals(List.of("window 1..1 floating-pane"), said(HouseContainers.ModalWindow.INSTANCE),
                 "its veil dynamic; its window one, nested - the floating pane's own head a choice");
     }
 

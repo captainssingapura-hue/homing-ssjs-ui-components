@@ -5,5 +5,5 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/** base's implementation of dialog: CSS of its own - its content apart, the colours it draws with typed here. */
-public record Dialog() implements CssImplementation<BaseScheme, Base, HouseContainers.Dialog> {}
+/** base's implementation of modal-window: CSS of its own - its content apart, the colours it draws with typed here. */
+public record ModalWindow() implements CssImplementation<BaseScheme, Base, HouseContainers.ModalWindow> {}

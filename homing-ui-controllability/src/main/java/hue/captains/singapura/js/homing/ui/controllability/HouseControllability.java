@@ -90,7 +90,7 @@ public record HouseControllability() implements StatelessFunctionalObject {
                 new ControlTypeAt(HouseBranches.Button.INSTANCE, SWITCHABLE),
                 new ControlTypeAt(HouseControls.Slider.INSTANCE, SWITCHABLE),
                 new ControlTypeAt(HouseContainers.EdgeStrip.INSTANCE, HOLDABLE),
-                new ControlTypeAt(HouseContainers.Dialog.INSTANCE, MODAL_OVERLAY),
+                new ControlTypeAt(HouseContainers.ModalWindow.INSTANCE, OVERLAY),   // always modal: opened, and closed (23 Oct)
                 new ControlTypeAt(HouseContainers.ContextMenu.INSTANCE, OVERLAY),
                 new ControlTypeAt(HouseContainers.FloatingPane.INSTANCE, PLACEABLE)));   // an icon a part only, plain: nothing to control but its colour (D52)
         var extensions = new ArrayList<ControllabilityExtension>();

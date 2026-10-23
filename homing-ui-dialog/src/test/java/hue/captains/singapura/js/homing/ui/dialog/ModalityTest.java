@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class ModalityTest extends JsModuleTestBase {
 
-    private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/dialog/";
+    private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/dialog/modal/";
 
     private static final String SHIM = """
         var log = [];

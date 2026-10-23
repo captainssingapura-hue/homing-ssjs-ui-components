@@ -15,9 +15,10 @@ Enter or Space - it does its one thing, so the user can act on the thing it stan
 Sums one thing up - its title, how it is sorted, what it is about - and leads to it, so the user
 can choose among several at a glance. Shown on whatever holds it: a card, a pane, a dialog.
 
-## Dialog
+## ModalWindow
 
-Puts one matter to the user above the page, and holds the page back until it is settled.
+Holds the page back while it is open: whatever it shows is the one matter until it is closed, and it
+closes only when asked to.
 
 ## FloatingPane
 
@@ -66,7 +67,7 @@ of every page.
 
 ## ActionBar
 
-Lines up the actions that end a matter, the one to lead with apart.
+The standard footer: lines up the actions that end a matter, the one to lead with apart.
 
 ## Trail
 

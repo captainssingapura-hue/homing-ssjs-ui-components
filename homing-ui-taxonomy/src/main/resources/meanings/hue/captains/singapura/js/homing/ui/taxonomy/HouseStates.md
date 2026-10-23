@@ -245,3 +245,8 @@ cannot be closed. Each change is one floater's. What a close is, if anything, is
 
 How the floaters a float layer holds are stacked: their ids, bottom to top, each once; the top is the
 one in use.
+
+## ActionControl
+
+For each action a footer holds, how many times it was pressed. Each change is one action's. What an
+action does is for whoever holds the footer to decide.

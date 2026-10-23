@@ -85,7 +85,7 @@ class UiControlPanelCrateConformanceTest {
         assertTrue(js.contains("\"colour\": Object.freeze({ category: \"degrees\", means: \"extent\", rest: 1, method: \"extent\", label: \"Colour\" })"), js);
         assertTrue(js.contains("\"enabled\": Object.freeze({ category: \"states\", means: \"switch\", rest: true, method: \"setOn\", label: \"Enabled\" })"), js);
         assertTrue(js.contains("\"ask\": Object.freeze({ category: \"asking\", means: \"question\", rest: null, method: \"ask\", label: \"What does it show?\" })"), js);
-        assertTrue(js.contains("\"modal-overlay\": Object.freeze([\"open-modal\", \"open\", \"close\"])"), js);
+        assertTrue(js.contains("\"overlay\": Object.freeze([\"open\", \"close\"])"), js);   // the modal window always modal, an overlay (23 Oct)
         assertTrue(js.contains("\"plain\": Object.freeze([])"), js);
         // each leaf in the group of its answer
         assertTrue(java.util.regex.Pattern.compile("\\[\"switchable\", \\[[^\\]]*\"danger-button\"").matcher(js).find(), js);

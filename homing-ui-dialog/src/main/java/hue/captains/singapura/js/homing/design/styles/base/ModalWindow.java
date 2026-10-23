@@ -7,12 +7,9 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
-/**
- * The dialog in the base layer: no look of its own - its veil, its window and its row of actions draw; every style's
- * alike.
- */
-public record Dialog() implements CastingStyle<BaseScheme, Base, HouseContainers.Dialog, RoleRoot> {
-    @Override public StylingRes<BaseScheme, HouseContainers.Dialog> style() {
+/** The modal window in the base layer: no look of its own - its veil and its window draw; every style's alike. */
+public record ModalWindow() implements CastingStyle<BaseScheme, Base, HouseContainers.ModalWindow, RoleRoot> {
+    @Override public StylingRes<BaseScheme, HouseContainers.ModalWindow> style() {
         return new StylingRes.CssContent<>();
     }
 }

@@ -25,7 +25,7 @@ public record UiDialogBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     @Override public List<ComponentAssignment<BaseScheme, Base, ?>> assignments() {
         return List.of(
-                new ComponentAssignment<>(HouseContainers.Dialog.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Dialog(), List.of()),
+                new ComponentAssignment<>(HouseContainers.ModalWindow.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ModalWindow(), List.of()),
                 new ComponentAssignment<>(HouseContainers.ActionBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ActionBar(), List.of()));
     }
 }

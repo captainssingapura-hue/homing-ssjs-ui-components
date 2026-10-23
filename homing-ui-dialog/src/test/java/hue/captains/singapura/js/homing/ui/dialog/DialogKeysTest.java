@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * before, when still a member, and not when someone else took them; Modality
  * only makes the rest inert and captures nothing.
  */
+@org.junit.jupiter.api.Disabled("RFC 0071 port: the dialog reduced to the modal window and the standard footer (owner, 23 Oct); its keys wait with the keyboard - Escape, Enter for Go, the content's first - to be ported or retired then")
 class DialogKeysTest extends UiDialogJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/dialog/";

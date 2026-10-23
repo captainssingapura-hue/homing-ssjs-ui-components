@@ -15,6 +15,7 @@ public record UiDialogComponents() implements C0_Components<UiDialogComponents> 
 
     @Override public List<ComponentEntry<UiDialogComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new DialogModule.Dialog()));
+                ComponentEntry.of(this, new hue.captains.singapura.js.homing.ui.dialog.modal.ModalWindowModule.ModalWindow()),
+                ComponentEntry.of(this, new hue.captains.singapura.js.homing.ui.dialog.footer.ActionBarModule.ActionBar()));
     }
 }

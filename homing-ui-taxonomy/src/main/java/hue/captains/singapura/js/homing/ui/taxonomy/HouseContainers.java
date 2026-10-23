@@ -97,15 +97,20 @@ public final class HouseContainers {
         }
     }
 
-    /** A floating pane over a scrim, with a bar of actions. Its title and close are the pane's, its content the caller's. */
-    public record Dialog() implements Composite<HouseBranches.Pane> {
-        public static final Dialog INSTANCE = new Dialog();
+    /**
+     * A window that holds the page while it is open - what was the dialog, reduced (owner, 23 Oct): its veil over the page,
+     * its window, a floating pane, centred over it. A true modal: closed only when asked explicitly, by its window's cross;
+     * what it shows is its caller's - a dialog is a widget shown in one, its footer the standard one.
+     */
+    public record ModalWindow() implements Composite<HouseBranches.Pane> {
+        public static final ModalWindow INSTANCE = new ModalWindow();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Pane parent() { return HouseBranches.Pane.INSTANCE; }
+        /** On view over the page, or not - its caller opens and closes it; and the closes asked of it, by its cross, passed on. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Shown.INSTANCE, HouseStates.FloatCloseControl.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(Scrim.INSTANCE).as(HouseShaping.Veil.INSTANCE).optional(Cardinality.DYNAMIC),
-                           DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Window.INSTANCE).one(),
-                           DSL.part(ActionBar.INSTANCE).as(HouseShaping.Actions.INSTANCE).optional());
+            return List.of(DSL.part(Scrim.INSTANCE).as(HouseShaping.Veil.INSTANCE).one(),
+                           DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Window.INSTANCE).one());
         }
     }
 
@@ -279,11 +284,16 @@ public final class HouseContainers {
         }
     }
 
-    /** A row of actions, at the foot of a dialog or a view. */
+    /**
+     * The standard footer (owner, 23 Oct): a row of actions at the foot of what it ends - a dialog's, a form's - its main
+     * one apart, at its end. A component of its own; each press passed on, by the action: what it does, its holder decides.
+     */
     public record ActionBar() implements Composite<HouseBranches.Bar> {
         public static final ActionBar INSTANCE = new ActionBar();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        /** The presses of its actions, by the action, passed on (owner, 23 Oct). */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.ActionControl.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseControls.PrimaryButton.INSTANCE).as(HouseDoing.Go.INSTANCE).optional(),
                            DSL.part(HouseControls.PlainButton.INSTANCE).as(HouseDoing.Action.INSTANCE).atLeast(1));
