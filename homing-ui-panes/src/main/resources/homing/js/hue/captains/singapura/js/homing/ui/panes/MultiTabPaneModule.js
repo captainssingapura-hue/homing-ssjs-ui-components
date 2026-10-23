@@ -15,6 +15,13 @@
 // TabDetachControl up - the pane's virtual detach manager's - and out of its
 // bar's order. A floater dragged by its head back onto the bar docks again; its
 // caller may dock it again too (attach). Its floater's close is its tab's close.
+// A floater is sized as its tab says when it is put in - its size, its size's
+// bounds - else a share of the slot; it is drawn on the pane's desk, where its
+// caller made it with one - an element holding it and its other panes - else
+// within the pane. A tab in the hand in a floater of its is in transit
+// (TabInTransit): its caller tells its other panes to expect it, and the one
+// whose bar its chip comes onto catches it (TabCaughtControl), told - its caller
+// then moves the tab over at once, the hand still on it (owner, 23 Oct).
 // The physics and the floaters are the pane's own: its caller hears the order,
 // the closes, the detaches. Ported (RFC 0071) a step at a time. The bar is its
 // own, and so is all that goes on on it - which tab is in use, the chips held
@@ -26,8 +33,12 @@
 // tab itself. Its keys come as they are ported.
 //
 //   var pane = new MultiTabPane(branch.createBranch("pane"),
-//                  new FixedMultiTabPane(new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), null), me.place(FixedMultiTabPane));
-//   pane.add({ id: "alpha", title: "Alpha", closable?, detachable? })   a tab put in, its pane empty: the one in use
+//                  new FixedMultiTabPane(new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), null, { desk? }), me.place(FixedMultiTabPane));
+//   pane.add({ id: "alpha", title: "Alpha", closable?, detachable?, float? })   a tab put in, its pane empty: the one in use
+//       float: { size?, least?, most? }, each { w, h } - its floater's size, else a share of the slot, and its size's bounds
+//   pane.expect("beta")   another pane's tab in transit, as its caller hears it - or null: caught should it come onto the bar
+//   pane.onChange(StateTabInTransit, listener)   a tab of its in the hand in a floater, or none: pane.transit
+//   pane.onChange(StateTabCaughtControl, listener)   another's tab caught on its bar, by its id: pane.caught - moved over by its caller
 //   pane.mount("alpha", root, party?)   what a tab shows: a widget's root in its pane, its branch of the page grafted
 //   pane.remove("alpha")   a tab taken out: its widget's root and branch let go - the widget's still, its caller's
 //   pane.attach("alpha")   a tab afloat docked again, at its bar's end: the one in use
@@ -71,11 +82,11 @@ class MultiTabPaneClose {
     handle(change) { this._pane._closesNow(change.after); }
 }
 
-/** A tab torn off its bar, the hand carrying it - or none again: the pane takes it on. */
+/** A tab torn off its bar, the hand carrying it - or none again: the pane's floaters take it on. */
 class MultiTabPaneCarry {
     constructor(pane) { this._pane = pane; Object.freeze(this); }
     canHandle(type) { return type === StateTabCarry; }
-    handle(change) { if (change.after !== "") this._pane._tear(change.after); }
+    handle(change) { if (change.after !== "") this._pane._floats.tear(change.after); }
 }
 
 /** One of its floaters' close pressed: that tab's close asked. */
@@ -89,7 +100,7 @@ class MultiTabPaneFloatClose {
 class MultiTabPaneFloatDragged {
     constructor(pane, id) { this._pane = pane; this._id = id; Object.freeze(this); }
     canHandle(type) { return type === StateDragging; }
-    handle(change) { this._pane._floatDragged(this._id, change.after === true); }
+    handle(change) { this._pane._floats.inHand(this._id, change.after === true); }
 }
 
 /** Its bar's tabs in another order: its own order, told to its caller. */
@@ -106,14 +117,11 @@ class MultiTabPane extends SimpleComponent {
         adds: Object.freeze({ rest: 0, state: StateTabAddControl }),   // its bar's adds, passed on: no class
         order: Object.freeze({ rest: StateTabOrder.rest, state: StateTabOrder }),   // its bar's order, passed on: no class
         closes: Object.freeze({ rest: StateTabCloseControl.rest, state: StateTabCloseControl }),   // its bar's closes asked, passed on: no class
-        detaches: Object.freeze({ rest: StateTabDetachControl.rest, state: StateTabDetachControl })   // its own: each tab's detaches, told: no class
+        detaches: Object.freeze({ rest: StateTabDetachControl.rest, state: StateTabDetachControl }),   // its own: each tab's detaches, told: no class
+        transit: Object.freeze({ rest: StateTabInTransit.rest, state: StateTabInTransit }),   // its own: the tab of its in the hand in a floater, told: no class
+        caught: Object.freeze({ rest: StateTabCaughtControl.rest, state: StateTabCaughtControl })   // its own: the tabs of others' it caught, told: no class
     });
     static BEHAVIOR = MultiTabPaneBehavior;
-
-    /** How near the bar's middle a carried tab's chip comes to be taken back onto it, in pixels. */
-    static CAPTURE = 8;
-    /** Where the hand holds a floater it carries: on its head's chip, from its corner, in pixels. */
-    static HOLD = Object.freeze({ x: 96, y: 19 });
 
     constructor(branch, fixed, place) {
         if (!branch || typeof branch.elementMaker !== "function")
@@ -123,13 +131,10 @@ class MultiTabPane extends SimpleComponent {
         this.branch = branch;
         this._menu = null;
         css.addClass(this.el, mtp_pane);
-        this._tabs = new Map();   // its tabs' ids to each one's own: its branch, its pane, the root mounted in it - none until mounted - its title, and its floater while afloat
+        this._tabs = new Map();   // its tabs' ids to each one's own: its branch, its pane, the root mounted in it - none until mounted - its title, its floater's fixed object and size, and its floater while afloat
         this._detaches = new Map();   // its tabs' ids to how many times each was detached - none for one that cannot be: its own, a view of it told
-        this._carrying = null;   // the tab the hand carries off its bar, in a floater under it
-        this._offset = 0;   // how far below its chip's middle the hand took the tab carried
-        this._dragged = null;   // the tab whose floater is in the hand, moved by its head
         this._floated = 0;   // the floaters made, each named afresh
-        this._top = 0;   // the top of its floaters' stack
+        this._floats = new MultiTabPaneFloats(this);   // its floaters: torn, carried, docked, and others' caught
         // its bar, the tab strip its fixed object holds: which tab is in use heard, its order and what it asks for passed on, a level up
         this._strip = new TabStrip(branch.createBranch("strip"), this.fixed.tabs, this._place(this.fixed.tabs));
         this._strip.onChange(StateTabAddControl, new MultiTabPaneAdd(this));
@@ -153,20 +158,29 @@ class MultiTabPane extends SimpleComponent {
     }
 
     /**
-     * A tab put in by its caller, at its bar's end - its id, its title, whether it can be closed: its own pane made in the
-     * slot, empty until its caller mounts in it; the tab the one in use. Refused for an id it holds.
+     * A tab put in by its caller, at its bar's end - its id, its title, whether it can be closed, what its floater is made
+     * with: its own pane made in the slot, empty until its caller mounts in it; the tab the one in use. Refused for an id
+     * it holds.
      */
     add(tab) {
         var id = tab && tab.id;
         if (this._tabs.has(id)) throw new Error("[MultiTabPane] holds a tab " + id + " already");
         if (typeof id !== "string" || !TabStrip.ID.test(id)) throw new TypeError("[MultiTabPane] a tab's id is lower case words joined by a dash, not " + id);
+        // its floater's, should it be torn off (owner, 23 Oct): its size's bounds, made now and kept - immutable; its size the tab's, or a share of the slot
+        var float = tab.float ?? {};
+        if (typeof float !== "object" || Object.keys(float).some(function (k) { return k !== "size" && k !== "least" && k !== "most"; }))
+            throw new TypeError("[MultiTabPane] a tab's float is { size, least, most }, each { w, h }, each left out at will");
+        var size = float.size ?? null;
+        if (size !== null && !(Number.isInteger(size.w) && size.w > 0 && Number.isInteger(size.h) && size.h > 0)) throw new TypeError("[MultiTabPane] a tab's floater's size is { w, h }, whole numbers above 0");
+        var made = new FixedFloatingPane(new FixedTitleBar(null, new FixedTab(null), new FixedCloseButton()), { size: { least: float.least, most: float.most } });
+        FloatingPane._bounded(made.size);
         var branch = this.branch.createBranch("tab-" + id);
         branch.activate(_multiTabPaneOwner, "multi-tab-pane tab " + id);   // the tab's own: its pane, and the widget grafted on it
         var pane = branch.createElement("pane", "div");
         css.addClass(pane, mtp_tab_content);
         css.addClass(pane, mtp_tab_content_hidden);
         this._slot.appendChild(pane);
-        this._tabs.set(id, { branch: branch, pane: pane, root: null, grafted: false, title: tab.title, floater: null });
+        this._tabs.set(id, { branch: branch, pane: pane, root: null, grafted: false, title: tab.title, made: made, size: size && Object.freeze({ w: size.w, h: size.h }), floater: null });
         try { this._strip.add(tab); }
         catch (e) { this._tabs.delete(id); branch.dissolve(); throw e; }
         this._detaches.set(id, tab.detachable !== false ? { times: 0 } : null);
@@ -176,14 +190,14 @@ class MultiTabPane extends SimpleComponent {
     /** A tab afloat docked again by its caller, at its bar's end: its floater gone, what it shows back in its pane, the one in use. */
     attach(id) {
         var t = this._tabs.get(id);
-        if (t === undefined || t.floater === null || this._carrying === id) throw new Error("[MultiTabPane] has no tab " + id + " afloat");
-        this._land(t);
+        if (t === undefined || t.floater === null || this._floats.carrying === id) throw new Error("[MultiTabPane] has no tab " + id + " afloat");
+        this._floats.land(t);
         this._strip.attach(id);
     }
 
     /** The ids of the tabs afloat, in its floaters - not the one the hand carries. */
     get afloat() {
-        var out = [], carrying = this._carrying;
+        var out = [], carrying = this._floats.carrying;
         this._tabs.forEach(function (t, id) { if (t.floater !== null && id !== carrying) out.push(id); });
         return Object.freeze(out);
     }
@@ -213,8 +227,7 @@ class MultiTabPane extends SimpleComponent {
     remove(id) {
         var t = this._tabs.get(id);
         if (t === undefined) throw new Error("[MultiTabPane] holds no tab " + id);
-        if (this._carrying === id) this._carrying = null;
-        if (this._dragged === id) this._dragged = null;
+        this._floats.forget(id);
         if (t.floater !== null) { t.floater.unmount(); t.floater.dispose(); t.floater = null; }
         else if (t.root !== null) t.pane.removeChild(t.root);
         if (t.grafted) t.branch.detach("widget");
@@ -252,7 +265,24 @@ class MultiTabPane extends SimpleComponent {
     /** The page's menus' steward, handed in once: its tab menu, for a right-press on a chip of its bar. */
     menus(steward) { if (this._menu !== null) throw new Error("[MultiTabPane] its menus' steward is handed in once"); this._menu = new MultiTabPaneMenu(this, this._strip, steward); }
 
+    /**
+     * A tab of another pane's in the hand, as its caller says, hearing that pane's TabInTransit - or none: caught should its
+     * chip come onto its bar, TabCaughtControl told; its caller then moves the tab over, the hand still on it - removed
+     * there, put in and mounted here - and its chip slides on under the hand. Refused for a tab it holds.
+     */
+    expect(id) {
+        if (id != null && (typeof id !== "string" || this._tabs.has(id))) throw new Error("[MultiTabPane] expects a tab of another pane's, by its id - not one it holds: " + id);
+        this._floats.expect(id);
+    }
+
+    /** The tab of its in the hand in a floater of its own - carried, or dragged by its head - by its id: "" for none. */
+    get transit() { return this._get("transit"); }
+
+    /** How many times it caught each tab of others', by its id. */
+    get caught() { return this._get("caught"); }
+
     dispose() {
+        this._floats.drop();
         if (this._menu !== null) this._menu.drop();
         this._behavior.drop();
         this._tabs.forEach(function (t) {
@@ -281,83 +311,37 @@ class MultiTabPane extends SimpleComponent {
         return Object.freeze(view);
     }
 
-    /**
-     * A tab torn off its bar, as its listener hears it: carried in a floater of its own, made under the hand - its head
-     * the tab's chip, its measure its slot's, on top - what it shows moved into it, never rebuilt.
-     */
-    _tear(id) {
-        var t = this._tabs.get(id), slot = this._slot.getBoundingClientRect(), bar = this._strip.el.getBoundingClientRect(), press = this._behavior.press;
-        var f = new FloatingPane(this.branch.createBranch("float-" + (++this._floated)),
-            new FixedFloatingPane(new FixedTitleBar(null, new FixedTab(null), new FixedCloseButton())), this._place(FixedFloatingPane));
+    /** A floater for one of its tabs, made as the tab is torn off: its head the tab's chip, made as its tab said; heard. */
+    _floater(id) {
+        var t = this._tabs.get(id), f = new FloatingPane(this.branch.createBranch("float-" + (++this._floated)), t.made, this._place(FixedFloatingPane));
         f.title = t.title;
         f.onChange(StateFloatCloseControl, new MultiTabPaneFloatClose(this, id));
         f.onChange(StateDragging, new MultiTabPaneFloatDragged(this, id));
-        this.el.appendChild(f.root);
-        f.size(slot.width, slot.height);
-        f.z = ++this._top;
-        if (t.root !== null) { t.pane.removeChild(t.root); f.mount(t.root); }
-        t.floater = f;
-        this._carrying = id;
-        this._offset = press !== null ? press.y - (bar.top + bar.height / 2) : 0;
-        if (this._behavior.at !== null) this._follow(f, this._behavior.at.x, this._behavior.at.y);
+        return f;
     }
 
-    /** A floater put under the hand: the hand on its head's chip. */
-    _follow(f, x, y) {
-        var r = this.el.getBoundingClientRect();
-        f.at(x - r.left - MultiTabPane.HOLD.x, y - r.top - MultiTabPane.HOLD.y);
-    }
-
-    /** Whether the hand - its chip's middle - is on the bar: within CAPTURE of its middle, along it. */
-    _onBar(x, y, offset) {
-        var b = this._strip.el.getBoundingClientRect(), mid = b.top + b.height / 2;
-        return Math.abs(y - offset - mid) <= MultiTabPane.CAPTURE && x >= b.left && x <= b.right;
-    }
-
-    /** The hand moved, down on it, as its behaviour hears it - before its parts: the tab carried follows it, and is taken back on the bar; a floater in the hand docks on it. */
-    _handAt(x, y) {
-        if (this._carrying !== null) {
-            var t = this._tabs.get(this._carrying);
-            this._follow(t.floater, x, y);
-            if (this._onBar(x, y, this._offset)) this._back(this._carrying, x, y);
-            return;
-        }
-        if (this._dragged !== null && this._onBar(x, y, 0)) this._back(this._dragged, x, y);
-    }
-
-    /** The hand let go, as its behaviour hears it - before its parts: the tab carried stays afloat - detached. */
-    _handUp() {
-        var id = this._carrying;
-        if (id === null) return;
-        this._carrying = null;
+    /** The tab carried let go afloat: out of its bar's order, detached once more - told. */
+    _afloat(id) {
         this._strip.release(id);
         this._detaches.get(id).times++;
         this._change("detaches", this._detachesNow());
     }
 
-    /** A tab carried, or a floater in the hand, back on the bar under the hand: its floater gone, its chip there, sliding on. */
-    _back(id, x, y) {
-        var t = this._tabs.get(id);
-        if (this._carrying === id) this._carrying = null;
-        if (this._dragged === id) this._dragged = null;
-        this._land(t);
-        this._strip.capture(id, x, y);
+    /** A tab of its in the hand in a floater, or none: told. */
+    _transit(id) { this._change("transit", id ?? ""); }
+
+    /** A tab of another's caught on its bar: once more, told - its caller moving it over. */
+    _caught(id) {
+        var counts = Object.assign({}, this.caught);
+        counts[id] = (counts[id] ?? 0) + 1;
+        this._change("caught", Object.freeze(counts));
     }
 
-    /** A tab's floater dropped: what it shows back in the tab's pane. */
-    _land(t) {
-        var f = t.floater;
-        t.floater = null;
-        if (t.root !== null) { f.unmount(); t.pane.appendChild(t.root); }
-        f.dispose();
-    }
+    /** The hand moved, down on it or on one of its floaters, as its behaviour hears it - before its parts: its floaters' to take on. */
+    _handAt(x, y) { this._floats.handAt(x, y); }
 
-    /** One of its floaters in the hand, or let go: on top while it is moved, the one in the hand kept. */
-    _floatDragged(id, on) {
-        var t = this._tabs.get(id);
-        if (on) { this._dragged = id; if (t && t.floater !== null) t.floater.z = ++this._top; }
-        else if (this._dragged === id) this._dragged = null;
-    }
+    /** The hand let go, as its behaviour hears it - before its parts. */
+    _handUp() { this._floats.handUp(); }
 
     /** One of its floaters' close pressed: that tab's close asked, as its chip's cross would. */
     _floatClose(id) { this._strip.closeAsked(id); }

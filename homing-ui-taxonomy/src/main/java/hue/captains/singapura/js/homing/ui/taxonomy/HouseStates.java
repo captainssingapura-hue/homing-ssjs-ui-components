@@ -280,6 +280,17 @@ public final class HouseStates {
         @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
     }
 
+    /**
+     * Which of its tabs is in the hand in a floater of its - torn off its bar and carried, or afloat and dragged by its
+     * head: the tab's id; none at rest. Said so that its caller may tell its other panes to expect it, each catching it
+     * should its chip come onto its bar (owner, 23 Oct). No class.
+     */
+    public record TabInTransit() implements StateType<Interaction> {
+        public static final TabInTransit INSTANCE = new TabInTransit();
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
     /** Held down by the hand, as the component has it: up at rest; down by its press, up again by its release. Drawn by nothing of its own. */
     public record Held() implements StateType<Interaction> {
         public static final Held INSTANCE = new Held();
@@ -375,6 +386,18 @@ public final class HouseStates {
      */
     public record TabDetachControl() implements StateType<Counting> {
         public static final TabDetachControl INSTANCE = new TabDetachControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
+    /**
+     * For each tab of another's it caught - its chip, in the hand in that other's floater, come onto its bar: by the tab's
+     * id, how many times, from none. Each change is one tab's, caught once more; told so that its caller moves the tab
+     * over at once - out of the other, into it - the hand still on it (owner, 23 Oct). Nothing it shows changes by it - no
+     * class.
+     */
+    public record TabCaughtControl() implements StateType<Counting> {
+        public static final TabCaughtControl INSTANCE = new TabCaughtControl();
         @Override public Counting parent() { return Counting.INSTANCE; }
         @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
     }
@@ -486,9 +509,9 @@ public final class HouseStates {
             Required.INSTANCE, Invalid.INSTANCE,
             Current.INSTANCE, Highlighted.INSTANCE, Pointed.INSTANCE,
             Empty.INSTANCE,
-            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, TabCarry.INSTANCE, Held.INSTANCE,
+            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, TabCarry.INSTANCE, TabInTransit.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
-            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE, LayerCloseControl.INSTANCE, ActionControl.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, TabCaughtControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE, LayerCloseControl.INSTANCE, ActionControl.INSTANCE,
             DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, FloatOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }

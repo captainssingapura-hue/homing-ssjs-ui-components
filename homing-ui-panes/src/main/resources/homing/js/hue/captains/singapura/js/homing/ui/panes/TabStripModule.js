@@ -26,7 +26,7 @@
 //   strip.add({ id: "alpha", title: "Alpha", closable?, detachable? })   a tab put in, at its end: the one in use
 //   strip.remove("alpha")   a tab taken out
 //   strip.onChange(StateTabCarry, listener)    a tab torn off, the hand carrying it - or none again
-//   strip.capture("alpha", x, y)   a tab carried or afloat taken back onto the bar under the hand, the hand still down
+//   strip.capture("alpha", x, y)   a tab carried, afloat or just put in taken onto the bar under the hand, the hand still down
 //   strip.release("alpha")         the tab carried let go afloat: out of the order, still held
 //   strip.attach("alpha")          a tab afloat docked again, at the end: the one in use
 //   strip.closeAsked("alpha")      a close asked of a tab from elsewhere - its owner's floater's
@@ -170,12 +170,14 @@ class TabStrip extends SimpleComponent {
 
     /**
      * A tab carried off it, or afloat, taken back by its owner onto the bar under the hand - at the place nearest it -
-     * the hand still down: in use, held, and sliding under the hand from there, as if it had never left. Its order is told
-     * when the hand lets go, if it changed.
+     * the hand still down: in use, held, and sliding under the hand from there, as if it had never left. A tab just put
+     * in, caught off another pane's floater, likewise: its chip taken from the end (owner, 23 Oct). Its order is told when
+     * the hand lets go, if it changed.
      */
     capture(id, x, y) {
-        if (!this._closes.has(id) || this._chips.has(id)) throw new Error("[TabStrip] carries no tab " + id + ", and has none afloat");
+        if (!this._closes.has(id)) throw new Error("[TabStrip] holds no tab " + id);
         this._letGo();
+        if (this._chips.has(id)) { this._chips.get(id).dispose(); this._chips.delete(id); this._row = this._row.filter(function (o) { return o !== id; }); }
         var chips = this._chips, at = this._row.filter(function (o) { var r = chips.get(o).el.getBoundingClientRect(); return x > r.left + r.width / 2; }).length;
         var chip = this._chip(id), row = this._row.slice();
         this.el.insertBefore(chip.el, at < row.length ? chips.get(row[at]).el : this._plus.el);

@@ -5,9 +5,10 @@
 // of its parts hears them: what the pane makes of them - a tab carried off its
 // bar, a floater brought back onto it - is its own. A right-press on it is told
 // to the pane's menu, where it has one: the browser's own kept away only where
-// the menu opened. It never touches the look.
+// the menu opened. Its pane's floaters, drawn on its desk, are heard as it is.
+// It never touches the look.
 //
-//   new MultiTabPaneBehavior(el, pane)   behavior.press   behavior.at
+//   new MultiTabPaneBehavior(el, pane)   behavior.press   behavior.at   behavior.hear(floater)
 // =============================================================================
 
 class MultiTabPaneBehavior {
@@ -25,13 +26,17 @@ class MultiTabPaneBehavior {
         el.addEventListener("contextmenu", function (ev) {
             if (pane._menu !== null && pane._menu.ask(ev.target, ev.clientX, ev.clientY)) ev.preventDefault();
         });
-        el.addEventListener("mousedown", function (ev) {
+        this._down = function (ev) {
             if (ev.button !== 0) return;
             self.press = self.at = { x: ev.clientX, y: ev.clientY };
             doc.addEventListener("mousemove", self._move, true);   // before its parts hear it: theirs come after
             doc.addEventListener("mouseup", self._up, true);
-        }, true);
+        };
+        el.addEventListener("mousedown", this._down, true);
     }
+
+    /** One of its pane's floaters, drawn away from it - on its desk: the hand going down on it heard as on the pane. */
+    hear(el) { el.addEventListener("mousedown", this._down, true); }
 
     /** The hand let go: heard no more until it goes down again. */
     _stop() {

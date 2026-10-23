@@ -64,6 +64,11 @@ class FloatingPane extends SimpleComponent {
     static DRAG_FROM = 3;
     /** How much of its head stays within what holds it, inline, in pixels. */
     static KEEP = 48;
+    /** Its size's bounds, as a fixed object holds them: refused where its most is under its least. */
+    static _bounded(size) {
+        if ((size.most.w !== null && size.most.w < size.least.w) || (size.most.h !== null && size.most.h < size.least.h))
+            throw new RangeError("[FloatingPane] its most size is at least its least: " + JSON.stringify(size));
+    }
     /** The sides it is sized from, each a handle: its edges, then its corners. */
     static SIDES = Object.freeze(["n", "s", "e", "w", "ne", "nw", "se", "sw"]);
     static _HANDLE = Object.freeze({ n: fp_size_n, s: fp_size_s, e: fp_size_e, w: fp_size_w, ne: fp_size_ne, nw: fp_size_nw, se: fp_size_se, sw: fp_size_sw });
@@ -73,10 +78,7 @@ class FloatingPane extends SimpleComponent {
             throw new TypeError("[FloatingPane] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_floatingPaneOwner);
         super(branch.elementMaker("frame"), fixed, FixedFloatingPane, place ?? manageFloatingPane);
-        // its size's bounds, its fixed object's: immutable for its life, its most none or at least its least
-        var size = this.fixed.size;
-        if ((size.most.w !== null && size.most.w < size.least.w) || (size.most.h !== null && size.most.h < size.least.h))
-            throw new RangeError("[FloatingPane] its most size is at least its least: " + JSON.stringify(size));
+        FloatingPane._bounded(this.fixed.size);   // its size's bounds, its fixed object's: immutable for its life
         this.branch = branch;
         css.addClass(this.el, fp_frame);
         // its head, where its fixed object holds one: the house's title bar, which it moves by

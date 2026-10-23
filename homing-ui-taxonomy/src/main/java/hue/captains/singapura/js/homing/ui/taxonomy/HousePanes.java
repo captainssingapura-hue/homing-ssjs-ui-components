@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
+import hue.captains.singapura.js.homing.component.taxonomy.FixedValue;
 import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
@@ -57,10 +58,14 @@ public final class HousePanes {
          * passed on, handled by none: it manages no tab in or out - its caller does; the order its tabs stand in, its
          * bar's passed on; the closes asked of each of its tabs, its bar's passed on, handled by none: what a close is,
          * its caller decides; and the detaches of each, its own - its virtual detach manager's (23 Oct). Which tab is in use,
-         * and the tab the hand carries, are its own (owner, 22 Oct).
+         * and the tab the hand carries, are its own (owner, 22 Oct). Which of its tabs is in the hand in a floater of its,
+         * and the tabs of others' it caught on its bar, told to its caller, who moves them over (owner, 23 Oct).
          */
         @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE, HouseStates.TabAddControl.INSTANCE,
-                HouseStates.TabOrder.INSTANCE, HouseStates.TabCloseControl.INSTANCE, HouseStates.TabDetachControl.INSTANCE); }
+                HouseStates.TabOrder.INSTANCE, HouseStates.TabCloseControl.INSTANCE, HouseStates.TabDetachControl.INSTANCE,
+                HouseStates.TabInTransit.INSTANCE, HouseStates.TabCaughtControl.INSTANCE); }
+        /** Where its floaters are drawn, immutable for its life: an element holding it and the panes it gives tabs to - none, itself (owner, 23 Oct). */
+        @Override public List<FixedValue> fixedValues() { return List.of(new FixedValue.Element("desk")); }
         /** Its slot: where what it shows is mounted by its caller, one at a time - its own element, no part (22 Oct). */
         @Override public List<Room> rooms() { return List.of(new Room("slot")); }
         @Override public List<Slot<?>> parts() {

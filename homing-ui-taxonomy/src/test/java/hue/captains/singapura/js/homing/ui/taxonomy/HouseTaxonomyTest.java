@@ -131,7 +131,7 @@ class HouseTaxonomyTest {
         HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
         HOUSE.states().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
-        assertEquals(23 + 119 + 22 + 99 + 11 + 41, nodes.size());   // a footer's presses (23 Oct);   // the float layer's stack and its closes (23 Oct); the menu item a branch of two, two levels of menu, a menu's picks (23 Oct);   // a choice chosen, and its picks (23 Oct);   // the tab carried and the detaches (23 Oct);   // the tab in use and the order of the tabs, a chip's close and the tabs' (22 Oct), a floating pane's (23 Oct)
+        assertEquals(23 + 119 + 22 + 99 + 11 + 43, nodes.size());   // a tab in transit, and another's caught (23 Oct);   // a footer's presses (23 Oct);   // the float layer's stack and its closes (23 Oct); the menu item a branch of two, two levels of menu, a menu's picks (23 Oct);   // a choice chosen, and its picks (23 Oct);   // the tab carried and the detaches (23 Oct);   // the tab in use and the order of the tabs, a chip's close and the tabs' (22 Oct), a floating pane's (23 Oct)
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
@@ -147,7 +147,7 @@ class HouseTaxonomyTest {
         assertEquals(List.of("availability", "picking", "disclosure", "validity", "place", "content", "interaction", "physical", "counting", "given", "measure"),
                 HOUSE.states().branches().stream().map(b -> b.name().value()).toList());
         assertEquals(HouseStates.ALL, HOUSE.states().types(), "every type, whether or not a component has it yet");
-        assertEquals(List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.TabCarry.INSTANCE, HouseStates.Held.INSTANCE),
+        assertEquals(List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.TabCarry.INSTANCE, HouseStates.TabInTransit.INSTANCE, HouseStates.Held.INSTANCE),
                 HOUSE.states().children(HouseStates.Interaction.INSTANCE), "what the hand and the keys do, folded into the tree - the hand's drag among them, and its hold as a component has it");
         assertEquals(List.of("true", "false"), tokens(HouseStates.Enabled.INSTANCE), "enabled at rest");
         assertEquals(List.of("false", "true"), tokens(HouseStates.Pressed.INSTANCE), "pressed only when pressed");

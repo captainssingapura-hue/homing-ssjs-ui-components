@@ -221,6 +221,16 @@ ask its going up. What a close is, if anything, is for whoever holds the pane to
 Which of the tabs the component holds the hand carries off it - torn off its bar, its chip gone from
 the row: that tab's id, or none.
 
+## TabInTransit
+
+Which of the tabs the component holds is in the hand in a floater of its own - torn off its bar and
+carried, or afloat and dragged by its head: that tab's id, or none.
+
+## TabCaughtControl
+
+For each tab of another component's the component caught - its chip, in the hand in that other's
+floater, brought onto its bar - how many times. Each change is one tab's.
+
 ## TabDetachControl
 
 For each tab the component holds, how many times it was detached - let go afloat off its bar - or none,
