@@ -14,7 +14,6 @@ import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
  */
 public record Slider() implements CastingStyle<BaseScheme, Glassmorphism, HouseControls.Slider, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.Slider> style() {
-        return new StylingRes.CssContent<>(
-                new BaseColours.Accent(), new BaseColours.KeysCandidate(), new BaseColours.KeysLent());
+        return new StylingRes.CssContent<>();
     }
 }

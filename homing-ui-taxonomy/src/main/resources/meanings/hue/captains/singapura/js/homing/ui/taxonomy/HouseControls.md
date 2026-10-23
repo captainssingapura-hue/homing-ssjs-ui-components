@@ -38,10 +38,6 @@ Has the function of a button and the look of an icon: does one thing, named by t
 
 Closes what it is on.
 
-## SliderKnob
-
-What the user takes hold of to move a slider's value along its groove.
-
 ## ToggleKnob
 
 What shows which way a switch stands, sliding in its groove as it is turned.
@@ -92,5 +88,5 @@ Sets a setting on or off, in one movement, and shows which it is.
 
 ## Slider
 
-Sets a value along a scale the user can see: its name, its range, where it rests, its steps, and
-the value read out as it moves.
+A value along a scale, named and read out: a label, the browser's own slider as each style draws it, and a
+readout of the value in the caller's words.

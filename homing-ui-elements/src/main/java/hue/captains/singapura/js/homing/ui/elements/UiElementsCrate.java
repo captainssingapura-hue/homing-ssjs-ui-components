@@ -89,8 +89,6 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(BrandMarkModule.INSTANCE),
                 CrateEntry.of(LampModule.INSTANCE),
                 CrateEntry.of(DropMarkModule.INSTANCE),
-                CrateEntry.of(DetentModule.INSTANCE),
-                CrateEntry.of(TickModule.INSTANCE),
                 CrateEntry.of(BoundaryLineModule.INSTANCE),
                 // the items: a menu's, a list's row, a choice's option - one behaviour for the three
                 CrateEntry.of(ItemBehaviorModule.INSTANCE),
@@ -104,12 +102,7 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 CrateEntry.of(CardBehaviorModule.INSTANCE),
                 CrateEntry.of(ClickableCardModule.INSTANCE),
                 CrateEntry.of(SummaryViewModule.INSTANCE),
-                CrateEntry.of(SliderScaleModule.INSTANCE),
                 // the slider's parts and the toggle's, each a component; the grip
-                CrateEntry.of(SliderRailModule.INSTANCE),
-                CrateEntry.of(SliderGrooveModule.INSTANCE),
-                CrateEntry.of(FillModule.INSTANCE),
-                CrateEntry.of(SliderKnobModule.INSTANCE),
                 CrateEntry.of(ToggleGrooveModule.INSTANCE),
                 CrateEntry.of(ToggleKnobModule.INSTANCE),
                 CrateEntry.of(GripModule.INSTANCE),

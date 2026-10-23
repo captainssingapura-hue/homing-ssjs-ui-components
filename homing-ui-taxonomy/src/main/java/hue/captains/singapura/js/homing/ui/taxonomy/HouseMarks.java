@@ -20,21 +20,7 @@ public final class HouseMarks {
 
     // ── marks ────────────────────────────────────────────────────────────
 
-    /** A notch a value may snap to. */
-    public record Detent() implements Leaf<Mark>, WithRoles<HouseRoleSets.Scaling> {
-        public static final Detent INSTANCE = new Detent();
-        @Override public Mark parent() { return Mark.INSTANCE; }
-        @Override public HouseRoleSets.Scaling roleSet() { return HouseRoleSets.Scaling.INSTANCE; }
-        /** Shown while what rests on it is in the hand. */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Dragging.INSTANCE); }
-    }
 
-    /** A scale's tick. */
-    public record Tick() implements Leaf<Mark>, WithRoles<HouseRoleSets.Scaling> {
-        public static final Tick INSTANCE = new Tick();
-        @Override public Mark parent() { return Mark.INSTANCE; }
-        @Override public HouseRoleSets.Scaling roleSet() { return HouseRoleSets.Scaling.INSTANCE; }
-    }
 
     /** A line between the rows of a list or a menu: one group ruled off from the next. */
     public record Separator() implements Leaf<Mark> {
@@ -92,23 +78,7 @@ public final class HouseMarks {
 
     // ── tracks ───────────────────────────────────────────────────────────
 
-    /** The slider's rail: the stretch its value is set along, the hand taken anywhere on it - its groove, fill and knob placed on it. Never alone: a slider's part. */
-    public record SliderRail() implements Leaf<Track> {
-        public static final SliderRail INSTANCE = new SliderRail();
-        @Override public Track parent() { return Track.INSTANCE; }
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Enabled.INSTANCE); }
-        /** Grown by its slider's size, as its slider is. */
-        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
-    }
 
-    /** The slider's groove: the line its knob runs along. Never alone: a slider's part. */
-    public record SliderGroove() implements Leaf<Track>, WithRoles<HouseRoleSets.Scaling> {
-        public static final SliderGroove INSTANCE = new SliderGroove();
-        @Override public Track parent() { return Track.INSTANCE; }
-        @Override public HouseRoleSets.Scaling roleSet() { return HouseRoleSets.Scaling.INSTANCE; }
-        /** Grown by its slider's size, as its slider is. */
-        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
-    }
 
     /** The toggle's groove: the pill a switch's knob slides in, in the accent when the switch is on. Never alone: a switch's part. */
     public record ToggleGroove() implements Leaf<Track>, WithRoles<HouseRoleSets.Scaling> {
@@ -120,10 +90,4 @@ public final class HouseMarks {
         }
     }
 
-    /** The part of a groove a value fills. */
-    public record Fill() implements Leaf<Track>, WithRoles<HouseRoleSets.Reporting> {
-        public static final Fill INSTANCE = new Fill();
-        @Override public Track parent() { return Track.INSTANCE; }
-        @Override public HouseRoleSets.Reporting roleSet() { return HouseRoleSets.Reporting.INSTANCE; }
-    }
 }

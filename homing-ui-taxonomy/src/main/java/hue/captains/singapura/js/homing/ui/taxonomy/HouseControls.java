@@ -58,10 +58,6 @@ public final class HouseControls {
     private static final List<StateType<?>> A_SELECT = List.of(HouseStates.Enabled.INSTANCE, HouseStates.ChosenOption.INSTANCE,
             HouseStates.Focused.INSTANCE);
 
-    /** What the slider's knob has: it may be off; it stands up or lies along; its focus shown; the current of a group; dragged. */
-    private static final List<StateType<?>> A_SLIDER_KNOB = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Orientation.INSTANCE,
-            HouseStates.Focused.INSTANCE, HouseStates.Current.INSTANCE, HouseStates.Dragging.INSTANCE);
-
     /** What a way somewhere has: how many times it was clicked; the browser's - the pointer over it, its focus shown. */
     private static final List<StateType<?>> A_WAY = List.of(HouseStates.Clicks.INSTANCE, HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
 
@@ -154,15 +150,6 @@ public final class HouseControls {
 
     // ── handles ──────────────────────────────────────────────────────────
 
-    /** The slider's knob: what is grabbed to move its value along its groove; upright it is a cap. Never alone: a slider's part. */
-    public record SliderKnob() implements Leaf<Handle>, WithRoles<HouseRoleSets.Changing> {
-        public static final SliderKnob INSTANCE = new SliderKnob();
-        @Override public Handle parent() { return Handle.INSTANCE; }
-        @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
-        @Override public List<StateType<?>> states() { return A_SLIDER_KNOB; }
-        /** Grown by its slider's size, as its slider is. */
-        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
-    }
 
     /** The toggle's knob: what shows which way a switch stands, sliding in its groove. Never alone: a switch's part. */
     public record ToggleKnob() implements Leaf<Handle>, WithRoles<HouseRoleSets.Changing> {
@@ -295,24 +282,19 @@ public final class HouseControls {
         }
     }
 
-    /** A value picked along a track, with its label, its scale and its readout. The rail is its own. */
+    /**
+     * A value along a scale, named and read out (owner, 23 Oct): its label, the house's range - the browser's own slider, as
+     * each style draws it - and its readout, in a row. For typical use: no detents, no scale, no icon.
+     */
     public record Slider() implements Composite<Input> {
         public static final Slider INSTANCE = new Slider();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Input parent() { return Input.INSTANCE; }
-        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Enabled.INSTANCE, HouseStates.Keyboard.INSTANCE); }
+        /** It may be off; where it stands, and being in the hand, its range's, passed on. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Enabled.INSTANCE, HouseStates.Degree.INSTANCE, HouseStates.Dragging.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseText.Label.INSTANCE).as(HouseSaying.Name.INSTANCE).one(),
-                           DSL.part(HouseMarks.SliderRail.INSTANCE).as(HouseShaping.Editor.INSTANCE).one(),
-                           DSL.part(HouseMarks.SliderGroove.INSTANCE).as(HouseSaying.Span.INSTANCE).one(),
-                           DSL.part(HouseMarks.Fill.INSTANCE).as(HouseSaying.Level.INSTANCE).one(),
-                           DSL.part(HouseMarks.Detent.INSTANCE).as(HouseSaying.Rest.INSTANCE).optional(),
-                           DSL.part(HouseMarks.Tick.INSTANCE).as(HouseSaying.Notch.INSTANCE).any(Cardinality.DYNAMIC),
-                           DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Figure.INSTANCE).any(Cardinality.DYNAMIC),
-                           DSL.part(SliderKnob.INSTANCE).as(HouseDoing.Thumb.INSTANCE).one(),
-                           DSL.part(HouseIcons.GripIcon.INSTANCE, HouseIcons.SizeIcon.INSTANCE, HouseIcons.AspectIcon.INSTANCE,
-                                    HouseIcons.ExtentIcon.INSTANCE, HouseIcons.LevelIcon.INSTANCE).as(HouseShaping.Measure.INSTANCE).optional(),
+                           DSL.part(Range.INSTANCE).as(HouseDoing.Adjust.INSTANCE).one(),
                            DSL.part(HouseText.Readout.INSTANCE).as(HouseSaying.Value.INSTANCE).one());
         }
     }

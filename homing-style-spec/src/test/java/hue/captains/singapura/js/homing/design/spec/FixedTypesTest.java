@@ -34,8 +34,6 @@ class FixedTypesTest {
         assertEquals(List.of("leading 0..1 add-icon|remove-icon|close-icon|reset-icon|rotate-icon|flip-icon|pin-icon|check-icon|grip-icon|disclose-icon|settings-icon"
                         + "|preferences-icon|size-icon|aspect-icon|extent-icon|level-icon|pacman-icon|column-icon|row-icon|merge-icon|detach-icon|within-icon", "hint 0..1 caption"),
                 said(HouseItems.CheckMenuItem.INSTANCE), "its own icon chosen once, its hint: its check always, no field (23 Oct)");
-        assertEquals(List.of("rest 0..1 detent", "measure 0..1 grip-icon|size-icon|aspect-icon|extent-icon|level-icon"), said(HouseControls.Slider.INSTANCE),
-                "its figures and notches dynamic; its mark one of five, or none");
     }
 
     @Test
@@ -49,9 +47,9 @@ class FixedTypesTest {
 
     @Test
     void nothingLeftToChoose_noFields() {
-        for (Component<?> c : List.of(HouseControls.PlainButton.INSTANCE, HouseControls.CloseButton.INSTANCE, HouseContainers.Trail.INSTANCE, HouseContainers.SummaryView.INSTANCE))
+        for (Component<?> c : List.of(HouseControls.PlainButton.INSTANCE, HouseControls.Slider.INSTANCE, HouseControls.CloseButton.INSTANCE, HouseContainers.Trail.INSTANCE, HouseContainers.SummaryView.INSTANCE))
             assertEquals(List.of(), FIXED.fields(HOUSE, c), c.token() + ": its parts one with one player, or dynamic");
-        assertEquals(18, HOUSE.components().stream().filter(c -> !FIXED.fields(HOUSE, c).isEmpty()).count(), "eighteen of the house's components have a field - the picker's and the opener's choices no more, widgets (22 Oct)");
+        assertEquals(17, HOUSE.components().stream().filter(c -> !FIXED.fields(HOUSE, c).isEmpty()).count(), "seventeen of the house's components have a field - the slider's none, on the native range (23 Oct); the picker's and the opener's choices no more, widgets (22 Oct)");
     }
 
     @Test

@@ -12,6 +12,6 @@ import java.util.List;
 /** neo-futurism's implementation of slider: CSS of its own - its content apart, the colours it draws with typed here. */
 public record Slider() implements CssImplementation<BaseScheme, NeoFuturism, HouseControls.Slider> {
     @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
-        return List.of(new BaseColours.Accent(), new BaseColours.KeysCandidate(), new BaseColours.KeysLent());
+        return List.of();
     }
 }

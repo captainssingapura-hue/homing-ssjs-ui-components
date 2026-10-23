@@ -89,9 +89,9 @@ class HouseRoleCatalogueTest {
     void theWholeHouse_leavesTheseWordsUnnamed_theCatalogueAheadOfIt() {
         var unnamed = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
                 .map(f -> f.says().replace(" is named by no component", "")).toList();
-        assertEquals(List.of("Subtitle", "Category", "Prompt", "Placeholder", "Status", "Error", "Check", "Style", "Palette", "Picker", "Query", "Cancel", "Skip", "Toggle", "Adjust",
+        assertEquals(List.of("Subtitle", "Category", "Prompt", "Placeholder", "Level", "Status", "Error", "Check", "Rest", "Notch", "Figure", "Style", "Palette", "Picker", "Query", "Cancel", "Skip", "Toggle",
                 "Reset", "Increase", "Decrease", "Clear", "Add", "Remove", "Preferences", "Previous", "Next", "First", "Last", "More", "Actions", "Page", "Host",
-                "Index", "Detail", "Setting", "Layout", "Body", "Media", "Fallback", "Member", "Entry", "Dock", "Group", "Reveal", "Opener", "Pull", "Scroll"), unnamed,
-                "the footer's place in a dialog, since it is a component of its own (23 Oct); a strip's foot, a site's page, a view's index and detail unnamed since the rooms left the parts; the words only widgets said - a subtitle, a status, a setting, an entry, a member and the rest - since the widgets are no components (20 Oct); add since the tab strip's plus is placed in the void role (21 Oct); a prompt, a picker and a cancel since the tab picker and the tab opener are widgets (22 Oct)");
+                "Index", "Detail", "Setting", "Layout", "Body", "Media", "Fallback", "Editor", "Member", "Entry", "Dock", "Group", "Reveal", "Opener", "Pull", "Scroll", "Measure"), unnamed,
+                "the slider on the native range: its level, its rest, its notches, its figures, its editor and its measure unnamed, its range adjusting it (23 Oct); the footer's place in a dialog, since it is a component of its own (23 Oct); a strip's foot, a site's page, a view's index and detail unnamed since the rooms left the parts; the words only widgets said - a subtitle, a status, a setting, an entry, a member and the rest - since the widgets are no components (20 Oct); add since the tab strip's plus is placed in the void role (21 Oct); a prompt, a picker and a cancel since the tab picker and the tab opener are widgets (22 Oct)");
     }
 }

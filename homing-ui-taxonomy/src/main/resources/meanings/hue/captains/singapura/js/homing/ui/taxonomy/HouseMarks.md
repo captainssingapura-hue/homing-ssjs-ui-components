@@ -1,13 +1,5 @@
 # The house's marks and tracks
 
-## Detent
-
-Marks a value the user's movement may settle on.
-
-## Tick
-
-Marks one step of a scale.
-
 ## Separator
 
 Rules one group of rows off from the next, across the list or the menu that holds them.
@@ -37,18 +29,7 @@ A small sign of a state: which one is current, which one has the keys.
 
 Shows where a dragged thing would land.
 
-## SliderRail
-
-The stretch a slider's value is set along: the hand taken anywhere on it, its groove, fill and knob placed on it.
-
-## SliderGroove
-
-The line a slider's value is set along: the whole of its range.
-
 ## ToggleGroove
 
 The pill a switch's knob slides in, showing by its colour that the switch is on.
 
-## Fill
-
-The part of the range the value has reached.

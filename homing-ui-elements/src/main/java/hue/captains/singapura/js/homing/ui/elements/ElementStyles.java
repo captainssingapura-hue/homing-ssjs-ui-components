@@ -113,7 +113,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
 
     // ── Slider ────────────────────────────────────────────────────────────────
 
-    /** The slider: a row of label, rail and readout — {@code Control.Slider} for its air and its gap. */
+    /** The slider: a row of label, range and readout — {@code Control.Slider} for its air and its gap. */
     public record el_slider() implements CssClass<ElementStyles> {
         @Override public String body() { return """
             display: flex;
@@ -123,101 +123,27 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
-    /** The label before the rail; a caller stacking sliders gives them one label width, {@code --sl-label}, so the rails align. */
+    /** The label before the range: as wide as its words. */
     public record el_slider_label() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-label")); }
+        @Override public String body() { return "flex: none;\n"; }
+    }
+
+    /** The range between them: the rest of the row (23 Oct). */
+    public record el_slider_range() implements CssClass<ElementStyles> {
         @Override public String body() { return """
-            flex: none;
-            inline-size: var(--sl-label, auto);
+            flex: 1 1 auto;
+            min-inline-size: 0;
             """;
         }
     }
 
-    /**
-     * The rail: the box the hand works in — the control's measure inline,
-     * the least height its knob needs — holding the track, the detent and
-     * the knob at their places; the fractions of the length are set on it
-     * — {@code --sl-value}, {@code --sl-rest}, {@code --sl-from},
-     * {@code --sl-span} — and read by the parts that draw them.
-     */
-    public record el_slider_rail() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            position: relative;
-            flex: none;
-            touch-action: none;
-            """;
-        }
-    }
 
-    /** The track: the groove, sunk, across the rail at its middle. */
-    public record el_slider_track() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            position: absolute;
-            inset-inline: 0;
-            top: 50%;
-            translate: 0 -50%;
-            box-sizing: border-box;
-            overflow: hidden;
-            pointer-events: none;
-            """;
-        }
-    }
 
-    /** The fill: the track's inside from the detent to the value, in the primary surface. */
-    public record el_slider_fill() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-from"), new CssVar("--sl-span")); }
-        @Override public String body() { return """
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: var(--sl-from, 0%);
-            width: var(--sl-span, 0%);
-            """;
-        }
-    }
 
-    /** The detent: the notch at the rest, drawn in muted ink at the design's width and height. */
-    public record el_slider_detent() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-rest")); }
-        @Override public String body() { return """
-            position: absolute;
-            top: 50%;
-            left: var(--sl-rest, 0%);
-            translate: -50% -50%;
-            pointer-events: none;
-            """;
-        }
-    }
 
-    /**
-     * The knob: what the hand takes and the keys go to — role slider, the
-     * focusable part — placed at the value across the rail. Its face, its
-     * extent, its ring and its hand are the slider knob's own look.
-     */
-    public record el_slider_knob() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-value")); }
-        @Override public String body() { return """
-            position: absolute;
-            top: 50%;
-            left: var(--sl-value, 0%);
-            translate: -50% -50%;
-            box-sizing: border-box;
-            """;
-        }
-    }
 
-    /** The mark on the knob: an {@code Icon}, centred over the face, at the size the design gives a knob's mark — the knob's own, when it is the knob. */
-    public record el_slider_mark() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            translate: -50% -50%;
-            """;
-        }
-    }
 
-    /** The readout after the rail: the value as the caller formats it, in a steady face, right-aligned. */
+    /** The readout after the range: the value as the caller formats it, in a steady face, right-aligned. */
     public record el_slider_readout() implements CssClass<ElementStyles> {
         // its steady width a flex basis, not a min-width: how small a text may be is its look's
         @Override public String body() { return """
@@ -228,164 +154,20 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
-    // ── Slider, vertical: a fader ─────────────────────────────────────────────
-    //
-    // The same words, turned: the rail takes a vertical writing mode, so the
-    // design's extent — its length inline, its room across — stands up with
-    // it, and the parts are placed from the bottom by the same fractions. A
-    // vertical slider's knob is the cap, wide across the track and low along
-    // it; the mark on it is set upright again.
 
-    /** The slider stood up: label above, rail, readout below. */
-    public record el_slider_vertical() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            flex-direction: column;
-            align-items: center;
-            """;
-        }
-    }
 
-    /** The rail stood up: the design's inline length runs downward, its block room across. */
-    public record el_slider_rail_vertical() implements CssClass<ElementStyles> {
-        @Override public String body() { return "writing-mode: vertical-lr;"; }
-    }
 
-    /** A rail with a scale beside it leaves the room the ticks' captions take, after it in the block direction: below a flat one, beside a standing one. */
-    public record el_slider_rail_ticked() implements CssClass<ElementStyles> {
-        @Override public String body() { return "margin-block-end: 2.2em;"; }
-    }
 
-    /** The track stood up: across the rail's middle, top to bottom. */
-    public record el_slider_track_vertical() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            inset-inline: auto;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            translate: -50% 0;
-            """;
-        }
-    }
 
-    /** The fill stood up: from the detent's height to the value's. */
-    public record el_slider_fill_vertical() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-from"), new CssVar("--sl-span")); }
-        @Override public String body() { return """
-            left: 0;
-            right: 0;
-            top: auto;
-            width: auto;
-            bottom: var(--sl-from, 0%);
-            height: var(--sl-span, 0%);
-            """;
-        }
-    }
 
-    /** The detent stood up: at its height, across the track. */
-    public record el_slider_detent_vertical() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-rest")); }
-        @Override public String body() { return """
-            top: auto;
-            left: 50%;
-            bottom: var(--sl-rest, 0%);
-            translate: -50% 50%;
-            """;
-        }
-    }
 
-    /**
-     * The cap: a vertical slider's knob — the box the hand takes and the
-     * keys go to, at the cap's extent (low along the track, wide across it),
-     * ringed on focus by the cap's own rule, placed at the value's height.
-     */
-    public record el_slider_cap() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-value")); }
-        @Override public String body() { return """
-            position: absolute;
-            left: 50%;
-            bottom: var(--sl-value, 0%);
-            translate: -50% 50%;
-            box-sizing: border-box;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            """;
-        }
-    }
 
-    /** The mark on the cap, upright again, at the size the design gives a cap's mark. */
-    public record el_slider_cap_mark() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            position: relative;
-            writing-mode: horizontal-tb;
-            """;
-        }
-    }
 
-    /**
-     * A tick of a scale: a line at a value, its caption beside it; placed
-     * after the rail in the block direction — below a flat slider, in a
-     * column; beside a standing one, in a row. Upright whatever the rail.
-     */
-    public record el_slider_tick() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-tick")); }
-        @Override public String body() { return """
-            position: absolute;
-            left: var(--sl-tick, 0%);
-            top: 100%;
-            translate: -50% 0;
-            margin-top: 2px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            writing-mode: horizontal-tb;
-            pointer-events: none;
-            """;
-        }
-    }
 
-    /** A tick beside a standing rail: at its height, to the right, a row. */
-    public record el_slider_tick_vertical() implements CssClass<ElementStyles> {
-        @Override public Set<CssVar> runtimeVars() { return Set.of(new CssVar("--sl-tick")); }
-        @Override public String body() { return """
-            left: 100%;
-            top: auto;
-            bottom: var(--sl-tick, 0%);
-            translate: 0 50%;
-            margin-top: 0;
-            margin-left: 3px;
-            flex-direction: row;
-            gap: 4px;
-            """;
-        }
-    }
 
-    /** The tick's line: the design's tick, along and across the track, in muted ink. */
-    public record el_slider_tick_line() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            flex: none;
-            """;
-        }
-    }
 
-    /** The tick's line beside a standing rail: turned with it, so along is up and across is level. */
-    public record el_slider_tick_line_vertical() implements CssClass<ElementStyles> {
-        @Override public String body() { return "writing-mode: vertical-lr;"; }
-    }
 
-    /** The tick's caption: its number, small and muted, in a steady face. */
-    public record el_slider_tick_label() implements CssClass<ElementStyles> {
-        @Override public String body() { return """
-            white-space: nowrap;
-            """;
-        }
-    }
 
-    /** A slider that is off: inert, and says so. */
-    public record el_slider_off() implements CssClass<ElementStyles> {
-        @Override public String body() { return "pointer-events: none;"; }
-    }
 
     // ── Slider group ──────────────────────────────────────────────────────────
 
@@ -756,11 +538,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     public List<CssClass<ElementStyles>> cssClasses() {
         return List.of(new el_button(), new el_button_primary(), new el_button_secondary(), new el_button_danger(), new el_button_warning(), new el_button_success(),
                        new el_button_plain(), new el_button_on(), new el_button_off(), new el_icon_button(), new el_text(),
-                       new el_slider(), new el_slider_label(), new el_slider_rail(), new el_slider_track(), new el_slider_fill(), new el_slider_detent(),
-                       new el_slider_knob(), new el_slider_mark(), new el_slider_readout(),
-                       new el_slider_vertical(), new el_slider_rail_vertical(), new el_slider_rail_ticked(), new el_slider_track_vertical(), new el_slider_fill_vertical(), new el_slider_detent_vertical(),
-                       new el_slider_cap(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
-                       new el_slider_off(),
+                       new el_slider(), new el_slider_label(), new el_slider_range(), new el_slider_readout(),
                        new el_menu_item(), new el_menu_item_label(), new el_menu_item_hint(), new el_menu_item_disclose(), new el_menu_item_lead(), new el_menu_item_off(), new el_choice_option(), new el_choice_option_note(),
                        new el_card(), new el_summary(), new el_summary_head(), new el_summary_title(), new el_summary_tag(), new el_summary_text(), new el_summary_foot(),
                        new el_checkbox(), new el_pane_thumb_name(), new el_switch(), new el_switch_groove(), new el_switch_knob(),
