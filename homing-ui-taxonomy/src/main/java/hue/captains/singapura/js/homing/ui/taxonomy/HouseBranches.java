@@ -62,6 +62,12 @@ public final class HouseBranches {
         @Override public Root parent() { return Root.INSTANCE; }
     }
 
+    /** One choice of a menu, of two kinds fixed for its life: one that does or opens, one that is checked or not (owner, 23 Oct). */
+    public record MenuItem() implements L2_ComponentBranch<Item> {
+        public static final MenuItem INSTANCE = new MenuItem();
+        @Override public Item parent() { return Item.INSTANCE; }
+    }
+
     /** What holds other components and gives them their place. */
     public record Container() implements L1_ComponentBranch<Root> {
         public static final Container INSTANCE = new Container();

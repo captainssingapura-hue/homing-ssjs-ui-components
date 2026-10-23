@@ -27,6 +27,8 @@ public record UiMenuBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
     @Override public List<ComponentAssignment<BaseScheme, Base, ?>> assignments() {
         return List.of(
                 new ComponentAssignment<>(HouseMenus.ContextMenuSteward.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenuSteward(), List.of()),
-                new ComponentAssignment<>(HouseContainers.ContextMenu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenu(), List.of()));
+                new ComponentAssignment<>(HouseContainers.ContextMenu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenu(), List.of()),
+                new ComponentAssignment<>(HouseContainers.L1Menu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.L1Menu(), List.of()),
+                new ComponentAssignment<>(HouseContainers.L2Menu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.L2Menu(), List.of()));
     }
 }

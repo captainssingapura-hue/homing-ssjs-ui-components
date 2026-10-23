@@ -1,0 +1,15 @@
+/* The level-2 menu in editorial: a menu opened where it is asked - raised, framed, its corner the style's, casting its shadow, in the style's face; its items and their lines its parts'. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px var(--fp-shade-dense), 0 2px 6px var(--fp-shade-solid);
+    padding-block: 6px;
+    gap: 2px;
+    min-width: 200px;
+    font-family: "Calibri", "Segoe UI", system-ui, sans-serif;
+    user-select: none;
+}

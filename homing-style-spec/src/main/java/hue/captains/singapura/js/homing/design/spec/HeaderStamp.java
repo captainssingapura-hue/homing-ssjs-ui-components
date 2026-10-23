@@ -93,8 +93,9 @@ public record HeaderStamp() implements StatelessFunctionalObject {
     /**
      * The stamp of a module that implements several components - a branch's base, every leaf under it; the icons' one
      * class - their headers merged (D19): each tree's imports once, two headers naming one node; the page's style
-     * manager's once; each room's constant once, two rooms of one name refused; a binding for each top-level component,
-     * each under its own name. One header is stamped as it is.
+     * manager's once; each room's constant once - two rooms of one name, the leaves' own, left out: each leaf's module names
+     * its own and hands it to the base (23 Oct); a binding for each top-level component, each under its own name. One
+     * header is stamped as it is.
      */
     public String stamp(List<ComponentHeader> headers, PageStyleManager page) {
         if (headers.isEmpty()) throw new IllegalArgumentException("a stamp is of one header at least");
@@ -113,11 +114,12 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         }
         if (headers.stream().anyMatch(ComponentHeader::topLevel)) lines.add("import { " + PageStyleManager.EXPORTED + " } from " + js.string(page.address()) + ";");
         var constants = new LinkedHashMap<String, String>();
+        var twice = new java.util.HashSet<String>();
         for (ComponentHeader h : headers) for (Constant s : rooms(h)) {
             String was = constants.putIfAbsent(s.name(), s.line());
-            if (was != null && !was.equals(s.line()))
-                throw new IllegalArgumentException("two rooms stamped as " + s.name() + " in one module: " + was + " and " + s.line());
+            if (was != null && !was.equals(s.line())) twice.add(s.name());   // two leaves' rooms of one name: neither is the base's
         }
+        twice.forEach(constants::remove);
         lines.addAll(constants.values());
         for (ComponentHeader h : headers) if (h.topLevel())
             lines.add("const " + manage(h) + " = " + PageStyleManager.EXPORTED + ".unit(" + DualRef.INSTANCE.of(h.component()).imported() + ");");

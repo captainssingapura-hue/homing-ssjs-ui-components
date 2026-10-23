@@ -17,7 +17,7 @@
 //              screen, as on blur. Without a steward a menu has no keys
 //   steward.define(kind)             a kind declared in JS, the same record, held
 //                                    to the same rules (MenuTree.check):
-//       .row(id, label, { icon?, hint? }?)   a row; icon is an Icon word
+//       .row(id, label, { icon?, hint?, checkable? }?)   a row; icon is an Icon word; checkable, a row checked or not
 //       .divider()                           the rows after are a new section
 //       .sub(id, label, opts?, sub => sub.row(...))   a row with rows, three levels at most
 //       .done() → the steward
@@ -108,6 +108,7 @@ class ContextMenuSteward {
             var n = { id: id, label: label, section: section };
             if (o && o.icon) n.icon = o.icon;
             if (o && o.hint) n.hint = o.hint;
+            if (o && o.checkable) n.checkable = true;
             return n;
         }
         function into(list, depth) {

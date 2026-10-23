@@ -1,8 +1,13 @@
 # The house's items
 
-## MenuItem
+## PlainMenuItem
 
-One choice of a menu: picking it does it, or opens the choices it leads to.
+One choice of a menu: picking it does it, or opens the choices it leads to. It is never checked.
+
+## CheckMenuItem
+
+One choice of a menu that is checked or not: picking it is the user's ask to turn it over. Its check
+shows where its own picture would, while it is checked.
 
 ## ListRow
 

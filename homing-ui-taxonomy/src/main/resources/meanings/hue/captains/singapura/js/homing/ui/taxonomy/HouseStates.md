@@ -230,3 +230,8 @@ for a tab that cannot be detached. Each change is one tab's.
 
 How many times a choice was picked - a menu's item pressed while it is usable: from none, each pick
 its going up. What a pick does is for its menu, and the one who opened the menu, to decide.
+
+## MenuPickControl
+
+For each row of a menu, and of the menus it holds, how many times it was picked - or none, for a row
+that opens rows. Each change is one row's. What a pick does is for whoever opened the menu to decide.

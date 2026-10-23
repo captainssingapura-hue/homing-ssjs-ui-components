@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
+import hue.captains.singapura.js.homing.component.taxonomy.PartOnly;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
@@ -160,14 +161,53 @@ public final class HouseContainers {
 
     // ── menus and layers ─────────────────────────────────────────────────
 
-    /** A menu opened where it is asked: its items, and the lines between groups of them. Submenus are its own frames. */
+    /**
+     * A menu opened where it is asked - level 0, the one at the top: its rows, made from its kind's tree, the lines between
+     * groups of them, and the menu of each row that opens rows, shown beside it (owner, 23 Oct). Its picks passed on.
+     */
     public record ContextMenu() implements Composite<HouseBranches.Menu> {
         public static final ContextMenu INSTANCE = new ContextMenu();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Menu parent() { return HouseBranches.Menu.INSTANCE; }
+        /** The picks of its rows and of the rows of the menus it holds, by the row: what a pick does, its opener decides. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.MenuPickControl.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseItems.MenuItem.INSTANCE).as(HouseDoing.Choice.INSTANCE).atLeast(1),
-                           DSL.part(HouseMarks.Separator.INSTANCE).as(HouseShaping.Break.INSTANCE).any());
+            return List.of(DSL.anyOf(HouseBranches.MenuItem.INSTANCE).as(HouseDoing.Choice.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(HouseMarks.Separator.INSTANCE).as(HouseShaping.Break.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(L1Menu.INSTANCE).as(HouseShaping.Popup.INSTANCE).any(Cardinality.DYNAMIC));
+        }
+    }
+
+    /**
+     * The menu of a row of a context menu, shown beside it while the cursor is on it - level 1 of a context menu, only ever its
+     * part: its rows, the lines between groups of them, and the menu of each of its rows that opens rows (owner, 23 Oct).
+     */
+    public record L1Menu() implements Composite<HouseBranches.Menu>, PartOnly {
+        public static final L1Menu INSTANCE = new L1Menu();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Menu parent() { return HouseBranches.Menu.INSTANCE; }
+        /** The picks of its rows and of the rows of the menus it holds, by the row. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.MenuPickControl.INSTANCE); }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.anyOf(HouseBranches.MenuItem.INSTANCE).as(HouseDoing.Choice.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(HouseMarks.Separator.INSTANCE).as(HouseShaping.Break.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(L2Menu.INSTANCE).as(HouseShaping.Popup.INSTANCE).any(Cardinality.DYNAMIC));
+        }
+    }
+
+    /**
+     * The menu of a row of a level-1 menu, shown beside it while the cursor is on it - level 2 of a context menu, only ever its
+     * part: its rows, the lines between groups of them; none of its rows opens rows - the last level (owner, 23 Oct).
+     */
+    public record L2Menu() implements Composite<HouseBranches.Menu>, PartOnly {
+        public static final L2Menu INSTANCE = new L2Menu();
+        private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
+        @Override public HouseBranches.Menu parent() { return HouseBranches.Menu.INSTANCE; }
+        /** The picks of its rows, by the row. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.MenuPickControl.INSTANCE); }
+        @Override public List<Slot<?>> parts() {
+            return List.of(DSL.anyOf(HouseBranches.MenuItem.INSTANCE).as(HouseDoing.Choice.INSTANCE).any(Cardinality.DYNAMIC),
+                           DSL.part(HouseMarks.Separator.INSTANCE).as(HouseShaping.Break.INSTANCE).any(Cardinality.DYNAMIC));
         }
     }
 

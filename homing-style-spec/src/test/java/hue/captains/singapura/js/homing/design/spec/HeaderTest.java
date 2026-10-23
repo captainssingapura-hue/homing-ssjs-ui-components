@@ -78,7 +78,8 @@ class HeaderTest {
             List<String> stack = Slots.INSTANCE.of(SPEC.taxonomy(), c).stream().map(s -> s.slot().token()).toList();
             if (!mine.equals(stack)) problems.add(c.token() + ": slots " + mine + ", the stack's " + stack);
             if (h.composite() == h.slots().isEmpty()) problems.add(c.token() + ": " + (h.composite() ? "a composite with no slot" : "a leaf with slots"));
-            if (h.topLevel() != SPEC.top().contains(c)) problems.add(c.token() + ": top-level wrongly said");
+            if (h.topLevel() != (SPEC.top().contains(c) && !(c instanceof hue.captains.singapura.js.homing.component.taxonomy.PartOnly)))
+                problems.add(c.token() + ": top-level wrongly said");   // listed, and not only ever a part (23 Oct)
             if (!h.states().stream().map(ComponentHeader.HeaderState::type).toList().equals(c.states()))
                 problems.add(c.token() + ": states other than it declares");
             slots += h.slots().size();

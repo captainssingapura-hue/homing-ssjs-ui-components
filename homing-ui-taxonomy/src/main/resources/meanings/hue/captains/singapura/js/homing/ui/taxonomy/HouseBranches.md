@@ -33,6 +33,11 @@ grid's mirror - and shows which is picked.
 
 One of many alike, offered or listed by what holds it; it means something only among the others.
 
+## MenuItem
+
+One choice of a menu. Of two kinds, fixed for its life: one that does something or opens the choices
+it leads to, and one that is checked or not.
+
 ## Container
 
 Holds other components together as one thing to the user, and gives each its place. What it

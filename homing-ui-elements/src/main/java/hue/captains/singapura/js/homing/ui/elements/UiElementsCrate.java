@@ -95,6 +95,8 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 // the items: a menu's, a list's row, a choice's option - one behaviour for the three
                 CrateEntry.of(ItemBehaviorModule.INSTANCE),
                 CrateEntry.of(MenuItemModule.INSTANCE),
+                CrateEntry.of(PlainMenuItemModule.INSTANCE),
+                CrateEntry.of(CheckMenuItemModule.INSTANCE),
                 CrateEntry.of(ListRowModule.INSTANCE),
                 CrateEntry.of(ChoiceOptionModule.INSTANCE),
                 // the cards - a container, plain or a button - and the summary, a view shown on any container

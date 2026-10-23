@@ -87,6 +87,7 @@ public final class MenuTrees {
                 problems.add(kind + ": " + id + " is listed under " + parent.id() + " but names " + (row.parent() == null ? "no parent" : row.parent().id()));
             if (!ids.add(id)) problems.add(kind + ": row id repeated: " + id);
             if (row.label() == null || row.label().isBlank()) problems.add(kind + ": " + id + " has no label");
+            if (row instanceof Checkable && !row.children().isEmpty()) problems.add(kind + ": " + id + " can be checked and lists rows: a row that can be checked opens none");
             check(kind, row, row.children(), depth + 1, ids, problems);
         }
     }

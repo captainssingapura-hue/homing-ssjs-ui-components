@@ -7,6 +7,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Classed;
 import hue.captains.singapura.js.homing.component.taxonomy.Flag;
 import hue.captains.singapura.js.homing.component.taxonomy.Importances;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
+import hue.captains.singapura.js.homing.component.taxonomy.PartOnly;
 import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
@@ -30,7 +31,7 @@ public record ReadHeader() implements StatelessFunctionalObject {
 
     public static final ReadHeader INSTANCE = new ReadHeader();
 
-    /** The header of one component of the taxonomy; top-level when the given list holds it. */
+    /** The header of one component of the taxonomy; top-level when the given list holds it, unless it is only ever a part (PartOnly, 23 Oct). */
     public ComponentHeader read(Taxonomy taxonomy, Collection<? extends Component<?>> top, Component<?> component) {
         var slots = new ArrayList<ComponentHeader.HeaderSlot>();
         var parts = new LinkedHashSet<Component<?>>();
@@ -56,7 +57,7 @@ public record ReadHeader() implements StatelessFunctionalObject {
         var chosen = new LinkedHashSet<Component<?>>();
         for (Component<?> part : parts) choices(taxonomy, part, chosen);
         chosen.removeAll(parts);
-        return new ComponentHeader(component, component instanceof Composite<?>, top.contains(component), slots, List.copyOf(parts),
+        return new ComponentHeader(component, component instanceof Composite<?>, top.contains(component) && !(component instanceof PartOnly), slots, List.copyOf(parts),
                 states, taxonomy.extents(component), component.rooms(), List.copyOf(chosen));
     }
 

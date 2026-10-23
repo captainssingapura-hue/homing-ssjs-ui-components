@@ -1,26 +1,23 @@
 // =============================================================================
-// MenuItem — one choice of a menu: its name, its own icon leading it, its hint,
-// and its way into rows of its own. Ported (RFC 0071, 23 Oct): a composed
-// component, made by its menu - cast as its choice - or on its own at the root.
-// What it is made with is fixed for its life, in its fixed object: its own icon,
-// or none; a check, for a row that can be checked - shown in its leading place,
-// in place of its own icon, while it is checked (owner, 23 Oct: option a); its
-// hint, the house's caption; its way on, the disclose icon, for a row that opens
-// rows. Its leading place is kept whether an icon is shown there or not, so the
-// names in a menu line up - a room of its own, as its name is.
+// MenuItem — what the two kinds of a menu's item share (owner, 23 Oct): one
+// choice of a menu, its name, its own icon leading it or none, its hint. Never
+// made on its own: each kind is - PlainMenuItem, which does something or opens
+// the rows it leads to, and CheckMenuItem, which is checked or not - each with
+// its own fixed type, binding and rooms, handed in. What it is made with is fixed
+// for its life. Its leading place is kept whether an icon is shown there or not,
+// so the names in a menu line up - a room of its own, as its name is.
 //
 // Its states: usable, or off (Enabled); where its menu's cursor is (Pointed) -
-// its menu's to say, and the pointer coming onto it points at it; checked, for
-// one that can be (Checked); its rows open, for one that opens rows (Expanded);
-// and its picks (PickControl), its press while it is usable passed on, handled
-// by none: what a pick does, its menu decides. It takes no focus: its menu's
-// keys are its menu's.
+// its menu's to say, and the pointer coming onto it points at it, while it is
+// usable: an off row never takes the cursor and stays grey (owner, 23 Oct); and
+// its picks (PickControl), its press while it is usable passed on, handled by
+// none: what a pick does, its menu decides. It takes no focus: its menu's keys
+// are its menu's.
 //
-//   var item = new MenuItem(branch.createBranch("rotate"), new FixedMenuItem(new FixedRotateIcon(), null, new FixedCaption(), null), me.place(FixedMenuItem));
-//   item.label = "Rotate"   item.hint = "a quarter turn"
+//   class PlainMenuItem extends MenuItem { constructor(branch, fixed, place) {
+//       super(branch, fixed, FixedPlainMenuItem, place ?? managePlainMenuItem, { lead: ROOM_LEAD, label: ROOM_LABEL }); } }
+//   item.label   item.hint   item.enabled   item.pointed   item.picks
 //   item.onChange(StatePickControl, listener)   picked: the count up by one
-//   item.onChange(StatePointed, listener)       the cursor on it, or the pointer onto it
-//   item.enabled  item.pointed  item.checked  item.expanded  item.picks
 // Its own classes only place. `css` is injected with the styles import.
 // =============================================================================
 
@@ -28,6 +25,7 @@ const _menuItemOwner = Object.freeze({ toString: () => "menu-item" });
 
 class MenuItem extends SimpleComponent {
     static TAG = "div";
+    /** What every kind has; each adds its own. */
     static AXES = Object.freeze({
         enabled: Object.freeze({
             values: Object.freeze([true, false]),
@@ -36,24 +34,22 @@ class MenuItem extends SimpleComponent {
             state: StateEnabled
         }),
         pointed: Object.freeze({ values: Object.freeze([false, true]), rest: false, state: StatePointed }),
-        checked: Object.freeze({ values: Object.freeze([false, true]), rest: false, state: StateChecked }),
-        expanded: Object.freeze({ values: Object.freeze([false, true]), rest: false, state: StateExpanded }),
         picks: Object.freeze({ rest: 0, state: StatePickControl })   // its presses while usable, passed on: no class
     });
     static BEHAVIOR = ItemBehavior;
 
-    constructor(branch, fixed, place) {
+    constructor(branch, fixed, Fixed, place, rooms) {
         if (!branch || typeof branch.elementMaker !== "function")
             throw new TypeError("[MenuItem] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_menuItemOwner);
-        super(branch.elementMaker("item"), fixed, FixedMenuItem, place ?? manageMenuItem);
+        super(branch.elementMaker("item"), fixed, Fixed, place);
         this.branch = branch;
         css.addClass(this.el, el_menu_item);
         this.el.setAttribute("role", "menuitem");
         this.el.setAttribute("tabindex", "-1");
-        // its leading place: a room of its own, its own icon in it, and the check beside it, the one shown at a time
+        // its leading place: a room of its own, its own icon in it - and, for a kind that has one, its check
         this._lead = branch.createElement("lead", "span");
-        this._room(ROOM_LEAD, this._lead);
+        this._room(rooms.lead, this._lead);
         css.addClass(this._lead, el_menu_item_lead);
         this.el.appendChild(this._lead);
         this._icon = null;
@@ -61,16 +57,9 @@ class MenuItem extends SimpleComponent {
             this._icon = new Icon(branch.elementMaker("icon"), this.fixed.leading, this._place(this.fixed.leading, RoleLeading));
             this._lead.appendChild(this._icon.el);
         }
-        this._check = null;
-        if (this.fixed.chosen !== null) {
-            this._check = new Icon(branch.elementMaker("check"), this.fixed.chosen, this._place(this.fixed.chosen, RoleChosen));
-            css.addClass(this._check.el, el_menu_item_off);   // shown while it is checked
-            this._lead.appendChild(this._check.el);
-            this.el.setAttribute("aria-checked", "false");
-        }
         // its name: a room of its own
         this._label = branch.createElement("label", "span");
-        this._room(ROOM_LABEL, this._label);
+        this._room(rooms.label, this._label);
         css.addClass(this._label, el_menu_item_label);
         this.el.appendChild(this._label);
         // its hint, the house's caption cast as a hint
@@ -79,15 +68,6 @@ class MenuItem extends SimpleComponent {
             this._hint = new Caption(branch.elementMaker("hint"), this.fixed.hint, this._place(this.fixed.hint));
             css.addClass(this._hint.el, el_menu_item_hint);
             this.el.appendChild(this._hint.el);
-        }
-        // its way into its rows, the disclose icon, at its end
-        this._disclose = null;
-        if (this.fixed.disclose !== null) {
-            this._disclose = new Icon(branch.elementMaker("disclose"), this.fixed.disclose, this._place(this.fixed.disclose, RoleDisclose));
-            css.addClass(this._disclose.el, el_menu_item_disclose);
-            this.el.appendChild(this._disclose.el);
-            this.el.setAttribute("aria-haspopup", "menu");
-            this.el.setAttribute("aria-expanded", "false");
         }
         this.root = this.el;
     }
@@ -103,30 +83,18 @@ class MenuItem extends SimpleComponent {
         this._hint.text = words;
     }
 
-    /** Usable, or off. */
+    /** Usable, or off: off, it lets the cursor go. */
     get enabled() { return this._get("enabled"); }
-    set enabled(on) { this._set("enabled", !!on); }
-
-    /** The one its menu's cursor is on. */
-    get pointed() { return this._get("pointed"); }
-    set pointed(on) { this._set("pointed", !!on); }
-
-    /** Checked: its check shown in its leading place, its own icon not. Only a row made with a check can be. */
-    get checked() { return this._get("checked"); }
-    set checked(on) {
-        if (this._check === null) throw new TypeError("[MenuItem] made with no check: it cannot be checked");
-        this._set("checked", !!on);
-        this.el.setAttribute("aria-checked", this.checked ? "true" : "false");
-        css.toggleClass(this._check.el, el_menu_item_off, !this.checked);
-        if (this._icon !== null) css.toggleClass(this._icon.el, el_menu_item_off, this.checked);
+    set enabled(on) {
+        this._set("enabled", !!on);
+        if (!this.enabled && this.pointed) this._set("pointed", false);
     }
 
-    /** Its rows open. Only a row made with its way on opens rows. */
-    get expanded() { return this._get("expanded"); }
-    set expanded(on) {
-        if (this._disclose === null) throw new TypeError("[MenuItem] made with no way on: it opens no rows");
-        this._set("expanded", !!on);
-        this.el.setAttribute("aria-expanded", this.expanded ? "true" : "false");
+    /** The one its menu's cursor is on: never an off one. */
+    get pointed() { return this._get("pointed"); }
+    set pointed(on) {
+        if (on && !this.enabled) throw new TypeError("[MenuItem] off: it takes no cursor");
+        this._set("pointed", !!on);
     }
 
     /** How many times it was picked, from none: its presses while it was usable. */

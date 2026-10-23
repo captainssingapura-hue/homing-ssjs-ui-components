@@ -1,28 +1,26 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.component.BranchComponent;
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplForBranch;
 import hue.captains.singapura.js.homing.core.DomModule;
+import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.icons.IconModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseBranches;
 
 import java.util.List;
 
 /**
- * The menu's item: one choice of a menu - its name, its own icon leading it, chosen once, a check for a row that can be
- * checked, shown in its place while it is (owner, 23 Oct: option a), its hint a caption, its way into rows of its own - a
- * composed component on its own {@code <div role="menuitem">}, ported (RFC 0071). Its presses while usable are counted
- * as its {@code PickControl}, handled by none: what a pick does, its menu decides.
+ * What the two kinds of a menu's item share (owner, 23 Oct): a composed component on its own {@code <div role="menuitem">},
+ * its leading place with its own icon in it, its name, its hint; usable or off, where its menu's cursor is - never an off
+ * one - and its picks. Never made on its own: each kind is, with its own fixed type, binding and rooms. Stamped with both
+ * kinds' headers (RFC 0071, D19), the rooms of one name left to each kind.
  */
-public record MenuItemModule() implements DomModule<MenuItemModule>, ImplFor<HouseItems.MenuItem> {
+public record MenuItemModule() implements DomModule<MenuItemModule>, ImplForBranch<HouseBranches.MenuItem> {
 
-    /** {@code new MenuItem(branch, new FixedMenuItem(leading?, check?, hint?, disclose?), place?)}; {@code onChange(StatePickControl | StatePointed | ..., listener)}; {@code label}, {@code hint}, {@code enabled}, {@code pointed}, {@code checked}, {@code expanded}, {@code picks}. */
-    public record MenuItem() implements BranchComponent<MenuItemModule> {
-        @Override public String summary() { return "One choice of a menu: its name, its icon or its check, its hint and its way into rows of its own; off, or where the menu's cursor is; its picks counted."; }
-    }
+    /** The base: {@code class XMenuItem extends MenuItem}; {@code label}, {@code hint}, {@code enabled}, {@code pointed}, {@code picks}. */
+    public record MenuItem() implements Exportable._Class<MenuItemModule> {}
 
     public static final MenuItemModule INSTANCE = new MenuItemModule();
 
@@ -34,8 +32,7 @@ public record MenuItemModule() implements DomModule<MenuItemModule>, ImplFor<Hou
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ElementStyles.el_menu_item(), new ElementStyles.el_menu_item_label(),
-                        new ElementStyles.el_menu_item_hint(), new ElementStyles.el_menu_item_disclose(), new ElementStyles.el_menu_item_lead(),
-                        new ElementStyles.el_menu_item_off()), ElementStyles.INSTANCE))
+                        new ElementStyles.el_menu_item_hint(), new ElementStyles.el_menu_item_lead()), ElementStyles.INSTANCE))
                 .build();
     }
 

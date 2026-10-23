@@ -36,7 +36,11 @@ public final class UiMenuCrate implements Crate, ComponentVehicle {
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(ContextMenuStewardModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(MenuBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(ContextMenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(L1MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(L2MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(MenuEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(MenuGeometryModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(MenuTreeModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),

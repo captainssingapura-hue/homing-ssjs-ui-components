@@ -30,7 +30,7 @@ public record UiElementsComponentModule() implements ComponentModule {
                        HouseControls.Range.INSTANCE, HouseControls.Select.INSTANCE, HouseContainers.Scrim.INSTANCE,
                        HouseMarks.Separator.INSTANCE, HouseMarks.Delimiter.INSTANCE, HouseMarks.BrandMark.INSTANCE,
                        HouseMarks.Lamp.INSTANCE, HouseMarks.DropMark.INSTANCE, HouseMarks.Detent.INSTANCE,
-                       HouseMarks.Tick.INSTANCE, HouseMarks.BoundaryLine.INSTANCE, HouseItems.MenuItem.INSTANCE,
+                       HouseMarks.Tick.INSTANCE, HouseMarks.BoundaryLine.INSTANCE, HouseItems.PlainMenuItem.INSTANCE, HouseItems.CheckMenuItem.INSTANCE,
                        HouseItems.ListRow.INSTANCE, HouseItems.ChoiceOption.INSTANCE,
                        HouseContainers.PlainContainer.INSTANCE, HouseContainers.GridCell.INSTANCE, HouseContainers.LayoutStyling.INSTANCE,
                        HouseContainers.PlainCard.INSTANCE, HouseContainers.ClickableCard.INSTANCE,

@@ -41,7 +41,8 @@ hue.captains.singapura.js.homing.design.spec.styles.base.DropMark	hue.captains.s
 hue.captains.singapura.js.homing.design.spec.styles.base.Detent	hue.captains.singapura.js.homing.design.styles.base.Detent
 hue.captains.singapura.js.homing.design.spec.styles.base.Tick	hue.captains.singapura.js.homing.design.styles.base.Tick
 hue.captains.singapura.js.homing.design.spec.styles.base.BoundaryLine	hue.captains.singapura.js.homing.design.styles.base.BoundaryLine
-hue.captains.singapura.js.homing.design.spec.styles.base.MenuItem	hue.captains.singapura.js.homing.design.styles.base.MenuItem
+hue.captains.singapura.js.homing.design.spec.styles.base.PlainMenuItem	hue.captains.singapura.js.homing.design.styles.base.PlainMenuItem
+hue.captains.singapura.js.homing.design.spec.styles.base.CheckMenuItem	hue.captains.singapura.js.homing.design.styles.base.CheckMenuItem
 hue.captains.singapura.js.homing.design.spec.styles.base.ListRow	hue.captains.singapura.js.homing.design.styles.base.ListRow
 hue.captains.singapura.js.homing.design.spec.styles.base.ChoiceOption	hue.captains.singapura.js.homing.design.styles.base.ChoiceOption
 hue.captains.singapura.js.homing.design.spec.styles.base.PlainCard	hue.captains.singapura.js.homing.design.styles.base.PlainCard
@@ -88,6 +89,8 @@ hue.captains.singapura.js.homing.design.spec.styles.base.FloatingPane	hue.captai
 hue.captains.singapura.js.homing.design.spec.styles.base.FloatLayer	hue.captains.singapura.js.homing.design.styles.base.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenuSteward	hue.captains.singapura.js.homing.design.styles.base.ContextMenuSteward
 hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenu	hue.captains.singapura.js.homing.design.styles.base.ContextMenu
+hue.captains.singapura.js.homing.design.spec.styles.base.L1Menu	hue.captains.singapura.js.homing.design.styles.base.L1Menu
+hue.captains.singapura.js.homing.design.spec.styles.base.L2Menu	hue.captains.singapura.js.homing.design.styles.base.L2Menu
 hue.captains.singapura.js.homing.design.spec.styles.base.TabPicker	hue.captains.singapura.js.homing.design.styles.base.TabPicker
 hue.captains.singapura.js.homing.design.spec.styles.base.MultiTabPane	hue.captains.singapura.js.homing.design.styles.base.MultiTabPane
 hue.captains.singapura.js.homing.design.spec.styles.base.SingleTabPane	hue.captains.singapura.js.homing.design.styles.base.SingleTabPane
@@ -151,7 +154,8 @@ hue.captains.singapura.js.homing.design.spec.styles.editorial.Separator	hue.capt
 hue.captains.singapura.js.homing.design.spec.styles.editorial.Lamp	hue.captains.singapura.js.homing.design.styles.editorial.Lamp
 hue.captains.singapura.js.homing.design.spec.styles.editorial.Detent	hue.captains.singapura.js.homing.design.styles.editorial.Detent
 hue.captains.singapura.js.homing.design.spec.styles.editorial.Tick	hue.captains.singapura.js.homing.design.styles.editorial.Tick
-hue.captains.singapura.js.homing.design.spec.styles.editorial.MenuItem	hue.captains.singapura.js.homing.design.styles.editorial.MenuItem
+hue.captains.singapura.js.homing.design.spec.styles.editorial.PlainMenuItem	hue.captains.singapura.js.homing.design.styles.editorial.PlainMenuItem
+hue.captains.singapura.js.homing.design.spec.styles.editorial.CheckMenuItem	hue.captains.singapura.js.homing.design.styles.editorial.CheckMenuItem
 hue.captains.singapura.js.homing.design.spec.styles.editorial.ListRow	hue.captains.singapura.js.homing.design.styles.editorial.ListRow
 hue.captains.singapura.js.homing.design.spec.styles.editorial.ChoiceOption	hue.captains.singapura.js.homing.design.styles.editorial.ChoiceOption
 hue.captains.singapura.js.homing.design.spec.styles.editorial.PlainCard	hue.captains.singapura.js.homing.design.styles.editorial.PlainCard
@@ -175,6 +179,8 @@ hue.captains.singapura.js.homing.design.spec.styles.editorial.CodeBlock	hue.capt
 hue.captains.singapura.js.homing.design.spec.styles.editorial.FloatingPane	hue.captains.singapura.js.homing.design.styles.editorial.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.editorial.FloatLayer	hue.captains.singapura.js.homing.design.styles.editorial.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.editorial.ContextMenu	hue.captains.singapura.js.homing.design.styles.editorial.ContextMenu
+hue.captains.singapura.js.homing.design.spec.styles.editorial.L1Menu	hue.captains.singapura.js.homing.design.styles.editorial.L1Menu
+hue.captains.singapura.js.homing.design.spec.styles.editorial.L2Menu	hue.captains.singapura.js.homing.design.styles.editorial.L2Menu
 hue.captains.singapura.js.homing.design.spec.styles.editorial.TabStrip	hue.captains.singapura.js.homing.design.styles.editorial.TabStrip
 hue.captains.singapura.js.homing.design.spec.styles.editorial.Tab	hue.captains.singapura.js.homing.design.styles.editorial.Tab
 hue.captains.singapura.js.homing.design.spec.styles.editorial.ActionBar	hue.captains.singapura.js.homing.design.styles.editorial.ActionBar
@@ -218,7 +224,8 @@ hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Separator	hue.c
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Lamp	hue.captains.singapura.js.homing.design.styles.neobrutalism.Lamp
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Detent	hue.captains.singapura.js.homing.design.styles.neobrutalism.Detent
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Tick	hue.captains.singapura.js.homing.design.styles.neobrutalism.Tick
-hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.MenuItem	hue.captains.singapura.js.homing.design.styles.neobrutalism.MenuItem
+hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PlainMenuItem	hue.captains.singapura.js.homing.design.styles.neobrutalism.PlainMenuItem
+hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.CheckMenuItem	hue.captains.singapura.js.homing.design.styles.neobrutalism.CheckMenuItem
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.ListRow	hue.captains.singapura.js.homing.design.styles.neobrutalism.ListRow
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.ChoiceOption	hue.captains.singapura.js.homing.design.styles.neobrutalism.ChoiceOption
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PlainCard	hue.captains.singapura.js.homing.design.styles.neobrutalism.PlainCard
@@ -242,6 +249,8 @@ hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.CodeBlock	hue.c
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.FloatingPane	hue.captains.singapura.js.homing.design.styles.neobrutalism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.FloatLayer	hue.captains.singapura.js.homing.design.styles.neobrutalism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.ContextMenu	hue.captains.singapura.js.homing.design.styles.neobrutalism.ContextMenu
+hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.L1Menu	hue.captains.singapura.js.homing.design.styles.neobrutalism.L1Menu
+hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.L2Menu	hue.captains.singapura.js.homing.design.styles.neobrutalism.L2Menu
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.TabStrip	hue.captains.singapura.js.homing.design.styles.neobrutalism.TabStrip
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Tab	hue.captains.singapura.js.homing.design.styles.neobrutalism.Tab
 hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.ActionBar	hue.captains.singapura.js.homing.design.styles.neobrutalism.ActionBar
@@ -285,7 +294,8 @@ hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Separator	hue.ca
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Lamp	hue.captains.singapura.js.homing.design.styles.neofuturism.Lamp
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Detent	hue.captains.singapura.js.homing.design.styles.neofuturism.Detent
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Tick	hue.captains.singapura.js.homing.design.styles.neofuturism.Tick
-hue.captains.singapura.js.homing.design.spec.styles.neofuturism.MenuItem	hue.captains.singapura.js.homing.design.styles.neofuturism.MenuItem
+hue.captains.singapura.js.homing.design.spec.styles.neofuturism.PlainMenuItem	hue.captains.singapura.js.homing.design.styles.neofuturism.PlainMenuItem
+hue.captains.singapura.js.homing.design.spec.styles.neofuturism.CheckMenuItem	hue.captains.singapura.js.homing.design.styles.neofuturism.CheckMenuItem
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.ListRow	hue.captains.singapura.js.homing.design.styles.neofuturism.ListRow
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.ChoiceOption	hue.captains.singapura.js.homing.design.styles.neofuturism.ChoiceOption
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.PlainCard	hue.captains.singapura.js.homing.design.styles.neofuturism.PlainCard
@@ -309,6 +319,8 @@ hue.captains.singapura.js.homing.design.spec.styles.neofuturism.CodeBlock	hue.ca
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.FloatingPane	hue.captains.singapura.js.homing.design.styles.neofuturism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.FloatLayer	hue.captains.singapura.js.homing.design.styles.neofuturism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.ContextMenu	hue.captains.singapura.js.homing.design.styles.neofuturism.ContextMenu
+hue.captains.singapura.js.homing.design.spec.styles.neofuturism.L1Menu	hue.captains.singapura.js.homing.design.styles.neofuturism.L1Menu
+hue.captains.singapura.js.homing.design.spec.styles.neofuturism.L2Menu	hue.captains.singapura.js.homing.design.styles.neofuturism.L2Menu
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.TabStrip	hue.captains.singapura.js.homing.design.styles.neofuturism.TabStrip
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.Tab	hue.captains.singapura.js.homing.design.styles.neofuturism.Tab
 hue.captains.singapura.js.homing.design.spec.styles.neofuturism.ActionBar	hue.captains.singapura.js.homing.design.styles.neofuturism.ActionBar
@@ -352,7 +364,8 @@ hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Separator	hue.ca
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Lamp	hue.captains.singapura.js.homing.design.styles.neumorphism.Lamp
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Detent	hue.captains.singapura.js.homing.design.styles.neumorphism.Detent
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Tick	hue.captains.singapura.js.homing.design.styles.neumorphism.Tick
-hue.captains.singapura.js.homing.design.spec.styles.neumorphism.MenuItem	hue.captains.singapura.js.homing.design.styles.neumorphism.MenuItem
+hue.captains.singapura.js.homing.design.spec.styles.neumorphism.PlainMenuItem	hue.captains.singapura.js.homing.design.styles.neumorphism.PlainMenuItem
+hue.captains.singapura.js.homing.design.spec.styles.neumorphism.CheckMenuItem	hue.captains.singapura.js.homing.design.styles.neumorphism.CheckMenuItem
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.ListRow	hue.captains.singapura.js.homing.design.styles.neumorphism.ListRow
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.ChoiceOption	hue.captains.singapura.js.homing.design.styles.neumorphism.ChoiceOption
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.PlainCard	hue.captains.singapura.js.homing.design.styles.neumorphism.PlainCard
@@ -376,6 +389,8 @@ hue.captains.singapura.js.homing.design.spec.styles.neumorphism.CodeBlock	hue.ca
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.FloatingPane	hue.captains.singapura.js.homing.design.styles.neumorphism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.FloatLayer	hue.captains.singapura.js.homing.design.styles.neumorphism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.ContextMenu	hue.captains.singapura.js.homing.design.styles.neumorphism.ContextMenu
+hue.captains.singapura.js.homing.design.spec.styles.neumorphism.L1Menu	hue.captains.singapura.js.homing.design.styles.neumorphism.L1Menu
+hue.captains.singapura.js.homing.design.spec.styles.neumorphism.L2Menu	hue.captains.singapura.js.homing.design.styles.neumorphism.L2Menu
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.TabStrip	hue.captains.singapura.js.homing.design.styles.neumorphism.TabStrip
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Tab	hue.captains.singapura.js.homing.design.styles.neumorphism.Tab
 hue.captains.singapura.js.homing.design.spec.styles.neumorphism.ActionBar	hue.captains.singapura.js.homing.design.styles.neumorphism.ActionBar
@@ -419,7 +434,8 @@ hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Separator	hue.
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Lamp	hue.captains.singapura.js.homing.design.styles.glassmorphism.Lamp
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Detent	hue.captains.singapura.js.homing.design.styles.glassmorphism.Detent
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Tick	hue.captains.singapura.js.homing.design.styles.glassmorphism.Tick
-hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.MenuItem	hue.captains.singapura.js.homing.design.styles.glassmorphism.MenuItem
+hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.PlainMenuItem	hue.captains.singapura.js.homing.design.styles.glassmorphism.PlainMenuItem
+hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.CheckMenuItem	hue.captains.singapura.js.homing.design.styles.glassmorphism.CheckMenuItem
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.ListRow	hue.captains.singapura.js.homing.design.styles.glassmorphism.ListRow
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.ChoiceOption	hue.captains.singapura.js.homing.design.styles.glassmorphism.ChoiceOption
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.PlainCard	hue.captains.singapura.js.homing.design.styles.glassmorphism.PlainCard
@@ -443,6 +459,8 @@ hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.CodeBlock	hue.
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.FloatingPane	hue.captains.singapura.js.homing.design.styles.glassmorphism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.FloatLayer	hue.captains.singapura.js.homing.design.styles.glassmorphism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.ContextMenu	hue.captains.singapura.js.homing.design.styles.glassmorphism.ContextMenu
+hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.L1Menu	hue.captains.singapura.js.homing.design.styles.glassmorphism.L1Menu
+hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.L2Menu	hue.captains.singapura.js.homing.design.styles.glassmorphism.L2Menu
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.TabStrip	hue.captains.singapura.js.homing.design.styles.glassmorphism.TabStrip
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.Tab	hue.captains.singapura.js.homing.design.styles.glassmorphism.Tab
 hue.captains.singapura.js.homing.design.spec.styles.glassmorphism.ActionBar	hue.captains.singapura.js.homing.design.styles.glassmorphism.ActionBar
@@ -486,7 +504,8 @@ hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Separator	hue.
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Lamp	hue.captains.singapura.js.homing.design.styles.retrofuturism.Lamp
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Detent	hue.captains.singapura.js.homing.design.styles.retrofuturism.Detent
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Tick	hue.captains.singapura.js.homing.design.styles.retrofuturism.Tick
-hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.MenuItem	hue.captains.singapura.js.homing.design.styles.retrofuturism.MenuItem
+hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainMenuItem	hue.captains.singapura.js.homing.design.styles.retrofuturism.PlainMenuItem
+hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CheckMenuItem	hue.captains.singapura.js.homing.design.styles.retrofuturism.CheckMenuItem
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ListRow	hue.captains.singapura.js.homing.design.styles.retrofuturism.ListRow
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ChoiceOption	hue.captains.singapura.js.homing.design.styles.retrofuturism.ChoiceOption
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.PlainCard	hue.captains.singapura.js.homing.design.styles.retrofuturism.PlainCard
@@ -510,6 +529,8 @@ hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.CodeBlock	hue.
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.FloatingPane	hue.captains.singapura.js.homing.design.styles.retrofuturism.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.FloatLayer	hue.captains.singapura.js.homing.design.styles.retrofuturism.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ContextMenu	hue.captains.singapura.js.homing.design.styles.retrofuturism.ContextMenu
+hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.L1Menu	hue.captains.singapura.js.homing.design.styles.retrofuturism.L1Menu
+hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.L2Menu	hue.captains.singapura.js.homing.design.styles.retrofuturism.L2Menu
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.TabStrip	hue.captains.singapura.js.homing.design.styles.retrofuturism.TabStrip
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.Tab	hue.captains.singapura.js.homing.design.styles.retrofuturism.Tab
 hue.captains.singapura.js.homing.design.spec.styles.retrofuturism.ActionBar	hue.captains.singapura.js.homing.design.styles.retrofuturism.ActionBar
@@ -553,7 +574,8 @@ hue.captains.singapura.js.homing.design.spec.styles.sketchy.Separator	hue.captai
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Lamp	hue.captains.singapura.js.homing.design.styles.sketchy.Lamp
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Detent	hue.captains.singapura.js.homing.design.styles.sketchy.Detent
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Tick	hue.captains.singapura.js.homing.design.styles.sketchy.Tick
-hue.captains.singapura.js.homing.design.spec.styles.sketchy.MenuItem	hue.captains.singapura.js.homing.design.styles.sketchy.MenuItem
+hue.captains.singapura.js.homing.design.spec.styles.sketchy.PlainMenuItem	hue.captains.singapura.js.homing.design.styles.sketchy.PlainMenuItem
+hue.captains.singapura.js.homing.design.spec.styles.sketchy.CheckMenuItem	hue.captains.singapura.js.homing.design.styles.sketchy.CheckMenuItem
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.ListRow	hue.captains.singapura.js.homing.design.styles.sketchy.ListRow
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.ChoiceOption	hue.captains.singapura.js.homing.design.styles.sketchy.ChoiceOption
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.PlainCard	hue.captains.singapura.js.homing.design.styles.sketchy.PlainCard
@@ -577,6 +599,8 @@ hue.captains.singapura.js.homing.design.spec.styles.sketchy.CodeBlock	hue.captai
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.FloatingPane	hue.captains.singapura.js.homing.design.styles.sketchy.FloatingPane
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.FloatLayer	hue.captains.singapura.js.homing.design.styles.sketchy.FloatLayer
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.ContextMenu	hue.captains.singapura.js.homing.design.styles.sketchy.ContextMenu
+hue.captains.singapura.js.homing.design.spec.styles.sketchy.L1Menu	hue.captains.singapura.js.homing.design.styles.sketchy.L1Menu
+hue.captains.singapura.js.homing.design.spec.styles.sketchy.L2Menu	hue.captains.singapura.js.homing.design.styles.sketchy.L2Menu
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.TabStrip	hue.captains.singapura.js.homing.design.styles.sketchy.TabStrip
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.Tab	hue.captains.singapura.js.homing.design.styles.sketchy.Tab
 hue.captains.singapura.js.homing.design.spec.styles.sketchy.ActionBar	hue.captains.singapura.js.homing.design.styles.sketchy.ActionBar

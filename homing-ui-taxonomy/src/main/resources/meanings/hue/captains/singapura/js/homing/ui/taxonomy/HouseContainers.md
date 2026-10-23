@@ -27,6 +27,16 @@ Holds content in a window of its own over the page, which the user can move and 
 
 Offers the choices that apply where the user asked, there, and closes once one is made.
 
+## L1Menu
+
+The choices a row of a context menu leads to, shown beside it while the user is on it. Only ever
+part of a context menu.
+
+## L2Menu
+
+The choices a row of a level-1 menu leads to, shown beside it while the user is on it: the last
+level, its choices lead nowhere further. Only ever part of a level-1 menu.
+
 ## Scrim
 
 Holds the page back while something above it asks for the user's attention.

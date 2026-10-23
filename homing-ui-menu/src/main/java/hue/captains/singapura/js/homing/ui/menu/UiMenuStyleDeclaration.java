@@ -18,6 +18,8 @@ public record UiMenuStyleDeclaration() implements StyleDeclaration {
     @Override public List<Provided<?, ?>> provided() {
         return List.of(new Provided<>(Base.INSTANCE, List.of(
                 new ContextMenu(),
+                new L1Menu(),
+                new L2Menu(),
                 new ContextMenuSteward())));
     }
 }

@@ -390,6 +390,17 @@ public final class HouseStates {
         @Override public StateDomain domain() { return DOMAIN; }
     }
 
+    /**
+     * For each row of a menu - its own and those of the menus it holds - how many times it was picked: by the row's id, a
+     * count from none, or none for a row that opens rows rather than being picked. Each change is one row's. What a pick
+     * does, the menu's opener decides; nothing it shows changes - no class (owner, 23 Oct).
+     */
+    public record MenuPickControl() implements StateType<Counting> {
+        public static final MenuPickControl INSTANCE = new MenuPickControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
     // ── given ────────────────────────────────────────────────────────────
 
     /** What is typed in it so far, the user still at it: a text, none at rest. What it shows is the words themselves - no class. */
@@ -446,7 +457,7 @@ public final class HouseStates {
             Empty.INSTANCE,
             Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, TabCarry.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
-            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, PickControl.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE,
             DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }

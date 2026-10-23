@@ -16,6 +16,8 @@ public record UiMenuComponents() implements C0_Components<UiMenuComponents> {
     @Override public List<ComponentEntry<UiMenuComponents>> leaves() {
         return List.of(
                 ComponentEntry.of(this, new ContextMenuStewardModule.ContextMenuSteward()),
-                ComponentEntry.of(this, new ContextMenuModule.ContextMenu()));
+                ComponentEntry.of(this, new ContextMenuModule.ContextMenu()),
+                ComponentEntry.of(this, new L1MenuModule.L1Menu()),
+                ComponentEntry.of(this, new L2MenuModule.L2Menu()));
     }
 }
