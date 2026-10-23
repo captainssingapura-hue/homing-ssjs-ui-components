@@ -32,7 +32,8 @@ public record FloatingPaneModule() implements DomModule<FloatingPaneModule>, Imp
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneBehaviorModule.FloatingPaneBehavior()), FloatingPaneBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TitleBarModule.TitleBar()), TitleBarModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.fp_frame(), new PaneStyles.fp_body()), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneStyles.fp_frame(), new PaneStyles.fp_body(),
+                        new PaneStyles.fp_size(),new PaneStyles.fp_size_n(), new PaneStyles.fp_size_s(), new PaneStyles.fp_size_e(), new PaneStyles.fp_size_w(), new PaneStyles.fp_size_ne(), new PaneStyles.fp_size_nw(), new PaneStyles.fp_size_se(), new PaneStyles.fp_size_sw()), PaneStyles.INSTANCE))
                 .build();
     }
 

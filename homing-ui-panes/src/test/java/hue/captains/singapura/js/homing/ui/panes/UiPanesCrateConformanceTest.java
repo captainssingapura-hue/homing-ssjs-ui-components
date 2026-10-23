@@ -65,7 +65,7 @@ class UiPanesCrateConformanceTest {
         // icon a chip held, with its own step
         var waiting = java.util.Set.of("mtp_rail", "mtp_strip_tail", "mtp_bar_close", "mtp_pill", "mtp_drop_mark",
                 "mtp_chip_icon", "mtp_chip_icon_on",
-                "fp_icon", "fp_icon_on", "fp_grip");   // the floating pane's icon and its grip, each with its own step (23 Oct)
+                "fp_icon", "fp_icon_on");   // the floating pane's icon, with its own step (23 Oct); its grip become its eight handles (24 Oct)
         var unimported = new java.util.TreeSet<String>();
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses())
             if (!imported.contains(c.getClass().getSimpleName())) unimported.add(c.getClass().getSimpleName());

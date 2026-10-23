@@ -431,23 +431,111 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** The grip: the corner that sizes the pane; draws nothing, catches the hand. */
-    public record fp_grip() implements CssClass<PaneStyles> {
+    /** A handle that sizes the pane, by the hand (24 Oct): unseen, over its edge, catching the hand - its cursor alone saying so. */
+    public record fp_size() implements CssClass<PaneStyles> {
         @Override public String body() { return """
             position: absolute;
-            right: 0;
-            bottom: 0;
-            width: 16px;
-            height: 16px;
-            cursor: nwse-resize;
+            z-index: 3;
             touch-action: none;
+            """;
+        }
+    }
+
+    /** The handle along its top edge. */
+    public record fp_size_n() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            top: 0;
+            inset-inline: 10px;
+            block-size: 5px;
+            cursor: ns-resize;
+            """;
+        }
+    }
+
+    /** The handle along its foot edge. */
+    public record fp_size_s() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            bottom: 0;
+            inset-inline: 10px;
+            block-size: 5px;
+            cursor: ns-resize;
+            """;
+        }
+    }
+
+    /** The handle along its right edge. */
+    public record fp_size_e() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            right: 0;
+            inset-block: 10px;
+            inline-size: 5px;
+            cursor: ew-resize;
+            """;
+        }
+    }
+
+    /** The handle along its left edge. */
+    public record fp_size_w() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            left: 0;
+            inset-block: 10px;
+            inline-size: 5px;
+            cursor: ew-resize;
+            """;
+        }
+    }
+
+    /** The handle along its top right corner. */
+    public record fp_size_ne() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            top: 0;
+            right: 0;
+            inline-size: 10px;
+            block-size: 10px;
+            cursor: nesw-resize;
+            """;
+        }
+    }
+
+    /** The handle along its top left corner. */
+    public record fp_size_nw() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            top: 0;
+            left: 0;
+            inline-size: 10px;
+            block-size: 10px;
+            cursor: nwse-resize;
+            """;
+        }
+    }
+
+    /** The handle along its foot right corner. */
+    public record fp_size_se() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            bottom: 0;
+            right: 0;
+            inline-size: 10px;
+            block-size: 10px;
+            cursor: nwse-resize;
+            """;
+        }
+    }
+
+    /** The handle along its foot left corner. */
+    public record fp_size_sw() implements CssClass<PaneStyles> {
+        @Override public String body() { return """
+            bottom: 0;
+            left: 0;
+            inline-size: 10px;
+            block-size: 10px;
+            cursor: nesw-resize;
             """;
         }
     }
 
     @Override
     public List<CssClass<PaneStyles>> cssClasses() {
-        return List.of(new fp_frame(), new fp_head(), new fp_icon(), new fp_icon_on(), new fp_title(), new fp_body(), new fp_grip(),
+        return List.of(new fp_frame(), new fp_head(), new fp_icon(), new fp_icon_on(), new fp_title(), new fp_body(), new fp_size(), new fp_size_n(), new fp_size_s(), new fp_size_e(), new fp_size_w(), new fp_size_ne(), new fp_size_nw(), new fp_size_se(), new fp_size_sw(),
                        new mtp_pane(), new mtp_strip(), new mtp_rail(), new mtp_strip_loose(), new mtp_chip(), new mtp_chip_icon(), new mtp_chip_icon_on(), new mtp_chip_label(), new mtp_chip_mark(), new mtp_chip_mark_on(), new mtp_chip_dragging(), new mtp_chip_shifted(),
                        new mtp_chip_close(), new mtp_drop_mark(), new mtp_strip_tail(), new mtp_rail_add(), new mtp_bar_close(),
                        new mtp_pill(), new mtp_content(), new mtp_tab_content(), new mtp_empty(),

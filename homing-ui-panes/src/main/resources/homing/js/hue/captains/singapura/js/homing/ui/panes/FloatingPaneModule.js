@@ -11,7 +11,9 @@
 // nothing is told of where it went. Its close, on its head, is passed on - its
 // FloatCloseControl going up - and what a close is, its caller decides. The
 // current one (Current) is its caller's to say; under the hand it is lit
-// (Highlighted). A grip to size it comes with its own step.
+// (Highlighted). Sized by the hand too, from every edge and corner, the
+// opposite side kept: unseen handles, the cursor alone saying so - never under
+// its least, never past what holds it - and nothing told.
 //
 //   var pane = new FloatingPane(branch.createBranch("notes"), new FixedFloatingPane(new FixedTitleBar(new FixedLabel(), null, new FixedCloseButton())));
 //   pane.title = "Notes"     its head's title, or its head's chip's name
@@ -62,6 +64,9 @@ class FloatingPane extends SimpleComponent {
     /** How much of its head stays within what holds it, inline, and how little it may be, in pixels. */
     static KEEP = 48;
     static LEAST = Object.freeze({ w: 160, h: 96 });
+    /** The sides it is sized from, each a handle: its edges, then its corners. */
+    static SIDES = Object.freeze(["n", "s", "e", "w", "ne", "nw", "se", "sw"]);
+    static _HANDLE = Object.freeze({ n: fp_size_n, s: fp_size_s, e: fp_size_e, w: fp_size_w, ne: fp_size_ne, nw: fp_size_nw, se: fp_size_se, sw: fp_size_sw });
 
     constructor(branch, fixed, place) {
         if (!branch || typeof branch.elementMaker !== "function")
@@ -83,9 +88,19 @@ class FloatingPane extends SimpleComponent {
         this._room(ROOM_BODY, this._body);
         css.addClass(this._body, fp_body);
         this.el.appendChild(this._body);
+        // its handles: every edge and corner sizes it by the hand, the opposite side kept - unseen, the cursor saying so (24 Oct)
+        for (var side of FloatingPane.SIDES) {
+            var handle = branch.createElement("size-" + side, "div");
+            css.addClass(handle, fp_size);
+            css.addClass(handle, FloatingPane._HANDLE[side]);
+            handle.setAttribute("data-size", side);
+            handle.setAttribute("aria-hidden", "true");
+            this.el.appendChild(handle);
+        }
         this._root = null;
         this._grafted = false;
         this._box = { x: 0, y: 0, w: 360, h: 240 };
+        this._sizing = null;   // where the hand took a handle, while it holds it
         this._z = 1;
         this._grab = null;   // where the hand took it, while its head is held
         this._write();
@@ -169,6 +184,29 @@ class FloatingPane extends SimpleComponent {
         this._keep();
         this._write();
     }
+
+    /** A handle taken by the hand, as its behaviour tells it: the pane as it is kept, and which side moves. */
+    _sizeFrom(side) { this._sizing = { side: side, x: this._box.x, y: this._box.y, w: this._box.w, h: this._box.h }; }
+
+    /**
+     * The hand moved, a handle held - by how much since it went down: the sides the handle is on follow it, the others kept;
+     * never under its least, never past what holds it, once that has a size. Nothing told: a widget that cares watches its
+     * own size.
+     */
+    _sized(dx, dy) {
+        var g = this._sizing;
+        if (g === null) return;
+        var least = FloatingPane.LEAST, holder = this.el.offsetParent, b = this._box;
+        var W = holder && holder.clientWidth > 0 ? holder.clientWidth : Infinity, H = holder && holder.clientHeight > 0 ? holder.clientHeight : Infinity;
+        if (g.side.includes("e")) b.w = Math.max(least.w, Math.min(g.w + dx, W - g.x));
+        if (g.side.includes("w")) { var left = Math.max(0, Math.min(g.x + dx, g.x + g.w - least.w)); b.w = g.x + g.w - left; b.x = left; }
+        if (g.side.includes("s")) b.h = Math.max(least.h, Math.min(g.h + dy, H - g.y));
+        if (g.side.includes("n")) { var top = Math.max(0, Math.min(g.y + dy, g.y + g.h - least.h)); b.h = g.y + g.h - top; b.y = top; }
+        this._write();
+    }
+
+    /** The handle let go: its size where it is. */
+    _sizeEnd() { this._sizing = null; }
 
     /** Its head let go: out of the hand, where it is. */
     _letGo() {
