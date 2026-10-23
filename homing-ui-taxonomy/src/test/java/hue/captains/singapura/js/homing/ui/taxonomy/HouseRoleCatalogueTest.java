@@ -31,8 +31,8 @@ class HouseRoleCatalogueTest {
                 CATALOGUE.children(RoleRoot.INSTANCE));
         assertEquals(22, CATALOGUE.branches().size());
         assertEquals(19, CATALOGUE.branches().stream().filter(b -> b.level() == 2).count());
-        assertEquals(96, CATALOGUE.roles().size(), "the void role among them (21 Oct)");
-        assertEquals(96, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
+        assertEquals(97, CATALOGUE.roles().size(), "a choice chosen (23 Oct); the void role among them (21 Oct)");
+        assertEquals(97, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
     }
 
     @Test
@@ -56,7 +56,7 @@ class HouseRoleCatalogueTest {
         expected.put("members", List.of("member", "entry", "dock", "cell", "group", "column"));
         expected.put("dividers", List.of("seam", "break"));
         expected.put("handles", List.of("reveal", "chip", "opener", "pull", "scroll"));
-        expected.put("picturing", List.of("face", "leading", "measure", "keys", "disclose"));   // where an icon sits on its owner (D52)
+        expected.put("picturing", List.of("face", "leading", "measure", "keys", "chosen", "disclose"));   // where an icon sits on its owner (D52); a choice chosen (23 Oct)
         var actual = new LinkedHashMap<String, List<String>>();
         for (RoleBranch b : CATALOGUE.branches())
             if (b.level() == 2) actual.put(b.name().value(), CATALOGUE.children(b).stream().map(RoleNode::name).map(n -> n.value()).toList());
@@ -73,7 +73,7 @@ class HouseRoleCatalogueTest {
             assertEquals(2, branch.level(), r + " is filed at level 2");
             perTop.merge(CATALOGUE.parent(branch).name().value(), 1L, Long::sum);
         }
-        assertEquals(Map.of("saying", 22L, "doing", 36L, "shaping", 37L), perTop);
+        assertEquals(Map.of("saying", 22L, "doing", 36L, "shaping", 38L), perTop);
     }
 
     @Test

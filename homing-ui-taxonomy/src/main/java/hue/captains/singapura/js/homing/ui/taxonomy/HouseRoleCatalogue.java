@@ -56,7 +56,7 @@ public record HouseRoleCatalogue() implements StatelessFunctionalObject {
                 HouseShaping.Reveal.INSTANCE, HouseShaping.Chip.INSTANCE, HouseShaping.Opener.INSTANCE, HouseShaping.Pull.INSTANCE,
                 HouseShaping.Scroll.INSTANCE,
                 HouseShaping.Face.INSTANCE, HouseShaping.Leading.INSTANCE, HouseShaping.Measure.INSTANCE, HouseShaping.Keys.INSTANCE,
-                HouseShaping.Disclose.INSTANCE);
+                HouseShaping.Chosen.INSTANCE, HouseShaping.Disclose.INSTANCE);
     }
 
     /** The catalogue, read on its own - its branches reached through the roles - or refused with every problem in it. */

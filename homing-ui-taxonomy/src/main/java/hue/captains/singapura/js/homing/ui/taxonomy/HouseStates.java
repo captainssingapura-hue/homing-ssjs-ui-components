@@ -379,6 +379,17 @@ public final class HouseStates {
         @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
     }
 
+    /**
+     * How many times it was picked - a menu's item pressed while it is usable: from none, each pick its going up. What a
+     * pick does, its menu and its menu's opener decide; nothing it shows changes - no class (owner, 23 Oct).
+     */
+    public record PickControl() implements StateType<Counting> {
+        public static final PickControl INSTANCE = new PickControl();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
     // ── given ────────────────────────────────────────────────────────────
 
     /** What is typed in it so far, the user still at it: a text, none at rest. What it shows is the words themselves - no class. */
@@ -435,7 +446,7 @@ public final class HouseStates {
             Empty.INSTANCE,
             Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, TabCarry.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
-            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, PickControl.INSTANCE,
             DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }

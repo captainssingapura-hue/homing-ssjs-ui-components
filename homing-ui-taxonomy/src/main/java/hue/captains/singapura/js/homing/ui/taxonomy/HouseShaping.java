@@ -50,6 +50,8 @@ public final class HouseShaping {
     public record Measure() implements Role<Picturing> { public static final Measure INSTANCE = new Measure(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
     /** Shows that the keyboard is with the owner: what the user types goes there. */
     public record Keys() implements Role<Picturing> { public static final Keys INSTANCE = new Keys(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
+    /** Shows that the owner, a choice, is chosen: its check, in its leading place in place of its own picture, while it is (23 Oct). */
+    public record Chosen() implements Role<Picturing> { public static final Chosen INSTANCE = new Chosen(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
     /** Shows that a choice leads to further choices, rather than doing something at once. */
     public record Disclose() implements Role<Picturing> { public static final Disclose INSTANCE = new Disclose(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
 

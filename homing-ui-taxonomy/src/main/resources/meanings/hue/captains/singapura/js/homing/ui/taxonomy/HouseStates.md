@@ -225,3 +225,8 @@ the row: that tab's id, or none.
 
 For each tab the component holds, how many times it was detached - let go afloat off its bar - or none,
 for a tab that cannot be detached. Each change is one tab's.
+
+## PickControl
+
+How many times a choice was picked - a menu's item pressed while it is usable: from none, each pick
+its going up. What a pick does is for its menu, and the one who opened the menu, to decide.

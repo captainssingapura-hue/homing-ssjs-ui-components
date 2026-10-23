@@ -198,6 +198,11 @@ The picture on the owner's knob: a grip to take it by, or what it measures - a s
 
 Shows that the keyboard is with the owner: what the user types goes there.
 
+## Chosen
+
+Shows that the owner, a choice, is chosen: its check, in its leading place in place of its own
+picture, while it is.
+
 ## Disclose
 
 Shows that a choice leads to further choices, rather than doing something at once.

@@ -28,7 +28,9 @@ class FixedTypesTest {
     void eachStaticChoice_aField_inTheOwnersOrder() {
         assertEquals(List.of("note 0..1 caption"), said(HouseItems.ChoiceOption.INSTANCE), "whether it has a note, the caption's own fixed object or none");
         assertEquals(List.of("go 0..1 primary-button", "action 1..* plain-button"), said(HouseContainers.ActionBar.INSTANCE), "a Go or none, and how many actions");
-        assertEquals(List.of("hint 0..1 caption", "disclose 0..1 disclose-icon"), said(HouseItems.MenuItem.INSTANCE), "its lead dynamic, no field: the pin check mounted when shown");
+        assertEquals(List.of("leading 0..1 add-icon|remove-icon|close-icon|reset-icon|rotate-icon|flip-icon|pin-icon|check-icon|grip-icon|disclose-icon|settings-icon"
+                        + "|preferences-icon|size-icon|aspect-icon|extent-icon|level-icon|pacman-icon|column-icon|row-icon|merge-icon|detach-icon|within-icon", "chosen 0..1 check-icon", "hint 0..1 caption", "disclose 0..1 disclose-icon"),
+                said(HouseItems.MenuItem.INSTANCE), "its own icon chosen once, the check beside it (23 Oct)");
         assertEquals(List.of("rest 0..1 detent", "measure 0..1 grip-icon|size-icon|aspect-icon|extent-icon|level-icon"), said(HouseControls.Slider.INSTANCE),
                 "its figures and notches dynamic; its mark one of five, or none");
     }

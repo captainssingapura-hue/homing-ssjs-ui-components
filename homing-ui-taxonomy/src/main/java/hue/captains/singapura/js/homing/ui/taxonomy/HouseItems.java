@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
-import hue.captains.singapura.js.homing.component.taxonomy.Cardinality;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentPartDSL;
 import hue.captains.singapura.js.homing.component.taxonomy.Composite;
 import hue.captains.singapura.js.homing.component.taxonomy.Leaf;
+import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.Slot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
@@ -25,13 +25,25 @@ public final class HouseItems {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Item parent() { return Item.INSTANCE; }
         @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
-        /** The pointer over it; usable, or off; where its menu's cursor is - the one Enter would pick. */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Enabled.INSTANCE, HouseStates.Pointed.INSTANCE); }
+        /**
+         * The pointer over it; usable, or off; where its menu's cursor is - the one Enter would pick; checked, for one that
+         * can be; its rows open, for one that opens rows; and the picks of it, passed on, handled by none: what a pick does,
+         * its menu decides (owner, 23 Oct).
+         */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Hovered.INSTANCE, HouseStates.Enabled.INSTANCE, HouseStates.Pointed.INSTANCE,
+                HouseStates.Checked.INSTANCE, HouseStates.Expanded.INSTANCE, HouseStates.PickControl.INSTANCE); }
+        /**
+         * Its own icon, leading it, chosen once; the check, for a row that can be checked, in the same place, shown in place of
+         * its own while it is checked - both fixed for its life (owner, 23 Oct: option a); its hint; and its way into its rows.
+         */
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.anyOf(HouseBranches.Icon.INSTANCE).as(HouseShaping.Leading.INSTANCE).optional(Cardinality.DYNAMIC),
+            return List.of(DSL.anyOf(HouseBranches.Icon.INSTANCE).as(HouseShaping.Leading.INSTANCE).optional(),
+                           DSL.part(HouseIcons.CheckIcon.INSTANCE).as(HouseShaping.Chosen.INSTANCE).optional(),
                            DSL.part(HouseText.Caption.INSTANCE).as(HouseSaying.Hint.INSTANCE).optional(),
                            DSL.part(HouseIcons.DiscloseIcon.INSTANCE).as(HouseShaping.Disclose.INSTANCE).optional());
         }
+        /** Its leading place, kept whether an icon is shown there or not, so the names in a menu line up; and its name. */
+        @Override public List<Room> rooms() { return List.of(new Room("lead"), new Room("label")); }
     }
 
     /** One row of a list. What it shows is its owner's. */

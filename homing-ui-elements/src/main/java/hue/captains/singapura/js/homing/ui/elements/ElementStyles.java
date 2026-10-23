@@ -449,6 +449,11 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
         }
     }
 
+    /** What of a menu item's leading place is not shown: its own icon while it is checked, its check while it is not (23 Oct). */
+    public record el_menu_item_off() implements CssClass<ElementStyles> {
+        @Override public String body() { return "display: none;"; }
+    }
+
     /** A choice's option: its name and, at its end, its note, on a line; its words from its start. */
     public record el_choice_option() implements CssClass<ElementStyles> {
         @Override public String body() { return """
@@ -728,7 +733,7 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
                        new el_slider_vertical(), new el_slider_rail_vertical(), new el_slider_rail_ticked(), new el_slider_track_vertical(), new el_slider_fill_vertical(), new el_slider_detent_vertical(),
                        new el_slider_cap(), new el_slider_cap_mark(), new el_slider_tick(), new el_slider_tick_vertical(), new el_slider_tick_line(), new el_slider_tick_line_vertical(), new el_slider_tick_label(),
                        new el_slider_off(),
-                       new el_menu_item(), new el_menu_item_label(), new el_menu_item_hint(), new el_menu_item_disclose(), new el_menu_item_lead(), new el_choice_option(), new el_choice_option_note(),
+                       new el_menu_item(), new el_menu_item_label(), new el_menu_item_hint(), new el_menu_item_disclose(), new el_menu_item_lead(), new el_menu_item_off(), new el_choice_option(), new el_choice_option_note(),
                        new el_card(), new el_summary(), new el_summary_head(), new el_summary_title(), new el_summary_tag(), new el_summary_text(), new el_summary_foot(),
                        new el_checkbox(), new el_pane_thumb_name(), new el_switch(), new el_switch_groove(), new el_switch_knob(),
                        new el_strip(), new el_strip_hidden(), new el_strip_lip(),
