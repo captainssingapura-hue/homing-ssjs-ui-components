@@ -207,6 +207,9 @@ class TabStrip extends SimpleComponent {
         this._select(id);
     }
 
+    /** The tab whose chip on it holds a node, by its id - its owner's menu asks - or none. */
+    tabAt(node) { for (const [id, chip] of this._chips) if (chip.el.contains(node)) return id; return null; }
+
     /** A close asked of one of its tabs from elsewhere - its owner's floater's: one more close asked, as its cross's would be. */
     closeAsked(id) {
         if (!this._closes.has(id) || this._closes.get(id) === null) throw new Error("[TabStrip] has no tab " + id + " that can be closed");

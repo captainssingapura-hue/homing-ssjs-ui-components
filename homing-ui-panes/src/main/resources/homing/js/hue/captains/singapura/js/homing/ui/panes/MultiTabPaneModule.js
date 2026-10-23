@@ -31,6 +31,7 @@
 //   pane.mount("alpha", root, party?)   what a tab shows: a widget's root in its pane, its branch of the page grafted
 //   pane.remove("alpha")   a tab taken out: its widget's root and branch let go - the widget's still, its caller's
 //   pane.attach("alpha")   a tab afloat docked again, at its bar's end: the one in use
+//   pane.menus(steward)   the page's menus' steward, once: a right-press on a chip opens that tab's menu
 //   pane.onChange(StateTabDetachControl, listener)   a tab detached, or put in or taken out: before and after
 //   pane.afloat    the ids of the tabs afloat, in its floaters
 //   pane.onChange(StateTabOrder, listener)   its tabs in another order: before and after
@@ -120,6 +121,7 @@ class MultiTabPane extends SimpleComponent {
         branch.activate(_multiTabPaneOwner);
         super(branch.elementMaker("pane"), fixed, FixedMultiTabPane, place ?? manageMultiTabPane);
         this.branch = branch;
+        this._menu = null;
         css.addClass(this.el, mtp_pane);
         this._tabs = new Map();   // its tabs' ids to each one's own: its branch, its pane, the root mounted in it - none until mounted - its title, and its floater while afloat
         this._detaches = new Map();   // its tabs' ids to how many times each was detached - none for one that cannot be: its own, a view of it told
@@ -247,7 +249,11 @@ class MultiTabPane extends SimpleComponent {
     }
 
     /** It and everything on its branch go together; what its tabs show is its caller's: let go, first. */
+    /** The page's menus' steward, handed in once: its tab menu, for a right-press on a chip of its bar. */
+    menus(steward) { if (this._menu !== null) throw new Error("[MultiTabPane] its menus' steward is handed in once"); this._menu = new MultiTabPaneMenu(this, this._strip, steward); }
+
     dispose() {
+        if (this._menu !== null) this._menu.drop();
         this._behavior.drop();
         this._tabs.forEach(function (t) {
             if (t.floater !== null) { t.floater.unmount(); t.floater.dispose(); }

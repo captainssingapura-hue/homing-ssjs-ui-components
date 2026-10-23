@@ -18,13 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TabMenuTest {
 
     @Test
-    void theKindIsTab_detachThenClose_withTheirIcons() {
+    void theKindIsTab_closeAlone_withItsIcon() {
         assertEquals("tab", TabMenu.INSTANCE.kind());
         assertEquals(List.of(), MenuTrees.validate(TabMenu.INSTANCE));
-        assertEquals(List.of("detach", "close"), MenuTrees.rows(TabMenu.INSTANCE).stream().map(r -> r.id()).toList());
-        assertEquals(HouseIcons.DetachIcon.INSTANCE, TabMenu.Detach.INSTANCE.icon());
+        assertEquals(List.of("close"), MenuTrees.rows(TabMenu.INSTANCE).stream().map(r -> r.id()).toList(),
+                "Close alone (owner, 23 Oct): Detach, a move of the tab to another pane, waits on moving tabs between panes");
         assertEquals(HouseIcons.CloseIcon.INSTANCE, TabMenu.Close.INSTANCE.icon());
-        assertEquals(1, TabMenu.Close.INSTANCE.section(), "a divider before Close");
     }
 
     @Test
@@ -39,9 +38,9 @@ class TabMenuTest {
     void thePaneDeclaresTheNeed_andItsJsOpensTheSameKind() {
         assertEquals(java.util.Set.of(TabMenu.INSTANCE, SplitMenu.INSTANCE), new MultiTabPaneModule.MultiTabPane().required(),
                 "a chip's menu, and its strip's own ground's - the room it sits in, answered by the desk's docking when it resides in a split grid");
-        // the pane ported a step at a time (22 Oct): it opens no menu yet - its menus come with the context menu's port
-        String menus = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/PaneMenusModule.js"));
-        assertTrue(menus.contains("pane._menus.open(kind,"), "and PaneMenus opens the kind it was handed, never one of its own");
+        // the ported pane opens its tab menu through the steward it is handed (23 Oct): the same kind, by the same word
+        String menus = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/MultiTabPaneMenuModule.js"));
+        assertTrue(menus.contains("this._steward.open(\"tab\","), "and its menu opens the tab kind through the steward handed to the pane");
         // a site that serves the pane's crate holds the kind, listing nothing
         assertEquals(java.util.Set.of("tab", "split"), java.util.Set.copyOf(ContextMenuRegistry.requiredBy(List.of(UiPanesCrate.INSTANCE)).kinds().stream().map(k -> k.kind()).toList()));
         assertEquals(List.of(), ContextMenuRegistry.validate(List.of(UiPanesCrate.INSTANCE)));

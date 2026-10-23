@@ -3,7 +3,9 @@
 // it - on its bar, or on one of its floaters - where it went down and where it
 // is now are kept, each move and the hand let go told to the pane, before any
 // of its parts hears them: what the pane makes of them - a tab carried off its
-// bar, a floater brought back onto it - is its own. It never touches the look.
+// bar, a floater brought back onto it - is its own. A right-press on it is told
+// to the pane's menu, where it has one: the browser's own kept away only where
+// the menu opened. It never touches the look.
 //
 //   new MultiTabPaneBehavior(el, pane)   behavior.press   behavior.at
 // =============================================================================
@@ -20,6 +22,9 @@ class MultiTabPaneBehavior {
             self._stop();
             pane._handUp(ev.clientX, ev.clientY);
         };
+        el.addEventListener("contextmenu", function (ev) {
+            if (pane._menu !== null && pane._menu.ask(ev.target, ev.clientX, ev.clientY)) ev.preventDefault();
+        });
         el.addEventListener("mousedown", function (ev) {
             if (ev.button !== 0) return;
             self.press = self.at = { x: ev.clientX, y: ev.clientY };

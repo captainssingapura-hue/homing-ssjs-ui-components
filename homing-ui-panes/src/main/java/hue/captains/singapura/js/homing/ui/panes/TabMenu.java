@@ -9,35 +9,26 @@ import hue.captains.singapura.js.homing.ui.menu.tree.M1_Node;
 import java.util.List;
 
 /**
- * The menu of a tab: what a right-click or Shift+F10 on a chip offers —
- * detach it to float, or close it. Owned here, by the crate whose component
+ * The menu of a tab: what a right-press on a chip offers — close it (owner,
+ * 23 Oct: Detach, a move of the tab to another pane, waits on moving tabs
+ * between panes). Owned here, by the crate whose component
  * opens it ({@link MultiTabPaneModule.MultiTabPane} names it as a need), and
  * derived into any site's registry that serves the pane. The object bound
- * while it is open is {@code { pane, tab, anchor }}: the dock, the tab
- * record, the chip; what a pick does — the undock, the removal — is the
- * page's handler, since the pane knows no desk.
+ * while it is open is the pane's menu and the tab it was opened for; a pick
+ * is the pane's - Close asks the tab's close, as its cross does.
  */
 public record TabMenu() implements ContextMenuKind<TabMenu> {
 
     public static final TabMenu INSTANCE = new TabMenu();
 
-    @Override public List<? extends M1_Node<TabMenu, ?>> children() { return List.of(Detach.INSTANCE, Close.INSTANCE); }
+    @Override public List<? extends M1_Node<TabMenu, ?>> children() { return List.of(Close.INSTANCE); }
 
-    /** Float this tab in a pane of its own. */
-    public record Detach() implements M1_Node<TabMenu, Detach> {
-        public static final Detach INSTANCE = new Detach();
-        @Override public TabMenu parent() { return TabMenu.INSTANCE; }
-        @Override public String label() { return "Detach"; }
-        @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.DetachIcon.INSTANCE; }
-        @Override public String hint() { return "float it in a pane of its own"; }
-    }
 
-    /** Close this tab; its widget is disposed. */
+    /** Close this tab: its close asked, as its cross asks it - whether it closes, the pane's caller decides. */
     public record Close() implements M1_Node<TabMenu, Close> {
         public static final Close INSTANCE = new Close();
         @Override public TabMenu parent() { return TabMenu.INSTANCE; }
         @Override public String label() { return "Close"; }
         @Override public Component<HouseBranches.Icon> icon() { return HouseIcons.CloseIcon.INSTANCE; }
-        @Override public int section() { return 1; }
     }
 }

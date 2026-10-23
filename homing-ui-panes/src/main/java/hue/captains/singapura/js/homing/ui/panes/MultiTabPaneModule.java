@@ -65,6 +65,7 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
         return ImportsFor.<MultiTabPaneModule>builder()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneBehaviorModule.MultiTabPaneBehavior()), MultiTabPaneBehaviorModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MultiTabPaneMenuModule.MultiTabPaneMenu()), MultiTabPaneMenuModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripModule.TabStrip()), TabStripModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
