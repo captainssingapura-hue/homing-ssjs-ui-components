@@ -49,7 +49,7 @@ class FixedTypesTest {
     void nothingLeftToChoose_noFields() {
         for (Component<?> c : List.of(HouseControls.PlainButton.INSTANCE, HouseControls.Slider.INSTANCE, HouseControls.CloseButton.INSTANCE, HouseContainers.Trail.INSTANCE, HouseContainers.SummaryView.INSTANCE))
             assertEquals(List.of(), FIXED.fields(HOUSE, c), c.token() + ": its parts one with one player, or dynamic");
-        assertEquals(17, HOUSE.components().stream().filter(c -> !FIXED.fields(HOUSE, c).isEmpty()).count(), "seventeen of the house's components have a field - the slider's none, on the native range (23 Oct); the picker's and the opener's choices no more, widgets (22 Oct)");
+        assertEquals(18, HOUSE.components().stream().filter(c -> !FIXED.fields(HOUSE, c).isEmpty()).count(), "eighteen of the house's components have a field - the pan-zoom view's bar, or none (23 Oct); the slider's none, on the native range (23 Oct); the picker's and the opener's choices no more, widgets (22 Oct)");
     }
 
     @Test

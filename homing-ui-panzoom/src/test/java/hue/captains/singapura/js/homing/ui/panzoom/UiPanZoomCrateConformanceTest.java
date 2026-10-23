@@ -51,7 +51,7 @@ class UiPanZoomCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(3, checked, "the arithmetic, the view and the bar");
+        assertEquals(4, checked, "the arithmetic, the view, what it does (23 Oct), and the bar");
     }
 
     @Test

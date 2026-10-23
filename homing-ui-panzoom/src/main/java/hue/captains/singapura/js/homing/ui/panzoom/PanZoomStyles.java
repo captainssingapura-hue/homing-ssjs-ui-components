@@ -26,7 +26,12 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
      * selected the drawing's words would paint them over as it went.
      */
     public record pz_view() implements CssClass<PanZoomStyles> {
-        @Override public String body() { return "display: flex;\nflex-direction: column;\noverflow: auto;\nmin-width: 0;\n-webkit-user-select: none;\nuser-select: none;\n"; }
+        @Override public String body() { return "display: flex;\nflex-direction: column;\nflex: 1 1 auto;\nmin-height: 0;\noverflow: auto;\nmin-width: 0;\n-webkit-user-select: none;\nuser-select: none;\n"; }
+    }
+
+    /** The view whole: its viewport, then its bar at its foot, where it has one (23 Oct) - no taller than its host makes it, its viewport scrolling. */
+    public record pz_frame() implements CssClass<PanZoomStyles> {
+        @Override public String body() { return "display: flex;\nflex-direction: column;\nmin-width: 0;\nmin-height: 0;\n"; }
     }
 
     /** Zoomed in place: the viewport held at the height it fitted at, so the drawing scrolls rather than the page growing. */
@@ -77,6 +82,6 @@ public record PanZoomStyles() implements CssGroup<PanZoomStyles> {
 
     @Override
     public List<CssClass<PanZoomStyles>> cssClasses() {
-        return List.of(new pz_view(), new pz_pinned(), new pz_canvas(), new pz_zoomed(), new pz_svg(), new pz_scaled(), new pz_pannable(), new pz_bar(), new pz_readout());
+        return List.of(new pz_view(), new pz_frame(), new pz_pinned(), new pz_canvas(), new pz_zoomed(), new pz_svg(), new pz_scaled(), new pz_pannable(), new pz_bar(), new pz_readout());
     }
 }

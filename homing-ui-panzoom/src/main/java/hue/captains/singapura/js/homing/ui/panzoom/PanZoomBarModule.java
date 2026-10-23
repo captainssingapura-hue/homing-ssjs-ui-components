@@ -15,12 +15,12 @@ import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 
 import java.util.List;
 
-/** The controls of a pan-zoom view: out, the zoom said, in, fit - the elements' buttons, following the view they drive. */
+/** The controls of a pan-zoom view, its part only: out, the zoom said, in, fit - the elements' buttons; it shows what its view says, and passes its presses on. */
 public record PanZoomBarModule() implements DomModule<PanZoomBarModule>, ImplFor<HousePanZoom.PanZoomBar> {
 
     public static final PanZoomBarModule INSTANCE = new PanZoomBarModule();
 
-    /** A composed component: {@code new PanZoomBar(branch, new FixedPanZoomBar(), place?)}; {@code drive(view)}, once; root, dispose. */
+    /** A composed component, a view's part: {@code new PanZoomBar(branch, new FixedPanZoomBar(), place)}; {@code show(view)}; its presses; root, dispose. */
     public record PanZoomBar() implements BranchComponent<PanZoomBarModule> {
         @Override public String summary() { return "The controls of a pan-zoom view: zoom out, the zoom as a share of fit, zoom in, back to fit."; }
     }

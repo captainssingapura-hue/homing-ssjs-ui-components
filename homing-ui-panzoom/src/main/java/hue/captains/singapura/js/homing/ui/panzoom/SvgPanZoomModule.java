@@ -11,6 +11,7 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule>, ImplFor
 
     public static final SvgPanZoomModule INSTANCE = new SvgPanZoomModule();
 
-    /** A branch component: the viewport, the canvas the drawing moves on; view, onChange, zoomIn, zoomOut, fit, key, measure, dispose. */
+    /** A composed component: its viewport and canvas, its bar at its foot where made with one; mount, label, zoomIn, zoomOut, fit, measure, view, dispose. */
     public record SvgPanZoom() implements BranchComponent<SvgPanZoomModule>, NeedKeyboard {
         @Override public String summary() { return "An SVG in a viewport that zooms about the pointer and pans once zoomed in: the hand, the wheel and its own keys."; }
 
@@ -38,8 +39,11 @@ public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule>, ImplFor
     @Override
     public ImportsFor<SvgPanZoomModule> imports() {
         return ImportsFor.<SvgPanZoomModule>builder()
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SvgPanZoomBehaviorModule.SvgPanZoomBehavior()), SvgPanZoomBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PanZoomModule.PanZoom()), PanZoomModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PanZoomStyles.pz_view(), new PanZoomStyles.pz_pinned(), new PanZoomStyles.pz_canvas(),
+                .add(new ModuleImports<>(List.of(new PanZoomBarModule.PanZoomBar()), PanZoomBarModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PanZoomStyles.pz_view(), new PanZoomStyles.pz_frame(), new PanZoomStyles.pz_pinned(), new PanZoomStyles.pz_canvas(),
                         new PanZoomStyles.pz_zoomed(), new PanZoomStyles.pz_svg(), new PanZoomStyles.pz_scaled(),
                         new PanZoomStyles.pz_pannable()), PanZoomStyles.INSTANCE))
                 .build();
