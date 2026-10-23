@@ -19,7 +19,7 @@ class FloatingPaneBehavior {
         el.addEventListener("mouseleave", function () { pane._hovered(false); });
         el.addEventListener("mousedown", function (ev) { self._from = { x: ev.clientX, y: ev.clientY }; }, true);   // where the hand went down: before its head hears it
         this._move = function (ev) { if (self._from !== null) pane._moved(ev.clientX - self._from.x, ev.clientY - self._from.y); };
-        // a handle taken: the hand's moves size it, until it lets go (24 Oct)
+        // a handle taken: the hand's moves size it, until it lets go (23 Oct)
         this._sizeMove = function (ev) { if (self._from !== null) pane._sized(ev.clientX - self._from.x, ev.clientY - self._from.y); };
         this._sizeUp = function () {
             self._doc.removeEventListener("mousemove", self._sizeMove);

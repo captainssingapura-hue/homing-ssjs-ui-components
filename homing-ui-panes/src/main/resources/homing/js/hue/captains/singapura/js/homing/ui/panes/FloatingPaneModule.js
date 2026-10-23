@@ -88,7 +88,7 @@ class FloatingPane extends SimpleComponent {
         this._room(ROOM_BODY, this._body);
         css.addClass(this._body, fp_body);
         this.el.appendChild(this._body);
-        // its handles: every edge and corner sizes it by the hand, the opposite side kept - unseen, the cursor saying so (24 Oct)
+        // its handles: every edge and corner sizes it by the hand, the opposite side kept - unseen, the cursor saying so (23 Oct)
         for (var side of FloatingPane.SIDES) {
             var handle = branch.createElement("size-" + side, "div");
             css.addClass(handle, fp_size);

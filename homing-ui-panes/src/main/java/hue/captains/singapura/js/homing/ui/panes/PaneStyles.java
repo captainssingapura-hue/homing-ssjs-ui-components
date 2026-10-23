@@ -431,7 +431,7 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
         }
     }
 
-    /** A handle that sizes the pane, by the hand (24 Oct): unseen, over its edge, catching the hand - its cursor alone saying so. */
+    /** A handle that sizes the pane, by the hand (23 Oct): unseen, over its edge, catching the hand - its cursor alone saying so. */
     public record fp_size() implements CssClass<PaneStyles> {
         @Override public String body() { return """
             position: absolute;
