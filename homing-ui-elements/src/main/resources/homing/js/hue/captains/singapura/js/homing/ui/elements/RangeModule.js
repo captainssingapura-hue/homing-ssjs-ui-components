@@ -25,7 +25,11 @@ class Range extends SimpleComponent {
             reflect: function (el, on) { el.disabled = !on; },
             state: StateEnabled
         }),
-        degree: Object.freeze({ rest: 0, state: StateDegree }),   // the knob where it stands: no class
+        degree: Object.freeze({   // the knob where it stands: no class - its place along it, a share, written for its look to draw its fill by
+            rest: 0,
+            reflect: function (el, d) { el.style.setProperty("--range-at", ((d + 1) * 50).toFixed(3) + "%"); },
+            state: StateDegree
+        }),
         dragging: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
