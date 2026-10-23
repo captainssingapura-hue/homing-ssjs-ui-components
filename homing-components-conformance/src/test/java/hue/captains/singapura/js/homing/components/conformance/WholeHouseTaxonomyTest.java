@@ -75,8 +75,8 @@ class WholeHouseTaxonomyTest {
     void everyRoleNamed_butTheWordsKeptForWhatIsToCome() {
         assertEquals(List.of("subtitle", "category", "prompt", "placeholder", "status", "error", "check", "style", "palette", "picker", "query", "cancel", "skip",
                              "toggle", "adjust", "reset", "increase", "decrease", "clear", "add", "remove", "preferences", "previous", "next", "first",
-                             "last", "more", "actions", "foot", "page", "host", "index", "detail", "setting", "layout", "body", "media", "fallback",
-                             "member", "entry", "dock", "group", "opener", "pull", "scroll"),
+                             "last", "more", "actions", "page", "host", "index", "detail", "setting", "layout", "body", "media", "fallback",
+                             "member", "entry", "dock", "group", "reveal", "opener", "pull", "scroll"),
                 HOUSE.roles().stream().filter(r -> HOUSE.partsNaming(r).isEmpty()).map(r -> r.name().value()).toList());
     }
 

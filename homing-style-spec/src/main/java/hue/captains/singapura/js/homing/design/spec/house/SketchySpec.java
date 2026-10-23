@@ -289,7 +289,7 @@ public record SketchySpec() implements SpecModule<BaseScheme, Sketchy> {
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.EdgeStrip(), List.of()),
+                new ComponentAssignment<>(HouseContainers.StatusFooter.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.StatusFooter(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.SiteBar(), List.of()),
                 new ComponentAssignment<>(HouseControls.Brand.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.sketchy.Brand(), List.of(

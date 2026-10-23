@@ -230,14 +230,33 @@ public final class HouseContainers {
 
     // ── bars ─────────────────────────────────────────────────────────────
 
-    /** A strip along an edge, revealed by its lip. Its controls are the caller's. */
-    public record EdgeStrip() implements Composite<HouseBranches.Bar> {
-        public static final EdgeStrip INSTANCE = new EdgeStrip();
+    /**
+     * A bar of status along the foot of what it ends - read-only: what it shows is its caller's status widget's, icons,
+     * badges and words, and nothing on it is pressed (owner, 23 Oct). A container only.
+     */
+    public record StatusFooter() implements Leaf<HouseBranches.Bar> {
+        public static final StatusFooter INSTANCE = new StatusFooter();
+        @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        /** Where its caller's status widget shows. */
+        @Override public List<Room> rooms() { return List.of(new Room("status")); }
+    }
+
+    /**
+     * A status footer at the foot, and above it an area that opens over what it covers - where its caller's control widget
+     * shows, as a dialog would - while anything keeps it open: the pointer on it, the widget in use, its owner; then it
+     * closes by itself (owner, 23 Oct). A container only. The foot's own: each side a component of its own.
+     */
+    public record ExpandableFooterArea() implements Composite<HouseBranches.Bar> {
+        public static final ExpandableFooterArea INSTANCE = new ExpandableFooterArea();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Bar parent() { return HouseBranches.Bar.INSTANCE; }
+        /** Its area open, or not. */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Expanded.INSTANCE); }
         @Override public List<Slot<?>> parts() {
-            return List.of(DSL.part(HouseControls.Lip.INSTANCE).as(HouseShaping.Reveal.INSTANCE).one());
+            return List.of(DSL.part(StatusFooter.INSTANCE).as(HouseShaping.Foot.INSTANCE).one());
         }
+        /** Where its caller's control widget shows, while it is open. */
+        @Override public List<Room> rooms() { return List.of(new Room("area")); }
     }
 
     /**

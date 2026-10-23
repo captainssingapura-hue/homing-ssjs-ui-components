@@ -289,7 +289,7 @@ public record EditorialSpec() implements SpecModule<BaseScheme, Editorial> {
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.EdgeStrip(), List.of()),
+                new ComponentAssignment<>(HouseContainers.StatusFooter.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.StatusFooter(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.SiteBar(), List.of()),
                 new ComponentAssignment<>(HouseControls.Brand.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.editorial.Brand(), List.of(

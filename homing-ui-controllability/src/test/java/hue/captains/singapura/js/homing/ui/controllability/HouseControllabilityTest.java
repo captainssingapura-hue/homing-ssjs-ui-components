@@ -90,7 +90,7 @@ class HouseControllabilityTest {
         var expected = new LinkedHashMap<String, String>();
         for (String b : List.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "slider"))
             expected.put(b, "switchable");
-        expected.put("edge-strip", "holdable");
+        expected.put("expandable-footer-area", "holdable");
         expected.put("modal-window", "overlay");   // the dialog reduced: always modal, opened and closed (23 Oct)
         expected.put("context-menu", "overlay");
         expected.put("floating-pane", "placeable");
@@ -150,7 +150,7 @@ class HouseControllabilityTest {
     void aTypeNamingADegree_andANodeClassifiedTwice_areRefused() {
         var degree = assertThrows(RefusedControls.class, () -> new ControlType("sized", List.of(HouseControlOptions.Size.INSTANCE)));
         assertTrue(degree.getMessage().contains("the axes are the component's own"), degree.getMessage());
-        var at = new ControlTypeAt(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.EdgeStrip.INSTANCE, HouseControllability.PLAIN);
+        var at = new ControlTypeAt(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.ExpandableFooterArea.INSTANCE, HouseControllability.PLAIN);
         var twice = assertThrows(RefusedControls.class, () -> new ControlClassification(List.of(at, at), HouseControllability.PLAIN));
         assertTrue(twice.getMessage().contains("declared twice"), twice.getMessage());
     }

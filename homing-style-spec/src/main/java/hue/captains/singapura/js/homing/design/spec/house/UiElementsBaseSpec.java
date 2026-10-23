@@ -322,7 +322,8 @@ public record UiElementsBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.EdgeStrip(), List.of()),
+                new ComponentAssignment<>(HouseContainers.StatusFooter.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.StatusFooter(), List.of()),
+                new ComponentAssignment<>(HouseContainers.ExpandableFooterArea.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ExpandableFooterArea(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.SiteBar(), List.of()),
                 new ComponentAssignment<>(HouseControls.Brand.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Brand(), List.of(
@@ -353,7 +354,6 @@ public record UiElementsBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
                 new ComponentAssignment<>(HouseText.Strong.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Strong(), List.of()),
                 new ComponentAssignment<>(HouseText.Muted.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Muted(), List.of()),
                 new ComponentAssignment<>(HouseMarks.Indicator.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Indicator(), List.of()),
-                new ComponentAssignment<>(HouseControls.Lip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.Lip(), List.of()),
                 new ComponentAssignment<>(HouseContainers.HeaderCell.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.HeaderCell(), List.of()),
                 new ComponentAssignment<>(HouseContainers.DataCell.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.DataCell(), List.of()));
     }

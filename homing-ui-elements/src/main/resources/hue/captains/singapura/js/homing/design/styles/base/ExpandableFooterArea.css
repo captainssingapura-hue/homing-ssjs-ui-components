@@ -1,0 +1,12 @@
+/* The expandable footer area in the base layer: its status footer draws its own; its area, opened over what it covers, raised and ruled along its foot. Whole: every property its look has (D9). */
+$casting {}
+
+$casting__area {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    padding-block: 12px;
+    padding-inline: 14px;
+}

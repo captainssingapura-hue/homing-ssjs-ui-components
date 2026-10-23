@@ -289,7 +289,7 @@ public record NeoBrutalismSpec() implements SpecModule<BaseScheme, NeoBrutalism>
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.EdgeStrip(), List.of()),
+                new ComponentAssignment<>(HouseContainers.StatusFooter.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.StatusFooter(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.SiteBar(), List.of()),
                 new ComponentAssignment<>(HouseControls.Brand.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neobrutalism.Brand(), List.of(

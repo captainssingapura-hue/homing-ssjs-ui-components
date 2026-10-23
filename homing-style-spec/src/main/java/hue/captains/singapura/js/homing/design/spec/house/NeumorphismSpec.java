@@ -289,7 +289,7 @@ public record NeumorphismSpec() implements SpecModule<BaseScheme, Neumorphism> {
                         new RoleAssignment<>(HouseDoing.Clear.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Switch()))),
                 new ComponentAssignment<>(HouseControls.PaneThumb.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.PaneThumb(), List.of()),
                 new ComponentAssignment<>(HouseControls.Slider.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Slider(), List.of()),
-                new ComponentAssignment<>(HouseContainers.EdgeStrip.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.EdgeStrip(), List.of()),
+                new ComponentAssignment<>(HouseContainers.StatusFooter.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.StatusFooter(), List.of()),
                 new ComponentAssignment<>(HouseContainers.Ground.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Ground(), List.of()),
                 new ComponentAssignment<>(HouseContainers.SiteBar.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.SiteBar(), List.of()),
                 new ComponentAssignment<>(HouseControls.Brand.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.neumorphism.Brand(), List.of(

@@ -50,7 +50,7 @@ public record SketchyStyleDeclaration() implements StyleDeclaration {
                 new L1Menu(),
                 new L2Menu(),
                 new Scrim(),
-                new EdgeStrip(),
+                new StatusFooter(),
                 new ActionBar(),
                 new TabStrip(),
                 new Ground(),

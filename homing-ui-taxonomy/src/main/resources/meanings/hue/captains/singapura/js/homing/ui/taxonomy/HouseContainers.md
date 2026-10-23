@@ -42,9 +42,14 @@ level, its choices lead nowhere further. Only ever part of a level-1 menu.
 
 Holds the page back while something above it asks for the user's attention.
 
-## EdgeStrip
+## StatusFooter
 
-Keeps controls out of the way at an edge until the pointer reaches for them.
+Tells the state of things along the foot of what it ends, at a glance: never pressed, only read.
+
+## ExpandableFooterArea
+
+Tells the state of things along its foot, and opens over what it covers, while it is wanted, to let
+the user act on them; then gets out of the way.
 
 ## FloatLayer
 

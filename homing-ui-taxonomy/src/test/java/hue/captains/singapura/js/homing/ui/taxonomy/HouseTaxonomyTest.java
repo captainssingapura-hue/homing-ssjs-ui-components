@@ -34,7 +34,7 @@ class HouseTaxonomyTest {
 
     /** The common components ui-components ships today, by their class names; its Button is realized by the button leaves, its Card by PlainCard and ClickableCard. */
     private static final Set<String> SHIPPED = Set.of(
-            "PlainCard", "ClickableCard", "SummaryView", "Slider", "EdgeStrip", "ModalWindow", "FloatingPane", "CloseIcon", "ContextMenu",
+            "PlainCard", "ClickableCard", "SummaryView", "Slider", "StatusFooter", "ExpandableFooterArea", "ModalWindow", "FloatingPane", "CloseIcon", "ContextMenu",
             "Link", "Crumb", "Scrim", "Separator", "Delimiter", "Label", "Heading1", "Heading2", "Heading3", "Heading4", "Heading5", "Heading6", "Caption", "Readout");
 
     @Test
