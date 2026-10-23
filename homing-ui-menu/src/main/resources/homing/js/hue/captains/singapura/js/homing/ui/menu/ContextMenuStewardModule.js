@@ -1,16 +1,19 @@
 // =============================================================================
 // ContextMenuSteward — one per page: the registry of kinds, the one instance
 // per kind, the layer they show in, and the one menu active — the
-// fundamental invariant. Lazy: it mints nothing at construction, a kind's
-// instance at the kind's first open, the layer at the first open of any, and
-// listens to nothing while no menu is open. A branch component: the page's
-// holder makes a sub-branch for it and hands it in, and hands the steward
-// to the components that offer menus.
+// fundamental invariant. Lazy: a kind's instance is minted at the kind's first
+// open, and nothing is listened to while no menu is open. Its layer is its own
+// element, in the page only while a menu is open. A composed component on a
+// branch of its own - ported largely unchanged (RFC 0071, owner 23 Oct): the
+// page's holder makes a sub-branch for it and hands it in, then its kinds and
+// its keys, and hands the steward to the components that offer menus. Each
+// kind's instance is a context menu, level 0, cast as its popup; it hears the
+// menu's picks by the row, through the menu's count.
 //
-//   new ContextMenuSteward(branch, { types?, onEvent?, keyboard?, keyboardId? })
-//     types    kind → { kind, nodes }: a Java ContextMenuRegistry's MENUS
-//     keyboard the page's KeyboardSteward: the steward joins the keyboard party as
-//              keyboardId (its branch's name, unless said) and CLAIMS the keys for
+//   new ContextMenuSteward(branch, new FixedContextMenuSteward(), place?)
+//   steward.hold(types)              kinds → { kind, nodes }: a Java ContextMenuRegistry's MENUS; a kind twice refused
+//   steward.keys(keyboard, id?)      the page's KeyboardSteward: the steward joins the keyboard party as
+//              id (its branch's name, unless said) and CLAIMS the keys for
 //              a menu while one is open — by call, on open, evicting whoever held —
 //              gives them back to who held before when it closes, and closes the
 //              menu when they are taken from it: losing the keys is losing the
@@ -58,46 +61,66 @@
 // =============================================================================
 
 const _stewardOwner = Object.freeze({ toString: () => "contextMenus" });
-var _pages = new WeakSet();          // the documents that have a steward: one each
-var _SWALLOW_MS = 1000;              // a swallowed gesture that never releases is forgotten after this
 
-class ContextMenuSteward {
-    constructor(branch, opts) {
-        if (!branch) throw new Error("[ContextMenuSteward] a branch of its own is required");
-        if (typeof document !== "undefined") {
-            if (_pages.has(document)) throw new Error("[ContextMenuSteward] this page has a steward already: one per page");
-            _pages.add(document);
-        }
-        var self = this;
+/** A kind's menu picked a row, as the steward hears it: the row whose count went up, while that menu is the one open. */
+class KindPicked {
+    constructor(steward, menu) { this.steward = steward; this.menu = menu; Object.freeze(this); }
+    canHandle(on) { return on === StateMenuPickControl; }
+    handle(change) {
+        var before = change.before || {}, after = change.after || {};
+        for (var id in after) if (before[id] != null && after[id] !== before[id] && this.steward._menu === this.menu) { this.steward._pick(id); return; }
+    }
+}
+var _pages = new WeakSet();          // the documents that have a steward: one each
+
+class ContextMenuSteward extends SimpleComponent {
+    static TAG = "div";
+    static BEHAVIOR = ContextMenuStewardBehavior;   // the page heard while a menu is open, and only then
+
+    constructor(branch, fixed, place) {
+        if (!branch || typeof branch.elementMaker !== "function")
+            throw new TypeError("[ContextMenuSteward] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
+        if (typeof document !== "undefined" && _pages.has(document)) throw new Error("[ContextMenuSteward] this page has a steward already: one per page");
         branch.activate(_stewardOwner);
+        super(branch.elementMaker("layer"), fixed, FixedContextMenuSteward, place ?? manageContextMenuSteward);
+        if (typeof document !== "undefined") _pages.add(document);
         this._branch = branch;
+        css.addClass(this.el, cm_layer);
         this._sinks = [];
-        if (opts && typeof opts.onEvent === "function") this.on(opts.onEvent);
         this._types = {};
-        var given = opts && opts.types ? opts.types : {};
-        for (var k in given) if (Object.prototype.hasOwnProperty.call(given, k)) this._types[k] = given[k];
         this._handlers = {};
         this._menus = {};
         this._specimens = [];
         this._specimenCount = 0;
-        this._layer = null;
         this._kind = null;
         this._menu = null;
         this._object = null;
         this._restoreTo = null;
         this._anchor = null;
-        this._onPress = function (e) { self._press(e); };
         this._kb = null; this._kbId = null; this._restoreKeys = null;
-        if (opts && opts.keyboard) {
-            this._kb = opts.keyboard;
-            this._kbId = this._kb.join(opts.keyboardId != null ? String(opts.keyboardId) : branch.name, {
-                keyDown: function (ev) { return self._key(ev); },
-                taken: function () { if (self._menu) { self._restoreKeys = null; self._close("taken"); } }
-            });
+    }
+
+    // ── handed in ─────────────────────────────────────────────────────────
+    /** The kinds a Java registry stamps - kind → { kind, nodes } - each held to the tree's rules; a kind twice refused. */
+    hold(types) {
+        for (var k in types) {
+            if (!Object.prototype.hasOwnProperty.call(types, k)) continue;
+            if (this._types[k]) throw new Error("[ContextMenuSteward] kind declared twice: " + k);
+            MenuTree.check(k, types[k].nodes);
+            this._types[k] = types[k];
         }
-        this._onScroll = function (e) { if (self._scrollMoves(e.target)) self._close("scroll"); };
-        this._onResize = function () { self._close("scroll"); };
-        this._onBlur = function () { self._close("blur"); };
+        return this;
+    }
+    /** The page's keyboard steward, once: the steward a member of its party, claiming the keys for an open menu. */
+    keys(keyboard, id) {
+        if (this._kb) throw new Error("[ContextMenuSteward] in the keyboard party already");
+        var self = this;
+        this._kb = keyboard;
+        this._kbId = keyboard.join(id != null ? String(id) : this._branch.name, {
+            keyDown: function (ev) { return self._key(ev); },
+            taken: function () { if (self._menu) { self._restoreKeys = null; self._close("taken"); } }
+        });
+        return this;
     }
 
     // ── the registry ──────────────────────────────────────────────────────
@@ -136,7 +159,8 @@ class ContextMenuSteward {
         if (!this.has(kind)) throw new Error("[ContextMenuSteward] no kind '" + kind + "'");
         var h = this._handlers[kind] || {};
         var sub = this._branch.createBranch("specimen-" + kind.replace(/[^A-Za-z0-9_-]/g, "_") + "-" + (++this._specimenCount));
-        var menu = new ContextMenu(sub, this._types[kind], {}, { specimen: true });
+        var menu = new ContextMenu(sub, new FixedContextMenu(), this._place(FixedContextMenu, RoleSpecimen));
+        menu.hold(this._types[kind].nodes, kind);
         css.addClass(host, cm_specimen);
         menu.bind(object === undefined ? null : object, h.state ? function (id, o) { return h.state(id, o); } : null);
         menu.mount(host);
@@ -164,9 +188,8 @@ class ContextMenuSteward {
         this._restoreTo = document.activeElement;
         this._anchor = opts && opts.anchor ? opts.anchor : null;
         menu.bind(object, h.state ? function (id, o) { return h.state(id, o); } : null);
-        var layer = this._layerEl();
-        document.body.appendChild(layer);
-        var p = menu.show(layer, { x: at.x, y: at.y }, { w: window.innerWidth, h: window.innerHeight }, !!(opts && opts.keyboard));
+        document.body.appendChild(this.el);
+        var p = menu.show(this.el, { x: at.x, y: at.y }, { w: window.innerWidth, h: window.innerHeight }, !!(opts && opts.keyboard));
         this._listen(true);
         if (this._kb) { this._restoreKeys = this._kb.holder() === this._kbId ? this._restoreKeys : this._kb.holder(); this._kb.claim(this._kbId); }
         this._fire(MenuEvents.Opened(kind, p.x, p.y));
@@ -181,8 +204,7 @@ class ContextMenuSteward {
         var kind = this._kind, menu = this._menu, object = this._object, h = this._handlers[kind] || {};
         this._listen(false);
         menu.hide();
-        menu.unbind();
-        if (this._layer && this._layer.parentNode) this._layer.parentNode.removeChild(this._layer);
+        if (this.el.parentNode) this.el.parentNode.removeChild(this.el);
         this._menu = null; this._kind = null; this._object = null; this._anchor = null;
         var back = this._restoreTo;
         this._restoreTo = null;
@@ -204,59 +226,31 @@ class ContextMenuSteward {
 
     // ── minted once, lazily ───────────────────────────────────────────────
     _menuFor(kind) {
-        var self = this;
         if (!this._menus[kind]) {
             var sub = this._branch.createBranch("type-" + kind.replace(/[^A-Za-z0-9_-]/g, "_"));
-            this._menus[kind] = new ContextMenu(sub, this._types[kind], { pick: function (id) { self._pick(id); } });
+            var menu = new ContextMenu(sub, new FixedContextMenu(), this._place(FixedContextMenu, RolePopup));
+            menu.hold(this._types[kind].nodes, kind);
+            menu.onChange(StateMenuPickControl, new KindPicked(this, menu));
+            this._menus[kind] = menu;
         }
         return this._menus[kind];
     }
-    _layerEl() {
-        if (!this._layer) {
-            this._layer = this._branch.createElement("layer", "div");
-            css.addClass(this._layer, cm_layer);
-        }
-        return this._layer;
-    }
 
     // ── while open: the document and the window ───────────────────────────
-    _listen(on) {
-        var f = on ? "addEventListener" : "removeEventListener";
-        document[f]("pointerdown", this._onPress, true);
-        document[f]("scroll", this._onScroll, true);
-        window[f]("resize", this._onResize);
-        window[f]("blur", this._onBlur);
-    }
+    _listen(on) { this._behavior.listen(on); }
+    /** A scroll its behaviour heard: closed, where it moves what the menu was opened for. */
+    _scrolled(target) { if (this._scrollMoves(target)) this._close("scroll"); }
     /** Whether a scroll of this target moves what the menu was opened for: the page itself, or a box that holds the anchor. */
     _scrollMoves(target) {
         if (!this._menu || this._menu.contains(target)) return false;
         if (target === document || target === document.documentElement || target === document.body) return true;
         return !!(this._anchor && target && typeof target.contains === "function" && target.contains(this._anchor));
     }
-    _press(e) {
-        if (this._menu && this._menu.contains(e.target)) return;
+    /** A press its behaviour heard: outside the open menu, it closes it - and its behaviour swallows the rest of the gesture. */
+    _outside(target) {
+        if (!this._menu || this._menu.contains(target)) return false;
         this._close("outside");
-        e.stopPropagation();
-        e.preventDefault();
-        ContextMenuSteward._swallow(e.pointerId);
-    }
-    /** The rest of the gesture that closed a menu: its release and its click reach nothing. */
-    static _swallow(pointerId) {
-        var done = false, timer = null;
-        function off() {
-            if (done) return;
-            done = true;
-            if (timer) clearTimeout(timer);
-            ["pointerup", "mouseup", "click", "dblclick"].forEach(function (t) { document.removeEventListener(t, stop, true); });
-        }
-        function stop(e) {
-            if (e.pointerId != null && pointerId != null && e.pointerId !== pointerId) return;
-            e.stopPropagation();
-            e.preventDefault();
-            if (e.type === "pointerup") setTimeout(off, 0);      // the click of this release is still to come, in this task
-        }
-        ["pointerup", "mouseup", "click", "dblclick"].forEach(function (t) { document.addEventListener(t, stop, true); });
-        timer = setTimeout(off, _SWALLOW_MS);
+        return true;
     }
     /** A keydown while a menu holds the keys: Escape closes, the menu takes its own, Tab is held; true when taken. */
     _key(e) {

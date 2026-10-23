@@ -11,17 +11,19 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 
 import java.util.List;
 
 /**
  * {@code ContextMenuSteward}, one per page: the registry of kinds — a Java
- * {@link ContextMenuRegistry}'s stamped {@code MENUS}, or kinds defined
- * through its builder — one instance per kind minted at the kind's first
- * open, the layer minted at the first open of any, and the one menu active,
- * which is the fundamental invariant. Lazy: nothing minted at construction,
- * nothing listened to while no menu is open. The press that closes a menu
- * is swallowed whole. A primitive, owning the layer on its branch.
+ * {@link ContextMenuRegistry}'s stamped {@code MENUS}, held, or kinds defined
+ * through its builder — one context menu per kind minted at the kind's first
+ * open, its layer its own element, and the one menu active, which is the
+ * fundamental invariant. Lazy: nothing listened to while no menu is open. The
+ * press that closes a menu is swallowed whole. Ported largely unchanged (RFC
+ * 0071, owner 23 Oct): a composed component on its own branch, its kinds and
+ * its keys handed in after it is made, its picks heard through the menu's count.
  */
 public record ContextMenuStewardModule() implements DomModule<ContextMenuStewardModule>, ImplFor<HouseMenus.ContextMenuSteward> {
 
@@ -43,6 +45,8 @@ public record ContextMenuStewardModule() implements DomModule<ContextMenuSteward
     @Override
     public ImportsFor<ContextMenuStewardModule> imports() {
         return ImportsFor.<ContextMenuStewardModule>builder()
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ContextMenuStewardBehaviorModule.ContextMenuStewardBehavior()), ContextMenuStewardBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MenuStyles.cm_layer(), new MenuStyles.cm_specimen()), MenuStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ContextMenuModule.ContextMenu()), ContextMenuModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MenuEventsModule.MenuEvents()), MenuEventsModule.INSTANCE))
