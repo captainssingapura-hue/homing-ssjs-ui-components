@@ -235,3 +235,13 @@ its going up. What a pick does is for its menu, and the one who opened the menu,
 
 For each row of a menu, and of the menus it holds, how many times it was picked - or none, for a row
 that opens rows. Each change is one row's. What a pick does is for whoever opened the menu to decide.
+
+## LayerCloseControl
+
+For each floater a float layer holds, how many times its close was asked - or none, for one that
+cannot be closed. Each change is one floater's. What a close is, if anything, is for whoever holds the layer to decide.
+
+## FloatOrder
+
+How the floaters a float layer holds are stacked: their ids, bottom to top, each once; the top is the
+one in use.

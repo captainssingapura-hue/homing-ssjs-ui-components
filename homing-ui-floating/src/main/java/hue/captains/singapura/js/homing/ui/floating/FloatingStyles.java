@@ -32,20 +32,8 @@ public record FloatingStyles() implements CssGroup<FloatingStyles> {
         }
     }
 
-    /** The desk as a layer over docks: it lies over its positioned host, and the hand passes through it except on a pane. */
-    public record fp_desk_layer() implements CssClass<FloatingStyles> {
-        @Override public String body() { return """
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-            """;
-        }
-    }
-
     @Override
     public List<CssClass<FloatingStyles>> cssClasses() {
-        return List.of(new fp_desk(), new fp_desk_layer());   // the frame, the head and the body the panes', with the floating pane (23 Oct)
+        return List.of(new fp_desk());   // the desk laid over another waits, with the old docking (23 Oct); the frame, the head and the body the panes', with the floating pane (23 Oct)
     }
 }

@@ -89,7 +89,7 @@ class WholeHouseTaxonomyTest {
         HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
         HOUSE.states().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
-        assertEquals(23 + 119 + 22 + 99 + 11 + 38, nodes.size(), "no module adds a state: the house's trees are whole");   // the tab carried and the detaches (23 Oct);   // the tab in use and the order of the tabs, a chip's close and the tabs' (22 Oct), a floating pane's (23 Oct)
+        assertEquals(23 + 119 + 22 + 99 + 11 + 40, nodes.size(), "no module adds a state: the house's trees are whole");   // the tab carried and the detaches (23 Oct);   // the tab in use and the order of the tabs, a chip's close and the tabs' (22 Oct), a floating pane's (23 Oct)
         assertTrue(nodes.stream().noneMatch(String::isBlank));
     }
 

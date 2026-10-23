@@ -50,7 +50,7 @@ class UiFloatingCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(2, checked, "the desk and the events - the floating pane the panes' (23 Oct)");
+        assertEquals(3, checked, "the desk, its behaviour (ported, 23 Oct) and the events - the floating pane the panes' (23 Oct)");
     }
 
     @Test

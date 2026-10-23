@@ -131,7 +131,7 @@ class HouseTaxonomyTest {
         HOUSE.roles().forEach(r -> nodes.add(HOUSE.meaning(r).markdown()));
         HOUSE.states().branches().forEach(b -> nodes.add(HOUSE.meaning(b).markdown()));
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
-        assertEquals(23 + 119 + 22 + 99 + 11 + 38, nodes.size());   // the menu item a branch of two, two levels of menu, a menu's picks (23 Oct);   // a choice chosen, and its picks (23 Oct);   // the tab carried and the detaches (23 Oct);   // the tab in use and the order of the tabs, a chip's close and the tabs' (22 Oct), a floating pane's (23 Oct)
+        assertEquals(23 + 119 + 22 + 99 + 11 + 40, nodes.size());   // the float layer's stack and its closes (23 Oct); the menu item a branch of two, two levels of menu, a menu's picks (23 Oct);   // a choice chosen, and its picks (23 Oct);   // the tab carried and the detaches (23 Oct);   // the tab in use and the order of the tabs, a chip's close and the tabs' (22 Oct), a floating pane's (23 Oct)
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));

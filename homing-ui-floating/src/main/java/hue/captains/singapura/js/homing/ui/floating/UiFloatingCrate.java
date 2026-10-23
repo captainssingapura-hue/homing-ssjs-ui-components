@@ -30,6 +30,7 @@ public final class UiFloatingCrate implements Crate, ComponentVehicle {
     @Override public List<CrateEntry> entries() {
         return List.of(
                 CrateEntry.of(FloatLayerModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(FloatLayerBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(FloatEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(FloatingStyles.INSTANCE));
     }

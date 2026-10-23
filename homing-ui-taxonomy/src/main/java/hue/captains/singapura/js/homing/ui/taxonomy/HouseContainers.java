@@ -134,8 +134,12 @@ public final class HouseContainers {
         public static final FloatLayer INSTANCE = new FloatLayer();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public HouseBranches.Layer parent() { return HouseBranches.Layer.INSTANCE; }
-        /** Where the page's keys are, held by the steward on its root (RFC 0067, D12). */
-        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE); }
+        /**
+         * Where the page's keys are, held by the steward on its root (RFC 0067, D12); how its floaters are stacked, the top the
+         * one in use; and the closes asked of each, passed on (owner, 23 Oct).
+         */
+        @Override public List<StateType<?>> states() { return List.of(HouseStates.Keyboard.INSTANCE, HouseStates.FloatOrder.INSTANCE,
+                HouseStates.LayerCloseControl.INSTANCE); }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(FloatingPane.INSTANCE).as(HouseShaping.Float.INSTANCE).any(Cardinality.DYNAMIC));
         }

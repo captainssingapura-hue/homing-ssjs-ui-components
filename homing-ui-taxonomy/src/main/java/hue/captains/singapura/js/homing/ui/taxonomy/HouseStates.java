@@ -401,6 +401,17 @@ public final class HouseStates {
         @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
     }
 
+    /**
+     * For each floater a float layer holds, how many times its close was asked: by the floater's id, a count from none, or
+     * none for one that cannot be closed. Each change is one floater's. What a close is, the layer's caller decides; nothing
+     * it shows changes - no class (owner, 23 Oct).
+     */
+    public record LayerCloseControl() implements StateType<Counting> {
+        public static final LayerCloseControl INSTANCE = new LayerCloseControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
     // ── given ────────────────────────────────────────────────────────────
 
     /** What is typed in it so far, the user still at it: a text, none at rest. What it shows is the words themselves - no class. */
@@ -423,6 +434,16 @@ public final class HouseStates {
      */
     public record TabOrder() implements StateType<Given> {
         public static final TabOrder INSTANCE = new TabOrder();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.NAMES); }
+    }
+
+    /**
+     * How the floaters a float layer holds are stacked: their ids, bottom to top, each once - the top the one in use; none
+     * at rest. What it shows is each floater where it stands in the stack - no class (owner, 23 Oct).
+     */
+    public record FloatOrder() implements StateType<Given> {
+        public static final FloatOrder INSTANCE = new FloatOrder();
         @Override public Given parent() { return Given.INSTANCE; }
         @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.NAMES); }
     }
@@ -457,7 +478,7 @@ public final class HouseStates {
             Empty.INSTANCE,
             Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, TabCarry.INSTANCE, Held.INSTANCE,
             Elevation.INSTANCE, Orientation.INSTANCE,
-            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE,
-            DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, ChosenOption.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE, LayerCloseControl.INSTANCE,
+            DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, FloatOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
 }
