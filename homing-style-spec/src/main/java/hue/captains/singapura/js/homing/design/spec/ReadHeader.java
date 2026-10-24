@@ -69,6 +69,7 @@ public record ReadHeader() implements StatelessFunctionalObject {
 
     /** Every component's header, the taxonomy's components in its order. */
     public List<ComponentHeader> readAll(Taxonomy taxonomy, Collection<? extends Component<?>> top) {
-        return taxonomy.components().stream().map(c -> read(taxonomy, top, c)).toList();
+        // a leaf the document wears has no module to stamp: a style's rule on :root, no class, no dual (owner, 24 Oct)
+        return taxonomy.components().stream().filter(c -> !taxonomy.wornByTheDocument(c)).map(c -> read(taxonomy, top, c)).toList();
     }
 }

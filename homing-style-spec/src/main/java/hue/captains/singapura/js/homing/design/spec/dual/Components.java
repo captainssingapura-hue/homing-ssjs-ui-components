@@ -14,7 +14,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-/** The component tree read for its dual (RFC 0071): its branches and its components, each said a branch, a leaf or a composite. */
+/**
+ * The component tree read for its dual (RFC 0071): its branches and its components, each said a branch, a leaf or a
+ * composite - but for what the document wears, which no runtime places (owner, 24 Oct).
+ */
 public record Components() implements DualTree<Taxon> {
 
     public static final Components INSTANCE = new Components();
@@ -50,5 +53,10 @@ public record Components() implements DualTree<Taxon> {
     public String room(Component<?> component, Room room) {
         return "Room" + JsLiterals.INSTANCE.name(component.token()) + JsLiterals.INSTANCE.name(room.name());
     }
-    @Override public Set<Taxon> used(Registration r) { return new LinkedHashSet<>(r.taxonomy().components()); }
+    /** Every component but those the document wears: a style's rule on :root is no runtime's, so the dual knows no such leaf, nor its branch (owner, 24 Oct). */
+    @Override public Set<Taxon> used(Registration r) {
+        var out = new LinkedHashSet<Taxon>();
+        for (Component<?> c : r.taxonomy().components()) if (!r.taxonomy().wornByTheDocument(c)) out.add(c);
+        return out;
+    }
 }

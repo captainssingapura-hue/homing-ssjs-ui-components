@@ -268,11 +268,12 @@ public final class HouseContainers {
 
     /**
      * The surface a page stands on: its ground, the ink and the face of what is written on it, and its
-     * scrollbar. One to a document, worn on its own element: everything on the page stands on it.
+     * scrollbar. Worn by the document itself ({@link HouseBranches.Document}): a style's rule on {@code :root}, no
+     * module, no element, no class - everything on the page stands on it (owner, 24 Oct).
      */
-    public record Ground() implements Leaf<HouseBranches.Surface> {
+    public record Ground() implements Leaf<HouseBranches.Document> {
         public static final Ground INSTANCE = new Ground();
-        @Override public HouseBranches.Surface parent() { return HouseBranches.Surface.INSTANCE; }
+        @Override public HouseBranches.Document parent() { return HouseBranches.Document.INSTANCE; }
     }
 
     /**

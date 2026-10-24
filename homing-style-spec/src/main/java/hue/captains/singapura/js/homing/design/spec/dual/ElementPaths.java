@@ -24,7 +24,10 @@ public record ElementPaths() implements DualTree<ElementPath> {
 
     @Override public String name() { return "paths"; }
     @Override public String prefix() { return "Path"; }
-    @Override public List<ElementPath> roots(Registration r) { return r.top().stream().map(c -> new ElementPath(c, List.of())).toList(); }
+    /** A path from each top-level component - but a leaf the document wears has no element, so no path (owner, 24 Oct). */
+    @Override public List<ElementPath> roots(Registration r) {
+        return r.top().stream().filter(c -> !r.taxonomy().wornByTheDocument(c)).map(c -> new ElementPath(c, List.of())).toList();
+    }
     @Override public List<ElementPath> children(Registration r, ElementPath path) {
         return Slots.INSTANCE.of(r.taxonomy(), component(path)).stream().map(s -> path.then(s.slot())).toList();
     }

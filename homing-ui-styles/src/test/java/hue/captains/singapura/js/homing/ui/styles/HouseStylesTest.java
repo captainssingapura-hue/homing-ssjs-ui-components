@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -66,7 +67,11 @@ class HouseStylesTest {
         for (DesignStyle<?> s : HouseStyles.STYLES) {
             String sheet = styling.styleSheet(s.token());
             assertTrue(!sheet.contains("$"), s.token() + ": every mark filled in");
-            for (Casting c : TAXONOMY.castings()) assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
+            for (Casting c : TAXONOMY.castings())
+                if (c.component() instanceof Component<?> leaf && TAXONOMY.wornByTheDocument(leaf))   // the ground: ruled on the document's root, under no class (24 Oct)
+                    assertTrue(sheet.contains("/* " + c.token() + ": ") && sheet.contains("\n:root {"), s.token() + ": " + c.token() + " on :root");
+                else assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
+            assertFalse(sheet.contains(".styled-ground"), s.token() + ": the ground wears no class");
         }
     }
 

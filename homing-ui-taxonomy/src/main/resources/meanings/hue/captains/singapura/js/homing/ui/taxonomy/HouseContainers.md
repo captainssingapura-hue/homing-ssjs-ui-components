@@ -63,7 +63,7 @@ Heads a pane that floats over the page: its title, its close, and where the hand
 ## Ground
 
 The surface a page stands on: its ground, the ink and the face of what is written on it, and its scrollbar.
-Everything on the page stands on it.
+Everything on the page stands on it; the document itself wears it, no element of the page does.
 
 ## SiteBar
 

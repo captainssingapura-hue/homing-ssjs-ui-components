@@ -71,7 +71,7 @@ Shows something whole, for the user to look at or look through, rather than to e
 
 ## Surface
 
-Fills what holds it, with no frame of its own; what stands on it is the point - the page's ground.
+Fills what holds it, with no frame of its own; what stands on it is the point.
 
 ## Chooser
 
@@ -101,3 +101,7 @@ A small sign the user reads at a glance, in place of words.
 ## Icon
 
 A picture standing for one idea wherever it is shown: each icon a component of its own, its picture drawn by the style worn.
+
+## Document
+
+What the document itself wears, as a whole: a style's CSS on its own element, and nothing the page makes or holds.

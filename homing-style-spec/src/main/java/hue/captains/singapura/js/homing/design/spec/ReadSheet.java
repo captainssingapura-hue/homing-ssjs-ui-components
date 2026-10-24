@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.design.Extent;
 import hue.captains.singapura.js.homing.design.Growth;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
@@ -21,7 +22,9 @@ import java.util.regex.Pattern;
  * same for a room of the component's own - each casting's class and the room's name - {@code &$word} the state's
  * class, a keyframes of its own named after the implementation. Refused, every missing content named, unless every one is
  * found: a sheet is served whole or not at all. And only for a selectable style: the base layer has no sheet of its own -
- * its rules are in each sheet that wears them.
+ * its rules are in each sheet that wears them. A casting the document wears ({@link
+ * hue.captains.singapura.js.homing.component.taxonomy.WornByTheDocument}) is ruled on {@code :root}, the document's own
+ * element, under no class (owner, 24 Oct): its implementation is shared with no element's casting.
  */
 public record ReadSheet() implements StatelessFunctionalObject {
 
@@ -37,15 +40,23 @@ public record ReadSheet() implements StatelessFunctionalObject {
         if (!spec.selectable().contains(style))
             throw new IllegalArgumentException(style.token() + " is no style a page wears: the base layer stands alone nowhere");
         Map<Class<?>, List<String>> wearing = new LinkedHashMap<>();
-        for (Casting k : spec.castings())
-            wearing.computeIfAbsent(spec.wears(style, k).getClass(), x -> new ArrayList<>()).add(StyleClasses.INSTANCE.casting(k));
+        var onTheRoot = new java.util.HashSet<Class<?>>();   // the implementations a casting the document wears
+        for (Casting k : spec.castings()) {
+            Class<?> impl = spec.wears(style, k).getClass();
+            wearing.computeIfAbsent(impl, x -> new ArrayList<>()).add(StyleClasses.INSTANCE.casting(k));
+            if (k.component() instanceof Component<?> c && spec.taxonomy().wornByTheDocument(c)) onTheRoot.add(impl);
+        }
         var rules = new ArrayList<StyleSheet.Rule>();
         var missing = new ArrayList<String>();
         for (SpecRegistry.Worn end : spec.worn(style)) {
             String name = name(end);
             List<String> castings = wearing.getOrDefault(end.impl().getClass(), List.of());
+            boolean root = onTheRoot.contains(end.impl().getClass());
+            if (root && castings.size() > 1)
+                throw new IllegalStateException(style.token() + ": " + name + " is worn by a casting the document wears and by another - "
+                        + String.join(", ", castings) + ": the document's rule is on :root, shared with no element's casting");
             switch (spec.content(end.impl())) {
-                case CssResolution.Found f -> rules.add(new StyleSheet.Rule(name, end, castings, filled(f.text(), castings, name).strip()));
+                case CssResolution.Found f -> rules.add(new StyleSheet.Rule(name, end, castings, filled(f.text(), root ? ":root" : selector(castings), castings, name).strip()));
                 case CssResolution r -> missing.add(r.resource() + ": " + r.getClass().getSimpleName());
             }
         }
@@ -69,11 +80,14 @@ public record ReadSheet() implements StatelessFunctionalObject {
      * the selector of their rooms of that name, {@code &$word} the state's class, {@code $name} a keyframes named after
      * the implementation.
      */
-    public String filled(String css, List<String> castings, String keyframes) {
+    public String filled(String css, List<String> castings, String keyframes) { return filled(css, selector(castings), castings, keyframes); }
+
+    /** The same, {@code $casting} the selector given: the castings' classes, or {@code :root} for a casting the document wears. */
+    public String filled(String css, String selector, List<String> castings, String keyframes) {
         String out = KEYFRAMES.matcher(css).replaceAll(m -> "@keyframes " + Matcher.quoteReplacement(keyframes + "-" + m.group(1)));
         out = STATE.matcher(out).replaceAll(m -> Matcher.quoteReplacement("&." + StyleClasses.INSTANCE.state(m.group(1))));
         out = ROOM.matcher(out).replaceAll(m -> Matcher.quoteReplacement(selector(castings.stream().map(c -> c + "__" + m.group(1)).toList())));
-        out = out.replace(CASTING, selector(castings));
+        out = out.replace(CASTING, selector);
         out = USE.matcher(out).replaceAll(m -> Matcher.quoteReplacement(keyframes + "-" + m.group(1)));
         return out;
     }

@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.FamilyHead;
 import hue.captains.singapura.js.homing.component.taxonomy.L1_ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.L2_ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
+import hue.captains.singapura.js.homing.component.taxonomy.WornByTheDocument;
 
 import java.util.List;
 
@@ -111,7 +112,7 @@ public final class HouseBranches {
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
-    /** A container that fills what holds it, with no frame of its own: the page's ground, the plain container, a grid's cell. */
+    /** A container that fills what holds it, with no frame of its own: the plain container, a grid's cell. */
     public record Surface() implements L2_ComponentBranch<Container>, FamilyHead {
         public static final Surface INSTANCE = new Surface();
         @Override public Container parent() { return Container.INSTANCE; }
@@ -151,6 +152,16 @@ public final class HouseBranches {
     /** A small sign: an icon, a tick, a lamp, an indicator. */
     public record Mark() implements L1_ComponentBranch<Root>, FamilyHead {
         public static final Mark INSTANCE = new Mark();
+        @Override public Root parent() { return Root.INSTANCE; }
+    }
+
+    /**
+     * What the document itself wears (RFC 0071 port, owner 24 Oct: "go with :root, keep it out of runtime"): its leaves are
+     * a style's CSS and nothing else, each ruled on {@code :root} by the sheet writer - no module, no element, no class.
+     * The page's ground is one. Heads its own family: the ground's CSS in the document's file.
+     */
+    public record Document() implements L1_ComponentBranch<Root>, WornByTheDocument, FamilyHead {
+        public static final Document INSTANCE = new Document();
         @Override public Root parent() { return Root.INSTANCE; }
     }
 

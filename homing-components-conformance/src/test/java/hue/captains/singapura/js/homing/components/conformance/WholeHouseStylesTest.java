@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.components.conformance;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.styling.StyleManager;
@@ -32,7 +33,10 @@ class WholeHouseStylesTest {
         for (DesignStyle<?> s : styling.styles()) {
             String sheet = styling.styleSheet(s.token());
             assertTrue(!sheet.contains("$"), s.token() + ": every mark filled in");
-            for (Casting c : HOUSE.castings()) assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
+            for (Casting c : HOUSE.castings())
+                if (c.component() instanceof Component<?> leaf && HOUSE.wornByTheDocument(leaf))   // the ground: ruled on the document's root, under no class (24 Oct)
+                    assertTrue(sheet.contains("/* " + c.token() + ": ") && sheet.contains("\n:root {"), s.token() + ": " + c.token() + " on :root");
+                else assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
         }
     }
 
