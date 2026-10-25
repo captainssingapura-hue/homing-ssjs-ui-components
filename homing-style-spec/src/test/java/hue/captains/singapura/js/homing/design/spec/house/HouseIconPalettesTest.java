@@ -1,0 +1,168 @@
+package hue.captains.singapura.js.homing.design.spec.house;
+
+import hue.captains.singapura.js.homing.component.taxonomy.Casting;
+import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
+import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
+import hue.captains.singapura.js.homing.design.styling.StyleManager;
+import hue.captains.singapura.js.homing.ui.styles.Base;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import hue.captains.singapura.js.homing.ui.styles.Sketchy;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
+import hue.captains.singapura.js.homing.ui.taxonomy.IconLeaf;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * The house's icon palettes (RFC 0067, D56): every icon its picture in every style - its style's own, or base's: a
+ * character, or for rotate, flip and the pacman an SVG - sketchy drawing its own pacman; each character the one today's sheet of that
+ * style drew on the icon's ::before, moved unchanged; a palette refused that leaves an icon without a picture, draws one
+ * that is no icon, or is a style's twice; and the page's module, one object a picture, shared by the styles that draw it
+ * alike.
+ */
+class HouseIconPalettesTest {
+
+    private static final SpecRegistry SPEC = HouseSpec.INSTANCE.registry();
+    private static final StyleManager TODAY = HouseStyles.INSTANCE.styling().manager();
+    private static final IconPictures PICTURES = HouseIconPalettes.INSTANCE.read(SPEC.taxonomy());
+    private static final Pattern GLYPH = Pattern.compile("content:\\s*\"([^\"]*)\"");
+
+    @Test
+    void everyIcon_hasItsPicture_inEveryStyle_fiveSvgs() {
+        assertEquals(22, PICTURES.icons().size(), "the pacman and the preferences among them (21 Oct)");
+        for (DesignStyle<?> s : SPEC.styles())
+            for (IconLeaf i : PICTURES.icons()) {
+                boolean svg = i.equals(HouseIcons.RotateIcon.INSTANCE) || i.equals(HouseIcons.FlipIcon.INSTANCE) || i.equals(HouseIcons.PacmanIcon.INSTANCE) || i.equals(HouseIcons.PreferencesIcon.INSTANCE)
+                        || i.equals(HouseIcons.AddIcon.INSTANCE);   // the plus drawn: a character sat off its box's middle (22 Oct)
+                assertEquals(svg, PICTURES.picture(s, i) instanceof IconPicture.Svg, s.token() + " " + i.token());
+            }
+    }
+
+    @Test
+    void eachCharacter_isTheOneTodaysSheetDrew_inThatStyle() throws IOException {
+        var wrong = new ArrayList<String>();
+        int checked = 0;
+        for (DesignStyle<?> s : SPEC.styles())
+            for (IconLeaf i : PICTURES.icons()) {
+                if (!(PICTURES.picture(s, i) instanceof IconPicture.Glyph now)) continue;
+                String sheet = sheet(TODAY.resolve(s, new Casting(i)).css().getClass().getName());
+                Matcher m = GLYPH.matcher(sheet);
+                assertTrue(m.find(), s.token() + " " + i.token() + ": today's sheet draws no glyph");
+                if (!m.group(1).equals(now.character())) wrong.add(s.token() + " " + i.token() + ": today " + m.group(1) + ", its palette " + now.character());
+                checked++;
+            }
+        System.out.println("[icon-palettes] " + checked + " characters, each the one today's sheet drew");
+        assertEquals(List.of(), wrong);
+    }
+
+    @Test
+    void aStyleDraws_onlyWhereItDiffers() {
+        assertEquals(new IconPicture.Glyph("✔"), PICTURES.picture(Sketchy.INSTANCE, HouseIcons.CheckIcon.INSTANCE));
+        assertTrue(PICTURES.own(Sketchy.INSTANCE, HouseIcons.CheckIcon.INSTANCE));
+        assertEquals(new IconPicture.Svg<>(new hue.captains.singapura.js.homing.design.spec.styles.base.AddSvg()), PICTURES.picture(Sketchy.INSTANCE, HouseIcons.AddIcon.INSTANCE), "sketchy draws base's plus");
+        assertFalse(PICTURES.own(Sketchy.INSTANCE, HouseIcons.AddIcon.INSTANCE));
+    }
+
+    @Test
+    void aPalette_isRefused_thatLeavesAnIconWithoutAPicture_drawsWhatIsNoIcon_orIsAStylesTwice() {
+        var base = HouseIconPalettes.INSTANCE.base();
+        var less = new java.util.LinkedHashMap<>(base.pictures());
+        less.remove(HouseIcons.CheckIcon.INSTANCE);
+        assertThrows(IllegalArgumentException.class, () -> new IconPictures(PICTURES.icons(), new IconPalette<>(Base.INSTANCE, less), List.of()));
+        var fewer = PICTURES.icons().stream().filter(i -> !i.equals(HouseIcons.CheckIcon.INSTANCE)).toList();
+        assertThrows(IllegalArgumentException.class, () -> new IconPictures(fewer, base, List.of()), "base draws an icon the instance does not register");
+        assertThrows(IllegalArgumentException.class, () -> new IconPictures(PICTURES.icons(), base,
+                List.of(new IconPalette<>(Sketchy.INSTANCE, Map.of()), new IconPalette<>(Sketchy.INSTANCE, Map.of()))));
+        assertThrows(IllegalArgumentException.class, () -> new IconPicture.Glyph(" "));
+        assertThrows(NullPointerException.class, () -> new IconPicture.Svg<>(null), "an SVG picture imports its SVG");
+    }
+
+    @Test
+    void thePagesModule_oneObjectAPicture_sharedByTheStylesThatDrawItAlike() {
+        String js = IconPicturesScript.INSTANCE.script(PICTURES, SPEC.selectable());
+        assertEquals(7, count(js, "const GLYPH_CLOSE_ICON"), "base's cross, and five styles' and sketchy's own");
+        assertEquals(1, count(js, "const SVG_ADD_ICON "), "one plus, drawn, for every style");
+        assertEquals(1, count(js, "const SVG_ROTATE_ICON "), "rotate: one picture, base's, in every style");
+        assertEquals(1, count(js, "const SVG_PACMAN_ICON "), "base's pacman, for every style but sketchy");
+        assertEquals(1, count(js, "const SVG_PACMAN_ICON_SKETCHY "), "sketchy's own pacman");
+        assertEquals(SPEC.selectable().size(), count(js, ", new Map(["));
+        assertTrue(js.contains("export { iconPictures };"));
+        assertFalse(js.contains("content"), "a picture is no content");
+        assertTrue(js.contains("CheckIcon as ComponentCheckIcon") && js.contains("Sketchy as StyleSketchy"), "each node imported by its name in its dual, as its prefixed name");
+    }
+
+    /**
+     * An SVG picture is held whole as it is read (owner, 21 Oct: its colours the palette's variables, written in it, no
+     * class): a picture as the house draws one is taken, and each way a text falls short of one is refused for it.
+     */
+    @Test
+    void anSvgPicture_isRefused_thatIsNotWhole() {
+        String shape = "<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-text)\"/>";
+        java.util.function.Function<String, String> in = inside -> "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\">" + inside + "</svg>";
+        IconSvg whole = new IconSvg("whole.svg", "<!-- a comment -->\n" + in.apply("\n    " + shape + "\n"));
+        assertEquals(List.of("text"), whole.colours());
+        assertFalse(whole.markup().contains("comment") || whole.markup().contains("\n"), "its markup without its comments or the space between its tags");
+        assertTrue(whole.markup().startsWith("<svg fill=\"currentColor\" "), "its svg filling in the colour the icon is given: each shape's default");
+        // by default a shape takes the colour its icon is given (owner, 21 Oct): saying nothing, or currentColor outright
+        IconSvg given = new IconSvg("given.svg", in.apply("<circle cx=\"12\" cy=\"12\" r=\"4\"/><path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: currentColor\"/>"
+                + "<path d=\"M 2 22 L 22 2\" stroke=\"currentColor\"/>"));
+        assertEquals(List.of(), given.colours(), "the colour it is given is no palette's: nothing to import");
+        var refused = new java.util.LinkedHashMap<String, String>();
+        refused.put("a class", in.apply("<path class=\"line\" d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-text)\"/>"));
+        refused.put("a literal colour in an attribute", in.apply("<path d=\"M 2 2 L 22 22\" fill=\"#000\"/>"));
+        refused.put("a literal colour", in.apply("<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: #000\"/>"));
+        refused.put("a colour in an attribute", in.apply("<path d=\"M 2 2 L 22 22\" fill=\"none\" stroke=\"var(--fp-text)\"/>"));
+        refused.put("something besides its colours in its style", in.apply("<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-text); opacity: .5\"/>"));
+        refused.put("a script", in.apply(shape + "<script>alert(1)</script>"));
+        refused.put("a text", in.apply(shape + "<text>R</text>"));
+        refused.put("an id", in.apply("<g id=\"x\">" + shape + "</g>"));
+        refused.put("something that runs", in.apply("<g onclick=\"go()\">" + shape + "</g>"));
+        refused.put("nothing drawn", in.apply(""));
+        refused.put("no size of a character", in.apply(shape).replace("width=\"1em\"", "width=\"24\""));
+        refused.put("no box of its own", in.apply(shape).replace(" viewBox=\"0 0 24 24\"", ""));
+        refused.put("no SVG's", "<svg viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\">" + shape + "</svg>");
+        refused.put("not to be read", "<svg");
+        var taken = new ArrayList<String>();
+        refused.forEach((why, text) -> { try { new IconSvg(why + ".svg", text); taken.add(why); } catch (IllegalArgumentException e) { /* refused */ } });
+        assertEquals(List.of(), taken, "each refused");
+    }
+
+    /** An SVG's file is held to the colours its SVG imports, both ways (owner, 21 Oct: SvgWithColorScheme, imported by the picture). */
+    @Test
+    void anSvgsFile_isHeldToTheColoursItImports_bothWays() {
+        java.util.function.Function<String, IconSvg> naming = colours -> new IconSvg("named.svg", "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" width=\"1em\" height=\"1em\">"
+                + java.util.Arrays.stream(colours.split(" ")).map(c -> "<path d=\"M 2 2 L 22 22\" style=\"fill: none; stroke: var(--fp-" + c + ")\"/>").reduce("", String::concat) + "</svg>");
+        var rotate = new hue.captains.singapura.js.homing.design.spec.styles.base.RotateSvg();
+        var pacman = new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg();
+        assertEquals(List.of("accent", "success-ink", "danger-ink"), IconSvgs.INSTANCE.imported(pacman));
+        assertEquals(List.of(), IconSvgs.INSTANCE.against(naming.apply("accent success-ink danger-ink"), pacman), "what it imports, each named");
+        assertEquals(List.of(), IconSvgs.INSTANCE.against(naming.apply("danger-ink accent success-ink"), pacman), "in whatever order");
+        List<String> more = IconSvgs.INSTANCE.against(naming.apply("accent success-ink danger-ink text"), pacman);
+        assertTrue(more.size() == 1 && more.getFirst().contains("names --fp-text, which PacmanSvg does not import"), more.toString());
+        List<String> fewer = IconSvgs.INSTANCE.against(naming.apply("accent danger-ink"), pacman);
+        assertTrue(fewer.size() == 1 && fewer.getFirst().contains("imports success-ink, which it never names"), fewer.toString());
+        assertEquals("pacman", new hue.captains.singapura.js.homing.design.spec.styles.sketchy.PacmanSvg().name(), "its name, its class's without Svg");
+    }
+
+    private static int count(String text, String what) { return text.split(Pattern.quote(what), -1).length - 1; }
+
+    private static String sheet(String className) throws IOException {
+        try (InputStream in = HouseIconPalettesTest.class.getResourceAsStream("/" + className.replace('.', '/') + ".css")) {
+            assertNotNull(in, className + ": no sheet on the classpath");
+            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+        }
+    }
+}

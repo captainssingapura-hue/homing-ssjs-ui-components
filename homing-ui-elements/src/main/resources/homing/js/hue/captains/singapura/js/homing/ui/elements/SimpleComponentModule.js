@@ -1,89 +1,105 @@
 // =============================================================================
-// SimpleComponent — the standard of a SIMPLE component (Implementing Components,
-// the guide): one element, which it owns no more than a value owns anything. It
-// makes the element itself, of its own tag, with the single-use maker its owner
-// hands it - branch.elementMaker(name) - so its owner never holds a bare element;
-// its owner places it. (A COMPOSED component takes a branch of the DOM-ops party
-// and mints its own tree on it: another standard.) A simple component is three:
+// SimpleComponent — the standard of a SIMPLE component, on the style manager
+// (RFC 0071): one element, which it makes itself, of its own tag, with the
+// single-use maker its owner's branch issues - branch.elementMaker(name) - and
+// places itself, with the single-use placement its owner hands it for the slot
+// it is in, or, at the root, with its own binding. The reference it gets back it
+// keeps to itself: its owner holds neither its element's style nor its
+// reference. (A COMPOSED component takes a branch of the DOM-ops party and mints
+// its own tree on it: another standard.) A simple component is three:
 //
 //   the component  its state - one value on each axis, kept here and nowhere
-//                  else, changed only by its setters - its degrees, its role,
-//                  and the handlers set on its events;
-//   its look       Look: its leaf's style-aware class, a state's class while it
-//                  holds, the reflections and the degrees - the only thing
-//                  that touches its classes;
+//                  else, changed only by its setters and its behaviour - its
+//                  degrees, its words, and the listeners that hear it change;
+//   its style      its reference: its casting's class put on as it is placed,
+//                  once, by the style manager; a classed state's class while it
+//                  holds, set through the reference (D12, D13); its degrees the
+//                  style-agnostic manager's, a number on its element;
 //   its behaviour  the leaf's BEHAVIOR: what the element does, its listeners. It
-//                  reads the state, changes it through the component, and has
-//                  the component fire its events; it never touches the look.
+//                  reads the state and changes it through the component; it
+//                  never touches the style.
 //
-// An AXIS is a sum type of mutually exclusive values: enabled is true or false.
-// An axis that is one of the house's states names it (state: STATE.ENABLED), and
-// its change is an event the component offers by having it. Setting one stores
-// the value, writes its reflection and holds its state's class (RFC 0067, D12)
-// - tells the behaviour (changed(axis, value)), and fires
-// the change to its handler, if one is set, with the previous value: from a
-// setter with no DOM event, from the behaviour with the one that made it. The
-// same value again does nothing.
+// An AXIS is one of its states: a value of a type of state - a node its header
+// imports, state: StateEnabled - one of the values the type allows (RFC 0069,
+// amended 21 Oct): enabled is true or false, a count of clicks a whole number
+// from 0, a draft a text, a tab order a list of names - kept frozen. Setting a
+// value stores it, writes its reflection, sets
+// the state's class through the reference where the type is classed - a yes or a
+// no as "true" or "false" - and nowhere else, tells the behaviour (changed(axis,
+// value)), and tells the change to whoever hears it. The same value again does
+// nothing: a change is between two different values - the same as its type says,
+// an order of names the same names in the same order. The browser's own states
+// (hovered, focused, down) are never an axis.
 //
-// Its EVENTS are the others it offers - EVENT.CLICK - each dressed from the raw
-// DOM event into a ComponentEvent that carries it. A handler is set by an
-// explicit setter per event (setOnClick, setOnEnabledChanged): it is asked
-// canHandle(type) first, refused unless it answers true, refused if it is a
-// closure - a function, or a bare object of functions - and refused for an event
-// that has one already: zero or one per event, and once for good. It is called
-// with handle(event).
+// A change is HEARD one way: onChange(on, listener) - on one of its state types,
+// every change of it; on one of that type's named changes - StateClicks.change(
+// "click") - that change alone. The listener is asked canHandle(on) first,
+// refused unless it answers true, refused if it is a closure - a function, or a
+// bare object of functions - and refused where one is set already: zero or one
+// for each, and once for good. It is handed a StateChange - its type, its
+// component, the value before and the value after, the named changes it is - the
+// type's listener first, then each named change's. No change carries its cause:
+// the browser's events are no component's; what one means to a component is a
+// change of a state of its own.
 //
 // What a leaf declares, as statics:
 //   TAG       the element it takes: "button"
-//   LEAF      its token in the taxonomy: "primary-button"; CASTINGS[LEAF] its castings
-//   AXES      { axis: { values, rest, reflect?(el, value), state? } }
-//   EVENTS    the events it offers besides its states' changes: [EVENT.CLICK]
-//   DEGREES   the degrees it varies by: "size", "extent", "aspect"
-//   WORDS     the words it shows: "label"
-//   PARTS     the parts it is handed, made by its owner: "icon" - its own to hold
+//   AXES      { axis: { values?, rest, reflect?(el, value), state? } } - its
+//             values where no type of state says them
+//   DEGREES   the extents it varies by, nodes its header imports: [ExtentSize]
 //   BEHAVIOR  its behaviour's class: new BEHAVIOR(el, component)
-// an accessor for each axis, degree and word, a setter for each event, and its
-// companion beside it: const PrimaryButtonFactory = new SimpleComponentFactory(PrimaryButton).
+// an accessor for each axis, degree and word, and a
+// constructor of its own - the one every component has (D29), (make, fixed,
+// place?) - that hands its own fixed type and its own binding on:
 //
-//   var b = new PrimaryButton(branch.elementMaker("save"), props, role?)
-//     make    the maker its owner's branch issues: it makes the <TAG>, once. An
-//             element its companion made is still taken, the old way, until every
-//             owner hands a maker; a widget may not (widget-draws-only-components)
-//     props   an axis, a degree, a word or a part by its name, and nothing else
-//     role    one of ROLE, Standalone unless given, passed in by its owner; refused unless
-//             the leaf is cast in it. The leaf and the role, locked here, are its casting,
-//             whose one class it wears (RFC 0067, appendix Two Classes per Leaf)
-//   .el  .role
+//   class PlainButton extends Button {
+//       constructor(make, fixed, place) { super(make, fixed, FixedPlainButton, place ?? managePlainButton); }
+//   }
+//   var b = new PlainButton(branch.elementMaker("save"), new FixedPlainButton(), me.place(FixedPlainButton));
+//     make    the maker its owner's branch issues: it makes the <TAG>, once
+//     fixed   what is immutable for its life: an object of its own fixed type,
+//             made by its dual (D30) - none of a bag of named values
+//     place   the placement its owner hands it for its slot - its owner's
+//             reference's slot(SLOT) - none at the root, where it places
+//             itself with its own binding; a component only ever a part has
+//             none, and is refused without one
+//   .el  .fixed
+// Everything else that changes is a setter's: its words, its degrees, its axes.
 // =============================================================================
 
-var _COMPONENT_DEGREE_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
+/** Which of the style-agnostic manager's numbers each extent is: the colour's is its extent. */
+var _COMPONENT_DEGREE_SETTER = Object.freeze({ colour: "extent", size: "size", aspect: "aspect" });
 
 class SimpleComponent {
-    constructor(make, props, role) {
+    #styles;
+
+    /**
+     * @param make  the maker its owner's branch issues
+     * @param fixed what is fixed for its life, of the leaf's own fixed type
+     * @param Fixed the leaf's own fixed type, which the leaf hands on
+     * @param place the placement its owner handed it, or the leaf's own binding at the root
+     */
+    constructor(make, fixed, Fixed, place) {
         var Leaf = new.target, self = this;
-        if (!Leaf.LEAF || !Leaf.BEHAVIOR) throw new Error("[" + Leaf.name + "] is no leaf: a simple component is made as one of its leaves");
-        var el = make;   // an element its companion made: the old way, until every owner hands a maker
-        if (typeof make === "function") {
-            if (!DomOpsParty.isElementMaker(make))
-                throw new Error("[" + Leaf.name + "] takes the maker its owner's branch issues - branch.elementMaker(name) - and no other function");
-            el = make(Leaf.TAG);
-        }
-        if (!el || String(el.tagName).toLowerCase() !== Leaf.TAG) throw new Error("[" + Leaf.name + "] wants the maker its owner's branch issues - branch.elementMaker(name) - and makes its own <" + Leaf.TAG + ">");
-        var p = props || {}, axes = Leaf.AXES || {}, degrees = Leaf.DEGREES || [], words = Leaf.WORDS || [], parts = Leaf.PARTS || [];
-        for (var k in p) if (!(k in axes) && degrees.indexOf(k) < 0 && words.indexOf(k) < 0 && parts.indexOf(k) < 0)
-            throw new Error("[" + Leaf.name + "] has no axis, degree, word or part '" + k + "'"
-                + (typeof p[k] === "function" ? ": a handler is set by its setter, never handed in" : ""));
+        if (!Leaf.BEHAVIOR || typeof Leaf.TAG !== "string") throw new Error("[" + Leaf.name + "] is no leaf: a simple component is made as one of its leaves");
+        if (typeof Fixed !== "function" || fixed === null || typeof fixed !== "object" || Object.getPrototypeOf(fixed) !== Fixed.prototype)
+            throw new TypeError("[" + Leaf.name + "] what is fixed for its life is an object of its own fixed type"
+                + (typeof Fixed === "function" ? ", " + Fixed.name : "") + " - never a bag of named values");
+        if (!DomOpsParty.isElementMaker(make))
+            throw new TypeError("[" + Leaf.name + "] takes the maker its owner's branch issues - branch.elementMaker(name) - and no other function, nor an element");
+        if (typeof place !== "function")
+            throw new TypeError("[" + Leaf.name + "] is placed by the placement its owner hands it - its reference's slot(SLOT) - and has no binding of its own: it is only ever a part");
+        var el = make(Leaf.TAG);
         this.el = el;
-        this.role = SimpleComponent._cast(Leaf, role == null ? ROLE.STANDALONE : role);
+        this.fixed = fixed;
+        this.#styles = place(el);
+        var axes = Leaf.AXES || {};
         this._state = {};
-        for (var a in axes) this._state[a] = a in p ? SimpleComponent._value(Leaf, a, p[a]) : axes[a].rest;
-        this._handlers = new Map();
-        this._degrees = {};
-        this._look = new Look(Leaf, this.role);
-        this._look.wear(el);
-        this._look.show(el, this._state);
-        degrees.forEach(function (d) { self._degree(d, p[d] == null ? _COMPONENT_DEGREE_REST[d] : p[d]); });
-        words.forEach(function (w) { self[w] = p[w]; });
+        for (var a in axes) this._state[a] = axes[a].rest;
+        this._listeners = new Map();
+        this._degrees = new Map();
+        (Leaf.DEGREES || []).forEach(function (x) { self._degrees.set(x, x.rest); });
+        for (var r in axes) if (typeof axes[r].reflect === "function") axes[r].reflect(el, this._state[r]);
         this._behavior = new Leaf.BEHAVIOR(el, this);
     }
 
@@ -93,112 +109,105 @@ class SimpleComponent {
         return this._state[axis];
     }
 
-    /** A value on an axis, from a setter: changed with no DOM event. */
-    _set(axis, value) { this._change(axis, value, null); }
+    /** A value on an axis, from a setter. */
+    _set(axis, value) { this._change(axis, value); }
 
     /**
-     * A value on an axis: stored, its reflection written, told to the behaviour, and - for a state,
-     * with a handler set for its change - fired with the previous value and the DOM event that made
-     * it, if one did. The same value again does nothing.
+     * A value on an axis: stored, its reflection written, its state's class set through the reference where its type
+     * is classed, told to the behaviour, and - for a state - its change told to whoever hears it. The same value again
+     * does nothing.
      */
-    _change(axis, value, raw) {
-        var v = SimpleComponent._value(this.constructor, axis, value), was = this._state[axis];
-        if (was === v) return;
+    _change(axis, value) {
+        var Leaf = this.constructor, v = SimpleComponent._value(Leaf, axis, value), was = this._state[axis], a = Leaf.AXES[axis];
+        if (a.state ? a.state.same(SimpleComponent._said(a.state, was), SimpleComponent._said(a.state, v)) : was === v) return;
         this._state[axis] = v;
-        this._look.show(this.el, this._state);
+        if (typeof a.reflect === "function") a.reflect(this.el, v);
+        if (a.state && a.state.classed) this.#styles.set(a.state, SimpleComponent._said(a.state, v));   // a class only for a classed state (RFC 0069, amended)
         if (this._behavior && typeof this._behavior.changed === "function") this._behavior.changed(axis, v);
-        var state = this.constructor.AXES[axis].state;
-        if (state && this._handlers.has(state.changed)) this._handlers.get(state.changed).handle(new StateChange(state.changed, this, raw, was));
+        if (a.state) this._tell(a.state, was, v);
     }
 
-    /** One of its events, dressed from the DOM event that made it, to its handler if one is set. */
-    _fire(type, raw) {
-        var h = this._handlers.get(type);
-        if (h) h.handle(new ComponentEvent(type, this, raw));
+    /** A change of one of its states, told: the type's listener first, then each of the named changes it is. */
+    _tell(type, before, after) {
+        var b = SimpleComponent._said(type, before), x = SimpleComponent._said(type, after);
+        var named = type.changes.filter(function (c) { return c.transition.fits(b, x); });
+        var change = new StateChange(type, this, before, after, named), listeners = this._listeners;
+        if (listeners.has(type)) listeners.get(type).handle(change);
+        named.forEach(function (c) { if (listeners.has(c)) listeners.get(c).handle(change); });
     }
 
     /**
-     * A handler for one of its events, once and for good: asked first whether it handles the type,
-     * then held to being an object of a class, then refused if the event has one already.
+     * A listener for the changes of one of its states - on its type, every change; on one of the type's named
+     * changes, that one alone - once and for good: asked first whether it hears it, then held to being an object of
+     * a class, then refused where one is set already.
      */
-    _setOn(type, handler) {
-        var Leaf = this.constructor;
-        if (!handler || typeof handler.canHandle !== "function" || handler.canHandle(type) !== true)
-            throw new Error("[" + Leaf.name + "] a handler says it handles " + type + ": canHandle(" + type + ") answers true");
-        if (typeof handler === "function" || Object.getPrototypeOf(handler) === Object.prototype || Object.getPrototypeOf(handler) === null)
-            throw new Error("[" + Leaf.name + "] a handler is an object of a class declared for it, never a closure");
-        if (typeof handler.handle !== "function") throw new Error("[" + Leaf.name + "] a handler handles: handle(event)");
-        if (!SimpleComponent._offers(Leaf, type)) throw new Error("[" + Leaf.name + "] offers no " + type);
-        if (this._handlers.has(type)) throw new Error("[" + Leaf.name + "] has its handler for " + type + " already: set once, it stays");
-        this._handlers.set(type, handler);
+    onChange(on, listener) {
+        var Leaf = this.constructor, type = SimpleComponent._typeOf(Leaf, on);
+        var what = type === null ? String(on && (on.token || on.name)) : on === type ? type.token : type.token + "'s " + on.name;
+        if (type === null) throw new Error("[" + Leaf.name + "] has no state " + what + ": it is heard changing its own states alone");
+        if (!listener || typeof listener.canHandle !== "function" || listener.canHandle(on) !== true)
+            throw new Error("[" + Leaf.name + "] a listener says it hears " + what + ": canHandle(" + what + ") answers true");
+        if (typeof listener === "function" || Object.getPrototypeOf(listener) === Object.prototype || Object.getPrototypeOf(listener) === null)
+            throw new Error("[" + Leaf.name + "] a listener is an object of a class declared for it, never a closure");
+        if (typeof listener.handle !== "function") throw new Error("[" + Leaf.name + "] a listener hears: handle(change)");
+        if (this._listeners.has(on)) throw new Error("[" + Leaf.name + "] has its listener for " + what + " already: set once, it stays");
+        this._listeners.set(on, listener);
     }
 
-    /** A degree, clamped to −1 … 1; at rest unless it is a number. */
-    _degree(name, n) {
-        if ((this.constructor.DEGREES || []).indexOf(name) < 0) throw new Error("[" + this.constructor.name + "] has no degree '" + name + "'");
-        var x = Math.max(-1, Math.min(1, Number(n)));
-        this._degrees[name] = Number.isFinite(x) ? x : _COMPONENT_DEGREE_REST[name];
-        this._look.degree(this.el, name, this._degrees[name]);
+    /** A degree, one of the extents it varies by. */
+    _degree(extent) {
+        if (!this._degrees.has(extent)) throw new Error("[" + this.constructor.name + "] varies by no " + (extent && extent.token));
+        return this._degrees.get(extent);
     }
 
+    /** A degree set: clamped to −1 … 1, at its rest unless it is a number - and at its rest, nothing written. */
+    _setDegree(extent, n) {
+        if (!this._degrees.has(extent)) throw new Error("[" + this.constructor.name + "] varies by no " + (extent && extent.token));
+        var x = Math.max(-1, Math.min(1, Number(n))), v = Number.isFinite(x) ? x : extent.rest;
+        this._degrees.set(extent, v);
+        CssClassManagerInstance[_COMPONENT_DEGREE_SETTER[extent.token]](this.el, v === extent.rest ? null : v);
+    }
+
+    /** A placement for one part it makes, by the part's fixed type - and its role, only where that player fills two places: its reference's, used once. */
+    _place(fixed, role) { return this.#styles.place(fixed, role); }
+
+    /** A room of its own placed - an element of its own inside it that is no part (RFC 0067): its reference writes the room's class, once. */
+    _room(room, element) { this.#styles.room(room, element); }
+
+    /** A value on an axis: one of its values, where it lists them; else one its type of state allows, as its type keeps it - an order frozen. */
     static _value(Leaf, axis, value) {
         var a = (Leaf.AXES || {})[axis];
         if (!a) throw new Error("[" + Leaf.name + "] has no axis '" + axis + "'");
-        if (a.values.indexOf(value) < 0) throw new Error("[" + Leaf.name + "] " + axis + " is one of " + a.values.join(", ") + ", not " + value);
-        return value;
+        if (a.values ? a.values.indexOf(value) < 0 : !(a.state && a.state.allows(SimpleComponent._said(a.state, value))))
+            throw new Error("[" + Leaf.name + "] " + axis + " is " + (a.values ? "one of " + a.values.join(", ") : "a value its state " + (a.state ? a.state.token : "") + " allows") + ", not " + value);
+        return a.state && !a.state.flag ? a.state.domain.kept(value) : value;
     }
 
-    /** Whether the leaf offers the event: one of its EVENTS, or the change of one of its states. */
-    static _offers(Leaf, type) {
-        if ((Leaf.EVENTS || []).indexOf(type) >= 0) return true;
+    /** A value as its type of state says it: a yes or a no as "true" or "false", the rest as they are. */
+    static _said(type, value) { return type.flag ? String(value) : value; }
+
+    /** The state type a listener may be set on: one of its states', for the type or a named change of it; else none. */
+    static _typeOf(Leaf, on) {
         var axes = Leaf.AXES || {};
-        for (var a in axes) if (axes[a].state && axes[a].state.changed === type) return true;
-        return false;
-    }
-
-    static _cast(Leaf, role) {
-        if (!role || typeof role.token !== "string") throw new Error("[" + Leaf.name + "] a role is one of ROLE, not " + role);
-        var castings = CASTINGS[Leaf.LEAF];
-        if (!castings) throw new Error("[" + Leaf.name + "] '" + Leaf.LEAF + "' is no leaf of the taxonomy");
-        if (castings.indexOf(role.token) < 0) throw new Error("[" + Leaf.name + "] is never cast as " + role.token + ": only as " + castings.join(", "));
-        return role;
+        for (var a in axes) {
+            var s = axes[a].state;
+            if (s && (s === on || s.changes.indexOf(on) >= 0)) return s;
+        }
+        return null;
     }
 }
 
 /**
- * A simple component's companion: the factory that makes the element it is realized on, of the
- * type it takes and nothing else, on the branch and under the name its owner gives. One per leaf,
- * exported beside it, named for it: PlainButtonFactory.
+ * A change of one state of one component (RFC 0069, amended 21 Oct): its type, its component, the value before and the
+ * value after - two different values, as the component has them - and the named changes of its type it is. No cause.
  */
-class SimpleComponentFactory {
-    constructor(Leaf) {
-        if (!Leaf || typeof Leaf.TAG !== "string" || !Leaf.LEAF) throw new Error("[SimpleComponentFactory] a companion is a leaf's, and makes its TAG");
-        this._tag = Leaf.TAG;
-        Object.freeze(this);
-    }
-
-    /** The type of element it makes. */
-    get tag() { return this._tag; }
-
-    /** An element for the component, minted on the owner's branch under the owner's name: the old way - an owner hands a maker now (branch.elementMaker). */
-    create(branch, name) { return branch.createElement(name, this._tag); }
-}
-
-/** One of a component's events, dressed from the DOM event that made it: its type, its component, and the raw event, or null. */
-class ComponentEvent {
-    constructor(type, source, raw) {
+class StateChange {
+    constructor(type, source, before, after, named) {
         this.type = type;
         this.source = source;
-        this.raw = raw == null ? null : raw;
-        if (new.target === ComponentEvent) Object.freeze(this);
-    }
-}
-
-/** A state's change: a ComponentEvent carrying the state's previous value. What it became is the component's attribute. */
-class StateChange extends ComponentEvent {
-    constructor(type, source, raw, previous) {
-        super(type, source, raw);
-        this.previous = previous;
+        this.before = before;
+        this.after = after;
+        this.named = Object.freeze(named.slice());
         Object.freeze(this);
     }
 }

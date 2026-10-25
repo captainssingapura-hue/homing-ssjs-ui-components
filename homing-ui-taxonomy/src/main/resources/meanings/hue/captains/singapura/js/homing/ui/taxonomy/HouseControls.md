@@ -32,15 +32,11 @@ Turns one thing on or off, and shows which it is, each time it is pressed.
 
 ## IconButton
 
-Does one thing named by a glyph alone, where the glyph is known well enough to need no words.
+Has the function of a button and the look of an icon: does one thing, named by the icon it wears, where the icon is known well enough to need no words shown.
 
 ## CloseButton
 
 Closes what it is on.
-
-## SliderKnob
-
-What the user takes hold of to move a slider's value along its groove.
 
 ## ToggleKnob
 
@@ -49,10 +45,6 @@ What shows which way a switch stands, sliding in its groove as it is turned.
 ## Grip
 
 What the user takes hold of to move the thing it is on.
-
-## Lip
-
-The thin band at an edge the user's hand comes to, which shows the strip it belongs to.
 
 ## Link
 
@@ -90,15 +82,11 @@ Brings forward one of the things a pane holds, and stands for it among the other
 
 Says whose site this is, and takes the user home.
 
-## PreferencesButton
-
-Opens the site's preferences, where the user sets how the site behaves for them.
-
 ## Switch
 
 Sets a setting on or off, in one movement, and shows which it is.
 
 ## Slider
 
-Sets a value along a scale the user can see: its name, its range, where it rests, its steps, and
-the value read out as it moves.
+A value along a scale, named and read out: a label, the browser's own slider as each style draws it, and a
+readout of the value in the caller's words.

@@ -16,7 +16,8 @@ public record UiIconsComponentModule() implements ComponentModule {
     @Override public List<? extends Component<?>> components() {
         return List.of(HouseIcons.AddIcon.INSTANCE, HouseIcons.RemoveIcon.INSTANCE, HouseIcons.CloseIcon.INSTANCE, HouseIcons.ResetIcon.INSTANCE,
                        HouseIcons.RotateIcon.INSTANCE, HouseIcons.FlipIcon.INSTANCE, HouseIcons.PinIcon.INSTANCE, HouseIcons.CheckIcon.INSTANCE,
-                       HouseIcons.GripIcon.INSTANCE, HouseIcons.DiscloseIcon.INSTANCE, HouseIcons.SettingsIcon.INSTANCE, HouseIcons.SizeIcon.INSTANCE,
-                       HouseIcons.AspectIcon.INSTANCE, HouseIcons.ExtentIcon.INSTANCE, HouseIcons.LevelIcon.INSTANCE);
+                       HouseIcons.GripIcon.INSTANCE, HouseIcons.DiscloseIcon.INSTANCE, HouseIcons.SettingsIcon.INSTANCE, HouseIcons.PreferencesIcon.INSTANCE, HouseIcons.SizeIcon.INSTANCE,
+                       HouseIcons.AspectIcon.INSTANCE, HouseIcons.ExtentIcon.INSTANCE, HouseIcons.LevelIcon.INSTANCE,
+                       HouseIcons.PacmanIcon.INSTANCE);
     }
 }

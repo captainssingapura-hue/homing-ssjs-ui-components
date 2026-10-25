@@ -8,14 +8,6 @@ Shows where the panes are, small, so the user can pick one by its place.
 
 Opens a new tab: the user says what kind, where it goes, and how it arrives.
 
-## TabOpener
-
-Offers what an empty pane can open, so it is never a dead end.
-
-## TabPicker
-
-Asks which kind of tab to open in a pane, and lets the user decline.
-
 ## MultiTabPane
 
 Holds several tabs in one place, one in front at a time, and lets the user move between them,

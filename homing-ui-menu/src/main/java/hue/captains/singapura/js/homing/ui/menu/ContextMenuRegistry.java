@@ -26,7 +26,7 @@ import java.util.Objects;
  * site's own {@code EsModule} with {@code SelfContent} holds one and writes
  * {@link #js()} as its body, a module exporting {@code MENUS}: a frozen
  * object of kind → type, the same record the steward's JS builder yields —
- * {@code { kind, nodes: [ { id, label, icon?, hint?, section?, nodes? } ] }}.
+ * {@code { kind, nodes: [ { id, label, icon?, hint?, section?, checkable?, nodes? } ] }}.
  *
  * <p><b>Derived, not listed.</b> A site does not enumerate its kinds: the
  * components its crate closure catalogues say what they {@link
@@ -115,6 +115,7 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
             if (r.icon() != null) sb.append(",\"icon\":").append(StampedParams.jsString(r.icon().token()));
             if (r.hint() != null) sb.append(",\"hint\":").append(StampedParams.jsString(r.hint()));
             if (r.section() != 0) sb.append(",\"section\":").append(r.section());
+            if (r instanceof hue.captains.singapura.js.homing.ui.menu.tree.Checkable) sb.append(",\"checkable\":true");
             if (!r.children().isEmpty()) { sb.append(",\"nodes\":"); nodes(sb, r.children()); }
             sb.append('}');
         }

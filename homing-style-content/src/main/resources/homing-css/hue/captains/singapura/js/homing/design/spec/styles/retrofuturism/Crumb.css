@@ -1,0 +1,22 @@
+/* The crumb in retro-futurism: a step of a trail back, in the colour of what holds it; the page itself the boldest. */
+$casting {
+    color: inherit;
+    background-color: transparent;
+    text-decoration-line: none;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    outline: 0 none;
+    transition: none;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 1px solid var(--fp-ring);
+        outline-offset: -1px;
+    }
+
+    &$current {
+        font-weight: 600;
+    }
+}

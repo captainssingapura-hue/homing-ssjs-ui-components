@@ -2,35 +2,36 @@
 // BoundaryLine — The line where two regions of a layout meet: the layout's own, drawn as its look
 // says. Never by itself. Lying or upright (Orientation, aria-orientation) - which way it runs, as its owner
 // says; in the hand (Dragging, data-dragging) while its owner's handle moves it. A simple component on a
-// <div role="separator">, in the boundary line's look; what the hand does to it - its cursor, its reach,
+// <div role="separator">; what the hand does to it - its cursor, its reach,
 // its keys - is the handle its owner arms on it.
+// On the style manager (RFC 0071): its module stamped with its header (D19),
+// its states set through its reference.
 //
-//   var line = new BoundaryLine(branch.elementMaker("line-0"), { orientation: "vertical" }, ROLE.SPLITTER);
-//   line.el  line.orientation  line.dragging
-//   line.setOnOrientationChanged(handler)  line.setOnDraggingChanged(handler)
+//   var line = new BoundaryLine(branch.elementMaker("line-0"), new FixedBoundaryLine(), me.place(FixedBoundaryLine));
+//   line.orientation = "vertical"   line.dragging
+//   line.onChange(StateOrientation, listener)  line.onChange(StateDragging, listener)
 // =============================================================================
 
 class BoundaryLine extends SimpleComponent {
-    static LEAF = "boundary-line";
     static TAG = "div";
     static AXES = Object.freeze({
         orientation: Object.freeze({
-            values: STATE.ORIENTATION.values,
-            rest: STATE.ORIENTATION.rest,
+            values: StateOrientation.states,
+            rest: StateOrientation.rest,
             reflect: function (el, way) { el.setAttribute("aria-orientation", way); },
-            state: STATE.ORIENTATION
+            state: StateOrientation
         }),
         dragging: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
             reflect: function (el, on) { if (on) el.setAttribute("data-dragging", ""); else el.removeAttribute("data-dragging"); },
-            state: STATE.DRAGGING
+            state: StateDragging
         })
     });
     static BEHAVIOR = MarkBehavior;
 
-    constructor(make, props, role) {
-        super(make, props, role);
+    constructor(make, fixed, place) {
+        super(make, fixed, FixedBoundaryLine, place ?? manageBoundaryLine);
         this.el.setAttribute("role", "separator");
     }
 
@@ -41,10 +42,4 @@ class BoundaryLine extends SimpleComponent {
     /** In the hand: its owner's handle moving it. */
     get dragging() { return this._get("dragging"); }
     set dragging(on) { this._set("dragging", !!on); }
-
-    setOnOrientationChanged(handler) { this._setOn(STATE.ORIENTATION.changed, handler); }
-    setOnDraggingChanged(handler) { this._setOn(STATE.DRAGGING.changed, handler); }
 }
-
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const BoundaryLineFactory = new SimpleComponentFactory(BoundaryLine);

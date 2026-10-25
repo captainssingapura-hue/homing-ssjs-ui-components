@@ -1,0 +1,11 @@
+/* The readout in sketchy: a figure read off, its digits even. Whole: every property its look has (D9). */
+$casting {
+    color: inherit;
+    background-color: transparent;
+    font-family: "Cabin Sketch", "Segoe Print", "Bradley Hand", "Chalkboard SE", cursive;
+    font-weight: 700;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    letter-spacing: normal;
+    font-variant-numeric: tabular-nums;
+}

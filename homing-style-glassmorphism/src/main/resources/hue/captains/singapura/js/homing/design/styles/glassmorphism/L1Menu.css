@@ -1,0 +1,16 @@
+/* The level-1 menu in glassmorphism: a menu opened where it is asked - raised, framed, its corner the style's, casting its shadow, in the style's face, what is behind it blurred; its items and their lines its parts'. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text);
+    background-color: var(--fp-raised);
+    border-color: var(--fp-border);
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 12px;
+    box-shadow: 0 24px 80px var(--fp-shade-thick);
+    padding-block: 8px;
+    gap: 2px;
+    min-width: 210px;
+    font-family: "Inter", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+    backdrop-filter: blur(16px) saturate(1.6);
+    user-select: none;
+}

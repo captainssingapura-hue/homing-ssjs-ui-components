@@ -113,10 +113,10 @@ class ComponentsConformanceTest {
         assertEquals(List.of(), ComponentTrees.validate(ComponentsConformance.TOP_LEVEL));
         var composed = ComponentTrees.compose("components", ComponentsConformance.TOP_LEVEL);
         var vehicles = composed.root().children().stream().map(n -> n.segment().value()).toList();
-        assertEquals(List.of("server", "ui-elements", "ui-icons", "ui-dialog", "ui-floating", "ui-preferences", "ui-split-grid", "ui-pan-zoom", "ui-panes", "ui-monitors", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the base first, which sizing requires (sizing ships no component); the elements require it too (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate, the preferences the split grid their view is laid out by; docking catalogues nothing - the desk, its hand, its floater and its docking are statics; the control panel, a widget, last");
+        assertEquals(List.of("server", "ui-elements", "ui-icons", "ui-dialog", "ui-floating", "ui-panes", "ui-preferences", "ui-split-grid", "ui-pan-zoom", "ui-monitors", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the base first, which sizing requires (sizing ships no component); the elements require it too (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate, which the panes now, its floats theirs (23 Oct), the preferences the split grid their view is laid out by; docking catalogues nothing - the desk, its hand, its floater and its docking are statics; the control panel, a widget, last");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
         assertEquals(13, root.vehicleCount());
-        assertEquals(98, root.componentCount(), "the components declared so far: 1 base (the keyboard steward), 66 elements (the browser's own text box, checkbox, range and select, the switch and its groove and knob, the slider's rail, groove, fill and knob, a grip, nine buttons, nineteen texts - code, a table cell's words (D42) and a badge of each tone among them - a heading for each of six levels among them - a link, a crumb, a scrim, a separator, a delimiter, the brand's mark, a pane's thumbnail, the plain and the clickable card, the summary's view, a menu's item, a list's row and a choice's option, a lamp, a drop mark, a detent, a tick and a boundary line, the slider and its group, the panel and the edge strip, the ground, the site bar, the brand and the trail), 1 icon, 1 dialog, 8 preferences (a setting's row among them), 2 pan-zoom (the view and its bar), 7 panes (the tab, a component of its own now, the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 2 floating, 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
+        assertEquals(95, root.componentCount(), "the ground no module's: the document's own, a style's rule on :root (24 Oct); the slider on the native range, its rail, groove, fill, knob, detent and tick retired (23 Oct); the edge strip and its lip become the status footer and the expandable footer area, both catalogued (23 Oct); the standard footer catalogued, a component of its own (23 Oct); the menu item two of a kind, two levels below the context menu (23 Oct); the components declared so far - the floating pane and its head the panes' (23 Oct); the slider group, the panel and its bar dropped (20 Oct): 1 base (the keyboard steward), 64 elements (the browser's own text box, checkbox, range and select, the switch and its groove and knob, the slider's rail, groove, fill and knob, a grip, nine buttons, nineteen texts - code, a table cell's words (D42) and a badge of each tone among them - a heading for each of six levels among them - a link, a crumb, a scrim, a separator, a delimiter, the brand's mark, a pane's thumbnail, the plain and the clickable card, the summary's view, a menu's item, a list's row and a choice's option, a lamp, a drop mark, a detent, a tick and a boundary line, the slider and the edge strip, the ground, the site bar, the brand and the trail), 1 icon, 1 dialog, 8 preferences (a setting's row among them), 2 pan-zoom (the view and its bar), 9 panes (the floating pane and its head among them, moved here (23 Oct); the tab, a component of its own now, the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 1 floating (its layer), 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
         assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.TOP_LEVEL));
@@ -133,10 +133,10 @@ class ComponentsConformanceTest {
     void keysComeThroughTheParty_andTheMigrationListOnlyShrinks() {
         assertEquals(List.of(), KeyboardRegistry.validate(ComponentsConformance.TOP_LEVEL));
         var map = KeyboardRegistry.requiredBy(ComponentsConformance.TOP_LEVEL);
-        assertEquals(List.of("ClickableCard", "ContextMenuSteward", "Dialog", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView", "Slider", "SliderGroup",
+        assertEquals(List.of("ClickableCard", "ContextMenuSteward", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView",
                         "SplitGridMirror", "SvgPanZoom", "TabOpener"),
                 map.byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList(), "the components that take keys: leaves, and the holders that hand keys on to what is inside them");
-        assertEquals(7, map.takersOf("ArrowUp").size(), "the slider and its group, the mirror, the list master and the view over it, the menu, the pan-zoom view");
+        assertEquals(5, map.takersOf("ArrowUp").size(), "the slider's keys the browser's now, on the native range (23 Oct); the mirror, the list master and the view over it, the menu, the pan-zoom view");
         assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(ComponentsConformance.TOP_LEVEL), "the ledger is empty: every key comes through the party");
     }
 
@@ -144,10 +144,11 @@ class ComponentsConformanceTest {
      * Every implementation anchored at the house's taxonomy: a component's
      * module implements its leaf, one leaf one module one class, a shared base
      * only under its branch; and what a leaf's module imports of other
-     * components is what its parts declare - read through a part nothing
-     * implements, whose own parts its owner realizes inline. The leaves not yet
-     * composed as declared are held in the ledger, so the list only shrinks:
-     * each is a question for the design - the declaration or the code is wrong.
+     * components is what its parts declare, each a component of its own - a part
+     * nothing implements is never realized by its owner inline (owner, 20 Oct).
+     * The leaves not yet composed as declared are held in the ledger, so the
+     * list only shrinks: each is a question for the design - the declaration or
+     * the code is wrong.
      */
     @Test
     void everyImplementationIsAnchored_andComposedAsItsLeafDeclares() {
@@ -155,7 +156,18 @@ class ComponentsConformanceTest {
         assertEquals(COMPOSITION_LEDGER, problems, () -> "implementations against the taxonomy (" + problems.size() + "):\n" + String.join("\n", problems));
     }
 
-    /** Drawn without the component the leaf declares: the chip's keys the design's own, the float's bar its own strip. */
+    /**
+     * Drawn without the component the leaf declares: the float's bar its own strip. And every part its owner made
+     * inline until the inline reading was withdrawn (owner, 20 Oct) - each to become a component of its own: the
+     * lip, the title bar and the action bar, whose behaviour their owners hear, once a
+     * component's own events are settled (RFC 0071 port, question 2). And the preferences button's old module, which still
+     * opens the dialog its taxonomy no longer gives it (owner, 20 Oct): ported, it hands its click to its owner, the site's
+     * chrome - a widget - which opens it. The rooms - a strip's tail, the one left - are no
+     * parts at all: their owners' own (Component.rooms()).
+     */
     private static final List<String> COMPOSITION_LEDGER = List.of(
-            "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for");
+            "SingleTabPaneModule (SingleTabPane) never imports TabStrip, which its part tabs calls for",
+            // the bar ported a step at a time (22 Oct): its plus, then its chips - its count and its landing come with their steps
+            "TabStripModule (TabStrip) never imports Pill, which its part count calls for",
+            "TabStripModule (TabStrip) never imports DropMark, which its part landing calls for");   // the floating pane's head implemented with it, its TitleBar (23 Oct)
 }

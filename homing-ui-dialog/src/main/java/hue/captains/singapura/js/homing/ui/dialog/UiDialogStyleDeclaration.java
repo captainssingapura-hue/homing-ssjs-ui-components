@@ -17,7 +17,7 @@ public record UiDialogStyleDeclaration() implements StyleDeclaration {
 
     @Override public List<Provided<?, ?>> provided() {
         return List.of(new Provided<>(Base.INSTANCE, List.of(
-                new Dialog(),
+                new ModalWindow(),
                 new ActionBar())));
     }
 }

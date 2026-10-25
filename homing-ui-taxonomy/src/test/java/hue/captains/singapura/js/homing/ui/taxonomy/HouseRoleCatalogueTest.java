@@ -26,13 +26,13 @@ class HouseRoleCatalogueTest {
     private static final RoleCatalogue CATALOGUE = HouseRoleCatalogue.INSTANCE.read();
 
     @Test
-    void threeTopBranches_nineteenBeneath_ninetyFiveRoles() {
+    void threeTopBranches_nineteenBeneath_ninetySixRoles() {
         assertEquals(List.of(HouseSaying.Saying.INSTANCE, HouseDoing.Doing.INSTANCE, HouseShaping.Shaping.INSTANCE),
                 CATALOGUE.children(RoleRoot.INSTANCE));
         assertEquals(22, CATALOGUE.branches().size());
         assertEquals(19, CATALOGUE.branches().stream().filter(b -> b.level() == 2).count());
-        assertEquals(95, CATALOGUE.roles().size());
-        assertEquals(95, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
+        assertEquals(97, CATALOGUE.roles().size(), "a choice chosen (23 Oct); the void role among them (21 Oct)");
+        assertEquals(97, Set.copyOf(CATALOGUE.roles()).size(), "each listed once");
     }
 
     @Test
@@ -56,7 +56,7 @@ class HouseRoleCatalogueTest {
         expected.put("members", List.of("member", "entry", "dock", "cell", "group", "column"));
         expected.put("dividers", List.of("seam", "break"));
         expected.put("handles", List.of("reveal", "chip", "opener", "pull", "scroll"));
-        expected.put("picturing", List.of("face", "leading", "measure", "keys", "disclose"));   // where an icon sits on its owner (D52)
+        expected.put("picturing", List.of("face", "leading", "measure", "keys", "chosen", "disclose"));   // where an icon sits on its owner (D52); a choice chosen (23 Oct)
         var actual = new LinkedHashMap<String, List<String>>();
         for (RoleBranch b : CATALOGUE.branches())
             if (b.level() == 2) actual.put(b.name().value(), CATALOGUE.children(b).stream().map(RoleNode::name).map(n -> n.value()).toList());
@@ -64,14 +64,16 @@ class HouseRoleCatalogueTest {
     }
 
     @Test
-    void everyRoleSitsTwoLevelsDown_underSaying_Doing_orShaping() {
+    void everyRoleSitsTwoLevelsDown_underSaying_Doing_orShaping_butTheVoidRole() {
         Map<String, Long> perTop = new LinkedHashMap<>();
         for (Role<?> r : CATALOGUE.roles()) {
             RoleBranch branch = CATALOGUE.parent(r);
+            // the void role says nothing, so it is of no family: right under Shaping, whose roles only place (21 Oct)
+            if (r.equals(HouseShaping.VoidRole.INSTANCE)) { assertEquals(HouseShaping.Shaping.INSTANCE, branch); continue; }
             assertEquals(2, branch.level(), r + " is filed at level 2");
             perTop.merge(CATALOGUE.parent(branch).name().value(), 1L, Long::sum);
         }
-        assertEquals(Map.of("saying", 22L, "doing", 36L, "shaping", 37L), perTop);
+        assertEquals(Map.of("saying", 22L, "doing", 36L, "shaping", 38L), perTop);
     }
 
     @Test
@@ -87,7 +89,9 @@ class HouseRoleCatalogueTest {
     void theWholeHouse_leavesTheseWordsUnnamed_theCatalogueAheadOfIt() {
         var unnamed = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
                 .map(f -> f.says().replace(" is named by no component", "")).toList();
-        assertEquals(List.of("Placeholder", "Error", "Check", "Query", "Skip", "Increase", "Decrease", "Clear", "Remove", "Previous",
-                "Next", "First", "Last", "More", "Host", "Media", "Fallback", "Dock", "Group", "Opener", "Pull", "Scroll"), unnamed);
+        assertEquals(List.of("Subtitle", "Category", "Prompt", "Placeholder", "Level", "Status", "Error", "Check", "Rest", "Notch", "Figure", "Style", "Palette", "Picker", "Query", "Cancel", "Skip", "Toggle",
+                "Reset", "Increase", "Decrease", "Clear", "Add", "Remove", "Preferences", "Previous", "Next", "First", "Last", "More", "Actions", "Page", "Host",
+                "Index", "Detail", "Setting", "Layout", "Body", "Media", "Fallback", "Editor", "Member", "Entry", "Dock", "Group", "Reveal", "Opener", "Pull", "Scroll", "Measure"), unnamed,
+                "the slider on the native range: its level, its rest, its notches, its figures, its editor and its measure unnamed, its range adjusting it (23 Oct); the footer's place in a dialog, since it is a component of its own (23 Oct); a strip's foot, a site's page, a view's index and detail unnamed since the rooms left the parts; the words only widgets said - a subtitle, a status, a setting, an entry, a member and the rest - since the widgets are no components (20 Oct); add since the tab strip's plus is placed in the void role (21 Oct); a prompt, a picker and a cancel since the tab picker and the tab opener are widgets (22 Oct)");
     }
 }

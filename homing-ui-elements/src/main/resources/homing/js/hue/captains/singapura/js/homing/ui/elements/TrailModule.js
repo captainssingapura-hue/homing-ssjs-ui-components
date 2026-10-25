@@ -1,37 +1,38 @@
 // =============================================================================
 // Trail — the way from a site's home to where the user is, each step a way
-// back. A branch component: its owner makes a sub-branch for it and hands it in.
+// back. A composed component on the style manager (RFC 0071): it takes a branch
+// of its own and makes on it its <nav>; each time it is drawn, its steps on a
+// branch of their own - each the house's crumb, cast as a step, the last the
+// page and the others ways back, and between two the house's delimiter, cast as
+// the break between them - each placed along its slot by a placement its own
+// reference gives.
 //
-//   var trail = new Trail(branch, { crumbs }, role?)
-//     crumbs   [ { text, to? } ], the last the page itself; a crumb with no `to`
-//              is a heading of the trail, never a link
-//     role     one of ROLE - Path, as a site's bar carries it; Standalone unless said
+//   var trail = new Trail(branch.createBranch("trail"), new FixedTrail(), me.place(FixedTrail));
 //   trail.root          the <nav>
-//   trail.draw(crumbs)  the crumbs drawn afresh, on a branch of their own
+//   trail.draw(crumbs)  [ { text, to? } ], the last the page itself; a crumb with no
+//                       `to` a heading of the trail, never a link - drawn afresh
 //
-// Each step is the house's crumb, cast as a step - the last the page, the
-// others ways back - and between two, the house's delimiter, cast as the break
-// between them. Its look - quieter than what it stands on, caption-sized - is
-// the house's. `css` is injected with the styles import.
+// Its look - quieter than what it stands on, caption-sized - is the style's.
+// `css` is injected with the styles import.
 // =============================================================================
 
 const _trailOwner = Object.freeze({ toString: () => "trail" });
 
-class Trail {
-    static LEAF = "trail";
+class Trail extends SimpleComponent {
+    static TAG = "nav";
+    static BEHAVIOR = MarkBehavior;
 
-    constructor(branch, props, role) {
-        if (!branch) throw new Error("[Trail] a branch of its own is required");
+    constructor(branch, fixed, place) {
+        if (!branch || typeof branch.elementMaker !== "function")
+            throw new TypeError("[Trail] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_trailOwner);
+        super(branch.elementMaker("trail"), fixed, FixedTrail, place ?? manageTrail);
         this._branch = branch;
         this._drawn = 0;
         this._steps = null;
-        var nav = branch.createElement("trail", "nav");
-        css.addClass(nav, el_trail);
-        new Look(Trail, role || ROLE.STANDALONE).wear(nav);
-        nav.setAttribute("aria-label", "Breadcrumb");
-        this.root = nav;
-        this.draw((props && props.crumbs) || []);
+        css.addClass(this.el, el_trail);
+        this.el.setAttribute("aria-label", "Breadcrumb");
+        this.root = this.el;
     }
 
     draw(crumbs) {
@@ -45,12 +46,14 @@ class Trail {
         while (this.root.firstChild) this.root.removeChild(this.root.firstChild);
         for (var i = 0; i < crumbs.length; i++) {
             if (i > 0) {
-                var sep = new Delimiter(DelimiterFactory.create(this._steps, "sep-" + i), {}, ROLE.BREAK);
+                var sep = new Delimiter(this._steps.elementMaker("sep-" + i), new FixedDelimiter(), this._place(FixedDelimiter));
                 this.root.appendChild(sep.el);
             }
             var last = i === crumbs.length - 1, linked = !last && typeof crumbs[i].to === "string";
-            var crumb = new Crumb(CrumbFactory.create(this._steps, "crumb-" + i),
-                                  { text: crumbs[i].text, to: linked ? crumbs[i].to : null, current: last }, ROLE.STEP);
+            var crumb = new Crumb(this._steps.elementMaker("crumb-" + i), new FixedCrumb(), this._place(FixedCrumb));
+            crumb.text = crumbs[i].text;
+            if (linked) crumb.to = crumbs[i].to;
+            crumb.current = last;
             css.addClass(crumb.el, el_trail_crumb);
             this.root.appendChild(crumb.el);
         }

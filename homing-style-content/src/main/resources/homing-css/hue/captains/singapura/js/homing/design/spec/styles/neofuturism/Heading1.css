@@ -1,0 +1,11 @@
+/* The heading 1 in neo-futurism: the heading of a page. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Bahnschrift", "Eurostile", "Avenir Next", "Futura", "Segoe UI", sans-serif;
+    font-weight: 300;
+    font-size: calc(46px * pow(1.2, var(--size)));
+    line-height: 1.05;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}

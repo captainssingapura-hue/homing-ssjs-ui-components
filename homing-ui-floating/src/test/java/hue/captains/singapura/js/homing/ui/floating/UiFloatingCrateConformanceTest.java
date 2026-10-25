@@ -50,12 +50,12 @@ class UiFloatingCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(3, checked, "the pane, the desk and the events");
+        assertEquals(3, checked, "the desk, its behaviour (ported, 23 Oct) and the events - the floating pane the panes' (23 Oct)");
     }
 
     @Test
-    void thePaneAndTheDeskImportEveryClassDeclared() {
-        var imported = java.util.stream.Stream.of(FloatingPaneModule.INSTANCE.imports(), FloatLayerModule.INSTANCE.imports())
+    void theDeskImportsEveryClassDeclared() {
+        var imported = java.util.stream.Stream.of(FloatLayerModule.INSTANCE.imports())
                 .flatMap(im -> im.getAllImports().values().stream())
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
         for (CssClass<FloatingStyles> c : FloatingStyles.INSTANCE.cssClasses())

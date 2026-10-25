@@ -1,14 +1,14 @@
 // =============================================================================
 // DangerBadge — a short word saying something is wrong, or cannot be undone. A Text (a simple component) on a <span>, in the danger badge's look.
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 //
-//   var x = new DangerBadge(DangerBadgeFactory.create(branch, "danger-badge"), { text: "…" }, ROLE.STANDALONE);
-//   x.text  x.size
+//   var t = new DangerBadge(branch.elementMaker("x"), new FixedDangerBadge(), me.place(FixedDangerBadge));   in a slot
+//   var t = new DangerBadge(branch.elementMaker("x"), new FixedDangerBadge());                     at the root
+//   t.text = "…"   t.size = -1
 // =============================================================================
 
 class DangerBadge extends Text {
-    static LEAF = "danger-badge";
     static TAG = "span";
-}
 
-/** Its companion: makes the <span> it is realized on, on its owner's branch, under its owner's name. */
-const DangerBadgeFactory = new SimpleComponentFactory(DangerBadge);
+    constructor(make, fixed, place) { super(make, fixed, FixedDangerBadge, place ?? manageDangerBadge); }
+}

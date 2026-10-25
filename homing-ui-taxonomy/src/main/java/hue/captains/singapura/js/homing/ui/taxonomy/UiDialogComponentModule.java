@@ -14,6 +14,6 @@ public record UiDialogComponentModule() implements ComponentModule {
     public static final UiDialogComponentModule INSTANCE = new UiDialogComponentModule();
 
     @Override public List<? extends Component<?>> components() {
-        return List.of(HouseContainers.Dialog.INSTANCE);
+        return List.of(HouseContainers.ModalWindow.INSTANCE, HouseContainers.ActionBar.INSTANCE);
     }
 }

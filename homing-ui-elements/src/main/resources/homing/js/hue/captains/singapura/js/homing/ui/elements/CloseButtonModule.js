@@ -1,30 +1,30 @@
 // =============================================================================
-// CloseButton — the button that closes what holds it: a Button (a simple
-// component) whose face is an icon, never words: the close icon (RFC 0067,
-// D52), its part - each style draws its own cross, the same cross a close row
-// of a menu shows - made on the room its owner gives it, so nothing here is a
-// picture; its words are its name, said to whoever cannot see the icon, and
-// shown by the browser to whoever points at it: its tooltip.
+// CloseButton — the button that closes what holds it: a cross, each style its
+// own, named for whoever cannot see it. A Button whose face is a part, the
+// close icon (D52) - so a composed component: it takes a branch of its own and
+// makes on it its element and its face's, the face placed along its slot by
+// the placement its own reference gives. On the style manager (RFC 0071): its
+// module stamped with its header (D19).
 //
-//   var c = new CloseButton(branch.elementMaker("close"), { face: branch.elementMaker("close-face"), label: "Close the dialog" }, ROLE.STANDALONE);
-//   c.face               its icon: the close icon
-//   c.label = "Close"    its name: aria-label, and its tooltip; "Close" unless given
-//   c.enabled  c.size
-//   c.setOnClick(handler)  a press, while it is enabled
+//   var c = new CloseButton(branch.createBranch("close"), new FixedCloseButton(), me.place(FixedCloseButton));
+//   c.onChange(StateClicks, listener)   c.clicks   c.enabled   c.size   c.label - its name, "Close" unless given
+//   c.face                  its face: the close icon
 // =============================================================================
 
-class CloseButton extends Button {
-    static LEAF = "close-button";
-    static PARTS = Object.freeze(["face"]);
+const _closeButtonOwner = Object.freeze({ toString: () => "close-button" });
 
-    constructor(make, props, role) {
-        var face = props ? props.face : null;
-        if (typeof face !== "function") throw new Error("[CloseButton] its face is the close icon, made on the room its owner gives it: { face: branch.elementMaker(name) }");
-        super(make, props, role);
-        this._face = new Icon(face(Icon.TAG), ICON.CLOSE_ICON, ROLE.FACE);
+class CloseButton extends Button {
+    constructor(branch, fixed, place) {
+        if (!branch || typeof branch.elementMaker !== "function")
+            throw new TypeError("[CloseButton] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
+        branch.activate(_closeButtonOwner);
+        super(branch.elementMaker("button"), fixed, FixedCloseButton, place ?? manageCloseButton);
+        this._face = new Icon(branch.elementMaker("face"), new FixedCloseIcon(), this._place(FixedCloseIcon));
         this.el.appendChild(this._face.el);
+        this.label = "";
     }
 
+    /** Its face: the close icon. */
     get face() { return this._face; }
 
     get label() { return this.el.getAttribute("aria-label") || ""; }
@@ -34,6 +34,3 @@ class CloseButton extends Button {
         this.el.setAttribute("title", name);   // the browser's own tooltip: no caption of the house's to draw
     }
 }
-
-/** Its companion: makes the <button> it is realized on, on its owner's branch, under its owner's name. */
-const CloseButtonFactory = new SimpleComponentFactory(CloseButton);

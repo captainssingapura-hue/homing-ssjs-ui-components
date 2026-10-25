@@ -22,6 +22,15 @@ public final class HouseShaping {
         @Override public boolean functional() { return true; }
     }
 
+    /**
+     * No role: the part is placed where its owner puts it, and nothing more is said of it - its look its own, whatever holds it. For a part whose owner does not care what role it plays. The icon button in what holds it, and the icon in an icon button (owner, 21 Oct). Filed under Shaping, so
+     * it only places: a part in it wears its own look, and no style draws one for it.
+     */
+    public record VoidRole() implements Role<Shaping> {
+        public static final VoidRole INSTANCE = new VoidRole();
+        @Override public Shaping parent() { return Shaping.INSTANCE; }
+    }
+
     // ── Picturing — where its icons sit on the owner ─────────────────────
 
     /**
@@ -41,6 +50,8 @@ public final class HouseShaping {
     public record Measure() implements Role<Picturing> { public static final Measure INSTANCE = new Measure(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
     /** Shows that the keyboard is with the owner: what the user types goes there. */
     public record Keys() implements Role<Picturing> { public static final Keys INSTANCE = new Keys(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
+    /** Shows that the owner, a choice, is chosen: its check, in its leading place in place of its own picture, while it is (23 Oct). */
+    public record Chosen() implements Role<Picturing> { public static final Chosen INSTANCE = new Chosen(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
     /** Shows that a choice leads to further choices, rather than doing something at once. */
     public record Disclose() implements Role<Picturing> { public static final Disclose INSTANCE = new Disclose(); @Override public Picturing parent() { return Picturing.INSTANCE; } }
 
@@ -102,6 +113,8 @@ public final class HouseShaping {
     public record Layout() implements Role<Contents> { public static final Layout INSTANCE = new Layout(); @Override public Contents parent() { return Contents.INSTANCE; } }
     /** What the owner holds between its head and its foot. */
     public record Body() implements Role<Contents> { public static final Body INSTANCE = new Body(); @Override public Contents parent() { return Contents.INSTANCE; } }
+    /** The container a layout is placed in, round the whole of it. */
+    public record Umbrella() implements Role<Contents> { public static final Umbrella INSTANCE = new Umbrella(); @Override public Contents parent() { return Contents.INSTANCE; } }
     /** A picture or a film that stands for the owner or shows it. */
     public record Media() implements Role<Contents> { public static final Media INSTANCE = new Media(); @Override public Contents parent() { return Contents.INSTANCE; } }
     /** Stands in for the owner's media when it cannot be shown. */
@@ -125,6 +138,8 @@ public final class HouseShaping {
     public record Dock() implements Role<Members> { public static final Dock INSTANCE = new Dock(); @Override public Members parent() { return Members.INSTANCE; } }
     /** One region of a grid, drawn. */
     public record Cell() implements Role<Members> { public static final Cell INSTANCE = new Cell(); @Override public Members parent() { return Members.INSTANCE; } }
+    /** The container at one of a layout's positions, one kind at all of them. */
+    public record SubContainer() implements Role<Members> { public static final SubContainer INSTANCE = new SubContainer(); @Override public Members parent() { return Members.INSTANCE; } }
     /** A run of the owner's members under a heading of their own. */
     public record Group() implements Role<Members> { public static final Group INSTANCE = new Group(); @Override public Members parent() { return Members.INSTANCE; } }
     /** Heads one column of the owner's cells. */

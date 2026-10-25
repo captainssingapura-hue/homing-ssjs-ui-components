@@ -11,7 +11,7 @@ Says what the owner is, so the user can tell it from the others.
 
 ## Title
 
-Names a container - a card, a panel, a pane, a group, a setting - so the user knows what it holds
+Names a container - a card, a pane, a group, a setting - so the user knows what it holds
 before looking inside.
 
 ## Subtitle

@@ -31,6 +31,7 @@ var MenuTree = Object.freeze({
                 if (ids[n.id]) throw new Error("[MenuTree] " + kind + ": row id repeated: " + n.id);
                 ids[n.id] = true;
                 if (n.icon != null && typeof n.icon !== "string") throw new Error("[MenuTree] " + kind + ": " + n.id + " names an icon that is not a word");
+                if (n.checkable && n.nodes && n.nodes.length) throw new Error("[MenuTree] " + kind + ": " + n.id + " can be checked and lists rows: a row that can be checked opens none");
                 if (n.nodes) walk(n.nodes, depth + 1, n.id);
             }
         }

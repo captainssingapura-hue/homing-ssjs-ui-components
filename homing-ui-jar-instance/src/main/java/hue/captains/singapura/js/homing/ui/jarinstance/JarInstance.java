@@ -15,7 +15,6 @@ import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.styles.BasePaletteDeclaration;
 import hue.captains.singapura.js.homing.ui.styles.Harbour;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseEvents;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseRoleCatalogue;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseStates;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
@@ -49,7 +48,7 @@ public record JarInstance() implements StatelessFunctionalObject {
 
     private Styling make(List<? extends ComponentModule> modules, List<? extends StyleDeclaration> jars) {
         StyleManager styles = new StyleRegistryBuilder<>(CollectModules.INSTANCE.baseWithin(Base.INSTANCE, modules, jars),
-                HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL, HouseEvents.ALL).build();
+                HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL).build();
         SchemeRegistry schemes = new SchemeRegistry(List.of(BaseColours.INSTANCE));
         return new Styling(styles, List.<DesignStyle<?>>of(Base.INSTANCE), new PaletteRegistry(List.of(BasePaletteDeclaration.INSTANCE), schemes),
                 Map.<DesignStyle<?>, ColorPalette<?>>of(Base.INSTANCE, Harbour.INSTANCE));

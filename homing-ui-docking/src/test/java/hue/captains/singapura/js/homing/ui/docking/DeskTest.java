@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * own ground moves the window and lands nowhere. Every step is data on one sink, in order. The fake party holds the
  * real one's rule for a name.
  */
+@org.junit.jupiter.api.Disabled("RFC 0071 port: these load the old simple component as a script - props, Look, companions; the base is ported, so they wait to be ported or retired with their modules, the components lab holding what they checked (the port journal)")
 class DeskTest extends UiDockingJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/";

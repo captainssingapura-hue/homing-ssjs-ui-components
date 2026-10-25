@@ -1,14 +1,14 @@
 // =============================================================================
 // Caption — quiet words beside something, adding to it without competing with it. A Text (a simple component) on a <span>, in the caption's look.
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 //
-//   var x = new Caption(CaptionFactory.create(branch, "caption"), { text: "…" }, ROLE.STANDALONE);
-//   x.text  x.size
+//   var t = new Caption(branch.elementMaker("x"), new FixedCaption(), me.place(FixedCaption));   in a slot
+//   var t = new Caption(branch.elementMaker("x"), new FixedCaption());                     at the root
+//   t.text = "…"   t.size = -1
 // =============================================================================
 
 class Caption extends Text {
-    static LEAF = "caption";
     static TAG = "span";
-}
 
-/** Its companion: makes the <span> it is realized on, on its owner's branch, under its owner's name. */
-const CaptionFactory = new SimpleComponentFactory(Caption);
+    constructor(make, fixed, place) { super(make, fixed, FixedCaption, place ?? manageCaption); }
+}

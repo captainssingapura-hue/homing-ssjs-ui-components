@@ -22,15 +22,15 @@ public final class UiFloatingCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-floating"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE, hue.captains.singapura.js.homing.ui.panes.UiPanesCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiFloatingComponents.INSTANCE; }
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(FloatingPaneModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(FloatLayerModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(FloatLayerBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(FloatEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(FloatingStyles.INSTANCE));
     }

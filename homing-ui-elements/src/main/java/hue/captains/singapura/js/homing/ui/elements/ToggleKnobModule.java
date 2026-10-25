@@ -20,21 +20,19 @@ public record ToggleKnobModule() implements DomModule<ToggleKnobModule>, ImplFor
         @Override public String summary() { return "What shows which way a switch stands, sliding in its groove."; }
     }
 
-    /** Its companion: {@code ToggleKnobFactory.create(branch, name)} makes the element it is realized on. */
-    public record ToggleKnobFactory() implements Exportable._Constant<ToggleKnobModule> {}
 
     public static final ToggleKnobModule INSTANCE = new ToggleKnobModule();
 
     @Override
     public ImportsFor<ToggleKnobModule> imports() {
         return ImportsFor.<ToggleKnobModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<ToggleKnobModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new ToggleKnob(), new ToggleKnobFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new ToggleKnob()));
     }
 }

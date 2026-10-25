@@ -9,7 +9,6 @@ import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.CaptionModule;
 import hue.captains.singapura.js.homing.ui.elements.MarkBehaviorModule;
 import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
 /** The setting's row: one setting of a group, listed with its value - a simple component on its own {@code <div role="listitem">}, its value a caption; still. */
 public record SettingRowModule() implements DomModule<SettingRowModule>, ImplFor<HousePreferences.SettingRow> {
 
-    /** {@code new SettingRow(branch, { label, value }, role)}; {@code root}, {@code label}, {@code value}. */
+    /** {@code new SettingRow(branch, new FixedSettingRow(), place?)}; {@code root}, {@code label}, {@code value}. */
     public record SettingRow() implements BranchComponent<SettingRowModule> {
         @Override public String summary() { return "One setting of a group, listed with its value."; }
     }
@@ -27,7 +26,6 @@ public record SettingRowModule() implements DomModule<SettingRowModule>, ImplFor
     @Override
     public ImportsFor<SettingRowModule> imports() {
         return ImportsFor.<SettingRowModule>builder()
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))

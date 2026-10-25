@@ -1,0 +1,17 @@
+package hue.captains.singapura.js.homing.design.spec.styles.glassmorphism;
+
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
+import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseText;
+
+import java.util.List;
+
+/** glassmorphism's implementation of warning-badge: CSS of its own - its content apart, the colours it draws with typed here. */
+public record WarningBadge() implements CssImplementation<BaseScheme, Glassmorphism, HouseText.WarningBadge> {
+    @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
+        return List.of(new BaseColours.WarningInk(), new BaseColours.WarningWash());
+    }
+}

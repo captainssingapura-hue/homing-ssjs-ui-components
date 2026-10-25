@@ -38,6 +38,15 @@ focused on it, or holding the page's keys in it.
 
 Where the component sits in the depth of the page, as its holder decides.
 
+## Counting
+
+How often a thing was done to the component: how many times it was clicked.
+
+## Given
+
+What the user has given the component: the words typed into it, the option chosen of those it
+offers.
+
 ## Enabled
 
 Whether the user can use the component at all. True at rest; false, it takes no press and no keys,
@@ -83,6 +92,7 @@ select drops, a sidebar unfolded. Said on what opens it, so the user knows befor
 
 The component is on view over the page for the time being: a dialog, a popover, a tooltip, a menu.
 Said on what is opened, as Expanded is said on what opens it.
+
 
 ## Required
 
@@ -135,6 +145,16 @@ listened to.
 
 Held by the user's hand and being moved, from the press that grabbed it until it is let go.
 
+## Measure
+
+How far along a scale the component stands, whatever the scale is for.
+
+## Held
+
+Held down by the user's hand, as the component has it: up at rest, down from its press until its
+release. Unlike the browser's own down, it is the component's, and what holding it means is the
+component's to say.
+
 ## Elevation
 
 How far off its own plane the component sits: flat, lifted towards the user or pressed in, its holder
@@ -143,3 +163,100 @@ deciding what that says.
 ## Orientation
 
 Which way a component laid along a line runs: across the page, or stood up, as a fader is.
+
+## Clicks
+
+How many times the component has been clicked, from none: a click is its going up. Nothing it shows
+changes as it counts.
+
+## DraftText
+
+The words typed into the component so far, the user still at them: none at rest.
+
+## CommittedText
+
+The words the user is done typing, by Enter or by leaving the component: none at rest.
+
+## ChosenOption
+
+The option chosen of those the component offers, by its value: none at rest.
+
+## Degree
+
+How far along a scale the component stands, from −1 to 1, at rest 0: an idea of arithmetic, whatever
+it is applied to - a size, an aspect, a colour, a loudness. What a degree is read as is its caller's.
+
+## TabAddControl
+
+How many times a tab was asked to be added - its plus pressed: from none, each ask its going up. What
+is added, if anything, is for whoever holds the component to decide.
+
+## ActiveTab
+
+Which of the tabs the component holds is the one in use, picked by the user: that tab's id. What
+the component shows is that tab's.
+
+## TabOrder
+
+The order the tabs the component holds stand in, as the user has moved them: their ids, each once.
+
+## ChipCloseControl
+
+How many times a tab's close was asked of its chip - its cross pressed: from none, each ask its going
+up. What a close is, the bar holding the chip decides.
+
+## TabCloseControl
+
+For each tab the component holds, how many times its close was asked - or none, for a tab that cannot
+be closed. Each change is one tab's. What a close is, if anything, is for whoever holds the component
+to decide.
+
+## FloatCloseControl
+
+How many times the close of a pane that floats was asked - its head's close pressed: from none, each
+ask its going up. What a close is, if anything, is for whoever holds the pane to decide.
+
+## TabCarry
+
+Which of the tabs the component holds the hand carries off it - torn off its bar, its chip gone from
+the row: that tab's id, or none.
+
+## TabInTransit
+
+Which of the tabs the component holds is in the hand in a floater of its own - torn off its bar and
+carried, or afloat and dragged by its head: that tab's id, or none.
+
+## TabCaughtControl
+
+For each tab of another component's the component caught - its chip, in the hand in that other's
+floater, brought onto its bar - how many times. Each change is one tab's.
+
+## TabDetachControl
+
+For each tab the component holds, how many times it was detached - let go afloat off its bar - or none,
+for a tab that cannot be detached. Each change is one tab's.
+
+## PickControl
+
+How many times a choice was picked - a menu's item pressed while it is usable: from none, each pick
+its going up. What a pick does is for its menu, and the one who opened the menu, to decide.
+
+## MenuPickControl
+
+For each row of a menu, and of the menus it holds, how many times it was picked - or none, for a row
+that opens rows. Each change is one row's. What a pick does is for whoever opened the menu to decide.
+
+## LayerCloseControl
+
+For each floater a float layer holds, how many times its close was asked - or none, for one that
+cannot be closed. Each change is one floater's. What a close is, if anything, is for whoever holds the layer to decide.
+
+## FloatOrder
+
+How the floaters a float layer holds are stacked: their ids, bottom to top, each once; the top is the
+one in use.
+
+## ActionControl
+
+For each action a footer holds, how many times it was pressed. Each change is one action's. What an
+action does is for whoever holds the footer to decide.

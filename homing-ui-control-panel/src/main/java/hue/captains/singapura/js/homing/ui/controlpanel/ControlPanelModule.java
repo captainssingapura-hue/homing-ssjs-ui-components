@@ -2,17 +2,14 @@ package hue.captains.singapura.js.homing.ui.controlpanel;
 
 import hue.captains.singapura.js.homing.ui.look.IconsModule;
 import hue.captains.singapura.js.homing.component.Widget;
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
-import hue.captains.singapura.js.homing.ui.elements.SliderGroupModule;
+import hue.captains.singapura.js.homing.ui.elements.SliderModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControlPanel;
 
 import java.util.List;
 
@@ -27,7 +24,7 @@ import java.util.List;
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 14,
         reason = "It makes elements by a companion, makes its own elements, places elements, wears classes of its own, writes text of its own and touches components' elements: it waits for the designed containers and the content components to draw only components.")
-public record ControlPanelModule() implements Widget<Widget._None, ControlPanelModule>, ImplFor<HouseControlPanel.ControlPanel> {
+public record ControlPanelModule() implements Widget<Widget._None, ControlPanelModule> {
 
     public static final ControlPanelModule INSTANCE = new ControlPanelModule();
 
@@ -42,10 +39,9 @@ public record ControlPanelModule() implements Widget<Widget._None, ControlPanelM
     public ImportsFor<ControlPanelModule> imports() {
         return ImportsFor.<ControlPanelModule>builder()
                 .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ControlsModule.Controls()), ControlsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderGroupModule.SliderGroup()), SliderGroupModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ControlPanelStyles.cp_panel(), new ControlPanelStyles.cp_row(), new ControlPanelStyles.cp_note()),
                         ControlPanelStyles.INSTANCE))

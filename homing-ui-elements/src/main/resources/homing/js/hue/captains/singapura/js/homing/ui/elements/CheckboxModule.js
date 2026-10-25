@@ -5,34 +5,32 @@
 // turns it on the element, and the component takes it as its checked, its
 // Checked state's class held while it holds; a setter turns the element's.
 //
-//   var c = new Checkbox(CheckboxFactory.create(branch, "agree"), { checked: false }, ROLE.STANDALONE);
+//   var c = new Checkbox(branch.elementMaker("checkbox"), new FixedCheckbox(), me.place(FixedCheckbox));
 //   c.checked  c.enabled
-//   c.setOnCheckedChanged(handler)   by the user (the DOM event carried) or a setter
-//   c.setOnCommit(handler)           the user done: a tick turned
+//   c.onChange(StateChecked, listener)   by the user or a setter
+// On the style manager (RFC 0071): its module stamped with its header (D19), its states set through its reference.
 // =============================================================================
 
 class Checkbox extends SimpleComponent {
-    static LEAF = "checkbox";
     static TAG = "input";
     static AXES = Object.freeze({
         enabled: Object.freeze({
             values: Object.freeze([true, false]),
             rest: true,
             reflect: function (el, on) { el.disabled = !on; },
-            state: STATE.ENABLED
+            state: StateEnabled
         }),
         checked: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
             reflect: function (el, on) { el.checked = on; },
-            state: STATE.CHECKED
+            state: StateChecked
         })
     });
-    static EVENTS = Object.freeze([EVENT.COMMIT]);
     static BEHAVIOR = CheckBehavior;
 
-    constructor(make, props, role) {
-        super(make, props, role);
+    constructor(make, fixed, place) {
+        super(make, fixed, FixedCheckbox, place ?? manageCheckbox);
         this.el.type = "checkbox";
         css.addClass(this.el, el_checkbox);   // the browser's box, laid out: no margin of its own
     }
@@ -43,15 +41,7 @@ class Checkbox extends SimpleComponent {
     get enabled() { return this._get("enabled"); }
     set enabled(on) { this._set("enabled", !!on); }
 
-    /** Its enabled changed - by a setter, or by nothing else an input has. */
-    setOnEnabledChanged(handler) { this._setOn(STATE.ENABLED.changed, handler); }
-
-    /** Its tick turned, by the user or a setter. */
-    setOnCheckedChanged(handler) { this._setOn(STATE.CHECKED.changed, handler); }
-
-    /** The user done: a tick turned on the element. */
-    setOnCommit(handler) { this._setOn(EVENT.COMMIT, handler); }
+    /** A tick turned on the element, as its behaviour hears it: its checked. */
+    _ticked(on) { this._change("checked", on); }
 }
 
-/** Its companion: makes the <input> it is realized on, on its owner's branch, under its owner's name. */
-const CheckboxFactory = new SimpleComponentFactory(Checkbox);

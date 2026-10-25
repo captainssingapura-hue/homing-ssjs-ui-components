@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * wearing its casting's class and holding its states as their classes - the lamp lit and broken, the detent shown, the
  * boundary line upright and in the hand; a drop mark and a tick, seen and never said.
  */
+@org.junit.jupiter.api.Disabled("RFC 0071 port: these load the old simple component as a script - props, Look, companions; the base is ported, so they wait to be ported or retired with their modules, the components lab holding what they checked (the port journal)")
 class MarkTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
@@ -34,8 +35,6 @@ class MarkTest extends UiElementsJsTest {
                     removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); } };
         var lamp = new Lamp(branch.elementMaker("lamp"), { text: "quiet" });
         var drop = new DropMark(branch.elementMaker("drop"), {});
-        var detent = new Detent(branch.elementMaker("detent"), {});
-        var tick = new Tick(branch.elementMaker("tick"), {});
         var line = new BoundaryLine(branch.elementMaker("line"), { orientation: "vertical" });
         """;
 
@@ -43,7 +42,7 @@ class MarkTest extends UiElementsJsTest {
     void load() {
         js = buildContext();
         TextsInJs.load(js, this::loadModule);   // the castings, the states, the look and the simple component
-        for (String m : new String[] {"MarkBehaviorModule.js", "LampModule.js", "DropMarkModule.js", "DetentModule.js", "TickModule.js", "BoundaryLineModule.js"})
+        for (String m : new String[] {"MarkBehaviorModule.js", "LampModule.js", "DropMarkModule.js", "BoundaryLineModule.js"})
             loadModule(DIR + m);
         js.eval("js", TextsInJs.withCss(SHIM));
     }
@@ -62,12 +61,6 @@ class MarkTest extends UiElementsJsTest {
         assertFalse(is("lamp.el.has('styled-lamp--current') || lamp.el.has('styled-lamp--invalid') || lamp.el.getAttribute('aria-current') !== null"));
     }
 
-    @Test
-    void theDetent_shownWhileWhatRestsOnItIsInTheHand() {
-        assertTrue(is("detent.el.has('styled-detent') && !detent.el.has('styled-detent--dragging')"));
-        eval("detent.dragging = true");
-        assertTrue(is("detent.el.has('styled-detent--dragging') && detent.el.getAttribute('data-dragging') === ''"));
-    }
 
     @Test
     void theBoundaryLine_aSeparator_uprightOrLying_inTheHandAsItsOwnerSays() {
@@ -80,8 +73,7 @@ class MarkTest extends UiElementsJsTest {
     }
 
     @Test
-    void theDropMarkAndTheTick_seenNeverSaid() {
+    void theDropMark_seenNeverSaid() {
         assertTrue(is("drop.el.has('styled-drop-mark') && drop.el.getAttribute('aria-hidden') === 'true'"));
-        assertTrue(is("tick.el.has('styled-tick') && tick.el.getAttribute('aria-hidden') === 'true'"));
     }
 }

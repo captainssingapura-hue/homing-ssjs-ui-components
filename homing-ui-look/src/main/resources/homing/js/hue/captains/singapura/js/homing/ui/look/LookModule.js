@@ -24,19 +24,11 @@
 //
 // A picture is an icon's: a component of its own, its picture its look (D52).
 //
-// While the house moves onto files (phase 5), a slice of the old look - wear(el,
-// { only | except }) - wears nothing styled and says so once on the console,
-// until its family moves and the slice is a leaf of its own (D17).
+// A look is worn whole: what wore a slice of one is a leaf of its own (D17), so a
+// slice asked for is refused.
 // =============================================================================
 
 var _LOOK_REST = Object.freeze({ size: 0, extent: 1, aspect: 0 });
-var _LOOK_SAID = new Set();
-
-function _lookSay(said) {
-    if (_LOOK_SAID.has(said)) return;
-    _LOOK_SAID.add(said);
-    if (typeof console !== "undefined" && typeof console.warn === "function") console.warn("[Look] " + said);
-}
 
 class Look {
     constructor(Leaf, role) {
@@ -51,11 +43,8 @@ class Look {
     }
 
     wear(el, slice) {
-        if (slice) {
-            _lookSay((this.token || this.component.LEAF) + ": a slice of the old look wears nothing styled - it becomes a leaf of its own (D17)");
-            return;
-        }
-        if (this.leaf) StyledLeaf.wear(el, this.leaf);
+        if (slice) throw new Error("[Look] " + this.token + " is worn whole: a slice of a look is a leaf of its own (D17)");
+        StyledLeaf.wear(el, this.leaf);
     }
 
     show(el, state) {

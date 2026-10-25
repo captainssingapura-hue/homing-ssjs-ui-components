@@ -5,11 +5,10 @@ import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
-/** What a tab does: the hand down on it, not on its cross, is its Press; a right-click asks its owner's opener for its menu. */
+/** What a tab does: the hand down on it - not on its cross - is its press, and up again, wherever it is by then, its release - each told to the tab. */
 public record TabBehaviorModule() implements DomModule<TabBehaviorModule> {
 
     /** {@code new TabBehavior(el, tab)}. */
@@ -20,7 +19,6 @@ public record TabBehaviorModule() implements DomModule<TabBehaviorModule> {
     @Override
     public ImportsFor<TabBehaviorModule> imports() {
         return ImportsFor.<TabBehaviorModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
                 .build();
     }
 

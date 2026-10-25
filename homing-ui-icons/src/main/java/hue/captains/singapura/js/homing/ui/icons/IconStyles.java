@@ -6,8 +6,8 @@ import hue.captains.singapura.js.homing.core.CssGroup;
 import java.util.List;
 
 /**
- * The icons' styles: the mark's box, and nothing else. The picture is the icon's look - the style worn's, drawn on
- * its ::before (D52) - so nothing here is a picture, and the box is the same in every theme.
+ * The icons' styles: the mark's box, and nothing else. The picture is the icon palette's of the style worn, drawn in
+ * the box by the page's style manager (D56) - so nothing here is a picture, and the box is the same in every theme.
  */
 public record IconStyles() implements CssGroup<IconStyles> {
 
@@ -15,7 +15,7 @@ public record IconStyles() implements CssGroup<IconStyles> {
 
     /**
      * The mark: an inline box of one em, a quarter wider than tall so the
-     * widest glyph sits in it, the glyph centred; it takes the ink and the
+     * widest glyph sits in it, its picture centred - a glyph, or an SVG; it takes the ink and the
      * size of the text it sits in, and it is never in the way of the hand.
      */
     public record ic_base() implements CssClass<IconStyles> {

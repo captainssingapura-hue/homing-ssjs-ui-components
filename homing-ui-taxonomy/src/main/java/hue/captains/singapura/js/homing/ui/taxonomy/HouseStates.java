@@ -1,9 +1,12 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.component.taxonomy.Classed;
 import hue.captains.singapura.js.homing.component.taxonomy.Flag;
 import hue.captains.singapura.js.homing.component.taxonomy.Importance;
 import hue.captains.singapura.js.homing.component.taxonomy.L1_StateBranch;
+import hue.captains.singapura.js.homing.component.taxonomy.NamedChange;
 import hue.captains.singapura.js.homing.component.taxonomy.Pseudo;
+import hue.captains.singapura.js.homing.component.taxonomy.StateDomain;
 import hue.captains.singapura.js.homing.component.taxonomy.StateRoot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
@@ -23,9 +26,10 @@ import java.util.Map;
  * {@link Flag}, false at rest unless it says otherwise; the rest are named. A design answers each
  * value but the rest by its word: the established design word where there is one - Enabled's false
  * is {@code disabled}, Hovered's true {@code hover}, Down's true {@code active} - and the type's name
- * and the value's otherwise ({@code busy-true}). Each type's change is an
- * event a component offers by having the type; no tree holds it. What each means is in {@code
- * meanings/.../HouseStates.md}.</p>
+ * and the value's otherwise ({@code busy-true}). A type whose look is no class - a count, a text, a
+ * held hand - is no {@code Classed}: its values are its domain's, and what it moves or shows draws it.
+ * A change of a type of state is an event; a component declares its states, and nothing else (RFC
+ * 0069, amended 21 Oct). What each means is in {@code meanings/.../HouseStates.md}.</p>
  */
 public final class HouseStates {
 
@@ -81,6 +85,24 @@ public final class HouseStates {
         @Override public StateRoot parent() { return StateRoot.INSTANCE; }
     }
 
+    /** How often a thing was done to it. */
+    public record Counting() implements L1_StateBranch<StateRoot> {
+        public static final Counting INSTANCE = new Counting();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** What the user has given it: the words typed, the option chosen. */
+    public record Given() implements L1_StateBranch<StateRoot> {
+        public static final Given INSTANCE = new Given();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
+    /** How far along a scale it stands. */
+    public record Measure() implements L1_StateBranch<StateRoot> {
+        public static final Measure INSTANCE = new Measure();
+        @Override public StateRoot parent() { return StateRoot.INSTANCE; }
+    }
+
     // ── availability ─────────────────────────────────────────────────────
 
     /** Usable: true at rest; off, it is inert and says so. */
@@ -120,7 +142,7 @@ public final class HouseStates {
     }
 
     /** How much of the group it speaks for is chosen: none, some or all. The mixed checkbox's, never a plain one's. */
-    public record Coverage() implements StateType<Picking>, Importance.Tertiary {
+    public record Coverage() implements Classed<Picking>, Importance.Tertiary {
         public static final Coverage INSTANCE = new Coverage();
         private static final List<StateValue> VALUES = List.of(new StateValue("none"), new StateValue("some"), new StateValue("all"));
         @Override public Picking parent() { return Picking.INSTANCE; }
@@ -128,6 +150,16 @@ public final class HouseStates {
     }
 
     /** Picked from among its kind: an option, a tab, a day, a row. */
+    /**
+     * Which of its tabs is the one in use, picked by the user: its id, a text; none at rest. What it shows is that tab's -
+     * no class of its own (owner, 22 Oct).
+     */
+    public record ActiveTab() implements StateType<Picking> {
+        public static final ActiveTab INSTANCE = new ActiveTab();
+        @Override public Picking parent() { return Picking.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
     public record Selected() implements Flag<Picking>, Importance.Tertiary {
         public static final Selected INSTANCE = new Selected();
         @Override public Picking parent() { return Picking.INSTANCE; }
@@ -222,7 +254,7 @@ public final class HouseStates {
     }
 
     /** Where the page's keys are, as the keyboard's steward says: away, candidate, lent or held. */
-    public record Keyboard() implements StateType<Interaction>, Importance.Secondary {
+    public record Keyboard() implements Classed<Interaction>, Importance.Secondary {
         public static final Keyboard INSTANCE = new Keyboard();
         private static final List<StateValue> VALUES = List.of(new StateValue("away"), new StateValue("candidate"),
                 new StateValue("lent"), new StateValue("held"));
@@ -238,10 +270,43 @@ public final class HouseStates {
         @Override public Map<StateValue, String> words() { return Map.of(StateValue.TRUE, "dragging"); }
     }
 
+    /**
+     * Which of its tabs the hand carries off it - torn off a bar, its chip gone from the row: the tab's id; none at rest.
+     * What it shows is the tab where the hand has it - no class (owner, 23 Oct).
+     */
+    public record TabCarry() implements StateType<Interaction> {
+        public static final TabCarry INSTANCE = new TabCarry();
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
+    /**
+     * Which of its tabs is in the hand in a floater of its - torn off its bar and carried, or afloat and dragged by its
+     * head: the tab's id; none at rest. Said so that its caller may tell its other panes to expect it, each catching it
+     * should its chip come onto its bar (owner, 23 Oct). No class.
+     */
+    public record TabInTransit() implements StateType<Interaction> {
+        public static final TabInTransit INSTANCE = new TabInTransit();
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
+    /** Held down by the hand, as the component has it: up at rest; down by its press, up again by its release. Drawn by nothing of its own. */
+    public record Held() implements StateType<Interaction> {
+        public static final Held INSTANCE = new Held();
+        public static final StateValue UP = new StateValue("up"), DOWN = new StateValue("down");
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Point(UP), new StateDomain.Point(DOWN)), new StateDomain.Named(UP));
+        private static final List<NamedChange> CHANGES = List.of(new NamedChange("press", new NamedChange.Between(UP, DOWN)),
+                new NamedChange("release", new NamedChange.Between(DOWN, UP)));
+        @Override public Interaction parent() { return Interaction.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+        @Override public List<NamedChange> changes() { return CHANGES; }
+    }
+
     // ── physical ─────────────────────────────────────────────────────────
 
     /** How far off its own plane it sits: flat, elevated or sunken. */
-    public record Elevation() implements StateType<Physical>, Importance.Senary {
+    public record Elevation() implements Classed<Physical>, Importance.Senary {
         public static final Elevation INSTANCE = new Elevation();
         private static final List<StateValue> VALUES = List.of(new StateValue("flat"), new StateValue("elevated"), new StateValue("sunken"));
         @Override public Physical parent() { return Physical.INSTANCE; }
@@ -250,7 +315,7 @@ public final class HouseStates {
     }
 
     /** Which way a thing laid along a line runs: horizontal, or vertical - stood up, as a fader. */
-    public record Orientation() implements StateType<Physical>, Importance.Senary {
+    public record Orientation() implements Classed<Physical>, Importance.Senary {
         public static final Orientation INSTANCE = new Orientation();
         private static final List<StateValue> VALUES = List.of(new StateValue("horizontal"), new StateValue("vertical"));
         @Override public Physical parent() { return Physical.INSTANCE; }
@@ -258,14 +323,195 @@ public final class HouseStates {
         @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "vertical"); }
     }
 
+    // ── counting ─────────────────────────────────────────────────────────
+
+    /** How many times it has been clicked, from none: a click is its going up. Nothing it shows changes - no class. */
+    public record Clicks() implements StateType<Counting> {
+        public static final Clicks INSTANCE = new Clicks();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        private static final List<NamedChange> CHANGES = List.of(new NamedChange("click", new NamedChange.Rises()));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+        @Override public List<NamedChange> changes() { return CHANGES; }
+    }
+
+    /**
+     * How many times a tab was asked to be added - the plus pressed: from none, each ask its going up. What is added is
+     * its caller's to decide; nothing it shows changes - no class (owner, 22 Oct).
+     */
+    public record TabAddControl() implements StateType<Counting> {
+        public static final TabAddControl INSTANCE = new TabAddControl();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
+    /**
+     * How many times its close was asked - its cross pressed: from none, each ask its going up. What a close is, the bar
+     * that holds it decides; nothing it shows changes - no class (owner, 22 Oct).
+     */
+    public record ChipCloseControl() implements StateType<Counting> {
+        public static final ChipCloseControl INSTANCE = new ChipCloseControl();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
+    /**
+     * For each tab it holds, how many times its close was asked: by the tab's id, a count from none - or none, for a tab
+     * that cannot be closed. Each change is one tab's: its close asked once more, or the tab put in. What a close is, its
+     * caller decides; nothing it shows changes - no class (owner, 22 Oct).
+     */
+    public record TabCloseControl() implements StateType<Counting> {
+        public static final TabCloseControl INSTANCE = new TabCloseControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
+    /**
+     * How many times its close was asked - a floating pane's, its head's close pressed; a modal window's, its window's: from none, each ask its going up.
+     * What a close is, its caller decides; nothing it shows changes - no class (owner, 23 Oct).
+     */
+    public record FloatCloseControl() implements StateType<Counting> {
+        public static final FloatCloseControl INSTANCE = new FloatCloseControl();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
+    /**
+     * For each tab it holds, how many times it was detached - let go afloat off its bar: by the tab's id, a count from
+     * none - or none, for a tab that cannot be detached. Each change is one tab's: detached once more, or the tab put in or
+     * taken out. Nothing it shows changes by it - no class (owner, 23 Oct).
+     */
+    public record TabDetachControl() implements StateType<Counting> {
+        public static final TabDetachControl INSTANCE = new TabDetachControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
+    /**
+     * For each tab of another's it caught - its chip, in the hand in that other's floater, come onto its bar: by the tab's
+     * id, how many times, from none. Each change is one tab's, caught once more; told so that its caller moves the tab
+     * over at once - out of the other, into it - the hand still on it (owner, 23 Oct). Nothing it shows changes by it - no
+     * class.
+     */
+    public record TabCaughtControl() implements StateType<Counting> {
+        public static final TabCaughtControl INSTANCE = new TabCaughtControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
+    /**
+     * How many times it was picked - a menu's item pressed while it is usable: from none, each pick its going up. What a
+     * pick does, its menu and its menu's opener decide; nothing it shows changes - no class (owner, 23 Oct).
+     */
+    public record PickControl() implements StateType<Counting> {
+        public static final PickControl INSTANCE = new PickControl();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
+    /**
+     * For each row of a menu - its own and those of the menus it holds - how many times it was picked: by the row's id, a
+     * count from none, or none for a row that opens rows rather than being picked. Each change is one row's. What a pick
+     * does, the menu's opener decides; nothing it shows changes - no class (owner, 23 Oct).
+     */
+    public record MenuPickControl() implements StateType<Counting> {
+        public static final MenuPickControl INSTANCE = new MenuPickControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
+    /**
+     * For each floater a float layer holds, how many times its close was asked: by the floater's id, a count from none, or
+     * none for one that cannot be closed. Each change is one floater's. What a close is, the layer's caller decides; nothing
+     * it shows changes - no class (owner, 23 Oct).
+     */
+    public record LayerCloseControl() implements StateType<Counting> {
+        public static final LayerCloseControl INSTANCE = new LayerCloseControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
+    /**
+     * For each action a footer holds, how many times it was pressed: by the action's name, a count from none. Each change
+     * is one action's. What an action does, the footer's holder decides; nothing it shows changes - no class (owner, 23 Oct).
+     */
+    public record ActionControl() implements StateType<Counting> {
+        public static final ActionControl INSTANCE = new ActionControl();
+        @Override public Counting parent() { return Counting.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.COUNTS); }
+    }
+
+    // ── given ────────────────────────────────────────────────────────────
+
+    /** What is typed in it so far, the user still at it: a text, none at rest. What it shows is the words themselves - no class. */
+    public record DraftText() implements StateType<Given> {
+        public static final DraftText INSTANCE = new DraftText();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
+    /** What the user is done typing - by Enter, or by leaving it: a text, none at rest. No class. */
+    public record CommittedText() implements StateType<Given> {
+        public static final CommittedText INSTANCE = new CommittedText();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
+    /**
+     * The order its tabs stand in, as the user has moved them: their ids, each once; none at rest. What it shows is its
+     * tabs where they stand - no class (owner, 22 Oct).
+     */
+    public record TabOrder() implements StateType<Given> {
+        public static final TabOrder INSTANCE = new TabOrder();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.NAMES); }
+    }
+
+    /**
+     * How the floaters a float layer holds are stacked: their ids, bottom to top, each once - the top the one in use; none
+     * at rest. What it shows is each floater where it stands in the stack - no class (owner, 23 Oct).
+     */
+    public record FloatOrder() implements StateType<Given> {
+        public static final FloatOrder INSTANCE = new FloatOrder();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.NAMES); }
+    }
+
+    /** The option chosen of those it offers: its value, a text; none at rest. What it shows is the option itself - no class. */
+    public record ChosenOption() implements StateType<Given> {
+        public static final ChosenOption INSTANCE = new ChosenOption();
+        @Override public Given parent() { return Given.INSTANCE; }
+        @Override public StateDomain domain() { return new StateDomain.Valued(StateDomain.Valued.Kind.TEXT); }
+    }
+
+    // ── measure ──────────────────────────────────────────────────────────
+
+    /**
+     * How far along a scale it stands, from −1 to 1, at rest 0: a mathematical idea, whatever it is applied to - a size,
+     * an aspect, a colour, a loudness (owner, 22 Oct). Its step, and what its caller reads it as, are not its own. No class.
+     */
+    public record Degree() implements StateType<Measure> {
+        public static final Degree INSTANCE = new Degree();
+        private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(-1, 1, false)), new StateDomain.Number(0));
+        @Override public Measure parent() { return Measure.INSTANCE; }
+        @Override public StateDomain domain() { return DOMAIN; }
+    }
+
     /** Every type of the tree, branch by branch. */
     public static final List<StateType<?>> ALL = List.of(
             Enabled.INSTANCE, ReadOnly.INSTANCE, Busy.INSTANCE,
-            Pressed.INSTANCE, Checked.INSTANCE, Coverage.INSTANCE, Selected.INSTANCE,
+            Pressed.INSTANCE, Checked.INSTANCE, Coverage.INSTANCE, ActiveTab.INSTANCE, Selected.INSTANCE,
             Expanded.INSTANCE, Shown.INSTANCE,
             Required.INSTANCE, Invalid.INSTANCE,
             Current.INSTANCE, Highlighted.INSTANCE, Pointed.INSTANCE,
             Empty.INSTANCE,
-            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE,
-            Elevation.INSTANCE, Orientation.INSTANCE);
+            Hovered.INSTANCE, Focused.INSTANCE, Down.INSTANCE, Keyboard.INSTANCE, Dragging.INSTANCE, TabCarry.INSTANCE, TabInTransit.INSTANCE, Held.INSTANCE,
+            Elevation.INSTANCE, Orientation.INSTANCE,
+            Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, TabCaughtControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE, LayerCloseControl.INSTANCE, ActionControl.INSTANCE,
+            DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, FloatOrder.INSTANCE, ChosenOption.INSTANCE,
+            Degree.INSTANCE);
 }

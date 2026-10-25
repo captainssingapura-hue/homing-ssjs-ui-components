@@ -33,6 +33,11 @@ grid's mirror - and shows which is picked.
 
 One of many alike, offered or listed by what holds it; it means something only among the others.
 
+## MenuItem
+
+One choice of a menu. Of two kinds, fixed for its life: one that does something or opens the choices
+it leads to, and one that is checked or not.
+
 ## Container
 
 Holds other components together as one thing to the user, and gives each its place. What it
@@ -56,17 +61,9 @@ Offers the user a set of choices for as long as they need them, then gets out of
 
 Holds what is shown over the page, apart from its flow, for as long as it is needed.
 
-## Split
-
-Shares a room between several things, each given its share; where it is resizable, the user changes the shares.
-
 ## Bar
 
 A thin band along an edge that carries controls or a way through, never the content itself.
-
-## Field
-
-Lets the user set one setting, and says what it is and how it stands.
 
 ## View
 
@@ -74,12 +71,7 @@ Shows something whole, for the user to look at or look through, rather than to e
 
 ## Surface
 
-Fills what holds it, with no frame of its own; what stands on it is the point - the page's ground,
-a panel.
-
-## Cluster
-
-Holds a set of controls as one, so the user works them together and the keys pass between them.
+Fills what holds it, with no frame of its own; what stands on it is the point.
 
 ## Chooser
 
@@ -109,3 +101,7 @@ A small sign the user reads at a glance, in place of words.
 ## Icon
 
 A picture standing for one idea wherever it is shown: each icon a component of its own, its picture drawn by the style worn.
+
+## Document
+
+What the document itself wears, as a whole: a style's CSS on its own element, and nothing the page makes or holds.

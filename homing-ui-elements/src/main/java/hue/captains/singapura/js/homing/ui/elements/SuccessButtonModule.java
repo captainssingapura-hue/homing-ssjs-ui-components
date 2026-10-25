@@ -14,27 +14,24 @@ import java.util.List;
 /** The success button: the button's declarations, worn in its own look. */
 public record SuccessButtonModule() implements DomModule<SuccessButtonModule>, ImplFor<HouseControls.SuccessButton> {
 
-    /** An element component: {@code new SuccessButton(el, { label, extent, size }, role)} on the element its companion makes; {@code setOnClick(handler)}; {@code enabled}, {@code size}, {@code extent}, {@code label}. */
+    /** An element component: {@code new SuccessButton(make, new FixedSuccessButton(), place?)}, made and placed by itself; {@code onChange(StateClicks, listener)}; {@code clicks}, {@code enabled}, {@code size}, {@code extent}, {@code label}. */
     public record SuccessButton() implements ElementComponent<SuccessButtonModule> {
         @Override public String tag() { return "button"; }
         @Override public String summary() { return "A button that completes what went well: accepts, finishes, confirms a good outcome."; }
     }
 
-    /** Its companion: {@code SuccessButtonFactory.create(branch, name)} makes the element it is realized on. */
-    public record SuccessButtonFactory() implements Exportable._Constant<SuccessButtonModule> {}
 
     public static final SuccessButtonModule INSTANCE = new SuccessButtonModule();
 
     @Override
     public ImportsFor<SuccessButtonModule> imports() {
         return ImportsFor.<SuccessButtonModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<SuccessButtonModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new SuccessButton(), new SuccessButtonFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new SuccessButton()));
     }
 }

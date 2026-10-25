@@ -1,4 +1,4 @@
-/* The slider in editorial: the house's value along a scale - its row, off, and the keys' marks; its rail, groove, fill and knob are its parts'. Whole: every property its look has (D9). */
+/* The slider in editorial: the house's value along a scale - its row, and off; its label, its range and its readout are its parts' (23 Oct). Whole: every property its look has (D9). */
 $casting {
     color: inherit;
     background-color: transparent;
@@ -25,26 +25,5 @@ $casting {
         box-shadow: none;
         transform: none;
         opacity: .45;
-    }
-
-    &$candidate {
-        outline-color: var(--fp-keys-candidate);
-        outline-width: 1px;
-        outline-style: dashed;
-        outline-offset: 3px;
-    }
-
-    &$lent {
-        outline-color: var(--fp-keys-lent);
-        outline-width: 1px;
-        outline-style: solid;
-        outline-offset: -2px;
-    }
-
-    &$held {
-        outline-color: var(--fp-accent);
-        outline-width: 2px;
-        outline-style: solid;
-        outline-offset: -2px;
     }
 }

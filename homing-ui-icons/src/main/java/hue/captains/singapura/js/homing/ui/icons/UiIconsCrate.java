@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.icons;
 
+import hue.captains.singapura.js.homing.core.js.CoreJsCrate;
 import hue.captains.singapura.js.homing.component.C0_Components;
 import hue.captains.singapura.js.homing.component.ComponentVehicle;
 import hue.captains.singapura.js.homing.core.Crate;
@@ -23,7 +24,7 @@ public final class UiIconsCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-icons"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, UiLookCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, CoreJsCrate.INSTANCE, UiLookCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiIconsComponents.INSTANCE; }

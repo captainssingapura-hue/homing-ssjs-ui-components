@@ -1,4 +1,6 @@
 // =============================================================================
+// NOT PORTED (RFC 0071): its degrees were a slider group's, which is dropped (owner, 20 Oct); ported, it holds
+// a slider for each degree directly, each placed as a member.
 // ControlPanel — the controls for a set of options, each made as its means
 // calls for: a slider for a degree, all of them in one group that holds the
 // keys, resting at the option's rest; a toggle for a switch, saying whether it

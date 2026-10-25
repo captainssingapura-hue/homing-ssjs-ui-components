@@ -7,7 +7,7 @@ import hue.captains.singapura.js.homing.ui.styles.Glassmorphism;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseDoing;
 
-/** Glassmorphism's range adjust: as its range on its own, by delegation. */
+/** Glassmorphism's range adjust: as its range on its own, by delegation - what adjusts a slider (23 Oct). */
 public record RangeAdjust()
         implements CastingStyle<BaseScheme, Glassmorphism, HouseControls.Range, HouseDoing.Adjust> {
     @Override public StylingRes<BaseScheme, HouseControls.Range> style() {

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -49,7 +50,7 @@ class HouseStylesTest {
         assertEquals(TAXONOMY.castings().size(), manager.implementations(Base.INSTANCE).size(), "the base layer is never absent (D26)");
         var go = TAXONOMY.castings().stream().filter(c -> c.token().equals("primary-button_go")).findFirst().orElseThrow();
         for (DesignStyle<?> s : HouseStyles.STYLES) {
-            assertEquals(124 + OWN_PICTURES.get(s.token()), manager.implementations(s).size(), s.token() + ": what it refines, its own and the modules' castings, and the icons it draws its own way (D52)");
+            assertEquals(92 + OWN_PICTURES.get(s.token()), manager.implementations(s).size(), s.token() + ": what it refines, its own and the modules' castings, and the icons it draws its own way (the slider on the native range, its six parts and their six castings retired, the range as what adjusts it, 23 Oct; the check menu item and its choice, the two menu levels, 23 Oct; D52) - a kicker as prompt and a plain button as choice and as cancel no more, the picker and the opener widgets (22 Oct); the icon button in add no more, placed in the void role, and the preferences button retired (21 Oct); a section and a rack no more, rooms of their owners; the slider group and its Adjust casting dropped, the panel, its bar and the kicker as a title; the thirteen castings only a widget's role made (20 Oct)");
             for (Component<?> b : BUTTONS)
                 assertEquals(s.token() + "'s own", manager.resolve(s, new Casting(b)).says(), s.token() + " draws " + b.token());
             assertTrue(manager.resolve(s, go).says().startsWith(s.token() + "'s own"), s.token() + " draws the primary button as Go too");
@@ -66,7 +67,11 @@ class HouseStylesTest {
         for (DesignStyle<?> s : HouseStyles.STYLES) {
             String sheet = styling.styleSheet(s.token());
             assertTrue(!sheet.contains("$"), s.token() + ": every mark filled in");
-            for (Casting c : TAXONOMY.castings()) assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
+            for (Casting c : TAXONOMY.castings())
+                if (c.component() instanceof Component<?> leaf && TAXONOMY.wornByTheDocument(leaf))   // the ground: ruled on the document's root, under no class (24 Oct)
+                    assertTrue(sheet.contains("/* " + c.token() + ": ") && sheet.contains("\n:root {"), s.token() + ": " + c.token() + " on :root");
+                else assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
+            assertFalse(sheet.contains(".styled-ground"), s.token() + ": the ground wears no class");
         }
     }
 
@@ -74,8 +79,7 @@ class HouseStylesTest {
     private static final List<Component<?>> BUTTONS = List.of(
             HouseControls.PlainButton.INSTANCE, HouseControls.PrimaryButton.INSTANCE, HouseControls.SecondaryButton.INSTANCE,
             HouseControls.DangerButton.INSTANCE, HouseControls.WarningButton.INSTANCE, HouseControls.SuccessButton.INSTANCE,
-            HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE,
-            HouseControls.PreferencesButton.INSTANCE);
+            HouseControls.ToggleButton.INSTANCE, HouseControls.IconButton.INSTANCE, HouseControls.CloseButton.INSTANCE);   // the preferences button retired (21 Oct)
 
     @Test
     void theHouseColourTree_reads_andEveryPaletteIsWholeOverIt() {
@@ -114,7 +118,7 @@ class HouseStylesTest {
     void everyStyle_drawsEveryIcon_andItsCrossIsItsOwn() {
         StyleManager manager = HouseStyles.INSTANCE.styling().manager();
         var icons = TAXONOMY.components().stream().filter(c -> TAXONOMY.parent(c) == HouseBranches.Icon.INSTANCE).toList();
-        assertEquals(20, icons.size(), "the house's fifteen and the panes' five");
+        assertEquals(22, icons.size(), "the house's seventeen - the pacman and the preferences among them (21 Oct) - and the panes' five");
         for (DesignStyle<?> s : HouseStyles.STYLES)
             for (Component<?> icon : icons) assertTrue(manager.rule(s, new Casting(icon)).contains("content: \""), s.token() + " draws " + icon.token());
         var crosses = new java.util.LinkedHashMap<String, String>();

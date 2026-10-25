@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * code and the badge of each tone among them - each wearing its casting's one class, on its own or in the role its
  * owner passes, refused in a role the taxonomy never casts it in.
  */
+@org.junit.jupiter.api.Disabled("RFC 0071 port: these load the old simple component as a script - props, Look, companions; the base is ported, so they wait to be ported or retired with their modules, the components lab holding what they checked (the port journal)")
 class TextTest extends UiElementsJsTest {
 
     private static final String DIR = "/homing/js/hue/captains/singapura/js/homing/ui/elements/";
@@ -68,7 +69,6 @@ class TextTest extends UiElementsJsTest {
 
     @Test
     void inARole_itsCastingsClassAlone() {
-        assertEquals("styled-kicker_title", str("worn(new Kicker(KickerFactory.create(branch, 'k'), { text: 'Guide' }, ROLE.TITLE))"));
         assertEquals("styled-heading4_title", str("worn(new Heading4(Heading4Factory.create(branch, 'h'), { text: 'A card' }, ROLE.TITLE))"));
         assertEquals("styled-badge_tag", str("worn(new Badge(BadgeFactory.create(branch, 'b'), { text: 'new' }, ROLE.TAG))"));
         assertEquals("styled-wordmark_name", str("worn(new Wordmark(WordmarkFactory.create(branch, 'w'), { text: 'Homing' }, ROLE.NAME))"));

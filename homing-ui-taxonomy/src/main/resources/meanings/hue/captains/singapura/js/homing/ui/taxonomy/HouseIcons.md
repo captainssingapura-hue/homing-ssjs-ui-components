@@ -44,6 +44,10 @@ There is more beneath: a row that opens its children, a node that expands.
 
 The settings behind it: what it is set by, to look at and change.
 
+## PreferencesIcon
+
+Your preferences: how the site behaves for you, each set to your liking.
+
 ## SizeIcon
 
 Bigger or smaller: the size axis.
@@ -59,6 +63,10 @@ More or less of what it means: the extent axis.
 ## LevelIcon
 
 How much of it: a level, a volume, a gain.
+
+## PacmanIcon
+
+Play: the round eater, mouth open, going along its way - for a game, or anything made for the fun of it.
 
 ## ColumnIcon
 

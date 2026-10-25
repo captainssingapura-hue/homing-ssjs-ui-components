@@ -34,6 +34,7 @@ public final class UiPanZoomCrate implements Crate, ComponentVehicle {
         return List.of(
                 CrateEntry.of(PanZoomModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 CrateEntry.of(SvgPanZoomModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                CrateEntry.of(SvgPanZoomBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(PanZoomBarModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
                 CrateEntry.of(PanZoomStyles.INSTANCE));
     }

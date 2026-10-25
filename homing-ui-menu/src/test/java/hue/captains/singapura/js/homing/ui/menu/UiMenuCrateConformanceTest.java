@@ -39,12 +39,12 @@ class UiMenuCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(5, checked, "the steward, the menu, the events, the geometry and the tree");
+        assertEquals(10, checked, "the steward and its behaviour, the menus' base and its behaviour, the three levels (23 Oct), the events, the geometry and the tree");
     }
 
     @Test
     void theStewardAndTheMenuImportEveryClassDeclared() {
-        var imported = java.util.stream.Stream.of(ContextMenuStewardModule.INSTANCE.imports(), ContextMenuModule.INSTANCE.imports())
+        var imported = java.util.stream.Stream.of(ContextMenuStewardModule.INSTANCE.imports(), MenuModule.INSTANCE.imports(), ContextMenuModule.INSTANCE.imports())
                 .flatMap(im -> im.getAllImports().values().stream())
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
         for (CssClass<MenuStyles> c : MenuStyles.INSTANCE.cssClasses())

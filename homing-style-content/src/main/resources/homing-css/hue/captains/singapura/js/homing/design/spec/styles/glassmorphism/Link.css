@@ -1,0 +1,24 @@
+/* The link in glassmorphism: a way somewhere, in the words around it. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-text-faded);
+    background-color: transparent;
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-underline-offset: 2px;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: calc(1em * pow(1.2, var(--size)));
+    line-height: inherit;
+    outline: 0 none;
+    transition: none;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--fp-way-hovered);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--fp-ring);
+        outline-offset: -2px;
+    }
+}

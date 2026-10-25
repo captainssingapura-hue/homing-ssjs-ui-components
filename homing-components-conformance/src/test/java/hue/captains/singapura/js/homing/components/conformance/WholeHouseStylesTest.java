@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.components.conformance;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
+import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.styling.StyleManager;
@@ -27,12 +28,15 @@ class WholeHouseStylesTest {
     void theHousesInstance_holdsToTheCentralRules_overTheWholeHouse() {
         Styling styling = HouseStyles.INSTANCE.styling();
         StyleManager manager = styling.manager();
-        assertEquals(195, HOUSE.castings().size(), "the text cell on its own, as a title and as a value (D42); each icon once, its look its own whatever role it plays (D52); the whole house's castings, the house's own and every extension's");
+        assertEquals(148, HOUSE.castings().size(), "the slider on the native range: its six parts and their castings retired, the range as what adjusts it (23 Oct); the check menu item and its choice, the two menu levels (23 Oct); the tab picker, its casting as the picker, the tab opener, the kicker as a prompt and the plain button as a choice and as a cancel gone, widgets' (22 Oct); the pacman icon's among them, the icon button's in add gone with its roles (21 Oct); the rooms no castings, their owners' own; the slider group and its casting as what adjusts dropped, the panel, its bar and the kicker as a title; the twelve widgets no components, and the thirteen castings only a widget's role made (20 Oct); the text cell on its own, as a title and as a value (D42); each icon once, its look its own whatever role it plays (D52); the whole house's castings, the house's own and every extension's");
         assertEquals(HOUSE.castings().size(), manager.implementations(Base.INSTANCE).size(), "Base's for every one of them, from the jar that adds it");
         for (DesignStyle<?> s : styling.styles()) {
             String sheet = styling.styleSheet(s.token());
             assertTrue(!sheet.contains("$"), s.token() + ": every mark filled in");
-            for (Casting c : HOUSE.castings()) assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
+            for (Casting c : HOUSE.castings())
+                if (c.component() instanceof Component<?> leaf && HOUSE.wornByTheDocument(leaf))   // the ground: ruled on the document's root, under no class (24 Oct)
+                    assertTrue(sheet.contains("/* " + c.token() + ": ") && sheet.contains("\n:root {"), s.token() + ": " + c.token() + " on :root");
+                else assertTrue(sheet.contains("\n.styled-" + c.token() + " {"), s.token() + ": " + c.token());
         }
     }
 

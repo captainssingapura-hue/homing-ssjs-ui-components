@@ -1,14 +1,14 @@
 // =============================================================================
 // Label — words that name a control or a field, so the user knows what using it will touch. A Text (a simple component) on a <span>, in the label's look.
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 //
-//   var x = new Label(LabelFactory.create(branch, "label"), { text: "…" }, ROLE.STANDALONE);
-//   x.text  x.size
+//   var t = new Label(branch.elementMaker("x"), new FixedLabel(), me.place(FixedLabel));   in a slot
+//   var t = new Label(branch.elementMaker("x"), new FixedLabel());                     at the root
+//   t.text = "…"   t.size = -1
 // =============================================================================
 
 class Label extends Text {
-    static LEAF = "label";
     static TAG = "span";
-}
 
-/** Its companion: makes the <span> it is realized on, on its owner's branch, under its owner's name. */
-const LabelFactory = new SimpleComponentFactory(Label);
+    constructor(make, fixed, place) { super(make, fixed, FixedLabel, place ?? manageLabel); }
+}

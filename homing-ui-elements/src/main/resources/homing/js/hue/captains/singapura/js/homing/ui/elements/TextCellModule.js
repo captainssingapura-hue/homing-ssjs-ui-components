@@ -1,15 +1,15 @@
 // =============================================================================
 // TextCell — a table cell's words: plain text set in its cell, a fact in its row or the name heading its column. A Text
 // (a simple component) on a <div>, in the text cell's look; its room is its holder's (RFC 0067, D42).
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 //
-//   var x = new TextCell(TextCellFactory.create(branch, "cell"), { text: "…" }, ROLE.VALUE);   // or ROLE.TITLE, ROLE.STANDALONE
-//   x.text  x.size
+//   var t = new TextCell(branch.elementMaker("x"), new FixedTextCell(), me.place(FixedTextCell));   in a slot
+//   var t = new TextCell(branch.elementMaker("x"), new FixedTextCell());                     at the root
+//   t.text = "…"   t.size = -1
 // =============================================================================
 
 class TextCell extends Text {
-    static LEAF = "text-cell";
     static TAG = "div";
-}
 
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const TextCellFactory = new SimpleComponentFactory(TextCell);
+    constructor(make, fixed, place) { super(make, fixed, FixedTextCell, place ?? manageTextCell); }
+}

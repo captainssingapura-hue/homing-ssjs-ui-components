@@ -1,19 +1,19 @@
 // =============================================================================
-// PrimaryButton — the primary button: a Button (a simple component) in the primary look,
-// which also has an extent - how much of its word it wears.
+// PrimaryButton — the primary button: a Button that leads, coloured by its word.
+// On the style manager (RFC 0071): its module stamped with its header (D19),
+// its fixed type and its binding the header's.
 //
-//   var b = new PrimaryButton(PrimaryButtonFactory.create(branch, "go"), { label: "Go" }, ROLE.STANDALONE);
-//   b.setOnClick(handler)
-//   b.enabled  b.size  b.label  b.extent
+//   var b = new PrimaryButton(branch.elementMaker("go"), new FixedPrimaryButton(), me.place(FixedPrimaryButton));   in a slot
+//   var b = new PrimaryButton(branch.elementMaker("go"), new FixedPrimaryButton());                     at the root
+//   b.label = "Go"   b.enabled = false   b.size = -1   b.extent = 0.6
+//   b.onChange(StateClicks, listener)   a press: its clicks counted up
 // =============================================================================
 
 class PrimaryButton extends Button {
-    static LEAF = "primary-button";
-    static DEGREES = Object.freeze(["size", "extent"]);
+    static DEGREES = Object.freeze([ExtentSize, ExtentColour]);
 
-    get extent() { return this._degrees.extent; }
-    set extent(t) { this._degree("extent", t); }
+    constructor(make, fixed, place) { super(make, fixed, FixedPrimaryButton, place ?? managePrimaryButton); }
+
+    get extent() { return this._degree(ExtentColour); }
+    set extent(t) { this._setDegree(ExtentColour, t); }
 }
-
-/** Its companion: makes the <button> it is realized on, on its owner's branch, under its owner's name. */
-const PrimaryButtonFactory = new SimpleComponentFactory(PrimaryButton);

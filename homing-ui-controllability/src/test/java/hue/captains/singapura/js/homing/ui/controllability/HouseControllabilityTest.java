@@ -81,7 +81,7 @@ class HouseControllabilityTest {
 
     @Test
     void theCommonLeavesAlone_onThisClasspath() {
-        assertEquals(8, HouseControllability.INSTANCE.classification().declared().size(),
+        assertEquals(6, HouseControllability.INSTANCE.classification().declared().size(),
                 "no module that extends the house is here: the types of its leaves are declared beside them, and read where they are");
     }
 
@@ -90,13 +90,12 @@ class HouseControllabilityTest {
         var expected = new LinkedHashMap<String, String>();
         for (String b : List.of("plain-button", "primary-button", "secondary-button", "danger-button", "warning-button", "success-button", "slider"))
             expected.put(b, "switchable");
-        expected.put("panel", "emphasised");
-        expected.put("edge-strip", "holdable");
-        expected.put("dialog", "modal-overlay");
+        expected.put("expandable-footer-area", "holdable");
+        expected.put("modal-window", "overlay");   // the dialog reduced: always modal, opened and closed (23 Oct)
         expected.put("context-menu", "overlay");
         expected.put("floating-pane", "placeable");
         expected.put("close-icon", "plain");   // a part only, shown in what holds it: nothing to control but its colour (D52)
-        for (String p : List.of("plain-card", "clickable-card", "summary-view", "slider-group")) expected.put(p, "plain");
+        for (String p : List.of("plain-card", "clickable-card", "summary-view")) expected.put(p, "plain");
         var actual = new LinkedHashMap<String, String>();
         for (String token : expected.keySet()) actual.put(token, typeOf(token));
         assertEquals(expected, actual);
@@ -115,7 +114,7 @@ class HouseControllabilityTest {
         assertEquals(List.of("colour", "size", "enabled"), optionsOf("danger-button"));
         assertEquals(List.of("size", "aspect"), optionsOf("clickable-card"));
         assertEquals(List.of("size"), optionsOf("summary-view"));
-        assertEquals(List.of("open-modal", "open", "close"), optionsOf("dialog").subList(optionsOf("dialog").size() - 3, optionsOf("dialog").size()));
+        assertEquals(List.of("open", "close"), optionsOf("modal-window").subList(optionsOf("modal-window").size() - 2, optionsOf("modal-window").size()));
     }
 
     private static List<String> optionsOf(String token) {
@@ -151,7 +150,7 @@ class HouseControllabilityTest {
     void aTypeNamingADegree_andANodeClassifiedTwice_areRefused() {
         var degree = assertThrows(RefusedControls.class, () -> new ControlType("sized", List.of(HouseControlOptions.Size.INSTANCE)));
         assertTrue(degree.getMessage().contains("the axes are the component's own"), degree.getMessage());
-        var at = new ControlTypeAt(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.Panel.INSTANCE, HouseControllability.PLAIN);
+        var at = new ControlTypeAt(hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers.ExpandableFooterArea.INSTANCE, HouseControllability.PLAIN);
         var twice = assertThrows(RefusedControls.class, () -> new ControlClassification(List.of(at, at), HouseControllability.PLAIN));
         assertTrue(twice.getMessage().contains("declared twice"), twice.getMessage());
     }

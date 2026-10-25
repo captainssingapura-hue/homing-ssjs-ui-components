@@ -1,0 +1,91 @@
+package hue.captains.singapura.js.homing.design.content;
+
+import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
+import hue.captains.singapura.js.homing.design.semantic.TypeArguments;
+import hue.captains.singapura.js.homing.design.spec.CssResolution;
+import hue.captains.singapura.js.homing.design.spec.ElementPath;
+import hue.captains.singapura.js.homing.design.spec.SpecRegistry;
+import hue.captains.singapura.js.homing.design.spec.house.HouseSpec;
+import hue.captains.singapura.js.homing.design.styles.CastingStyle;
+import hue.captains.singapura.js.homing.design.styling.CastingCss;
+import hue.captains.singapura.js.homing.design.styling.StyleManager;
+import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
+import hue.captains.singapura.js.homing.ui.taxonomy.IconLeaf;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * The gauge, while today's stack stands (RFC 0067, D53, D54): in every style, each element's content - what the typed spec
+ * stack's resolver finds for the implementation the element wears - is exactly the CSS today's registry gives the
+ * element's casting. It goes when today's stack does.
+ *
+ * <p>But for the icons (D56): an icon's look is base's in every style, the same for every icon, and what it shows is its
+ * icon palette's - so an icon element is held to today's base CSS for the icon, its comment and the glyph on its
+ * {@code ::before} aside. That each palette's glyph is the one today's sheet drew is HouseIconPalettesTest's.
+ *
+ * <p>And for the rooms (owner, 20 Oct): a panel's body, a slider group's rack and a strip's tail are no parts now but
+ * their owners' own, their rules in their owners' looks ({@code $casting__name}) - copied verbatim from the leaves' when
+ * they moved - so an owner's look is held to today's with its rooms' rules aside.
+ */
+class TodayTest {
+
+    private static final SpecRegistry SPEC = HouseSpec.INSTANCE.registry();
+    private static final StyleManager TODAY = HouseStyles.INSTANCE.styling().manager();
+
+    @Test
+    void everyElementInEveryStyle_isGivenTodaysCss() {
+        var wrong = new ArrayList<String>();
+        int held = 0;
+        for (DesignStyle<?> s : SPEC.styles())
+            for (ElementPath e : SPEC.elements()) {
+                boolean icon = e.casting().component() instanceof IconLeaf;
+                CastingStyle<?, ?, ?, ?> today = TODAY.resolve(icon ? SPEC.base() : s, e.casting()).css();
+                String css = CastingCss.INSTANCE.read(today.getClass())
+                        .orElseThrow(() -> new IllegalStateException(today.getClass().getName() + " has no CSS today"));
+                String then = icon ? withoutGlyph(css) : css;
+                switch (SPEC.content(s, e)) {
+                    case CssResolution.Found f when roomsAside(icon ? withoutGlyph(f.text()) : f.text()).equals(roomsAside(then)) -> held++;
+                    case CssResolution.Found f -> wrong.add(s.token() + " " + e.token() + ": " + f.resource() + " is not today's " + today.getClass().getName());
+                    case CssResolution r -> wrong.add(s.token() + " " + e.token() + ": " + r);
+                }
+            }
+        assertTrue(wrong.isEmpty(), wrong.size() + " differ:\n" + String.join("\n", wrong.subList(0, Math.min(40, wrong.size()))));
+        System.out.println("[today] " + held + " elements' content, in every style, exactly today's CSS");
+    }
+
+    /**
+     * Each element's CSS is of the layer and the component today's is (RFC 0067, D54): an implementation is its
+     * component's, whatever role it is worn in, so its role is no longer in its type - today's CSS of a role drawn as
+     * its component is, is the component's own here.
+     */
+    @Test
+    void everyElementInEveryStyle_wearsCssOfTodaysLayerAndComponent() {
+        var wrong = new ArrayList<String>();
+        for (DesignStyle<?> s : SPEC.styles())
+            for (ElementPath e : SPEC.elements()) {
+                SpecRegistry.Worn now = SPEC.worn(s, e);
+                boolean icon = e.casting().component() instanceof IconLeaf;
+                List<Class<?>> then = TypeArguments.INSTANCE.of(TODAY.resolve(icon ? SPEC.base() : s, e.casting()).css().getClass(), CastingStyle.class);
+                List<Class<?>> mine = List.of(now.layer().getClass(), now.component().getClass());
+                if (!mine.equals(then.subList(1, 3))) wrong.add(s.token() + " " + e.token() + ": " + names(mine) + ", today " + names(then.subList(1, 3)));
+            }
+        assertTrue(wrong.isEmpty(), wrong.size() + " differ:\n" + String.join("\n", wrong.subList(0, Math.min(40, wrong.size()))));
+        System.out.println("[today] " + SPEC.styles().size() * SPEC.elements().size() + " elements' CSS of today's layer and component");
+    }
+
+    /** An icon's CSS without its leading comment and the glyph on its ::before: the rules its look has, the same for every icon. */
+    private static String withoutGlyph(String css) {
+        return css.replace("\r\n", "\n").replaceFirst("^/\\*.*?\\*/\n", "").replaceFirst("\n\n    &::before \\{\n        content: \"[^\"]*\";\n    }\n", "\n");
+    }
+
+    /** A look with its rooms' rules aside - each {@code $casting__name} rule and its comment - its ends trimmed. */
+    private static String roomsAside(String css) {
+        return css.replace("\r\n", "\n").replaceAll("\\n/\\*(?:(?!\\*/)[\\s\\S])*\\*/\\n\\$casting__[a-z0-9-]+ \\{[^}]*\\}\\n", "\n").strip();
+    }
+
+    private static List<String> names(List<Class<?>> types) { return types.stream().map(Class::getSimpleName).toList(); }
+}

@@ -6,7 +6,6 @@ import hue.captains.singapura.js.homing.ui.icons.UiIconsStyleDeclaration;
 import hue.captains.singapura.js.homing.ui.jarinstance.JarInstance;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiElementsComponentModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.UiMonitorsComponentModule;
 import org.junit.jupiter.api.BeforeAll;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public abstract class UiMonitorsJsTest extends JsModuleTestBase {
 
     @BeforeAll
     static void theJarsInstance_installed() {
-        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiMonitorsComponentModule.INSTANCE),
+        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE),
                 List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiMonitorsStyleDeclaration.INSTANCE));
     }
 }

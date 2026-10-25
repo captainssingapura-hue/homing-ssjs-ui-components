@@ -1,26 +1,26 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.ui.elements.KickerModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HousePanes;
 
-import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.Widget;
+import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
+import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
-import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
 /**
- * {@code TabOpener}, what a new tab holds until you say what it should hold.
+ * {@code TabOpener}, a transient widget (owner, 22 Oct), its caller's - a
+ * workspace's or an app's, never its pane's, which stays dumb: what a new tab
+ * holds until you say what it should hold.
  * A strip's plus cannot know which of a page's kinds was meant, and guessing
  * one is worse than asking: so the plus opens a tab with this in it, and
  * picking from it turns that tab into the thing picked. The chip you made is
@@ -40,11 +40,12 @@ import java.util.List;
  * widget rather than out of the room. That seam is wired here once, so a page
  * need not wire it.</p>
  */
-public record TabOpenerModule() implements DomModule<TabOpenerModule>, ImplFor<HousePanes.TabOpener> {
+@ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 11,
+        reason = "It makes elements of its own and by a companion, places them, wears classes of its own and touches its components' elements: a component until 22 Oct, it waits for its port as a widget - the designed containers, and the widget slot - to draw only components.")
+public record TabOpenerModule() implements Widget<Widget._None, TabOpenerModule> {
 
     /** The class. */
-    public record TabOpener() implements BranchComponent<TabOpenerModule>, NeedKeyboard {
-        @Override public String summary() { return "A new tab's chooser: the kinds a source can make, and the one picked becomes this very tab."; }
+    public record TabOpener() implements Widget._Class<Widget._None, TabOpenerModule>, NeedKeyboard {
         /**
          * Two Escapes and nothing else. The choices are native buttons, so the
          * browser's own keys walk them and press them and this declares none
@@ -61,17 +62,18 @@ public record TabOpenerModule() implements DomModule<TabOpenerModule>, ImplFor<H
 
     public static final TabOpenerModule INSTANCE = new TabOpenerModule();
 
+    @Override public String title() { return "Tab opener"; }
+
     @Override
     public ImportsFor<TabOpenerModule> imports() {
         return ImportsFor.<TabOpenerModule>builder()
-                .add(new ModuleImports<>(List.of(new KickerModule.Kicker(), new KickerModule.KickerFactory()), KickerModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),
                         new PaneStyles.mtp_opener_note(),
                         new PaneStyles.mtp_opener_grid()
                 ), PaneStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
                 .build();

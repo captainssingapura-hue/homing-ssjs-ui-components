@@ -16,7 +16,7 @@
          preferences, so it lives where they do - for now. -->
     <groupId>io.github.captainssingapura-hue.homing.js</groupId>
     <artifactId>homing-components</artifactId>
-    <version>LOCAL-SNAPSHOT</version>
+    <version>LOCAL-SNAPSHOT-T1</version>
     <packaging>pom</packaging>
     <description>
         RFC 0066 Episode 3, layer 2 - the DOM-level components, one module
@@ -61,6 +61,8 @@
         <module>homing-style-retro-futurism</module>
         <module>homing-style-sketchy</module>
         <module>homing-ui-modules</module>
+        <module>homing-style-spec</module>
+        <module>homing-style-content</module>
         <module>homing-components-conformance</module>
     </modules>
 
@@ -70,7 +72,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- The substrate, from the core repo. Its own version, not ours:
              this repo releases on its own clock. -->
-        <homing.core.version>LOCAL-SNAPSHOT</homing.core.version>
+        <homing.core.version>LOCAL-SNAPSHOT-T1</homing.core.version>
         <junit.version>5.11.3</junit.version>
         <jacoco.version>0.8.14</jacoco.version>
         <graalvm.version>24.1.1</graalvm.version>

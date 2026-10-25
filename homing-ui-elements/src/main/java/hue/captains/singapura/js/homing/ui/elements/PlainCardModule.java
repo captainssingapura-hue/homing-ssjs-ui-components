@@ -24,14 +24,13 @@ public record PlainCardModule() implements DomModule<PlainCardModule>, ImplFor<H
         @Override public String summary() { return "The basic card: a frame the caller fills, at the design's measure and aspect, what is inside scrolling beyond it."; }
     }
 
-    public record PlainCardFactory() implements Exportable._Constant<PlainCardModule> {}
 
     public static final PlainCardModule INSTANCE = new PlainCardModule();
 
     @Override
     public ImportsFor<PlainCardModule> imports() {
         return ImportsFor.<PlainCardModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ElementStyles.el_card()), ElementStyles.INSTANCE))
                 .build();
@@ -39,6 +38,6 @@ public record PlainCardModule() implements DomModule<PlainCardModule>, ImplFor<H
 
     @Override
     public ExportsOf<PlainCardModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new PlainCard(), new PlainCardFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new PlainCard()));
     }
 }

@@ -9,12 +9,11 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 /**
- * The slider in editorial: the house's value along a scale - its row, off, and the keys' marks; its rail, groove, fill
- * and knob are its parts'. Whole: every property its look has (D9).
+ * The slider in editorial: the house's value along a scale - its row, and off; its label, its range
+ * and its readout are its parts' (23 Oct). Whole: every property its look has (D9).
  */
 public record Slider() implements CastingStyle<BaseScheme, Editorial, HouseControls.Slider, RoleRoot> {
     @Override public StylingRes<BaseScheme, HouseControls.Slider> style() {
-        return new StylingRes.CssContent<>(
-                new BaseColours.Accent(), new BaseColours.KeysCandidate(), new BaseColours.KeysLent());
+        return new StylingRes.CssContent<>();
     }
 }

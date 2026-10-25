@@ -14,7 +14,6 @@ import hue.captains.singapura.js.homing.core.StandardJsModuleType;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiElementsComponentModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.UiControlPanelComponentModule;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsStyleDeclaration;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsStyleDeclaration;
 import hue.captains.singapura.js.homing.ui.jarinstance.JarInstance;
@@ -37,7 +36,7 @@ class UiControlPanelCrateConformanceTest {
     /** The jar's own instance (D51): the catalogue a page has is made from its taxonomy. */
     @BeforeAll
     static void theJarsInstance_installed() {
-        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiControlPanelComponentModule.INSTANCE),
+        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE),
                 List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE));
     }
 
@@ -86,7 +85,7 @@ class UiControlPanelCrateConformanceTest {
         assertTrue(js.contains("\"colour\": Object.freeze({ category: \"degrees\", means: \"extent\", rest: 1, method: \"extent\", label: \"Colour\" })"), js);
         assertTrue(js.contains("\"enabled\": Object.freeze({ category: \"states\", means: \"switch\", rest: true, method: \"setOn\", label: \"Enabled\" })"), js);
         assertTrue(js.contains("\"ask\": Object.freeze({ category: \"asking\", means: \"question\", rest: null, method: \"ask\", label: \"What does it show?\" })"), js);
-        assertTrue(js.contains("\"modal-overlay\": Object.freeze([\"open-modal\", \"open\", \"close\"])"), js);
+        assertTrue(js.contains("\"overlay\": Object.freeze([\"open\", \"close\"])"), js);   // the modal window always modal, an overlay (23 Oct)
         assertTrue(js.contains("\"plain\": Object.freeze([])"), js);
         // each leaf in the group of its answer
         assertTrue(java.util.regex.Pattern.compile("\\[\"switchable\", \\[[^\\]]*\"danger-button\"").matcher(js).find(), js);

@@ -1,0 +1,17 @@
+package hue.captains.singapura.js.homing.design.spec.styles.neofuturism;
+
+import hue.captains.singapura.js.homing.design.color.ColorLeaf;
+import hue.captains.singapura.js.homing.design.spec.CssImplementation;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours;
+import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
+import hue.captains.singapura.js.homing.ui.styles.NeoFuturism;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseItems;
+
+import java.util.List;
+
+/** neo-futurism's implementation of check-menu-item: CSS of its own - its content apart, the colours it draws with typed here. */
+public record CheckMenuItem() implements CssImplementation<BaseScheme, NeoFuturism, HouseItems.CheckMenuItem> {
+    @Override public List<ColorLeaf<? super BaseScheme, ?, ?>> colours() {
+        return List.of(new BaseColours.Border(), new BaseColours.Accent(), new BaseColours.AccentWashSoft(), new BaseColours.AccentWashStrong());
+    }
+}

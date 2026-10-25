@@ -8,29 +8,27 @@
 // never stretch it; what is inside scrolls beyond it. It is still under the
 // hand: a card that does something when pressed is the clickable card.
 //
-//   var card = new PlainCard(branch.elementMaker("card"), { size: 0, aspect: 0 });
+//   var card = new PlainCard(branch.elementMaker("plain-card"), new FixedPlainCard(), me.place(FixedPlainCard));
 //   card.el.appendChild(new SummaryView(branch.createBranch("summary"), { title: "Grid" }).root);
 //   card.el  card.size  card.aspect
+// On the style manager (RFC 0071): its module stamped with its header (D19).
 // =============================================================================
 
 class PlainCard extends SimpleComponent {
-    static LEAF = "plain-card";
     static TAG = "div";
-    static DEGREES = Object.freeze(["size", "aspect"]);
+    static DEGREES = Object.freeze([ExtentSize, ExtentAspect]);
     static BEHAVIOR = MarkBehavior;
 
-    constructor(make, props, role) {
-        super(make, props, role);
+    constructor(make, fixed, place) {
+        super(make, fixed, FixedPlainCard, place ?? managePlainCard);
         css.addClass(this.el, el_card);   // what is inside fits it, and scrolls beyond it
     }
 
-    get size() { return this._degrees.size; }
-    set size(s) { this._degree("size", s); }
+    get size() { return this._degree(ExtentSize); }
+    set size(s) { this._setDegree(ExtentSize, s); }
 
     /** −1 the tallest the design allows, 0 square, 1 the widest. */
-    get aspect() { return this._degrees.aspect; }
-    set aspect(a) { this._degree("aspect", a); }
+    get aspect() { return this._degree(ExtentAspect); }
+    set aspect(a) { this._setDegree(ExtentAspect, a); }
 }
 
-/** Its companion: makes the <div> it is realized on, on its owner's branch, under its owner's name. */
-const PlainCardFactory = new SimpleComponentFactory(PlainCard);

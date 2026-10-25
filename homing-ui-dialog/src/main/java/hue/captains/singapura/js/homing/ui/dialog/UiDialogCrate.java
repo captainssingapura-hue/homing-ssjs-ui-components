@@ -25,15 +25,19 @@ public final class UiDialogCrate implements Crate, ComponentVehicle {
     @Override public String name() { return "homing-ui-dialog"; }
 
     @Override public List<Crate> requires() {
-        return List.of(ServerCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE, UiFloatingCrate.INSTANCE);
+        return List.of(ServerCrate.INSTANCE, UiLookCrate.INSTANCE, UiElementsCrate.INSTANCE, UiFloatingCrate.INSTANCE, hue.captains.singapura.js.homing.ui.panes.UiPanesCrate.INSTANCE);
     }
 
     @Override public C0_Components<?> components() { return UiDialogComponents.INSTANCE; }
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(DialogModule.INSTANCE),
-                CrateEntry.of(ModalityModule.INSTANCE),
-                CrateEntry.of(DialogStyles.INSTANCE));
+                // the modal window: what holds the page while it is open (23 Oct)
+                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.modal.ModalWindowModule.INSTANCE),
+                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.modal.ModalityModule.INSTANCE),
+                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.modal.ModalStyles.INSTANCE),
+                // the standard footer: what ends a matter
+                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.footer.ActionBarModule.INSTANCE),
+                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.footer.FooterStyles.INSTANCE));
     }
 }

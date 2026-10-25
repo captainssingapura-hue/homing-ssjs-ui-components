@@ -4,8 +4,6 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
-import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
@@ -19,9 +17,7 @@ public record ItemBehaviorModule() implements DomModule<ItemBehaviorModule> {
 
     @Override
     public ImportsFor<ItemBehaviorModule> imports() {
-        return ImportsFor.<ItemBehaviorModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .build();
+        return ImportsFor.noImports();
     }
 
     @Override public ExportsOf<ItemBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ItemBehavior())); }

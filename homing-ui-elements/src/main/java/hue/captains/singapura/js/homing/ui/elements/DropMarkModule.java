@@ -19,20 +19,19 @@ public record DropMarkModule() implements DomModule<DropMarkModule>, ImplFor<Hou
         @Override public String summary() { return "Where a dragged thing would land."; }
     }
 
-    public record DropMarkFactory() implements Exportable._Constant<DropMarkModule> {}
 
     public static final DropMarkModule INSTANCE = new DropMarkModule();
 
     @Override
     public ImportsFor<DropMarkModule> imports() {
         return ImportsFor.<DropMarkModule>builder()
-                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent(), new SimpleComponentModule.SimpleComponentFactory()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();
     }
 
     @Override
     public ExportsOf<DropMarkModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new DropMark(), new DropMarkFactory()));
+        return new ExportsOf<>(INSTANCE, List.of(new DropMark()));
     }
 }

@@ -50,17 +50,25 @@ class UiPanesCrateConformanceTest {
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;
         }
-        assertEquals(20, checked, "the pane, the single-tab pane, its tabs' parts, the strip, the tab and what it does, the tab-pane, the register, the hand, the window, the opener and the picker, the events, the drag, the tear, the fit, the keys, the menus, the merge and the source");
+        assertEquals(29, checked, "the pane and what it does, its tab menu (23 Oct), its floaters (23 Oct), the strip's slide, the single-tab pane, its tabs' parts, the strip and what it does, the floating pane and what it does, its head and what it does, the tab and what it does, the tab-pane, the register, the hand, the window, the opener and the picker, the events, the drag, the tear, the fit, the keys, the menus, the merge and the source");
     }
 
     @Test
     void thePaneAndTheStripImportEveryClassDeclared() {
-        var imported = java.util.stream.Stream.of(MultiTabPaneModule.INSTANCE.imports(), PaneTabsModule.INSTANCE.imports(), TabStripModule.INSTANCE.imports(),
+        var imported = java.util.stream.Stream.of(MultiTabPaneModule.INSTANCE.imports(), PaneTabsModule.INSTANCE.imports(), TabStripModule.INSTANCE.imports(), TabStripSlideModule.INSTANCE.imports(),
+                                                  FloatingPaneModule.INSTANCE.imports(), TitleBarModule.INSTANCE.imports(),
                                                   TabOpenerModule.INSTANCE.imports(), TabPickerModule.INSTANCE.imports(),
                                                   TabModule.INSTANCE.imports(), TabPaneModule.INSTANCE.imports())
                 .flatMap(im -> im.getAllImports().values().stream())
                 .flatMap(mi -> mi.allImports().stream()).map(e -> e.getClass().getSimpleName()).toList();
+        // the bar ported a step at a time (22 Oct): what its old count, close and landing wore waits for their port - and the
+        // icon a chip held, with its own step
+        var waiting = java.util.Set.of("mtp_rail", "mtp_strip_tail", "mtp_bar_close", "mtp_pill", "mtp_drop_mark",
+                "mtp_chip_icon", "mtp_chip_icon_on",
+                "fp_icon", "fp_icon_on");   // the floating pane's icon, with its own step (23 Oct); its grip become its eight handles (23 Oct)
+        var unimported = new java.util.TreeSet<String>();
         for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses())
-            assertTrue(imported.contains(c.getClass().getSimpleName()), c.getClass().getSimpleName() + " is declared but not imported");
+            if (!imported.contains(c.getClass().getSimpleName())) unimported.add(c.getClass().getSimpleName());
+        assertEquals(new java.util.TreeSet<>(waiting), unimported, "declared, and imported by none but those waiting for the bar's port");
     }
 }

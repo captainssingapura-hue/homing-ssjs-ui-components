@@ -5,6 +5,10 @@
 A part that makes up its owner's room: its bands, its layers, what it shows, its members, the
 lines between them, and what the hand takes hold of.
 
+## VoidRole
+
+No role: the part is placed where its owner puts it, and nothing more is said of it - its look its own, whatever holds it. For a part whose owner does not care what role it plays.
+
 ## Bands
 
 Strips of the owner's room, each with a job of its own.
@@ -83,6 +87,10 @@ Lays the owner's regions out, and keeps them laid out as they change.
 
 What the owner holds between its head and its foot: the content it is there for.
 
+## Umbrella
+
+Holds a layout, round the whole of it: the room about it is the umbrella's.
+
 ## Media
 
 A picture or a film that stands for the owner or shows it: a card's cover, an item's thumbnail, a
@@ -117,6 +125,10 @@ One tabbed pane, in one region of the owner.
 ## Cell
 
 One region of a grid, drawn to show its place.
+
+## SubContainer
+
+Stands at one of a layout's positions, holding what is placed there - the same kind at every position.
 
 ## Group
 
@@ -185,6 +197,11 @@ The picture on the owner's knob: a grip to take it by, or what it measures - a s
 ## Keys
 
 Shows that the keyboard is with the owner: what the user types goes there.
+
+## Chosen
+
+Shows that the owner, a choice, is chosen: its check, in its leading place in place of its own
+picture, while it is.
 
 ## Disclose
 

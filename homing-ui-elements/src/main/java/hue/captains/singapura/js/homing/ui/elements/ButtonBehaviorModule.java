@@ -4,15 +4,13 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
-import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
 
 import java.util.List;
 
 /**
- * What a button does: a press acts while it is enabled. Shared by the button leaves - the toggle's press its own; it reads
- * the state through the button, keeps none of its own, and imports no style - it never touches the
- * look.
+ * What a button does: a press is told to the button, which answers it (RFC 0071) - its click while it is enabled, the
+ * toggle turning over first. Shared by the button leaves; it keeps no state of its own, names no node, and imports no
+ * style - it never touches the style.
  */
 public record ButtonBehaviorModule() implements DomModule<ButtonBehaviorModule> {
 
@@ -22,9 +20,7 @@ public record ButtonBehaviorModule() implements DomModule<ButtonBehaviorModule> 
     public static final ButtonBehaviorModule INSTANCE = new ButtonBehaviorModule();
 
     @Override public ImportsFor<ButtonBehaviorModule> imports() {
-        return ImportsFor.<ButtonBehaviorModule>builder()
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .build();
+        return ImportsFor.noImports();
     }
 
     @Override public ExportsOf<ButtonBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ButtonBehavior())); }

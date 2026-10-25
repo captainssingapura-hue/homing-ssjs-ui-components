@@ -6,8 +6,6 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import java.util.List;
@@ -21,7 +19,7 @@ import java.util.List;
  */
 public record SummaryViewModule() implements DomModule<SummaryViewModule>, ImplFor<HouseContainers.SummaryView> {
 
-    /** {@code new SummaryView(branch, { title, tag, text, link, size })}; {@code root}; size, title, dispose. */
+    /** {@code new SummaryView(branch, new FixedSummaryView(), place?)}; {@code root}; {@code title}, {@code tag}, {@code text}, {@code link}, {@code size}, {@code dispose()}. */
     public record SummaryView() implements BranchComponent<SummaryViewModule> {
         @Override public String summary() { return "Sums one thing up, laid out whole: a title and a tag beside it, a line of summary, a way to the thing - shown on any container."; }
     }
@@ -31,8 +29,8 @@ public record SummaryViewModule() implements DomModule<SummaryViewModule>, ImplF
     @Override
     public ImportsFor<SummaryViewModule> imports() {
         return ImportsFor.<SummaryViewModule>builder()
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Heading4Module.Heading4()), Heading4Module.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BadgeModule.Badge()), BadgeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))

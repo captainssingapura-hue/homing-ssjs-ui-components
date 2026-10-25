@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.FamilyHead;
 import hue.captains.singapura.js.homing.component.taxonomy.L1_ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.L2_ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
+import hue.captains.singapura.js.homing.component.taxonomy.WornByTheDocument;
 
 import java.util.List;
 
@@ -62,6 +63,12 @@ public final class HouseBranches {
         @Override public Root parent() { return Root.INSTANCE; }
     }
 
+    /** One choice of a menu, of two kinds fixed for its life: one that does or opens, one that is checked or not (owner, 23 Oct). */
+    public record MenuItem() implements L2_ComponentBranch<Item> {
+        public static final MenuItem INSTANCE = new MenuItem();
+        @Override public Item parent() { return Item.INSTANCE; }
+    }
+
     /** What holds other components and gives them their place. */
     public record Container() implements L1_ComponentBranch<Root> {
         public static final Container INSTANCE = new Container();
@@ -93,21 +100,9 @@ public final class HouseBranches {
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
-    /** A container that divides its room between others. */
-    public record Split() implements L2_ComponentBranch<Container>, FamilyHead {
-        public static final Split INSTANCE = new Split();
-        @Override public Container parent() { return Container.INSTANCE; }
-    }
-
     /** A thin container along an edge: a strip, a bar of actions. */
     public record Bar() implements L2_ComponentBranch<Container>, FamilyHead {
         public static final Bar INSTANCE = new Bar();
-        @Override public Container parent() { return Container.INSTANCE; }
-    }
-
-    /** A container that edits one setting. */
-    public record Field() implements L2_ComponentBranch<Container>, FamilyHead {
-        public static final Field INSTANCE = new Field();
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
@@ -117,15 +112,9 @@ public final class HouseBranches {
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
-    /** A container that fills what holds it, with no frame of its own: the page's ground, a panel. */
+    /** A container that fills what holds it, with no frame of its own: the plain container, a grid's cell. */
     public record Surface() implements L2_ComponentBranch<Container>, FamilyHead {
         public static final Surface INSTANCE = new Surface();
-        @Override public Container parent() { return Container.INSTANCE; }
-    }
-
-    /** A container that holds a set of controls as one: a group of sliders, a control panel. */
-    public record Cluster() implements L2_ComponentBranch<Container>, FamilyHead {
-        public static final Cluster INSTANCE = new Cluster();
         @Override public Container parent() { return Container.INSTANCE; }
     }
 
@@ -141,10 +130,11 @@ public final class HouseBranches {
         @Override public Root parent() { return Root.INSTANCE; }
     }
 
-    /** Words, and the numbers read as words. */
+    /** Words, and the numbers read as words - at a size: a pane's title follows its own. */
     public record Text() implements L1_ComponentBranch<Root>, FamilyHead {
         public static final Text INSTANCE = new Text();
         @Override public Root parent() { return Root.INSTANCE; }
+        @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
 
     /** Words that say what a container holds, read first: a leaf for each level of a page's outline. */
@@ -162,6 +152,16 @@ public final class HouseBranches {
     /** A small sign: an icon, a tick, a lamp, an indicator. */
     public record Mark() implements L1_ComponentBranch<Root>, FamilyHead {
         public static final Mark INSTANCE = new Mark();
+        @Override public Root parent() { return Root.INSTANCE; }
+    }
+
+    /**
+     * What the document itself wears (RFC 0071 port, owner 24 Oct: "go with :root, keep it out of runtime"): its leaves are
+     * a style's CSS and nothing else, each ruled on {@code :root} by the sheet writer - no module, no element, no class.
+     * The page's ground is one. Heads its own family: the ground's CSS in the document's file.
+     */
+    public record Document() implements L1_ComponentBranch<Root>, WornByTheDocument, FamilyHead {
+        public static final Document INSTANCE = new Document();
         @Override public Root parent() { return Root.INSTANCE; }
     }
 

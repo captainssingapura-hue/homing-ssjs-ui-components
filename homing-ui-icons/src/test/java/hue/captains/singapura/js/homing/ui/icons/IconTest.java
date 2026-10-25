@@ -17,8 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The Icon component over a fake element (RFC 0067, D52): the icon handed in, one of ICON - each a leaf of the Icon
  * branch - its box and its casting's class worn and taken off; anything not an icon of the instance's refused; a token
- * looked up for a caller handed one as data. Over the jar's own instance: the house's fifteen icons.
+ * looked up for a caller handed one as data. Over the jar's own instance: the house's seventeen icons.
  */
+@org.junit.jupiter.api.Disabled("RFC 0071 port: these load the old simple component as a script - props, Look, companions; the base is ported, so they wait to be ported or retired with their modules, the components lab holding what they checked (the port journal)")
 class IconTest extends UiIconsJsTest {
 
     private static final String P = "/homing/js/hue/captains/singapura/js/homing/ui/icons/";
@@ -75,7 +76,7 @@ class IconTest extends UiIconsJsTest {
         assertTrue(eval("Icon.of('disclose-icon') === ICON.DISCLOSE_ICON").asBoolean());
         var none = assertThrows(PolyglotException.class, () -> eval("Icon.of('sparkle-icon')"));
         assertTrue(none.getMessage().contains("no icon 'sparkle-icon'"), none.getMessage());
-        assertEquals(15, eval("Object.keys(ICON).length").asInt(), "the jar's instance: the house's fifteen");
+        assertEquals(17, eval("Object.keys(ICON).length").asInt(), "the jar's instance: the house's seventeen, the pacman and the preferences among them (21 Oct)");
         assertFalse(eval("'COLUMN_ICON' in ICON").asBoolean(), "the panes' icons are the panes' module's");
         assertEquals("span", eval("Icon.TAG").asString());
         assertThrows(PolyglotException.class, () -> eval("new Icon(null, ICON.ADD_ICON)"));

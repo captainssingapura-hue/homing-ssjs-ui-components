@@ -2,33 +2,36 @@
 // SiteBar — heads a site's pages: its brand at the start, the way to where the
 // user is across the middle, and what its owner hands it at its end - a site's
 // preferences - in the ink written on it, which what it carries takes. A
-// branch component: its owner makes a sub-branch for it and hands it in.
+// composed component on the style manager (RFC 0071): it takes a branch of its
+// own and makes on it its <header> and its parts - its brand, the house's, cast
+// as the way home; its trail, the house's, cast as the path - each placed along
+// its slot by its own reference.
 //
-//   var bar = new SiteBar(branch, { brand: { label, home }, crumbs })
+//   var bar = new SiteBar(branch.createBranch("bar"), new FixedSiteBar(), me.place(FixedSiteBar));
 //   bar.root          the bar, a <header>
+//   bar.brand         its brand: bar.brand.label, bar.brand.home
 //   bar.trail         its trail: trail.draw(crumbs) draws the way afresh
 //   bar.end(c)        c at its end: a component, by its element (el) or its tree (root)
 //
-// Its brand is the house's, cast as the way home; its trail the house's, cast
-// as the path. The bar's look is the house's; its classes only place. `css` is
-// injected with the styles import.
+// The bar's classes only place. `css` is injected with the styles import.
 // =============================================================================
 
 const _siteBarOwner = Object.freeze({ toString: () => "siteBar" });
 
-class SiteBar {
-    static LEAF = "site-bar";
+class SiteBar extends SimpleComponent {
+    static TAG = "header";
+    static BEHAVIOR = MarkBehavior;
 
-    constructor(branch, props) {
-        if (!branch) throw new Error("[SiteBar] a branch of its own is required");
-        var p = props || {};
+    constructor(branch, fixed, place) {
+        if (!branch || typeof branch.elementMaker !== "function")
+            throw new TypeError("[SiteBar] a composed component takes a branch of its own - branch.createBranch(name) - and makes its parts on it");
         branch.activate(_siteBarOwner);
-        var el = branch.createElement("bar", "header");
-        css.addClass(el, el_site_bar);
-        new Look(SiteBar, ROLE.STANDALONE).wear(el);
-        this.root = el;
-        this._hold(new Brand(branch.createBranch("brand"), p.brand || {}, ROLE.HOME), el_site_bar_start);
-        this.trail = new Trail(branch.createBranch("trail"), { crumbs: p.crumbs || [] }, ROLE.PATH);
+        super(branch.elementMaker("bar"), fixed, FixedSiteBar, place ?? manageSiteBar);
+        css.addClass(this.el, el_site_bar);
+        this.root = this.el;
+        this.brand = new Brand(branch.createBranch("brand"), new FixedBrand(), this._place(FixedBrand));
+        this._hold(this.brand, el_site_bar_start);
+        this.trail = new Trail(branch.createBranch("trail"), new FixedTrail(), this._place(FixedTrail));
         this._hold(this.trail, el_site_bar_way);
     }
 

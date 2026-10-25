@@ -1,40 +1,31 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
-import hue.captains.singapura.js.homing.ui.look.IconsModule;
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.elements.PillModule;
-import hue.captains.singapura.js.homing.ui.elements.DropMarkModule;
-
 import hue.captains.singapura.js.homing.component.BranchComponent;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
-import hue.captains.singapura.js.homing.ui.elements.CloseButtonModule;
 import hue.captains.singapura.js.homing.ui.elements.IconButtonModule;
-import hue.captains.singapura.js.homing.ui.icons.IconModule;
+import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
 
 import java.util.List;
 
 /**
- * {@code TabStrip}, the row of chips over a pane. {@code new TabStrip(branch,
- * {onAdd?, onDrop, onDragOut?})} builds the strip — chips with a label and a
- * cross, the tail with the add button and the count, the mark for a tab
- * offered from outside — and the drag that is a browser's, along a rail:
- * the chip pressed goes where the hand goes along the row, the others
- * stepping aside live, and settles on the slot it is nearest, never before
- * the pinned ones. It holds no tab state; the pane arranges, selects and
- * counts, and turns a drop into a move.
+ * {@code TabStrip}, the bar over a multi-tab pane, ported a step at a time (RFC 0071): a chip for each tab it holds -
+ * its own, made by it, pressed to be the one in use and slid along it as a browser's tab is, the chips it passes stepping
+ * aside, eased - and its one plus, a regular button, the
+ * house's icon button. Its chips' states are its own (owner, 22 Oct): its owner hears which tab is in use
+ * ({@code ActiveTab}), the order of its tabs once a drag has changed it ({@code TabOrder}), the closes asked of each
+ * tab, its chips' crosses' ({@code TabCloseControl}), and its plus's presses, passed on as its {@code TabAddControl} -
+ * handling none. Its count and its landing come as they are ported.
  */
 public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<HouseContainers.TabStrip> {
 
-    /** The class. */
+    /** A composed component: {@code new TabStrip(branch, new FixedTabStrip(new FixedIconButton(new FixedAddIcon())), place?)}; {@code add(tab)}, {@code remove(id)}; {@code onChange(StateActiveTab | StateTabOrder | StateTabCloseControl | StateTabAddControl, listener)}; {@code active}, {@code order}, {@code closes}, {@code adds}, {@code current}, {@code dispose}. */
     public record TabStrip() implements BranchComponent<TabStripModule> {
-        @Override public String summary() { return "The strip of chips on its own: selection by a press, and the hand that drags a chip along the rail; no chip takes native focus, and the keys over a strip are its pane's."; }
+        @Override public String summary() { return "The bar over a multi-tab pane: its tabs' chips, pressed and dragged along it, and its one plus, whose presses it passes on."; }
     }
 
     public static final TabStripModule INSTANCE = new TabStripModule();
@@ -42,36 +33,15 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
     @Override
     public ImportsFor<TabStripModule> imports() {
         return ImportsFor.<TabStripModule>builder()
-                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PillModule.Pill()), PillModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE(), new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton()), IconButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton()), CloseButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DropMarkModule.DropMark()), DropMarkModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(
-                        new PaneStyles.mtp_strip(),
-                        new PaneStyles.mtp_rail(),
-                        new PaneStyles.mtp_strip_loose(),
-                        new PaneStyles.mtp_strip_tail(),
-                        new PaneStyles.mtp_rail_add(),
-                        new PaneStyles.mtp_bar_close(),
-                        new PaneStyles.mtp_pill(),
-                        new PaneStyles.mtp_drop_mark(),
-                        new PaneStyles.mtp_chip_shifted(),
-                        new PaneStyles.mtp_chip_dragging()
-                ), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabStripBehaviorModule.TabStripBehavior()), TabStripBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabHandModule.TabHand()), TabHandModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabDragModule.TabDrag()), TabDragModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new TabWindowModule.TabWindow()), TabWindowModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new TabStripSlideModule.TabStripSlide()), TabStripSlideModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new IconButtonModule.IconButton()), IconButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PaneStyles.mtp_strip(), new PaneStyles.mtp_rail_add()), PaneStyles.INSTANCE))
                 .build();
     }
 
     @Override
-    public ExportsOf<TabStripModule> exports() {
-        return new ExportsOf<>(INSTANCE, List.of(new TabStrip()));
-    }
+    public ExportsOf<TabStripModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new TabStrip())); }
 }

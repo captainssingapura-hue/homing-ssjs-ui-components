@@ -28,9 +28,11 @@ public record UiIconsStyleDeclaration() implements StyleDeclaration {
                 new GripIcon(),
                 new DiscloseIcon(),
                 new SettingsIcon(),
+                new PreferencesIcon(),
                 new SizeIcon(),
                 new AspectIcon(),
                 new ExtentIcon(),
-                new LevelIcon())));
+                new LevelIcon(),
+                new PacmanIcon())));
     }
 }

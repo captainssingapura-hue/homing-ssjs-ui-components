@@ -1,37 +1,33 @@
 // =============================================================================
-// ToggleButton — a button that is pressed or not: a Button (a simple component)
-// with one more state, pressed, which a press turns over (ToggleButtonBehavior).
-// Pressed, it says so - aria-pressed - which the look's pressed treatments are
-// shown by: held as each style presses a button, tinted with the palette's accent.
+// ToggleButton — a Button that holds a pressed state: a press while it is
+// enabled turns it over - its click is that change, and it counts none. On the style manager (RFC 0071):
+// its module stamped with its header (D19), its pressed set through its
+// reference, which the style draws.
 //
-//   var t = new ToggleButton(ToggleButtonFactory.create(branch, "bold"),
-//                            { label: "Bold", pressed: false }, ROLE.STANDALONE);
-//   t.pressed = true               pressed, and it says so; a press turns it over again
-//   t.setOnPressedChanged(handler) its pressed changed: handler.handle(StateChange) -
-//                                  previous the old value, raw the click that turned
-//                                  it, or null when a setter did
-//   t.setOnClick(handler)          a press, after it has turned over
-//   t.enabled  t.size  t.label  t.setOnEnabledChanged
+//   var t = new ToggleButton(branch.elementMaker("bold"), new FixedToggleButton(), me.place(FixedToggleButton));
+//   t.pressed = true      t.onChange(StatePressed, listener)
 // =============================================================================
 
 class ToggleButton extends Button {
-    static LEAF = "toggle-button";
-    static AXES = Object.freeze(Object.assign({}, Button.AXES, {
+    static AXES = Object.freeze({
+        enabled: Button.AXES.enabled,   // a button's - but no count: what its press changes is its pressed
         pressed: Object.freeze({
             values: Object.freeze([false, true]),
             rest: false,
             reflect: function (el, on) { el.setAttribute("aria-pressed", on ? "true" : "false"); },
-            state: STATE.PRESSED
+            state: StatePressed
         })
-    }));
+    });
     static BEHAVIOR = ToggleButtonBehavior;
+
+    constructor(make, fixed, place) { super(make, fixed, FixedToggleButton, place ?? manageToggleButton); }
+
+    /** A toggle counts no clicks: its press turns its pressed over. */
+    get clicks() { throw new Error("[ToggleButton] counts no clicks: its press turns its pressed over"); }
 
     get pressed() { return this._get("pressed"); }
     set pressed(v) { this._set("pressed", !!v); }
 
-    /** Its pressed changed: by a press, or by a setter. */
-    setOnPressedChanged(handler) { this._setOn(STATE.PRESSED.changed, handler); }
+    /** A press, as its behaviour hears it: while it is enabled, its pressed turned over. */
+    _pressed() { if (this.enabled) this._change("pressed", !this.pressed); }
 }
-
-/** Its companion: makes the <button> it is realized on, on its owner's branch, under its owner's name. */
-const ToggleButtonFactory = new SimpleComponentFactory(ToggleButton);

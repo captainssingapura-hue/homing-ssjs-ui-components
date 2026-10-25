@@ -1,0 +1,8 @@
+/* The within icon in the base layer, in the colour it is given - its look every icon's alike; what it shows is its icon palette's, drawn on it by the page (D56). Whole: every property its look has (D9). */
+$casting {
+    --current-whole: currentColor;
+    --along-keys-mark: color-mix(in oklab, var(--fp-accent) calc(clamp(0, var(--extent), 1) * 100%), color-mix(in oklab, var(--current-whole) calc(clamp(0, var(--extent) + 1, 1) * 100%), var(--current-whole)));
+    color: var(--along-keys-mark);
+    background-color: transparent;
+    line-height: 1;
+}

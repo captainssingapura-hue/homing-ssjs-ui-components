@@ -1,19 +1,19 @@
 // =============================================================================
-// SuccessButton — the success button: a Button (a simple component) in the success look,
-// which also has an extent - how much of its word it wears.
+// SuccessButton — the success button: a Button whose press confirms, coloured by its word.
+// On the style manager (RFC 0071): its module stamped with its header (D19),
+// its fixed type and its binding the header's.
 //
-//   var b = new SuccessButton(SuccessButtonFactory.create(branch, "go"), { label: "Go" }, ROLE.STANDALONE);
-//   b.setOnClick(handler)
-//   b.enabled  b.size  b.label  b.extent
+//   var b = new SuccessButton(branch.elementMaker("go"), new FixedSuccessButton(), me.place(FixedSuccessButton));   in a slot
+//   var b = new SuccessButton(branch.elementMaker("go"), new FixedSuccessButton());                     at the root
+//   b.label = "Go"   b.enabled = false   b.size = -1   b.extent = 0.6
+//   b.onChange(StateClicks, listener)   a press: its clicks counted up
 // =============================================================================
 
 class SuccessButton extends Button {
-    static LEAF = "success-button";
-    static DEGREES = Object.freeze(["size", "extent"]);
+    static DEGREES = Object.freeze([ExtentSize, ExtentColour]);
 
-    get extent() { return this._degrees.extent; }
-    set extent(t) { this._degree("extent", t); }
+    constructor(make, fixed, place) { super(make, fixed, FixedSuccessButton, place ?? manageSuccessButton); }
+
+    get extent() { return this._degree(ExtentColour); }
+    set extent(t) { this._setDegree(ExtentColour, t); }
 }
-
-/** Its companion: makes the <button> it is realized on, on its owner's branch, under its owner's name. */
-const SuccessButtonFactory = new SimpleComponentFactory(SuccessButton);

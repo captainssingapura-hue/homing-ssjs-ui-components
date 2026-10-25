@@ -7,7 +7,6 @@ import hue.captains.singapura.js.homing.core.QueryString;
 import hue.captains.singapura.js.homing.core.StampedParams;
 import hue.captains.singapura.js.homing.core.js.DomOpsPartyModule;
 import hue.captains.singapura.js.homing.server.HtmlPageContent;
-import hue.captains.singapura.js.homing.ui.elements.GroundModule;
 import hue.captains.singapura.js.homing.site.Html;
 import hue.captains.singapura.js.homing.site.Placed;
 import hue.captains.singapura.js.homing.site.Query;
@@ -85,9 +84,6 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
                         const chrome = Object.freeze({ brand: %s, crumbs: %s, preferences: %s, fill: %s });
                         %s
                         const { domOpsParty } = await import(%s);
-                        // The page's ground, on the document's own element: everything on the page stands on it.
-                        const { Ground } = await import(%s);
-                        new Ground(document.documentElement);
                         // The chrome, a widget: attached here, the app mounted in its slot.
                         const { MpaChrome } = await import(%s);
                         const page = new MpaChrome(domOpsParty.createBranch("mpaChrome"), chrome);
@@ -109,7 +105,6 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
                         brand, crumbs, prefs, fill == PageFill.VIEWPORT ? "true" : "false",
                         stamped == null ? "" : "const params = " + stamped + ";",
                         StampedParams.jsString(mpa.moduleUrl(DomOpsPartyModule.INSTANCE)),
-                        StampedParams.jsString(mpa.moduleUrl(GroundModule.INSTANCE)),
                         StampedParams.jsString(mpa.moduleUrl(MpaChromeModule.INSTANCE)),
                         StampedParams.jsString(mpa.moduleUrl(app)),
                         stamped == null ? "{}" : "params"));

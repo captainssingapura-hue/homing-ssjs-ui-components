@@ -1,50 +1,25 @@
 package hue.captains.singapura.js.homing.ui.elements;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
-
 import hue.captains.singapura.js.homing.component.BranchComponent;
-import hue.captains.singapura.js.homing.component.keyboard.Key;
-import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
-import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
-import hue.captains.singapura.js.homing.component.keyboard.Modifier;
-import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
+import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.core.DomModule;
-import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
-import hue.captains.singapura.js.homing.ui.icons.IconRoomModule;
-
-import hue.captains.singapura.js.homing.ui.look.IconsModule;
+import hue.captains.singapura.js.homing.ui.taxonomy.HouseControls;
 
 import java.util.List;
 
 /**
- * The slider: a number set by a knob on a track, every part
- * a real element wearing a design word — the track sunk, the fill from the
- * detent to the value, the knob raised and focusable, with a mark on it: a
- * grip, or the word for what the slider sets — so a design draws the whole
- * of it and the browser's own slider is nowhere in it.
+ * The slider: a value along a scale, named and read out - a label, the house's range (the browser's own slider, as each
+ * style draws it) and a readout, in a row (owner, 23 Oct). Where it stands, and being in the hand, are its range's,
+ * passed on; its keys are the range's own, the browser's.
  */
 public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseControls.Slider> {
 
-    /** A branch component, on a sub-branch the caller made, with its properties: a label, the rail with its detent, a readout; value, setOn, size, label, dispose. */
-    public record Slider() implements BranchComponent<SliderModule>, NeedKeyboard {
-        @Override public String summary() { return "A number set by a knob on a track: a label, the rail with its detent, a readout; the hand and the keys alike."; }
-
-        /** The keys, through the party: a step either way, ten with Shift or by page, the ends. */
-        public static final List<KeyBinding> KEYS = List.of(
-                KeyBinding.of(Key.ARROW_UP, "a step up"), KeyBinding.of(Key.ARROW_RIGHT, "a step up"),
-                KeyBinding.of(Key.ARROW_DOWN, "a step down"), KeyBinding.of(Key.ARROW_LEFT, "a step down"),
-                KeyBinding.of(Key.ARROW_UP, Modifier.SHIFT, "ten steps up"), KeyBinding.of(Key.ARROW_RIGHT, Modifier.SHIFT, "ten steps up"),
-                KeyBinding.of(Key.ARROW_DOWN, Modifier.SHIFT, "ten steps down"), KeyBinding.of(Key.ARROW_LEFT, Modifier.SHIFT, "ten steps down"),
-                KeyBinding.of(Key.PAGE_UP, "ten steps up"), KeyBinding.of(Key.PAGE_DOWN, "ten steps down"),
-                KeyBinding.of(Key.HOME, "the minimum"), KeyBinding.of(Key.END, "the maximum"));
-        @Override public List<KeyBinding> keys() { return KEYS; }
+    /** A composed component, on a branch of its own: its label, its degree, its step, its readout's words, off. */
+    public record Slider() implements BranchComponent<SliderModule> {
+        @Override public String summary() { return "A value along a scale, named and read out: a label, the browser's own slider as each style draws it, a readout."; }
     }
 
     public static final SliderModule INSTANCE = new SliderModule();
@@ -52,39 +27,13 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
     @Override
     public ImportsFor<SliderModule> imports() {
         return ImportsFor.<SliderModule>builder()
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LabelModule.Label()), LabelModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderScaleModule.SliderScale()), SliderScaleModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new RangeModule.Range()), RangeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderRailModule.SliderRail()), SliderRailModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderGrooveModule.SliderGroove()), SliderGrooveModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new FillModule.Fill()), FillModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new SliderKnobModule.SliderKnob()), SliderKnobModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_slider(),
-                        new ElementStyles.el_slider_label(),
-                        new ElementStyles.el_slider_rail(),
-                        new ElementStyles.el_slider_track(),
-                        new ElementStyles.el_slider_fill(),
-                        new ElementStyles.el_slider_detent(),
-                        new ElementStyles.el_slider_knob(),
-                        new ElementStyles.el_slider_mark(),
-                        new ElementStyles.el_slider_readout(),
-                        new ElementStyles.el_slider_vertical(),
-                        new ElementStyles.el_slider_rail_vertical(),
-                        new ElementStyles.el_slider_track_vertical(),
-                        new ElementStyles.el_slider_fill_vertical(),
-                        new ElementStyles.el_slider_detent_vertical(),
-                        new ElementStyles.el_slider_cap(),
-                        new ElementStyles.el_slider_cap_mark(),
-                        new ElementStyles.el_slider_off()
-                ), ElementStyles.INSTANCE))
-                .add(new ModuleImports<>(List.of(new IconRoomModule.IconRoom()), IconRoomModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new DetentModule.Detent()), DetentModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ElementStyles.el_slider(), new ElementStyles.el_slider_label(), new ElementStyles.el_slider_range(),
+                        new ElementStyles.el_slider_readout()), ElementStyles.INSTANCE))
                 .build();
     }
 

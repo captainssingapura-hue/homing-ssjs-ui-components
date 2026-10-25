@@ -1,0 +1,11 @@
+/* The heading 1 in neo-brutalism: the heading of a page. Whole: every property its look has (D9). */
+$casting {
+    color: var(--fp-heading-ink);
+    background-color: transparent;
+    font-family: "Arial Black", "Impact", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 900;
+    font-size: calc(44px * pow(1.2, var(--size)));
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+}

@@ -9,19 +9,18 @@ import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
 import hue.captains.singapura.js.homing.core.ModuleImports;
+import hue.captains.singapura.js.homing.ui.elements.MarkBehaviorModule;
 import hue.captains.singapura.js.homing.ui.elements.PlainButtonModule;
-import hue.captains.singapura.js.homing.ui.look.CastingsModule;
-import hue.captains.singapura.js.homing.ui.look.LookModule;
-import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
+import hue.captains.singapura.js.homing.ui.elements.SimpleComponentModule;
 
 import java.util.List;
 
-/** The controls of a pan-zoom view: out, the zoom said, in, fit - the elements' buttons, following the view they drive. */
+/** The controls of a pan-zoom view, its part only: out, the zoom said, in, fit - the elements' buttons; it shows what its view says, and passes its presses on. */
 public record PanZoomBarModule() implements DomModule<PanZoomBarModule>, ImplFor<HousePanZoom.PanZoomBar> {
 
     public static final PanZoomBarModule INSTANCE = new PanZoomBarModule();
 
-    /** A branch component: {@code new PanZoomBar(branch, view)}; root, dispose. */
+    /** A composed component, a view's part: {@code new PanZoomBar(branch, new FixedPanZoomBar(), place)}; {@code show(view)}; its presses; root, dispose. */
     public record PanZoomBar() implements BranchComponent<PanZoomBarModule> {
         @Override public String summary() { return "The controls of a pan-zoom view: zoom out, the zoom as a share of fit, zoom in, back to fit."; }
     }
@@ -29,11 +28,10 @@ public record PanZoomBarModule() implements DomModule<PanZoomBarModule>, ImplFor
     @Override
     public ImportsFor<PanZoomBarModule> imports() {
         return ImportsFor.<PanZoomBarModule>builder()
-                .add(new ModuleImports<>(List.of(new ReadoutModule.Readout(), new ReadoutModule.ReadoutFactory()), ReadoutModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new StatesAndEventsModule.EVENT()), StatesAndEventsModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton(), new PlainButtonModule.PlainButtonFactory()), PlainButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new LookModule.Look()), LookModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
+                .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PanZoomStyles.pz_bar(), new PanZoomStyles.pz_readout()), PanZoomStyles.INSTANCE))
                 .build();
     }

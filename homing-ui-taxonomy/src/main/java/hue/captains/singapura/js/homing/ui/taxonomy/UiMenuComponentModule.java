@@ -14,6 +14,7 @@ public record UiMenuComponentModule() implements ComponentModule {
     public static final UiMenuComponentModule INSTANCE = new UiMenuComponentModule();
 
     @Override public List<? extends Component<?>> components() {
-        return List.of(HouseMenus.ContextMenuSteward.INSTANCE, HouseContainers.ContextMenu.INSTANCE);
+        return List.of(HouseMenus.ContextMenuSteward.INSTANCE, HouseContainers.ContextMenu.INSTANCE,
+                HouseContainers.L1Menu.INSTANCE, HouseContainers.L2Menu.INSTANCE);
     }
 }

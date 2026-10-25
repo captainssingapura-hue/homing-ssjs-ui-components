@@ -1,0 +1,42 @@
+/* The plain menu item in retro-futurism: one choice of a menu - flat, tinted under the hand and where the menu's cursor is, faded while off. Whole: every property its look has (D9). */
+$casting {
+    color: inherit;
+    background-color: transparent;
+    border-color: transparent;
+    outline-color: currentColor;
+    border-radius: 2px;
+    box-shadow: none;
+    border-width: 1px;
+    border-style: solid;
+    outline-width: 0;
+    outline-style: none;
+    outline-offset: 0;
+    padding-block: 7px;
+    padding-inline: 12px;
+    gap: 10px;
+    font-family: "Rajdhani", "Bahnschrift", "Segoe UI", system-ui, sans-serif;
+    font-weight: inherit;
+    font-size: calc(14px * pow(1.25, var(--size)));
+    line-height: 1.5;
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+    transform: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--fp-accent-wash-soft);
+        border-color: var(--fp-border);
+    }
+
+    &$disabled {
+        opacity: .4;
+        cursor: not-allowed;
+        /* under the pointer too: an off row stays as it rests (owner, 23 Oct) */
+        background-color: transparent;
+        border-color: transparent;
+    }
+
+    &$pointed {
+        background-color: var(--fp-accent-wash-strong);
+        border-color: var(--fp-accent);
+    }
+}

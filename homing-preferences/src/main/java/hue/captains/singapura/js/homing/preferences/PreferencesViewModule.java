@@ -1,10 +1,8 @@
 package hue.captains.singapura.js.homing.preferences;
 
-import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
 import hue.captains.singapura.js.homing.conformance.rules.ConformanceDebt;
 import hue.captains.singapura.js.homing.conformance.rules.WidgetDrawsOnlyComponentsRule;
 import hue.captains.singapura.js.homing.ui.splitgrid.SplitGridModule;
-import hue.captains.singapura.js.homing.ui.taxonomy.HousePreferences;
 
 import hue.captains.singapura.js.homing.component.Widget;
 import hue.captains.singapura.js.homing.component.WidgetSlotModule;
@@ -32,7 +30,7 @@ import java.util.List;
  */
 @ConformanceDebt(rule = WidgetDrawsOnlyComponentsRule.class, findings = 4,
         reason = "It makes the box its grid fills, and gives the grid's cells their room with classes of its own: it waits for a region's room to be the layout's.")
-public record PreferencesViewModule() implements Widget<Widget._None, PreferencesViewModule>, ImplFor<HousePreferences.PreferencesView> {
+public record PreferencesViewModule() implements Widget<Widget._None, PreferencesViewModule> {
 
     /** The class. */
     public record PreferencesView() implements Widget._Class<Widget._None, PreferencesViewModule>, NeedKeyboard {
