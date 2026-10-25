@@ -2,6 +2,7 @@ package hue.captains.singapura.js.homing.components.conformance;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
+import hue.captains.singapura.js.homing.component.taxonomy.MeaningsCheck;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControllability;
@@ -91,6 +92,9 @@ class WholeHouseTaxonomyTest {
         HOUSE.states().types().forEach(s -> nodes.add(HOUSE.meaning(s).markdown()));
         assertEquals(24 + 113 + 22 + 99 + 11 + 43, nodes.size(), "no module adds a state: the house's trees are whole");   // the document a branch, worn by the document itself (24 Oct);   // a tab in transit, and another's caught (23 Oct);   // the tab carried and the detaches (23 Oct);   // the tab in use and the order of the tabs, a chip's close and the tabs' (22 Oct), a floating pane's (23 Oct)
         assertTrue(nodes.stream().noneMatch(String::isBlank));
+        var problems = MeaningsCheck.INSTANCE.problems(HOUSE);
+        assertTrue(problems.isEmpty(), () -> "every section a node's, none twice, no words astray:\n"
+                + String.join("\n", problems.stream().map(Object::toString).toList()));
     }
 
     @Test
