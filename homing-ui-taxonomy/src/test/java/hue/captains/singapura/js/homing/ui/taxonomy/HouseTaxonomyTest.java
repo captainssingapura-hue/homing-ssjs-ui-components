@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.taxonomy;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentBranch;
 import hue.captains.singapura.js.homing.component.taxonomy.ExtentAxis;
+import hue.captains.singapura.js.homing.component.taxonomy.MeaningsCheck;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Root;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
@@ -135,6 +136,9 @@ class HouseTaxonomyTest {
         assertTrue(nodes.stream().noneMatch(String::isBlank));
         assertTrue(HOUSE.meaning(HouseControls.DangerButton.INSTANCE).markdown().startsWith("Does a thing that destroys"));
         assertTrue(HOUSE.meaning(HouseSaying.Title.INSTANCE).markdown().startsWith("Names a container"));
+        var problems = MeaningsCheck.INSTANCE.problems(HOUSE);
+        assertTrue(problems.isEmpty(), () -> "every section a node's, none twice, no words astray:\n"
+                + String.join("\n", problems.stream().map(Object::toString).toList()));
     }
 
     /**
