@@ -110,8 +110,8 @@ class ComponentsConformanceTest {
      */
     @Test
     void everyComponentIsCatalogued_andTheCompositionIsSound() {
-        assertEquals(List.of(), ComponentTrees.validate(ComponentsConformance.TOP_LEVEL));
-        var composed = ComponentTrees.compose("components", ComponentsConformance.TOP_LEVEL);
+        assertEquals(List.of(), ComponentTrees.INSTANCE.validate(ComponentsConformance.TOP_LEVEL));
+        var composed = ComponentTrees.INSTANCE.compose("components", ComponentsConformance.TOP_LEVEL);
         var vehicles = composed.root().children().stream().map(n -> n.segment().value()).toList();
         assertEquals(List.of("server", "ui-elements", "ui-icons", "ui-dialog", "ui-floating", "ui-panes", "ui-preferences", "ui-split-grid", "ui-pan-zoom", "ui-monitors", "ui-menu", "mpa", "ui-control-panel"), vehicles, "one vehicle per crate that ships components, in closure order — the base first, which sizing requires (sizing ships no component); the elements require it too (the keyboard steward) and the icons (a knob's mark), the dialog the floating crate, which the panes now, its floats theirs (23 Oct), the preferences the split grid their view is laid out by; docking catalogues nothing - the desk, its hand, its floater and its docking are statics; the control panel, a widget, last");
         var root = (ComponentDetails.OfComposition) composed.detailsOf(composed.root().identity());
