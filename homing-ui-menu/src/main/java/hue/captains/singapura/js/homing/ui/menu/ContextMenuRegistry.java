@@ -49,7 +49,7 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
     /** The kinds the catalogued components of a crate closure need, each once: in catalogue order between components, by name within one — a set has no order, and a stamped module must. */
     public static ContextMenuRegistry requiredBy(List<Crate> topLevel) {
         var kinds = new LinkedHashMap<Class<?>, ContextMenuKind<?>>();
-        for (UiComponent<?> c : ComponentTrees.components(topLevel))
+        for (UiComponent<?> c : ComponentTrees.INSTANCE.components(topLevel))
             if (c instanceof NeedContextMenu n)
                 for (ContextMenuKind<?> k : n.required().stream().sorted(Comparator.comparing(ContextMenuKind::kind)).toList()) kinds.putIfAbsent(k.getClass(), k);
         return new ContextMenuRegistry(List.copyOf(kinds.values()));
@@ -64,8 +64,8 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
     public static List<String> validate(List<Crate> topLevel) {
         var problems = new ArrayList<String>();
         var catalogued = new HashSet<Class<?>>();
-        for (UiComponent<?> c : ComponentTrees.components(topLevel)) catalogued.add(c.getClass());
-        for (Crate crate : ComponentTrees.closure(topLevel)) {
+        for (UiComponent<?> c : ComponentTrees.INSTANCE.components(topLevel)) catalogued.add(c.getClass());
+        for (Crate crate : ComponentTrees.INSTANCE.closure(topLevel)) {
             for (CrateEntry e : crate.entries()) {
                 for (var x : e.module().exports().exports()) {
                     if (!(x instanceof NeedContextMenu n)) continue;
