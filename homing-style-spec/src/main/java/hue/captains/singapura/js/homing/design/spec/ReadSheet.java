@@ -36,6 +36,10 @@ public record ReadSheet() implements StatelessFunctionalObject {
     private static final Pattern KEYFRAMES = Pattern.compile("@keyframes\\s+\\$([a-z][a-z0-9-]*)");
     private static final Pattern USE = Pattern.compile("\\$([a-z][a-z0-9-]*)");
 
+    /**
+     * The sheet of {@code style} as {@code spec} serves it; refuses a style no page wears, and names every content it
+     * cannot find.
+     */
     public StyleSheet read(SpecRegistry spec, DesignStyle<?> style) {
         if (!spec.selectable().contains(style))
             throw new IllegalArgumentException(style.token() + " is no style a page wears: the base layer stands alone nowhere");

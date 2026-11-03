@@ -50,7 +50,9 @@ public abstract class PreferencesRegistry implements EsModule<PreferencesRegistr
         this.master = Objects.requireNonNull(master, "PreferencesRegistry.master");
     }
 
+    /** The preferences tree, as read from its root. */
     public PreferenceTree tree()   { return tree; }
+    /** The widget that shows the master. */
     public WidgetProvider master() { return master; }
 
     @Override public ImportsFor<PreferencesRegistry> imports() { return ImportsFor.noImports(); }

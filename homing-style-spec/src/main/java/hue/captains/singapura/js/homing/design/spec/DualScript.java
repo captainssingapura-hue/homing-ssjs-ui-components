@@ -19,6 +19,7 @@ public record DualScript() implements StatelessFunctionalObject {
 
     public static final DualScript INSTANCE = new DualScript();
 
+    /** The JS module of {@code dual}: its imports, then each node made and exported after its parent. */
     public String script(TreeDual dual) {
         var lines = new ArrayList<String>();
         lines.add("// The JS dual of the " + dual.tree().name() + " tree (RFC 0071), generated from Java: the " + dual.nodes().size() + " of its "

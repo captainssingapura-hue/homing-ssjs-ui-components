@@ -29,6 +29,7 @@ public record DualRef() implements StatelessFunctionalObject {
      */
     public record Ref(DualTree<?> tree, String name, String imported) implements Scalar {}
 
+    /** Where {@code node} is in the page's JS; refuses what is no node of a tree the page names. */
     public Ref of(Object node) {
         return switch (node) {
             case Taxon t -> ref(Components.INSTANCE, t.token());

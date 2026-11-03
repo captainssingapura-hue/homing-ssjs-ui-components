@@ -24,6 +24,7 @@ public final class ComponentsConformanceExport {
 
     private ComponentsConformanceExport() {}
 
+    /** Assembles the report and writes it into the folder {@code args[0]}; refuses any other number of arguments. */
     public static void main(String[] args) throws IOException {
         if (args.length != 1) throw new IllegalArgumentException("Usage: ComponentsConformanceExport <output-directory>");
         Path dir = Paths.get(args[0]);

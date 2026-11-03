@@ -56,6 +56,7 @@ public record IconsModule() implements EsModule<IconsModule>, SelfContent {
 
         public static final Icons INSTANCE = new Icons();
 
+        /** The icons of {@code taxonomy}: every component under the Icon branch, in the order read. */
         public List<Component<?>> of(Taxonomy taxonomy) {
             var out = new ArrayList<Component<?>>();
             for (Component<?> c : taxonomy.components())

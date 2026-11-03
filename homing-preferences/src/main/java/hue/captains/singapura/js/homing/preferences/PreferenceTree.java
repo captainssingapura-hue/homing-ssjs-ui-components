@@ -47,6 +47,7 @@ public record PreferenceTree(PreferenceNode root, Map<String, PreferenceNode> by
     /** Every path, root first, each parent before its children. */
     public List<String> paths() { return new ArrayList<>(byPath.keySet()); }
 
+    /** The node at {@code path}; refuses a path no node has. */
     public PreferenceNode at(String path) {
         var n = byPath.get(path);
         if (n == null) throw new IllegalArgumentException("No preference node at '" + path + "'");

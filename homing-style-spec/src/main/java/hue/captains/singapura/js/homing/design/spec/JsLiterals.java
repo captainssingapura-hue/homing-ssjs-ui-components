@@ -11,10 +11,13 @@ public record JsLiterals() implements StatelessFunctionalObject {
 
     public static final JsLiterals INSTANCE = new JsLiterals();
 
+    /** {@code s} as a quoted JS string. */
     public String string(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
 
+    /** {@code list} as a frozen JS array of strings. */
     public String strings(List<String> list) { return "Object.freeze([" + String.join(", ", list.stream().map(this::string).toList()) + "])"; }
 
+    /** {@code map} as a frozen JS object of strings. */
     public String map(Map<String, String> map) {
         var out = new ArrayList<String>();
         map.forEach((k, v) -> out.add(string(k) + ": " + string(v)));
