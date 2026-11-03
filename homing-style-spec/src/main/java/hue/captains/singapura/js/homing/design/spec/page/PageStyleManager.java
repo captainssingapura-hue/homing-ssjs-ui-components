@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec.page;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
  *
  * @param address the module's address: {@code /module?class=} and its class's canonical name
  */
-public record PageStyleManager(String address) implements ValueObject {
+public record PageStyleManager(String address) implements Scalar {
 
     /** The name the module exports it under, and every header imports it as. */
     public static final String EXPORTED = "styleManager";

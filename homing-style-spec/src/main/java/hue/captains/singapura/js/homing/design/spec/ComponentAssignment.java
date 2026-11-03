@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,7 +32,7 @@ import java.util.Optional;
  * @param roles     each role with a look of its own it is cast in, each once, and the implementation it wears in it
  */
 public record ComponentAssignment<Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>>(
-        C component, CssImplementation<Sc, S, C> alone, List<RoleAssignment<Sc, S, C>> roles) implements ValueObject {
+        C component, CssImplementation<Sc, S, C> alone, List<RoleAssignment<Sc, S, C>> roles) implements Scalar {
 
     public ComponentAssignment {
         Objects.requireNonNull(component, "ComponentAssignment.component");

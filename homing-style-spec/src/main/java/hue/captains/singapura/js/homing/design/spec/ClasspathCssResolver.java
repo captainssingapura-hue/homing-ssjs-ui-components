@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.design.semantic.Validation;
 import hue.captains.singapura.js.homing.design.semantic.Validations;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @param prefix the directory content is under, from the classpath's root: {@code homing-css/}
  */
-public record ClasspathCssResolver(String prefix) implements CssResolver, ValueObject {
+public record ClasspathCssResolver(String prefix) implements CssResolver, Scalar {
 
     public ClasspathCssResolver {
         final String given = prefix;

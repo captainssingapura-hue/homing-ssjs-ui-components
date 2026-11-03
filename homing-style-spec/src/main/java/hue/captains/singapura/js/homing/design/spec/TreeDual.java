@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.design.spec.dual.DualTree;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.HashSet;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.Optional;
  * @param inTree how many nodes the tree has in all, the unused with them
  * @param left   the tokens of the nodes left out: used by no registered component, nor above one that is
  */
-public record TreeDual(DualTree<?> tree, List<Node> nodes, int inTree, List<String> left) implements ValueObject {
+public record TreeDual(DualTree<?> tree, List<Node> nodes, int inTree, List<String> left) implements Scalar {
 
     public TreeDual {
         Objects.requireNonNull(tree, "TreeDual.tree");
@@ -42,7 +42,7 @@ public record TreeDual(DualTree<?> tree, List<Node> nodes, int inTree, List<Stri
      * @param companions   what the dual declares beside it, each exported under its own name
      */
     public record Node(String name, String token, Optional<String> parent, String construction, List<Object> refers, List<Companion> companions)
-            implements ValueObject {
+            implements Scalar {
         public Node {
             Objects.requireNonNull(name, "Node.name");
             Objects.requireNonNull(token, "Node.token");
@@ -59,7 +59,7 @@ public record TreeDual(DualTree<?> tree, List<Node> nodes, int inTree, List<Stri
      * @param name        its name in the module
      * @param declaration its JavaScript
      */
-    public record Companion(String name, String declaration) implements ValueObject {
+    public record Companion(String name, String declaration) implements Scalar {
         public Companion {
             Objects.requireNonNull(name, "Companion.name");
             Objects.requireNonNull(declaration, "Companion.declaration");

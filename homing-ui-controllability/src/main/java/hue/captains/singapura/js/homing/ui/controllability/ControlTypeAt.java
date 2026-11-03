@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.ui.controllability;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.Objects;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
  * @param at   the node: a branch or a leaf
  * @param type its control type
  */
-public record ControlTypeAt(Taxon at, ControlType type) implements ValueObject {
+public record ControlTypeAt(Taxon at, ControlType type) implements Scalar {
 
     public ControlTypeAt {
         Objects.requireNonNull(at, "ControlTypeAt.at");

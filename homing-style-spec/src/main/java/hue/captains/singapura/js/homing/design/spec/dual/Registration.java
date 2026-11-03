@@ -3,7 +3,7 @@ package hue.captains.singapura.js.homing.design.spec.dual;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +16,7 @@ import java.util.Objects;
  * @param top      the top-level components, in the modules' order
  * @param styles   the selectable styles, in the registry's order; base is never one
  */
-public record Registration(Taxonomy taxonomy, List<Component<?>> top, List<DesignStyle<?>> styles) implements ValueObject {
+public record Registration(Taxonomy taxonomy, List<Component<?>> top, List<DesignStyle<?>> styles) implements Scalar {
 
     public Registration {
         Objects.requireNonNull(taxonomy, "Registration.taxonomy");

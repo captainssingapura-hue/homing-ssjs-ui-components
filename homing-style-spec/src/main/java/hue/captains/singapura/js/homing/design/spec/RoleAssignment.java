@@ -4,7 +4,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.Objects;
 
@@ -17,7 +17,7 @@ import java.util.Objects;
  * @param to   the implementation the component wears in it
  */
 public record RoleAssignment<Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>>(Role<?> role, CssImplementation<Sc, S, C> to)
-        implements ValueObject {
+        implements Scalar {
     public RoleAssignment {
         Objects.requireNonNull(role, "RoleAssignment.role");
         Objects.requireNonNull(to, "RoleAssignment.to");

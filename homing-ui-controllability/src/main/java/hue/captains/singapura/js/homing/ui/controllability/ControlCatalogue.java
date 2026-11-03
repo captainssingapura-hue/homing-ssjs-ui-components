@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.ui.controllability;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,7 +23,7 @@ import java.util.Optional;
  * @param branches the branches under the root, in the order first reached
  * @param options  the options
  */
-public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<?>> options) implements ValueObject {
+public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<?>> options) implements Scalar {
 
     public ControlCatalogue {
         branches = List.copyOf(branches);

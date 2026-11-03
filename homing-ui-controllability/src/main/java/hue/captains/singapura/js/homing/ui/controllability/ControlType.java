@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.ui.controllability;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @param name    its name: lowercase letters, digits and hyphens, a letter first
  * @param options the options it takes, in the order a panel shows them
  */
-public record ControlType(String name, List<ControlOption<?>> options) implements ValueObject {
+public record ControlType(String name, List<ControlOption<?>> options) implements Scalar {
 
     /** A type's name: lowercase letters, digits and hyphens, a letter first. */
     public static final Pattern NAME = Pattern.compile("[a-z][a-z0-9-]*");

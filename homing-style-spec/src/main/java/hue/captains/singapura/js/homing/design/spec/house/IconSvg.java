@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec.house;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * @param resource where it was read: {@code homing-svg/…/Base/rotate.svg}
  * @param text     its text as the resource has it
  */
-public record IconSvg(String resource, String text) implements ValueObject {
+public record IconSvg(String resource, String text) implements Scalar {
 
     private static final String SVG = "http://www.w3.org/2000/svg";
     private static final Set<String> SHAPES = Set.of("path", "circle", "ellipse", "line", "polyline", "polygon", "rect");

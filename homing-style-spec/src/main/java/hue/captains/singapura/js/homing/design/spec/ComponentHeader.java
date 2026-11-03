@@ -8,7 +8,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.Room;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -36,7 +36,7 @@ import java.util.Optional;
  */
 public record ComponentHeader(Component<?> component, boolean composite, boolean topLevel, List<HeaderSlot> slots,
                               List<Component<?>> parts, List<HeaderState> states,
-                              List<ExtentAxis> extents, List<Room> rooms, List<Component<?>> chosen) implements ValueObject {
+                              List<ExtentAxis> extents, List<Room> rooms, List<Component<?>> chosen) implements Scalar {
 
     public ComponentHeader {
         Objects.requireNonNull(component, "ComponentHeader.component");
@@ -58,7 +58,7 @@ public record ComponentHeader(Component<?> component, boolean composite, boolean
      * @param alternatives how many players the part has: one, or several to choose among
      */
     public record HeaderSlot(Component<?> part, Role<?> role, Cardinality cardinality, boolean placed, int alternatives)
-            implements ValueObject {
+            implements Scalar {
         public HeaderSlot {
             Objects.requireNonNull(part, "HeaderSlot.part");
             Objects.requireNonNull(role, "HeaderSlot.role");
@@ -80,7 +80,7 @@ public record ComponentHeader(Component<?> component, boolean composite, boolean
      * @param level   its importance for this component - its own level for it, where the component gives one, else the type's
      */
     public record HeaderState(StateType<?> type, List<StateValue> allowed, Map<StateValue, String> words, boolean flag,
-                              Optional<String> browser, Optional<String> level) implements ValueObject {
+                              Optional<String> browser, Optional<String> level) implements Scalar {
         public HeaderState {
             Objects.requireNonNull(type, "HeaderState.type");
             allowed = List.copyOf(allowed);

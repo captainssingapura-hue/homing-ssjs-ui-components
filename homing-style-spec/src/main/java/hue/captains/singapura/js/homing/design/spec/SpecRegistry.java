@@ -5,7 +5,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.design.semantic.Derives;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,7 +33,7 @@ import java.util.Set;
  */
 public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Component<?>> top, List<DesignStyle<?>> styles,
                            Map<DesignStyle<?>, Map<Component<?>, ComponentAssignment<?, ?, ?>>> assignments, CssResolver resolver)
-        implements ValueObject {
+        implements Scalar {
 
     public SpecRegistry {
         Objects.requireNonNull(taxonomy, "SpecRegistry.taxonomy");
@@ -70,7 +70,7 @@ public record SpecRegistry(Taxonomy taxonomy, DesignStyle<?> base, List<Componen
      * @param component the component it draws
      * @param impl      the implementation
      */
-    public record Worn(DesignStyle<?> layer, Component<?> component, CssImplementation<?, ?, ?> impl) implements ValueObject {
+    public record Worn(DesignStyle<?> layer, Component<?> component, CssImplementation<?, ?, ?> impl) implements Scalar {
         public Worn {
             Objects.requireNonNull(layer, "Worn.layer");
             Objects.requireNonNull(component, "Worn.component");
