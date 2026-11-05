@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.preferences;
 
 import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.tao.ontology.Immutable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +19,7 @@ import java.util.Objects;
  * preference's name: a setting names the preference it writes in its
  * widget's params, and a group has no name to write.</p>
  */
-public record PreferenceTree(PreferenceNode root, Map<String, PreferenceNode> byPath) {
+public record PreferenceTree(PreferenceNode root, Map<String, PreferenceNode> byPath) implements Immutable {
 
     public PreferenceTree {
         Objects.requireNonNull(root, "PreferenceTree.root");
