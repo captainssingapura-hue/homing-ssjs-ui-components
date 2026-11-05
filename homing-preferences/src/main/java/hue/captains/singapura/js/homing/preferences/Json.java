@@ -2,11 +2,14 @@ package hue.captains.singapura.js.homing.preferences;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * The smallest JSON writer the registry needs: strings, numbers, booleans,
  * null, lists, maps with string keys, and a {@link Raw} fragment already
- * written — the rigid tree's canonical JSON, say.
+ * written — the rigid tree's canonical JSON, say. A map's keys are written
+ * sorted, so its text follows from what it holds and not from how it was built:
+ * a {@code Map.of} comes in a different order on every start of the JVM.
  */
 final class Json {
 
@@ -29,12 +32,14 @@ final class Json {
             case Boolean b -> sb.append(b);
             case Number n -> sb.append(n);
             case Map<?, ?> m -> {
+                var sorted = new TreeMap<String, Object>();
+                m.forEach((key, value) -> sorted.put(String.valueOf(key), value));
                 sb.append('{');
                 boolean first = true;
-                for (var e : m.entrySet()) {
+                for (var e : sorted.entrySet()) {
                     if (!first) sb.append(',');
                     first = false;
-                    string(String.valueOf(e.getKey()), sb);
+                    string(e.getKey(), sb);
                     sb.append(':');
                     write(e.getValue(), sb);
                 }
