@@ -1,5 +1,8 @@
 package hue.captains.singapura.js.homing.sizing;
 
+import hue.captains.singapura.js.homing.base.lang.StatelessSingleton;
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +12,7 @@ import java.util.Objects;
  * stored ratio - made millionths by the one rounding rule; a rail of equal boxes; a rail read from
  * its text. Every rail is made by its record or here, and the rule is the one in {@link Rail}.
  */
-public record Sizing() {
+public record Sizing() implements StatelessFunctionalObject, StatelessSingleton {
 
     public static final Sizing INSTANCE = new Sizing();
 

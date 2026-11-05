@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
+import hue.captains.singapura.js.homing.base.lang.StatelessSingleton;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.SchemeDeclaration;
@@ -12,6 +13,7 @@ import hue.captains.singapura.js.homing.design.styling.StyleRegistryBuilder;
 import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.design.styling.StylingInstance;
 import hue.captains.singapura.js.homing.ui.modules.HouseModules;
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -38,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>Its jar carries the house's family files, for reading: written when it is built (WriteStyleFamilies), served by a
  * deployed site from the classpath (StyleFamilies).</p>
  */
-public record HouseStyles() implements StylingInstance {
+public record HouseStyles() implements StylingInstance, StatelessFunctionalObject, StatelessSingleton {
 
     public static final HouseStyles INSTANCE = new HouseStyles();
 

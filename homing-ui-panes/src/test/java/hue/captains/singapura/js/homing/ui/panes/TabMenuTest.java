@@ -39,7 +39,7 @@ class TabMenuTest {
         assertEquals(java.util.Set.of(TabMenu.INSTANCE, SplitMenu.INSTANCE), new MultiTabPaneModule.MultiTabPane().required(),
                 "a chip's menu, and its strip's own ground's - the room it sits in, answered by the desk's docking when it resides in a split grid");
         // the ported pane opens its tab menu through the steward it is handed (23 Oct): the same kind, by the same word
-        String menus = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/MultiTabPaneMenuModule.js"));
+        String menus = String.join("\n", ResourceReader.CLASSPATH.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/MultiTabPaneMenuModule.js"));
         assertTrue(menus.contains("this._steward.open(\"tab\","), "and its menu opens the tab kind through the steward handed to the pane");
         // a site that serves the pane's crate holds the kind, listing nothing
         assertEquals(java.util.Set.of("tab", "split"), java.util.Set.copyOf(ContextMenuRegistry.requiredBy(List.of(UiPanesCrate.INSTANCE)).kinds().stream().map(k -> k.kind()).toList()));
