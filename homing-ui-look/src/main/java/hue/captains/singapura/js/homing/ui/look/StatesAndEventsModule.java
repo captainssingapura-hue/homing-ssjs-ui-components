@@ -8,9 +8,8 @@ import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
-import hue.captains.singapura.js.homing.core.ModuleNameResolver;
-import hue.captains.singapura.js.homing.core.SelfContent;
-import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.design.styling.StyledModule;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.Locale;
  * gone with the tree of events (RFC 0069, amended): what is not yet ported names it still, and does not load. It
  * retires with the old look.
  */
-public record StatesAndEventsModule() implements EsModule<StatesAndEventsModule>, SelfContent {
+public record StatesAndEventsModule() implements EsModule<StatesAndEventsModule>, StyledModule {
 
     public static final StatesAndEventsModule INSTANCE = new StatesAndEventsModule();
 
@@ -38,8 +37,8 @@ public record StatesAndEventsModule() implements EsModule<StatesAndEventsModule>
     }
 
     @Override
-    public List<String> selfContent(ModuleNameResolver resolver) {
-        Taxonomy house = InstalledStyling.get().taxonomy();
+    public List<String> selfContent(Styling styling) {
+        Taxonomy house = styling.taxonomy();
         var states = new ArrayList<String>();
         for (StateType<?> t : house.states().types()) {
             if (!(t instanceof Classed<?> s)) continue;   // the old look draws classes: its classed states alone

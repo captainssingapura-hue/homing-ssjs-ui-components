@@ -16,8 +16,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.UiElementsComponentModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsStyleDeclaration;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsStyleDeclaration;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.ui.jarinstance.JarInstance;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -34,11 +34,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UiControlPanelCrateConformanceTest {
 
     /** The jar's own instance (D51): the catalogue a page has is made from its taxonomy. */
-    @BeforeAll
-    static void theJarsInstance_installed() {
-        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE),
-                List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE));
-    }
+    private static final Styling STYLING = JarInstance.INSTANCE.styling(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE),
+            List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE));
 
     @Test
     void everyServedModuleIsCrated() {
@@ -80,7 +77,7 @@ class UiControlPanelCrateConformanceTest {
 
     @Test
     void theCatalogueAPageHas_isTheDeclarations() {
-        String js = String.join("\n", ControlCatalogueModule.INSTANCE.selfContent(null)) + "\n" + String.join("\n", ControlLeavesModule.INSTANCE.selfContent(null));
+        String js = String.join("\n", ControlCatalogueModule.INSTANCE.selfContent(null)) + "\n" + String.join("\n", ControlLeavesModule.INSTANCE.selfContent(STYLING));
         assertTrue(js.contains("\"size\": Object.freeze({ category: \"degrees\", means: \"extent\", rest: 0, method: \"size\", label: \"Size\" })"), js);
         assertTrue(js.contains("\"colour\": Object.freeze({ category: \"degrees\", means: \"extent\", rest: 1, method: \"extent\", label: \"Colour\" })"), js);
         assertTrue(js.contains("\"enabled\": Object.freeze({ category: \"states\", means: \"switch\", rest: true, method: \"setOn\", label: \"Enabled\" })"), js);

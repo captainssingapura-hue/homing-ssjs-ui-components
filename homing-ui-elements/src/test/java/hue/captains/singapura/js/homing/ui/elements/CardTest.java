@@ -68,7 +68,7 @@ class CardTest extends UiElementsJsTest {
     @BeforeEach
     void load() {
         js = buildContext();
-        TextsInJs.load(js, this::loadModule);   // the summary's texts are the house's
+        TextsInJs.load(js, STYLING, this::loadModule);   // the summary's texts are the house's
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         for (String m : new String[] {"MarkBehaviorModule.js", "LinkBehaviorModule.js", "LinkModule.js", "CardBehaviorModule.js",
                                       "PlainCardModule.js", "ClickableCardModule.js", "SummaryViewModule.js"})

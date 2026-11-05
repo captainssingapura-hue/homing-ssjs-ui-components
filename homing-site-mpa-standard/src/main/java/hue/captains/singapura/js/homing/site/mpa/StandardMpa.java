@@ -2,13 +2,16 @@ package hue.captains.singapura.js.homing.site.mpa;
 
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.Crate;
+import hue.captains.singapura.js.homing.core.DesignRenderer;
 import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.ExternalModule;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
+import hue.captains.singapura.js.homing.core.NoDesign;
 import hue.captains.singapura.js.homing.core.SimpleAppResolver;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
 import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import hue.captains.singapura.js.homing.design.styling.Styling;
+import hue.captains.singapura.js.homing.design.styling.StylingRenderer;
 import hue.captains.singapura.js.homing.preferences.PreferencesRegistry;
 import hue.captains.singapura.js.homing.server.AppMeta;
 import hue.captains.singapura.js.homing.server.HomingActionRegistry;
@@ -49,6 +52,7 @@ import java.util.Objects;
 public final class StandardMpa implements Mpa {
 
     private final Brand brand;
+    private final Styling styling;
     private final ThemeRegistry themes;
     private final PreferencesRegistry preferences;
     private final List<Crate> crates;
@@ -58,9 +62,11 @@ public final class StandardMpa implements Mpa {
     private final ThemesGetAction themesAction;
     private final StyleFamiliesGetAction familiesAction;
 
-    private StandardMpa(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, List<Crate> crates,
+    /** @param styling the site's styling; null for a site that names its themes and has none */
+    private StandardMpa(Brand brand, Styling styling, ThemeRegistry themes, PreferencesRegistry preferences, List<Crate> crates,
                         Map<Class<? extends ExternalModule<?>>, String> libraryUrls) {
         this.brand  = Objects.requireNonNull(brand, "StandardMpa.brand");
+        this.styling = styling;
         this.themes = themes == null ? ThemeRegistry.EMPTY : themes;
         this.preferences = preferences == null ? DefaultPreferences.INSTANCE : preferences;
         var all = new ArrayList<Crate>(crates);
@@ -72,16 +78,17 @@ public final class StandardMpa implements Mpa {
         for (EsModule<?> m : new ServedModules(this.crates).byName().values()) {
             if (m instanceof AppModule<?, ?> a) apps.add(a);
         }
+        DesignRenderer design = styling == null ? NoDesign.INSTANCE : new StylingRenderer(styling);
         // the modules' scripts, like the family files: in dev mode from the source folders homing.devRoot names, else from the jars
         this.framework = new HomingActionRegistry(names, new SimpleAppResolver(apps), ResourceReader.fromSystemProperty(),
-                                                  this.themes, new AppMeta(brand.label()), this.crates);
+                                                  this.themes, new AppMeta(brand.label()), this.crates, design);
         this.themesAction = new ThemesGetAction(this.themes);
-        this.familiesAction = new StyleFamiliesGetAction();
+        this.familiesAction = styling == null ? null : new StyleFamiliesGetAction(styling);
     }
 
     /** A site's MPA: the brand on the bar, the themes it offers, the crates whose modules it serves; the default preferences. */
     public StandardMpa(Brand brand, ThemeRegistry themes, Crate... crates) {
-        this(brand, themes, null, List.of(crates), Map.of());
+        this(brand, null, themes, null, List.of(crates), Map.of());
     }
 
     /**
@@ -90,22 +97,22 @@ public final class StandardMpa implements Mpa {
      * instance the site's crate declares. The bar's button opens it.
      */
     public StandardMpa(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, Crate... crates) {
-        this(brand, themes, preferences, List.of(crates), Map.of());
+        this(brand, null, themes, preferences, List.of(crates), Map.of());
     }
 
     /**
      * A site's MPA over its styling (RFC 0067, appendix The Style Jars): the brand on the bar, the styling - the styles
      * and palettes the instance includes, registered in their two stages - and the crates whose modules it serves; the
-     * default preferences. The styling is installed here, at bootstrap, for every served sheet to read, and the themes
-     * the picker offers are its.
+     * default preferences. The styling is handed to the server, for what is made from it, and the themes the picker
+     * offers are its.
      */
     public StandardMpa(Brand brand, Styling styling, Crate... crates) {
-        this(brand, installed(styling), null, List.of(crates), Map.of());
+        this(brand, styling, installed(styling), null, List.of(crates), Map.of());
     }
 
     /** As {@link #StandardMpa(Brand, Styling, Crate...)}, with the site's own preferences. */
     public StandardMpa(Brand brand, Styling styling, PreferencesRegistry preferences, Crate... crates) {
-        this(brand, installed(styling), preferences, List.of(crates), Map.of());
+        this(brand, styling, installed(styling), preferences, List.of(crates), Map.of());
     }
 
     /**
@@ -115,10 +122,10 @@ public final class StandardMpa implements Mpa {
     public StandardMpa withLibraryAt(Class<? extends ExternalModule<?>> proxy, String url) {
         var urls = new LinkedHashMap<Class<? extends ExternalModule<?>>, String>(libraryUrls);
         urls.put(proxy, url);
-        return new StandardMpa(brand, themes, preferences, crates, urls);
+        return new StandardMpa(brand, styling, themes, preferences, crates, urls);
     }
 
-    /** The styling installed, and its themes. */
+    /** The styling's themes, the styling installed for what still reads it there: the demo's modules, until that repository moves. */
     private static ThemeRegistry installed(Styling styling) {
         InstalledStyling.install(styling);
         return new StylingThemes(styling);
@@ -170,7 +177,7 @@ public final class StandardMpa implements Mpa {
         var gets = new LinkedHashMap<String, GetAction<RoutingContext, ?, ?, ?>>();
         gets.putAll(framework.getActions());
         gets.put(ThemesGetAction.ROUTE, themesAction);
-        if (InstalledStyling.installed().isPresent()) gets.put(StyleFamiliesGetAction.ROUTE, familiesAction);   // a styling's family files, for reading
+        if (familiesAction != null) gets.put(StyleFamiliesGetAction.ROUTE, familiesAction);   // a styling's family files, for reading
         siteActions.forEach((route, action) -> { if (!route.equals(SiteGetAction.ROUTE)) gets.put(route, action); });
         gets.put(SiteGetAction.ROUTE, siteActions.get(SiteGetAction.ROUTE));
         var posts = Map.copyOf(framework.postActions());

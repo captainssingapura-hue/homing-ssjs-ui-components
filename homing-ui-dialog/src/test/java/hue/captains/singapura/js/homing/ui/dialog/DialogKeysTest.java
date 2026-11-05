@@ -71,8 +71,8 @@ class DialogKeysTest extends UiDialogJsTest {
     void load() {
         js = buildContext();
         js.eval("js", "var console = { error: function (m) { throw new Error(m); } };");
-        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));   // the roles the dialog casts its buttons in
-        js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(STYLING)));   // the roles the dialog casts its buttons in
+        js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(STYLING)));
         loadModule(DIR + "ModalityModule.js");
         loadModule(DIR + "DialogModule.js");
         js.eval("js", SHIM);

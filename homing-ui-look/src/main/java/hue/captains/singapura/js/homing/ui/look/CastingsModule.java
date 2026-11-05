@@ -11,10 +11,9 @@ import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
-import hue.captains.singapura.js.homing.core.ModuleNameResolver;
-import hue.captains.singapura.js.homing.core.SelfContent;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseShaping;
-import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.design.styling.StyledModule;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -25,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * The house's roles and castings as a page has them, generated from the installed instance's taxonomy - so no second
+ * The house's roles and castings as a page has them, generated from the taxonomy of the styling served - so no second
  * list can drift from it (RFC 0067, appendix Castings):
  *
  * <ul>
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
  *
  * <p>Every leaf may stand alone until the taxonomy declares the part-only ones.</p>
  */
-public record CastingsModule() implements EsModule<CastingsModule>, SelfContent {
+public record CastingsModule() implements EsModule<CastingsModule>, StyledModule {
 
     public static final CastingsModule INSTANCE = new CastingsModule();
 
@@ -54,8 +53,8 @@ public record CastingsModule() implements EsModule<CastingsModule>, SelfContent 
     }
 
     @Override
-    public List<String> selfContent(ModuleNameResolver resolver) {
-        Taxonomy taxonomy = InstalledStyling.get().taxonomy();
+    public List<String> selfContent(Styling styling) {
+        Taxonomy taxonomy = styling.taxonomy();
         Set<RoleNode> functional = under(taxonomy, HouseShaping.Shaping.INSTANCE);
         var roles = new ArrayList<String>();
         roles.add(role("standalone", false));

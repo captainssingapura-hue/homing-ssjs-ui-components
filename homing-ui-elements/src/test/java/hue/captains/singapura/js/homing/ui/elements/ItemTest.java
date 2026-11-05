@@ -54,9 +54,9 @@ class ItemTest extends UiElementsJsTest {
     void load() {
         js = buildContext();
         js.eval("js", "var ic_base = 'ic_base';");
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)));   // the instance's icons
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(STYLING)));   // the instance's icons
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/icons/IconModule.js");
-        TextsInJs.load(js, this::loadModule);   // a hint and a note are the house's captions
+        TextsInJs.load(js, STYLING, this::loadModule);   // a hint and a note are the house's captions
         for (String m : new String[] {"ItemBehaviorModule.js", "MenuItemModule.js", "ListRowModule.js", "ChoiceOptionModule.js"})
             loadModule(DIR + m);
         js.eval("js", TextsInJs.withCss(SHIM));

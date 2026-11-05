@@ -41,7 +41,7 @@ class MarkTest extends UiElementsJsTest {
     @BeforeEach
     void load() {
         js = buildContext();
-        TextsInJs.load(js, this::loadModule);   // the castings, the states, the look and the simple component
+        TextsInJs.load(js, STYLING, this::loadModule);   // the castings, the states, the look and the simple component
         for (String m : new String[] {"MarkBehaviorModule.js", "LampModule.js", "DropMarkModule.js", "BoundaryLineModule.js"})
             loadModule(DIR + m);
         js.eval("js", TextsInJs.withCss(SHIM));

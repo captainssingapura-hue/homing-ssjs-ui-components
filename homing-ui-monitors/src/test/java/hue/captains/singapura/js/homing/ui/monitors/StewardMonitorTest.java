@@ -77,9 +77,9 @@ class StewardMonitorTest extends UiMonitorsJsTest {
         loadModule(DIR + "component/keyboard/KeyboardStewardModule.js");
         loadModule(DIR + "component/WidgetSlotModule.js");
         // its body the house's lamp: its castings, its states, its look and the simple component it is
-        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(STYLING)));
         js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet', ICONS = {};");
         loadModule(DIR + "server/StyledLeaves.js");
         loadModule(DIR + "ui/look/LookModule.js");

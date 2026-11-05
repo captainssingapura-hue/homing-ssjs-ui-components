@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.menu;
 
+import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.ui.look.CastingsModule;
 import hue.captains.singapura.js.homing.ui.look.LookManifestModule;
 import hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule;
@@ -26,16 +27,16 @@ final class TextsInJs {
             + " ['size', 'extent', 'aspect'].forEach(function (d) { if (!css[d]) css[d] = function (e, v) { e['_' + d] = v; }; });"
             + " if (typeof el_text === 'undefined') globalThis.el_text = 'el_text';\n";
 
-    static void load(Context js, Consumer<String> loadModule) {
+    static void load(Context js, Styling styling, Consumer<String> loadModule) {
         if (js.eval("js", "typeof ROLE === 'undefined'").asBoolean())
-            js.eval("js", String.join(System.lineSeparator(), CastingsModule.INSTANCE.selfContent(null)));
+            js.eval("js", String.join(System.lineSeparator(), CastingsModule.INSTANCE.selfContent(styling)));
         if (js.eval("js", "typeof STATE === 'undefined'").asBoolean())
-            js.eval("js", String.join(System.lineSeparator(), StatesAndEventsModule.INSTANCE.selfContent(null)));
+            js.eval("js", String.join(System.lineSeparator(), StatesAndEventsModule.INSTANCE.selfContent(styling)));
         if (js.eval("js", "typeof LEAVES === 'undefined'").asBoolean())
-            js.eval("js", String.join(System.lineSeparator(), LookManifestModule.INSTANCE.selfContent(null)));
+            js.eval("js", String.join(System.lineSeparator(), LookManifestModule.INSTANCE.selfContent(styling)));
         js.eval("js", "if (typeof style_sheet === 'undefined') { globalThis.style_sheet = 'style-sheet'; globalThis.palette_sheet = 'palette-sheet'; } if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); if (js.eval("js", "typeof StyledLeaf === 'undefined'").asBoolean()) loadModule.accept("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         if (js.eval("js", "typeof ICON === 'undefined'").asBoolean())   // the instance's icons, as a var: a test may load its own first
-            js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(null)).replace("const ICON ", "var ICON "));
+            js.eval("js", String.join(System.lineSeparator(), hue.captains.singapura.js.homing.ui.look.IconsModule.INSTANCE.selfContent(styling)).replace("const ICON ", "var ICON "));
         if (js.eval("js", "typeof Look === 'undefined'").asBoolean())   // the look, the design's: beside the elements, not one of them
             loadModule.accept("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");
         if (js.eval("js", "typeof Icon === 'undefined'").asBoolean()) {   // the icon an owner mounts - a close button's face among them (D52) - and its box

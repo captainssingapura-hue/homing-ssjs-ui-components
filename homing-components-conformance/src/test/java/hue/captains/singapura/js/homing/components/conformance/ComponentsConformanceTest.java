@@ -17,9 +17,8 @@ import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.tree.TreeLevel;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
-import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.design.styling.StylingRenderer;
 import hue.captains.singapura.js.homing.ui.styles.HouseStyles;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -50,10 +49,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class ComponentsConformanceTest {
 
-    /** The house's own instance, installed as a site installs its own: what is made from its taxonomy is served (D51). */
-    @BeforeAll
-    static void theHousesInstance_installed() { InstalledStyling.install(HouseStyles.INSTANCE.styling()); }
-
     private static final boolean ALLOW_PRE_EXISTING =
             Boolean.parseBoolean(System.getProperty("conformance.allowPreExisting", "true"));
 
@@ -76,7 +71,7 @@ class ComponentsConformanceTest {
 
     @Test
     void everyServedModuleKeepsItsLane() {
-        List<Finding> raw = new ConformanceEngine(ComponentsConformance.POLICY, new ServedModuleRenderer())
+        List<Finding> raw = new ConformanceEngine(ComponentsConformance.POLICY, new ServedModuleRenderer(new StylingRenderer(HouseStyles.INSTANCE.styling())))
                 .checkCrates(ComponentsConformance.INSTANCE.topLevel());
         assertEquals(List.of(), DeclaredDebts.INSTANCE.unbalanced(ComponentsConformance.INSTANCE.topLevel(), raw), "a debt not as declared - owed exactly, never more");
         List<GradedFinding> graded = ComponentsConformance.INSTANCE.grader(ALLOW_PRE_EXISTING).grade(raw);

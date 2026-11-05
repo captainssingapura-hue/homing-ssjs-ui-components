@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.site.mpa;
 
-import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import hue.captains.singapura.js.homing.design.styling.StyleFamilies;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.server.EmptyParam;
 import hue.captains.singapura.js.homing.server.ResourceNotFound;
 import hue.captains.singapura.tao.http.action.GetAction;
@@ -11,12 +11,13 @@ import hue.captains.singapura.tao.http.action.TypedContent;
 import io.vertx.ext.web.RoutingContext;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
- * GET {@code /style-families} - the installed styling's family files, for reading (RFC 0067, appendix The Style Jars):
+ * GET {@code /style-families} - the site's styling's family files, for reading (RFC 0067, appendix The Style Jars):
  * in dev mode made afresh from the casting files on the file system on every request, deployed the ones the
  * instance's jar was built with ({@link StyleFamilies}).
  *
@@ -36,8 +37,15 @@ public final class StyleFamiliesGetAction
     /** A file, or the list. */
     public record Served(String body, String contentType) implements TypedContent {}
 
-    /** Made once, from the styling installed at bootstrap. */
+    private final Styling styling;
+
+    /** Made once, from the styling, the first time it is asked for. */
     private final AtomicReference<StyleFamilies> families = new AtomicReference<>();
+
+    /** The family files of this styling. */
+    public StyleFamiliesGetAction(Styling styling) {
+        this.styling = Objects.requireNonNull(styling, "StyleFamiliesGetAction.styling");
+    }
 
     @Override
     public ParamMarshaller._QueryString<RoutingContext, Query> queryStrMarshaller() {
@@ -52,7 +60,7 @@ public final class StyleFamiliesGetAction
     @Override
     public CompletableFuture<Served> execute(Query query, EmptyParam.NoHeaders headers) {
         try {
-            StyleFamilies read = families.updateAndGet(f -> f != null ? f : new StyleFamilies(InstalledStyling.get()));
+            StyleFamilies read = families.updateAndGet(f -> f != null ? f : new StyleFamilies(styling));
             boolean style = query.style() != null && !query.style().isBlank(), family = query.family() != null && !query.family().isBlank();
             if (!style && !family) return CompletableFuture.completedFuture(new Served(list(read), "application/json; charset=utf-8"));
             if (!style || !family) return CompletableFuture.failedFuture(notFound(ROUTE, "a file is asked for by both its style and its family"));

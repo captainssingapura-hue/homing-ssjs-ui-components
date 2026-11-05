@@ -77,7 +77,7 @@ class SplitGridMirrorTest extends UiSplitGridJsTest {
         loadModule(P + "SplitGridTreeModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/sizing/RailModule.js");
         loadModule(P + "SplitGridGeometryModule.js");
-        TextsInJs.load(js, this::loadModule);   // the look, and the kicker each cell's name is
+        TextsInJs.load(js, STYLING, this::loadModule);   // the look, and the kicker each cell's name is
         for (String m : new String[] {"MarkBehaviorModule.js", "PaneThumbModule.js"})
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);   // each cell the house's pane thumbnail
         loadModule(P + "SplitGridMirrorModule.js");
