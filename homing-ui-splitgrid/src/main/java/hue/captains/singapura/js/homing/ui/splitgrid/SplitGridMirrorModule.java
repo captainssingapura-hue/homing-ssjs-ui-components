@@ -33,10 +33,11 @@ public record SplitGridMirrorModule() implements DomModule<SplitGridMirrorModule
     public record SplitGridMirror() implements BranchComponent<SplitGridMirrorModule>, NeedKeyboard {
         @Override public String summary() { return "The arrangement of a grid, drawn at a scale, with a cursor the keyboard moves from cell to cell."; }
         /** The arrows, through the party: the cursor to the cell beside it. */
-        public static final List<KeyBinding> KEYS = List.of(
+        @Override public List<KeyBinding> keys() {
+            return List.of(
                 new KeyBinding(Key.ARROW_LEFT, "the cursor to the cell on the left"), new KeyBinding(Key.ARROW_RIGHT, "the cursor to the cell on the right"),
                 new KeyBinding(Key.ARROW_UP, "the cursor to the cell above"), new KeyBinding(Key.ARROW_DOWN, "the cursor to the cell below"));
-        @Override public List<KeyBinding> keys() { return KEYS; }
+        }
     }
 
     public static final SplitGridMirrorModule INSTANCE = new SplitGridMirrorModule();

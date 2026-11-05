@@ -87,7 +87,7 @@ class HouseRoleCatalogueTest {
      */
     @Test
     void theWholeHouse_leavesTheseWordsUnnamed_theCatalogueAheadOfIt() {
-        var unnamed = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES).findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
+        var unnamed = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules()).findings().stream().filter(f -> f.sign() == TaxonomyFinding.Sign.ROLE_UNNAMED)
                 .map(f -> f.says().replace(" is named by no component", "")).toList();
         assertEquals(List.of("Subtitle", "Category", "Prompt", "Placeholder", "Level", "Status", "Error", "Check", "Rest", "Notch", "Figure", "Style", "Palette", "Picker", "Query", "Cancel", "Skip", "Toggle",
                 "Reset", "Increase", "Decrease", "Clear", "Add", "Remove", "Preferences", "Previous", "Next", "First", "Last", "More", "Actions", "Page", "Host",

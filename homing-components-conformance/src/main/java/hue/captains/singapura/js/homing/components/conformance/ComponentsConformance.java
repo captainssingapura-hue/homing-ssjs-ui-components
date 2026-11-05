@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.components.conformance;
 
+import hue.captains.singapura.js.homing.base.lang.StatelessSingleton;
 import hue.captains.singapura.js.homing.conformance.rules.Allowance;
 import hue.captains.singapura.js.homing.layout.LayoutCrate;
 import hue.captains.singapura.js.homing.sizing.SizingCrate;
@@ -23,6 +24,7 @@ import hue.captains.singapura.js.homing.ui.menu.UiMenuCrate;
 import hue.captains.singapura.js.homing.ui.floating.UiFloatingCrate;
 import hue.captains.singapura.js.homing.ui.panes.UiPanesCrate;
 import hue.captains.singapura.js.homing.ui.panzoom.UiPanZoomCrate;
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,12 +53,13 @@ import java.util.stream.Collectors;
  * core-js, the base's runtime, the design targets — are gated upstream and
  * are in the closure only so that imports and CSS reach resolve.</p>
  */
-public final class ComponentsConformance {
+public record ComponentsConformance() implements StatelessFunctionalObject, StatelessSingleton {
 
-    private ComponentsConformance() {}
+    public static final ComponentsConformance INSTANCE = new ComponentsConformance();
 
     /** The fresh crates: what the gate grades and the studio browses. */
-    public static final List<Crate> TOP_LEVEL = List.of(
+    public List<Crate> topLevel() {
+        return List.of(
             LayoutCrate.INSTANCE,
             SizingCrate.INSTANCE,
             UiLookCrate.INSTANCE,
@@ -73,12 +76,15 @@ public final class ComponentsConformance {
             UiMenuCrate.INSTANCE,
             MpaCrate.INSTANCE,
             UiControlPanelCrate.INSTANCE);
+    }
 
     /** One class per Maven module, for the coverage check: nothing served from these modules may be uncrated. */
-    public static final List<Class<?>> ANCHORS = List.of(
+    public List<Class<?>> anchors() {
+        return List.of(
             LayoutCrate.class, SizingCrate.class, UiLookCrate.class, UiElementsCrate.class, UiDialogCrate.class, UiPreferencesCrate.class,
             UiPanZoomCrate.class, UiPanesCrate.class, UiFloatingCrate.class, UiDockingCrate.class, UiSplitGridCrate.class, UiIconsCrate.class, UiMonitorsCrate.class, UiMenuCrate.class, MpaCrate.class,
             UiControlPanelCrate.class);
+    }
 
     /** The framework's policy, unextended: the components declare no types of their own. */
     public static final JsRulePolicy POLICY = DefaultJsRulePolicy.INSTANCE;
@@ -88,20 +94,20 @@ public final class ComponentsConformance {
      * component does - a derived sheet's class is the manager's to put on an element, whatever sheet rules it; the
      * manager only loads the provided ones (RFC 0064, D25) - so nothing here is excused.
      */
-    public static final List<Allowance> ALLOWANCES = List.of();
+    public List<Allowance> allowances() { return List.of(); }
 
     /** The top level and everything it requires, transitively. */
-    public static Collection<Crate> closure() {
-        return CrateClosure.INSTANCE.of(TOP_LEVEL);
+    public Collection<Crate> closure() {
+        return CrateClosure.INSTANCE.of(topLevel());
     }
 
     /** The served identities of the top level's own modules — what the gate and the export grade. */
-    public static Set<String> ownModules() {
-        return TOP_LEVEL.stream().flatMap(c -> c.entries().stream()).map(e -> e.moduleClass()).collect(Collectors.toSet());
+    public Set<String> ownModules() {
+        return topLevel().stream().flatMap(c -> c.entries().stream()).map(e -> e.moduleClass()).collect(Collectors.toSet());
     }
 
     /** The committed baseline: empty, and held empty on purpose. */
-    public static Baseline baseline() {
+    public Baseline baseline() {
         try (InputStream in = ComponentsConformance.class.getResourceAsStream("/components-conformance-baseline.txt")) {
             if (in == null) return Baseline.EMPTY;
             var lines = new ArrayList<String>();
@@ -115,9 +121,9 @@ public final class ComponentsConformance {
     }
 
     /** The framework-strict grader with the components' allowances and (empty) baseline; a module's declared debts honoured. */
-    public static FindingGrader grader(boolean allowPreExisting) {
+    public FindingGrader grader(boolean allowPreExisting) {
         return FindingGrader.STRICT
-                .withAllowlist(ALLOWANCES)
+                .withAllowlist(allowances())
                 .withBaseline(baseline())
                 .allowingPreExisting(allowPreExisting);
     }

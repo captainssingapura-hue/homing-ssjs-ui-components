@@ -45,12 +45,15 @@ public record HouseStyles() implements StylingInstance, StatelessFunctionalObjec
     public static final HouseStyles INSTANCE = new HouseStyles();
 
     /** The styles served, the house's own first: it is the default. */
-    public static final List<DesignStyle<BaseScheme>> STYLES = List.of(
+    public List<DesignStyle<BaseScheme>> styles() {
+        return List.of(
             Editorial.INSTANCE, NeoBrutalism.INSTANCE, NeoFuturism.INSTANCE, Neumorphism.INSTANCE,
             Glassmorphism.INSTANCE, RetroFuturism.INSTANCE, Sketchy.INSTANCE);
+    }
 
     /** Each style's own palette, the one it is worn in unless another is asked for - the old designs' own colours. */
-    public static final Map<DesignStyle<BaseScheme>, ColorPalette<BaseScheme>> OWN = Map.of(
+    public Map<DesignStyle<BaseScheme>, ColorPalette<BaseScheme>> own() {
+        return Map.of(
             Editorial.INSTANCE, Harbour.INSTANCE,
             NeoBrutalism.INSTANCE, NeoBrutalismColours.INSTANCE,
             NeoFuturism.INSTANCE, NeoFuturismColours.INSTANCE,
@@ -58,12 +61,13 @@ public record HouseStyles() implements StylingInstance, StatelessFunctionalObjec
             Glassmorphism.INSTANCE, Frost.INSTANCE,
             RetroFuturism.INSTANCE, Synthwave.INSTANCE,
             Sketchy.INSTANCE, Marker.INSTANCE);
+    }
 
     /** The house's schemes, each by its declaration, registered once: the base scheme alone (D49). */
-    public static final List<SchemeDeclaration<?>> SCHEME_JARS = List.of(BaseColours.INSTANCE);
+    public List<SchemeDeclaration<?>> schemeJars() { return List.of(BaseColours.INSTANCE); }
 
     /** The house's jars of palettes, each by its declaration: the base scheme's eight, Harbour first and so the default. */
-    public static final List<PaletteDeclaration> PALETTE_JARS = List.of(BasePaletteDeclaration.INSTANCE);
+    public List<PaletteDeclaration> paletteJars() { return List.of(BasePaletteDeclaration.INSTANCE); }
 
     /** The house's own instance, nothing a site adds: registered the first time it is asked for, and the same after. */
     @Override public Styling styling() { return styling(List.of()); }
@@ -94,8 +98,8 @@ public record HouseStyles() implements StylingInstance, StatelessFunctionalObjec
 
     /** The instance: the styles served over the house's styles, the house's palettes over its schemes, each style's own. */
     private Styling register(List<BaseModule<BaseScheme, Base>> more) {
-        SchemeRegistry schemes = new SchemeRegistry(SCHEME_JARS);
-        return new Styling(styles(more), List.copyOf(STYLES), new PaletteRegistry(PALETTE_JARS, schemes), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
+        SchemeRegistry schemes = new SchemeRegistry(schemeJars());
+        return new Styling(styles(more), List.copyOf(styles()), new PaletteRegistry(paletteJars(), schemes), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(own()));
     }
 
     /** Each instance registered, by the site's base modules: each registered once. */

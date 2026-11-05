@@ -29,7 +29,7 @@ public record NeumorphismSpec() implements SpecModule<BaseScheme, Neumorphism> {
 
     @Override public Neumorphism style() { return Neumorphism.INSTANCE; }
 
-    @Override public List<ComponentModule> modules() { return HouseTaxonomy.MODULES; }
+    @Override public List<ComponentModule> modules() { return HouseTaxonomy.INSTANCE.modules(); }
 
     @Override public List<ComponentAssignment<BaseScheme, Neumorphism, ?>> assignments() {
         return List.of(

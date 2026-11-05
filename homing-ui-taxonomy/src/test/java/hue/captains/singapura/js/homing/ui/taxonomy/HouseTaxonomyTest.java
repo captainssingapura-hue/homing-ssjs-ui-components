@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class HouseTaxonomyTest {
 
-    private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
+    private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules());
 
     /** The common components ui-components ships today, by their class names; its Button is realized by the button leaves, its Card by PlainCard and ClickableCard. */
     private static final Set<String> SHIPPED = Set.of(
@@ -70,7 +70,7 @@ class HouseTaxonomyTest {
 
     @Test
     void everythingReached_isDeclared() {
-        assertEquals(Set.copyOf(HOUSE.components()), ComponentModules.INSTANCE.bringers(HouseTaxonomy.MODULES, HOUSE).keySet(),
+        assertEquals(Set.copyOf(HOUSE.components()), ComponentModules.INSTANCE.bringers(HouseTaxonomy.INSTANCE.modules(), HOUSE).keySet(),
                 "no component is reached but through a module: listed by it, or a part of one it lists");
     }
 
@@ -150,7 +150,7 @@ class HouseTaxonomyTest {
     void theStates_wholeInTheBase_filedByWhatTheyAreAbout() {
         assertEquals(List.of("availability", "picking", "disclosure", "validity", "place", "content", "interaction", "physical", "counting", "given", "measure"),
                 HOUSE.states().branches().stream().map(b -> b.name().value()).toList());
-        assertEquals(HouseStates.ALL, HOUSE.states().types(), "every type, whether or not a component has it yet");
+        assertEquals(HouseStates.INSTANCE.all(), HOUSE.states().types(), "every type, whether or not a component has it yet");
         assertEquals(List.of(HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE, HouseStates.Keyboard.INSTANCE, HouseStates.Dragging.INSTANCE, HouseStates.TabCarry.INSTANCE, HouseStates.TabInTransit.INSTANCE, HouseStates.Held.INSTANCE),
                 HOUSE.states().children(HouseStates.Interaction.INSTANCE), "what the hand and the keys do, folded into the tree - the hand's drag among them, and its hold as a component has it");
         assertEquals(List.of("true", "false"), tokens(HouseStates.Enabled.INSTANCE), "enabled at rest");

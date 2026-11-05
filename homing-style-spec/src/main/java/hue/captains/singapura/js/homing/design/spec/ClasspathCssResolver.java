@@ -11,12 +11,13 @@ import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * The resolver of the classpath (RFC 0067, D53): an implementation's content is the resource under the resolver's
  * prefix at its class's canonical name - {@code homing-css/…/styles/editorial/PlainButton.css} - the exact name, from
  * its class's loader. The prefix is given where the resolver is registered ({@link ReadSpec}), and held to its rules
- * ({@link PrefixRule#RULES}) when made. One is found: two copies are refused when the classpath is built
+ * ({@link PrefixRule}) when made. One is found: two copies are refused when the classpath is built
  * ({@link DuplicateContent}), never here.
  *
  * @param prefix the directory content is under, from the classpath's root: {@code homing-css/}
@@ -25,7 +26,7 @@ public record ClasspathCssResolver(String prefix) implements CssResolver, Scalar
 
     public ClasspathCssResolver {
         final String given = prefix;
-        Validation found = Validations.INSTANCE.all(PrefixRule.RULES, rule -> rule.check(given));
+        Validation found = Validations.INSTANCE.all(List.<PrefixRule>of(new PrefixRule.Given(), new PrefixRule.FromTheRoot(), new PrefixRule.ADirectory(), new PrefixRule.ForwardSlashes(), new PrefixRule.NamedSegments()), rule -> rule.check(given));
         if (found instanceof Validation.Invalid invalid)
             throw new IllegalArgumentException("the resolver's prefix is refused:\n  " + String.join("\n  ", invalid.problems()));
     }

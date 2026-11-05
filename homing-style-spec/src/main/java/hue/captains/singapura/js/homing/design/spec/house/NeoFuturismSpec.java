@@ -29,7 +29,7 @@ public record NeoFuturismSpec() implements SpecModule<BaseScheme, NeoFuturism> {
 
     @Override public NeoFuturism style() { return NeoFuturism.INSTANCE; }
 
-    @Override public List<ComponentModule> modules() { return HouseTaxonomy.MODULES; }
+    @Override public List<ComponentModule> modules() { return HouseTaxonomy.INSTANCE.modules(); }
 
     @Override public List<ComponentAssignment<BaseScheme, NeoFuturism, ?>> assignments() {
         return List.of(

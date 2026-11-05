@@ -30,7 +30,7 @@ public final class ComponentsConformanceExport {
         Path dir = Paths.get(args[0]);
         InstalledStyling.install(HouseStyles.INSTANCE.styling());
         ConformanceRun run = new ConformanceEngine(ComponentsConformance.POLICY, new ServedModuleRenderer())
-                .assemble(ComponentsConformance.TOP_LEVEL, ComponentsConformance.grader(true));
+                .assemble(ComponentsConformance.INSTANCE.topLevel(), ComponentsConformance.INSTANCE.grader(true));
         new ConformanceReportWriter().write(dir, run);
         System.out.println("[ComponentsConformanceExport] wrote report to " + dir
                 + " (" + run.modules().size() + " modules, "

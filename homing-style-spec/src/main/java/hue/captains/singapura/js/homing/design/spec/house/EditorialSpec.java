@@ -29,7 +29,7 @@ public record EditorialSpec() implements SpecModule<BaseScheme, Editorial> {
 
     @Override public Editorial style() { return Editorial.INSTANCE; }
 
-    @Override public List<ComponentModule> modules() { return HouseTaxonomy.MODULES; }
+    @Override public List<ComponentModule> modules() { return HouseTaxonomy.INSTANCE.modules(); }
 
     @Override public List<ComponentAssignment<BaseScheme, Editorial, ?>> assignments() {
         return List.of(

@@ -29,7 +29,7 @@ public record NeoBrutalismSpec() implements SpecModule<BaseScheme, NeoBrutalism>
 
     @Override public NeoBrutalism style() { return NeoBrutalism.INSTANCE; }
 
-    @Override public List<ComponentModule> modules() { return HouseTaxonomy.MODULES; }
+    @Override public List<ComponentModule> modules() { return HouseTaxonomy.INSTANCE.modules(); }
 
     @Override public List<ComponentAssignment<BaseScheme, NeoBrutalism, ?>> assignments() {
         return List.of(

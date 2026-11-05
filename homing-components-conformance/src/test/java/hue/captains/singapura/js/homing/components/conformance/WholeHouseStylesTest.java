@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class WholeHouseStylesTest {
 
-    private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
+    private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules());
 
     @Test
     void theHousesInstance_holdsToTheCentralRules_overTheWholeHouse() {

@@ -29,7 +29,7 @@ public record SketchySpec() implements SpecModule<BaseScheme, Sketchy> {
 
     @Override public Sketchy style() { return Sketchy.INSTANCE; }
 
-    @Override public List<ComponentModule> modules() { return HouseTaxonomy.MODULES; }
+    @Override public List<ComponentModule> modules() { return HouseTaxonomy.INSTANCE.modules(); }
 
     @Override public List<ComponentAssignment<BaseScheme, Sketchy, ?>> assignments() {
         return List.of(

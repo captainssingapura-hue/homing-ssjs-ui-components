@@ -40,34 +40,34 @@ class ReadSpecTest {
 
     @Test
     void aJar_assigningAComponentItDoesNotSayItStyles_isRefused() {
-        refused(HouseSpec.BASE, styles(new Style(List.of(UiIconsComponentModule.INSTANCE), List.of(editorial(HouseControls.PlainButton.INSTANCE)))),
+        refused(HouseSpec.INSTANCE.base(), styles(new Style(List.of(UiIconsComponentModule.INSTANCE), List.of(editorial(HouseControls.PlainButton.INSTANCE)))),
                 "which UiElementsComponentModule brings - no module it names");
     }
 
     @Test
     void aComponentAssignedTwiceInALayer_isRefused() {
-        refused(HouseSpec.BASE, styles(new Style(EditorialSpec.INSTANCE.modules(), List.of(editorial(HouseControls.PlainButton.INSTANCE)))),
+        refused(HouseSpec.INSTANCE.base(), styles(new Style(EditorialSpec.INSTANCE.modules(), List.of(editorial(HouseControls.PlainButton.INSTANCE)))),
                 "plain-button is assigned twice in editorial");
     }
 
     @Test
     void theBase_leavingAComponentOut_isRefused() {
-        refused(bases(a -> a.component().equals(HouseControls.PlainButton.INSTANCE) ? null : a), HouseSpec.STYLES,
+        refused(bases(a -> a.component().equals(HouseControls.PlainButton.INSTANCE) ? null : a), HouseSpec.INSTANCE.styles(),
                 "plain-button has no assignment in the base");
     }
 
     @Test
     void theBase_leavingOutARoleOfAComponentsSet_isRefused() {
-        refused(bases(a -> a.equals(PLAIN) ? without(PLAIN, HouseDoing.Action.INSTANCE) : a), HouseSpec.STYLES,
+        refused(bases(a -> a.equals(PLAIN) ? without(PLAIN, HouseDoing.Action.INSTANCE) : a), HouseSpec.INSTANCE.styles(),
                 "base assigns plain-button and not plain-button_action: a layer assigns every casting of a component it assigns");
     }
 
     @Test
     void aStyle_assigningAComponentInPart_isRefused() {
-        var styles = new ArrayList<SpecModule<BaseScheme, ?>>(HouseSpec.STYLES);
+        var styles = new ArrayList<SpecModule<BaseScheme, ?>>(HouseSpec.INSTANCE.styles());
         styles.set(0, new Style(EditorialSpec.INSTANCE.modules(), EditorialSpec.INSTANCE.assignments().stream()
                 .map(a -> a.component().equals(HouseControls.PlainButton.INSTANCE) ? editorial(HouseControls.PlainButton.INSTANCE) : a).toList()));
-        refused(HouseSpec.BASE, styles, "editorial assigns plain-button and not plain-button_go, plain-button_cancel, plain-button_action");
+        refused(HouseSpec.INSTANCE.base(), styles, "editorial assigns plain-button and not plain-button_go, plain-button_cancel, plain-button_action");
     }
 
     /** Editorial's own assignment of a component, its roles left out. */
@@ -87,7 +87,7 @@ class ReadSpecTest {
 
     /** The house's base modules, UiElements' assignments each changed - or left out, where the change gives none. */
     private static List<BaseSpecModule<BaseScheme, Base>> bases(UnaryOperator<ComponentAssignment<BaseScheme, Base, ?>> change) {
-        var out = new ArrayList<BaseSpecModule<BaseScheme, Base>>(HouseSpec.BASE);
+        var out = new ArrayList<BaseSpecModule<BaseScheme, Base>>(HouseSpec.INSTANCE.base());
         var changed = new ArrayList<ComponentAssignment<BaseScheme, Base, ?>>();
         for (ComponentAssignment<BaseScheme, Base, ?> a : UiElementsBaseSpec.INSTANCE.assignments()) {
             ComponentAssignment<BaseScheme, Base, ?> c = change.apply(a);
@@ -99,14 +99,14 @@ class ReadSpecTest {
 
     /** The house's styles, and one more module of Editorial's. */
     private static List<SpecModule<BaseScheme, ?>> styles(SpecModule<BaseScheme, ?> more) {
-        var out = new ArrayList<SpecModule<BaseScheme, ?>>(HouseSpec.STYLES);
+        var out = new ArrayList<SpecModule<BaseScheme, ?>>(HouseSpec.INSTANCE.styles());
         out.add(more);
         return out;
     }
 
     private static void refused(List<? extends BaseSpecModule<?, ?>> bases, List<? extends SpecModule<?, ?>> styles, String says) {
         var e = assertThrows(IllegalArgumentException.class, () -> ReadSpec.INSTANCE.read(bases, styles, HouseRoleCatalogue.INSTANCE.roles(),
-                HouseStates.ALL, new ClasspathCssResolver("homing-css/")));
+                HouseStates.INSTANCE.all(), new ClasspathCssResolver("homing-css/")));
         assertTrue(e.getMessage().contains(says), "refused, and saying \"" + says + "\":\n" + e.getMessage());
     }
 

@@ -20,7 +20,7 @@ class UiIconsStyleDeclarationTest {
     @TestFactory
     Stream<DynamicTest> theJar_andEachImplementation_heldAlone() {
         CheckDeclaration.Checked checked = CheckDeclaration.INSTANCE.check(
-                UiIconsStyleDeclaration.INSTANCE, HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES), BaseColours.TREE);
+                UiIconsStyleDeclaration.INSTANCE, HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules()), BaseColours.TREE);
         return Stream.concat(
                 Stream.of(DynamicTest.dynamicTest("the jar", () -> assertEquals(List.of(), checked.problems()))),
                 checked.implementations().stream()

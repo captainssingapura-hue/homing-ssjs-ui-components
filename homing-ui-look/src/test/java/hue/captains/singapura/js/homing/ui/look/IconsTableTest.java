@@ -19,7 +19,7 @@ class IconsTableTest {
 
     @Test
     void theIcons_everyLeafOfTheIconBranch_inTheOrderRead() {
-        List<Component<?>> icons = IconsModule.Icons.INSTANCE.of(HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES));
+        List<Component<?>> icons = IconsModule.Icons.INSTANCE.of(HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules()));
         assertEquals(22, icons.size(), "the house's seventeen - the pacman and the preferences among them (21 Oct) - and the panes' five");
         assertEquals(HouseIcons.AddIcon.INSTANCE, icons.get(0));
         assertTrue(icons.contains(HouseIcons.WithinIcon.INSTANCE));

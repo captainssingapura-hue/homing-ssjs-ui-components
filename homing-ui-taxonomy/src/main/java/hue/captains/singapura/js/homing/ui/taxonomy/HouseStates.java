@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.taxonomy;
 
+import hue.captains.singapura.js.homing.base.lang.StatelessSingleton;
 import hue.captains.singapura.js.homing.component.taxonomy.Classed;
 import hue.captains.singapura.js.homing.component.taxonomy.Flag;
 import hue.captains.singapura.js.homing.component.taxonomy.Importance;
@@ -10,6 +11,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.StateDomain;
 import hue.captains.singapura.js.homing.component.taxonomy.StateRoot;
 import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
 import java.util.Map;
@@ -31,9 +33,9 @@ import java.util.Map;
  * A change of a type of state is an event; a component declares its states, and nothing else (RFC
  * 0069, amended 21 Oct). What each means is in {@code meanings/.../HouseStates.md}.</p>
  */
-public final class HouseStates {
+public record HouseStates() implements StatelessFunctionalObject, StatelessSingleton {
 
-    private HouseStates() {}
+    public static final HouseStates INSTANCE = new HouseStates();
 
     // ── branches ─────────────────────────────────────────────────────────
 
@@ -144,9 +146,8 @@ public final class HouseStates {
     /** How much of the group it speaks for is chosen: none, some or all. The mixed checkbox's, never a plain one's. */
     public record Coverage() implements Classed<Picking>, Importance.Tertiary {
         public static final Coverage INSTANCE = new Coverage();
-        private static final List<StateValue> VALUES = List.of(new StateValue("none"), new StateValue("some"), new StateValue("all"));
+        @Override public List<StateValue> values() { return List.of(new StateValue("none"), new StateValue("some"), new StateValue("all")); }
         @Override public Picking parent() { return Picking.INSTANCE; }
-        @Override public List<StateValue> values() { return VALUES; }
     }
 
     /** Picked from among its kind: an option, a tab, a day, a row. */
@@ -256,11 +257,12 @@ public final class HouseStates {
     /** Where the page's keys are, as the keyboard's steward says: away, candidate, lent or held. */
     public record Keyboard() implements Classed<Interaction>, Importance.Secondary {
         public static final Keyboard INSTANCE = new Keyboard();
-        private static final List<StateValue> VALUES = List.of(new StateValue("away"), new StateValue("candidate"),
+        @Override public List<StateValue> values() {
+            return List.of(new StateValue("away"), new StateValue("candidate"),
                 new StateValue("lent"), new StateValue("held"));
+        }
         @Override public Interaction parent() { return Interaction.INSTANCE; }
-        @Override public List<StateValue> values() { return VALUES; }
-        @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "candidate", VALUES.get(2), "lent", VALUES.get(3), "held"); }
+        @Override public Map<StateValue, String> words() { return Map.of(values().get(1), "candidate", values().get(2), "lent", values().get(3), "held"); }
     }
 
     /** Held by the hand and moved: from the press that grabs it to the release. */
@@ -296,11 +298,12 @@ public final class HouseStates {
         public static final Held INSTANCE = new Held();
         public static final StateValue UP = new StateValue("up"), DOWN = new StateValue("down");
         private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Point(UP), new StateDomain.Point(DOWN)), new StateDomain.Named(UP));
-        private static final List<NamedChange> CHANGES = List.of(new NamedChange("press", new NamedChange.Between(UP, DOWN)),
+        @Override public List<NamedChange> changes() {
+            return List.of(new NamedChange("press", new NamedChange.Between(UP, DOWN)),
                 new NamedChange("release", new NamedChange.Between(DOWN, UP)));
+        }
         @Override public Interaction parent() { return Interaction.INSTANCE; }
         @Override public StateDomain domain() { return DOMAIN; }
-        @Override public List<NamedChange> changes() { return CHANGES; }
     }
 
     // ── physical ─────────────────────────────────────────────────────────
@@ -308,19 +311,17 @@ public final class HouseStates {
     /** How far off its own plane it sits: flat, elevated or sunken. */
     public record Elevation() implements Classed<Physical>, Importance.Senary {
         public static final Elevation INSTANCE = new Elevation();
-        private static final List<StateValue> VALUES = List.of(new StateValue("flat"), new StateValue("elevated"), new StateValue("sunken"));
+        @Override public List<StateValue> values() { return List.of(new StateValue("flat"), new StateValue("elevated"), new StateValue("sunken")); }
         @Override public Physical parent() { return Physical.INSTANCE; }
-        @Override public List<StateValue> values() { return VALUES; }
-        @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "elevated", VALUES.get(2), "sunken"); }
+        @Override public Map<StateValue, String> words() { return Map.of(values().get(1), "elevated", values().get(2), "sunken"); }
     }
 
     /** Which way a thing laid along a line runs: horizontal, or vertical - stood up, as a fader. */
     public record Orientation() implements Classed<Physical>, Importance.Senary {
         public static final Orientation INSTANCE = new Orientation();
-        private static final List<StateValue> VALUES = List.of(new StateValue("horizontal"), new StateValue("vertical"));
+        @Override public List<StateValue> values() { return List.of(new StateValue("horizontal"), new StateValue("vertical")); }
         @Override public Physical parent() { return Physical.INSTANCE; }
-        @Override public List<StateValue> values() { return VALUES; }
-        @Override public Map<StateValue, String> words() { return Map.of(VALUES.get(1), "vertical"); }
+        @Override public Map<StateValue, String> words() { return Map.of(values().get(1), "vertical"); }
     }
 
     // ── counting ─────────────────────────────────────────────────────────
@@ -329,10 +330,9 @@ public final class HouseStates {
     public record Clicks() implements StateType<Counting> {
         public static final Clicks INSTANCE = new Clicks();
         private static final StateDomain DOMAIN = new StateDomain.Ranges(List.of(new StateDomain.Span(0, Integer.MAX_VALUE, true)), new StateDomain.Number(0));
-        private static final List<NamedChange> CHANGES = List.of(new NamedChange("click", new NamedChange.Rises()));
+        @Override public List<NamedChange> changes() { return List.of(new NamedChange("click", new NamedChange.Rises())); }
         @Override public Counting parent() { return Counting.INSTANCE; }
         @Override public StateDomain domain() { return DOMAIN; }
-        @Override public List<NamedChange> changes() { return CHANGES; }
     }
 
     /**
@@ -502,7 +502,8 @@ public final class HouseStates {
     }
 
     /** Every type of the tree, branch by branch. */
-    public static final List<StateType<?>> ALL = List.of(
+    public List<StateType<?>> all() {
+        return List.of(
             Enabled.INSTANCE, ReadOnly.INSTANCE, Busy.INSTANCE,
             Pressed.INSTANCE, Checked.INSTANCE, Coverage.INSTANCE, ActiveTab.INSTANCE, Selected.INSTANCE,
             Expanded.INSTANCE, Shown.INSTANCE,
@@ -514,4 +515,5 @@ public final class HouseStates {
             Clicks.INSTANCE, TabAddControl.INSTANCE, ChipCloseControl.INSTANCE, TabCloseControl.INSTANCE, FloatCloseControl.INSTANCE, TabDetachControl.INSTANCE, TabCaughtControl.INSTANCE, PickControl.INSTANCE, MenuPickControl.INSTANCE, LayerCloseControl.INSTANCE, ActionControl.INSTANCE,
             DraftText.INSTANCE, CommittedText.INSTANCE, TabOrder.INSTANCE, FloatOrder.INSTANCE, ChosenOption.INSTANCE,
             Degree.INSTANCE);
+    }
 }

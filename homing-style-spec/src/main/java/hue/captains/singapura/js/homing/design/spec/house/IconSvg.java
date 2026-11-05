@@ -33,11 +33,17 @@ import java.util.regex.Pattern;
 public record IconSvg(String resource, String text) implements Scalar {
 
     private static final String SVG = "http://www.w3.org/2000/svg";
-    private static final Set<String> SHAPES = Set.of("path", "circle", "ellipse", "line", "polyline", "polygon", "rect");
-    private static final Set<String> SHAPE_ATTRIBUTES = Set.of("d", "points", "x", "y", "width", "height", "cx", "cy", "r", "rx", "ry",
+    private enum Words {
+        SHAPES(Set.of("path", "circle", "ellipse", "line", "polyline", "polygon", "rect")),
+        SHAPE_ATTRIBUTES(Set.of("d", "points", "x", "y", "width", "height", "cx", "cy", "r", "rx", "ry",
             "x1", "y1", "x2", "y2", "transform", "style", "fill", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin",
-            "stroke-miterlimit", "fill-rule", "clip-rule", "opacity");
-    private static final Set<String> GROUP_ATTRIBUTES = Set.of("transform", "opacity");
+            "stroke-miterlimit", "fill-rule", "clip-rule", "opacity")),
+        GROUP_ATTRIBUTES(Set.of("transform", "opacity"));
+
+        private final Set<String> all;
+
+        Words(Set<String> all) { this.all = all; }
+    }
     private static final Pattern DECLARATION = Pattern.compile("\\s*([a-z-]+)\\s*:\\s*([^;]+?)\\s*(;|$)");
     private static final Pattern PALETTE = Pattern.compile("var\\(--fp-([a-z0-9]+(?:-[a-z0-9]+)*)\\)");
 
@@ -95,10 +101,10 @@ public record IconSvg(String resource, String text) implements Scalar {
             if (!(n instanceof Element e) || !SVG.equals(e.getNamespaceURI())) { out.add("only shapes and groups inside, not " + n.getNodeName()); continue; }
             String tag = e.getLocalName();
             if (tag.equals("g")) {
-                attributes(e, GROUP_ATTRIBUTES, out);
+                attributes(e, Words.GROUP_ATTRIBUTES.all, out);
                 shapes += children(e, out);
-            } else if (SHAPES.contains(tag)) {
-                attributes(e, SHAPE_ATTRIBUTES, out);
+            } else if (Words.SHAPES.all.contains(tag)) {
+                attributes(e, Words.SHAPE_ATTRIBUTES.all, out);
                 painted(e, out);
                 if (e.hasChildNodes() && !e.getTextContent().isBlank()) out.add(tag + ": a shape holds nothing");
                 shapes++;

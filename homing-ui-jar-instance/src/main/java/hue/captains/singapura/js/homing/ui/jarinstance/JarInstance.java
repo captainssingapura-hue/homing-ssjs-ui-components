@@ -48,7 +48,7 @@ public record JarInstance() implements StatelessFunctionalObject {
 
     private Styling make(List<? extends ComponentModule> modules, List<? extends StyleDeclaration> jars) {
         StyleManager styles = new StyleRegistryBuilder<>(CollectModules.INSTANCE.baseWithin(Base.INSTANCE, modules, jars),
-                HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL).build();
+                HouseRoleCatalogue.INSTANCE.roles(), HouseStates.INSTANCE.all()).build();
         SchemeRegistry schemes = new SchemeRegistry(List.of(BaseColours.INSTANCE));
         return new Styling(styles, List.<DesignStyle<?>>of(Base.INSTANCE), new PaletteRegistry(List.of(BasePaletteDeclaration.INSTANCE), schemes),
                 Map.<DesignStyle<?>, ColorPalette<?>>of(Base.INSTANCE, Harbour.INSTANCE));

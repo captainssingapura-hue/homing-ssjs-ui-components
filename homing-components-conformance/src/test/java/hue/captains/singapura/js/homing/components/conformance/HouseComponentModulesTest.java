@@ -65,7 +65,7 @@ class HouseComponentModulesTest {
     }
 
     /** The flat list an instance of the whole house registers at bootstrap: the taxonomy's, each jar's in its turn. */
-    private static final List<ComponentModule> HOUSE = HouseTaxonomy.MODULES;
+    private static final List<ComponentModule> HOUSE = HouseTaxonomy.INSTANCE.modules();
 
     @Test
     void theHousesList_isEachJarsModule_inTheJarsOrder() {

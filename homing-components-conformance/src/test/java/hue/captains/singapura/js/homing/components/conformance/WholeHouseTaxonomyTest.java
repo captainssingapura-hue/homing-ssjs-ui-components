@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class WholeHouseTaxonomyTest {
 
-    private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
+    private static final Taxonomy HOUSE = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules());
 
     @Test
     void everyModulesComponents_areDefinedInTheHousesTaxonomy() {

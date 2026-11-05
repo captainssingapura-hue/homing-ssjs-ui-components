@@ -17,9 +17,6 @@ public interface PrefixRule extends StatelessFunctionalObject {
     /** What the rule finds of the prefix; nothing of a prefix not given, which {@link Given} finds. */
     Validation check(String prefix);
 
-    /** The rules a resolver's prefix is held to, applied each apart. */
-    List<PrefixRule> RULES = List.of(new Given(), new FromTheRoot(), new ADirectory(), new ForwardSlashes(), new NamedSegments());
-
     /** A prefix is given. */
     record Given() implements PrefixRule {
         @Override public Validation check(String prefix) {

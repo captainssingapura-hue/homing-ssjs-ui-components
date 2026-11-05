@@ -29,11 +29,12 @@ public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule>, ImplFor
         @Override public String summary() { return "An SVG in a viewport that zooms about the pointer and pans once zoomed in: the hand, the wheel and its own keys."; }
 
         /** Its keys, natively, while the viewport has the focus. */
-        public static final List<KeyBinding> KEYS = List.of(
+        @Override public List<KeyBinding> keys() {
+            return List.of(
                 new KeyBinding(Key.PLUS, "zoom in"), new KeyBinding(Key.MINUS, "zoom out"), new KeyBinding(Key.DIGIT_0, "back to fit"),
                 new KeyBinding(Key.ARROW_LEFT, "pan left"), new KeyBinding(Key.ARROW_RIGHT, "pan right"),
                 new KeyBinding(Key.ARROW_UP, "pan up"), new KeyBinding(Key.ARROW_DOWN, "pan down"));
-        @Override public List<KeyBinding> keys() { return KEYS; }
+        }
     }
 
     @Override

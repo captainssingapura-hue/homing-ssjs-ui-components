@@ -57,14 +57,17 @@ public record HouseModules() implements StatelessFunctionalObject {
     public static final HouseModules INSTANCE = new HouseModules();
 
     /** Base's implementations: every house jar that brings castings into being, each declaring Base's for them. */
-    public static final List<StyleDeclaration> BASE_JARS = List.of(
+    public List<StyleDeclaration> baseJars() {
+        return List.of(
             UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiDialogStyleDeclaration.INSTANCE,
             UiFloatingStyleDeclaration.INSTANCE, UiMenuStyleDeclaration.INSTANCE, UiMonitorsStyleDeclaration.INSTANCE,
             UiPanesStyleDeclaration.INSTANCE, UiPanZoomStyleDeclaration.INSTANCE, UiSplitGridStyleDeclaration.INSTANCE,
             UiPreferencesStyleDeclaration.INSTANCE, MpaStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE);
+    }
 
     /** Each house style's own jar. */
-    public static final Map<DesignStyle<BaseScheme>, StyleDeclaration> STYLE_JARS = Map.of(
+    public Map<DesignStyle<BaseScheme>, StyleDeclaration> styleJars() {
+        return Map.of(
             Editorial.INSTANCE, EditorialStyleDeclaration.INSTANCE,
             NeoBrutalism.INSTANCE, NeoBrutalismStyleDeclaration.INSTANCE,
             NeoFuturism.INSTANCE, NeoFuturismStyleDeclaration.INSTANCE,
@@ -72,16 +75,17 @@ public record HouseModules() implements StatelessFunctionalObject {
             Glassmorphism.INSTANCE, GlassmorphismStyleDeclaration.INSTANCE,
             RetroFuturism.INSTANCE, RetroFuturismStyleDeclaration.INSTANCE,
             Sketchy.INSTANCE, SketchyStyleDeclaration.INSTANCE);
+    }
 
     /** The component modules the house registers: its jars', as the house defines them. */
-    public List<ComponentModule> definitions() { return HouseTaxonomy.MODULES; }
+    public List<ComponentModule> definitions() { return HouseTaxonomy.INSTANCE.modules(); }
 
     /** The base modules: each component module with its components' looks in Base, from every house jar's declaration. */
-    public List<BaseModule<BaseScheme, Base>> base() { return CollectModules.INSTANCE.base(Base.INSTANCE, definitions(), BASE_JARS); }
+    public List<BaseModule<BaseScheme, Base>> base() { return CollectModules.INSTANCE.base(Base.INSTANCE, definitions(), baseJars()); }
 
     /** A house style's module: its looks from its own jar, each in the bundle of the component whose design it is of. */
     public <S extends DesignStyle<BaseScheme>> StyleModule<BaseScheme, S> style(S style) {
-        StyleDeclaration jar = STYLE_JARS.get(style);
+        StyleDeclaration jar = styleJars().get(style);
         if (jar == null) throw new IllegalArgumentException(style.token() + " is no house style: it has no jar of the house's");
         return CollectModules.INSTANCE.style(style, definitions(), List.of(jar));
     }
@@ -90,5 +94,5 @@ public record HouseModules() implements StatelessFunctionalObject {
     public List<Role<?>> roles() { return HouseRoleCatalogue.INSTANCE.roles(); }
 
     /** The house's tree of states, whole. */
-    public List<StateType<?>> states() { return HouseStates.ALL; }
+    public List<StateType<?>> states() { return HouseStates.INSTANCE.all(); }
 }

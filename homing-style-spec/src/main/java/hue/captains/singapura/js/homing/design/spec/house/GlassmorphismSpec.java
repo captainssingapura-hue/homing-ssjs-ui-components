@@ -29,7 +29,7 @@ public record GlassmorphismSpec() implements SpecModule<BaseScheme, Glassmorphis
 
     @Override public Glassmorphism style() { return Glassmorphism.INSTANCE; }
 
-    @Override public List<ComponentModule> modules() { return HouseTaxonomy.MODULES; }
+    @Override public List<ComponentModule> modules() { return HouseTaxonomy.INSTANCE.modules(); }
 
     @Override public List<ComponentAssignment<BaseScheme, Glassmorphism, ?>> assignments() {
         return List.of(
