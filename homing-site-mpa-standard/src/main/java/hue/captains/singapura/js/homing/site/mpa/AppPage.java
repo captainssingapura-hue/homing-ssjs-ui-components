@@ -114,9 +114,9 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
     private String stampParams(Query query) {
         ParamCodec<P> codec = app.paramCodec();
         if (codec == ParamCodec.None.INSTANCE) return null;
-        Map<String, List<String>> merged = QueryString.params();
-        query.all().forEach((k, vs) -> vs.forEach(v -> QueryString.put(merged, k, v)));
-        codec.to(params).forEach((k, vs) -> { merged.remove(k); vs.forEach(v -> QueryString.put(merged, k, v)); });
+        Map<String, List<String>> merged = QueryString.INSTANCE.params();
+        query.all().forEach((k, vs) -> vs.forEach(v -> QueryString.INSTANCE.put(merged, k, v)));
+        codec.to(params).forEach((k, vs) -> { merged.remove(k); vs.forEach(v -> QueryString.INSTANCE.put(merged, k, v)); });
         P effective = codec.from(merged) instanceof ParamCodec.Decoded.Ok<P>(P p) ? p : params;
         return StampedParams.jsObject(codec.to(effective));
     }

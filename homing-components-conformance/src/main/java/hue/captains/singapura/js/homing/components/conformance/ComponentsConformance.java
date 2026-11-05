@@ -92,7 +92,7 @@ public final class ComponentsConformance {
 
     /** The top level and everything it requires, transitively. */
     public static Collection<Crate> closure() {
-        return CrateClosure.of(TOP_LEVEL);
+        return CrateClosure.INSTANCE.of(TOP_LEVEL);
     }
 
     /** The served identities of the top level's own modules — what the gate and the export grade. */
