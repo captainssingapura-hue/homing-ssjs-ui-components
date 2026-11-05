@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.site.mpa;
 import hue.captains.singapura.js.homing.core.AppModule;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.EsModule;
+import hue.captains.singapura.js.homing.core.ExternalModule;
 import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.SimpleAppResolver;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
@@ -51,19 +52,22 @@ public final class StandardMpa implements Mpa {
     private final ThemeRegistry themes;
     private final PreferencesRegistry preferences;
     private final List<Crate> crates;
+    private final Map<Class<? extends ExternalModule<?>>, String> libraryUrls;
     private final ModuleNameResolver names;
     private final HomingActionRegistry framework;
     private final ThemesGetAction themesAction;
     private final StyleFamiliesGetAction familiesAction;
 
-    private StandardMpa(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, List<Crate> crates) {
+    private StandardMpa(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, List<Crate> crates,
+                        Map<Class<? extends ExternalModule<?>>, String> libraryUrls) {
         this.brand  = Objects.requireNonNull(brand, "StandardMpa.brand");
         this.themes = themes == null ? ThemeRegistry.EMPTY : themes;
         this.preferences = preferences == null ? DefaultPreferences.INSTANCE : preferences;
         var all = new ArrayList<Crate>(crates);
         if (all.stream().noneMatch(c -> c == MpaCrate.INSTANCE)) all.add(MpaCrate.INSTANCE);
         this.crates = List.copyOf(all);
-        this.names  = new QueryParamResolver("/module");
+        this.libraryUrls = Map.copyOf(libraryUrls);
+        this.names  = new QueryParamResolver("/module", this.libraryUrls);
         var apps = new ArrayList<AppModule<?, ?>>();
         for (EsModule<?> m : new ServedModules(this.crates).byName().values()) {
             if (m instanceof AppModule<?, ?> a) apps.add(a);
@@ -77,7 +81,7 @@ public final class StandardMpa implements Mpa {
 
     /** A site's MPA: the brand on the bar, the themes it offers, the crates whose modules it serves; the default preferences. */
     public StandardMpa(Brand brand, ThemeRegistry themes, Crate... crates) {
-        this(brand, themes, null, List.of(crates));
+        this(brand, themes, null, List.of(crates), Map.of());
     }
 
     /**
@@ -86,7 +90,7 @@ public final class StandardMpa implements Mpa {
      * instance the site's crate declares. The bar's button opens it.
      */
     public StandardMpa(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, Crate... crates) {
-        this(brand, themes, preferences, List.of(crates));
+        this(brand, themes, preferences, List.of(crates), Map.of());
     }
 
     /**
@@ -96,12 +100,22 @@ public final class StandardMpa implements Mpa {
      * the picker offers are its.
      */
     public StandardMpa(Brand brand, Styling styling, Crate... crates) {
-        this(brand, installed(styling), null, List.of(crates));
+        this(brand, installed(styling), null, List.of(crates), Map.of());
     }
 
     /** As {@link #StandardMpa(Brand, Styling, Crate...)}, with the site's own preferences. */
     public StandardMpa(Brand brand, Styling styling, PreferencesRegistry preferences, Crate... crates) {
-        this(brand, installed(styling), preferences, List.of(crates));
+        this(brand, installed(styling), preferences, List.of(crates), Map.of());
+    }
+
+    /**
+     * This site with {@code proxy} importing its 3rd-party library from {@code url}: for a deployment that cannot reach
+     * the proxy's default. A new MPA, this one as it was: a site makes its pages with the one it serves.
+     */
+    public StandardMpa withLibraryAt(Class<? extends ExternalModule<?>> proxy, String url) {
+        var urls = new LinkedHashMap<Class<? extends ExternalModule<?>>, String>(libraryUrls);
+        urls.put(proxy, url);
+        return new StandardMpa(brand, themes, preferences, crates, urls);
     }
 
     /** The styling installed, and its themes. */
