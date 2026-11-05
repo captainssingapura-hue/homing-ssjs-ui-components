@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * The icons a page may show are the taxonomy's (RFC 0067, D52): every leaf of the Icon branch, in the order read - the
- * house's seventeen, then the panes' five where their module is registered. The table itself is made from the installed
- * instance's taxonomy, and held where an instance is installed (the icons' jar's IconTest).
+ * house's seventeen, then the panes' five where their module is registered. The table itself is made from a styling's
+ * taxonomy, and held where a test has one (the icons' jar's IconTest).
  */
 class IconsTableTest {
 

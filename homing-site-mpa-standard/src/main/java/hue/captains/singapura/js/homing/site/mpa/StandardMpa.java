@@ -9,7 +9,6 @@ import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.NoDesign;
 import hue.captains.singapura.js.homing.core.SimpleAppResolver;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
-import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
 import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.design.styling.StylingRenderer;
 import hue.captains.singapura.js.homing.preferences.PreferencesRegistry;
@@ -107,12 +106,12 @@ public final class StandardMpa implements Mpa {
      * offers are its.
      */
     public StandardMpa(Brand brand, Styling styling, Crate... crates) {
-        this(brand, styling, installed(styling), null, List.of(crates), Map.of());
+        this(brand, styling, new StylingThemes(styling), null, List.of(crates), Map.of());
     }
 
     /** As {@link #StandardMpa(Brand, Styling, Crate...)}, with the site's own preferences. */
     public StandardMpa(Brand brand, Styling styling, PreferencesRegistry preferences, Crate... crates) {
-        this(brand, styling, installed(styling), preferences, List.of(crates), Map.of());
+        this(brand, styling, new StylingThemes(styling), preferences, List.of(crates), Map.of());
     }
 
     /**
@@ -123,12 +122,6 @@ public final class StandardMpa implements Mpa {
         var urls = new LinkedHashMap<Class<? extends ExternalModule<?>>, String>(libraryUrls);
         urls.put(proxy, url);
         return new StandardMpa(brand, styling, themes, preferences, crates, urls);
-    }
-
-    /** The styling's themes, the styling installed for what still reads it there: the demo's modules, until that repository moves. */
-    private static ThemeRegistry installed(Styling styling) {
-        InstalledStyling.install(styling);
-        return new StylingThemes(styling);
     }
 
     @Override public Brand brand() { return brand; }

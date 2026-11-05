@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -95,6 +96,15 @@ class StandardMpaServesItsStylingTest {
         var themed = new StandardMpa(new Brand("Themed"), ThemeRegistry.EMPTY, new Look());
         var refused = assertThrows(IllegalStateException.class, () -> module(themed, CastingsModule.INSTANCE));
         assertTrue(refused.getMessage().contains(CastingsModule.class.getName()), refused.getMessage());
+    }
+
+    @Test
+    void twoSites_inOneProcess_eachHoldTheirOwnStyling() {
+        var one = HouseStyles.INSTANCE.styling();
+        var other = HouseStyles.INSTANCE.styling();
+        assertNotSame(one, other);
+        assertEquals(module(new StandardMpa(new Brand("One"), one, new Look()), CastingsModule.INSTANCE),
+                     module(new StandardMpa(new Brand("Other"), other, new Look()), CastingsModule.INSTANCE));
     }
 
     @Test
