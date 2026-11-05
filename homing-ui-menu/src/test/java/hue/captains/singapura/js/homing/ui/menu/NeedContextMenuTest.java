@@ -64,12 +64,12 @@ class NeedContextMenuTest {
     public record PanesComponents() implements C0_Components<PanesComponents> {
         public static final PanesComponents INSTANCE = new PanesComponents();
         @Override public String name() { return "Panes"; }
-        @Override public List<ComponentEntry<PanesComponents>> leaves() { return List.of(ComponentEntry.of(this, new PanesModule.Strip()), ComponentEntry.of(this, new PanesModule.Pane())); }
+        @Override public List<ComponentEntry<PanesComponents>> leaves() { return List.of(new ComponentEntry.OfComponent<>(this, new PanesModule.Strip()), new ComponentEntry.OfComponent<>(this, new PanesModule.Pane())); }
     }
     static final class PanesCrate implements Crate, ComponentVehicle {
         static final PanesCrate INSTANCE = new PanesCrate();
         @Override public String name() { return "panes"; }
-        @Override public List<CrateEntry> entries() { return List.of(CrateEntry.of(PanesModule.INSTANCE)); }
+        @Override public List<CrateEntry> entries() { return List.of(new CrateEntry(PanesModule.INSTANCE)); }
         @Override public C0_Components<?> components() { return PanesComponents.INSTANCE; }
     }
     static final class SiteCrate implements Crate {
@@ -104,7 +104,7 @@ class NeedContextMenuTest {
     static final class LooseCrate implements Crate {
         static final LooseCrate INSTANCE = new LooseCrate();
         @Override public String name() { return "loose"; }
-        @Override public List<CrateEntry> entries() { return List.of(CrateEntry.of(LooseModule.INSTANCE)); }
+        @Override public List<CrateEntry> entries() { return List.of(new CrateEntry(LooseModule.INSTANCE)); }
     }
 
     @Test

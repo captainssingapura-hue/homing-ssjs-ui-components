@@ -29,12 +29,12 @@ public final class UiLookCrate implements Crate {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(CastingsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(StatesAndEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(HouseStyleSheet.INSTANCE),
-                CrateEntry.of(HousePaletteSheet.INSTANCE),
-                CrateEntry.of(LookManifestModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(IconsModule.INSTANCE),
-                CrateEntry.of(LookModule.INSTANCE));
+                new CrateEntry(CastingsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(StatesAndEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(HouseStyleSheet.INSTANCE),
+                new CrateEntry(HousePaletteSheet.INSTANCE),
+                new CrateEntry(LookManifestModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(IconsModule.INSTANCE),
+                new CrateEntry(LookModule.INSTANCE));
     }
 }

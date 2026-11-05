@@ -32,11 +32,11 @@ public final class UiSplitGridCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(SplitGridModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(SplitGridMirrorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(SplitGridTreeModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(SplitGridGeometryModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(SplitGridEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(SplitGridStyles.INSTANCE));
+                new CrateEntry(SplitGridModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(SplitGridMirrorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(SplitGridTreeModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(SplitGridGeometryModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(SplitGridEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(SplitGridStyles.INSTANCE));
     }
 }

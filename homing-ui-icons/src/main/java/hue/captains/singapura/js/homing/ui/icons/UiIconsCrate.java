@@ -31,8 +31,8 @@ public final class UiIconsCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(IconModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(IconRoomModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(IconStyles.INSTANCE));
+                new CrateEntry(IconModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(IconRoomModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(IconStyles.INSTANCE));
     }
 }

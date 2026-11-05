@@ -28,13 +28,8 @@ public record WidgetProvider(Widget<?, ?> widget, Map<String, Object> params) {
     }
 
     /** The widget, with no params. */
-    public static WidgetProvider of(Widget<?, ?> widget) {
-        return new WidgetProvider(widget, Map.of());
-    }
-
-    /** The widget, with these params. */
-    public static WidgetProvider of(Widget<?, ?> widget, Map<String, Object> params) {
-        return new WidgetProvider(widget, params);
+    public WidgetProvider(Widget<?, ?> widget) {
+        this(widget, Map.of());
     }
 
     /** This provider with one more param. */

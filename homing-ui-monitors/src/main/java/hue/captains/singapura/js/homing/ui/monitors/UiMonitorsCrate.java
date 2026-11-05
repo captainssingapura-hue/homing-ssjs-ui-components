@@ -30,8 +30,8 @@ public final class UiMonitorsCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(FocusMonitorModule.INSTANCE),
-                CrateEntry.of(StewardMonitorModule.INSTANCE),
-                CrateEntry.of(FocusStyles.INSTANCE));
+                new CrateEntry(FocusMonitorModule.INSTANCE),
+                new CrateEntry(StewardMonitorModule.INSTANCE),
+                new CrateEntry(FocusStyles.INSTANCE));
     }
 }

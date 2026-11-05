@@ -45,7 +45,7 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
     }
 
     /** A registry of these kinds, each checked and none declared twice. */
-    public static ContextMenuRegistry of(ContextMenuKind<?>... kinds) { return new ContextMenuRegistry(List.of(kinds)); }
+    public ContextMenuRegistry(ContextMenuKind<?>... kinds) { this(List.of(kinds)); }
 
     /** The kinds the catalogued components of a crate closure need, each once: in catalogue order between components, by name within one — a set has no order, and a stamped module must. */
     public static ContextMenuRegistry requiredBy(List<Crate> topLevel) {

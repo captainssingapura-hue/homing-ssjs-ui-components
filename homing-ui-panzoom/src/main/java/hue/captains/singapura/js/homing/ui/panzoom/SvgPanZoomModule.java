@@ -30,9 +30,9 @@ public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule>, ImplFor
 
         /** Its keys, natively, while the viewport has the focus. */
         public static final List<KeyBinding> KEYS = List.of(
-                KeyBinding.of(Key.PLUS, "zoom in"), KeyBinding.of(Key.MINUS, "zoom out"), KeyBinding.of(Key.DIGIT_0, "back to fit"),
-                KeyBinding.of(Key.ARROW_LEFT, "pan left"), KeyBinding.of(Key.ARROW_RIGHT, "pan right"),
-                KeyBinding.of(Key.ARROW_UP, "pan up"), KeyBinding.of(Key.ARROW_DOWN, "pan down"));
+                new KeyBinding(Key.PLUS, "zoom in"), new KeyBinding(Key.MINUS, "zoom out"), new KeyBinding(Key.DIGIT_0, "back to fit"),
+                new KeyBinding(Key.ARROW_LEFT, "pan left"), new KeyBinding(Key.ARROW_RIGHT, "pan right"),
+                new KeyBinding(Key.ARROW_UP, "pan up"), new KeyBinding(Key.ARROW_DOWN, "pan down"));
         @Override public List<KeyBinding> keys() { return KEYS; }
     }
 

@@ -65,7 +65,7 @@ public final class StandardMpa implements Mpa {
         this.crates = List.copyOf(all);
         this.names  = new QueryParamResolver("/module");
         var apps = new ArrayList<AppModule<?, ?>>();
-        for (EsModule<?> m : ServedModules.of(this.crates).byName().values()) {
+        for (EsModule<?> m : new ServedModules(this.crates).byName().values()) {
             if (m instanceof AppModule<?, ?> a) apps.add(a);
         }
         // the modules' scripts, like the family files: in dev mode from the source folders homing.devRoot names, else from the jars
@@ -76,17 +76,17 @@ public final class StandardMpa implements Mpa {
     }
 
     /** A site's MPA: the brand on the bar, the themes it offers, the crates whose modules it serves; the default preferences. */
-    public static StandardMpa of(Brand brand, ThemeRegistry themes, Crate... crates) {
-        return new StandardMpa(brand, themes, null, List.of(crates));
+    public StandardMpa(Brand brand, ThemeRegistry themes, Crate... crates) {
+        this(brand, themes, null, List.of(crates));
     }
 
     /**
-     * As {@link #of(Brand, ThemeRegistry, Crate...)}, with the site's own
+     * As {@link #StandardMpa(Brand, ThemeRegistry, Crate...)}, with the site's own
      * preferences: a {@link PreferencesRegistry} the site extends, whose
      * instance the site's crate declares. The bar's button opens it.
      */
-    public static StandardMpa of(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, Crate... crates) {
-        return new StandardMpa(brand, themes, preferences, List.of(crates));
+    public StandardMpa(Brand brand, ThemeRegistry themes, PreferencesRegistry preferences, Crate... crates) {
+        this(brand, themes, preferences, List.of(crates));
     }
 
     /**
@@ -95,13 +95,13 @@ public final class StandardMpa implements Mpa {
      * default preferences. The styling is installed here, at bootstrap, for every served sheet to read, and the themes
      * the picker offers are its.
      */
-    public static StandardMpa of(Brand brand, Styling styling, Crate... crates) {
-        return new StandardMpa(brand, installed(styling), null, List.of(crates));
+    public StandardMpa(Brand brand, Styling styling, Crate... crates) {
+        this(brand, installed(styling), null, List.of(crates));
     }
 
-    /** As {@link #of(Brand, Styling, Crate...)}, with the site's own preferences. */
-    public static StandardMpa of(Brand brand, Styling styling, PreferencesRegistry preferences, Crate... crates) {
-        return new StandardMpa(brand, installed(styling), preferences, List.of(crates));
+    /** As {@link #StandardMpa(Brand, Styling, Crate...)}, with the site's own preferences. */
+    public StandardMpa(Brand brand, Styling styling, PreferencesRegistry preferences, Crate... crates) {
+        this(brand, installed(styling), preferences, List.of(crates));
     }
 
     /** The styling installed, and its themes. */

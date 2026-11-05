@@ -20,8 +20,8 @@ import java.util.Objects;
  * what distinguishes them is only which widget shows them, and that the
  * setting's widget names a preference in its params.
  *
- * <p>Built without levels: {@link #of} takes children and the tree assigns
- * levels by depth when it is read ({@link PreferenceTree#of}), so a subtree
+ * <p>Built without levels: the constructor taking a segment's text takes children, and the tree
+ * assigns levels by depth when it is read ({@link PreferenceTree#PreferenceTree(PreferenceNode)}), so a subtree
  * declared on its own — a component's contribution — can be placed anywhere
  * and takes the level of where it lands.</p>
  *
@@ -46,9 +46,9 @@ public record PreferenceNode(TreeLevel level, NodeName segment, String label, St
     }
 
     /** A node at no level yet; the tree levels it by depth. */
-    public static PreferenceNode of(String segment, String label, String summary, WidgetProvider provider,
-                                    PreferenceNode... children) {
-        return new PreferenceNode(TreeLevel.L0.INSTANCE, NodeName.slug(segment), label, summary, provider, List.of(children));
+    public PreferenceNode(String segment, String label, String summary, WidgetProvider provider,
+                          PreferenceNode... children) {
+        this(TreeLevel.L0.INSTANCE, NodeName.slug(segment), label, summary, provider, List.of(children));
     }
 
     @Override

@@ -31,9 +31,9 @@ public final class UiDockingCrate implements Crate {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(DeskModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(FloaterModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(DeskHandModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(GridDockingModule.INSTANCE, StandardJsModuleType.PRIMITIVE));
+                new CrateEntry(DeskModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(FloaterModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(DeskHandModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(GridDockingModule.INSTANCE, StandardJsModuleType.PRIMITIVE));
     }
 }

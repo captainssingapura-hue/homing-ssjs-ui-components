@@ -61,7 +61,7 @@ class UiControlPanelCrateConformanceTest {
             String m = entry.moduleClass();
             if (m.equals(ControlCatalogueModule.class.getName()) || m.equals(ControlLeavesModule.class.getName())) continue;
             String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            raw.addAll(DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src)));
+            raw.addAll(DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(new ServedModule(m, type, src)));
             checked++;
         }
         assertEquals(2, checked, "the helper and the panel, a widget; the catalogue is generated, the styles a sheet");

@@ -15,7 +15,7 @@ public record UiMonitorsComponents() implements C0_Components<UiMonitorsComponen
 
     @Override public List<ComponentEntry<UiMonitorsComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new FocusMonitorModule.FocusMonitor()),
-                ComponentEntry.of(this, new StewardMonitorModule.StewardMonitor()));
+                new ComponentEntry.OfComponent<>(this, new FocusMonitorModule.FocusMonitor()),
+                new ComponentEntry.OfComponent<>(this, new StewardMonitorModule.StewardMonitor()));
     }
 }

@@ -39,22 +39,22 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
         /** The container's own, while the pane holds the keys: the tabs walked, reordered and detached; the widget entered; the pane yielded; the menu. */
         @Override public List<KeyBinding> keys() {
             return List.of(
-                    KeyBinding.of(Key.ARROW_LEFT, "the active tab moves to the previous, at once"), KeyBinding.of(Key.ARROW_RIGHT, "the active tab moves to the next, at once"),
-                    KeyBinding.of(Key.HOME, "the first tab"), KeyBinding.of(Key.END, "the last tab"),
-                    KeyBinding.of(Key.ARROW_LEFT, Modifier.SHIFT, "the active tab moves one slot left along the rail, staying active"),
-                    KeyBinding.of(Key.ARROW_RIGHT, Modifier.SHIFT, "the active tab moves one slot right along the rail, staying active"),
-                    KeyBinding.of(Key.ARROW_DOWN, Modifier.SHIFT, "the active tab asked to detach and float: DetachRequested, for a holder with a desk"),
-                    KeyBinding.of(Key.ENTER, "the active tab's widget activates itself - a claim; the pane never claims for it"),
-                    KeyBinding.of(Key.ESCAPE, "taken and kept: the dock is where Escape stops, so nothing overshoots out of the room"),
-                    KeyBinding.of(Key.CONTEXT_MENU, "the active tab's menu"), KeyBinding.of(Key.F10, Modifier.SHIFT, "the active tab's menu"),
+                    new KeyBinding(Key.ARROW_LEFT, "the active tab moves to the previous, at once"), new KeyBinding(Key.ARROW_RIGHT, "the active tab moves to the next, at once"),
+                    new KeyBinding(Key.HOME, "the first tab"), new KeyBinding(Key.END, "the last tab"),
+                    new KeyBinding(Key.ARROW_LEFT, Modifier.SHIFT, "the active tab moves one slot left along the rail, staying active"),
+                    new KeyBinding(Key.ARROW_RIGHT, Modifier.SHIFT, "the active tab moves one slot right along the rail, staying active"),
+                    new KeyBinding(Key.ARROW_DOWN, Modifier.SHIFT, "the active tab asked to detach and float: DetachRequested, for a holder with a desk"),
+                    new KeyBinding(Key.ENTER, "the active tab's widget activates itself - a claim; the pane never claims for it"),
+                    new KeyBinding(Key.ESCAPE, "taken and kept: the dock is where Escape stops, so nothing overshoots out of the room"),
+                    new KeyBinding(Key.CONTEXT_MENU, "the active tab's menu"), new KeyBinding(Key.F10, Modifier.SHIFT, "the active tab's menu"),
                     // BrowserKeys, the other scheme a pane may be given. Declared here because the map is a PAGE's, and a
                     // reader of it wants every key the component may answer, not only the ones today's pane was built with.
-                    KeyBinding.of(Key.TAB, Modifier.CTRL, "browser scheme: the next tab, wrapping"),
-                    KeyBinding.of(Key.TAB, java.util.Set.of(Modifier.CTRL, Modifier.SHIFT), "browser scheme: the previous tab, wrapping"),
-                    KeyBinding.of(Key.PAGE_DOWN, Modifier.CTRL, "browser scheme: the next tab"),
-                    KeyBinding.of(Key.PAGE_UP, Modifier.CTRL, "browser scheme: the previous tab"),
-                    KeyBinding.of(Key.ARROW_RIGHT, java.util.Set.of(Modifier.CTRL, Modifier.SHIFT), "browser scheme: the next tab, by a chord a browser does not keep for itself"),
-                    KeyBinding.of(Key.ARROW_LEFT, java.util.Set.of(Modifier.CTRL, Modifier.SHIFT), "browser scheme: the previous tab, by a chord a browser does not keep for itself"));
+                    new KeyBinding(Key.TAB, Modifier.CTRL, "browser scheme: the next tab, wrapping"),
+                    new KeyBinding(Key.TAB, java.util.Set.of(Modifier.CTRL, Modifier.SHIFT), "browser scheme: the previous tab, wrapping"),
+                    new KeyBinding(Key.PAGE_DOWN, Modifier.CTRL, "browser scheme: the next tab"),
+                    new KeyBinding(Key.PAGE_UP, Modifier.CTRL, "browser scheme: the previous tab"),
+                    new KeyBinding(Key.ARROW_RIGHT, java.util.Set.of(Modifier.CTRL, Modifier.SHIFT), "browser scheme: the next tab, by a chord a browser does not keep for itself"),
+                    new KeyBinding(Key.ARROW_LEFT, java.util.Set.of(Modifier.CTRL, Modifier.SHIFT), "browser scheme: the previous tab, by a chord a browser does not keep for itself"));
         }
     }
 

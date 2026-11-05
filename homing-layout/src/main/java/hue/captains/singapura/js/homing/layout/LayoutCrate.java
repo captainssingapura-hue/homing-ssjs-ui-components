@@ -16,6 +16,6 @@ public final class LayoutCrate implements Crate {
     @Override public List<Crate> requires() { return List.of(); }
 
     @Override public List<CrateEntry> entries() {
-        return List.of(CrateEntry.of(LayoutModule.INSTANCE, StandardJsModuleType.PURE_LOGIC));
+        return List.of(new CrateEntry(LayoutModule.INSTANCE, StandardJsModuleType.PURE_LOGIC));
     }
 }

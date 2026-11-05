@@ -15,6 +15,6 @@ public record UiIconsComponents() implements C0_Components<UiIconsComponents> {
 
     @Override public List<ComponentEntry<UiIconsComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new IconModule.Icon()));
+                new ComponentEntry.OfComponent<>(this, new IconModule.Icon()));
     }
 }

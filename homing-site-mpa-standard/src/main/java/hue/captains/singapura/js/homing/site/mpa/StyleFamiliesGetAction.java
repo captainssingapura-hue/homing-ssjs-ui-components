@@ -52,7 +52,7 @@ public final class StyleFamiliesGetAction
     @Override
     public CompletableFuture<Served> execute(Query query, EmptyParam.NoHeaders headers) {
         try {
-            StyleFamilies read = families.updateAndGet(f -> f != null ? f : StyleFamilies.of(InstalledStyling.get()));
+            StyleFamilies read = families.updateAndGet(f -> f != null ? f : new StyleFamilies(InstalledStyling.get()));
             boolean style = query.style() != null && !query.style().isBlank(), family = query.family() != null && !query.family().isBlank();
             if (!style && !family) return CompletableFuture.completedFuture(new Served(list(read), "application/json; charset=utf-8"));
             if (!style || !family) return CompletableFuture.failedFuture(notFound(ROUTE, "a file is asked for by both its style and its family"));

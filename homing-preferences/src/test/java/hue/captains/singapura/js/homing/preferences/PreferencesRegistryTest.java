@@ -22,14 +22,14 @@ class PreferencesRegistryTest {
             new PartialModulePath("/module?class=" + m.getClass().getCanonicalName());
 
     static PreferenceTree tree() {
-        return PreferenceTree.of(PreferenceNode.of("preferences", "Preferences", "All of them",
-                WidgetProvider.of(OverviewWidgetModule.INSTANCE, Map.of("label", "Preferences", "settings", List.of())),
-                PreferenceNode.of("theme", "Theme", "", WidgetProvider.of(ChoiceWidgetModule.INSTANCE,
+        return new PreferenceTree(new PreferenceNode("preferences", "Preferences", "All of them",
+                new WidgetProvider(OverviewWidgetModule.INSTANCE, Map.of("label", "Preferences", "settings", List.of())),
+                new PreferenceNode("theme", "Theme", "", new WidgetProvider(ChoiceWidgetModule.INSTANCE,
                         Map.of("name", "theme", "options", List.of(Map.of("value", "a", "label", "A"))))),
-                PreferenceNode.of("editor", "Editor", "How text is shown", WidgetProvider.of(OverviewWidgetModule.INSTANCE),
-                        PreferenceNode.of("font-size", "Font size", "", WidgetProvider.of(ScaleWidgetModule.INSTANCE,
+                new PreferenceNode("editor", "Editor", "How text is shown", new WidgetProvider(OverviewWidgetModule.INSTANCE),
+                        new PreferenceNode("font-size", "Font size", "", new WidgetProvider(ScaleWidgetModule.INSTANCE,
                                 Map.of("name", "editor/font-size", "min", 12, "max", 24, "default", 16))),
-                        PreferenceNode.of("wrap", "Wrap lines", "", WidgetProvider.of(ToggleWidgetModule.INSTANCE,
+                        new PreferenceNode("wrap", "Wrap lines", "", new WidgetProvider(ToggleWidgetModule.INSTANCE,
                                 Map.of("name", "editor/wrap", "default", true))))));
     }
 
@@ -46,16 +46,16 @@ class PreferencesRegistryTest {
 
     @Test
     void refusesTwoSiblingsWithOneSegment() {
-        var ex = assertThrows(IllegalArgumentException.class, () -> PreferenceTree.of(
-                PreferenceNode.of("p", "P", "", WidgetProvider.of(OverviewWidgetModule.INSTANCE),
-                        PreferenceNode.of("x", "X1", "", WidgetProvider.of(ToggleWidgetModule.INSTANCE)),
-                        PreferenceNode.of("x", "X2", "", WidgetProvider.of(ToggleWidgetModule.INSTANCE)))));
+        var ex = assertThrows(IllegalArgumentException.class, () -> new PreferenceTree(
+                new PreferenceNode("p", "P", "", new WidgetProvider(OverviewWidgetModule.INSTANCE),
+                        new PreferenceNode("x", "X1", "", new WidgetProvider(ToggleWidgetModule.INSTANCE)),
+                        new PreferenceNode("x", "X2", "", new WidgetProvider(ToggleWidgetModule.INSTANCE)))));
         assertTrue(ex.getMessage().contains("share the segment 'x'"), ex.getMessage());
     }
 
     @Test
     void stampsEveryNodeWithItsWidgetModuleExportAndParams() {
-        var reg = new PreferencesRegistry(tree(), WidgetProvider.of(ChoiceWidgetModule.INSTANCE, Map.of("folder", true))) {};
+        var reg = new PreferencesRegistry(tree(), new WidgetProvider(ChoiceWidgetModule.INSTANCE, Map.of("folder", true))) {};
         String json = reg.json(RESOLVER);
         // the rigid tree, canonical
         assertTrue(json.startsWith("{\"tree\":{\"level\":\"L0\",\"segment\":\"preferences\""), json.substring(0, 80));

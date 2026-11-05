@@ -26,11 +26,18 @@ public record PreferenceTree(PreferenceNode root, Map<String, PreferenceNode> by
     }
 
     /** Reads and checks the tree under {@code root}, levelling it from zero. */
-    public static PreferenceTree of(PreferenceNode root) {
-        PreferenceNode levelled = Objects.requireNonNull(root, "root").atDepth(0);
+    public PreferenceTree(PreferenceNode root) {
+        this(levelled(root), pathsOf(levelled(root)));
+    }
+
+    private static PreferenceNode levelled(PreferenceNode root) {
+        return Objects.requireNonNull(root, "root").atDepth(0);
+    }
+
+    private static Map<String, PreferenceNode> pathsOf(PreferenceNode levelled) {
         var byPath = new LinkedHashMap<String, PreferenceNode>();
         walk(levelled, levelled.segment().value(), byPath);
-        return new PreferenceTree(levelled, byPath);
+        return byPath;
     }
 
     private static void walk(PreferenceNode node, String path, Map<String, PreferenceNode> byPath) {

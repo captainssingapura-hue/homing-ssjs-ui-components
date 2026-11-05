@@ -15,7 +15,7 @@ public record UiSplitGridComponents() implements C0_Components<UiSplitGridCompon
 
     @Override public List<ComponentEntry<UiSplitGridComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new SplitGridModule.SplitGrid()),
-                ComponentEntry.of(this, new SplitGridMirrorModule.SplitGridMirror()));
+                new ComponentEntry.OfComponent<>(this, new SplitGridModule.SplitGrid()),
+                new ComponentEntry.OfComponent<>(this, new SplitGridMirrorModule.SplitGridMirror()));
     }
 }

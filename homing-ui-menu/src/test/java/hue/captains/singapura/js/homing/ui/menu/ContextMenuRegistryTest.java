@@ -73,7 +73,7 @@ class ContextMenuRegistryTest {
         }
     }
 
-    private static final ContextMenuRegistry R = ContextMenuRegistry.of(AnimalMenu.INSTANCE, CounterMenu.INSTANCE);
+    private static final ContextMenuRegistry R = new ContextMenuRegistry(AnimalMenu.INSTANCE, CounterMenu.INSTANCE);
 
     @Test
     void aNodeIsItsClass_theKindItsNameWithoutMenu_theRowItsNameInKebab() {
@@ -141,9 +141,9 @@ class ContextMenuRegistryTest {
         var stray = MenuTrees.validate(StrayMenu.INSTANCE);
         assertEquals(List.of("stray: borrowed is listed under stray but names no parent"), stray);
         assertEquals(List.of("empty: a kind lists no rows"), MenuTrees.validate(EmptyMenu.INSTANCE));
-        var ex = assertThrows(IllegalArgumentException.class, () -> ContextMenuRegistry.of(TwinMenu.INSTANCE));
+        var ex = assertThrows(IllegalArgumentException.class, () -> new ContextMenuRegistry(TwinMenu.INSTANCE));
         assertTrue(ex.getMessage().contains("row id repeated: x"), ex.getMessage());
-        var twice = assertThrows(IllegalArgumentException.class, () -> ContextMenuRegistry.of(AnimalMenu.INSTANCE, AnimalMenu.INSTANCE));
+        var twice = assertThrows(IllegalArgumentException.class, () -> new ContextMenuRegistry(AnimalMenu.INSTANCE, AnimalMenu.INSTANCE));
         assertTrue(twice.getMessage().contains("kind declared twice: animal"), twice.getMessage());
     }
 }

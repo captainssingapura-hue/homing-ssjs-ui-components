@@ -31,8 +31,8 @@ public record ListMasterWidgetModule() implements Widget<Widget._None, ListMaste
     public record ListMasterWidget() implements Widget._Class<Widget._None, ListMasterWidgetModule>, NeedKeyboard {
         /** The rows walked, through the party: the view hands the list its keys while the focus is in it. */
         public static final List<KeyBinding> KEYS = List.of(
-                KeyBinding.of(Key.ARROW_DOWN, "the row below chosen"), KeyBinding.of(Key.ARROW_UP, "the row above chosen"),
-                KeyBinding.of(Key.HOME, "the first row chosen"), KeyBinding.of(Key.END, "the last row chosen"));
+                new KeyBinding(Key.ARROW_DOWN, "the row below chosen"), new KeyBinding(Key.ARROW_UP, "the row above chosen"),
+                new KeyBinding(Key.HOME, "the first row chosen"), new KeyBinding(Key.END, "the last row chosen"));
         @Override public List<KeyBinding> keys() { return KEYS; }
     }
 

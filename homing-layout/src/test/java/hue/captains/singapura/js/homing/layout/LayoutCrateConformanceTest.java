@@ -31,7 +31,7 @@ class LayoutCrateConformanceTest {
             var type = (StandardJsModuleType) entry.declaredType();
             String m = entry.moduleClass();
             String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src));
+            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(new ServedModule(m, type, src));
             assertEquals(List.of(), findings, () -> m + ": " + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
         }
     }
