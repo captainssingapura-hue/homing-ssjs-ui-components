@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.preferences;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
+import hue.captains.singapura.js.homing.ui.elements.ElementStyles;
 import java.util.List;
 import java.util.Set;
 
@@ -53,19 +54,27 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
 
     public record pv_kicker() implements CssClass<PreferencesStyles> {
         @Override public String body() { return "margin: 0 0 4px;"; }
+        /** Its margin is set over the text's own, so it follows it. */
+        @Override public List<CssClass<?>> dependsOn() { return List.of(new ElementStyles.el_text()); }
     }
 
     public record pv_title() implements CssClass<PreferencesStyles> {
         @Override public String body() { return "margin: 0 0 6px;"; }
+        /** Its margin is set over the text's own, so it follows it. */
+        @Override public List<CssClass<?>> dependsOn() { return List.of(new ElementStyles.el_text()); }
     }
 
     public record pv_summary() implements CssClass<PreferencesStyles> {
         @Override public String body() { return "margin: 0 0 18px;"; }
+        /** Its margin is set over the text's own, so it follows it. */
+        @Override public List<CssClass<?>> dependsOn() { return List.of(new ElementStyles.el_text()); }
     }
 
     /** A line about the value: what it is, where it came from. */
     public record pv_note() implements CssClass<PreferencesStyles> {
         @Override public String body() { return "margin: 12px 0 0;"; }
+        /** Its margin is set over the text's own, so it follows it. */
+        @Override public List<CssClass<?>> dependsOn() { return List.of(new ElementStyles.el_text()); }
     }
 
     /** The row of what a widget lets you do below its control. */
@@ -112,6 +121,8 @@ public record PreferencesStyles() implements CssGroup<PreferencesStyles> {
 
     public record pv_readout() implements CssClass<PreferencesStyles> {
         @Override public String body() { return "margin: 8px 0 0;"; }
+        /** Its margin is set over the text's own, so it follows it. */
+        @Override public List<CssClass<?>> dependsOn() { return List.of(new ElementStyles.el_text()); }
     }
 
     // ── The list master ───────────────────────────────────────────────────────

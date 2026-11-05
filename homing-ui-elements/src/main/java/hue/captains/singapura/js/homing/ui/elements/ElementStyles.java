@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.elements;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
+import hue.captains.singapura.js.homing.ui.icons.IconStyles;
 
 import java.util.List;
 import java.util.Set;
@@ -234,6 +235,8 @@ public record ElementStyles() implements CssGroup<ElementStyles> {
     /** What of a menu item's leading place is not shown: its own icon while it is checked, its check while it is not (23 Oct). */
     public record el_menu_item_off() implements CssClass<ElementStyles> {
         @Override public String body() { return "display: none;"; }
+        /** It hides an icon, so it follows the icon's own display. */
+        @Override public List<CssClass<?>> dependsOn() { return List.of(new IconStyles.ic_base()); }
     }
 
     /** A choice's option: its name and, at its end, its note, on a line; its words from its start. */

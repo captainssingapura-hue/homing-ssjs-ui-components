@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.panes;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
+import hue.captains.singapura.js.homing.ui.icons.IconStyles;
 
 import java.util.List;
 import java.util.Set;
@@ -92,6 +93,8 @@ public record PaneStyles() implements CssGroup<PaneStyles> {
             user-select: none;
             """;
         }
+        /** It sits on an icon and hides it, so it follows the icon's own display and size. */
+        @Override public List<CssClass<?>> dependsOn() { return List.of(new IconStyles.ic_base()); }
     }
 
     /** The mark, while the keys are in the tab. */
