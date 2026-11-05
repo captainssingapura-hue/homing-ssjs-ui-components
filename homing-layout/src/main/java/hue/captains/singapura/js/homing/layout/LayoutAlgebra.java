@@ -5,6 +5,7 @@ import hue.captains.singapura.js.homing.layout.Layout.Horizontal_Part;
 import hue.captains.singapura.js.homing.layout.Layout.Vertical_NSplit;
 import hue.captains.singapura.js.homing.layout.Layout.Vertical_Part;
 import hue.captains.singapura.js.homing.layout.Layout.Whole;
+import hue.captains.singapura.tao.ontology.Mutable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,7 +90,7 @@ public record LayoutAlgebra() {
     }
 
     /** A recursive descent over the term's text: its place in it is its only state, and it lives for one read. */
-    private final class Reader {
+    private final class Reader implements Mutable {
         private final String s;
         private int at;
         Reader(String s) { this.s = s; }
