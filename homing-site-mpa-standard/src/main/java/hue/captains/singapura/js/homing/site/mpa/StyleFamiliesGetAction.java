@@ -70,15 +70,15 @@ public final class StyleFamiliesGetAction
         }
     }
 
-    private static String list(StyleFamilies read) {
+    private String list(StyleFamilies read) {
         return "{\"dev\":" + read.dev() + ",\"styles\":" + array(read.styles()) + ",\"families\":" + array(read.families()) + "}";
     }
 
-    private static String array(List<String> tokens) {
+    private String array(List<String> tokens) {
         return tokens.stream().map(t -> "\"" + t.replace("\\", "\\\\").replace("\"", "\\\"") + "\"").collect(Collectors.joining(",", "[", "]"));
     }
 
-    private static ResourceNotFound notFound(String resource, String why) {
+    private ResourceNotFound notFound(String resource, String why) {
         return new ResourceNotFound(new ResourceNotFound._InternalError(null, why), new ResourceNotFound._ExternalError(resource, why));
     }
 }

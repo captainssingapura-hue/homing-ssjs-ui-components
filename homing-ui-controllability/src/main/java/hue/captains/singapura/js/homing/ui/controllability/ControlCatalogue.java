@@ -72,7 +72,7 @@ public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<
         return options.stream().filter(o -> o.name().value().equals(name)).findFirst();
     }
 
-    private static String said(List<ControlNode> nodes) {
+    private String said(List<ControlNode> nodes) {
         return String.join(" and ", nodes.stream().map(ControlCatalogue::qualified).toList());
     }
 

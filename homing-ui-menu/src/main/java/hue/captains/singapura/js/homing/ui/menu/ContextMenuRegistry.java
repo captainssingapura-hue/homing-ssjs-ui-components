@@ -107,7 +107,7 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
         }
         return sb.append('}').toString();
     }
-    private static void nodes(StringBuilder sb, List<? extends MenuRow<?, ?>> rows) {
+    private void nodes(StringBuilder sb, List<? extends MenuRow<?, ?>> rows) {
         sb.append('[');
         for (int i = 0; i < rows.size(); i++) {
             if (i > 0) sb.append(',');

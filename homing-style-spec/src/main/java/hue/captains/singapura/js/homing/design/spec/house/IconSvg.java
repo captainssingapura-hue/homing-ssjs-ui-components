@@ -71,7 +71,7 @@ public record IconSvg(String resource, String text) implements Scalar {
     }
 
     /** Everything that keeps a text from being an icon's SVG picture; none when it is one. */
-    private static List<String> problems(String text) {
+    private List<String> problems(String text) {
         var out = new ArrayList<String>();
         Element root;
         try {
@@ -94,7 +94,7 @@ public record IconSvg(String resource, String text) implements Scalar {
     }
 
     /** Its children, held: groups, each held the same way, and shapes; how many shapes, all told. */
-    private static int children(Element parent, List<String> out) {
+    private int children(Element parent, List<String> out) {
         int shapes = 0;
         for (Node n = parent.getFirstChild(); n != null; n = n.getNextSibling()) {
             if (n.getNodeType() == Node.TEXT_NODE && n.getTextContent().isBlank() || n.getNodeType() == Node.COMMENT_NODE) continue;
@@ -114,7 +114,7 @@ public record IconSvg(String resource, String text) implements Scalar {
     }
 
     /** Only the attributes its element may have: no class, no id, nothing that runs or links. */
-    private static void attributes(Element e, Set<String> allowed, List<String> out) {
+    private void attributes(Element e, Set<String> allowed, List<String> out) {
         NamedNodeMap all = e.getAttributes();
         for (int i = 0; i < all.getLength(); i++) {
             String name = all.item(i).getNodeName();
@@ -128,7 +128,7 @@ public record IconSvg(String resource, String text) implements Scalar {
      * A shape's fill and its stroke: each none, the colour it is given ({@code currentColor}) or a palette's colour in its
      * style - or unsaid, as its svg gives it: a fill in the colour it is given, no stroke. Nothing else in its style.
      */
-    private static void painted(Element e, List<String> out) {
+    private void painted(Element e, List<String> out) {
         String tag = e.getLocalName();
         var said = new java.util.HashMap<String, String>();
         for (String a : List.of("fill", "stroke")) if (e.hasAttribute(a)) {

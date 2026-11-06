@@ -121,7 +121,7 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
         return StampedParams.INSTANCE.jsObject(codec.to(effective));
     }
 
-    private static String stampCrumbs(Trail trail) {
+    private String stampCrumbs(Trail trail) {
         var sb = new StringBuilder("Object.freeze([");
         boolean first = true;
         for (Trail.Crumb c : trail.crumbs()) {

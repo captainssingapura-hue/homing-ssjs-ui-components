@@ -58,7 +58,7 @@ public sealed interface Layout permits Layout.Horizontal_Part, Layout.Vertical_P
         return List.copyOf(out);
     }
 
-    private static void collect(Layout l, List<CellId> out) {
+    private void collect(Layout l, List<CellId> out) {
         switch (l) {
             case Whole w -> out.add(w.id());
             case Horizontal_NSplit h -> h.parts().forEach(p -> collect(p, out));
