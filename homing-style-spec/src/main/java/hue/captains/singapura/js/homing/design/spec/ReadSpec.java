@@ -55,6 +55,7 @@ public record ReadSpec() implements StatelessFunctionalObject {
         for (BaseSpecModule<?, ?> m : bases)
             if (m.style().getClass() != base.getClass())
                 problems.add(name(m) + " is " + m.style().token() + "'s, and the base is " + base.token() + ": an instance has one base");
+        if (!problems.isEmpty()) refuse(problems);
         if (base instanceof Derives<?, ?> d) problems.add("the base, " + base.token() + ", is written over " + d.base().token() + ": a base is written over nothing");
         List<ComponentModule> registered = bases.stream().<ComponentModule>map(BaseSpecModule::components).toList();
         Taxonomy taxonomy = taxonomy(registered, roles, states, problems);

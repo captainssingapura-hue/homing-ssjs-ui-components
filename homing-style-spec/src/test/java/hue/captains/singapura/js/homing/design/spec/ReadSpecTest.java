@@ -26,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * The reader's rules bite (RFC 0067, D54): the house read with one thing changed is refused, naming what - a jar assigning
  * a component it does not say it styles, a component assigned twice in a layer, the base leaving a component out, a
- * layer leaving out a role of a component's set (D55) - the base, or a style assigning a component only in part.
+ * layer leaving out a role of a component's set (D55) - the base, or a style assigning a component only in part - and a
+ * second base of another style.
  */
 class ReadSpecTest {
 
@@ -68,6 +69,14 @@ class ReadSpecTest {
         styles.set(0, new Style(EditorialSpec.INSTANCE.modules(), EditorialSpec.INSTANCE.assignments().stream()
                 .map(a -> a.component().equals(HouseControls.PlainButton.INSTANCE) ? editorial(HouseControls.PlainButton.INSTANCE) : a).toList()));
         refused(HouseSpec.INSTANCE.base(), styles, "editorial assigns plain-button and not plain-button_go, plain-button_cancel, plain-button_action");
+    }
+
+    @Test
+    void aSecondBaseOfAnotherStyle_isRefused() {
+        var bases = new ArrayList<BaseSpecModule<?, ?>>(HouseSpec.INSTANCE.base());
+        bases.remove(UiElementsBaseSpec.INSTANCE);
+        bases.add(new EditorialElements(List.of(editorial(HouseControls.PlainButton.INSTANCE))));
+        refused(bases, HouseSpec.INSTANCE.styles(), "an instance has one base");
     }
 
     /** Editorial's own assignment of a component, its roles left out. */
@@ -113,6 +122,12 @@ class ReadSpecTest {
     /** UiElements' base module, its assignments given. */
     private record Elements(List<ComponentAssignment<BaseScheme, Base, ?>> assignments) implements BaseSpecModule<BaseScheme, Base> {
         @Override public Base style() { return Base.INSTANCE; }
+        @Override public ComponentModule components() { return UiElementsBaseSpec.INSTANCE.components(); }
+    }
+
+    /** UiElements' base module written in Editorial, its assignments given. */
+    private record EditorialElements(List<ComponentAssignment<BaseScheme, Editorial, ?>> assignments) implements BaseSpecModule<BaseScheme, Editorial> {
+        @Override public Editorial style() { return Editorial.INSTANCE; }
         @Override public ComponentModule components() { return UiElementsBaseSpec.INSTANCE.components(); }
     }
 
