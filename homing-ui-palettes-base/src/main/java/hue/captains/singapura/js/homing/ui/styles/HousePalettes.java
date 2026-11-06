@@ -14,6 +14,11 @@ import hue.captains.singapura.js.homing.ui.styles.BaseColours.GlowSoft;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours.GlowStrong;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours.Ground;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours.BaseColour;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours.AttentionColour;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours.InkColour;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours.LineColour;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours.ShadowColour;
+import hue.captains.singapura.js.homing.ui.styles.BaseColours.SurfaceColour;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours.Inverted;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours.OnAccent;
 import hue.captains.singapura.js.homing.ui.styles.BaseColours.OnInverted;
@@ -76,9 +81,10 @@ import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 /**
  * How a house palette is designed (RFC 0067, appendix Semantic Colours and Flavours, D32): from its {@link Seeds}, every
  * house colour - a seed as it is, a tint worked out from the seeds once, when the palette is read - so every house
- * palette curates the same colours, each the same way. How a palette arrives at its colours is its own concern, kept
- * here and nowhere in the stack: a sheet sees concrete colours only. A palette may answer a colour of its own before
- * this rule, and so curate it by hand.
+ * palette curates the same colours, each the same way. Four take nothing from the seeds: the ink on danger, and danger's,
+ * warning's and success's, the same in every house palette. How a palette arrives at its colours is its own concern,
+ * kept here and nowhere in the stack: a sheet sees concrete colours only. A palette may answer a colour of its own
+ * before this rule, and so curate it by hand.
  *
  * <p>A tint is two colours mixed in sRGB, as the house's old sheets mixed them, alpha premultiplied, so a seed that is
  * glass stays glass; a shadow's strength is its colour at that alpha.</p>
@@ -89,8 +95,19 @@ public record HousePalettes() implements StatelessFunctionalObject {
 
     private static final ConcreteColor.Srgb CLEAR = new ConcreteColor.Srgb("transparent");
 
-    /** Every house colour, from a palette's seeds: the compiler holds the switch to every one. */
+    /** Every house colour, from a palette's seeds: the compiler holds the switches, one a branch of the tree, to every one. */
     public ConcreteColor of(Seeds s, BaseColour colour) {
+        return switch (colour) {
+            case SurfaceColour c -> surface(s, c);
+            case InkColour c -> ink(s, c);
+            case LineColour c -> line(s, c);
+            case AttentionColour c -> attention(s, c);
+            case ShadowColour c -> shadow(s, c);
+        };
+    }
+
+    /** The surfaces: what things stand on. */
+    private ConcreteColor surface(Seeds s, SurfaceColour colour) {
         return switch (colour) {
             case Raised c -> seed(s.raised());
             case Ground c -> seed(s.ground());
@@ -102,6 +119,12 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case ScrollThumb c -> mix(seed(s.text()), 0.55, seed(s.ground()));
             case PrimaryNeutral c -> mix(seed(s.title()), 0.20, seed(s.raised()));
             case SecondaryNeutral c -> mix(seed(s.accent()), 0.20, seed(s.raised()));
+        };
+    }
+
+    /** The inks: what is written and drawn in. */
+    private ConcreteColor ink(Seeds s, InkColour colour) {
+        return switch (colour) {
             case Text c -> seed(s.text());
             case TextFaded c -> mix(seed(s.text()), 0.80, CLEAR);
             case OnInverted c -> seed(s.onInverted());
@@ -114,9 +137,21 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case DangerInk c -> seed("#7F1D1D");
             case WarningInk c -> seed("#713F12");
             case SuccessInk c -> seed("#1B5E20");
+        };
+    }
+
+    /** The lines: the hairline, a groove's edge, a line under the hand. */
+    private ConcreteColor line(Seeds s, LineColour colour) {
+        return switch (colour) {
             case Border c -> seed(s.border());
             case GrooveEdge c -> mix(seed(s.text()), 0.45, CLEAR);
             case LineHovered c -> mix(seed(s.accent()), 0.50, seed(s.border()));
+        };
+    }
+
+    /** Attention: the house's own colour. */
+    private ConcreteColor attention(Seeds s, AttentionColour colour) {
+        return switch (colour) {
             case Title c -> seed(s.title());
             case Accent c -> seed(s.accent());
             case AccentEdge c -> seed(s.accentEdge());
@@ -131,6 +166,12 @@ public record HousePalettes() implements StatelessFunctionalObject {
             case AccentWashStrong c -> mix(seed(s.accent()), 0.28, CLEAR);
             case KeysCandidate c -> mix(seed(s.accent()), 0.45, CLEAR);
             case KeysLent c -> mix(seed(s.accent()), 0.25, CLEAR);
+        };
+    }
+
+    /** The shadows: what a box casts. */
+    private ConcreteColor shadow(Seeds s, ShadowColour colour) {
+        return switch (colour) {
             case ShadeFaint c -> mix(seed(s.inverted()), 0.04, CLEAR);
             case ShadeLight c -> mix(seed(s.inverted()), 0.08, CLEAR);
             case ShadeSoft c -> mix(seed(s.inverted()), 0.10, CLEAR);
@@ -176,9 +217,9 @@ public record HousePalettes() implements StatelessFunctionalObject {
     ConcreteColor.Srgb mix(ConcreteColor.Srgb a, double share, ConcreteColor.Srgb b) {
         double alpha = a.alpha() * share + b.alpha() * (1 - share);
         if (alpha == 0) return CLEAR;
-        int red = INSTANCE.channel(a.red() * a.alpha() * share + b.red() * b.alpha() * (1 - share), alpha);
-        int green = INSTANCE.channel(a.green() * a.alpha() * share + b.green() * b.alpha() * (1 - share), alpha);
-        int blue = INSTANCE.channel(a.blue() * a.alpha() * share + b.blue() * b.alpha() * (1 - share), alpha);
+        int red = channel(a.red() * a.alpha() * share + b.red() * b.alpha() * (1 - share), alpha);
+        int green = channel(a.green() * a.alpha() * share + b.green() * b.alpha() * (1 - share), alpha);
+        int blue = channel(a.blue() * a.alpha() * share + b.blue() * b.alpha() * (1 - share), alpha);
         return new ConcreteColor.Srgb(red, green, blue, Math.round(alpha * 1000) / 1000.0);
     }
 
