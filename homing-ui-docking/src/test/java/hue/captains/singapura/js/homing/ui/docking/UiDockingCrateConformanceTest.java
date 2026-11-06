@@ -17,12 +17,12 @@ class UiDockingCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiDockingCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiDockingCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiDockingCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiDockingCrate.INSTANCE));
     }
 
     /** Each served JS module under the lane its crate entry declares: the primitives' DOM-owner discipline, the line limit for both. */

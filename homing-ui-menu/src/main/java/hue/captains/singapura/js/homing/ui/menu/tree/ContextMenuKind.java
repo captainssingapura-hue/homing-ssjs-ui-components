@@ -29,7 +29,7 @@ import java.util.List;
 public non-sealed interface ContextMenuKind<Self extends ContextMenuKind<Self>> extends MenuNode<Self> {
 
     /** The kind: the class's simple name without its {@code Menu} suffix, in kebab case. */
-    default String kind() { return MenuTrees.kindOf(getClass()); }
+    default String kind() { return MenuTrees.INSTANCE.kindOf(getClass()); }
     /** A kind's id is its kind. */
     @Override default String id() { return kind(); }
 

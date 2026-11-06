@@ -173,7 +173,7 @@ public record HousePalettes() implements StatelessFunctionalObject {
     private ConcreteColor.Srgb seed(String written) { return new ConcreteColor.Srgb(written); }
 
     /** {@code a} at {@code share}, {@code b} the rest, in sRGB, alpha premultiplied - CSS's {@code color-mix(in srgb, a p%, b)}. */
-    static ConcreteColor.Srgb mix(ConcreteColor.Srgb a, double share, ConcreteColor.Srgb b) {
+    ConcreteColor.Srgb mix(ConcreteColor.Srgb a, double share, ConcreteColor.Srgb b) {
         double alpha = a.alpha() * share + b.alpha() * (1 - share);
         if (alpha == 0) return CLEAR;
         int red = INSTANCE.channel(a.red() * a.alpha() * share + b.red() * b.alpha() * (1 - share), alpha);

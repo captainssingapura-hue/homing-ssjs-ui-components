@@ -16,12 +16,12 @@ class UiDialogCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiDialogCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiDialogCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiDialogCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiDialogCrate.INSTANCE));
     }
 
     @Test

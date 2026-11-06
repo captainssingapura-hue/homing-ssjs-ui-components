@@ -20,12 +20,12 @@ class SizingCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(SizingCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(SizingCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(SizingCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(SizingCrate.INSTANCE));
     }
 
     @Test

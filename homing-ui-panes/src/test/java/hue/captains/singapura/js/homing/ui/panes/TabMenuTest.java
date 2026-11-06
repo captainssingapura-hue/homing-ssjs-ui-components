@@ -20,8 +20,8 @@ class TabMenuTest {
     @Test
     void theKindIsTab_closeAlone_withItsIcon() {
         assertEquals("tab", TabMenu.INSTANCE.kind());
-        assertEquals(List.of(), MenuTrees.validate(TabMenu.INSTANCE));
-        assertEquals(List.of("close"), MenuTrees.rows(TabMenu.INSTANCE).stream().map(r -> r.id()).toList(),
+        assertEquals(List.of(), MenuTrees.INSTANCE.validate(TabMenu.INSTANCE));
+        assertEquals(List.of("close"), MenuTrees.INSTANCE.rows(TabMenu.INSTANCE).stream().map(r -> r.id()).toList(),
                 "Close alone (owner, 23 Oct): Detach, a move of the tab to another pane, waits on moving tabs between panes");
         assertEquals(HouseIcons.CloseIcon.INSTANCE, TabMenu.Close.INSTANCE.icon());
     }
@@ -29,9 +29,9 @@ class TabMenuTest {
     @Test
     void theSplitMenu_isSplit_partThenMergeThenClose() {
         assertEquals("split", SplitMenu.INSTANCE.kind());
-        assertEquals(List.of(), MenuTrees.validate(SplitMenu.INSTANCE));
+        assertEquals(List.of(), MenuTrees.INSTANCE.validate(SplitMenu.INSTANCE));
         assertEquals(List.of("beside", "below", "merge-left", "merge-right", "merge-up", "merge-down", "merge-into", "close"),
-                MenuTrees.rows(SplitMenu.INSTANCE).stream().map(r -> r.id()).toList());
+                MenuTrees.INSTANCE.rows(SplitMenu.INSTANCE).stream().map(r -> r.id()).toList());
     }
 
     @Test

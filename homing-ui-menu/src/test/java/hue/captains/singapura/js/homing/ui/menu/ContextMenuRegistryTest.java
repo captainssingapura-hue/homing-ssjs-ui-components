@@ -80,13 +80,13 @@ class ContextMenuRegistryTest {
         assertEquals("animal", AnimalMenu.INSTANCE.kind());
         assertEquals("counter", CounterMenu.INSTANCE.kind());
         assertEquals("rotate", AnimalMenu.Rotate.INSTANCE.id());
-        assertEquals("change-animal", MenuTrees.kebab("ChangeAnimal"));
-        assertEquals("s10", MenuTrees.kebab("S10"));
-        assertEquals("html-thing", MenuTrees.kebab("HTMLThing"));
-        assertEquals(List.of("rotate", "change", "cat", "dog", "big"), MenuTrees.rows(AnimalMenu.INSTANCE).stream().map(r -> r.id()).toList(), "parents before children, in order");
-        assertEquals("Big", MenuTrees.find(AnimalMenu.INSTANCE, "big").label());
-        assertTrue(MenuTrees.find(AnimalMenu.INSTANCE, "owl") == null);
-        assertEquals(List.of(), MenuTrees.validate(AnimalMenu.INSTANCE));
+        assertEquals("change-animal", MenuTrees.INSTANCE.kebab("ChangeAnimal"));
+        assertEquals("s10", MenuTrees.INSTANCE.kebab("S10"));
+        assertEquals("html-thing", MenuTrees.INSTANCE.kebab("HTMLThing"));
+        assertEquals(List.of("rotate", "change", "cat", "dog", "big"), MenuTrees.INSTANCE.rows(AnimalMenu.INSTANCE).stream().map(r -> r.id()).toList(), "parents before children, in order");
+        assertEquals("Big", MenuTrees.INSTANCE.find(AnimalMenu.INSTANCE, "big").label());
+        assertTrue(MenuTrees.INSTANCE.find(AnimalMenu.INSTANCE, "owl") == null);
+        assertEquals(List.of(), MenuTrees.INSTANCE.validate(AnimalMenu.INSTANCE));
         assertEquals(AnimalMenu.INSTANCE, R.kind("animal"));
     }
 
@@ -136,11 +136,11 @@ class ContextMenuRegistryTest {
 
     @Test
     void whatTheCompilerCannotHold_javaRefuses() {
-        var twin = MenuTrees.validate(TwinMenu.INSTANCE);
+        var twin = MenuTrees.INSTANCE.validate(TwinMenu.INSTANCE);
         assertEquals(List.of("twin: row id repeated: x", "twin: x has no label"), twin);
-        var stray = MenuTrees.validate(StrayMenu.INSTANCE);
+        var stray = MenuTrees.INSTANCE.validate(StrayMenu.INSTANCE);
         assertEquals(List.of("stray: borrowed is listed under stray but names no parent"), stray);
-        assertEquals(List.of("empty: a kind lists no rows"), MenuTrees.validate(EmptyMenu.INSTANCE));
+        assertEquals(List.of("empty: a kind lists no rows"), MenuTrees.INSTANCE.validate(EmptyMenu.INSTANCE));
         var ex = assertThrows(IllegalArgumentException.class, () -> new ContextMenuRegistry(TwinMenu.INSTANCE));
         assertTrue(ex.getMessage().contains("row id repeated: x"), ex.getMessage());
         var twice = assertThrows(IllegalArgumentException.class, () -> new ContextMenuRegistry(AnimalMenu.INSTANCE, AnimalMenu.INSTANCE));

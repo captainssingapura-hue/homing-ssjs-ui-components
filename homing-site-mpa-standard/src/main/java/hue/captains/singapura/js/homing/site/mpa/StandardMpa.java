@@ -166,7 +166,7 @@ public final class StandardMpa implements Mpa {
      */
     @Override
     public ActionRegistry<RoutingContext> registry(Site site) {
-        var siteActions = SiteHost.registry(site).getActions();
+        var siteActions = SiteHost.INSTANCE.registry(site).getActions();
         var gets = new LinkedHashMap<String, GetAction<RoutingContext, ?, ?, ?>>();
         gets.putAll(framework.getActions());
         gets.put(ThemesGetAction.ROUTE, themesAction);

@@ -49,7 +49,7 @@ public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<
             if (means > 1) problems.add(qualified(o) + " is controlled by " + means + " means: one, of extent, switch, action, question");
         }
         for (ControlNode n : nodes) {
-            ControlBranch parent = ControlLevels.parentOf(n);
+            ControlBranch parent = ControlLevels.INSTANCE.parentOf(n);
             if (parent != null && !nodes.contains(parent))
                 problems.add(qualified(n) + " is filed under " + qualified(parent) + ", which the catalogue does not hold");
         }
@@ -57,12 +57,12 @@ public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<
     }
 
     /** The branch a node is filed under; none for the root. */
-    public ControlBranch parent(ControlNode node) { return ControlLevels.parentOf(node); }
+    public ControlBranch parent(ControlNode node) { return ControlLevels.INSTANCE.parentOf(node); }
 
     /** The branches and options directly under a branch - the root's included - branches first. */
     public List<ControlNode> children(ControlBranch branch) {
         var out = new ArrayList<ControlNode>();
-        for (ControlBranch b : branches) if (branch.equals(ControlLevels.parentOf(b))) out.add(b);
+        for (ControlBranch b : branches) if (branch.equals(ControlLevels.INSTANCE.parentOf(b))) out.add(b);
         for (ControlOption<?> o : options) if (branch.equals(o.parent())) out.add(o);
         return List.copyOf(out);
     }

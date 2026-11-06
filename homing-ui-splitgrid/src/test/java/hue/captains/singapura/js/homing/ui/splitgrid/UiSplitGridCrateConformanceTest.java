@@ -20,12 +20,12 @@ class UiSplitGridCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiSplitGridCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiSplitGridCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiSplitGridCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiSplitGridCrate.INSTANCE));
     }
 
     /** The grid's classes place: its line, its mirror and its cells wear the house's look, and nothing here wears a word or holds a value. */

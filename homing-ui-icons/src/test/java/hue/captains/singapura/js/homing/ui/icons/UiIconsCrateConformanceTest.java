@@ -19,12 +19,12 @@ class UiIconsCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiIconsCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiIconsCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiIconsCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiIconsCrate.INSTANCE));
     }
 
     @Test

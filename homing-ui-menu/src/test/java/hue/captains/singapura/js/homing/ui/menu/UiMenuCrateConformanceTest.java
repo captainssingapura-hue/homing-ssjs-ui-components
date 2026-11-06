@@ -19,12 +19,12 @@ class UiMenuCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiMenuCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiMenuCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiMenuCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiMenuCrate.INSTANCE));
     }
 
     @Test

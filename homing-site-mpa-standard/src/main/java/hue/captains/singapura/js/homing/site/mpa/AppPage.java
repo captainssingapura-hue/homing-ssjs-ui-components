@@ -61,10 +61,10 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
         String title  = trail.isEmpty() ? app.title() : trail.last().text();
         String stamped = stampParams(query);
         String crumbs  = stampCrumbs(trail);
-        String brand   = "Object.freeze({label:" + StampedParams.jsString(mpa.brand().label())
-                       + ",home:" + StampedParams.jsString(mpa.brand().home()) + "})";
-        String prefs   = "Object.freeze({module:" + StampedParams.jsString(mpa.moduleUrl(mpa.preferences()))
-                       + ",view:" + StampedParams.jsString(mpa.moduleUrl(PreferencesViewModule.INSTANCE)) + "})";
+        String brand   = "Object.freeze({label:" + StampedParams.INSTANCE.jsString(mpa.brand().label())
+                       + ",home:" + StampedParams.INSTANCE.jsString(mpa.brand().home()) + "})";
+        String prefs   = "Object.freeze({module:" + StampedParams.INSTANCE.jsString(mpa.moduleUrl(mpa.preferences()))
+                       + ",view:" + StampedParams.INSTANCE.jsString(mpa.moduleUrl(PreferencesViewModule.INSTANCE)) + "})";
 
         return new HtmlPageContent("""
                 <!DOCTYPE html>
@@ -101,12 +101,12 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
                 </body>
                 </html>
                 """.formatted(
-                        Html.escape(title + " · " + mpa.brand().label()),
+                        Html.INSTANCE.escape(title + " · " + mpa.brand().label()),
                         brand, crumbs, prefs, fill == PageFill.VIEWPORT ? "true" : "false",
                         stamped == null ? "" : "const params = " + stamped + ";",
-                        StampedParams.jsString(mpa.moduleUrl(DomOpsPartyModule.INSTANCE)),
-                        StampedParams.jsString(mpa.moduleUrl(MpaChromeModule.INSTANCE)),
-                        StampedParams.jsString(mpa.moduleUrl(app)),
+                        StampedParams.INSTANCE.jsString(mpa.moduleUrl(DomOpsPartyModule.INSTANCE)),
+                        StampedParams.INSTANCE.jsString(mpa.moduleUrl(MpaChromeModule.INSTANCE)),
+                        StampedParams.INSTANCE.jsString(mpa.moduleUrl(app)),
                         stamped == null ? "{}" : "params"));
     }
 
@@ -118,7 +118,7 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
         query.all().forEach((k, vs) -> vs.forEach(v -> QueryString.INSTANCE.put(merged, k, v)));
         codec.to(params).forEach((k, vs) -> { merged.remove(k); vs.forEach(v -> QueryString.INSTANCE.put(merged, k, v)); });
         P effective = codec.from(merged) instanceof ParamCodec.Decoded.Ok<P>(P p) ? p : params;
-        return StampedParams.jsObject(codec.to(effective));
+        return StampedParams.INSTANCE.jsObject(codec.to(effective));
     }
 
     private static String stampCrumbs(Trail trail) {
@@ -127,8 +127,8 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
         for (Trail.Crumb c : trail.crumbs()) {
             if (!first) sb.append(',');
             first = false;
-            sb.append("Object.freeze({text:").append(StampedParams.jsString(c.text()))
-              .append(",to:").append(StampedParams.jsString(c.href())).append("})");
+            sb.append("Object.freeze({text:").append(StampedParams.INSTANCE.jsString(c.text()))
+              .append(",to:").append(StampedParams.INSTANCE.jsString(c.href())).append("})");
         }
         return sb.append("])").toString();
     }

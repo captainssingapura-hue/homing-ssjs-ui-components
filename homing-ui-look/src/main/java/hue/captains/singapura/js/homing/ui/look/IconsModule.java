@@ -43,8 +43,8 @@ public record IconsModule() implements EsModule<IconsModule>, StyledModule {
         var entries = new ArrayList<String>();
         for (Component<?> c : Icons.INSTANCE.of(styling.taxonomy())) {
             String token = c.token();
-            entries.add("    " + token.toUpperCase(Locale.ROOT).replace('-', '_') + ": Object.freeze({ LEAF: " + StampedParams.jsString(token)
-                    + ", toString() { return " + StampedParams.jsString(token) + "; } })");
+            entries.add("    " + token.toUpperCase(Locale.ROOT).replace('-', '_') + ": Object.freeze({ LEAF: " + StampedParams.INSTANCE.jsString(token)
+                    + ", toString() { return " + StampedParams.INSTANCE.jsString(token) + "; } })");
         }
         lines.add("const ICON = Object.freeze({\n" + String.join(",\n", entries) + "\n});");
         return lines;

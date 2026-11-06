@@ -54,7 +54,7 @@ class ComponentsConformanceTest {
 
     @Test
     void everyCrateIsStructurallyComplete() {
-        CrateConformance.Result result = CrateConformance.evaluate(new ArrayList<>(ComponentsConformance.INSTANCE.closure()));
+        CrateConformance.Result result = CrateConformance.INSTANCE.evaluate(new ArrayList<>(ComponentsConformance.INSTANCE.closure()));
         for (Crate c : ComponentsConformance.INSTANCE.topLevel()) {
             CrateConformance.CrateResult crate = result.crates().get(c.name());
             assertNotNull(crate, c.name() + " must be present in the evaluation");
@@ -65,7 +65,7 @@ class ComponentsConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        List<String> gaps = CrateCoverage.check(ComponentsConformance.INSTANCE.closure(), ComponentsConformance.INSTANCE.anchors());
+        List<String> gaps = CrateCoverage.INSTANCE.check(ComponentsConformance.INSTANCE.closure(), ComponentsConformance.INSTANCE.anchors());
         assertEquals(List.of(), gaps, () -> "served modules missing from every crate:\n" + String.join("\n", gaps));
     }
 
@@ -84,7 +84,7 @@ class ComponentsConformanceTest {
     @Test
     void theCssGraphKeepsItsLaws() {
         Set<String> own = ComponentsConformance.INSTANCE.ownModules();
-        List<Finding> raw = CssConformance.check(ComponentsConformance.INSTANCE.closure())
+        List<Finding> raw = CssConformance.INSTANCE.check(ComponentsConformance.INSTANCE.closure())
                 .stream().filter(f -> own.contains(f.moduleClass())).toList();
         List<GradedFinding> errors = ComponentsConformance.INSTANCE.grader(ALLOW_PRE_EXISTING).grade(raw)
                 .stream().filter(GradedFinding::isError).toList();

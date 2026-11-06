@@ -21,7 +21,7 @@ public record ReadControls() implements StatelessFunctionalObject {
         var branches = new LinkedHashSet<ControlBranch>();
         for (ControlOption<?> o : options) {
             var lineage = new ArrayDeque<ControlBranch>();
-            for (ControlBranch b = o.parent(); b != null && !(b instanceof L0_ControlBranch); b = ControlLevels.parentOf(b)) lineage.push(b);
+            for (ControlBranch b = o.parent(); b != null && !(b instanceof L0_ControlBranch); b = ControlLevels.INSTANCE.parentOf(b)) lineage.push(b);
             branches.addAll(lineage);
         }
         return new ControlCatalogue(new ArrayList<>(branches), List.copyOf(options));

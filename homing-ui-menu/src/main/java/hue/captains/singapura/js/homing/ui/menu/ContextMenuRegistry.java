@@ -39,7 +39,7 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
         kinds = List.copyOf(Objects.requireNonNull(kinds, "kinds"));
         var names = new HashSet<String>();
         for (ContextMenuKind<?> k : kinds) {
-            MenuTrees.requireValid(k);
+            MenuTrees.INSTANCE.requireValid(k);
             if (!names.add(k.kind())) throw new IllegalArgumentException("ContextMenuRegistry: kind declared twice: " + k.kind());
         }
     }
@@ -101,7 +101,7 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
         for (int i = 0; i < kinds.size(); i++) {
             if (i > 0) sb.append(',');
             var k = kinds.get(i);
-            sb.append(StampedParams.jsString(k.kind())).append(":{\"kind\":").append(StampedParams.jsString(k.kind())).append(",\"nodes\":");
+            sb.append(StampedParams.INSTANCE.jsString(k.kind())).append(":{\"kind\":").append(StampedParams.INSTANCE.jsString(k.kind())).append(",\"nodes\":");
             nodes(sb, k.children());
             sb.append('}');
         }
@@ -112,9 +112,9 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
         for (int i = 0; i < rows.size(); i++) {
             if (i > 0) sb.append(',');
             var r = rows.get(i);
-            sb.append("{\"id\":").append(StampedParams.jsString(r.id())).append(",\"label\":").append(StampedParams.jsString(r.label()));
-            if (r.icon() != null) sb.append(",\"icon\":").append(StampedParams.jsString(r.icon().token()));
-            if (r.hint() != null) sb.append(",\"hint\":").append(StampedParams.jsString(r.hint()));
+            sb.append("{\"id\":").append(StampedParams.INSTANCE.jsString(r.id())).append(",\"label\":").append(StampedParams.INSTANCE.jsString(r.label()));
+            if (r.icon() != null) sb.append(",\"icon\":").append(StampedParams.INSTANCE.jsString(r.icon().token()));
+            if (r.hint() != null) sb.append(",\"hint\":").append(StampedParams.INSTANCE.jsString(r.hint()));
             if (r.section() != 0) sb.append(",\"section\":").append(r.section());
             if (r instanceof hue.captains.singapura.js.homing.ui.menu.tree.Checkable) sb.append(",\"checkable\":true");
             if (!r.children().isEmpty()) { sb.append(",\"nodes\":"); nodes(sb, r.children()); }

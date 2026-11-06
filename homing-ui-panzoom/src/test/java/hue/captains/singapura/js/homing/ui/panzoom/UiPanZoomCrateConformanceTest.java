@@ -21,12 +21,12 @@ class UiPanZoomCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiPanZoomCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiPanZoomCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiPanZoomCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiPanZoomCrate.INSTANCE));
     }
 
     @Test

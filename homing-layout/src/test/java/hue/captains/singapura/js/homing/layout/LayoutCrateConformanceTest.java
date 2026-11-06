@@ -17,12 +17,12 @@ class LayoutCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(LayoutCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(LayoutCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(LayoutCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(LayoutCrate.INSTANCE));
     }
 
     @Test

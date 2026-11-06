@@ -25,12 +25,12 @@ class UiMonitorsCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiMonitorsCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiMonitorsCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiMonitorsCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiMonitorsCrate.INSTANCE));
     }
 
     @Test

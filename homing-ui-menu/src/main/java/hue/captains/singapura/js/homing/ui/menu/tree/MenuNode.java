@@ -25,7 +25,7 @@ import java.util.List;
 public sealed interface MenuNode<Self extends MenuNode<Self>> extends StatelessFunctionalObject permits ContextMenuKind, MenuRow {
 
     /** The node's id: its class's simple name in kebab case — {@code ChangeAnimal} → {@code change-animal}, {@code S10} → {@code s10}. */
-    default String id() { return MenuTrees.kebab(getClass().getSimpleName()); }
+    default String id() { return MenuTrees.INSTANCE.kebab(getClass().getSimpleName()); }
 
     /** The rows beneath, in order; empty at a leaf. Typed to the next level by each level's interface. */
     List<? extends MenuRow<?, ?>> children();

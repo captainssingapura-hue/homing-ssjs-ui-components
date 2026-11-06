@@ -95,7 +95,7 @@ public abstract class PreferencesRegistry implements EsModule<PreferencesRegistr
         out.put("tree", new Json.Raw(treeJson));
         out.put("master", provider(resolver, master, masterParams));
         out.put("nodes", nodes);
-        return Json.write(out);
+        return Json.INSTANCE.write(out);
     }
 
     private static Map<String, Object> provider(ModuleNameResolver resolver, WidgetProvider p, Map<String, Object> params) {

@@ -39,12 +39,12 @@ class UiControlPanelCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiControlPanelCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiControlPanelCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiControlPanelCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiControlPanelCrate.INSTANCE));
     }
 
     /** The hand-written modules keep their lanes; the catalogue is generated, and has no file to read. */

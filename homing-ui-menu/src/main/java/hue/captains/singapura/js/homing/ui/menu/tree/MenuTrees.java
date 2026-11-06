@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.menu.tree;
 
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,15 +17,15 @@ import java.util.function.BiConsumer;
  * vocabulary, and a third-level row lists nothing. Depth is counted from
  * the kind: its rows are at 1, the last level at {@link #MAX_DEPTH}.
  */
-public final class MenuTrees {
+public record MenuTrees() implements StatelessFunctionalObject {
 
-    private MenuTrees() {}
+    public static final MenuTrees INSTANCE = new MenuTrees();
 
     /** The deepest level a row may be at: the third. */
     public static final int MAX_DEPTH = 3;
 
     /** {@code ChangeAnimal} → {@code change-animal}; {@code S10} → {@code s10}; {@code HTMLThing} → {@code html-thing}. */
-    public static String kebab(String simpleName) {
+    public String kebab(String simpleName) {
         var sb = new StringBuilder();
         for (int i = 0; i < simpleName.length(); i++) {
             char c = simpleName.charAt(i);
@@ -39,36 +40,36 @@ public final class MenuTrees {
     }
 
     /** A kind's name from its class: {@code AnimalMenu} → {@code animal}; a class not so suffixed is its whole name in kebab. */
-    public static String kindOf(Class<?> kind) {
+    public String kindOf(Class<?> kind) {
         String name = kind.getSimpleName();
         if (name.endsWith("Menu") && name.length() > 4) name = name.substring(0, name.length() - 4);
         return kebab(name);
     }
 
     /** Every row of the kind, parents before children, in listing order. */
-    public static List<MenuRow<?, ?>> rows(ContextMenuKind<?> kind) {
+    public List<MenuRow<?, ?>> rows(ContextMenuKind<?> kind) {
         var out = new ArrayList<MenuRow<?, ?>>();
         walk(kind, (row, depth) -> out.add(row));
         return List.copyOf(out);
     }
 
     /** The row with an id, or null. */
-    public static MenuRow<?, ?> find(ContextMenuKind<?> kind, String id) {
+    public MenuRow<?, ?> find(ContextMenuKind<?> kind, String id) {
         for (MenuRow<?, ?> r : rows(kind)) if (r.id().equals(id)) return r;
         return null;
     }
 
     /** Walks the rows, parents before children, each with its depth from the kind (1 for a first-level row). */
-    public static void walk(ContextMenuKind<?> kind, BiConsumer<MenuRow<?, ?>, Integer> visit) {
+    public void walk(ContextMenuKind<?> kind, BiConsumer<MenuRow<?, ?>, Integer> visit) {
         for (MenuRow<?, ?> r : kind.children()) walk(r, 1, visit);
     }
-    private static void walk(MenuRow<?, ?> row, int depth, BiConsumer<MenuRow<?, ?>, Integer> visit) {
+    private void walk(MenuRow<?, ?> row, int depth, BiConsumer<MenuRow<?, ?>, Integer> visit) {
         visit.accept(row, depth);
         for (MenuRow<?, ?> c : row.children()) walk(c, depth + 1, visit);
     }
 
     /** The problems with a kind's tree, in walking order; empty when it is sound. */
-    public static List<String> validate(ContextMenuKind<?> kind) {
+    public List<String> validate(ContextMenuKind<?> kind) {
         var problems = new ArrayList<String>();
         String k = kind.kind();
         if (k.isBlank()) problems.add(kind.getClass().getSimpleName() + ": a kind needs a name");
@@ -78,7 +79,7 @@ public final class MenuTrees {
         return List.copyOf(problems);
     }
 
-    private static void check(String kind, MenuNode<?> parent, List<? extends MenuRow<?, ?>> rows, int depth, Set<String> ids, List<String> problems) {
+    private void check(String kind, MenuNode<?> parent, List<? extends MenuRow<?, ?>> rows, int depth, Set<String> ids, List<String> problems) {
         if (rows == null) { problems.add(kind + ": " + parent.id() + " lists null"); return; }
         if (depth > MAX_DEPTH) { if (!rows.isEmpty()) problems.add(kind + ": " + parent.id() + " is at the last level and lists " + rows.size()); return; }
         for (MenuRow<?, ?> row : rows) {
@@ -93,7 +94,7 @@ public final class MenuTrees {
     }
 
     /** {@link #validate}, thrown. */
-    public static <K extends ContextMenuKind<?>> K requireValid(K kind) {
+    public <K extends ContextMenuKind<?>> K requireValid(K kind) {
         var problems = validate(kind);
         if (!problems.isEmpty()) throw new IllegalArgumentException("ContextMenuKind " + kind.kind() + ": " + String.join("; ", problems));
         return kind;

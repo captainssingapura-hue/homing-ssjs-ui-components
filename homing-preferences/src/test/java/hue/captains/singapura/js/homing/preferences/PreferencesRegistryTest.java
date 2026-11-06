@@ -73,22 +73,22 @@ class PreferencesRegistryTest {
 
     @Test
     void theCrateHoldsAndImportsOnlyWhatItRequires() {
-        assertEquals(List.of(), OrphanCheck.check(UiPreferencesCrate.INSTANCE));
-        assertEquals(List.of(), CrateDependencyRule.check(UiPreferencesCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiPreferencesCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiPreferencesCrate.INSTANCE));
     }
 
     @Test
     void jsonEscapesWhatWouldCloseAScript() {
-        assertEquals("\"a\\u003c/script>\\\"b\\\"\"", Json.write("a</script>\"b\""));
+        assertEquals("\"a\\u003c/script>\\\"b\\\"\"", Json.INSTANCE.write("a</script>\"b\""));
         var written = new java.util.LinkedHashMap<String, Object>();
         written.put("n", 1); written.put("t", true); written.put("l", java.util.Arrays.asList("x", null));
-        assertEquals("{\"l\":[\"x\",null],\"n\":1,\"t\":true}", Json.write(written));
+        assertEquals("{\"l\":[\"x\",null],\"n\":1,\"t\":true}", Json.INSTANCE.write(written));
     }
 
     @Test
     void aMapsKeysAreSorted_atEveryDepth_howeverItWasBuilt() {
         assertEquals("{\"a\":[{\"x\":1,\"y\":2}],\"b\":{\"c\":3,\"d\":4}}",
-                Json.write(Map.of("b", Map.of("d", 4, "c", 3), "a", List.of(Map.of("y", 2, "x", 1)))));
+                Json.INSTANCE.write(Map.of("b", Map.of("d", 4, "c", 3), "a", List.of(Map.of("y", 2, "x", 1)))));
     }
 
     @Test

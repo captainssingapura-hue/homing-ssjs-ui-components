@@ -20,12 +20,12 @@ class UiPanesCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiPanesCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiPanesCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiPanesCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiPanesCrate.INSTANCE));
     }
 
     @Test
