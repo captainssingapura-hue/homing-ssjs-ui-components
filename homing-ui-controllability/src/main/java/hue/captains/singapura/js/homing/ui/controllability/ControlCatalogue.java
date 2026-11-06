@@ -46,12 +46,12 @@ public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<
         for (ControlOption<?> o : options) {
             int means = (o instanceof WithExtent<?> ? 1 : 0) + (o instanceof WithSwitch<?> ? 1 : 0)
                       + (o instanceof WithAction<?> ? 1 : 0) + (o instanceof WithQuestion<?> ? 1 : 0);
-            if (means > 1) problems.add(qualified(o) + " is controlled by " + means + " means: one, of extent, switch, action, question");
+            if (means > 1) problems.add(QualifiedNames.INSTANCE.of(o) + " is controlled by " + means + " means: one, of extent, switch, action, question");
         }
         for (ControlNode n : nodes) {
             ControlBranch parent = ControlLevels.INSTANCE.parentOf(n);
             if (parent != null && !nodes.contains(parent))
-                problems.add(qualified(n) + " is filed under " + qualified(parent) + ", which the catalogue does not hold");
+                problems.add(QualifiedNames.INSTANCE.of(n) + " is filed under " + QualifiedNames.INSTANCE.of(parent) + ", which the catalogue does not hold");
         }
         if (!problems.isEmpty()) throw new RefusedControls(problems);
     }
@@ -73,12 +73,6 @@ public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<
     }
 
     private String said(List<ControlNode> nodes) {
-        return String.join(" and ", nodes.stream().map(ControlCatalogue::qualified).toList());
-    }
-
-    /** A node as a problem says it: its type without the package, nesting kept. */
-    static String qualified(Object node) {
-        String n = node.getClass().getName();
-        return n.substring(n.lastIndexOf('.') + 1);
+        return String.join(" and ", nodes.stream().map(QualifiedNames.INSTANCE::of).toList());
     }
 }

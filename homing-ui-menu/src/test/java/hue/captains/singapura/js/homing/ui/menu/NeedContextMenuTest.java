@@ -81,9 +81,9 @@ class NeedContextMenuTest {
 
     @Test
     void theRegistryIsDerivedFromWhatTheCataloguedComponentsNeed_eachKindOnce_inCatalogueOrder() {
-        var r = ContextMenuRegistry.requiredBy(List.of(SiteCrate.INSTANCE));
+        var r = CrateMenus.INSTANCE.requiredBy(List.of(SiteCrate.INSTANCE));
         assertEquals(List.of("tab", "pane"), r.kinds().stream().map(ContextMenuKind::kind).toList(), "the strip's tab menu first, then the pane's own; the tab menu once though two components need it");
-        assertEquals(List.of(), ContextMenuRegistry.validate(List.of(SiteCrate.INSTANCE)));
+        assertEquals(List.of(), CrateMenus.INSTANCE.validate(List.of(SiteCrate.INSTANCE)));
         assertTrue(r.js().get(2).contains("\"tab\":{\"kind\":\"tab\"") && r.js().get(2).contains("\"pane\":{\"kind\":\"pane\""), r.js().toString());
     }
 
@@ -113,7 +113,7 @@ class NeedContextMenuTest {
                 "loose: LooseModule.Statics needs context menus but is not a declared component",
                 "loose: LooseModule.Uncatalogued needs context menus but no catalogue lists it",
                 "loose: LooseModule.Uncatalogued needs context menus but names no kind"),
-                ContextMenuRegistry.validate(List.of(LooseCrate.INSTANCE)));
-        assertEquals(List.of(), ContextMenuRegistry.requiredBy(List.of(LooseCrate.INSTANCE)).kinds(), "nothing derived: the needs are invisible, which is what validate says");
+                CrateMenus.INSTANCE.validate(List.of(LooseCrate.INSTANCE)));
+        assertEquals(List.of(), CrateMenus.INSTANCE.requiredBy(List.of(LooseCrate.INSTANCE)).kinds(), "nothing derived: the needs are invisible, which is what validate says");
     }
 }

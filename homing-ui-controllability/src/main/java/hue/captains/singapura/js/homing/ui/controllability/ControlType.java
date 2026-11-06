@@ -30,9 +30,9 @@ public record ControlType(String name, List<ControlOption<?>> options) implement
         if (!NAME.matcher(name).matches()) problems.add("the control type '" + name + "': lowercase letters, digits and hyphens, a letter first");
         var seen = new HashSet<ControlOption<?>>();
         for (ControlOption<?> o : options) {
-            if (!seen.add(o)) problems.add("the control type '" + name + "' takes " + ControlCatalogue.qualified(o) + " twice");
+            if (!seen.add(o)) problems.add("the control type '" + name + "' takes " + QualifiedNames.INSTANCE.of(o) + " twice");
             if (o instanceof WithExtent<?>)
-                problems.add("the control type '" + name + "' names " + ControlCatalogue.qualified(o) + ", set by degree: the axes are the component's own, from the taxonomy");
+                problems.add("the control type '" + name + "' names " + QualifiedNames.INSTANCE.of(o) + ", set by degree: the axes are the component's own, from the taxonomy");
         }
         if (!problems.isEmpty()) throw new RefusedControls(problems);
     }

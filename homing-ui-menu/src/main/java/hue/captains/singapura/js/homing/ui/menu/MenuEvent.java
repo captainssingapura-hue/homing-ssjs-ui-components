@@ -1,9 +1,9 @@
 package hue.captains.singapura.js.homing.ui.menu;
 
 import hue.captains.singapura.js.homing.base.lang.StatelessSingleton;
+import hue.captains.singapura.js.homing.component.EventFields;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -27,16 +27,10 @@ public sealed interface MenuEvent {
     /** The kind: the record's simple name, the JS object's {@code kind}. */
     default String kind() { return getClass().getSimpleName(); }
 
-    private static String requireId(String id, String what) {
-        Objects.requireNonNull(id, what);
-        if (id.isEmpty()) throw new IllegalArgumentException(what + ": must not be empty");
-        return id;
-    }
-
     /** A menu of this kind opened, its top-left at this point of the viewport. */
     record Opened(String menuKind, double x, double y) implements MenuEvent {
         public Opened {
-            requireId(menuKind, "Opened.menuKind");
+            EventFields.INSTANCE.id(menuKind, "Opened.menuKind");
             if (!Double.isFinite(x) || !Double.isFinite(y)) throw new IllegalArgumentException("Opened.x/y: must be finite");
         }
     }
@@ -44,15 +38,15 @@ public sealed interface MenuEvent {
     /** An item of the open menu was picked. */
     record Picked(String menuKind, String itemId) implements MenuEvent {
         public Picked {
-            requireId(menuKind, "Picked.menuKind");
-            requireId(itemId, "Picked.itemId");
+            EventFields.INSTANCE.id(menuKind, "Picked.menuKind");
+            EventFields.INSTANCE.id(itemId, "Picked.itemId");
         }
     }
 
     /** The open menu closed, for one of the {@link Reasons}. */
     record Closed(String menuKind, String reason) implements MenuEvent {
         public Closed {
-            requireId(menuKind, "Closed.menuKind");
+            EventFields.INSTANCE.id(menuKind, "Closed.menuKind");
             Set<String> reasons = Reasons.INSTANCE.all();
             if (!reasons.contains(reason)) throw new IllegalArgumentException("Closed.reason: not one of " + reasons + ": " + reason);
         }

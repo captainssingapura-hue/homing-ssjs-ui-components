@@ -1,7 +1,6 @@
 package hue.captains.singapura.js.homing.layout;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -32,21 +31,12 @@ public sealed interface Layout permits Layout.Horizontal_Part, Layout.Vertical_P
 
     /** Two or more parts in a row, left to right; none of them a row. */
     record Horizontal_NSplit(List<Horizontal_Part> parts) implements Vertical_Part {
-        public Horizontal_NSplit { parts = checked(parts, "Horizontal_NSplit"); }
+        public Horizontal_NSplit { parts = LayoutParts.INSTANCE.checked(parts, "Horizontal_NSplit"); }
     }
 
     /** Two or more parts in a stack, top to bottom; none of them a stack. */
     record Vertical_NSplit(List<Vertical_Part> parts) implements Horizontal_Part {
-        public Vertical_NSplit { parts = checked(parts, "Vertical_NSplit"); }
-    }
-
-    /** Two or more parts, and no cell in two of them. */
-    private static <P extends Layout> List<P> checked(List<P> parts, String what) {
-        var copy = List.copyOf(Objects.requireNonNull(parts, what + ".parts"));
-        if (copy.size() < 2) throw new IllegalArgumentException(what + " of " + copy.size() + " - two parts or more");
-        var seen = new HashSet<CellId>();
-        for (P p : copy) for (CellId c : p.cells()) if (!seen.add(c)) throw new IllegalArgumentException(what + " - the cell " + c + " stands twice");
-        return copy;
+        public Vertical_NSplit { parts = LayoutParts.INSTANCE.checked(parts, "Vertical_NSplit"); }
     }
 
     // ── what it is ─────────────────────────────────────────────────────────

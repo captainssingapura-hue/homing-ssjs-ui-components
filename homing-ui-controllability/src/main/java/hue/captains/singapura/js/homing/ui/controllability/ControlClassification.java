@@ -30,7 +30,7 @@ public record ControlClassification(List<ControlTypeAt> declared, ControlType ot
         var byName = new HashMap<String, ControlType>();
         byName.put(otherwise.name(), otherwise);
         for (ControlTypeAt d : declared) {
-            if (!nodes.add(d.at())) problems.add(ControlCatalogue.qualified(d.at()) + " is declared twice");
+            if (!nodes.add(d.at())) problems.add(QualifiedNames.INSTANCE.of(d.at()) + " is declared twice");
             ControlType was = byName.putIfAbsent(d.type().name(), d.type());
             if (was != null && !was.equals(d.type())) problems.add("two control types named '" + d.type().name() + "'");
         }

@@ -20,7 +20,7 @@ public record Sizing() implements StatelessFunctionalObject, StatelessSingleton 
     public Rail of(double... weights) {
         Objects.requireNonNull(weights, "weights");
         if (weights.length == 0) throw new IllegalArgumentException("a rail has a box or more");
-        return new Rail(Arrays.stream(Rail.apportion(weights)).boxed().toList());
+        return new Rail(Arrays.stream(Apportion.INSTANCE.apportion(weights)).boxed().toList());
     }
 
     /** The weights - any positive numbers - as shares of a million, by the one rule. */
@@ -34,7 +34,7 @@ public record Sizing() implements StatelessFunctionalObject, StatelessSingleton 
         if (n < 1) throw new IllegalArgumentException("a rail has a box or more, not " + n);
         int[] ones = new int[n];
         Arrays.fill(ones, 1);
-        return new Rail(Arrays.stream(Rail.apportion(Rail.WHOLE, ones)).boxed().toList());
+        return new Rail(Arrays.stream(Apportion.INSTANCE.apportion(Rail.WHOLE, ones)).boxed().toList());
     }
 
     /** A rail read from its text - {@code 500000 500000} - as {@link Rail#text()} writes it. */

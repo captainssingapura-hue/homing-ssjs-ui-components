@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.panes;
 
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
+import hue.captains.singapura.js.homing.ui.menu.CrateMenus;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseIcons;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import hue.captains.singapura.js.homing.ui.menu.tree.MenuTrees;
@@ -42,7 +43,7 @@ class TabMenuTest {
         String menus = String.join("\n", ResourceReader.CLASSPATH.getStringsFromResource("homing/js/hue/captains/singapura/js/homing/ui/panes/MultiTabPaneMenuModule.js"));
         assertTrue(menus.contains("this._steward.open(\"tab\","), "and its menu opens the tab kind through the steward handed to the pane");
         // a site that serves the pane's crate holds the kind, listing nothing
-        assertEquals(java.util.Set.of("tab", "split"), java.util.Set.copyOf(ContextMenuRegistry.requiredBy(List.of(UiPanesCrate.INSTANCE)).kinds().stream().map(k -> k.kind()).toList()));
-        assertEquals(List.of(), ContextMenuRegistry.validate(List.of(UiPanesCrate.INSTANCE)));
+        assertEquals(java.util.Set.of("tab", "split"), java.util.Set.copyOf(CrateMenus.INSTANCE.requiredBy(List.of(UiPanesCrate.INSTANCE)).kinds().stream().map(k -> k.kind()).toList()));
+        assertEquals(List.of(), CrateMenus.INSTANCE.validate(List.of(UiPanesCrate.INSTANCE)));
     }
 }

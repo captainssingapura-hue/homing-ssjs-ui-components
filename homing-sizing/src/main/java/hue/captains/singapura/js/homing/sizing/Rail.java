@@ -134,7 +134,7 @@ public record Rail(List<Integer> shares) {
         int s = shares.get(i);
         if (s < inner.size()) throw new IllegalArgumentException("a box of " + s + " millionths cannot hold " + inner.size() + " boxes");
         int[] weights = inner.shares.stream().mapToInt(Integer::intValue).toArray();
-        int[] parts = apportion(s, weights);
+        int[] parts = Apportion.INSTANCE.apportion(s, weights);
         var out = new ArrayList<Integer>(size() + parts.length - 1);
         out.addAll(shares.subList(0, i));
         for (int p : parts) out.add(p);
@@ -158,65 +158,4 @@ public record Rail(List<Integer> shares) {
     }
 
     // ── the one rounding rule ────────────────────────────────────────────
-
-    /**
-     * {@code total} shared by whole weights, by the one rule: each part's floor, what is left over a
-     * unit at a time to the largest remainders, the earlier on a tie; then a part left at nothing
-     * given one, taken from the largest. The workspace's log rounds by it.
-     */
-    static int[] apportion(int total, int[] weights) {
-        int n = weights.length;
-        long sum = 0;
-        for (int w : weights) sum += w;
-        int[] units = new int[n];
-        long[] rem = new long[n];
-        long got = 0;
-        for (int i = 0; i < n; i++) {
-            long q = (long) total * weights[i];
-            units[i] = (int) (q / sum);
-            rem[i] = q % sum;
-            got += units[i];
-        }
-        var order = new ArrayList<Integer>(n);
-        for (int i = 0; i < n; i++) order.add(i);
-        order.sort((a, b) -> rem[a] != rem[b] ? Long.compare(rem[b], rem[a]) : Integer.compare(a, b));
-        return settle(units, order, total - got);
-    }
-
-    /** The same rule over weights that are any positive numbers: a declaration's 2 : 1, a stored ratio. */
-    static int[] apportion(double[] weights) {
-        int n = weights.length;
-        double sum = 0;
-        for (double w : weights) {
-            if (!(w > 0) || Double.isInfinite(w)) throw new IllegalArgumentException("a weight is a positive number, not " + w);
-            sum += w;
-        }
-        int[] units = new int[n];
-        double[] rem = new double[n];
-        long got = 0;
-        for (int i = 0; i < n; i++) {
-            double q = WHOLE * weights[i] / sum;
-            double f = Math.floor(q);
-            units[i] = (int) f;
-            rem[i] = q - f;
-            got += units[i];
-        }
-        var order = new ArrayList<Integer>(n);
-        for (int i = 0; i < n; i++) order.add(i);
-        order.sort((a, b) -> rem[a] != rem[b] ? Double.compare(rem[b], rem[a]) : Integer.compare(a, b));
-        return settle(units, order, WHOLE - got);
-    }
-
-    private static int[] settle(int[] units, List<Integer> order, long left) {
-        int n = units.length;
-        for (long k = 0; k < left; k++) units[order.get((int) (k % n))]++;
-        for (int i = 0; i < n; i++) {
-            if (units[i] > 0) continue;
-            int big = 0;
-            for (int j = 1; j < n; j++) if (units[j] > units[big]) big = j;
-            units[big]--;
-            units[i] = 1;
-        }
-        return units;
-    }
 }

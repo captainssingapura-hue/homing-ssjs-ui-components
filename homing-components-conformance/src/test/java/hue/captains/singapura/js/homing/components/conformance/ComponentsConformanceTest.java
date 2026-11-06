@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.components.conformance;
 
+import hue.captains.singapura.js.homing.component.keyboard.CrateKeys;
 import hue.captains.singapura.js.homing.conformance.engine.ConformanceEngine;
 import hue.captains.singapura.js.homing.conformance.engine.ServedModuleRenderer;
 import hue.captains.singapura.js.homing.conformance.rules.CrateConformance;
@@ -15,6 +16,7 @@ import hue.captains.singapura.js.homing.component.keyboard.KeyboardRegistry;
 import hue.captains.singapura.js.homing.core.Crate;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.tree.TreeLevel;
+import hue.captains.singapura.js.homing.ui.menu.CrateMenus;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseTaxonomy;
 import hue.captains.singapura.js.homing.ui.menu.ContextMenuRegistry;
 import hue.captains.singapura.js.homing.design.styling.StylingRenderer;
@@ -114,8 +116,8 @@ class ComponentsConformanceTest {
         assertEquals(95, root.componentCount(), "the ground no module's: the document's own, a style's rule on :root (24 Oct); the slider on the native range, its rail, groove, fill, knob, detent and tick retired (23 Oct); the edge strip and its lip become the status footer and the expandable footer area, both catalogued (23 Oct); the standard footer catalogued, a component of its own (23 Oct); the menu item two of a kind, two levels below the context menu (23 Oct); the components declared so far - the floating pane and its head the panes' (23 Oct); the slider group, the panel and its bar dropped (20 Oct): 1 base (the keyboard steward), 64 elements (the browser's own text box, checkbox, range and select, the switch and its groove and knob, the slider's rail, groove, fill and knob, a grip, nine buttons, nineteen texts - code, a table cell's words (D42) and a badge of each tone among them - a heading for each of six levels among them - a link, a crumb, a scrim, a separator, a delimiter, the brand's mark, a pane's thumbnail, the plain and the clickable card, the summary's view, a menu's item, a list's row and a choice's option, a lamp, a drop mark, a detent, a tick and a boundary line, the slider and the edge strip, the ground, the site bar, the brand and the trail), 1 icon, 1 dialog, 8 preferences (a setting's row among them), 2 pan-zoom (the view and its bar), 9 panes (the floating pane and its head among them, moved here (23 Oct); the tab, a component of its own now, the tab-pane, the single-tab pane a float carries, the opener and the picker among them; the new-tab control and its picture retired for now), 1 floating (its layer), 2 split grid, 2 monitors, 2 menus, 3 chrome and the control panel");
         assertTrue(composed.root().children().stream().allMatch(v -> v.level() == TreeLevel.L1.INSTANCE), "every vehicle grafted one under the root");
         // what the components need of a page is derived from the catalogue: nothing invisible, nothing nameless
-        assertEquals(List.of(), ContextMenuRegistry.validate(ComponentsConformance.INSTANCE.topLevel()));
-        assertEquals(List.of("split", "tab"), ContextMenuRegistry.requiredBy(ComponentsConformance.INSTANCE.topLevel()).kinds().stream().map(k -> k.kind()).toList(), "the tab pane opens both - a chip's menu, and its strip ground's, which the desk's docking answers - by name; a site serving it holds them");
+        assertEquals(List.of(), CrateMenus.INSTANCE.validate(ComponentsConformance.INSTANCE.topLevel()));
+        assertEquals(List.of("split", "tab"), CrateMenus.INSTANCE.requiredBy(ComponentsConformance.INSTANCE.topLevel()).kinds().stream().map(k -> k.kind()).toList(), "the tab pane opens both - a chip's menu, and its strip ground's, which the desk's docking answers - by name; a site serving it holds them");
     }
 
     /**
@@ -126,13 +128,13 @@ class ComponentsConformanceTest {
      */
     @Test
     void keysComeThroughTheParty_andTheMigrationListOnlyShrinks() {
-        assertEquals(List.of(), KeyboardRegistry.validate(ComponentsConformance.INSTANCE.topLevel()));
-        var map = KeyboardRegistry.requiredBy(ComponentsConformance.INSTANCE.topLevel());
+        assertEquals(List.of(), CrateKeys.INSTANCE.validate(ComponentsConformance.INSTANCE.topLevel()));
+        var map = CrateKeys.INSTANCE.requiredBy(ComponentsConformance.INSTANCE.topLevel());
         assertEquals(List.of("ClickableCard", "ContextMenuSteward", "FloatLayer", "ListMasterWidget", "MultiTabPane", "PreferencesView",
                         "SplitGridMirror", "SvgPanZoom", "TabOpener"),
                 map.byComponent().keySet().stream().map(c -> c.getClass().getSimpleName()).sorted().toList(), "the components that take keys: leaves, and the holders that hand keys on to what is inside them");
         assertEquals(5, map.takersOf("ArrowUp").size(), "the slider's keys the browser's now, on the native range (23 Oct); the mirror, the list master and the view over it, the menu, the pan-zoom view");
-        assertEquals(List.of(), KeyboardRegistry.undeclaredListeners(ComponentsConformance.INSTANCE.topLevel()), "the ledger is empty: every key comes through the party");
+        assertEquals(List.of(), CrateKeys.INSTANCE.undeclaredListeners(ComponentsConformance.INSTANCE.topLevel()), "the ledger is empty: every key comes through the party");
     }
 
     /**
