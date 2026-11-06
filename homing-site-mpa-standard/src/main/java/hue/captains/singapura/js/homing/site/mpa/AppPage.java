@@ -61,10 +61,6 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
         String title  = trail.isEmpty() ? app.title() : trail.last().text();
         String stamped = stampParams(query);
         String crumbs  = stampCrumbs(trail);
-        String brand   = "Object.freeze({label:" + StampedParams.INSTANCE.jsString(mpa.brand().label())
-                       + ",home:" + StampedParams.INSTANCE.jsString(mpa.brand().home()) + "})";
-        String prefs   = "Object.freeze({module:" + StampedParams.INSTANCE.jsString(mpa.moduleUrl(mpa.preferences()))
-                       + ",view:" + StampedParams.INSTANCE.jsString(mpa.moduleUrl(PreferencesViewModule.INSTANCE)) + "})";
 
         return new HtmlPageContent("""
                 <!DOCTYPE html>
@@ -102,12 +98,24 @@ public record AppPage<P extends AppModule._Param, M extends AppModule<P, M>>(
                 </html>
                 """.formatted(
                         Html.INSTANCE.escape(title + " · " + mpa.brand().label()),
-                        brand, crumbs, prefs, fill == PageFill.VIEWPORT ? "true" : "false",
+                        brand(), crumbs, preferences(), fill == PageFill.VIEWPORT ? "true" : "false",
                         stamped == null ? "" : "const params = " + stamped + ";",
                         StampedParams.INSTANCE.jsString(mpa.moduleUrl(DomOpsPartyModule.INSTANCE)),
                         StampedParams.INSTANCE.jsString(mpa.moduleUrl(MpaChromeModule.INSTANCE)),
                         StampedParams.INSTANCE.jsString(mpa.moduleUrl(app)),
                         stamped == null ? "{}" : "params"));
+    }
+
+    /** The site's brand, as the chrome reads it. */
+    private String brand() {
+        return "Object.freeze({label:" + StampedParams.INSTANCE.jsString(mpa.brand().label())
+                + ",home:" + StampedParams.INSTANCE.jsString(mpa.brand().home()) + "})";
+    }
+
+    /** Where the chrome finds the preferences and their view. */
+    private String preferences() {
+        return "Object.freeze({module:" + StampedParams.INSTANCE.jsString(mpa.moduleUrl(mpa.preferences()))
+                + ",view:" + StampedParams.INSTANCE.jsString(mpa.moduleUrl(PreferencesViewModule.INSTANCE)) + "})";
     }
 
     /** The app's params as a JS object, or null when the app declares no codec. */
