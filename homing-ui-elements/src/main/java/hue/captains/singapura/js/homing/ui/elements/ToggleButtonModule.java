@@ -25,7 +25,7 @@ public record ToggleButtonModule() implements DomModule<ToggleButtonModule>, Imp
 
     @Override
     public ImportsFor<ToggleButtonModule> imports() {
-        return ImportsFor.<ToggleButtonModule>builder()
+        return new ImportsFor._Builder<ToggleButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ToggleButtonBehaviorModule.ToggleButtonBehavior()), ToggleButtonBehaviorModule.INSTANCE))
                 .build();

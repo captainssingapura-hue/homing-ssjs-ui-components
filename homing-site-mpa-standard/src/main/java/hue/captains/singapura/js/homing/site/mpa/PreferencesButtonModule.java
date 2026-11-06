@@ -48,7 +48,7 @@ public record PreferencesButtonModule() implements DomModule<PreferencesButtonMo
 
     @Override
     public ImportsFor<PreferencesButtonModule> imports() {
-        return ImportsFor.<PreferencesButtonModule>builder()
+        return new ImportsFor._Builder<PreferencesButtonModule>()
                 .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatesAndEventsModule.STATE()), StatesAndEventsModule.INSTANCE))

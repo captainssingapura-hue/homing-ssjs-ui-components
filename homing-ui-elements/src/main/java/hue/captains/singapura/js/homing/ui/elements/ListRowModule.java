@@ -24,7 +24,7 @@ public record ListRowModule() implements DomModule<ListRowModule>, ImplFor<House
 
     @Override
     public ImportsFor<ListRowModule> imports() {
-        return ImportsFor.<ListRowModule>builder()
+        return new ImportsFor._Builder<ListRowModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ItemBehaviorModule.ItemBehavior()), ItemBehaviorModule.INSTANCE))
                 .build();

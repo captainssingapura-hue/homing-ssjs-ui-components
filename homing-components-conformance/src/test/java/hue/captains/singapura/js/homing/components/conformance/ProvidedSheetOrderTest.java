@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.components.conformance;
 
 import hue.captains.singapura.js.homing.core.CssGroup;
+import hue.captains.singapura.js.homing.core.CssGroupDependencies;
 import hue.captains.singapura.js.homing.core.CssImportsFor;
 import hue.captains.singapura.js.homing.preferences.PreferencesStyles;
 import hue.captains.singapura.js.homing.ui.elements.ElementStyles;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ProvidedSheetOrderTest {
 
     private static void follows(CssGroup<?> sheet, CssGroup<?> first) {
-        assertTrue(CssImportsFor.dependenciesOf(sheet).contains(first), sheet.getClass().getSimpleName() + " must load after " + first.getClass().getSimpleName());
+        assertTrue(CssGroupDependencies.INSTANCE.of(sheet).contains(first), sheet.getClass().getSimpleName() + " must load after " + first.getClass().getSimpleName());
     }
 
     @Test

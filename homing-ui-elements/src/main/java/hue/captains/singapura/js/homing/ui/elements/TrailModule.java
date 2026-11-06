@@ -25,7 +25,7 @@ public record TrailModule() implements DomModule<TrailModule>, ImplFor<HouseCont
 
     @Override
     public ImportsFor<TrailModule> imports() {
-        return ImportsFor.<TrailModule>builder()
+        return new ImportsFor._Builder<TrailModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CrumbModule.Crumb()), CrumbModule.INSTANCE))

@@ -25,7 +25,7 @@ public record SwitchModule() implements DomModule<SwitchModule>, ImplFor<HouseCo
 
     @Override
     public ImportsFor<SwitchModule> imports() {
-        return ImportsFor.<SwitchModule>builder()
+        return new ImportsFor._Builder<SwitchModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new InputBehaviorsModule.TurnBehavior()), InputBehaviorsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ToggleGrooveModule.ToggleGroove()), ToggleGrooveModule.INSTANCE))

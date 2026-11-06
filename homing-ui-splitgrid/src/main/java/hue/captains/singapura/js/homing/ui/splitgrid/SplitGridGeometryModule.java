@@ -24,7 +24,7 @@ public record SplitGridGeometryModule() implements EsModule<SplitGridGeometryMod
 
     @Override
     public ImportsFor<SplitGridGeometryModule> imports() {
-        return ImportsFor.<SplitGridGeometryModule>builder()
+        return new ImportsFor._Builder<SplitGridGeometryModule>()
                 .add(new ModuleImports<>(List.of(new RailModule.Rail()), RailModule.INSTANCE))
                 .build();
     }

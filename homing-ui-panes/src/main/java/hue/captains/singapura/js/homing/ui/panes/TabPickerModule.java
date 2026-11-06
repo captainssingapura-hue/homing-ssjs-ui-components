@@ -39,7 +39,7 @@ public record TabPickerModule() implements Widget<Widget._None, TabPickerModule>
 
     @Override
     public ImportsFor<TabPickerModule> imports() {
-        return ImportsFor.<TabPickerModule>builder()
+        return new ImportsFor._Builder<TabPickerModule>()
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),

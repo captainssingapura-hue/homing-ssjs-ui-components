@@ -25,7 +25,7 @@ public record CodeModule() implements DomModule<CodeModule>, ImplFor<HouseText.C
 
     @Override
     public ImportsFor<CodeModule> imports() {
-        return ImportsFor.<CodeModule>builder()
+        return new ImportsFor._Builder<CodeModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

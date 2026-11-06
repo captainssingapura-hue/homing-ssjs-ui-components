@@ -25,7 +25,7 @@ public record DelimiterModule() implements DomModule<DelimiterModule>, ImplFor<H
 
     @Override
     public ImportsFor<DelimiterModule> imports() {
-        return ImportsFor.<DelimiterModule>builder()
+        return new ImportsFor._Builder<DelimiterModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

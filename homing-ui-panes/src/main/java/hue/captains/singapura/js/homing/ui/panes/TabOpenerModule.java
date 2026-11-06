@@ -66,7 +66,7 @@ public record TabOpenerModule() implements Widget<Widget._None, TabOpenerModule>
 
     @Override
     public ImportsFor<TabOpenerModule> imports() {
-        return ImportsFor.<TabOpenerModule>builder()
+        return new ImportsFor._Builder<TabOpenerModule>()
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),

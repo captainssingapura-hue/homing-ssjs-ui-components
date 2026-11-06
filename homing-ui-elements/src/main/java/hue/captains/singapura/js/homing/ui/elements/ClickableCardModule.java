@@ -33,7 +33,7 @@ public record ClickableCardModule() implements DomModule<ClickableCardModule>, I
 
     @Override
     public ImportsFor<ClickableCardModule> imports() {
-        return ImportsFor.<ClickableCardModule>builder()
+        return new ImportsFor._Builder<ClickableCardModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CardBehaviorModule.CardBehavior()), CardBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))

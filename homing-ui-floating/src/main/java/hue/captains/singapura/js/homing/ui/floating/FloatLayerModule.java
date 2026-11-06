@@ -35,7 +35,7 @@ public record FloatLayerModule() implements DomModule<FloatLayerModule>, ImplFor
 
     @Override
     public ImportsFor<FloatLayerModule> imports() {
-        return ImportsFor.<FloatLayerModule>builder()
+        return new ImportsFor._Builder<FloatLayerModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatLayerBehaviorModule.FloatLayerBehavior()), FloatLayerBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))

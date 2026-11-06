@@ -22,7 +22,7 @@ public record MenuTreeModule() implements EsModule<MenuTreeModule> {
 
     public static final MenuTreeModule INSTANCE = new MenuTreeModule();
 
-    @Override public ImportsFor<MenuTreeModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<MenuTreeModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<MenuTreeModule> exports() {

@@ -43,7 +43,7 @@ public record ListMasterWidgetModule() implements Widget<Widget._None, ListMaste
 
     @Override
     public ImportsFor<ListMasterWidgetModule> imports() {
-        return ImportsFor.<ListMasterWidgetModule>builder()
+        return new ImportsFor._Builder<ListMasterWidgetModule>()
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ListRowModule.ListRow()), ListRowModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

@@ -16,7 +16,7 @@ public record MenuBehaviorModule() implements DomModule<MenuBehaviorModule> {
 
     public static final MenuBehaviorModule INSTANCE = new MenuBehaviorModule();
 
-    @Override public ImportsFor<MenuBehaviorModule> imports() { return ImportsFor.<MenuBehaviorModule>builder().build(); }
+    @Override public ImportsFor<MenuBehaviorModule> imports() { return new ImportsFor._Builder<MenuBehaviorModule>().build(); }
 
     @Override public ExportsOf<MenuBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new MenuBehavior())); }
 }

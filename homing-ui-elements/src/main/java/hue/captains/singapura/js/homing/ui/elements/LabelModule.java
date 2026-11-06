@@ -25,7 +25,7 @@ public record LabelModule() implements DomModule<LabelModule>, ImplFor<HouseText
 
     @Override
     public ImportsFor<LabelModule> imports() {
-        return ImportsFor.<LabelModule>builder()
+        return new ImportsFor._Builder<LabelModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

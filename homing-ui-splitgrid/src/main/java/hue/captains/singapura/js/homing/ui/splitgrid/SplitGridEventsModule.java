@@ -19,7 +19,7 @@ public record SplitGridEventsModule() implements EsModule<SplitGridEventsModule>
 
     public static final SplitGridEventsModule INSTANCE = new SplitGridEventsModule();
 
-    @Override public ImportsFor<SplitGridEventsModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<SplitGridEventsModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<SplitGridEventsModule> exports() {

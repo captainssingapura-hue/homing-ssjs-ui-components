@@ -15,7 +15,7 @@ public record ContextMenuStewardBehaviorModule() implements DomModule<ContextMen
 
     public static final ContextMenuStewardBehaviorModule INSTANCE = new ContextMenuStewardBehaviorModule();
 
-    @Override public ImportsFor<ContextMenuStewardBehaviorModule> imports() { return ImportsFor.<ContextMenuStewardBehaviorModule>builder().build(); }
+    @Override public ImportsFor<ContextMenuStewardBehaviorModule> imports() { return new ImportsFor._Builder<ContextMenuStewardBehaviorModule>().build(); }
 
     @Override public ExportsOf<ContextMenuStewardBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ContextMenuStewardBehavior())); }
 }

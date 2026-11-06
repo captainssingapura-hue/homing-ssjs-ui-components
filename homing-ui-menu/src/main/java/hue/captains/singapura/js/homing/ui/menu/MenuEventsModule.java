@@ -18,7 +18,7 @@ public record MenuEventsModule() implements EsModule<MenuEventsModule> {
 
     public static final MenuEventsModule INSTANCE = new MenuEventsModule();
 
-    @Override public ImportsFor<MenuEventsModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<MenuEventsModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<MenuEventsModule> exports() {

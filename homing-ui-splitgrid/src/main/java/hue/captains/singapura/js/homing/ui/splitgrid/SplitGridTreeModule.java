@@ -19,7 +19,7 @@ public record SplitGridTreeModule() implements EsModule<SplitGridTreeModule> {
 
     public static final SplitGridTreeModule INSTANCE = new SplitGridTreeModule();
 
-    @Override public ImportsFor<SplitGridTreeModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<SplitGridTreeModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<SplitGridTreeModule> exports() {

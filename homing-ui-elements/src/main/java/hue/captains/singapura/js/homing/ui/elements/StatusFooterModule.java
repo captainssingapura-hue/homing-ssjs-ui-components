@@ -25,7 +25,7 @@ public record StatusFooterModule() implements DomModule<StatusFooterModule>, Imp
 
     @Override
     public ImportsFor<StatusFooterModule> imports() {
-        return ImportsFor.<StatusFooterModule>builder()
+        return new ImportsFor._Builder<StatusFooterModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ElementStyles.el_status_footer(), new ElementStyles.el_status_room(), new ElementStyles.el_status_cover()), ElementStyles.INSTANCE))

@@ -41,7 +41,7 @@ public record MpaChromeModule() implements Widget<MpaChromeModule.Chrome, MpaChr
 
     @Override
     public ImportsFor<MpaChromeModule> imports() {
-        return ImportsFor.<MpaChromeModule>builder()
+        return new ImportsFor._Builder<MpaChromeModule>()
                 .add(new ModuleImports<>(List.of(new ChromeLayoutModule.ChromeLayout()), ChromeLayoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SiteBarModule.SiteBar()), SiteBarModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferencesButtonModule.PreferencesButton()), PreferencesButtonModule.INSTANCE))

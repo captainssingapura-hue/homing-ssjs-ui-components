@@ -55,7 +55,7 @@ public abstract class PreferencesRegistry implements EsModule<PreferencesRegistr
     /** The widget that shows the master. */
     public WidgetProvider master() { return master; }
 
-    @Override public ImportsFor<PreferencesRegistry> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<PreferencesRegistry> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<PreferencesRegistry> exports() {

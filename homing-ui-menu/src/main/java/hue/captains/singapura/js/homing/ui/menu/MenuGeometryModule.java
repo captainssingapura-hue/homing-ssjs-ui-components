@@ -19,7 +19,7 @@ public record MenuGeometryModule() implements EsModule<MenuGeometryModule> {
 
     public static final MenuGeometryModule INSTANCE = new MenuGeometryModule();
 
-    @Override public ImportsFor<MenuGeometryModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<MenuGeometryModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<MenuGeometryModule> exports() {

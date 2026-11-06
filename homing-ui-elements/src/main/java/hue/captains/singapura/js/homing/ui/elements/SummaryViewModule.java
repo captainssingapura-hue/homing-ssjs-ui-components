@@ -28,7 +28,7 @@ public record SummaryViewModule() implements DomModule<SummaryViewModule>, ImplF
 
     @Override
     public ImportsFor<SummaryViewModule> imports() {
-        return ImportsFor.<SummaryViewModule>builder()
+        return new ImportsFor._Builder<SummaryViewModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Heading4Module.Heading4()), Heading4Module.INSTANCE))

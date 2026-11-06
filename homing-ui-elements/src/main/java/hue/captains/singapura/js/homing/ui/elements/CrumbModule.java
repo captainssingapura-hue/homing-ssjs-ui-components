@@ -26,7 +26,7 @@ public record CrumbModule() implements DomModule<CrumbModule>, ImplFor<HouseCont
 
     @Override
     public ImportsFor<CrumbModule> imports() {
-        return ImportsFor.<CrumbModule>builder()
+        return new ImportsFor._Builder<CrumbModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LinkBehaviorModule.LinkBehavior()), LinkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))

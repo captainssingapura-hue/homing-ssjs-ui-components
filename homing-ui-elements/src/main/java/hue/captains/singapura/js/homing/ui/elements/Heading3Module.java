@@ -25,7 +25,7 @@ public record Heading3Module() implements DomModule<Heading3Module>, ImplFor<Hou
 
     @Override
     public ImportsFor<Heading3Module> imports() {
-        return ImportsFor.<Heading3Module>builder()
+        return new ImportsFor._Builder<Heading3Module>()
                 .add(new ModuleImports<>(List.of(new HeadingModule.Heading()), HeadingModule.INSTANCE))
                 .build();
     }

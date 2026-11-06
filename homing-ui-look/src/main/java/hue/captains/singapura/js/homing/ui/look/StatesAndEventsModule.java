@@ -29,7 +29,7 @@ public record StatesAndEventsModule() implements EsModule<StatesAndEventsModule>
 
     public record STATE() implements Exportable._Constant<StatesAndEventsModule> {}
 
-    @Override public ImportsFor<StatesAndEventsModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<StatesAndEventsModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<StatesAndEventsModule> exports() {

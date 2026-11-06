@@ -27,7 +27,7 @@ public record PanZoomBarModule() implements DomModule<PanZoomBarModule>, ImplFor
 
     @Override
     public ImportsFor<PanZoomBarModule> imports() {
-        return ImportsFor.<PanZoomBarModule>builder()
+        return new ImportsFor._Builder<PanZoomBarModule>()
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))

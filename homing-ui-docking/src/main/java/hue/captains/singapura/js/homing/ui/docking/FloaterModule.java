@@ -27,7 +27,7 @@ public record FloaterModule() implements DomModule<FloaterModule> {
 
     @Override
     public ImportsFor<FloaterModule> imports() {
-        return ImportsFor.<FloaterModule>builder()
+        return new ImportsFor._Builder<FloaterModule>()
                 .add(new ModuleImports<>(List.of(new SingleTabPaneModule.SingleTabPane()), SingleTabPaneModule.INSTANCE))
                 .build();
     }

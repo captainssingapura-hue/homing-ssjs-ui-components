@@ -24,7 +24,7 @@ public record IconButtonModule() implements DomModule<IconButtonModule>, ImplFor
 
     @Override
     public ImportsFor<IconButtonModule> imports() {
-        return ImportsFor.<IconButtonModule>builder()
+        return new ImportsFor._Builder<IconButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .build();

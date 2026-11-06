@@ -42,7 +42,7 @@ public record SingleTabPaneModule() implements DomModule<SingleTabPaneModule>, I
 
     @Override
     public ImportsFor<SingleTabPaneModule> imports() {
-        return ImportsFor.<SingleTabPaneModule>builder()
+        return new ImportsFor._Builder<SingleTabPaneModule>()
                 .add(new ModuleImports<>(List.of(new PaneKeysModule.PaneKeys()), PaneKeysModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneMenusModule.PaneMenus()), PaneMenusModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneTabsModule.PaneTabs()), PaneTabsModule.INSTANCE))

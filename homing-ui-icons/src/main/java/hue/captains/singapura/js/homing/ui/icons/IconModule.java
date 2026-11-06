@@ -31,7 +31,7 @@ public record IconModule() implements DomModule<IconModule>, ImplForLeavesOf<Hou
 
     @Override
     public ImportsFor<IconModule> imports() {
-        return ImportsFor.<IconModule>builder()
+        return new ImportsFor._Builder<IconModule>()
                 .add(new ModuleImports<>(List.of(new IconStyles.ic_base()), IconStyles.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DomOpsPartyModule.DomOpsParty()), DomOpsPartyModule.INSTANCE))
                 .build();

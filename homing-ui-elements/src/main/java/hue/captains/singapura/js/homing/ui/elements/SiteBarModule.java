@@ -26,7 +26,7 @@ public record SiteBarModule() implements DomModule<SiteBarModule>, ImplFor<House
 
     @Override
     public ImportsFor<SiteBarModule> imports() {
-        return ImportsFor.<SiteBarModule>builder()
+        return new ImportsFor._Builder<SiteBarModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BrandModule.Brand()), BrandModule.INSTANCE))

@@ -36,7 +36,7 @@ public record SplitGridModule() implements DomModule<SplitGridModule> {
 
     @Override
     public ImportsFor<SplitGridModule> imports() {
-        return ImportsFor.<SplitGridModule>builder()
+        return new ImportsFor._Builder<SplitGridModule>()
                 .add(new ModuleImports<>(List.of(new SplitGridEventsModule.SplitGridEvents()), SplitGridEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridTreeModule.SplitGridTree()), SplitGridTreeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridGeometryModule.SplitGridGeometry()), SplitGridGeometryModule.INSTANCE))

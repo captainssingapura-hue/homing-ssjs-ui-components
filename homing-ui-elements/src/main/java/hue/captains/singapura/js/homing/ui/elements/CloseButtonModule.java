@@ -25,7 +25,7 @@ public record CloseButtonModule() implements DomModule<CloseButtonModule>, ImplF
 
     @Override
     public ImportsFor<CloseButtonModule> imports() {
-        return ImportsFor.<CloseButtonModule>builder()
+        return new ImportsFor._Builder<CloseButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .build();

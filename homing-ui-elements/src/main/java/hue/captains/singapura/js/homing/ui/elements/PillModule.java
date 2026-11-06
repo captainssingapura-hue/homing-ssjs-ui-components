@@ -25,7 +25,7 @@ public record PillModule() implements DomModule<PillModule>, ImplFor<HouseText.P
 
     @Override
     public ImportsFor<PillModule> imports() {
-        return ImportsFor.<PillModule>builder()
+        return new ImportsFor._Builder<PillModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

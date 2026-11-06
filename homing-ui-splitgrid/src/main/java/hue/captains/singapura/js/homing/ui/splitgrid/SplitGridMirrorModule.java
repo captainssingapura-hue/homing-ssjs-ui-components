@@ -44,7 +44,7 @@ public record SplitGridMirrorModule() implements DomModule<SplitGridMirrorModule
 
     @Override
     public ImportsFor<SplitGridMirrorModule> imports() {
-        return ImportsFor.<SplitGridMirrorModule>builder()
+        return new ImportsFor._Builder<SplitGridMirrorModule>()
                 .add(new ModuleImports<>(List.of(new SplitGridEventsModule.SplitGridEvents()), SplitGridEventsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridTreeModule.SplitGridTree()), SplitGridTreeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridGeometryModule.SplitGridGeometry()), SplitGridGeometryModule.INSTANCE))

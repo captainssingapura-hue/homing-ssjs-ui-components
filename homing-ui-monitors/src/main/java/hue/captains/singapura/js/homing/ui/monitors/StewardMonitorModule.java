@@ -37,7 +37,7 @@ public record StewardMonitorModule() implements Widget<Widget._None, StewardMoni
 
     @Override
     public ImportsFor<StewardMonitorModule> imports() {
-        return ImportsFor.<StewardMonitorModule>builder()
+        return new ImportsFor._Builder<StewardMonitorModule>()
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LampModule.Lamp()), LampModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))

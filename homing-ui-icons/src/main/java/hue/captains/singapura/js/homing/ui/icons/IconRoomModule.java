@@ -23,7 +23,7 @@ public record IconRoomModule() implements DomModule<IconRoomModule> {
 
     @Override
     public ImportsFor<IconRoomModule> imports() {
-        return ImportsFor.<IconRoomModule>builder()
+        return new ImportsFor._Builder<IconRoomModule>()
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .build();
     }

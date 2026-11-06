@@ -25,7 +25,7 @@ public record PaneMergeModule() implements EsModule<PaneMergeModule> {
 
     public static final PaneMergeModule INSTANCE = new PaneMergeModule();
 
-    @Override public ImportsFor<PaneMergeModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<PaneMergeModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<PaneMergeModule> exports() {

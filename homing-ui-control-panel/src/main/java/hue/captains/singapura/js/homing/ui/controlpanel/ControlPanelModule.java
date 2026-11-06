@@ -37,7 +37,7 @@ public record ControlPanelModule() implements Widget<Widget._None, ControlPanelM
 
     @Override
     public ImportsFor<ControlPanelModule> imports() {
-        return ImportsFor.<ControlPanelModule>builder()
+        return new ImportsFor._Builder<ControlPanelModule>()
                 .add(new ModuleImports<>(List.of(new IconsModule.ICON()), IconsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ControlsModule.Controls()), ControlsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SliderModule.Slider()), SliderModule.INSTANCE))

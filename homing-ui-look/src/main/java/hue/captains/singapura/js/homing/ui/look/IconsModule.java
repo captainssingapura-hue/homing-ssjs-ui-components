@@ -31,7 +31,7 @@ public record IconsModule() implements EsModule<IconsModule>, StyledModule {
     /** Each icon: {@code ICON.CLOSE_ICON = { LEAF: "close-icon" }}, frozen. */
     public record ICON() implements Exportable._Constant<IconsModule> {}
 
-    @Override public ImportsFor<IconsModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<IconsModule> imports() { return new ImportsFor<>(); }
 
     @Override public ExportsOf<IconsModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ICON())); }
 

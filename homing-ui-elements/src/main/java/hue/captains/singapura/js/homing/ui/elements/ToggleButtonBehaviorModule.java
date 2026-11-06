@@ -20,7 +20,7 @@ public record ToggleButtonBehaviorModule() implements DomModule<ToggleButtonBeha
     public static final ToggleButtonBehaviorModule INSTANCE = new ToggleButtonBehaviorModule();
 
     @Override public ImportsFor<ToggleButtonBehaviorModule> imports() {
-        return ImportsFor.noImports();
+        return new ImportsFor<>();
     }
 
     @Override public ExportsOf<ToggleButtonBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ToggleButtonBehavior())); }

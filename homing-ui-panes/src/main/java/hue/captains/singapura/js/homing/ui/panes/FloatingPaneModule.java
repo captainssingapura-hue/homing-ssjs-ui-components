@@ -28,7 +28,7 @@ public record FloatingPaneModule() implements DomModule<FloatingPaneModule>, Imp
 
     @Override
     public ImportsFor<FloatingPaneModule> imports() {
-        return ImportsFor.<FloatingPaneModule>builder()
+        return new ImportsFor._Builder<FloatingPaneModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneBehaviorModule.FloatingPaneBehavior()), FloatingPaneBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TitleBarModule.TitleBar()), TitleBarModule.INSTANCE))

@@ -25,7 +25,7 @@ public record SuccessBadgeModule() implements DomModule<SuccessBadgeModule>, Imp
 
     @Override
     public ImportsFor<SuccessBadgeModule> imports() {
-        return ImportsFor.<SuccessBadgeModule>builder()
+        return new ImportsFor._Builder<SuccessBadgeModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

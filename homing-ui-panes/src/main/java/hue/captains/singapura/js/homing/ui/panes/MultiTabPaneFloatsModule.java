@@ -19,7 +19,7 @@ public record MultiTabPaneFloatsModule() implements DomModule<MultiTabPaneFloats
 
     public static final MultiTabPaneFloatsModule INSTANCE = new MultiTabPaneFloatsModule();
 
-    @Override public ImportsFor<MultiTabPaneFloatsModule> imports() { return ImportsFor.<MultiTabPaneFloatsModule>builder().build(); }
+    @Override public ImportsFor<MultiTabPaneFloatsModule> imports() { return new ImportsFor._Builder<MultiTabPaneFloatsModule>().build(); }
 
     @Override public ExportsOf<MultiTabPaneFloatsModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new MultiTabPaneFloats())); }
 }

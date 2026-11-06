@@ -25,7 +25,7 @@ public record SecondaryButtonModule() implements DomModule<SecondaryButtonModule
 
     @Override
     public ImportsFor<SecondaryButtonModule> imports() {
-        return ImportsFor.<SecondaryButtonModule>builder()
+        return new ImportsFor._Builder<SecondaryButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .build();
     }

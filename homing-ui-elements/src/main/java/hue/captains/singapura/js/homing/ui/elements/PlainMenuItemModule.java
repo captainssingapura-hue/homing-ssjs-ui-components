@@ -27,7 +27,7 @@ public record PlainMenuItemModule() implements DomModule<PlainMenuItemModule>, I
 
     @Override
     public ImportsFor<PlainMenuItemModule> imports() {
-        return ImportsFor.<PlainMenuItemModule>builder()
+        return new ImportsFor._Builder<PlainMenuItemModule>()
                 .add(new ModuleImports<>(List.of(new MenuItemModule.MenuItem()), MenuItemModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))   // its hint, made by the base: imported where its leaf is

@@ -15,7 +15,7 @@ public record TextBehaviorModule() implements DomModule<TextBehaviorModule> {
 
     public static final TextBehaviorModule INSTANCE = new TextBehaviorModule();
 
-    @Override public ImportsFor<TextBehaviorModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<TextBehaviorModule> imports() { return new ImportsFor<>(); }
 
     @Override public ExportsOf<TextBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new TextBehavior())); }
 }

@@ -18,7 +18,7 @@ public record RailModule() implements EsModule<RailModule> {
 
     public static final RailModule INSTANCE = new RailModule();
 
-    @Override public ImportsFor<RailModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<RailModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<RailModule> exports() {

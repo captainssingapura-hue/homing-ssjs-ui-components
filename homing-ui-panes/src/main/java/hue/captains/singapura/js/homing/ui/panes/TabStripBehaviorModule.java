@@ -17,7 +17,7 @@ public record TabStripBehaviorModule() implements DomModule<TabStripBehaviorModu
 
     @Override
     public ImportsFor<TabStripBehaviorModule> imports() {
-        return ImportsFor.<TabStripBehaviorModule>builder()
+        return new ImportsFor._Builder<TabStripBehaviorModule>()
                 .build();
     }
 

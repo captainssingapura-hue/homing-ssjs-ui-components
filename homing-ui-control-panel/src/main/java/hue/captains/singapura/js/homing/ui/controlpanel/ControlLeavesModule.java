@@ -39,7 +39,7 @@ public record ControlLeavesModule() implements EsModule<ControlLeavesModule>, St
     public record CONTROL_TYPE_OF() implements Exportable._Constant<ControlLeavesModule> {}
     public record CONTROL_OPTIONS_OF() implements Exportable._Constant<ControlLeavesModule> {}
 
-    @Override public ImportsFor<ControlLeavesModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<ControlLeavesModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<ControlLeavesModule> exports() {

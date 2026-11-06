@@ -17,7 +17,7 @@ public record ScrimBehaviorModule() implements DomModule<ScrimBehaviorModule> {
 
     @Override
     public ImportsFor<ScrimBehaviorModule> imports() {
-        return ImportsFor.noImports();
+        return new ImportsFor<>();
     }
 
     @Override public ExportsOf<ScrimBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ScrimBehavior())); }

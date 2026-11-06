@@ -25,7 +25,7 @@ public record Heading4Module() implements DomModule<Heading4Module>, ImplFor<Hou
 
     @Override
     public ImportsFor<Heading4Module> imports() {
-        return ImportsFor.<Heading4Module>builder()
+        return new ImportsFor._Builder<Heading4Module>()
                 .add(new ModuleImports<>(List.of(new HeadingModule.Heading()), HeadingModule.INSTANCE))
                 .build();
     }

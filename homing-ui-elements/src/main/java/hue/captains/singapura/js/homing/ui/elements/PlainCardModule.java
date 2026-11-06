@@ -29,7 +29,7 @@ public record PlainCardModule() implements DomModule<PlainCardModule>, ImplFor<H
 
     @Override
     public ImportsFor<PlainCardModule> imports() {
-        return ImportsFor.<PlainCardModule>builder()
+        return new ImportsFor._Builder<PlainCardModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ElementStyles.el_card()), ElementStyles.INSTANCE))

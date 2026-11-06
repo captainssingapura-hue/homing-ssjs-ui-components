@@ -26,7 +26,7 @@ public record MenuItemModule() implements DomModule<MenuItemModule>, ImplForBran
 
     @Override
     public ImportsFor<MenuItemModule> imports() {
-        return ImportsFor.<MenuItemModule>builder()
+        return new ImportsFor._Builder<MenuItemModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ItemBehaviorModule.ItemBehavior()), ItemBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))

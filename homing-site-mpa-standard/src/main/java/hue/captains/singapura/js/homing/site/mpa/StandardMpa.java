@@ -9,6 +9,7 @@ import hue.captains.singapura.js.homing.core.ModuleNameResolver;
 import hue.captains.singapura.js.homing.core.NoDesign;
 import hue.captains.singapura.js.homing.core.SimpleAppResolver;
 import hue.captains.singapura.js.homing.core.util.ResourceReader;
+import hue.captains.singapura.js.homing.core.util.ResourceReaders;
 import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.design.styling.StylingRenderer;
 import hue.captains.singapura.js.homing.preferences.PreferencesRegistry;
@@ -79,7 +80,7 @@ public final class StandardMpa implements Mpa {
         }
         DesignRenderer design = styling == null ? NoDesign.INSTANCE : new StylingRenderer(styling);
         // the modules' scripts, like the family files: in dev mode from the source folders homing.devRoot names, else from the jars
-        this.framework = new HomingActionRegistry(names, new SimpleAppResolver(apps), ResourceReader.fromSystemProperty(),
+        this.framework = new HomingActionRegistry(names, new SimpleAppResolver(apps), ResourceReaders.INSTANCE.fromSystemProperty(),
                                                   this.themes, new AppMeta(brand.label()), this.crates, design);
         this.themesAction = new ThemesGetAction(this.themes);
         this.familiesAction = styling == null ? null : new StyleFamiliesGetAction(styling);

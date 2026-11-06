@@ -41,7 +41,7 @@ public record TabFitModule() implements EsModule<TabFitModule> {
 
     public static final TabFitModule INSTANCE = new TabFitModule();
 
-    @Override public ImportsFor<TabFitModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<TabFitModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<TabFitModule> exports() {

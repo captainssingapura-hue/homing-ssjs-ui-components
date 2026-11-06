@@ -25,7 +25,7 @@ public record ReadoutModule() implements DomModule<ReadoutModule>, ImplFor<House
 
     @Override
     public ImportsFor<ReadoutModule> imports() {
-        return ImportsFor.<ReadoutModule>builder()
+        return new ImportsFor._Builder<ReadoutModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

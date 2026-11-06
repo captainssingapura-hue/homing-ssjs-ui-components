@@ -18,7 +18,7 @@ public record TabStripSlideModule() implements DomModule<TabStripSlideModule> {
 
     @Override
     public ImportsFor<TabStripSlideModule> imports() {
-        return ImportsFor.<TabStripSlideModule>builder()
+        return new ImportsFor._Builder<TabStripSlideModule>()
                 .add(new ModuleImports<>(List.of(new TabDragModule.TabDrag()), TabDragModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneStyles.mtp_strip_loose(), new PaneStyles.mtp_chip_dragging(), new PaneStyles.mtp_chip_shifted()), PaneStyles.INSTANCE))
                 .build();

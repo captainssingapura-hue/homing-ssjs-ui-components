@@ -25,7 +25,7 @@ public record DangerBadgeModule() implements DomModule<DangerBadgeModule>, ImplF
 
     @Override
     public ImportsFor<DangerBadgeModule> imports() {
-        return ImportsFor.<DangerBadgeModule>builder()
+        return new ImportsFor._Builder<DangerBadgeModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

@@ -25,7 +25,7 @@ public record PlainButtonModule() implements DomModule<PlainButtonModule>, ImplF
 
     @Override
     public ImportsFor<PlainButtonModule> imports() {
-        return ImportsFor.<PlainButtonModule>builder()
+        return new ImportsFor._Builder<PlainButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .build();
     }

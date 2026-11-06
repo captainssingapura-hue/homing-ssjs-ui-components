@@ -17,7 +17,7 @@ public record LinkBehaviorModule() implements DomModule<LinkBehaviorModule> {
 
     @Override
     public ImportsFor<LinkBehaviorModule> imports() {
-        return ImportsFor.noImports();
+        return new ImportsFor<>();
     }
 
     @Override public ExportsOf<LinkBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new LinkBehavior())); }

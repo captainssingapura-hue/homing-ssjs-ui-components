@@ -42,7 +42,7 @@ public record ControlCatalogueModule() implements EsModule<ControlCatalogueModul
 
     public record CONTROL_TYPES() implements Exportable._Constant<ControlCatalogueModule> {}
 
-    @Override public ImportsFor<ControlCatalogueModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<ControlCatalogueModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<ControlCatalogueModule> exports() {

@@ -22,7 +22,7 @@ public record LookManifestModule() implements EsModule<LookManifestModule>, Styl
 
     public record LEAVES() implements Exportable._Constant<LookManifestModule> {}
 
-    @Override public ImportsFor<LookManifestModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<LookManifestModule> imports() { return new ImportsFor<>(); }
 
     @Override public ExportsOf<LookManifestModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new LEAVES())); }
 

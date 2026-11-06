@@ -32,7 +32,7 @@ public record TabStripModule() implements DomModule<TabStripModule>, ImplFor<Hou
 
     @Override
     public ImportsFor<TabStripModule> imports() {
-        return ImportsFor.<TabStripModule>builder()
+        return new ImportsFor._Builder<TabStripModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabStripBehaviorModule.TabStripBehavior()), TabStripBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))

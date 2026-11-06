@@ -25,7 +25,7 @@ public record ScrimModule() implements DomModule<ScrimModule>, ImplFor<HouseCont
 
     @Override
     public ImportsFor<ScrimModule> imports() {
-        return ImportsFor.<ScrimModule>builder()
+        return new ImportsFor._Builder<ScrimModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ScrimBehaviorModule.ScrimBehavior()), ScrimBehaviorModule.INSTANCE))
                 .build();

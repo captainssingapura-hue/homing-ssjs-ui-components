@@ -25,7 +25,7 @@ public record SuccessButtonModule() implements DomModule<SuccessButtonModule>, I
 
     @Override
     public ImportsFor<SuccessButtonModule> imports() {
-        return ImportsFor.<SuccessButtonModule>builder()
+        return new ImportsFor._Builder<SuccessButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .build();
     }

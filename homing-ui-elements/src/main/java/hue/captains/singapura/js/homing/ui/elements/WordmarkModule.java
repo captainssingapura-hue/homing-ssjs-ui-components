@@ -25,7 +25,7 @@ public record WordmarkModule() implements DomModule<WordmarkModule>, ImplFor<Hou
 
     @Override
     public ImportsFor<WordmarkModule> imports() {
-        return ImportsFor.<WordmarkModule>builder()
+        return new ImportsFor._Builder<WordmarkModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

@@ -34,7 +34,7 @@ public record TabSourceModule() implements EsModule<TabSourceModule> {
     public static final TabSourceModule INSTANCE = new TabSourceModule();
 
     @Override
-    public ImportsFor<TabSourceModule> imports() { return ImportsFor.noImports(); }
+    public ImportsFor<TabSourceModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<TabSourceModule> exports() {

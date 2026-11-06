@@ -25,7 +25,7 @@ public record ToggleKnobModule() implements DomModule<ToggleKnobModule>, ImplFor
 
     @Override
     public ImportsFor<ToggleKnobModule> imports() {
-        return ImportsFor.<ToggleKnobModule>builder()
+        return new ImportsFor._Builder<ToggleKnobModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

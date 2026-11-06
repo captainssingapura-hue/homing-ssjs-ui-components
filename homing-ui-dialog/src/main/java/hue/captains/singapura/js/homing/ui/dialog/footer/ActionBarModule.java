@@ -30,7 +30,7 @@ public record ActionBarModule() implements DomModule<ActionBarModule>, ImplFor<H
 
     @Override
     public ImportsFor<ActionBarModule> imports() {
-        return ImportsFor.<ActionBarModule>builder()
+        return new ImportsFor._Builder<ActionBarModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlainButtonModule.PlainButton()), PlainButtonModule.INSTANCE))

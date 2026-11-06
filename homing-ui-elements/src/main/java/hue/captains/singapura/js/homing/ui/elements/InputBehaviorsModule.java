@@ -31,7 +31,7 @@ public record InputBehaviorsModule() implements DomModule<InputBehaviorsModule> 
     public static final InputBehaviorsModule INSTANCE = new InputBehaviorsModule();
 
     @Override public ImportsFor<InputBehaviorsModule> imports() {
-        return ImportsFor.noImports();
+        return new ImportsFor<>();
     }
 
     @Override public ExportsOf<InputBehaviorsModule> exports() {

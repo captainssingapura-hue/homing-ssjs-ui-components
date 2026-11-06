@@ -45,7 +45,7 @@ public record ContextMenuStewardModule() implements DomModule<ContextMenuSteward
 
     @Override
     public ImportsFor<ContextMenuStewardModule> imports() {
-        return ImportsFor.<ContextMenuStewardModule>builder()
+        return new ImportsFor._Builder<ContextMenuStewardModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ContextMenuStewardBehaviorModule.ContextMenuStewardBehavior()), ContextMenuStewardBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MenuStyles.cm_layer(), new MenuStyles.cm_specimen()), MenuStyles.INSTANCE))

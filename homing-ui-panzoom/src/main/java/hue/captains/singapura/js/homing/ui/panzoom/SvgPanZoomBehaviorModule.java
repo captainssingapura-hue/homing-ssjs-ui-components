@@ -15,7 +15,7 @@ public record SvgPanZoomBehaviorModule() implements DomModule<SvgPanZoomBehavior
 
     public static final SvgPanZoomBehaviorModule INSTANCE = new SvgPanZoomBehaviorModule();
 
-    @Override public ImportsFor<SvgPanZoomBehaviorModule> imports() { return ImportsFor.<SvgPanZoomBehaviorModule>builder().build(); }
+    @Override public ImportsFor<SvgPanZoomBehaviorModule> imports() { return new ImportsFor._Builder<SvgPanZoomBehaviorModule>().build(); }
 
     @Override public ExportsOf<SvgPanZoomBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new SvgPanZoomBehavior())); }
 }

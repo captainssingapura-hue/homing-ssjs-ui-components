@@ -58,7 +58,7 @@ class NeedContextMenuTest {
             @Override public Set<ContextMenuKind<?>> required() { return Set.of(TabMenu.INSTANCE); }
         }
         public record Hand() implements Exportable._Constant<PanesModule> {}
-        @Override public ImportsFor<PanesModule> imports() { return ImportsFor.noImports(); }
+        @Override public ImportsFor<PanesModule> imports() { return new ImportsFor<>(); }
         @Override public ExportsOf<PanesModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new Pane(), new Strip(), new Hand())); }
     }
     public record PanesComponents() implements C0_Components<PanesComponents> {
@@ -98,7 +98,7 @@ class NeedContextMenuTest {
         public record Uncatalogued() implements BranchComponent<LooseModule>, NeedContextMenu {
             @Override public Set<ContextMenuKind<?>> required() { return Set.of(); }
         }
-        @Override public ImportsFor<LooseModule> imports() { return ImportsFor.noImports(); }
+        @Override public ImportsFor<LooseModule> imports() { return new ImportsFor<>(); }
         @Override public ExportsOf<LooseModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new Statics(), new Uncatalogued())); }
     }
     static final class LooseCrate implements Crate {

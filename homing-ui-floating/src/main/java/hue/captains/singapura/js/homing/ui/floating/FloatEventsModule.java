@@ -20,7 +20,7 @@ public record FloatEventsModule() implements EsModule<FloatEventsModule> {
 
     public static final FloatEventsModule INSTANCE = new FloatEventsModule();
 
-    @Override public ImportsFor<FloatEventsModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<FloatEventsModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<FloatEventsModule> exports() {

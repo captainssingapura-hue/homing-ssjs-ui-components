@@ -39,7 +39,7 @@ public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule>, ImplFor
 
     @Override
     public ImportsFor<SvgPanZoomModule> imports() {
-        return ImportsFor.<SvgPanZoomModule>builder()
+        return new ImportsFor._Builder<SvgPanZoomModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SvgPanZoomBehaviorModule.SvgPanZoomBehavior()), SvgPanZoomBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PanZoomModule.PanZoom()), PanZoomModule.INSTANCE))

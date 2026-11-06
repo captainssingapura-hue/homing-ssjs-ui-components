@@ -62,7 +62,7 @@ public record MultiTabPaneModule() implements DomModule<MultiTabPaneModule>, Imp
 
     @Override
     public ImportsFor<MultiTabPaneModule> imports() {
-        return ImportsFor.<MultiTabPaneModule>builder()
+        return new ImportsFor._Builder<MultiTabPaneModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneBehaviorModule.MultiTabPaneBehavior()), MultiTabPaneBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MultiTabPaneMenuModule.MultiTabPaneMenu()), MultiTabPaneMenuModule.INSTANCE))

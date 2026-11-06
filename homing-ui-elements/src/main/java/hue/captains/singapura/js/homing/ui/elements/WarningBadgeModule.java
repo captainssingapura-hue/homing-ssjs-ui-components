@@ -25,7 +25,7 @@ public record WarningBadgeModule() implements DomModule<WarningBadgeModule>, Imp
 
     @Override
     public ImportsFor<WarningBadgeModule> imports() {
-        return ImportsFor.<WarningBadgeModule>builder()
+        return new ImportsFor._Builder<WarningBadgeModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

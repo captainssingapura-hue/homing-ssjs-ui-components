@@ -25,7 +25,7 @@ public record ButtonModule() implements DomModule<ButtonModule>, ImplForBranch<H
 
     @Override
     public ImportsFor<ButtonModule> imports() {
-        return ImportsFor.<ButtonModule>builder()
+        return new ImportsFor._Builder<ButtonModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ButtonBehaviorModule.ButtonBehavior()), ButtonBehaviorModule.INSTANCE))
                 .build();

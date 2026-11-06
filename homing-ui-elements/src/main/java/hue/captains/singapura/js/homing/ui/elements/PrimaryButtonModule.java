@@ -25,7 +25,7 @@ public record PrimaryButtonModule() implements DomModule<PrimaryButtonModule>, I
 
     @Override
     public ImportsFor<PrimaryButtonModule> imports() {
-        return ImportsFor.<PrimaryButtonModule>builder()
+        return new ImportsFor._Builder<PrimaryButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .build();
     }

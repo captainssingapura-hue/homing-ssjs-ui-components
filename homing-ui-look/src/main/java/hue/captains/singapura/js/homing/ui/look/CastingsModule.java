@@ -45,7 +45,7 @@ public record CastingsModule() implements EsModule<CastingsModule>, StyledModule
 
     public record CASTINGS() implements Exportable._Constant<CastingsModule> {}
 
-    @Override public ImportsFor<CastingsModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<CastingsModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<CastingsModule> exports() {

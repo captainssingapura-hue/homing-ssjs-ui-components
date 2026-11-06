@@ -26,7 +26,7 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
 
     @Override
     public ImportsFor<SliderModule> imports() {
-        return ImportsFor.<SliderModule>builder()
+        return new ImportsFor._Builder<SliderModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LabelModule.Label()), LabelModule.INSTANCE))

@@ -25,7 +25,7 @@ public record WarningButtonModule() implements DomModule<WarningButtonModule>, I
 
     @Override
     public ImportsFor<WarningButtonModule> imports() {
-        return ImportsFor.<WarningButtonModule>builder()
+        return new ImportsFor._Builder<WarningButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .build();
     }

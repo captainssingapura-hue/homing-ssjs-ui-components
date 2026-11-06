@@ -18,7 +18,7 @@ public record TabBehaviorModule() implements DomModule<TabBehaviorModule> {
 
     @Override
     public ImportsFor<TabBehaviorModule> imports() {
-        return ImportsFor.<TabBehaviorModule>builder()
+        return new ImportsFor._Builder<TabBehaviorModule>()
                 .build();
     }
 

@@ -47,7 +47,7 @@ public record PreferencesViewModule() implements Widget<Widget._None, Preference
 
     @Override
     public ImportsFor<PreferencesViewModule> imports() {
-        return ImportsFor.<PreferencesViewModule>builder()
+        return new ImportsFor._Builder<PreferencesViewModule>()
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

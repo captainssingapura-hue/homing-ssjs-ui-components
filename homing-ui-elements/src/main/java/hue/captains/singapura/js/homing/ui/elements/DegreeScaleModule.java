@@ -19,7 +19,7 @@ public record DegreeScaleModule() implements DomModule<DegreeScaleModule> {
 
     public static final DegreeScaleModule INSTANCE = new DegreeScaleModule();
 
-    @Override public ImportsFor<DegreeScaleModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<DegreeScaleModule> imports() { return new ImportsFor<>(); }
 
     @Override public ExportsOf<DegreeScaleModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new DegreeScale())); }
 }

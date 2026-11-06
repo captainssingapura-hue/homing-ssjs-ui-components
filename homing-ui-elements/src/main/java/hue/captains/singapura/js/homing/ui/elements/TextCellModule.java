@@ -29,7 +29,7 @@ public record TextCellModule() implements DomModule<TextCellModule>, ImplFor<Hou
 
     @Override
     public ImportsFor<TextCellModule> imports() {
-        return ImportsFor.<TextCellModule>builder()
+        return new ImportsFor._Builder<TextCellModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

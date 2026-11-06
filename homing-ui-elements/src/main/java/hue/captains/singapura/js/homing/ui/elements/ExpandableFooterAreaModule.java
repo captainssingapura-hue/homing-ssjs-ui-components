@@ -26,7 +26,7 @@ public record ExpandableFooterAreaModule() implements DomModule<ExpandableFooter
 
     @Override
     public ImportsFor<ExpandableFooterAreaModule> imports() {
-        return ImportsFor.<ExpandableFooterAreaModule>builder()
+        return new ImportsFor._Builder<ExpandableFooterAreaModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ExpandableFooterAreaBehaviorModule.ExpandableFooterAreaBehavior()), ExpandableFooterAreaBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatusFooterModule.StatusFooter()), StatusFooterModule.INSTANCE))
