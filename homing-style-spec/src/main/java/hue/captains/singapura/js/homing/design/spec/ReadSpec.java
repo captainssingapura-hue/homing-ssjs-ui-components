@@ -128,7 +128,7 @@ public record ReadSpec() implements StatelessFunctionalObject {
     }
 
     /** A component's castings, its own (D55): on its own, and in each role of its set - none, for a component only ever placed. */
-    private static Set<Casting> castings(Component<?> c) {
+    private Set<Casting> castings(Component<?> c) {
         var out = new LinkedHashSet<Casting>();
         out.add(new Casting(c));
         if (c instanceof WithRoles<?> w) for (Role<?> r : w.roleSet().roles()) out.add(new Casting(c, r));
@@ -136,20 +136,20 @@ public record ReadSpec() implements StatelessFunctionalObject {
     }
 
     /** The colours of an implementation: each once. */
-    private static void colours(CssImplementation<?, ?, ?> impl, List<String> problems) {
+    private void colours(CssImplementation<?, ?, ?> impl, List<String> problems) {
         var seen = new HashSet<Class<?>>();
         for (ColorLeaf<?, ?, ?> c : impl.colours())
             if (!seen.add(c.getClass())) problems.add(impl.getClass().getName() + " lists " + c.token() + " twice: each colour once");
     }
 
-    private static void record(Class<?> type, List<String> problems) {
+    private void record(Class<?> type, List<String> problems) {
         if (!type.isRecord() || type.getRecordComponents().length > 0)
             problems.add(type.getName() + " is no stateless record: an implementation is a value, a record of no components");
     }
 
-    private static String name(Object module) { return module.getClass().getSimpleName(); }
+    private String name(Object module) { return module.getClass().getSimpleName(); }
 
-    private static void refuse(List<String> problems) {
+    private void refuse(List<String> problems) {
         throw new IllegalArgumentException("the typed spec is refused:\n  " + String.join("\n  ", problems));
     }
 }

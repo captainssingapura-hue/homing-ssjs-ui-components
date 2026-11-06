@@ -72,7 +72,7 @@ public record ControlLeavesModule() implements EsModule<ControlLeavesModule>, St
                 "const CONTROL_OPTIONS_OF = Object.freeze(Object.fromEntries([\n    " + optionsOf + "\n].flatMap(([options, leaves]) => leaves.map((leaf) => [leaf, options]))));");
     }
 
-    private static String listed(List<String> tokens) { return "[" + tokens.stream().map(ControlLeavesModule::quoted).collect(Collectors.joining(", ")) + "]"; }
+    private String listed(List<String> tokens) { return "[" + tokens.stream().map(this::quoted).collect(Collectors.joining(", ")) + "]"; }
 
-    private static String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
+    private String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
 }

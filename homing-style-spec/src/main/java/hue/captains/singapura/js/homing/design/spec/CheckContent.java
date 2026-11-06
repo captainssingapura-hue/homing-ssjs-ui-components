@@ -58,7 +58,7 @@ public record CheckContent() implements StatelessFunctionalObject {
         return List.copyOf(problems);
     }
 
-    private static ClasspathCssResolver classpath(SpecRegistry spec) {
+    private ClasspathCssResolver classpath(SpecRegistry spec) {
         if (!(spec.resolver() instanceof ClasspathCssResolver classpath))
             throw new IllegalArgumentException("the registry's resolver, " + spec.resolver() + ", does not look on the classpath");
         return classpath;

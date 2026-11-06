@@ -99,5 +99,5 @@ public record IconPicturesScript() implements StatelessFunctionalObject {
         return String.join("\n", lines) + "\n";
     }
 
-    private static String constant(String token) { return token.toUpperCase(Locale.ROOT).replace('-', '_'); }
+    private String constant(String token) { return token.toUpperCase(Locale.ROOT).replace('-', '_'); }
 }

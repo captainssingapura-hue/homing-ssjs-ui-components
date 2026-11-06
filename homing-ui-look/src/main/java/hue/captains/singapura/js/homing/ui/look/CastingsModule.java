@@ -72,13 +72,13 @@ public record CastingsModule() implements EsModule<CastingsModule>, StyledModule
     }
 
     /** {@code GO: Object.freeze({ token: "go", functional: false, toString() { return "go"; } })} */
-    private static String role(String token, boolean functional) {
+    private String role(String token, boolean functional) {
         return token.toUpperCase(Locale.ROOT).replace('-', '_') + ": Object.freeze({ token: " + quoted(token)
                 + ", functional: " + functional + ", toString() { return " + quoted(token) + "; } })";
     }
 
     /** Standalone, then the roles of every slot the component plays, each once, in the slots' order. */
-    private static List<String> castOf(Taxonomy taxonomy, Component<?> c) {
+    private List<String> castOf(Taxonomy taxonomy, Component<?> c) {
         var out = new LinkedHashSet<String>();
         out.add(quoted("standalone"));
         for (Part<?, ?> p : taxonomy.parts()) if (p.bases().contains(c)) out.add(quoted(p.role().name().value()));
@@ -86,7 +86,7 @@ public record CastingsModule() implements EsModule<CastingsModule>, StyledModule
     }
 
     /** Every role node under a branch of the catalogue. */
-    private static Set<RoleNode> under(Taxonomy taxonomy, RoleBranch branch) {
+    private Set<RoleNode> under(Taxonomy taxonomy, RoleBranch branch) {
         var out = new HashSet<RoleNode>();
         for (RoleNode n : taxonomy.children(branch)) {
             out.add(n);
@@ -95,5 +95,5 @@ public record CastingsModule() implements EsModule<CastingsModule>, StyledModule
         return out;
     }
 
-    private static String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
+    private String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
 }

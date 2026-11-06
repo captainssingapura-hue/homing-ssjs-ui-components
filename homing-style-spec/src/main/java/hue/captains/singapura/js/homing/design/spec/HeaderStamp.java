@@ -157,5 +157,5 @@ public record HeaderStamp() implements StatelessFunctionalObject {
         return List.copyOf(out);
     }
 
-    private static void add(LinkedHashMap<String, DualRef.Ref> out, DualRef.Ref r) { out.putIfAbsent(r.imported(), r); }
+    private void add(LinkedHashMap<String, DualRef.Ref> out, DualRef.Ref r) { out.putIfAbsent(r.imported(), r); }
 }

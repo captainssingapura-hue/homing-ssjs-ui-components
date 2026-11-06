@@ -170,17 +170,17 @@ public record HousePalettes() implements StatelessFunctionalObject {
      */
     public ConcreteColor.Srgb tint(ConcreteColor.Srgb colour, double share, ConcreteColor.Srgb over) { return mix(colour, share, over); }
 
-    private static ConcreteColor.Srgb seed(String written) { return new ConcreteColor.Srgb(written); }
+    private ConcreteColor.Srgb seed(String written) { return new ConcreteColor.Srgb(written); }
 
     /** {@code a} at {@code share}, {@code b} the rest, in sRGB, alpha premultiplied - CSS's {@code color-mix(in srgb, a p%, b)}. */
     static ConcreteColor.Srgb mix(ConcreteColor.Srgb a, double share, ConcreteColor.Srgb b) {
         double alpha = a.alpha() * share + b.alpha() * (1 - share);
         if (alpha == 0) return CLEAR;
-        int red = channel(a.red() * a.alpha() * share + b.red() * b.alpha() * (1 - share), alpha);
-        int green = channel(a.green() * a.alpha() * share + b.green() * b.alpha() * (1 - share), alpha);
-        int blue = channel(a.blue() * a.alpha() * share + b.blue() * b.alpha() * (1 - share), alpha);
+        int red = INSTANCE.channel(a.red() * a.alpha() * share + b.red() * b.alpha() * (1 - share), alpha);
+        int green = INSTANCE.channel(a.green() * a.alpha() * share + b.green() * b.alpha() * (1 - share), alpha);
+        int blue = INSTANCE.channel(a.blue() * a.alpha() * share + b.blue() * b.alpha() * (1 - share), alpha);
         return new ConcreteColor.Srgb(red, green, blue, Math.round(alpha * 1000) / 1000.0);
     }
 
-    private static int channel(double premultiplied, double alpha) { return (int) Math.max(0, Math.min(255, Math.round(premultiplied / alpha))); }
+    private int channel(double premultiplied, double alpha) { return (int) Math.max(0, Math.min(255, Math.round(premultiplied / alpha))); }
 }

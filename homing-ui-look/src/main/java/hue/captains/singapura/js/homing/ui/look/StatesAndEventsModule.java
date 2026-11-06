@@ -59,12 +59,12 @@ public record StatesAndEventsModule() implements EsModule<StatesAndEventsModule>
     }
 
     /** {@code Object.freeze({ token: "click", toString() { return "click"; } })} */
-    private static String type(String token) {
+    private String type(String token) {
         return "Object.freeze({ token: " + quoted(token) + ", toString() { return " + quoted(token) + "; } })";
     }
 
     /** {@code enabled} gives {@code ENABLED}. */
-    private static String constant(String token) { return token.toUpperCase(Locale.ROOT).replace('-', '_'); }
+    private String constant(String token) { return token.toUpperCase(Locale.ROOT).replace('-', '_'); }
 
-    private static String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
+    private String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
 }

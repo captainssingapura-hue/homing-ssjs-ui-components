@@ -41,7 +41,7 @@ public record DualRef() implements StatelessFunctionalObject {
         };
     }
 
-    private static Ref ref(DualTree<?> tree, String token) {
+    private Ref ref(DualTree<?> tree, String token) {
         String name = JsLiterals.INSTANCE.name(token);
         return new Ref(tree, name, tree.prefix() + name);
     }

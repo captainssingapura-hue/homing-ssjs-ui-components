@@ -96,7 +96,7 @@ public record ReadSheet() implements StatelessFunctionalObject {
         return out;
     }
 
-    private static String css(DesignStyle<?> style, List<StyleSheet.Rule> rules) {
+    private String css(DesignStyle<?> style, List<StyleSheet.Rule> rules) {
         var css = new StringBuilder();
         css.append("/* ").append(style.token()).append(" - its sheet (RFC 0071, RFC 0067 D54): one rule for each implementation a casting wears in ")
            .append(style.token()).append(",\n   its selector the castings that wear it. Generated; do not edit. */\n")
