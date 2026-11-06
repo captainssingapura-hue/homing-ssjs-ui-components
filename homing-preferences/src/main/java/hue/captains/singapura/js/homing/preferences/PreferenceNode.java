@@ -4,7 +4,9 @@ import hue.captains.singapura.js.homing.tree.DimensionKey;
 import hue.captains.singapura.js.homing.tree.DimensionValue;
 import hue.captains.singapura.js.homing.tree.DisplayLabel;
 import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.js.homing.tree.NodeNames;
 import hue.captains.singapura.js.homing.tree.TreeLevel;
+import hue.captains.singapura.js.homing.tree.TreeLevels;
 import hue.captains.singapura.js.homing.tree.TreeNode;
 import hue.captains.singapura.js.homing.tree.dims.NameValue;
 
@@ -48,7 +50,7 @@ public record PreferenceNode(TreeLevel level, NodeName segment, String label, St
     /** A node at no level yet; the tree levels it by depth. */
     public PreferenceNode(String segment, String label, String summary, WidgetProvider provider,
                           PreferenceNode... children) {
-        this(TreeLevel.L0.INSTANCE, NodeName.slug(segment), label, summary, provider, List.of(children));
+        this(TreeLevel.L0.INSTANCE, NodeNames.INSTANCE.slug(segment), label, summary, provider, List.of(children));
     }
 
     @Override
@@ -60,6 +62,6 @@ public record PreferenceNode(TreeLevel level, NodeName segment, String label, St
     PreferenceNode atDepth(int depth) {
         var kids = new ArrayList<PreferenceNode>();
         for (PreferenceNode c : children) kids.add(c.atDepth(depth + 1));
-        return new PreferenceNode(TreeLevel.atDepth(depth), segment, label, summary, provider, kids);
+        return new PreferenceNode(TreeLevels.INSTANCE.atDepth(depth), segment, label, summary, provider, kids);
     }
 }

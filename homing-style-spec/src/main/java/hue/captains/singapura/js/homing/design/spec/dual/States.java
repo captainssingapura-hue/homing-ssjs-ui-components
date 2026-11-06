@@ -15,6 +15,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
 import hue.captains.singapura.js.homing.design.spec.JsLiterals;
 import hue.captains.singapura.js.homing.tree.NodeName;
 
+import hue.captains.singapura.js.homing.tree.NodeNames;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,7 +40,7 @@ public record States() implements DualTree<StateNode> {
             List<StateValue> values = c.values();
             var words = new LinkedHashMap<String, String>();
             for (StateValue v : values.subList(1, values.size())) words.put(v.token(), c.word(v));
-            String level = Importances.INSTANCE.levelOf(c).map(l -> js.string(NodeName.ofType(l, "").value())).orElse("null");
+            String level = Importances.INSTANCE.levelOf(c).map(l -> js.string(NodeNames.INSTANCE.ofType(l, "").value())).orElse("null");
             classes = "new StateClasses(" + js.object(words) + ", " + (c instanceof Flag<?>) + ", " + (c instanceof Pseudo p ? js.string(p.pseudoClass()) : "null") + ", " + level + ")";
         }
         String changes = String.join(", ", s.changes().stream().map(this::change).toList());

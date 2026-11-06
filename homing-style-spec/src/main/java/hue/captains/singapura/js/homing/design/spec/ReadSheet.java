@@ -6,6 +6,7 @@ import hue.captains.singapura.js.homing.design.Extent;
 import hue.captains.singapura.js.homing.design.Growth;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.js.homing.tree.NodeNames;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public record ReadSheet() implements StatelessFunctionalObject {
 
     /** An implementation's name in a sheet, its keyframes' prefix: its layer, then its own name - {@code editorial___plain-button}. */
     public String name(SpecRegistry.Worn worn) {
-        return worn.layer().token() + "___" + NodeName.ofType(worn.impl().getClass(), "").value();
+        return worn.layer().token() + "___" + NodeNames.INSTANCE.ofType(worn.impl().getClass(), "").value();
     }
 
     /** The selector of the castings that wear a rule: the one class, or every one of them in an {@code :is()}. */
