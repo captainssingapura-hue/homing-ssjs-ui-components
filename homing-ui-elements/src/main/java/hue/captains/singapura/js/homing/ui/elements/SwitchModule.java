@@ -25,16 +25,16 @@ public record SwitchModule() implements DomModule<SwitchModule>, ImplFor<HouseCo
 
     @Override
     public ImportsFor<SwitchModule> imports() {
-        return ImportsFor.<SwitchModule>builder()
+        return new ImportsFor._Builder<SwitchModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new InputBehaviorsModule.TurnBehavior()), InputBehaviorsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ToggleGrooveModule.ToggleGroove()), ToggleGrooveModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ToggleKnobModule.ToggleKnob()), ToggleKnobModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_switch(),
-                        new ElementStyles.el_switch_groove(),
-                        new ElementStyles.el_switch_knob()
-                ), ElementStyles.INSTANCE))
+                        new SwitchStyles.el_switch(),
+                        new SwitchStyles.el_switch_groove(),
+                        new SwitchStyles.el_switch_knob()
+                ), SwitchStyles.INSTANCE))
                 .build();
     }
 

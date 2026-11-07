@@ -29,7 +29,7 @@ public record MenuModule() implements DomModule<MenuModule>, ImplForBranch<House
 
     @Override
     public ImportsFor<MenuModule> imports() {
-        return ImportsFor.<MenuModule>builder()
+        return new ImportsFor._Builder<MenuModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MenuBehaviorModule.MenuBehavior()), MenuBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PlainMenuItemModule.PlainMenuItem()), PlainMenuItemModule.INSTANCE))

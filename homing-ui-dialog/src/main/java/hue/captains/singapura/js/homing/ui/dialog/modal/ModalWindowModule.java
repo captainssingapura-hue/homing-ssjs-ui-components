@@ -30,7 +30,7 @@ public record ModalWindowModule() implements DomModule<ModalWindowModule>, ImplF
 
     @Override
     public ImportsFor<ModalWindowModule> imports() {
-        return ImportsFor.<ModalWindowModule>builder()
+        return new ImportsFor._Builder<ModalWindowModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ScrimModule.Scrim()), ScrimModule.INSTANCE))

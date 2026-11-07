@@ -148,18 +148,18 @@ class DeskTest extends UiDockingJsTest {
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeyboardStewardModule.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/component/keyboard/KeysModule.js");
         // the close and icon buttons: their castings and their looks, generated, before their declarations are read
-        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", hue.captains.singapura.js.homing.ui.look.StatesAndEventsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(STYLING)));
         js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };"); loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         js.eval("js", "var ic_base = { name: 'ic_base' };");   // the icon's box
-        js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(STYLING)));
         loadModule(P + "icons/IconModule.js");
         js.eval("js", "var el_icon_button = 'el_icon_button';");   // the icon button's face, laid out
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");   // the look, the design's: beside the elements, not one of them
         for (String m : new String[] {"SimpleComponentModule.js", "ButtonBehaviorModule.js", "ButtonModule.js", "CloseButtonModule.js", "IconButtonModule.js"})
             loadModule(P + "elements/" + m);
-        TextsInJs.load(js, this::loadModule);   // the texts its panes and floats hold
+        TextsInJs.load(js, STYLING, this::loadModule);   // the texts its panes and floats hold
         loadModule(P + "floating/FloatEventsModule.js");
         loadModule(P + "floating/FloatingPaneModule.js");
         loadModule(P + "floating/FloatLayerModule.js");

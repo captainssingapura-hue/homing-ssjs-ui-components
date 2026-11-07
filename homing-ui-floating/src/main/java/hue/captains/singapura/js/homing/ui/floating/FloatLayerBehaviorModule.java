@@ -15,7 +15,7 @@ public record FloatLayerBehaviorModule() implements DomModule<FloatLayerBehavior
 
     public static final FloatLayerBehaviorModule INSTANCE = new FloatLayerBehaviorModule();
 
-    @Override public ImportsFor<FloatLayerBehaviorModule> imports() { return ImportsFor.<FloatLayerBehaviorModule>builder().build(); }
+    @Override public ImportsFor<FloatLayerBehaviorModule> imports() { return new ImportsFor._Builder<FloatLayerBehaviorModule>().build(); }
 
     @Override public ExportsOf<FloatLayerBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new FloatLayerBehavior())); }
 }

@@ -1,6 +1,7 @@
 package hue.captains.singapura.js.homing.ui.controllability;
 
 import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.js.homing.tree.NodeNames;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 /**
@@ -12,5 +13,5 @@ import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 public sealed interface ControlNode extends StatelessFunctionalObject permits ControlBranch, ControlOption {
 
     /** {@code ZoomIn} gives {@code zoom-in}. */
-    default NodeName name() { return NodeName.ofType(getClass(), ""); }
+    default NodeName name() { return NodeNames.INSTANCE.ofType(getClass(), ""); }
 }

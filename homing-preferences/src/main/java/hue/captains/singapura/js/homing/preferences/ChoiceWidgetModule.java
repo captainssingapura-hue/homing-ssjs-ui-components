@@ -32,7 +32,7 @@ public record ChoiceWidgetModule() implements Widget<Widget._None, ChoiceWidgetM
 
     @Override
     public ImportsFor<ChoiceWidgetModule> imports() {
-        return ImportsFor.<ChoiceWidgetModule>builder()
+        return new ImportsFor._Builder<ChoiceWidgetModule>()
                 .add(new ModuleImports<>(List.of(new ChoiceOptionModule.ChoiceOption()), ChoiceOptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferenceFieldModule.PreferenceField()), PreferenceFieldModule.INSTANCE))

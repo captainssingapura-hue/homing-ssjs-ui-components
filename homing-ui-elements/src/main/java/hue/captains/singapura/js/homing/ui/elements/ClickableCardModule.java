@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.elements;
 import hue.captains.singapura.js.homing.component.BranchComponent;
 import hue.captains.singapura.js.homing.component.keyboard.Key;
 import hue.captains.singapura.js.homing.component.keyboard.KeyBinding;
+import hue.captains.singapura.js.homing.component.keyboard.KeyBindings;
 import hue.captains.singapura.js.homing.component.keyboard.KeysModule;
 import hue.captains.singapura.js.homing.component.keyboard.NeedKeyboard;
 import hue.captains.singapura.js.homing.component.taxonomy.ImplFor;
@@ -26,18 +27,18 @@ public record ClickableCardModule() implements DomModule<ClickableCardModule>, I
     public record ClickableCard() implements BranchComponent<ClickableCardModule>, NeedKeyboard {
         @Override public String summary() { return "A card that is a button: pressed, it does its one thing; it lifts under the hand and takes the keys."; }
         /** The card is a button to the keyboard too: through the party. */
-        @Override public List<KeyBinding> keys() { return KeyBinding.each("the card's click", Key.ENTER, Key.SPACE); }
+        @Override public List<KeyBinding> keys() { return KeyBindings.INSTANCE.each("the card's click", Key.ENTER, Key.SPACE); }
     }
 
     public static final ClickableCardModule INSTANCE = new ClickableCardModule();
 
     @Override
     public ImportsFor<ClickableCardModule> imports() {
-        return ImportsFor.<ClickableCardModule>builder()
+        return new ImportsFor._Builder<ClickableCardModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CardBehaviorModule.CardBehavior()), CardBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_card()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CardStyles.el_card()), CardStyles.INSTANCE))
                 .build();
     }
 

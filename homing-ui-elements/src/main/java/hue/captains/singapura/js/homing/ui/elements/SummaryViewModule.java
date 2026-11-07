@@ -28,7 +28,7 @@ public record SummaryViewModule() implements DomModule<SummaryViewModule>, ImplF
 
     @Override
     public ImportsFor<SummaryViewModule> imports() {
-        return ImportsFor.<SummaryViewModule>builder()
+        return new ImportsFor._Builder<SummaryViewModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Heading4Module.Heading4()), Heading4Module.INSTANCE))
@@ -36,13 +36,13 @@ public record SummaryViewModule() implements DomModule<SummaryViewModule>, ImplF
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LinkModule.Link()), LinkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_summary(),
-                        new ElementStyles.el_summary_head(),
-                        new ElementStyles.el_summary_title(),
-                        new ElementStyles.el_summary_tag(),
-                        new ElementStyles.el_summary_text(),
-                        new ElementStyles.el_summary_foot()
-                ), ElementStyles.INSTANCE))
+                        new CardStyles.el_summary(),
+                        new CardStyles.el_summary_head(),
+                        new CardStyles.el_summary_title(),
+                        new CardStyles.el_summary_tag(),
+                        new CardStyles.el_summary_text(),
+                        new CardStyles.el_summary_foot()
+                ), CardStyles.INSTANCE))
                 .build();
     }
 

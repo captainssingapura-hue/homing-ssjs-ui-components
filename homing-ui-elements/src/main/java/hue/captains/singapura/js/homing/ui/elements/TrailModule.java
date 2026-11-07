@@ -25,15 +25,15 @@ public record TrailModule() implements DomModule<TrailModule>, ImplFor<HouseCont
 
     @Override
     public ImportsFor<TrailModule> imports() {
-        return ImportsFor.<TrailModule>builder()
+        return new ImportsFor._Builder<TrailModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CrumbModule.Crumb()), CrumbModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DelimiterModule.Delimiter()), DelimiterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_trail(),
-                        new ElementStyles.el_trail_crumb()
-                ), ElementStyles.INSTANCE))
+                        new SiteBarStyles.el_trail(),
+                        new SiteBarStyles.el_trail_crumb()
+                ), SiteBarStyles.INSTANCE))
                 .build();
     }
 

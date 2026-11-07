@@ -25,7 +25,7 @@ public record CaptionModule() implements DomModule<CaptionModule>, ImplFor<House
 
     @Override
     public ImportsFor<CaptionModule> imports() {
-        return ImportsFor.<CaptionModule>builder()
+        return new ImportsFor._Builder<CaptionModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

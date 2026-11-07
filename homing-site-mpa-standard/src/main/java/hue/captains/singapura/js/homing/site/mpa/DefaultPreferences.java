@@ -18,14 +18,14 @@ import java.util.Map;
  */
 public final class DefaultPreferences extends PreferencesRegistry {
 
-    static final PreferenceTree TREE = PreferenceTree.of(
-            PreferenceNode.of("preferences", "Preferences", "What this site remembers for you, in this browser.",
-                    WidgetProvider.of(OverviewWidgetModule.INSTANCE, Map.of(
+    static final PreferenceTree TREE = new PreferenceTree(
+            new PreferenceNode("preferences", "Preferences", "What this site remembers for you, in this browser.",
+                    new WidgetProvider(OverviewWidgetModule.INSTANCE, Map.of(
                             "label", "Preferences",
                             "summary", "What this site remembers for you, in this browser: the design it wears - its style, and its colours.",
                             "settings", List.of(Map.of("name", "style", "label", "Style"), Map.of("name", "palette", "label", "Colours")))),
-                    PreferenceNode.of("theme", "Theme", "The design this site wears, and the colours it wears it in.",
-                            WidgetProvider.of(ThemeWidgetModule.INSTANCE, Map.of(
+                    new PreferenceNode("theme", "Theme", "The design this site wears, and the colours it wears it in.",
+                            new WidgetProvider(ThemeWidgetModule.INSTANCE, Map.of(
                                     "label", "Style",
                                     "summary", "The styles this site offers, then the colours the chosen one is offered in - each kept on its own. A pick switches its own sheet on the page; another tab follows.")))));
 
@@ -33,6 +33,6 @@ public final class DefaultPreferences extends PreferencesRegistry {
     public static final DefaultPreferences INSTANCE = new DefaultPreferences();
 
     private DefaultPreferences() {
-        super(TREE, WidgetProvider.of(ListMasterWidgetModule.INSTANCE));
+        super(TREE, new WidgetProvider(ListMasterWidgetModule.INSTANCE));
     }
 }

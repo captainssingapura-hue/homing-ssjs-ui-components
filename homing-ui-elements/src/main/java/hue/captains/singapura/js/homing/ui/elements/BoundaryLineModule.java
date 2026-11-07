@@ -24,7 +24,7 @@ public record BoundaryLineModule() implements DomModule<BoundaryLineModule>, Imp
 
     @Override
     public ImportsFor<BoundaryLineModule> imports() {
-        return ImportsFor.<BoundaryLineModule>builder()
+        return new ImportsFor._Builder<BoundaryLineModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

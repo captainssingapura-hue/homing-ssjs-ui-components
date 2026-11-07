@@ -15,7 +15,7 @@ public record UiPanZoomComponents() implements C0_Components<UiPanZoomComponents
 
     @Override public List<ComponentEntry<UiPanZoomComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new SvgPanZoomModule.SvgPanZoom()),
-                ComponentEntry.of(this, new PanZoomBarModule.PanZoomBar()));
+                new ComponentEntry.OfComponent<>(this, new SvgPanZoomModule.SvgPanZoom()),
+                new ComponentEntry.OfComponent<>(this, new PanZoomBarModule.PanZoomBar()));
     }
 }

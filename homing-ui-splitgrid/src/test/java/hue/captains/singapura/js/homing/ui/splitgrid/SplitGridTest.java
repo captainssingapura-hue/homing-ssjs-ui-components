@@ -105,9 +105,9 @@ class SplitGridTest extends UiSplitGridJsTest {
         loadModule("/homing/js/hue/captains/singapura/js/homing/sizing/SizingHandleModule.js");
         loadModule(P + "SplitGridGeometryModule.js");
         // each line the house's boundary line: its castings, its states, its look and the simple component it is
-        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(STYLING)));
         js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet', ICONS = {};");
         loadModule("/homing/js/hue/captains/singapura/server/StyledLeaves.js".replace("singapura/server", "singapura/js/homing/server"));
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");

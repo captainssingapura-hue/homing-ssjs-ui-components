@@ -21,7 +21,7 @@ public record PaneMenusModule() implements EsModule<PaneMenusModule> {
 
     public static final PaneMenusModule INSTANCE = new PaneMenusModule();
 
-    @Override public ImportsFor<PaneMenusModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<PaneMenusModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<PaneMenusModule> exports() {

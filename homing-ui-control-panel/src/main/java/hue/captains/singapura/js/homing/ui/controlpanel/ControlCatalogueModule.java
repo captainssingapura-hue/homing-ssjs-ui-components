@@ -42,7 +42,7 @@ public record ControlCatalogueModule() implements EsModule<ControlCatalogueModul
 
     public record CONTROL_TYPES() implements Exportable._Constant<ControlCatalogueModule> {}
 
-    @Override public ImportsFor<ControlCatalogueModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<ControlCatalogueModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<ControlCatalogueModule> exports() {
@@ -71,7 +71,7 @@ public record ControlCatalogueModule() implements EsModule<ControlCatalogueModul
     }
 
     /** Where an option rests, as a page has it: a number for a degree, a truth for a switch, null for what is done or asked. */
-    private static String rest(ControlOption<?> o) {
+    private String rest(ControlOption<?> o) {
         return switch (o) {
             case WithExtent<?> e -> e.rest() == Math.rint(e.rest()) ? String.valueOf((long) e.rest()) : String.valueOf(e.rest());
             case WithSwitch<?> s -> String.valueOf(s.rest());
@@ -79,5 +79,5 @@ public record ControlCatalogueModule() implements EsModule<ControlCatalogueModul
         };
     }
 
-    private static String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
+    private String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
 }

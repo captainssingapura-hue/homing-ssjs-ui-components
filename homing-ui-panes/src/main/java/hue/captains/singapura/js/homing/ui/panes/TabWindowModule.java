@@ -31,7 +31,7 @@ public record TabWindowModule() implements DomModule<TabWindowModule> {
 
     @Override
     public ImportsFor<TabWindowModule> imports() {
-        return ImportsFor.<TabWindowModule>builder()
+        return new ImportsFor._Builder<TabWindowModule>()
                 .add(new ModuleImports<>(List.of(new TabFitModule.TabFit()), TabFitModule.INSTANCE))
                 .build();
     }

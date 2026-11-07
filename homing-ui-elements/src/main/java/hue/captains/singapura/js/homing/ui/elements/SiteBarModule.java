@@ -26,17 +26,17 @@ public record SiteBarModule() implements DomModule<SiteBarModule>, ImplFor<House
 
     @Override
     public ImportsFor<SiteBarModule> imports() {
-        return ImportsFor.<SiteBarModule>builder()
+        return new ImportsFor._Builder<SiteBarModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BrandModule.Brand()), BrandModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TrailModule.Trail()), TrailModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_site_bar(),
-                        new ElementStyles.el_site_bar_start(),
-                        new ElementStyles.el_site_bar_way(),
-                        new ElementStyles.el_site_bar_end()
-                ), ElementStyles.INSTANCE))
+                        new SiteBarStyles.el_site_bar(),
+                        new SiteBarStyles.el_site_bar_start(),
+                        new SiteBarStyles.el_site_bar_way(),
+                        new SiteBarStyles.el_site_bar_end()
+                ), SiteBarStyles.INSTANCE))
                 .build();
     }
 

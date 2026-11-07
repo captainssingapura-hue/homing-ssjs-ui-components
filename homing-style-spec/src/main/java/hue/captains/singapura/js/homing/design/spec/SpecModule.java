@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
+import hue.captains.singapura.tao.ontology.Immutable;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  * @param <Sc> the layer's scheme
  * @param <S>  the layer
  */
-public interface SpecModule<Sc extends ColorScheme, S extends DesignStyle<Sc>> {
+public interface SpecModule<Sc extends ColorScheme, S extends DesignStyle<Sc>> extends Immutable {
     /** The layer its assignments are of. */
     S style();
     /** The component modules whose components it assigns: no other component's. */

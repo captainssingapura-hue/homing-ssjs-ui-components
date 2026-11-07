@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.ui.controllability;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Taxon;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.Objects;
  * @param declared  the types declared, each at its node
  * @param otherwise the type of a leaf with none declared on its lineage
  */
-public record ControlClassification(List<ControlTypeAt> declared, ControlType otherwise) implements ValueObject {
+public record ControlClassification(List<ControlTypeAt> declared, ControlType otherwise) implements Scalar {
 
     public ControlClassification {
         declared = List.copyOf(declared);
@@ -30,7 +30,7 @@ public record ControlClassification(List<ControlTypeAt> declared, ControlType ot
         var byName = new HashMap<String, ControlType>();
         byName.put(otherwise.name(), otherwise);
         for (ControlTypeAt d : declared) {
-            if (!nodes.add(d.at())) problems.add(ControlCatalogue.qualified(d.at()) + " is declared twice");
+            if (!nodes.add(d.at())) problems.add(QualifiedNames.INSTANCE.of(d.at()) + " is declared twice");
             ControlType was = byName.putIfAbsent(d.type().name(), d.type());
             if (was != null && !was.equals(d.type())) problems.add("two control types named '" + d.type().name() + "'");
         }

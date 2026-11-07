@@ -23,7 +23,7 @@ public record SizingHandleModule() implements DomModule<SizingHandleModule> {
 
     @Override
     public ImportsFor<SizingHandleModule> imports() {
-        return ImportsFor.<SizingHandleModule>builder()
+        return new ImportsFor._Builder<SizingHandleModule>()
                 .add(new ModuleImports<>(List.of(new RailModule.Rail()), RailModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new SizingStyles.sz_handle(),

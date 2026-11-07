@@ -26,7 +26,7 @@ public record LinkModule() implements DomModule<LinkModule>, ImplFor<HouseContro
 
     @Override
     public ImportsFor<LinkModule> imports() {
-        return ImportsFor.<LinkModule>builder()
+        return new ImportsFor._Builder<LinkModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LinkBehaviorModule.LinkBehavior()), LinkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))

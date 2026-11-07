@@ -30,10 +30,11 @@ public record ListMasterWidgetModule() implements Widget<Widget._None, ListMaste
     /** The class. */
     public record ListMasterWidget() implements Widget._Class<Widget._None, ListMasterWidgetModule>, NeedKeyboard {
         /** The rows walked, through the party: the view hands the list its keys while the focus is in it. */
-        public static final List<KeyBinding> KEYS = List.of(
-                KeyBinding.of(Key.ARROW_DOWN, "the row below chosen"), KeyBinding.of(Key.ARROW_UP, "the row above chosen"),
-                KeyBinding.of(Key.HOME, "the first row chosen"), KeyBinding.of(Key.END, "the last row chosen"));
-        @Override public List<KeyBinding> keys() { return KEYS; }
+        @Override public List<KeyBinding> keys() {
+            return List.of(
+                new KeyBinding(Key.ARROW_DOWN, "the row below chosen"), new KeyBinding(Key.ARROW_UP, "the row above chosen"),
+                new KeyBinding(Key.HOME, "the first row chosen"), new KeyBinding(Key.END, "the last row chosen"));
+        }
     }
 
     public static final ListMasterWidgetModule INSTANCE = new ListMasterWidgetModule();
@@ -42,7 +43,7 @@ public record ListMasterWidgetModule() implements Widget<Widget._None, ListMaste
 
     @Override
     public ImportsFor<ListMasterWidgetModule> imports() {
-        return ImportsFor.<ListMasterWidgetModule>builder()
+        return new ImportsFor._Builder<ListMasterWidgetModule>()
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ListRowModule.ListRow()), ListRowModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

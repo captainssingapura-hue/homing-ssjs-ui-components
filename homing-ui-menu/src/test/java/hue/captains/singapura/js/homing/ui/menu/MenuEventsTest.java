@@ -65,7 +65,7 @@ class MenuEventsTest extends JsModuleTestBase {
         var java = records().stream().map(Class::getSimpleName).toList();
         assertEquals(java.toString(), eval("'[' + MenuEvents.KINDS.join(', ') + ']'").asString());
         assertEquals(3, java.size());
-        assertEquals(MenuEvent.REASONS.stream().sorted().toList().toString(), eval("'[' + MenuEvents.REASONS.slice().sort().join(', ') + ']'").asString());
+        assertEquals(MenuEvent.Reasons.INSTANCE.all().stream().sorted().toList().toString(), eval("'[' + MenuEvents.REASONS.slice().sort().join(', ') + ']'").asString());
     }
 
     @Test

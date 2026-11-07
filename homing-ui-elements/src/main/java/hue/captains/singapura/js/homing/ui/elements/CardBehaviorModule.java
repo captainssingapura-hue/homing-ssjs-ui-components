@@ -17,7 +17,7 @@ public record CardBehaviorModule() implements DomModule<CardBehaviorModule> {
 
     @Override
     public ImportsFor<CardBehaviorModule> imports() {
-        return ImportsFor.noImports();
+        return new ImportsFor<>();
     }
 
     @Override public ExportsOf<CardBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new CardBehavior())); }

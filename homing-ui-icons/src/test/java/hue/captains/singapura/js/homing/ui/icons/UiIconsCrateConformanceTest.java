@@ -19,12 +19,12 @@ class UiIconsCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiIconsCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiIconsCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiIconsCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiIconsCrate.INSTANCE));
     }
 
     @Test
@@ -33,8 +33,8 @@ class UiIconsCrateConformanceTest {
         for (var entry : UiIconsCrate.INSTANCE.entries()) {
             if (!(entry.declaredType() instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
-            String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src));
+            String src = String.join("\n", ResourceReader.CLASSPATH.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
+            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(new ServedModule(m, type, src));
             assertEquals(List.of(), findings, () -> m + ": "
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;

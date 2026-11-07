@@ -31,7 +31,7 @@ public record ScaleWidgetModule() implements Widget<Widget._None, ScaleWidgetMod
 
     @Override
     public ImportsFor<ScaleWidgetModule> imports() {
-        return ImportsFor.<ScaleWidgetModule>builder()
+        return new ImportsFor._Builder<ScaleWidgetModule>()
                 .add(new ModuleImports<>(List.of(new RangeModule.Range()), RangeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))

@@ -15,8 +15,8 @@ public record MpaComponents() implements C0_Components<MpaComponents> {
 
     @Override public List<ComponentEntry<MpaComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new MpaChromeModule.MpaChrome()),
-                ComponentEntry.of(this, new PreferencesButtonModule.PreferencesButton()),
-                ComponentEntry.of(this, new ThemeWidgetModule.ThemeWidget()));
+                new ComponentEntry.OfComponent<>(this, new MpaChromeModule.MpaChrome()),
+                new ComponentEntry.OfComponent<>(this, new PreferencesButtonModule.PreferencesButton()),
+                new ComponentEntry.OfComponent<>(this, new ThemeWidgetModule.ThemeWidget()));
     }
 }

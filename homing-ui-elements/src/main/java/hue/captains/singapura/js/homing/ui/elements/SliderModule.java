@@ -26,14 +26,14 @@ public record SliderModule() implements DomModule<SliderModule>, ImplFor<HouseCo
 
     @Override
     public ImportsFor<SliderModule> imports() {
-        return ImportsFor.<SliderModule>builder()
+        return new ImportsFor._Builder<SliderModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LabelModule.Label()), LabelModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new RangeModule.Range()), RangeModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ReadoutModule.Readout()), ReadoutModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_slider(), new ElementStyles.el_slider_label(), new ElementStyles.el_slider_range(),
-                        new ElementStyles.el_slider_readout()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new SliderStyles.el_slider(), new SliderStyles.el_slider_label(), new SliderStyles.el_slider_range(),
+                        new SliderStyles.el_slider_readout()), SliderStyles.INSTANCE))
                 .build();
     }
 

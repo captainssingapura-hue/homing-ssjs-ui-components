@@ -20,12 +20,12 @@ class UiSplitGridCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiSplitGridCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiSplitGridCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiSplitGridCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiSplitGridCrate.INSTANCE));
     }
 
     /** The grid's classes place: its line, its mirror and its cells wear the house's look, and nothing here wears a word or holds a value. */
@@ -45,8 +45,8 @@ class UiSplitGridCrateConformanceTest {
         for (var entry : UiSplitGridCrate.INSTANCE.entries()) {
             if (!(entry.declaredType() instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
-            String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src));
+            String src = String.join("\n", ResourceReader.CLASSPATH.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
+            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(new ServedModule(m, type, src));
             assertEquals(List.of(), findings, () -> m + ": "
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;

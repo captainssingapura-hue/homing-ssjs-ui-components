@@ -18,8 +18,8 @@ public final class SizingCrate implements Crate {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(RailModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(SizingHandleModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(SizingStyles.INSTANCE));
+                new CrateEntry(RailModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(SizingHandleModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(SizingStyles.INSTANCE));
     }
 }

@@ -37,7 +37,7 @@ public record PreferencesViewModule() implements Widget<Widget._None, Preference
         @Override public String summary() { return "A master slot on the left, a detail slot on the right, over a preferences registry."; }
         /** The view holds the keys for its two slots: the master's while the focus is in the master pane, the shown detail widget's in the detail pane. */
         @Override public List<KeyBinding> keys() {
-            return ListMasterWidgetModule.ListMasterWidget.KEYS.stream().map(b -> new KeyBinding(b.key(), b.modifiers(), "to the master: " + b.meaning())).toList();
+            return new ListMasterWidgetModule.ListMasterWidget().keys().stream().map(b -> new KeyBinding(b.key(), b.modifiers(), "to the master: " + b.meaning())).toList();
         }
     }
 
@@ -47,7 +47,7 @@ public record PreferencesViewModule() implements Widget<Widget._None, Preference
 
     @Override
     public ImportsFor<PreferencesViewModule> imports() {
-        return ImportsFor.<PreferencesViewModule>builder()
+        return new ImportsFor._Builder<PreferencesViewModule>()
                 .add(new ModuleImports<>(List.of(new WidgetSlotModule.WidgetSlot()), WidgetSlotModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SplitGridModule.SplitGrid()), SplitGridModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(

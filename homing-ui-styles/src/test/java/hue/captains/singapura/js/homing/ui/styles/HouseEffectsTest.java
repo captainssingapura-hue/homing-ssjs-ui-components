@@ -17,7 +17,7 @@ class HouseEffectsTest {
 
     @Test
     void everyEffect_isItsOwnToWrite_andMoves() {
-        for (AnimationEffect e : HouseEffects.ALL) {
+        for (AnimationEffect e : HouseEffects.INSTANCE.all()) {
             Effects.INSTANCE.check(e);
             assertTrue(e.moves(), e.token());
         }

@@ -25,7 +25,7 @@ public record LedeModule() implements DomModule<LedeModule>, ImplFor<HouseText.L
 
     @Override
     public ImportsFor<LedeModule> imports() {
-        return ImportsFor.<LedeModule>builder()
+        return new ImportsFor._Builder<LedeModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

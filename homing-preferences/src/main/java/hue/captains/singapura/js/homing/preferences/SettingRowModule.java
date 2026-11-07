@@ -25,7 +25,7 @@ public record SettingRowModule() implements DomModule<SettingRowModule>, ImplFor
 
     @Override
     public ImportsFor<SettingRowModule> imports() {
-        return ImportsFor.<SettingRowModule>builder()
+        return new ImportsFor._Builder<SettingRowModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))

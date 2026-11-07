@@ -25,7 +25,7 @@ public record SelectModule() implements DomModule<SelectModule>, ImplFor<HouseCo
 
     @Override
     public ImportsFor<SelectModule> imports() {
-        return ImportsFor.<SelectModule>builder()
+        return new ImportsFor._Builder<SelectModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new InputBehaviorsModule.PickBehavior()), InputBehaviorsModule.INSTANCE))
                 .build();

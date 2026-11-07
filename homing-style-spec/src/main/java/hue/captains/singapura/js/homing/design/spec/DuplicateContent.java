@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -26,7 +26,7 @@ public record DuplicateContent() implements StatelessFunctionalObject {
      * @param resource the resource
      * @param where    each place that gives it: two or more
      */
-    public record Copies(String resource, List<URL> where) implements ValueObject {
+    public record Copies(String resource, List<URL> where) implements Scalar {
         public Copies {
             Objects.requireNonNull(resource, "Copies.resource");
             where = List.copyOf(where);

@@ -22,14 +22,14 @@ class PreferencesRegistryTest {
             new PartialModulePath("/module?class=" + m.getClass().getCanonicalName());
 
     static PreferenceTree tree() {
-        return PreferenceTree.of(PreferenceNode.of("preferences", "Preferences", "All of them",
-                WidgetProvider.of(OverviewWidgetModule.INSTANCE, Map.of("label", "Preferences", "settings", List.of())),
-                PreferenceNode.of("theme", "Theme", "", WidgetProvider.of(ChoiceWidgetModule.INSTANCE,
+        return new PreferenceTree(new PreferenceNode("preferences", "Preferences", "All of them",
+                new WidgetProvider(OverviewWidgetModule.INSTANCE, Map.of("label", "Preferences", "settings", List.of())),
+                new PreferenceNode("theme", "Theme", "", new WidgetProvider(ChoiceWidgetModule.INSTANCE,
                         Map.of("name", "theme", "options", List.of(Map.of("value", "a", "label", "A"))))),
-                PreferenceNode.of("editor", "Editor", "How text is shown", WidgetProvider.of(OverviewWidgetModule.INSTANCE),
-                        PreferenceNode.of("font-size", "Font size", "", WidgetProvider.of(ScaleWidgetModule.INSTANCE,
+                new PreferenceNode("editor", "Editor", "How text is shown", new WidgetProvider(OverviewWidgetModule.INSTANCE),
+                        new PreferenceNode("font-size", "Font size", "", new WidgetProvider(ScaleWidgetModule.INSTANCE,
                                 Map.of("name", "editor/font-size", "min", 12, "max", 24, "default", 16))),
-                        PreferenceNode.of("wrap", "Wrap lines", "", WidgetProvider.of(ToggleWidgetModule.INSTANCE,
+                        new PreferenceNode("wrap", "Wrap lines", "", new WidgetProvider(ToggleWidgetModule.INSTANCE,
                                 Map.of("name", "editor/wrap", "default", true))))));
     }
 
@@ -46,25 +46,25 @@ class PreferencesRegistryTest {
 
     @Test
     void refusesTwoSiblingsWithOneSegment() {
-        var ex = assertThrows(IllegalArgumentException.class, () -> PreferenceTree.of(
-                PreferenceNode.of("p", "P", "", WidgetProvider.of(OverviewWidgetModule.INSTANCE),
-                        PreferenceNode.of("x", "X1", "", WidgetProvider.of(ToggleWidgetModule.INSTANCE)),
-                        PreferenceNode.of("x", "X2", "", WidgetProvider.of(ToggleWidgetModule.INSTANCE)))));
+        var ex = assertThrows(IllegalArgumentException.class, () -> new PreferenceTree(
+                new PreferenceNode("p", "P", "", new WidgetProvider(OverviewWidgetModule.INSTANCE),
+                        new PreferenceNode("x", "X1", "", new WidgetProvider(ToggleWidgetModule.INSTANCE)),
+                        new PreferenceNode("x", "X2", "", new WidgetProvider(ToggleWidgetModule.INSTANCE)))));
         assertTrue(ex.getMessage().contains("share the segment 'x'"), ex.getMessage());
     }
 
     @Test
     void stampsEveryNodeWithItsWidgetModuleExportAndParams() {
-        var reg = new PreferencesRegistry(tree(), WidgetProvider.of(ChoiceWidgetModule.INSTANCE, Map.of("folder", true))) {};
+        var reg = new PreferencesRegistry(tree(), new WidgetProvider(ChoiceWidgetModule.INSTANCE, Map.of("folder", true))) {};
         String json = reg.json(RESOLVER);
         // the rigid tree, canonical
-        assertTrue(json.startsWith("{\"tree\":{\"level\":\"L0\",\"segment\":\"preferences\""), json.substring(0, 80));
+        assertTrue(json.contains("\"tree\":{\"level\":\"L0\",\"segment\":\"preferences\""), json);
         assertTrue(json.contains("{\"key\":\"displayLabel\",\"valueTag\":\"name\",\"text\":\"Font size\"}"), json);
         // the master: the provider's params plus the tree and the labels
-        assertTrue(json.contains("\"master\":{\"module\":\"/module?class=hue.captains.singapura.js.homing.preferences.ChoiceWidgetModule\",\"export\":\"ChoiceWidget\",\"params\":{\"folder\":true,\"tree\":{"), json);
-        assertTrue(json.contains("\"labels\":{\"preferences\":\"Preferences\",\"preferences/theme\":\"Theme\""), json);
+        assertTrue(json.contains("\"master\":{\"export\":\"ChoiceWidget\",\"module\":\"/module?class=hue.captains.singapura.js.homing.preferences.ChoiceWidgetModule\",\"params\":{\"folder\":true,\"labels\":{"), json);
+        assertTrue(json.contains("\"labels\":{\"preferences\":\"Preferences\",\"preferences/editor\":\"Editor\""), json);
         // a node: label, summary, widget with typed params
-        assertTrue(json.contains("\"preferences/editor/font-size\":{\"label\":\"Font size\",\"summary\":\"\",\"widget\":{\"module\":\"/module?class=hue.captains.singapura.js.homing.preferences.ScaleWidgetModule\",\"export\":\"ScaleWidget\",\"params\":{"), json);
+        assertTrue(json.contains("\"preferences/editor/font-size\":{\"label\":\"Font size\",\"summary\":\"\",\"widget\":{\"export\":\"ScaleWidget\",\"module\":\"/module?class=hue.captains.singapura.js.homing.preferences.ScaleWidgetModule\",\"params\":{"), json);
         assertTrue(json.contains("\"min\":12") && json.contains("\"default\":true"), json);
         // the module itself defines the constant
         var lines = reg.selfContent(RESOLVER);
@@ -73,15 +73,27 @@ class PreferencesRegistryTest {
 
     @Test
     void theCrateHoldsAndImportsOnlyWhatItRequires() {
-        assertEquals(List.of(), OrphanCheck.check(UiPreferencesCrate.INSTANCE));
-        assertEquals(List.of(), CrateDependencyRule.check(UiPreferencesCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiPreferencesCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiPreferencesCrate.INSTANCE));
     }
 
     @Test
     void jsonEscapesWhatWouldCloseAScript() {
-        assertEquals("\"a\\u003c/script>\\\"b\\\"\"", Json.write("a</script>\"b\""));
-        var ordered = new java.util.LinkedHashMap<String, Object>();
-        ordered.put("n", 1); ordered.put("t", true); ordered.put("l", java.util.Arrays.asList("x", null));
-        assertEquals("{\"n\":1,\"t\":true,\"l\":[\"x\",null]}", Json.write(ordered));
+        assertEquals("\"a\\u003c/script>\\\"b\\\"\"", Json.INSTANCE.write("a</script>\"b\""));
+        var written = new java.util.LinkedHashMap<String, Object>();
+        written.put("n", 1); written.put("t", true); written.put("l", java.util.Arrays.asList("x", null));
+        assertEquals("{\"l\":[\"x\",null],\"n\":1,\"t\":true}", Json.INSTANCE.write(written));
+    }
+
+    @Test
+    void aMapsKeysAreSorted_atEveryDepth_howeverItWasBuilt() {
+        assertEquals("{\"a\":[{\"x\":1,\"y\":2}],\"b\":{\"c\":3,\"d\":4}}",
+                Json.INSTANCE.write(Map.of("b", Map.of("d", 4, "c", 3), "a", List.of(Map.of("y", 2, "x", 1)))));
+    }
+
+    @Test
+    void theRootStaysTheFirstNode_forTheViewOpensOnTheFirst() {
+        var reg = new PreferencesRegistry(tree(), new WidgetProvider(ChoiceWidgetModule.INSTANCE)) {};
+        assertTrue(reg.json(RESOLVER).contains("\"nodes\":{\"preferences\":{"), "every other path extends the root's, so it sorts first");
     }
 }

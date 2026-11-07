@@ -43,7 +43,7 @@ public record ReadDual() implements StatelessFunctionalObject {
     }
 
     /** Whether a node is kept: used, or above a used one. */
-    private static <N> boolean keep(DualTree<N> tree, Registration registration, N node, Set<N> used, Set<N> kept, List<N> all) {
+    private <N> boolean keep(DualTree<N> tree, Registration registration, N node, Set<N> used, Set<N> kept, List<N> all) {
         all.add(node);
         boolean any = used.contains(node);
         for (N child : tree.children(registration, node)) any |= keep(tree, registration, child, used, kept, all);
@@ -51,7 +51,7 @@ public record ReadDual() implements StatelessFunctionalObject {
         return any;
     }
 
-    private static <N> void walk(DualTree<N> tree, Registration registration, N node, List<N> above, Set<N> kept, List<TreeDual.Node> out) {
+    private <N> void walk(DualTree<N> tree, Registration registration, N node, List<N> above, Set<N> kept, List<TreeDual.Node> out) {
         if (!kept.contains(node)) return;
         Optional<String> parent = above.isEmpty() ? Optional.empty() : Optional.of(tree.name(above.getLast()));
         out.add(new TreeDual.Node(tree.name(node), tree.token(node), parent,

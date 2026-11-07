@@ -1,5 +1,7 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
+import hue.captains.singapura.tao.ontology.Scalar;
+
 /**
  * The colours a house palette is written from, light: as many as the branches answered so far ask
  * for - the button's, the page's, and the desk's. The old seed palettes have thirteen; the muted ink
@@ -22,4 +24,4 @@ package hue.captains.singapura.js.homing.ui.styles;
  * still written only here.</p>
  */
 public record Seeds(String raised, String inverted, String text, String onInverted, String title, String accent, String accentEdge,
-             String onAccent, String border, String ground, String recessed) {}
+             String onAccent, String border, String ground, String recessed) implements Scalar {}

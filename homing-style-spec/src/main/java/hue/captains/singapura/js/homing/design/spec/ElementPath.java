@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.Objects;
  * @param top   the top-level component
  * @param parts the slots down to the element, each a part of the one before in its declared role
  */
-public record ElementPath(Component<?> top, List<Casting> parts) implements ValueObject {
+public record ElementPath(Component<?> top, List<Casting> parts) implements Scalar {
 
     public ElementPath {
         Objects.requireNonNull(top, "ElementPath.top");

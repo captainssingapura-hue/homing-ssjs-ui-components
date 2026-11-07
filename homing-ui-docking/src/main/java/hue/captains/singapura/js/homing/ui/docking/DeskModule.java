@@ -32,7 +32,7 @@ public record DeskModule() implements DomModule<DeskModule> {
 
     @Override
     public ImportsFor<DeskModule> imports() {
-        return ImportsFor.<DeskModule>builder()
+        return new ImportsFor._Builder<DeskModule>()
                 .add(new ModuleImports<>(List.of(new TabRegisterModule.TabRegister()), TabRegisterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatLayerModule.FloatLayer()), FloatLayerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloaterModule.Floater()), FloaterModule.INSTANCE))

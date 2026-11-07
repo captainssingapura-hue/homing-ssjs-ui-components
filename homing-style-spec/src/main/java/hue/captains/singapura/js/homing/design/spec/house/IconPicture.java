@@ -1,7 +1,7 @@
 package hue.captains.singapura.js.homing.design.spec.house;
 
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.Objects;
 
@@ -14,7 +14,7 @@ import java.util.Objects;
  *
  * @param <SC> the colour scheme it is drawn in: a character's any
  */
-public sealed interface IconPicture<SC extends ColorScheme> extends ValueObject permits IconPicture.Glyph, IconPicture.Svg {
+public sealed interface IconPicture<SC extends ColorScheme> extends Scalar permits IconPicture.Glyph, IconPicture.Svg {
 
     /**
      * A picture drawn as a character: in every scheme, naming no colour.

@@ -45,10 +45,10 @@ class IconTest extends UiIconsJsTest {
         js = buildContext();
         js.eval("js", SHIM);
         // the instance's icons, and its look: the castings, the trees of states and events, the manifest, the leaf's classes and the look
-        js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", IconsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(STYLING)));
         loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");
         loadModule(P + "IconModule.js");

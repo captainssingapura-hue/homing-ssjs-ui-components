@@ -29,7 +29,7 @@ public record ContextMenuModule() implements DomModule<ContextMenuModule>, ImplF
 
     @Override
     public ImportsFor<ContextMenuModule> imports() {
-        return ImportsFor.<ContextMenuModule>builder()
+        return new ImportsFor._Builder<ContextMenuModule>()
                 .add(new ModuleImports<>(List.of(new MenuModule.Menu()), MenuModule.INSTANCE))
                 // its rows and its lines, made by the base: imported where its leaf is
                 .add(new ModuleImports<>(List.of(new PlainMenuItemModule.PlainMenuItem()), PlainMenuItemModule.INSTANCE))

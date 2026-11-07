@@ -15,7 +15,7 @@ public record ExpandableFooterAreaBehaviorModule() implements DomModule<Expandab
 
     public static final ExpandableFooterAreaBehaviorModule INSTANCE = new ExpandableFooterAreaBehaviorModule();
 
-    @Override public ImportsFor<ExpandableFooterAreaBehaviorModule> imports() { return ImportsFor.<ExpandableFooterAreaBehaviorModule>builder().build(); }
+    @Override public ImportsFor<ExpandableFooterAreaBehaviorModule> imports() { return new ImportsFor._Builder<ExpandableFooterAreaBehaviorModule>().build(); }
 
     @Override public ExportsOf<ExpandableFooterAreaBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ExpandableFooterAreaBehavior())); }
 }

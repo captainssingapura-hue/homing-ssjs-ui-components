@@ -33,13 +33,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class HouseStylesTest {
 
-    private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
+    private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules());
 
     @Test
     void theStyles_areSeven_eachOverBase_andBaseOverNothing() {
         assertEquals(List.of("editorial", "neo-brutalism", "neo-futurism", "neumorphism", "glassmorphism", "retro-futurism", "sketchy"),
-                HouseStyles.STYLES.stream().map(DesignStyle::token).toList(), "the old slugs, Editorial first");
-        for (DesignStyle<?> s : HouseStyles.STYLES)
+                HouseStyles.INSTANCE.styles().stream().map(DesignStyle::token).toList(), "the old slugs, Editorial first");
+        for (DesignStyle<?> s : HouseStyles.INSTANCE.styles())
             assertTrue(s instanceof Derives<?, ?> d && d.base() == Base.INSTANCE, s.token() + " is written over Base");
         assertTrue(!Derives.class.isInstance(Base.INSTANCE), "Base is written over nothing: the base layer");
     }
@@ -49,7 +49,7 @@ class HouseStylesTest {
         StyleManager manager = HouseStyles.INSTANCE.styling().manager();
         assertEquals(TAXONOMY.castings().size(), manager.implementations(Base.INSTANCE).size(), "the base layer is never absent (D26)");
         var go = TAXONOMY.castings().stream().filter(c -> c.token().equals("primary-button_go")).findFirst().orElseThrow();
-        for (DesignStyle<?> s : HouseStyles.STYLES) {
+        for (DesignStyle<?> s : HouseStyles.INSTANCE.styles()) {
             assertEquals(92 + OWN_PICTURES.get(s.token()), manager.implementations(s).size(), s.token() + ": what it refines, its own and the modules' castings, and the icons it draws its own way (the slider on the native range, its six parts and their six castings retired, the range as what adjusts it, 23 Oct; the check menu item and its choice, the two menu levels, 23 Oct; D52) - a kicker as prompt and a plain button as choice and as cancel no more, the picker and the opener widgets (22 Oct); the icon button in add no more, placed in the void role, and the preferences button retired (21 Oct); a section and a rack no more, rooms of their owners; the slider group and its Adjust casting dropped, the panel, its bar and the kicker as a title; the thirteen castings only a widget's role made (20 Oct)");
             for (Component<?> b : BUTTONS)
                 assertEquals(s.token() + "'s own", manager.resolve(s, new Casting(b)).says(), s.token() + " draws " + b.token());
@@ -64,7 +64,7 @@ class HouseStylesTest {
     @Test
     void aStylesSheet_aClassForEveryCasting_everyMarkFilledIn() {
         Styling styling = HouseStyles.INSTANCE.styling();
-        for (DesignStyle<?> s : HouseStyles.STYLES) {
+        for (DesignStyle<?> s : HouseStyles.INSTANCE.styles()) {
             String sheet = styling.styleSheet(s.token());
             assertTrue(!sheet.contains("$"), s.token() + ": every mark filled in");
             for (Casting c : TAXONOMY.castings())
@@ -119,10 +119,10 @@ class HouseStylesTest {
         StyleManager manager = HouseStyles.INSTANCE.styling().manager();
         var icons = TAXONOMY.components().stream().filter(c -> TAXONOMY.parent(c) == HouseBranches.Icon.INSTANCE).toList();
         assertEquals(22, icons.size(), "the house's seventeen - the pacman and the preferences among them (21 Oct) - and the panes' five");
-        for (DesignStyle<?> s : HouseStyles.STYLES)
+        for (DesignStyle<?> s : HouseStyles.INSTANCE.styles())
             for (Component<?> icon : icons) assertTrue(manager.rule(s, new Casting(icon)).contains("content: \""), s.token() + " draws " + icon.token());
         var crosses = new java.util.LinkedHashMap<String, String>();
-        for (DesignStyle<?> s : HouseStyles.STYLES) {
+        for (DesignStyle<?> s : HouseStyles.INSTANCE.styles()) {
             String rule = manager.rule(s, new Casting(HouseIcons.CloseIcon.INSTANCE));
             int at = rule.indexOf("content: \"") + "content: \"".length();
             crosses.put(s.token(), rule.substring(at, rule.indexOf('"', at)));
@@ -143,7 +143,7 @@ class HouseStylesTest {
         assertEquals("editorial in harbour", styles.dressed(null).toString());
         assertEquals("neumorphism", styles.slug(styles.dressed("neumorphism_clay")), "a style in its own palette is named alone");
         assertEquals(56, styles.themes().size(), "seven styles, each in eight palettes: every house palette is of the base, as every house style (D22)");
-        for (DesignStyle<?> s : HouseStyles.STYLES)
+        for (DesignStyle<?> s : HouseStyles.INSTANCE.styles())
             assertTrue(styles.palettes().contains(styles.own(s)), s.token() + " has a palette of its own among the house's");
     }
 }

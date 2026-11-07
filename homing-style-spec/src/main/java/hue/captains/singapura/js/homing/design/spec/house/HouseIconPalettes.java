@@ -72,7 +72,7 @@ public record HouseIconPalettes() implements StatelessFunctionalObject {
                 new IconPalette<>(Sketchy.INSTANCE, sketchy()));
     }
 
-    private static Map<IconLeaf, IconPicture<? super BaseScheme>> sketchy() {
+    private Map<IconLeaf, IconPicture<? super BaseScheme>> sketchy() {
         var p = new LinkedHashMap<IconLeaf, IconPicture<? super BaseScheme>>();
         p.put(HouseIcons.CloseIcon.INSTANCE, new Glyph("✖"));
         p.put(HouseIcons.PinIcon.INSTANCE, new Glyph("⚲"));

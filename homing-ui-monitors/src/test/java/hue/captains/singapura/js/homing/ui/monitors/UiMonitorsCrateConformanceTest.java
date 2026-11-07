@@ -25,12 +25,12 @@ class UiMonitorsCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiMonitorsCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiMonitorsCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiMonitorsCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiMonitorsCrate.INSTANCE));
     }
 
     @Test
@@ -41,8 +41,8 @@ class UiMonitorsCrateConformanceTest {
             var declared = entry.module() instanceof Widget<?, ?> ? StandardJsModuleType.WIDGET : entry.declaredType();
             if (!(declared instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
-            String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            raw.addAll(DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src)));
+            String src = String.join("\n", ResourceReader.CLASSPATH.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
+            raw.addAll(DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(new ServedModule(m, type, src)));
             checked++;
         }
         assertEquals(2, checked, "the two monitors, widgets both; the styles are a sheet");

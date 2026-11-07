@@ -25,7 +25,7 @@ public record LookModule() implements DomModule<LookModule> {
 
     @Override
     public ImportsFor<LookModule> imports() {
-        return ImportsFor.<LookModule>builder()
+        return new ImportsFor._Builder<LookModule>()
                 .add(new ModuleImports<>(List.of(new HouseStyleSheet.style_sheet()), HouseStyleSheet.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HousePaletteSheet.palette_sheet()), HousePaletteSheet.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LookManifestModule.LEAVES()), LookManifestModule.INSTANCE))

@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.design.spec.house;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.color.Palettable;
 import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.js.homing.tree.NodeNames;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
@@ -30,5 +31,5 @@ public interface SvgWithColorScheme<SC extends ColorScheme> extends StatelessFun
     default List<Palettable<? super SC, ?>> colours() { return List.of(); }
 
     /** Its name, as the page says it: its class's, without {@code Svg}, in words joined by hyphens - {@code pacman}. */
-    default String name() { return NodeName.ofType(getClass(), "Svg").value(); }
+    default String name() { return NodeNames.INSTANCE.ofType(getClass(), "Svg").value(); }
 }

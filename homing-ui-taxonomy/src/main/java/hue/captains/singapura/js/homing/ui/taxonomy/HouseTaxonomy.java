@@ -25,11 +25,13 @@ public record HouseTaxonomy() implements StatelessFunctionalObject {
      * The house's jars' component modules, each defined here beside the components it lists: the flat list an instance
      * of the whole house registers at bootstrap, and all a style jar's check needs of the house's components.
      */
-    public static final List<ComponentModule> MODULES = List.of(
+    public List<ComponentModule> modules() {
+        return List.of(
             UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE, UiDialogComponentModule.INSTANCE,
             UiFloatingComponentModule.INSTANCE, UiMenuComponentModule.INSTANCE,
             UiPanesComponentModule.INSTANCE, UiPanZoomComponentModule.INSTANCE, UiSplitGridComponentModule.INSTANCE,
-            UiPreferencesComponentModule.INSTANCE);   // the site jar's preferences button retired (21 Oct): it brings no component
+            UiPreferencesComponentModule.INSTANCE);
+    }   // the site jar's preferences button retired (21 Oct): it brings no component
 
     /**
      * The taxonomy of the component modules given, in the house's words: their components, a flat list, explicitly -
@@ -37,6 +39,6 @@ public record HouseTaxonomy() implements StatelessFunctionalObject {
      * Nothing found on the classpath.
      */
     public Taxonomy read(List<? extends ComponentModule> modules) {
-        return ComponentModules.INSTANCE.read(modules, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL);
+        return ComponentModules.INSTANCE.read(modules, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.INSTANCE.all());
     }
 }

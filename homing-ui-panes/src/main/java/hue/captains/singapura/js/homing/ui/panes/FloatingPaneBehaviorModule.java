@@ -17,7 +17,7 @@ public record FloatingPaneBehaviorModule() implements DomModule<FloatingPaneBeha
 
     @Override
     public ImportsFor<FloatingPaneBehaviorModule> imports() {
-        return ImportsFor.<FloatingPaneBehaviorModule>builder()
+        return new ImportsFor._Builder<FloatingPaneBehaviorModule>()
                 .build();
     }
 

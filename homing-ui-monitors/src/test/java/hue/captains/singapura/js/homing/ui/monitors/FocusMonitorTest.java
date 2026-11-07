@@ -79,9 +79,9 @@ class FocusMonitorTest extends UiMonitorsJsTest {
         loadModule(DIR + "component/keyboard/KeyboardStewardModule.js");
         loadModule(DIR + "component/WidgetSlotModule.js");
         // each row the house's list row: its castings, its states, its look and the simple component it is
-        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(STYLING)));
         js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet', ICONS = {}; var CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };");
         loadModule(DIR + "server/StyledLeaves.js");
         loadModule(DIR + "ui/look/LookModule.js");

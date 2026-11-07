@@ -13,6 +13,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.StateType;
 import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.js.homing.tree.NodeNames;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public record ReadHeader() implements StatelessFunctionalObject {
             Map<StateValue, String> words = new LinkedHashMap<>();
             List<StateValue> allowed = s.values();
             for (StateValue v : allowed.subList(1, allowed.size())) words.put(v, s.word(v));
-            Optional<String> level = Importances.INSTANCE.levelFor(component, s).map(l -> NodeName.ofType(l, "").value());
+            Optional<String> level = Importances.INSTANCE.levelFor(component, s).map(l -> NodeNames.INSTANCE.ofType(l, "").value());
             states.add(new ComponentHeader.HeaderState(s, allowed, words, s instanceof Flag<?>,
                     s instanceof Pseudo p ? Optional.of(p.pseudoClass()) : Optional.empty(), level));
         }

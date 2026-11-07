@@ -22,7 +22,7 @@ public record PaneThumbModule() implements DomModule<PaneThumbModule>, ImplFor<H
 
     @Override
     public ImportsFor<PaneThumbModule> imports() {
-        return ImportsFor.<PaneThumbModule>builder()
+        return new ImportsFor._Builder<PaneThumbModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))

@@ -51,14 +51,28 @@ public record BaseColours() implements SchemeDeclaration<BaseScheme> {
 
     @Override public BaseScheme scheme() { return BaseScheme.INSTANCE; }
 
-    /** Every palettable colour of the house: one sealed set, so a palette's switch over it is exhaustive. */
-    public sealed interface BaseColour permits
-            Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft, ScrollThumb, PrimaryNeutral, SecondaryNeutral,
-            Text, TextFaded, OnInverted, OnBar, OnAccent, OnDanger, WayHovered, HeadingInk, KickerInk, DangerInk, WarningInk, SuccessInk,
-            Border, GrooveEdge, LineHovered,
-            Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentTintHint, AccentWash, AccentWashFaint, AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent,
-            ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeModerate, ShadeFirm, ShadeStrong, ShadeDeep, ShadeHeavy, ShadeSolid, ShadeThick, ShadeDense, ShadeDark, ShadeDarker, ShadeDarkest, SheenSoft, Sheen,
-            GlowTrace, GlowFaint, GlowLow, GlowDim, GlowGentle, GlowSoft, GlowMild, GlowMedium, GlowWarm, GlowStrong, GlowBright, GlowFull, GlowFlare {}
+    /** Every palettable colour of the house: one sealed set, branch by branch of the tree, so a palette's switches over it are exhaustive. */
+    public sealed interface BaseColour permits SurfaceColour, InkColour, LineColour, AttentionColour, ShadowColour {}
+    /** The surfaces: what things stand on. */
+    public sealed interface SurfaceColour extends BaseColour permits
+            Raised, Ground, Recessed, Inverted, Wash, WashFaint, WashSoft, ScrollThumb, PrimaryNeutral, SecondaryNeutral {}
+    /** The inks: what is written and drawn in. */
+    public sealed interface InkColour extends BaseColour permits
+            Text, TextFaded, OnInverted, OnBar, OnAccent, OnDanger, WayHovered, HeadingInk, KickerInk, DangerInk,
+            WarningInk, SuccessInk {}
+    /** The lines: the hairline, a groove's edge, a line under the hand. */
+    public sealed interface LineColour extends BaseColour permits
+            Border, GrooveEdge, LineHovered {}
+    /** Attention: the house's own colour. */
+    public sealed interface AttentionColour extends BaseColour permits
+            Title, Accent, AccentEdge, Ring, AccentTint, AccentTintFaint, AccentTintHint, AccentWash, AccentWashFaint,
+            AccentWashLight, AccentWashSoft, AccentWashStrong, KeysCandidate, KeysLent {}
+    /** The shadows: what a box casts. */
+    public sealed interface ShadowColour extends BaseColour permits
+            ShadeFaint, ShadeLight, ShadeSoft, ShadeMedium, ShadeModerate, ShadeFirm, ShadeStrong, ShadeDeep,
+            ShadeHeavy, ShadeSolid, ShadeThick, ShadeDense, ShadeDark, ShadeDarker, ShadeDarkest, SheenSoft, Sheen,
+            GlowTrace, GlowFaint, GlowLow, GlowDim, GlowGentle, GlowSoft, GlowMild, GlowMedium, GlowWarm, GlowStrong,
+            GlowBright, GlowFull, GlowFlare {}
 
     public record Surfaces() implements L1_ColorBranch<BaseScheme> {}
     public record Inks() implements L1_ColorBranch<BaseScheme> {}
@@ -72,25 +86,25 @@ public record BaseColours() implements SchemeDeclaration<BaseScheme> {
     // ── surfaces ──────────────────────────────────────────────────────────
 
     /** A layer lifted off the page: a button's face, and the lit side of a shadow. */
-    public record Raised() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record Raised() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** The page's ground: what everything on a page stands on. */
-    public record Ground() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record Ground() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** A layer pressed below the page: the desk panes float over, a text box set into it. */
-    public record Recessed() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record Recessed() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** The darkest layer: a bar the page's ground is written on, and what a box casts. */
-    public record Inverted() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record Inverted() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** A wash under the hand for a mark alone - an icon button's - that shows on a raised face or the page's ground. */
-    public record Wash() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record Wash() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** The text's ink washed fainter, at 8%: the ground code is set on. */
-    public record WashFaint() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record WashFaint() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** At 10%: a pill's ground. */
-    public record WashSoft() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record WashSoft() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** The scrollbar's thumb on the page's ground: the text's ink, 55% into the ground. */
-    public record ScrollThumb() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record ScrollThumb() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** The primary button's ground at its neutral degree: the house colour at a fifth over the raised face, each palette's own (D41). */
-    public record PrimaryNeutral() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record PrimaryNeutral() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** The secondary button's ground at its neutral degree: the accent at a fifth over the raised face, each palette's own (D41). */
-    public record SecondaryNeutral() implements Palettable<BaseScheme, Surfaces>, BaseColour { @Override public Surfaces parent() { return new Surfaces(); } }
+    public record SecondaryNeutral() implements Palettable<BaseScheme, Surfaces>, SurfaceColour { @Override public Surfaces parent() { return new Surfaces(); } }
     /** Nothing drawn: the same in every palette. */
     public record Clear() implements Fixed<BaseScheme, Surfaces> {
         @Override public Surfaces parent() { return new Surfaces(); }
@@ -100,38 +114,38 @@ public record BaseColours() implements SchemeDeclaration<BaseScheme> {
     // ── inks: what is written and drawn in, each the palette's (D32) ──────
 
     /** The ink of what is written. */
-    public record Text() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record Text() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** The text's ink, a fifth faded into what it stands on: a quieter line - a caption, a lede - and a way somewhere. */
-    public record TextFaded() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record TextFaded() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** The ink written on the house's own colour and on inverted: the primary button's, the chosen tab's. */
-    public record OnInverted() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record OnInverted() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** What is written on a bar laid in the inverted layer - a site's bar, a floating pane's head: the page's ground, on the dark. */
-    public record OnBar() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record OnBar() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** The ink written on the accent. */
-    public record OnAccent() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record OnAccent() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** A way somewhere under the hand: the house's own colour leaning half into the faded text a way is written in. */
-    public record WayHovered() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record WayHovered() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** A heading's ink: the house's own colour leaning half into the text's. */
-    public record HeadingInk() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record HeadingInk() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** A kicker's ink: the accent's edge leaning half into the text's. */
-    public record KickerInk() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record KickerInk() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** The ink written on danger. */
-    public record OnDanger() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record OnDanger() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** Danger's ink: words that warn of a loss. */
-    public record DangerInk() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record DangerInk() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** Warning's ink. */
-    public record WarningInk() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record WarningInk() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
     /** Success's ink. */
-    public record SuccessInk() implements Palettable<BaseScheme, Inks>, BaseColour { @Override public Inks parent() { return new Inks(); } }
+    public record SuccessInk() implements Palettable<BaseScheme, Inks>, InkColour { @Override public Inks parent() { return new Inks(); } }
 
     // ── lines ─────────────────────────────────────────────────────────────
 
     /** The hairline: a button's border, and where a coloured button's ground ends at 0. */
-    public record Border() implements Palettable<BaseScheme, Lines>, BaseColour { @Override public Lines parent() { return new Lines(); } }
+    public record Border() implements Palettable<BaseScheme, Lines>, LineColour { @Override public Lines parent() { return new Lines(); } }
     /** A groove's edge: the text's ink at 45%. */
-    public record GrooveEdge() implements Palettable<BaseScheme, Lines>, BaseColour { @Override public Lines parent() { return new Lines(); } }
+    public record GrooveEdge() implements Palettable<BaseScheme, Lines>, LineColour { @Override public Lines parent() { return new Lines(); } }
     /** A line under the hand: the accent half into the border - a boundary the hand may move. */
-    public record LineHovered() implements Palettable<BaseScheme, Lines>, BaseColour { @Override public Lines parent() { return new Lines(); } }
+    public record LineHovered() implements Palettable<BaseScheme, Lines>, LineColour { @Override public Lines parent() { return new Lines(); } }
 
     // ── current: CSS's currentColor at a share, for what does not care (D31, D32) ──
 
@@ -151,96 +165,96 @@ public record BaseColours() implements SchemeDeclaration<BaseScheme> {
     // ── attention ─────────────────────────────────────────────────────────
 
     /** The house's own colour: the primary button's ground, and the glow. */
-    public record Title() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record Title() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The accent: the secondary button's ground. */
-    public record Accent() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record Accent() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The accent's edge: the secondary button's border, a toggle's that is on. */
-    public record AccentEdge() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentEdge() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The ring a control wears while its focus is shown: the accent leaning into the hairline. */
-    public record Ring() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record Ring() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The accent's tint on a raised face: a toggle that is on. */
-    public record AccentTint() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentTint() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The accent's faint tint on a raised face, 12%: a pane's thumbnail the cursor is at. */
-    public record AccentTintFaint() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentTintFaint() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** A hint of the accent on a raised face, at 7%: a strip of tabs lit while its pane is worked in. */
-    public record AccentTintHint() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentTintHint() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The accent washed thin, at 18%: a badge's ground. */
-    public record AccentWash() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentWash() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The accent washed fainter, 8%: a tab's ground. */
-    public record AccentWashFaint() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentWashFaint() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** At 12%: the one that is current, among items. */
-    public record AccentWashLight() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentWashLight() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** At 15%: a tab under the hand. */
-    public record AccentWashSoft() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentWashSoft() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** At 28%: where a menu's cursor is. */
-    public record AccentWashStrong() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record AccentWashStrong() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The keys' mark on a candidate for them: the accent at 45%. */
-    public record KeysCandidate() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record KeysCandidate() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
     /** The keys' mark where they are lent: the accent at 25%. */
-    public record KeysLent() implements Palettable<BaseScheme, Attention>, BaseColour { @Override public Attention parent() { return new Attention(); } }
+    public record KeysLent() implements Palettable<BaseScheme, Attention>, AttentionColour { @Override public Attention parent() { return new Attention(); } }
 
     // ── shadows: the inverted layer's shade, the raised one's sheen, the house colour's glow, at each strength ──
 
     /** The inverted layer cast faintly - 4% - a whisper of lift. */
-    public record ShadeFaint() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeFaint() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 8%: a box set down. */
-    public record ShadeLight() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeLight() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 10%: a soft lift. */
-    public record ShadeSoft() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeSoft() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 12%: a box lifted under the hand. */
-    public record ShadeMedium() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeMedium() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 14%: a panel lifted off the page, its far shadow. */
-    public record ShadeModerate() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeModerate() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 16%: a moulded box's dark side. */
-    public record ShadeFirm() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeFirm() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 18%: a tab in use, set on the row. */
-    public record ShadeStrong() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeStrong() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 20%: a tab in the hand. */
-    public record ShadeDeep() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeDeep() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 22%: a glass tab in the hand. */
-    public record ShadeHeavy() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeHeavy() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 30%: an edge strip's near shadow. */
-    public record ShadeSolid() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeSolid() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 35%: an edge strip lifted off the page. */
-    public record ShadeThick() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeThick() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 45%: a panel lifted, cast hard. */
-    public record ShadeDense() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeDense() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 55%: a panel set in, cast hard. */
-    public record ShadeDark() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeDark() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 60%: an edge strip cast deep below its glow. */
-    public record ShadeDarker() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeDarker() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 70%: a panel set deep into the page. */
-    public record ShadeDarkest() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record ShadeDarkest() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** The raised layer's sheen at 45%: a glass panel's top edge lit. */
-    public record SheenSoft() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record SheenSoft() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** The raised layer's sheen, at 60%: a glass edge lit from above. */
-    public record Sheen() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record Sheen() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** The house colour glowing at 12%: a pane lit under the hand. */
-    public record GlowTrace() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowTrace() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** The house colour glowing faintly - 14% - a fine line of light. */
-    public record GlowFaint() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowFaint() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 20%: a pane in the hand. */
-    public record GlowLow() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowLow() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 25%. */
-    public record GlowDim() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowDim() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 28%: the current pane's fine ring. */
-    public record GlowGentle() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowGentle() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 30%. */
-    public record GlowSoft() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowSoft() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 35%: the current pane's ring, moulded. */
-    public record GlowMild() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowMild() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 40%. */
-    public record GlowMedium() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowMedium() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 45%. */
-    public record GlowWarm() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowWarm() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 55%. */
-    public record GlowStrong() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowStrong() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 60%. */
-    public record GlowBright() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowBright() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 70%: a neon edge. */
-    public record GlowFull() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowFull() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
     /** At 80%: a neon tab in the hand. */
-    public record GlowFlare() implements Palettable<BaseScheme, Shadows>, BaseColour { @Override public Shadows parent() { return new Shadows(); } }
+    public record GlowFlare() implements Palettable<BaseScheme, Shadows>, ShadowColour { @Override public Shadows parent() { return new Shadows(); } }
 
     // ── feedback: the same in every house palette ─────────────────────────
 

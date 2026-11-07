@@ -1,7 +1,9 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
+import hue.captains.singapura.js.homing.base.lang.StatelessSingleton;
 import hue.captains.singapura.js.homing.design.AnimationEffect;
 import hue.captains.singapura.js.homing.design.Target;
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.List;
 
@@ -10,9 +12,9 @@ import java.util.List;
  * each variant with no parameters. A design names one for what it draws; its CSS is sealed here and the framework
  * writes it - its class, its still dual, its keyframes - and its colours are its element's, borrowed.
  */
-public final class HouseEffects {
+public record HouseEffects() implements StatelessFunctionalObject, StatelessSingleton {
 
-    private HouseEffects() {}
+    public static final HouseEffects INSTANCE = new HouseEffects();
 
     /** A dashed line whose dashes travel along it, round and round: worn by a line, drawn in its stroke's ink. Still, the dashes stand. */
     public record MarchingAnts() implements AnimationEffect {
@@ -40,5 +42,5 @@ public final class HouseEffects {
     }
 
     /** Every effect the house has, in the order a picker shows them. */
-    public static final List<AnimationEffect> ALL = List.of(MarchingAnts.INSTANCE, MovingGradient.INSTANCE);
+    public List<AnimationEffect> all() { return List.of(MarchingAnts.INSTANCE, MovingGradient.INSTANCE); }
 }

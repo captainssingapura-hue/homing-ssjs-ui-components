@@ -25,7 +25,7 @@ public record GridDockingModule() implements DomModule<GridDockingModule> {
 
     @Override
     public ImportsFor<GridDockingModule> imports() {
-        return ImportsFor.<GridDockingModule>builder()
+        return new ImportsFor._Builder<GridDockingModule>()
                 .add(new ModuleImports<>(List.of(new MultiTabPaneModule.MultiTabPane()), MultiTabPaneModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PaneMergeModule.PaneMerge()), PaneMergeModule.INSTANCE))
                 .build();

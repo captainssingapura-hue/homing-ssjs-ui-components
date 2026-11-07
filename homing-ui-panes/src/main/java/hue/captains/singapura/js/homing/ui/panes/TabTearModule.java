@@ -23,7 +23,7 @@ public record TabTearModule() implements EsModule<TabTearModule> {
 
     public static final TabTearModule INSTANCE = new TabTearModule();
 
-    @Override public ImportsFor<TabTearModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<TabTearModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<TabTearModule> exports() {

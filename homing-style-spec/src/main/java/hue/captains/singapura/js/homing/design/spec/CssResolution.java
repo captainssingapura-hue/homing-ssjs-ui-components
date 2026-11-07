@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.net.URL;
 import java.util.Objects;
@@ -10,7 +10,7 @@ import java.util.Objects;
  * the content, nothing there, or where it is but could not be had. Two copies of one content are no case here: they are
  * refused when the classpath is built ({@link DuplicateContent}), so the name finds one.
  */
-public sealed interface CssResolution extends ValueObject
+public sealed interface CssResolution extends Scalar
         permits CssResolution.Found, CssResolution.Nothing, CssResolution.Unreadable, CssResolution.NotUtf8 {
 
     /** The resource the content is to be: {@code hue/captains/singapura/js/homing/design/spec/styles/editorial/PlainButton.css}. */

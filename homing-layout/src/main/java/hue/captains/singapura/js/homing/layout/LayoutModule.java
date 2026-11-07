@@ -18,7 +18,7 @@ public record LayoutModule() implements EsModule<LayoutModule> {
 
     public static final LayoutModule INSTANCE = new LayoutModule();
 
-    @Override public ImportsFor<LayoutModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<LayoutModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<LayoutModule> exports() {

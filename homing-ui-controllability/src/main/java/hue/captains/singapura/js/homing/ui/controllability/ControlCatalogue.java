@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.ui.controllability;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -23,7 +23,7 @@ import java.util.Optional;
  * @param branches the branches under the root, in the order first reached
  * @param options  the options
  */
-public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<?>> options) implements ValueObject {
+public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<?>> options) implements Scalar {
 
     public ControlCatalogue {
         branches = List.copyOf(branches);
@@ -46,23 +46,23 @@ public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<
         for (ControlOption<?> o : options) {
             int means = (o instanceof WithExtent<?> ? 1 : 0) + (o instanceof WithSwitch<?> ? 1 : 0)
                       + (o instanceof WithAction<?> ? 1 : 0) + (o instanceof WithQuestion<?> ? 1 : 0);
-            if (means > 1) problems.add(qualified(o) + " is controlled by " + means + " means: one, of extent, switch, action, question");
+            if (means > 1) problems.add(QualifiedNames.INSTANCE.of(o) + " is controlled by " + means + " means: one, of extent, switch, action, question");
         }
         for (ControlNode n : nodes) {
-            ControlBranch parent = ControlLevels.parentOf(n);
+            ControlBranch parent = ControlLevels.INSTANCE.parentOf(n);
             if (parent != null && !nodes.contains(parent))
-                problems.add(qualified(n) + " is filed under " + qualified(parent) + ", which the catalogue does not hold");
+                problems.add(QualifiedNames.INSTANCE.of(n) + " is filed under " + QualifiedNames.INSTANCE.of(parent) + ", which the catalogue does not hold");
         }
         if (!problems.isEmpty()) throw new RefusedControls(problems);
     }
 
     /** The branch a node is filed under; none for the root. */
-    public ControlBranch parent(ControlNode node) { return ControlLevels.parentOf(node); }
+    public ControlBranch parent(ControlNode node) { return ControlLevels.INSTANCE.parentOf(node); }
 
     /** The branches and options directly under a branch - the root's included - branches first. */
     public List<ControlNode> children(ControlBranch branch) {
         var out = new ArrayList<ControlNode>();
-        for (ControlBranch b : branches) if (branch.equals(ControlLevels.parentOf(b))) out.add(b);
+        for (ControlBranch b : branches) if (branch.equals(ControlLevels.INSTANCE.parentOf(b))) out.add(b);
         for (ControlOption<?> o : options) if (branch.equals(o.parent())) out.add(o);
         return List.copyOf(out);
     }
@@ -72,13 +72,7 @@ public record ControlCatalogue(List<ControlBranch> branches, List<ControlOption<
         return options.stream().filter(o -> o.name().value().equals(name)).findFirst();
     }
 
-    private static String said(List<ControlNode> nodes) {
-        return String.join(" and ", nodes.stream().map(ControlCatalogue::qualified).toList());
-    }
-
-    /** A node as a problem says it: its type without the package, nesting kept. */
-    static String qualified(Object node) {
-        String n = node.getClass().getName();
-        return n.substring(n.lastIndexOf('.') + 1);
+    private String said(List<ControlNode> nodes) {
+        return String.join(" and ", nodes.stream().map(QualifiedNames.INSTANCE::of).toList());
     }
 }

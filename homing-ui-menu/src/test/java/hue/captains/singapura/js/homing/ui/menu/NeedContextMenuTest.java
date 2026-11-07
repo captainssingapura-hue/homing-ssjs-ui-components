@@ -58,18 +58,18 @@ class NeedContextMenuTest {
             @Override public Set<ContextMenuKind<?>> required() { return Set.of(TabMenu.INSTANCE); }
         }
         public record Hand() implements Exportable._Constant<PanesModule> {}
-        @Override public ImportsFor<PanesModule> imports() { return ImportsFor.noImports(); }
+        @Override public ImportsFor<PanesModule> imports() { return new ImportsFor<>(); }
         @Override public ExportsOf<PanesModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new Pane(), new Strip(), new Hand())); }
     }
     public record PanesComponents() implements C0_Components<PanesComponents> {
         public static final PanesComponents INSTANCE = new PanesComponents();
         @Override public String name() { return "Panes"; }
-        @Override public List<ComponentEntry<PanesComponents>> leaves() { return List.of(ComponentEntry.of(this, new PanesModule.Strip()), ComponentEntry.of(this, new PanesModule.Pane())); }
+        @Override public List<ComponentEntry<PanesComponents>> leaves() { return List.of(new ComponentEntry.OfComponent<>(this, new PanesModule.Strip()), new ComponentEntry.OfComponent<>(this, new PanesModule.Pane())); }
     }
     static final class PanesCrate implements Crate, ComponentVehicle {
         static final PanesCrate INSTANCE = new PanesCrate();
         @Override public String name() { return "panes"; }
-        @Override public List<CrateEntry> entries() { return List.of(CrateEntry.of(PanesModule.INSTANCE)); }
+        @Override public List<CrateEntry> entries() { return List.of(new CrateEntry(PanesModule.INSTANCE)); }
         @Override public C0_Components<?> components() { return PanesComponents.INSTANCE; }
     }
     static final class SiteCrate implements Crate {
@@ -81,9 +81,9 @@ class NeedContextMenuTest {
 
     @Test
     void theRegistryIsDerivedFromWhatTheCataloguedComponentsNeed_eachKindOnce_inCatalogueOrder() {
-        var r = ContextMenuRegistry.requiredBy(List.of(SiteCrate.INSTANCE));
+        var r = CrateMenus.INSTANCE.requiredBy(List.of(SiteCrate.INSTANCE));
         assertEquals(List.of("tab", "pane"), r.kinds().stream().map(ContextMenuKind::kind).toList(), "the strip's tab menu first, then the pane's own; the tab menu once though two components need it");
-        assertEquals(List.of(), ContextMenuRegistry.validate(List.of(SiteCrate.INSTANCE)));
+        assertEquals(List.of(), CrateMenus.INSTANCE.validate(List.of(SiteCrate.INSTANCE)));
         assertTrue(r.js().get(2).contains("\"tab\":{\"kind\":\"tab\"") && r.js().get(2).contains("\"pane\":{\"kind\":\"pane\""), r.js().toString());
     }
 
@@ -98,13 +98,13 @@ class NeedContextMenuTest {
         public record Uncatalogued() implements BranchComponent<LooseModule>, NeedContextMenu {
             @Override public Set<ContextMenuKind<?>> required() { return Set.of(); }
         }
-        @Override public ImportsFor<LooseModule> imports() { return ImportsFor.noImports(); }
+        @Override public ImportsFor<LooseModule> imports() { return new ImportsFor<>(); }
         @Override public ExportsOf<LooseModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new Statics(), new Uncatalogued())); }
     }
     static final class LooseCrate implements Crate {
         static final LooseCrate INSTANCE = new LooseCrate();
         @Override public String name() { return "loose"; }
-        @Override public List<CrateEntry> entries() { return List.of(CrateEntry.of(LooseModule.INSTANCE)); }
+        @Override public List<CrateEntry> entries() { return List.of(new CrateEntry(LooseModule.INSTANCE)); }
     }
 
     @Test
@@ -113,7 +113,7 @@ class NeedContextMenuTest {
                 "loose: LooseModule.Statics needs context menus but is not a declared component",
                 "loose: LooseModule.Uncatalogued needs context menus but no catalogue lists it",
                 "loose: LooseModule.Uncatalogued needs context menus but names no kind"),
-                ContextMenuRegistry.validate(List.of(LooseCrate.INSTANCE)));
-        assertEquals(List.of(), ContextMenuRegistry.requiredBy(List.of(LooseCrate.INSTANCE)).kinds(), "nothing derived: the needs are invisible, which is what validate says");
+                CrateMenus.INSTANCE.validate(List.of(LooseCrate.INSTANCE)));
+        assertEquals(List.of(), CrateMenus.INSTANCE.requiredBy(List.of(LooseCrate.INSTANCE)).kinds(), "nothing derived: the needs are invisible, which is what validate says");
     }
 }

@@ -33,11 +33,11 @@ public final class UiDialogCrate implements Crate, ComponentVehicle {
     @Override public List<CrateEntry> entries() {
         return List.of(
                 // the modal window: what holds the page while it is open (23 Oct)
-                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.modal.ModalWindowModule.INSTANCE),
-                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.modal.ModalityModule.INSTANCE),
-                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.modal.ModalStyles.INSTANCE),
+                new CrateEntry(hue.captains.singapura.js.homing.ui.dialog.modal.ModalWindowModule.INSTANCE),
+                new CrateEntry(hue.captains.singapura.js.homing.ui.dialog.modal.ModalityModule.INSTANCE),
+                new CrateEntry(hue.captains.singapura.js.homing.ui.dialog.modal.ModalStyles.INSTANCE),
                 // the standard footer: what ends a matter
-                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.footer.ActionBarModule.INSTANCE),
-                CrateEntry.of(hue.captains.singapura.js.homing.ui.dialog.footer.FooterStyles.INSTANCE));
+                new CrateEntry(hue.captains.singapura.js.homing.ui.dialog.footer.ActionBarModule.INSTANCE),
+                new CrateEntry(hue.captains.singapura.js.homing.ui.dialog.footer.FooterStyles.INSTANCE));
     }
 }

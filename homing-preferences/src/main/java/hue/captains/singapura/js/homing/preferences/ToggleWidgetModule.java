@@ -27,7 +27,7 @@ public record ToggleWidgetModule() implements Widget<Widget._None, ToggleWidgetM
 
     @Override
     public ImportsFor<ToggleWidgetModule> imports() {
-        return ImportsFor.<ToggleWidgetModule>builder()
+        return new ImportsFor._Builder<ToggleWidgetModule>()
                 .add(new ModuleImports<>(List.of(new PreferenceFieldModule.PreferenceField()), PreferenceFieldModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PreferenceSteward.PreferenceViewInstance()), PreferenceSteward.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))

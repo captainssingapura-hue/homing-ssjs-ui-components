@@ -31,7 +31,7 @@ public record TabModule() implements DomModule<TabModule>, ImplFor<HouseControls
 
     @Override
     public ImportsFor<TabModule> imports() {
-        return ImportsFor.<TabModule>builder()
+        return new ImportsFor._Builder<TabModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabBehaviorModule.TabBehavior()), TabBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))

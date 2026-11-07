@@ -18,9 +18,9 @@ public record UiPreferencesComponents() implements C0_Components<UiPreferencesCo
 
     @Override public List<ComponentEntry<UiPreferencesComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new PreferencesViewModule.PreferencesView()),
-                ComponentEntry.of(this, new PreferenceFieldModule.PreferenceField()),
-                ComponentEntry.of(this, new SettingRowModule.SettingRow()));
+                new ComponentEntry.OfComponent<>(this, new PreferencesViewModule.PreferencesView()),
+                new ComponentEntry.OfComponent<>(this, new PreferenceFieldModule.PreferenceField()),
+                new ComponentEntry.OfComponent<>(this, new SettingRowModule.SettingRow()));
     }
 
     /** One per kind of setting: a choice, a scale, a toggle, a list's master, an overview. */
@@ -31,11 +31,11 @@ public record UiPreferencesComponents() implements C0_Components<UiPreferencesCo
         @Override public String summary() { return "One per kind of setting: a choice, a scale, a toggle, a list's master, an overview."; }
         @Override public List<ComponentEntry<PreferenceWidgetsComponents>> leaves() {
             return List.of(
-                    ComponentEntry.of(this, new ChoiceWidgetModule.ChoiceWidget()),
-                    ComponentEntry.of(this, new ScaleWidgetModule.ScaleWidget()),
-                    ComponentEntry.of(this, new ToggleWidgetModule.ToggleWidget()),
-                    ComponentEntry.of(this, new ListMasterWidgetModule.ListMasterWidget()),
-                    ComponentEntry.of(this, new OverviewWidgetModule.OverviewWidget()));
+                    new ComponentEntry.OfComponent<>(this, new ChoiceWidgetModule.ChoiceWidget()),
+                    new ComponentEntry.OfComponent<>(this, new ScaleWidgetModule.ScaleWidget()),
+                    new ComponentEntry.OfComponent<>(this, new ToggleWidgetModule.ToggleWidget()),
+                    new ComponentEntry.OfComponent<>(this, new ListMasterWidgetModule.ListMasterWidget()),
+                    new ComponentEntry.OfComponent<>(this, new OverviewWidgetModule.OverviewWidget()));
         }
     }
 }

@@ -20,7 +20,7 @@ public record ButtonBehaviorModule() implements DomModule<ButtonBehaviorModule> 
     public static final ButtonBehaviorModule INSTANCE = new ButtonBehaviorModule();
 
     @Override public ImportsFor<ButtonBehaviorModule> imports() {
-        return ImportsFor.noImports();
+        return new ImportsFor<>();
     }
 
     @Override public ExportsOf<ButtonBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ButtonBehavior())); }

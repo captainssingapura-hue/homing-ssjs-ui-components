@@ -27,7 +27,7 @@ public record DeskHandModule() implements DomModule<DeskHandModule> {
 
     @Override
     public ImportsFor<DeskHandModule> imports() {
-        return ImportsFor.<DeskHandModule>builder()
+        return new ImportsFor._Builder<DeskHandModule>()
                 .add(new ModuleImports<>(List.of(new TabTearModule.TabTear()), TabTearModule.INSTANCE))
                 .build();
     }

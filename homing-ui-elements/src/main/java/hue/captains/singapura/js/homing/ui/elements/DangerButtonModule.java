@@ -25,7 +25,7 @@ public record DangerButtonModule() implements DomModule<DangerButtonModule>, Imp
 
     @Override
     public ImportsFor<DangerButtonModule> imports() {
-        return ImportsFor.<DangerButtonModule>builder()
+        return new ImportsFor._Builder<DangerButtonModule>()
                 .add(new ModuleImports<>(List.of(new ButtonModule.Button()), ButtonModule.INSTANCE))
                 .build();
     }

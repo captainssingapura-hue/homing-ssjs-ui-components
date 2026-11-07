@@ -19,7 +19,7 @@ public record MultiTabPaneMenuModule() implements DomModule<MultiTabPaneMenuModu
 
     public static final MultiTabPaneMenuModule INSTANCE = new MultiTabPaneMenuModule();
 
-    @Override public ImportsFor<MultiTabPaneMenuModule> imports() { return ImportsFor.<MultiTabPaneMenuModule>builder().build(); }
+    @Override public ImportsFor<MultiTabPaneMenuModule> imports() { return new ImportsFor._Builder<MultiTabPaneMenuModule>().build(); }
 
     @Override public ExportsOf<MultiTabPaneMenuModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new MultiTabPaneMenu())); }
 }

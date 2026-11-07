@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.ui.menu;
 import hue.captains.singapura.js.homing.core.CssClass;
 import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssVar;
+import hue.captains.singapura.js.homing.ui.elements.ItemStyles;
 
 import java.util.List;
 import java.util.Set;
@@ -56,6 +57,8 @@ public record MenuStyles() implements CssGroup<MenuStyles> {
     /** A row hidden for the bound object: not there. Last in the sheet, so it wins the display. */
     public record cm_item_hidden() implements CssClass<MenuStyles> {
         @Override public String body() { return "display: none;"; }
+        /** It hides a menu item, so it follows the item's own display. */
+        @Override public List<CssClass<?>> dependsOn() { return List.of(new ItemStyles.el_menu_item()); }
     }
 
     /** A separator between sections: the house's separator, placed - its line is its own look's, the room round it the menu's. */

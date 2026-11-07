@@ -17,7 +17,7 @@ public record ItemBehaviorModule() implements DomModule<ItemBehaviorModule> {
 
     @Override
     public ImportsFor<ItemBehaviorModule> imports() {
-        return ImportsFor.noImports();
+        return new ImportsFor<>();
     }
 
     @Override public ExportsOf<ItemBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new ItemBehavior())); }

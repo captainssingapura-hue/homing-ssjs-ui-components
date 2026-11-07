@@ -17,7 +17,7 @@ public record MultiTabPaneBehaviorModule() implements DomModule<MultiTabPaneBeha
 
     @Override
     public ImportsFor<MultiTabPaneBehaviorModule> imports() {
-        return ImportsFor.<MultiTabPaneBehaviorModule>builder()
+        return new ImportsFor._Builder<MultiTabPaneBehaviorModule>()
                 .build();
     }
 

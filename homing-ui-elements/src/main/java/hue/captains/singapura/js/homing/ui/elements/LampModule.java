@@ -24,7 +24,7 @@ public record LampModule() implements DomModule<LampModule>, ImplFor<HouseMarks.
 
     @Override
     public ImportsFor<LampModule> imports() {
-        return ImportsFor.<LampModule>builder()
+        return new ImportsFor._Builder<LampModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec.house;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -30,14 +30,20 @@ import java.util.regex.Pattern;
  * @param resource where it was read: {@code homing-svg/…/Base/rotate.svg}
  * @param text     its text as the resource has it
  */
-public record IconSvg(String resource, String text) implements ValueObject {
+public record IconSvg(String resource, String text) implements Scalar {
 
     private static final String SVG = "http://www.w3.org/2000/svg";
-    private static final Set<String> SHAPES = Set.of("path", "circle", "ellipse", "line", "polyline", "polygon", "rect");
-    private static final Set<String> SHAPE_ATTRIBUTES = Set.of("d", "points", "x", "y", "width", "height", "cx", "cy", "r", "rx", "ry",
+    private enum Words {
+        SHAPES(Set.of("path", "circle", "ellipse", "line", "polyline", "polygon", "rect")),
+        SHAPE_ATTRIBUTES(Set.of("d", "points", "x", "y", "width", "height", "cx", "cy", "r", "rx", "ry",
             "x1", "y1", "x2", "y2", "transform", "style", "fill", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin",
-            "stroke-miterlimit", "fill-rule", "clip-rule", "opacity");
-    private static final Set<String> GROUP_ATTRIBUTES = Set.of("transform", "opacity");
+            "stroke-miterlimit", "fill-rule", "clip-rule", "opacity")),
+        GROUP_ATTRIBUTES(Set.of("transform", "opacity"));
+
+        private final Set<String> all;
+
+        Words(Set<String> all) { this.all = all; }
+    }
     private static final Pattern DECLARATION = Pattern.compile("\\s*([a-z-]+)\\s*:\\s*([^;]+?)\\s*(;|$)");
     private static final Pattern PALETTE = Pattern.compile("var\\(--fp-([a-z0-9]+(?:-[a-z0-9]+)*)\\)");
 
@@ -65,7 +71,7 @@ public record IconSvg(String resource, String text) implements ValueObject {
     }
 
     /** Everything that keeps a text from being an icon's SVG picture; none when it is one. */
-    private static List<String> problems(String text) {
+    private List<String> problems(String text) {
         var out = new ArrayList<String>();
         Element root;
         try {
@@ -88,17 +94,17 @@ public record IconSvg(String resource, String text) implements ValueObject {
     }
 
     /** Its children, held: groups, each held the same way, and shapes; how many shapes, all told. */
-    private static int children(Element parent, List<String> out) {
+    private int children(Element parent, List<String> out) {
         int shapes = 0;
         for (Node n = parent.getFirstChild(); n != null; n = n.getNextSibling()) {
             if (n.getNodeType() == Node.TEXT_NODE && n.getTextContent().isBlank() || n.getNodeType() == Node.COMMENT_NODE) continue;
             if (!(n instanceof Element e) || !SVG.equals(e.getNamespaceURI())) { out.add("only shapes and groups inside, not " + n.getNodeName()); continue; }
             String tag = e.getLocalName();
             if (tag.equals("g")) {
-                attributes(e, GROUP_ATTRIBUTES, out);
+                attributes(e, Words.GROUP_ATTRIBUTES.all, out);
                 shapes += children(e, out);
-            } else if (SHAPES.contains(tag)) {
-                attributes(e, SHAPE_ATTRIBUTES, out);
+            } else if (Words.SHAPES.all.contains(tag)) {
+                attributes(e, Words.SHAPE_ATTRIBUTES.all, out);
                 painted(e, out);
                 if (e.hasChildNodes() && !e.getTextContent().isBlank()) out.add(tag + ": a shape holds nothing");
                 shapes++;
@@ -108,7 +114,7 @@ public record IconSvg(String resource, String text) implements ValueObject {
     }
 
     /** Only the attributes its element may have: no class, no id, nothing that runs or links. */
-    private static void attributes(Element e, Set<String> allowed, List<String> out) {
+    private void attributes(Element e, Set<String> allowed, List<String> out) {
         NamedNodeMap all = e.getAttributes();
         for (int i = 0; i < all.getLength(); i++) {
             String name = all.item(i).getNodeName();
@@ -122,7 +128,7 @@ public record IconSvg(String resource, String text) implements ValueObject {
      * A shape's fill and its stroke: each none, the colour it is given ({@code currentColor}) or a palette's colour in its
      * style - or unsaid, as its svg gives it: a fill in the colour it is given, no stroke. Nothing else in its style.
      */
-    private static void painted(Element e, List<String> out) {
+    private void painted(Element e, List<String> out) {
         String tag = e.getLocalName();
         var said = new java.util.HashMap<String, String>();
         for (String a : List.of("fill", "stroke")) if (e.hasAttribute(a)) {

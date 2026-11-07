@@ -22,7 +22,8 @@ public record HouseSpec() implements StatelessFunctionalObject {
     public static final HouseSpec INSTANCE = new HouseSpec();
 
     /** Each house component module, its assignments in Base. */
-    public static final List<BaseSpecModule<BaseScheme, Base>> BASE = List.of(
+    public List<BaseSpecModule<BaseScheme, Base>> base() {
+        return List.of(
             UiElementsBaseSpec.INSTANCE,
             UiIconsBaseSpec.INSTANCE,
             UiDialogBaseSpec.INSTANCE,
@@ -31,10 +32,12 @@ public record HouseSpec() implements StatelessFunctionalObject {
             UiPanesBaseSpec.INSTANCE,
             UiPanZoomBaseSpec.INSTANCE,
             UiSplitGridBaseSpec.INSTANCE,
-            UiPreferencesBaseSpec.INSTANCE);   // the site jar's base gone with its preferences button (21 Oct)
+            UiPreferencesBaseSpec.INSTANCE);
+    }   // the site jar's base gone with its preferences button (21 Oct)
 
     /** Each house style's assignments. */
-    public static final List<SpecModule<BaseScheme, ?>> STYLES = List.of(
+    public List<SpecModule<BaseScheme, ?>> styles() {
+        return List.of(
             EditorialSpec.INSTANCE,
             NeoBrutalismSpec.INSTANCE,
             NeoFuturismSpec.INSTANCE,
@@ -42,10 +45,11 @@ public record HouseSpec() implements StatelessFunctionalObject {
             GlassmorphismSpec.INSTANCE,
             RetroFuturismSpec.INSTANCE,
             SketchySpec.INSTANCE);
+    }
 
     /** The house, read and held, its content found on the classpath under {@code homing-css/}. */
     public SpecRegistry registry() {
-        return ReadSpec.INSTANCE.read(BASE, STYLES, HouseRoleCatalogue.INSTANCE.roles(), HouseStates.ALL,
+        return ReadSpec.INSTANCE.read(base(), styles(), HouseRoleCatalogue.INSTANCE.roles(), HouseStates.INSTANCE.all(),
                 new ClasspathCssResolver("homing-css/"));
     }
 }

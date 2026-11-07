@@ -24,7 +24,7 @@ public record TextModule() implements DomModule<TextModule>, ImplForBranch<House
 
     @Override
     public ImportsFor<TextModule> imports() {
-        return ImportsFor.<TextModule>builder()
+        return new ImportsFor._Builder<TextModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TextBehaviorModule.TextBehavior()), TextBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ElementStyles.el_text()), ElementStyles.INSTANCE))

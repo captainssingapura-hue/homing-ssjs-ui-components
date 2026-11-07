@@ -15,6 +15,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.StateValue;
 import hue.captains.singapura.js.homing.design.spec.JsLiterals;
 import hue.captains.singapura.js.homing.tree.NodeName;
 
+import hue.captains.singapura.js.homing.tree.NodeNames;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,15 +40,15 @@ public record States() implements DualTree<StateNode> {
             List<StateValue> values = c.values();
             var words = new LinkedHashMap<String, String>();
             for (StateValue v : values.subList(1, values.size())) words.put(v.token(), c.word(v));
-            String level = Importances.INSTANCE.levelOf(c).map(l -> js.string(NodeName.ofType(l, "").value())).orElse("null");
+            String level = Importances.INSTANCE.levelOf(c).map(l -> js.string(NodeNames.INSTANCE.ofType(l, "").value())).orElse("null");
             classes = "new StateClasses(" + js.object(words) + ", " + (c instanceof Flag<?>) + ", " + (c instanceof Pseudo p ? js.string(p.pseudoClass()) : "null") + ", " + level + ")";
         }
-        String changes = String.join(", ", s.changes().stream().map(States::change).toList());
+        String changes = String.join(", ", s.changes().stream().map(this::change).toList());
         return "new StateType(" + token + ", " + parent + ", " + domain(s.domain()) + ", [" + changes + "], " + classes + ")";
     }
 
     /** A domain as the kit makes it: {@code new Ranges([new Point("up"), new Point("down")], "up")}, {@code new Valued("text")}, {@code new Valued("names")}, {@code new Valued("counts")}. */
-    private static String domain(StateDomain d) {
+    private String domain(StateDomain d) {
         var js = JsLiterals.INSTANCE;
         return switch (d) {
             case StateDomain.Ranges r -> "new Ranges([" + String.join(", ", r.ranges().stream().map(x -> switch (x) {
@@ -59,7 +60,7 @@ public record States() implements DualTree<StateNode> {
     }
 
     /** A value as the page has it: a named one its token, a number itself, a text a string, an order of names a frozen list of strings, a count for each name a frozen object - null for none. */
-    private static String value(StateDomain.Value v) {
+    private String value(StateDomain.Value v) {
         return switch (v) {
             case StateDomain.Named n -> JsLiterals.INSTANCE.string(n.value().token());
             case StateDomain.Number n -> number(n.value());
@@ -71,7 +72,7 @@ public record States() implements DualTree<StateNode> {
     }
 
     /** A named change as the kit makes it: {@code new NamedChange("press", new Between("up", "down"))}. */
-    private static String change(NamedChange c) {
+    private String change(NamedChange c) {
         var js = JsLiterals.INSTANCE;
         return "new NamedChange(" + js.string(c.name()) + ", " + switch (c.transition()) {
             case NamedChange.Between b -> "new Between(" + js.string(b.from().token()) + ", " + js.string(b.to().token()) + ")";
@@ -80,7 +81,7 @@ public record States() implements DualTree<StateNode> {
         } + ")";
     }
 
-    private static String number(double d) { return d == Math.rint(d) && Math.abs(d) < 1e15 ? String.valueOf((long) d) : String.valueOf(d); }
+    private String number(double d) { return d == Math.rint(d) && Math.abs(d) < 1e15 ? String.valueOf((long) d) : String.valueOf(d); }
 
     @Override public List<String> kit() { return List.of("StateBranch", "StateType", "Point", "Span", "Ranges", "Valued", "Between", "Rises", "Falls", "NamedChange", "StateClasses"); }
     @Override public Set<StateNode> used(Registration r) {

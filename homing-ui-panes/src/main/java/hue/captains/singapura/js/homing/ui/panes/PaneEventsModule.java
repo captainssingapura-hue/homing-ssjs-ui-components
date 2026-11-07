@@ -21,7 +21,7 @@ public record PaneEventsModule() implements EsModule<PaneEventsModule> {
 
     public static final PaneEventsModule INSTANCE = new PaneEventsModule();
 
-    @Override public ImportsFor<PaneEventsModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<PaneEventsModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<PaneEventsModule> exports() {

@@ -6,7 +6,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public record Slots() implements StatelessFunctionalObject {
      * @param role   the role the part is in
      * @param placed whether the role only places it: it then wears its standalone
      */
-    public record Slot(Component<?> part, Role<?> role, boolean placed) implements ValueObject {
+    public record Slot(Component<?> part, Role<?> role, boolean placed) implements Scalar {
         /** The casting its look is of. */
         public Casting casting() { return placed ? new Casting(part) : new Casting(part, role); }
 

@@ -37,7 +37,7 @@ public record SimpleComponentModule() implements DomModule<SimpleComponentModule
 
     @Override
     public ImportsFor<SimpleComponentModule> imports() {
-        return ImportsFor.<SimpleComponentModule>builder()
+        return new ImportsFor._Builder<SimpleComponentModule>()
                 .add(new ModuleImports<>(List.of(new DomOpsPartyModule.DomOpsParty()), DomOpsPartyModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CssClassManager.CssClassManagerInstance()), CssClassManager.INSTANCE))
                 .build();

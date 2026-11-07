@@ -15,7 +15,7 @@ public record MarkBehaviorModule() implements DomModule<MarkBehaviorModule> {
 
     public static final MarkBehaviorModule INSTANCE = new MarkBehaviorModule();
 
-    @Override public ImportsFor<MarkBehaviorModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<MarkBehaviorModule> imports() { return new ImportsFor<>(); }
 
     @Override public ExportsOf<MarkBehaviorModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new MarkBehavior())); }
 }

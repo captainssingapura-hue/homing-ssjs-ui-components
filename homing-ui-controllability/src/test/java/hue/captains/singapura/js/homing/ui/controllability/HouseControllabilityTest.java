@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HouseControllabilityTest {
 
     private static final ControlCatalogue CATALOGUE = HouseControllability.INSTANCE.catalogue();
-    private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
+    private static final Taxonomy TAXONOMY = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules());
 
     @Test
     void sevenCategories_twentyOneOptions_eachInItsCategory() {

@@ -42,7 +42,7 @@ class ContextMenuChoiceTest extends UiMenuJsTest {
     @BeforeEach
     void load() {
         js = buildContext();
-        TextsInJs.load(js, this::loadModule);
+        TextsInJs.load(js, STYLING, this::loadModule);
         for (String m : new String[] {"ItemBehaviorModule.js", "MenuItemModule.js"}) loadModule(DIR + m);
         js.eval("js", TextsInJs.withCss(SHIM));
     }

@@ -28,7 +28,7 @@ public record L2MenuModule() implements DomModule<L2MenuModule>, ImplFor<HouseCo
 
     @Override
     public ImportsFor<L2MenuModule> imports() {
-        return ImportsFor.<L2MenuModule>builder()
+        return new ImportsFor._Builder<L2MenuModule>()
                 .add(new ModuleImports<>(List.of(new MenuModule.Menu()), MenuModule.INSTANCE))
                 // its rows and its lines, made by the base: imported where its leaf is
                 .add(new ModuleImports<>(List.of(new PlainMenuItemModule.PlainMenuItem()), PlainMenuItemModule.INSTANCE))

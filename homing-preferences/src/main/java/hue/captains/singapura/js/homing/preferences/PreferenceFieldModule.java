@@ -42,7 +42,7 @@ public record PreferenceFieldModule() implements Widget<Widget._None, Preference
 
     @Override
     public ImportsFor<PreferenceFieldModule> imports() {
-        return ImportsFor.<PreferenceFieldModule>builder()
+        return new ImportsFor._Builder<PreferenceFieldModule>()
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new Heading4Module.Heading4()), Heading4Module.INSTANCE))
                 .add(new ModuleImports<>(List.of(new LedeModule.Lede()), LedeModule.INSTANCE))

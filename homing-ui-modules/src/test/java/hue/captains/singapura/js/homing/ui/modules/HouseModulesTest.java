@@ -33,8 +33,8 @@ class HouseModulesTest {
     @Test
     void aBaseModule_forEachHouseComponentModule() {
         List<BaseModule<BaseScheme, Base>> base = MODULES.base();
-        assertEquals(HouseTaxonomy.MODULES, MODULES.definitions(), "the house's jars' modules: nothing found on the classpath (D51)");
-        assertEquals(HouseTaxonomy.MODULES, base.stream().map(BaseModule::components).toList(), "one for each, in order");
+        assertEquals(HouseTaxonomy.INSTANCE.modules(), MODULES.definitions(), "the house's jars' modules: nothing found on the classpath (D51)");
+        assertEquals(HouseTaxonomy.INSTANCE.modules(), base.stream().map(BaseModule::components).toList(), "one for each, in order");
         for (BaseModule<BaseScheme, Base> m : base) {
             assertEquals(Base.INSTANCE, m.style());
             var bundled = new HashSet<Component<?>>();
@@ -45,12 +45,12 @@ class HouseModulesTest {
 
     @Test
     void eachHouseStyle_aModule_anotherStyleNone() {
-        for (DesignStyle<BaseScheme> s : HouseModules.STYLE_JARS.keySet()) {
+        for (DesignStyle<BaseScheme> s : HouseModules.INSTANCE.styleJars().keySet()) {
             StyleModule<BaseScheme, DesignStyle<BaseScheme>> m = MODULES.style(s);
             assertEquals(s, m.style());
             assertTrue(!m.bundles().isEmpty(), s.token() + " refines some component");
         }
-        assertEquals(7, HouseModules.STYLE_JARS.size());
+        assertEquals(7, HouseModules.INSTANCE.styleJars().size());
         String none = assertThrows(IllegalArgumentException.class, () -> MODULES.style(Base.INSTANCE)).getMessage();
         assertEquals("base is no house style: it has no jar of the house's", none);
     }
@@ -61,7 +61,7 @@ class HouseModulesTest {
                 .style(Editorial.INSTANCE, MODULES.style(Editorial.INSTANCE))
                 .style(Sketchy.INSTANCE, MODULES.style(Sketchy.INSTANCE))
                 .build();
-        var house = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.MODULES);
+        var house = HouseTaxonomy.INSTANCE.read(HouseTaxonomy.INSTANCE.modules());
         assertEquals(new HashSet<>(house.components()), new HashSet<>(styles.taxonomy().components()));
         assertEquals(new HashSet<>(house.castings()), new HashSet<>(styles.taxonomy().castings()));
         assertEquals(house.roles(), styles.taxonomy().roles(), "the catalogue whole, in its order");

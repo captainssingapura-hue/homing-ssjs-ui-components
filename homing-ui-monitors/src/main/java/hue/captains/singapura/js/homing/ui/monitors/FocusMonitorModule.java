@@ -38,7 +38,7 @@ public record FocusMonitorModule() implements Widget<Widget._None, FocusMonitorM
 
     @Override
     public ImportsFor<FocusMonitorModule> imports() {
-        return ImportsFor.<FocusMonitorModule>builder()
+        return new ImportsFor._Builder<FocusMonitorModule>()
                 .add(new ModuleImports<>(List.of(new CastingsModule.ROLE()), CastingsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ListRowModule.ListRow()), ListRowModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new focusParty()), FocusPartyModule.INSTANCE))

@@ -7,15 +7,14 @@ import hue.captains.singapura.js.homing.core.EsModule;
 import hue.captains.singapura.js.homing.core.Exportable;
 import hue.captains.singapura.js.homing.core.ExportsOf;
 import hue.captains.singapura.js.homing.core.ImportsFor;
-import hue.captains.singapura.js.homing.core.ModuleNameResolver;
-import hue.captains.singapura.js.homing.core.SelfContent;
 import hue.captains.singapura.js.homing.ui.controllability.ControlCatalogue;
 import hue.captains.singapura.js.homing.ui.controllability.ControlOption;
 import hue.captains.singapura.js.homing.ui.controllability.ControlType;
 import hue.captains.singapura.js.homing.ui.controllability.HouseControllability;
 import hue.captains.singapura.js.homing.ui.controllability.WithExtent;
 import hue.captains.singapura.js.homing.ui.controllability.WithSwitch;
-import hue.captains.singapura.js.homing.design.styling.InstalledStyling;
+import hue.captains.singapura.js.homing.design.styling.StyledModule;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,14 +32,14 @@ import java.util.stream.Collectors;
  *       each axis it varies along, then its type's options.</li>
  * </ul>
  */
-public record ControlLeavesModule() implements EsModule<ControlLeavesModule>, SelfContent {
+public record ControlLeavesModule() implements EsModule<ControlLeavesModule>, StyledModule {
 
     public static final ControlLeavesModule INSTANCE = new ControlLeavesModule();
 
     public record CONTROL_TYPE_OF() implements Exportable._Constant<ControlLeavesModule> {}
     public record CONTROL_OPTIONS_OF() implements Exportable._Constant<ControlLeavesModule> {}
 
-    @Override public ImportsFor<ControlLeavesModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<ControlLeavesModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<ControlLeavesModule> exports() {
@@ -48,9 +47,9 @@ public record ControlLeavesModule() implements EsModule<ControlLeavesModule>, Se
     }
 
     @Override
-    public List<String> selfContent(ModuleNameResolver resolver) {
+    public List<String> selfContent(Styling styling) {
         var house = HouseControllability.INSTANCE;
-        Taxonomy taxonomy = InstalledStyling.get().taxonomy();
+        Taxonomy taxonomy = styling.taxonomy();
         List<Component<?>> leaves = taxonomy.components().stream().filter(c -> !(c instanceof VirtualComponent<?>)).toList();   // a design draws a virtual leaf; nothing controls it
         var byType = new LinkedHashMap<String, List<String>>();          // a control type → the leaves of it, in the taxonomy's order
         var byOptions = new LinkedHashMap<List<String>, List<String>>(); // what leaves are controlled by → those leaves
@@ -73,7 +72,7 @@ public record ControlLeavesModule() implements EsModule<ControlLeavesModule>, Se
                 "const CONTROL_OPTIONS_OF = Object.freeze(Object.fromEntries([\n    " + optionsOf + "\n].flatMap(([options, leaves]) => leaves.map((leaf) => [leaf, options]))));");
     }
 
-    private static String listed(List<String> tokens) { return "[" + tokens.stream().map(ControlLeavesModule::quoted).collect(Collectors.joining(", ")) + "]"; }
+    private String listed(List<String> tokens) { return "[" + tokens.stream().map(this::quoted).collect(Collectors.joining(", ")) + "]"; }
 
-    private static String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
+    private String quoted(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"") + "\""; }
 }

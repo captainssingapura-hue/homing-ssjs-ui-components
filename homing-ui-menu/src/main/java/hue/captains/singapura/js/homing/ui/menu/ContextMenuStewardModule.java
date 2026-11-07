@@ -31,20 +31,21 @@ public record ContextMenuStewardModule() implements DomModule<ContextMenuSteward
     public record ContextMenuSteward() implements BranchComponent<ContextMenuStewardModule>, NeedKeyboard {
         @Override public String summary() { return "One per page: the kinds, one instance each, the layer, and the one menu active."; }
         /** Claimed on open, given back on close, closed when taken: the open menu's keys. */
-        public static final List<KeyBinding> KEYS = List.of(
-                KeyBinding.of(Key.ESCAPE, "the menu closed"), KeyBinding.of(Key.TAB, "held: the focus stays in the menu"),
-                KeyBinding.of(Key.ARROW_DOWN, "the next row"), KeyBinding.of(Key.ARROW_UP, "the previous row"),
-                KeyBinding.of(Key.HOME, "the first row"), KeyBinding.of(Key.END, "the last row"),
-                KeyBinding.of(Key.ARROW_RIGHT, "into the row's submenu"), KeyBinding.of(Key.ARROW_LEFT, "back out of a submenu"),
-                KeyBinding.of(Key.ENTER, "the row activated"), KeyBinding.of(Key.SPACE, "the row activated"));
-        @Override public List<KeyBinding> keys() { return KEYS; }
+        @Override public List<KeyBinding> keys() {
+            return List.of(
+                new KeyBinding(Key.ESCAPE, "the menu closed"), new KeyBinding(Key.TAB, "held: the focus stays in the menu"),
+                new KeyBinding(Key.ARROW_DOWN, "the next row"), new KeyBinding(Key.ARROW_UP, "the previous row"),
+                new KeyBinding(Key.HOME, "the first row"), new KeyBinding(Key.END, "the last row"),
+                new KeyBinding(Key.ARROW_RIGHT, "into the row's submenu"), new KeyBinding(Key.ARROW_LEFT, "back out of a submenu"),
+                new KeyBinding(Key.ENTER, "the row activated"), new KeyBinding(Key.SPACE, "the row activated"));
+        }
     }
 
     public static final ContextMenuStewardModule INSTANCE = new ContextMenuStewardModule();
 
     @Override
     public ImportsFor<ContextMenuStewardModule> imports() {
-        return ImportsFor.<ContextMenuStewardModule>builder()
+        return new ImportsFor._Builder<ContextMenuStewardModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ContextMenuStewardBehaviorModule.ContextMenuStewardBehavior()), ContextMenuStewardBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MenuStyles.cm_layer(), new MenuStyles.cm_specimen()), MenuStyles.INSTANCE))

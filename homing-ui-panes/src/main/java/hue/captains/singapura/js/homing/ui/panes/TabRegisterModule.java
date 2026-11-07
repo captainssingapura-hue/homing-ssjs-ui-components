@@ -27,7 +27,7 @@ public record TabRegisterModule() implements DomModule<TabRegisterModule> {
 
     @Override
     public ImportsFor<TabRegisterModule> imports() {
-        return ImportsFor.<TabRegisterModule>builder()
+        return new ImportsFor._Builder<TabRegisterModule>()
                 .add(new ModuleImports<>(List.of(new TabPaneModule.TabPane()), TabPaneModule.INSTANCE))
                 .build();
     }

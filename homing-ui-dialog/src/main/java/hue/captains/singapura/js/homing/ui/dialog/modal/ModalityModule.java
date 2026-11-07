@@ -26,7 +26,7 @@ public record ModalityModule() implements EsModule<ModalityModule> {
 
     public static final ModalityModule INSTANCE = new ModalityModule();
 
-    @Override public ImportsFor<ModalityModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<ModalityModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<ModalityModule> exports() {

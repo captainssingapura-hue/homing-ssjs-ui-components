@@ -24,7 +24,7 @@ public record DropMarkModule() implements DomModule<DropMarkModule>, ImplFor<Hou
 
     @Override
     public ImportsFor<DropMarkModule> imports() {
-        return ImportsFor.<DropMarkModule>builder()
+        return new ImportsFor._Builder<DropMarkModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

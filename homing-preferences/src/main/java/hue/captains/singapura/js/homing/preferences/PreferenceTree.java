@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.preferences;
 
-import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.tao.ontology.Immutable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.Objects;
  * preference's name: a setting names the preference it writes in its
  * widget's params, and a group has no name to write.</p>
  */
-public record PreferenceTree(PreferenceNode root, Map<String, PreferenceNode> byPath) {
+public record PreferenceTree(PreferenceNode root, Map<String, PreferenceNode> byPath) implements Immutable {
 
     public PreferenceTree {
         Objects.requireNonNull(root, "PreferenceTree.root");
@@ -26,27 +26,14 @@ public record PreferenceTree(PreferenceNode root, Map<String, PreferenceNode> by
     }
 
     /** Reads and checks the tree under {@code root}, levelling it from zero. */
-    public static PreferenceTree of(PreferenceNode root) {
-        PreferenceNode levelled = Objects.requireNonNull(root, "root").atDepth(0);
-        var byPath = new LinkedHashMap<String, PreferenceNode>();
-        walk(levelled, levelled.segment().value(), byPath);
-        return new PreferenceTree(levelled, byPath);
-    }
-
-    private static void walk(PreferenceNode node, String path, Map<String, PreferenceNode> byPath) {
-        byPath.put(path, node);
-        var seen = new java.util.HashSet<NodeName>();
-        for (PreferenceNode c : node.children()) {
-            if (!seen.add(c.segment())) {
-                throw new IllegalArgumentException("Two children of '" + path + "' share the segment '" + c.segment() + "'");
-            }
-            walk(c, path + "/" + c.segment().value(), byPath);
-        }
+    public PreferenceTree(PreferenceNode root) {
+        this(PreferencePaths.INSTANCE.levelled(root), PreferencePaths.INSTANCE.of(PreferencePaths.INSTANCE.levelled(root)));
     }
 
     /** Every path, root first, each parent before its children. */
     public List<String> paths() { return new ArrayList<>(byPath.keySet()); }
 
+    /** The node at {@code path}; refuses a path no node has. */
     public PreferenceNode at(String path) {
         var n = byPath.get(path);
         if (n == null) throw new IllegalArgumentException("No preference node at '" + path + "'");

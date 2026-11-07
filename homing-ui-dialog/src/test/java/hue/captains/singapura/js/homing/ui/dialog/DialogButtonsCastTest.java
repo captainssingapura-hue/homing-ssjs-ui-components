@@ -38,9 +38,9 @@ class DialogButtonsCastTest extends UiDialogJsTest {
     @BeforeEach
     void load() {
         js = buildContext();
-        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(null)));
-        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(null)));
+        js.eval("js", String.join("\n", CastingsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", StatesAndEventsModule.INSTANCE.selfContent(STYLING)));
+        js.eval("js", String.join("\n", LookManifestModule.INSTANCE.selfContent(STYLING)));
         js.eval("js", "var style_sheet = 'style-sheet', palette_sheet = 'palette-sheet'; if (typeof CssClassManagerInstance === 'undefined') globalThis.CssClassManagerInstance = { cls: function (n) { return n; }, addClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.add(arguments[i]); }, removeClass: function (e) { for (var i = 1; i < arguments.length; i++) e.classList.remove(arguments[i]); }, hasClass: function (e, c) { return e.classList.contains(c); } };");
         loadModule("/homing/js/hue/captains/singapura/js/homing/server/StyledLeaves.js");
         loadModule("/homing/js/hue/captains/singapura/js/homing/ui/look/LookModule.js");

@@ -17,7 +17,7 @@ import java.util.Objects;
  * palette that fits it, each by the slug the styling gives it - the style's token alone in its own palette, the style's
  * then the palette's in another - the default first. A picker's two axes are the styles, each in its own palette, and
  * the palettes; a palette fits a style when the styling says it does. Nothing is rendered here: the look renders
- * itself, from the styling installed, for the theme a page is worn in - each icon's picture among it (D52).
+ * itself, from the styling, for the theme a page is worn in - each icon's picture among it (D52).
  */
 public final class StylingThemes implements ThemeRegistry {
 

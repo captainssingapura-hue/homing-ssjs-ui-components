@@ -28,12 +28,12 @@ public record FloatingPaneModule() implements DomModule<FloatingPaneModule>, Imp
 
     @Override
     public ImportsFor<FloatingPaneModule> imports() {
-        return ImportsFor.<FloatingPaneModule>builder()
+        return new ImportsFor._Builder<FloatingPaneModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneBehaviorModule.FloatingPaneBehavior()), FloatingPaneBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TitleBarModule.TitleBar()), TitleBarModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.fp_frame(), new PaneStyles.fp_body(),
-                        new PaneStyles.fp_size(),new PaneStyles.fp_size_n(), new PaneStyles.fp_size_s(), new PaneStyles.fp_size_e(), new PaneStyles.fp_size_w(), new PaneStyles.fp_size_ne(), new PaneStyles.fp_size_nw(), new PaneStyles.fp_size_se(), new PaneStyles.fp_size_sw()), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FloatingPaneStyles.fp_frame(), new FloatingPaneStyles.fp_body(),
+                        new FloatingPaneStyles.fp_size(),new FloatingPaneStyles.fp_size_n(), new FloatingPaneStyles.fp_size_s(), new FloatingPaneStyles.fp_size_e(), new FloatingPaneStyles.fp_size_w(), new FloatingPaneStyles.fp_size_ne(), new FloatingPaneStyles.fp_size_nw(), new FloatingPaneStyles.fp_size_se(), new FloatingPaneStyles.fp_size_sw()), FloatingPaneStyles.INSTANCE))
                 .build();
     }
 

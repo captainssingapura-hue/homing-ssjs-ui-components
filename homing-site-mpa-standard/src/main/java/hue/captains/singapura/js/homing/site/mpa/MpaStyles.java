@@ -102,8 +102,8 @@ public record MpaStyles() implements CssGroup<MpaStyles> {
      * the second rule pins the slot itself when there is no root to pin.</p>
      */
     public record mpa_page_app() implements CssClass<MpaStyles>, InLayer<Layout> {
-        private static final String APP = "." + CssClassName.toCssName(mpa_main_full.class);
-        private static final String ROOT = "." + CssClassName.toCssName(mpa_root.class);
+        private static final String APP = "." + CssClassName.INSTANCE.toCssName(mpa_main_full.class);
+        private static final String ROOT = "." + CssClassName.INSTANCE.toCssName(mpa_root.class);
         @Override public String selector() { return "html:has(" + APP + ")"; }
         @Override public String body() { return """
             overflow: hidden;

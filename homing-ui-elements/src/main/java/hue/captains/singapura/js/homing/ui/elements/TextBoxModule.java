@@ -25,7 +25,7 @@ public record TextBoxModule() implements DomModule<TextBoxModule>, ImplFor<House
 
     @Override
     public ImportsFor<TextBoxModule> imports() {
-        return ImportsFor.<TextBoxModule>builder()
+        return new ImportsFor._Builder<TextBoxModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new InputBehaviorsModule.EditBehavior()), InputBehaviorsModule.INSTANCE))
                 .build();

@@ -27,16 +27,16 @@ public record BrandModule() implements DomModule<BrandModule>, ImplFor<HouseCont
 
     @Override
     public ImportsFor<BrandModule> imports() {
-        return ImportsFor.<BrandModule>builder()
+        return new ImportsFor._Builder<BrandModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new BrandMarkModule.BrandMark()), BrandMarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark()), WordmarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_brand(),
-                        new ElementStyles.el_brand_mark()
-                ), ElementStyles.INSTANCE))
+                        new SiteBarStyles.el_brand(),
+                        new SiteBarStyles.el_brand_mark()
+                ), SiteBarStyles.INSTANCE))
                 .build();
     }
 

@@ -1,19 +1,12 @@
 package hue.captains.singapura.js.homing.ui.menu;
 
-import hue.captains.singapura.js.homing.component.ComponentTrees;
-import hue.captains.singapura.js.homing.component.UiComponent;
-import hue.captains.singapura.js.homing.core.Crate;
-import hue.captains.singapura.js.homing.core.CrateEntry;
-import hue.captains.singapura.js.homing.core.DomModule;
 import hue.captains.singapura.js.homing.core.StampedParams;
 import hue.captains.singapura.js.homing.ui.menu.tree.ContextMenuKind;
 import hue.captains.singapura.js.homing.ui.menu.tree.MenuRow;
 import hue.captains.singapura.js.homing.ui.menu.tree.MenuTrees;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,45 +32,13 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
         kinds = List.copyOf(Objects.requireNonNull(kinds, "kinds"));
         var names = new HashSet<String>();
         for (ContextMenuKind<?> k : kinds) {
-            MenuTrees.requireValid(k);
+            MenuTrees.INSTANCE.requireValid(k);
             if (!names.add(k.kind())) throw new IllegalArgumentException("ContextMenuRegistry: kind declared twice: " + k.kind());
         }
     }
 
-    public static ContextMenuRegistry of(ContextMenuKind<?>... kinds) { return new ContextMenuRegistry(List.of(kinds)); }
-
-    /** The kinds the catalogued components of a crate closure need, each once: in catalogue order between components, by name within one — a set has no order, and a stamped module must. */
-    public static ContextMenuRegistry requiredBy(List<Crate> topLevel) {
-        var kinds = new LinkedHashMap<Class<?>, ContextMenuKind<?>>();
-        for (UiComponent<?> c : ComponentTrees.INSTANCE.components(topLevel))
-            if (c instanceof NeedContextMenu n)
-                for (ContextMenuKind<?> k : n.required().stream().sorted(Comparator.comparing(ContextMenuKind::kind)).toList()) kinds.putIfAbsent(k.getClass(), k);
-        return new ContextMenuRegistry(List.copyOf(kinds.values()));
-    }
-
-    /**
-     * The problems with the closure's needs: a need on something that is
-     * not a declared component, or on a component no catalogue lists — a
-     * need nobody can find registers nothing — and a need that names no
-     * kind. Empty when every need will be met by {@link #requiredBy}.
-     */
-    public static List<String> validate(List<Crate> topLevel) {
-        var problems = new ArrayList<String>();
-        var catalogued = new HashSet<Class<?>>();
-        for (UiComponent<?> c : ComponentTrees.INSTANCE.components(topLevel)) catalogued.add(c.getClass());
-        for (Crate crate : ComponentTrees.INSTANCE.closure(topLevel)) {
-            for (CrateEntry e : crate.entries()) {
-                for (var x : e.module().exports().exports()) {
-                    if (!(x instanceof NeedContextMenu n)) continue;
-                    String who = crate.name() + ": " + e.module().getClass().getSimpleName() + "." + x.getClass().getSimpleName();
-                    if (!(x instanceof UiComponent<?>) || !(e.module() instanceof DomModule<?>)) { problems.add(who + " needs context menus but is not a declared component"); continue; }
-                    if (!catalogued.contains(x.getClass())) problems.add(who + " needs context menus but no catalogue lists it");
-                    if (n.required() == null || n.required().isEmpty()) problems.add(who + " needs context menus but names no kind");
-                }
-            }
-        }
-        return List.copyOf(problems);
-    }
+    /** A registry of these kinds, each checked and none declared twice. */
+    public ContextMenuRegistry(ContextMenuKind<?>... kinds) { this(List.of(kinds)); }
 
     /** The kind by name, or null. */
     public ContextMenuKind<?> kind(String name) {
@@ -100,20 +61,20 @@ public record ContextMenuRegistry(List<ContextMenuKind<?>> kinds) {
         for (int i = 0; i < kinds.size(); i++) {
             if (i > 0) sb.append(',');
             var k = kinds.get(i);
-            sb.append(StampedParams.jsString(k.kind())).append(":{\"kind\":").append(StampedParams.jsString(k.kind())).append(",\"nodes\":");
+            sb.append(StampedParams.INSTANCE.jsString(k.kind())).append(":{\"kind\":").append(StampedParams.INSTANCE.jsString(k.kind())).append(",\"nodes\":");
             nodes(sb, k.children());
             sb.append('}');
         }
         return sb.append('}').toString();
     }
-    private static void nodes(StringBuilder sb, List<? extends MenuRow<?, ?>> rows) {
+    private void nodes(StringBuilder sb, List<? extends MenuRow<?, ?>> rows) {
         sb.append('[');
         for (int i = 0; i < rows.size(); i++) {
             if (i > 0) sb.append(',');
             var r = rows.get(i);
-            sb.append("{\"id\":").append(StampedParams.jsString(r.id())).append(",\"label\":").append(StampedParams.jsString(r.label()));
-            if (r.icon() != null) sb.append(",\"icon\":").append(StampedParams.jsString(r.icon().token()));
-            if (r.hint() != null) sb.append(",\"hint\":").append(StampedParams.jsString(r.hint()));
+            sb.append("{\"id\":").append(StampedParams.INSTANCE.jsString(r.id())).append(",\"label\":").append(StampedParams.INSTANCE.jsString(r.label()));
+            if (r.icon() != null) sb.append(",\"icon\":").append(StampedParams.INSTANCE.jsString(r.icon().token()));
+            if (r.hint() != null) sb.append(",\"hint\":").append(StampedParams.INSTANCE.jsString(r.hint()));
             if (r.section() != 0) sb.append(",\"section\":").append(r.section());
             if (r instanceof hue.captains.singapura.js.homing.ui.menu.tree.Checkable) sb.append(",\"checkable\":true");
             if (!r.children().isEmpty()) { sb.append(",\"nodes\":"); nodes(sb, r.children()); }

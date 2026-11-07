@@ -6,7 +6,7 @@ import hue.captains.singapura.js.homing.component.taxonomy.FixedValue;
 import hue.captains.singapura.js.homing.component.taxonomy.Part;
 import hue.captains.singapura.js.homing.component.taxonomy.Taxonomy;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,7 +46,7 @@ public record FixedTypes() implements StatelessFunctionalObject {
      * @param most    the most, or none for no most - one and at most one: one fixed object, or none
      * @param players the components that may play it, each's fixed object accepted
      */
-    public record Field(String name, int least, Integer most, List<Component<?>> players) implements ValueObject {
+    public record Field(String name, int least, Integer most, List<Component<?>> players) implements Scalar {
         public Field {
             Objects.requireNonNull(name, "Field.name");
             players = List.copyOf(players);

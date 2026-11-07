@@ -3,7 +3,7 @@ package hue.captains.singapura.js.homing.design.spec.house;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.ui.taxonomy.IconLeaf;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ import java.util.Objects;
  * @param pictures each icon it draws, with the picture it draws it as
  * @param <SC>     its style's colour scheme
  */
-public record IconPalette<SC extends ColorScheme>(DesignStyle<SC> style, Map<IconLeaf, IconPicture<? super SC>> pictures) implements ValueObject {
+public record IconPalette<SC extends ColorScheme>(DesignStyle<SC> style, Map<IconLeaf, IconPicture<? super SC>> pictures) implements Scalar {
 
     public IconPalette {
         Objects.requireNonNull(style, "IconPalette.style");

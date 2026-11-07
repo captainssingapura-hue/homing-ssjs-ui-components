@@ -23,7 +23,7 @@ public record HeadingModule() implements DomModule<HeadingModule>, ImplForBranch
 
     @Override
     public ImportsFor<HeadingModule> imports() {
-        return ImportsFor.<HeadingModule>builder()
+        return new ImportsFor._Builder<HeadingModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

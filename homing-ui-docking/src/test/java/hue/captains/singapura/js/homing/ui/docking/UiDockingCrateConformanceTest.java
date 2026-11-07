@@ -17,12 +17,12 @@ class UiDockingCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiDockingCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiDockingCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiDockingCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiDockingCrate.INSTANCE));
     }
 
     /** Each served JS module under the lane its crate entry declares: the primitives' DOM-owner discipline, the line limit for both. */
@@ -32,8 +32,8 @@ class UiDockingCrateConformanceTest {
         for (var entry : UiDockingCrate.INSTANCE.entries()) {
             if (!(entry.declaredType() instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
-            String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src));
+            String src = String.join("\n", ResourceReader.CLASSPATH.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
+            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(new ServedModule(m, type, src));
             assertEquals(List.of(), findings, () -> m + ": "
                     + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
             checked++;

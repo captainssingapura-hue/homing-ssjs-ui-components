@@ -55,8 +55,8 @@ public record TabOpenerModule() implements Widget<Widget._None, TabOpenerModule>
          */
         @Override public List<KeyBinding> keys() {
             return List.of(
-                    KeyBinding.of(Key.ESCAPE, "from a choice: the keys come back to the opener, and the room is not left"),
-                    KeyBinding.of(Key.ESCAPE, "from the opener: the keys go up to the dock"));
+                    new KeyBinding(Key.ESCAPE, "from a choice: the keys come back to the opener, and the room is not left"),
+                    new KeyBinding(Key.ESCAPE, "from the opener: the keys go up to the dock"));
         }
     }
 
@@ -66,7 +66,7 @@ public record TabOpenerModule() implements Widget<Widget._None, TabOpenerModule>
 
     @Override
     public ImportsFor<TabOpenerModule> imports() {
-        return ImportsFor.<TabOpenerModule>builder()
+        return new ImportsFor._Builder<TabOpenerModule>()
                 .add(new ModuleImports<>(List.of(new KickerModule.Kicker()), KickerModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_opener(),

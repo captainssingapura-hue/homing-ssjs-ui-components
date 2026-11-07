@@ -17,7 +17,7 @@ public record TitleBarBehaviorModule() implements DomModule<TitleBarBehaviorModu
 
     @Override
     public ImportsFor<TitleBarBehaviorModule> imports() {
-        return ImportsFor.<TitleBarBehaviorModule>builder()
+        return new ImportsFor._Builder<TitleBarBehaviorModule>()
                 .build();
     }
 

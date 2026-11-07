@@ -30,10 +30,10 @@ public final class UiControlPanelCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(ControlCatalogueModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(ControlLeavesModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(ControlsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(ControlPanelModule.INSTANCE),
-                CrateEntry.of(ControlPanelStyles.INSTANCE));
+                new CrateEntry(ControlCatalogueModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(ControlLeavesModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(ControlsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(ControlPanelModule.INSTANCE),
+                new CrateEntry(ControlPanelStyles.INSTANCE));
     }
 }

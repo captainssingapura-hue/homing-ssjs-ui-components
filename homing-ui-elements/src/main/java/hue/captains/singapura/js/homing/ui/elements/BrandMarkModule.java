@@ -25,7 +25,7 @@ public record BrandMarkModule() implements DomModule<BrandMarkModule>, ImplFor<H
 
     @Override
     public ImportsFor<BrandMarkModule> imports() {
-        return ImportsFor.<BrandMarkModule>builder()
+        return new ImportsFor._Builder<BrandMarkModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

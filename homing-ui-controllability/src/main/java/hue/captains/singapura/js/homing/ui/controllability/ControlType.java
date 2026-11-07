@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.ui.controllability;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * @param name    its name: lowercase letters, digits and hyphens, a letter first
  * @param options the options it takes, in the order a panel shows them
  */
-public record ControlType(String name, List<ControlOption<?>> options) implements ValueObject {
+public record ControlType(String name, List<ControlOption<?>> options) implements Scalar {
 
     /** A type's name: lowercase letters, digits and hyphens, a letter first. */
     public static final Pattern NAME = Pattern.compile("[a-z][a-z0-9-]*");
@@ -30,9 +30,9 @@ public record ControlType(String name, List<ControlOption<?>> options) implement
         if (!NAME.matcher(name).matches()) problems.add("the control type '" + name + "': lowercase letters, digits and hyphens, a letter first");
         var seen = new HashSet<ControlOption<?>>();
         for (ControlOption<?> o : options) {
-            if (!seen.add(o)) problems.add("the control type '" + name + "' takes " + ControlCatalogue.qualified(o) + " twice");
+            if (!seen.add(o)) problems.add("the control type '" + name + "' takes " + QualifiedNames.INSTANCE.of(o) + " twice");
             if (o instanceof WithExtent<?>)
-                problems.add("the control type '" + name + "' names " + ControlCatalogue.qualified(o) + ", set by degree: the axes are the component's own, from the taxonomy");
+                problems.add("the control type '" + name + "' names " + QualifiedNames.INSTANCE.of(o) + ", set by degree: the axes are the component's own, from the taxonomy");
         }
         if (!problems.isEmpty()) throw new RefusedControls(problems);
     }

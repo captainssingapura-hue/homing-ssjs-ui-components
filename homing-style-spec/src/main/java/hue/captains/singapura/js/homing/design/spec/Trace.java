@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec;
 
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +17,7 @@ import java.util.Objects;
  * @param passed  the layers asked that do not assign its component, in the order asked
  * @param end     what it wears: the implementation, of the layer whose assignment gives it
  */
-public record Trace(DesignStyle<?> style, Casting casting, List<DesignStyle<?>> passed, SpecRegistry.Worn end) implements ValueObject {
+public record Trace(DesignStyle<?> style, Casting casting, List<DesignStyle<?>> passed, SpecRegistry.Worn end) implements Scalar {
     public Trace {
         Objects.requireNonNull(style, "Trace.style");
         Objects.requireNonNull(casting, "Trace.casting");

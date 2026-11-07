@@ -25,7 +25,7 @@ public record BadgeModule() implements DomModule<BadgeModule>, ImplFor<HouseText
 
     @Override
     public ImportsFor<BadgeModule> imports() {
-        return ImportsFor.<BadgeModule>builder()
+        return new ImportsFor._Builder<BadgeModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

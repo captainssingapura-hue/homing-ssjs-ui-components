@@ -67,5 +67,5 @@ public record ElementPaths() implements DualTree<ElementPath> {
 
     @Override public List<String> kit() { return List.of("ElementPath"); }
 
-    private static Component<?> component(ElementPath path) { return path.parts().isEmpty() ? path.top() : path.parts().getLast().cast(); }
+    private Component<?> component(ElementPath path) { return path.parts().isEmpty() ? path.top() : path.parts().getLast().cast(); }
 }

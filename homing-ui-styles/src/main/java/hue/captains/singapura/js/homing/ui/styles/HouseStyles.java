@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.styles;
 
+import hue.captains.singapura.js.homing.base.lang.StatelessSingleton;
 import hue.captains.singapura.js.homing.design.semantic.ColorPalette;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.design.semantic.SchemeDeclaration;
@@ -12,12 +13,12 @@ import hue.captains.singapura.js.homing.design.styling.StyleRegistryBuilder;
 import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.design.styling.StylingInstance;
 import hue.captains.singapura.js.homing.ui.modules.HouseModules;
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The house's styles ready-made (RFC 0067, appendix The Style Jars): the house's own instance, for a site to reuse - both
@@ -28,8 +29,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * them; and each style's own palette, the one it is worn in unless another is asked for, chosen by hand (appendix
  * Semantic Colours and Flavours, D22) - a pairing neither a style nor a palette may know. Its schemes are registered
  * once, each by its declaration - the base's, BaseColours (D49) - and the palettes are the instance's registry of them,
- * apart from the styles, which care nothing for colours. A site hands the styling to its MPA, which installs it at
- * bootstrap.
+ * apart from the styles, which care nothing for colours. A site hands the styling to its MPA, which hands it to the
+ * server.
  *
  * <p>A site whose downstream jars bring components of their own hands in their base modules ({@link #styling(List)}),
  * registered after the house's - the grid's frame among them wherever the grid is: nothing is found on the classpath
@@ -38,17 +39,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>Its jar carries the house's family files, for reading: written when it is built (WriteStyleFamilies), served by a
  * deployed site from the classpath (StyleFamilies).</p>
  */
-public record HouseStyles() implements StylingInstance {
+public record HouseStyles() implements StylingInstance, StatelessFunctionalObject, StatelessSingleton {
 
     public static final HouseStyles INSTANCE = new HouseStyles();
 
     /** The styles served, the house's own first: it is the default. */
-    public static final List<DesignStyle<BaseScheme>> STYLES = List.of(
+    public List<DesignStyle<BaseScheme>> styles() {
+        return List.of(
             Editorial.INSTANCE, NeoBrutalism.INSTANCE, NeoFuturism.INSTANCE, Neumorphism.INSTANCE,
             Glassmorphism.INSTANCE, RetroFuturism.INSTANCE, Sketchy.INSTANCE);
+    }
 
     /** Each style's own palette, the one it is worn in unless another is asked for - the old designs' own colours. */
-    public static final Map<DesignStyle<BaseScheme>, ColorPalette<BaseScheme>> OWN = Map.of(
+    public Map<DesignStyle<BaseScheme>, ColorPalette<BaseScheme>> own() {
+        return Map.of(
             Editorial.INSTANCE, Harbour.INSTANCE,
             NeoBrutalism.INSTANCE, NeoBrutalismColours.INSTANCE,
             NeoFuturism.INSTANCE, NeoFuturismColours.INSTANCE,
@@ -56,26 +60,29 @@ public record HouseStyles() implements StylingInstance {
             Glassmorphism.INSTANCE, Frost.INSTANCE,
             RetroFuturism.INSTANCE, Synthwave.INSTANCE,
             Sketchy.INSTANCE, Marker.INSTANCE);
+    }
 
     /** The house's schemes, each by its declaration, registered once: the base scheme alone (D49). */
-    public static final List<SchemeDeclaration<?>> SCHEME_JARS = List.of(BaseColours.INSTANCE);
+    public List<SchemeDeclaration<?>> schemeJars() { return List.of(BaseColours.INSTANCE); }
 
     /** The house's jars of palettes, each by its declaration: the base scheme's eight, Harbour first and so the default. */
-    public static final List<PaletteDeclaration> PALETTE_JARS = List.of(BasePaletteDeclaration.INSTANCE);
+    public List<PaletteDeclaration> paletteJars() { return List.of(BasePaletteDeclaration.INSTANCE); }
 
-    /** The house's own instance, nothing a site adds: registered the first time it is asked for, and the same after. */
+    /** The house's own instance, nothing a site adds: registered anew by each call, so a site keeps the one it makes. */
     @Override public Styling styling() { return styling(List.of()); }
 
     /**
-     * The house's instance with a site's own base modules, registered after the house's: registered the first time these
-     * are asked for, and the same after - so the styling a site installs is the one its tests install.
+     * The house's instance with a site's own base modules, registered after the house's: registered anew by each call, so
+     * a site keeps the one it makes. The instance: the styles served over the house's styles, the house's palettes over
+     * its schemes, each style's own.
      */
     public Styling styling(List<? extends BaseModule<BaseScheme, Base>> more) {
-        return House.STYLINGS.computeIfAbsent(List.copyOf(more), this::register);
+        SchemeRegistry schemes = new SchemeRegistry(schemeJars());
+        return new Styling(styles(more), List.copyOf(styles()), new PaletteRegistry(paletteJars(), schemes), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(own()));
     }
 
     /** The house's styles: its base modules and a site's with the house's words, then each house style over Base with its module. */
-    private StyleManager styles(List<BaseModule<BaseScheme, Base>> more) {
+    private StyleManager styles(List<? extends BaseModule<BaseScheme, Base>> more) {
         var modules = HouseModules.INSTANCE;
         var base = new ArrayList<BaseModule<BaseScheme, Base>>(modules.base());
         base.addAll(more);
@@ -88,17 +95,5 @@ public record HouseStyles() implements StylingInstance {
                 .style(RetroFuturism.INSTANCE, modules.style(RetroFuturism.INSTANCE))
                 .style(Sketchy.INSTANCE, modules.style(Sketchy.INSTANCE))
                 .build();
-    }
-
-    /** The instance: the styles served over the house's styles, the house's palettes over its schemes, each style's own. */
-    private Styling register(List<BaseModule<BaseScheme, Base>> more) {
-        SchemeRegistry schemes = new SchemeRegistry(SCHEME_JARS);
-        return new Styling(styles(more), List.copyOf(STYLES), new PaletteRegistry(PALETTE_JARS, schemes), new LinkedHashMap<DesignStyle<?>, ColorPalette<?>>(OWN));
-    }
-
-    /** Each instance registered, by the site's base modules: each registered once. */
-    private static final class House {
-        private House() {}
-        static final Map<List<BaseModule<BaseScheme, Base>>, Styling> STYLINGS = new ConcurrentHashMap<>();
     }
 }

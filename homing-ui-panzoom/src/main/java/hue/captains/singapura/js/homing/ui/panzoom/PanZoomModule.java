@@ -18,7 +18,7 @@ public record PanZoomModule() implements EsModule<PanZoomModule> {
 
     public record PanZoom() implements Exportable._Class<PanZoomModule> {}
 
-    @Override public ImportsFor<PanZoomModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<PanZoomModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<PanZoomModule> exports() { return new ExportsOf<>(INSTANCE, List.of(new PanZoom())); }

@@ -27,12 +27,9 @@ public record WidgetProvider(Widget<?, ?> widget, Map<String, Object> params) {
         params = params == null ? Map.of() : java.util.Collections.unmodifiableMap(new LinkedHashMap<>(params));
     }
 
-    public static WidgetProvider of(Widget<?, ?> widget) {
-        return new WidgetProvider(widget, Map.of());
-    }
-
-    public static WidgetProvider of(Widget<?, ?> widget, Map<String, Object> params) {
-        return new WidgetProvider(widget, params);
+    /** The widget, with no params. */
+    public WidgetProvider(Widget<?, ?> widget) {
+        this(widget, Map.of());
     }
 
     /** This provider with one more param. */

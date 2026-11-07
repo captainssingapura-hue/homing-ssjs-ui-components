@@ -25,7 +25,7 @@ public record SeparatorModule() implements DomModule<SeparatorModule>, ImplFor<H
 
     @Override
     public ImportsFor<SeparatorModule> imports() {
-        return ImportsFor.<SeparatorModule>builder()
+        return new ImportsFor._Builder<SeparatorModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

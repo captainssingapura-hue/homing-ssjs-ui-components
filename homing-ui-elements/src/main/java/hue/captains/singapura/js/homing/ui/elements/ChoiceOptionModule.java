@@ -22,11 +22,11 @@ public record ChoiceOptionModule() implements DomModule<ChoiceOptionModule>, Imp
 
     @Override
     public ImportsFor<ChoiceOptionModule> imports() {
-        return ImportsFor.<ChoiceOptionModule>builder()
+        return new ImportsFor._Builder<ChoiceOptionModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ItemBehaviorModule.ItemBehavior()), ItemBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_choice_option(), new ElementStyles.el_choice_option_note()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ItemStyles.el_choice_option(), new ItemStyles.el_choice_option_note()), ItemStyles.INSTANCE))
                 .build();
     }
 

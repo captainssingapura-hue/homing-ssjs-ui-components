@@ -43,7 +43,7 @@ public record PaneKeysModule() implements EsModule<PaneKeysModule> {
 
     public static final PaneKeysModule INSTANCE = new PaneKeysModule();
 
-    @Override public ImportsFor<PaneKeysModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<PaneKeysModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<PaneKeysModule> exports() {

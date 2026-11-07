@@ -50,10 +50,12 @@ public abstract class PreferencesRegistry implements EsModule<PreferencesRegistr
         this.master = Objects.requireNonNull(master, "PreferencesRegistry.master");
     }
 
+    /** The preferences tree, as read from its root. */
     public PreferenceTree tree()   { return tree; }
+    /** The widget that shows the master. */
     public WidgetProvider master() { return master; }
 
-    @Override public ImportsFor<PreferencesRegistry> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<PreferencesRegistry> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<PreferencesRegistry> exports() {
@@ -93,10 +95,10 @@ public abstract class PreferencesRegistry implements EsModule<PreferencesRegistr
         out.put("tree", new Json.Raw(treeJson));
         out.put("master", provider(resolver, master, masterParams));
         out.put("nodes", nodes);
-        return Json.write(out);
+        return Json.INSTANCE.write(out);
     }
 
-    private static Map<String, Object> provider(ModuleNameResolver resolver, WidgetProvider p, Map<String, Object> params) {
+    private Map<String, Object> provider(ModuleNameResolver resolver, WidgetProvider p, Map<String, Object> params) {
         var out = new LinkedHashMap<String, Object>();
         out.put("module", resolver.resolve(p.widget()).basePath());
         out.put("export", p.widget().exports().exports().get(0).getClass().getSimpleName());   // the widget's class

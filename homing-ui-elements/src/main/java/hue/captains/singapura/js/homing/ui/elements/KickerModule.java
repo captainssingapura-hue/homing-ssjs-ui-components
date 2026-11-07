@@ -25,7 +25,7 @@ public record KickerModule() implements DomModule<KickerModule>, ImplFor<HouseTe
 
     @Override
     public ImportsFor<KickerModule> imports() {
-        return ImportsFor.<KickerModule>builder()
+        return new ImportsFor._Builder<KickerModule>()
                 .add(new ModuleImports<>(List.of(new TextModule.Text()), TextModule.INSTANCE))
                 .build();
     }

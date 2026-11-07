@@ -1,5 +1,6 @@
 package hue.captains.singapura.js.homing.ui.splitgrid;
 
+import hue.captains.singapura.js.homing.component.EventFields;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,12 +20,6 @@ public sealed interface SplitGridEvent {
 
     /** The kind: the record's simple name, the JS object's {@code kind}. */
     default String kind() { return getClass().getSimpleName(); }
-
-    private static String requireId(String id, String what) {
-        Objects.requireNonNull(id, what);
-        if (id.isEmpty()) throw new IllegalArgumentException(what + ": must not be empty");
-        return id;
-    }
 
     /** A split's children were re-shared, by a divider drag or by {@code setRatios}; the ratios sum to one. */
     record TracksChanged(String path, List<Double> ratios) implements SplitGridEvent {
@@ -46,8 +41,8 @@ public sealed interface SplitGridEvent {
     /** A cell was subdivided: a new, empty cell beside it on the side named — left, right, top or bottom — each taking half the room. */
     record Subdivided(String cellId, String newCellId, String side) implements SplitGridEvent {
         public Subdivided {
-            requireId(cellId, "Subdivided.cellId");
-            requireId(newCellId, "Subdivided.newCellId");
+            EventFields.INSTANCE.id(cellId, "Subdivided.cellId");
+            EventFields.INSTANCE.id(newCellId, "Subdivided.newCellId");
             Objects.requireNonNull(side, "Subdivided.side");
             if (!List.of("left", "right", "top", "bottom").contains(side)) throw new IllegalArgumentException("Subdivided.side: left, right, top or bottom");
         }
@@ -61,15 +56,15 @@ public sealed interface SplitGridEvent {
      */
     record Removed(String cellId, String toward) implements SplitGridEvent {
         public Removed {
-            requireId(cellId, "Removed.cellId");
-            if (toward != null) requireId(toward, "Removed.toward");
+            EventFields.INSTANCE.id(cellId, "Removed.cellId");
+            if (toward != null) EventFields.INSTANCE.id(toward, "Removed.toward");
         }
     }
 
     /** A mirror's cursor is at a cell: moved there by an arrow — left, right, up, down — a pointer, or a call. */
     record CursorMoved(String cellId, String by) implements SplitGridEvent {
         public CursorMoved {
-            requireId(cellId, "CursorMoved.cellId");
+            EventFields.INSTANCE.id(cellId, "CursorMoved.cellId");
             Objects.requireNonNull(by, "CursorMoved.by");
             if (!List.of("left", "right", "up", "down", "pointer", "call").contains(by)) throw new IllegalArgumentException("CursorMoved.by: left, right, up, down, pointer or call");
         }

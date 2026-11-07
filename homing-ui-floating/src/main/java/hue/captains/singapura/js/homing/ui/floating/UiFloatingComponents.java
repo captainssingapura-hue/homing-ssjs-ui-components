@@ -15,6 +15,6 @@ public record UiFloatingComponents() implements C0_Components<UiFloatingComponen
 
     @Override public List<ComponentEntry<UiFloatingComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new FloatLayerModule.FloatLayer()));   // the floating pane the panes' now (23 Oct)
+                new ComponentEntry.OfComponent<>(this, new FloatLayerModule.FloatLayer()));   // the floating pane the panes' now (23 Oct)
     }
 }

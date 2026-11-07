@@ -35,16 +35,16 @@ public final class UiMenuCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(ContextMenuStewardModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(ContextMenuStewardBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(MenuBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(ContextMenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(L1MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(L2MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
-                CrateEntry.of(MenuEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(MenuGeometryModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(MenuTreeModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                CrateEntry.of(MenuStyles.INSTANCE));
+                new CrateEntry(ContextMenuStewardModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(ContextMenuStewardBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(MenuBehaviorModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(ContextMenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(L1MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(L2MenuModule.INSTANCE, StandardJsModuleType.PRIMITIVE),
+                new CrateEntry(MenuEventsModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(MenuGeometryModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(MenuTreeModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
+                new CrateEntry(MenuStyles.INSTANCE));
     }
 }

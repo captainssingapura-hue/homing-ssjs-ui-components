@@ -28,7 +28,7 @@ public record PaneTabsModule() implements DomModule<PaneTabsModule> {
 
     @Override
     public ImportsFor<PaneTabsModule> imports() {
-        return ImportsFor.<PaneTabsModule>builder()
+        return new ImportsFor._Builder<PaneTabsModule>()
                 .add(new ModuleImports<>(List.of(new PaneEventsModule.PaneEvents()), PaneEventsModule.INSTANCE))
                 .build();
     }

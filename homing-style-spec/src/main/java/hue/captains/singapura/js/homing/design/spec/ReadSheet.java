@@ -6,6 +6,7 @@ import hue.captains.singapura.js.homing.design.Extent;
 import hue.captains.singapura.js.homing.design.Growth;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.tree.NodeName;
+import hue.captains.singapura.js.homing.tree.NodeNames;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
@@ -36,6 +37,10 @@ public record ReadSheet() implements StatelessFunctionalObject {
     private static final Pattern KEYFRAMES = Pattern.compile("@keyframes\\s+\\$([a-z][a-z0-9-]*)");
     private static final Pattern USE = Pattern.compile("\\$([a-z][a-z0-9-]*)");
 
+    /**
+     * The sheet of {@code style} as {@code spec} serves it; refuses a style no page wears, and names every content it
+     * cannot find.
+     */
     public StyleSheet read(SpecRegistry spec, DesignStyle<?> style) {
         if (!spec.selectable().contains(style))
             throw new IllegalArgumentException(style.token() + " is no style a page wears: the base layer stands alone nowhere");
@@ -67,7 +72,7 @@ public record ReadSheet() implements StatelessFunctionalObject {
 
     /** An implementation's name in a sheet, its keyframes' prefix: its layer, then its own name - {@code editorial___plain-button}. */
     public String name(SpecRegistry.Worn worn) {
-        return worn.layer().token() + "___" + NodeName.ofType(worn.impl().getClass(), "").value();
+        return worn.layer().token() + "___" + NodeNames.INSTANCE.ofType(worn.impl().getClass(), "").value();
     }
 
     /** The selector of the castings that wear a rule: the one class, or every one of them in an {@code :is()}. */
@@ -92,7 +97,7 @@ public record ReadSheet() implements StatelessFunctionalObject {
         return out;
     }
 
-    private static String css(DesignStyle<?> style, List<StyleSheet.Rule> rules) {
+    private String css(DesignStyle<?> style, List<StyleSheet.Rule> rules) {
         var css = new StringBuilder();
         css.append("/* ").append(style.token()).append(" - its sheet (RFC 0071, RFC 0067 D54): one rule for each implementation a casting wears in ")
            .append(style.token()).append(",\n   its selector the castings that wear it. Generated; do not edit. */\n")

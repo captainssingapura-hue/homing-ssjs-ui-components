@@ -25,7 +25,7 @@ public record CheckboxModule() implements DomModule<CheckboxModule>, ImplFor<Hou
 
     @Override
     public ImportsFor<CheckboxModule> imports() {
-        return ImportsFor.<CheckboxModule>builder()
+        return new ImportsFor._Builder<CheckboxModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new InputBehaviorsModule.CheckBehavior()), InputBehaviorsModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ElementStyles.el_checkbox()), ElementStyles.INSTANCE))

@@ -27,49 +27,56 @@ public final class HouseControls {
 
     private HouseControls() {}
 
-    /** What every button has: it may be off; how many times it was clicked; and the browser's - the pointer over it, its focus shown, the hand down on it. */
-    private static final List<StateType<?>> A_BUTTON = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Clicks.INSTANCE,
-            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE);
+    /** The states the controls share, by what they are. */
+    private enum StatesOf {
+        /** What every button has: it may be off; how many times it was clicked; and the browser's - the pointer over it, its focus shown, the hand down on it. */
+        A_BUTTON(List.of(HouseStates.Enabled.INSTANCE, HouseStates.Clicks.INSTANCE,
+            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE)),
+        /** What a toggle has instead of a count: it may be on - what its click flips. */
+        A_TOGGLE(List.of(HouseStates.Enabled.INSTANCE, HouseStates.Pressed.INSTANCE,
+            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE)),
+        /** A crumb's states: whether it is the step that is this page; how many times it was clicked. */
+        A_CRUMB(List.of(HouseStates.Current.INSTANCE, HouseStates.Clicks.INSTANCE,
+            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE)),
+        /** What the browser's own inputs have: they may be off; their focus shown. */
+        AN_INPUT(List.of(HouseStates.Enabled.INSTANCE, HouseStates.Focused.INSTANCE)),
+        /** What a box ticked, or a switch, has besides: it may be on. */
+        A_CHECK(List.of(HouseStates.Enabled.INSTANCE, HouseStates.Checked.INSTANCE,
+            HouseStates.Focused.INSTANCE)),
+        /** What the range has: it may be off; its degree; whether the hand holds it; its focus shown. */
+        A_RANGE(List.of(HouseStates.Enabled.INSTANCE, HouseStates.Degree.INSTANCE,
+            HouseStates.Dragging.INSTANCE, HouseStates.Focused.INSTANCE)),
+        /** What a text box has besides: what is typed so far, and what the user is done typing. */
+        A_TEXT_BOX(List.of(HouseStates.Enabled.INSTANCE, HouseStates.DraftText.INSTANCE,
+            HouseStates.CommittedText.INSTANCE, HouseStates.Focused.INSTANCE)),
+        /** What a select has besides: the option chosen. */
+        A_SELECT(List.of(HouseStates.Enabled.INSTANCE, HouseStates.ChosenOption.INSTANCE,
+            HouseStates.Focused.INSTANCE)),
+        /** What the brand has: its focus shown. */
+        A_BRAND(List.of(HouseStates.Focused.INSTANCE)),
+        /** What a way somewhere has: how many times it was clicked; the browser's - the pointer over it, its focus shown. */
+        A_WAY(List.of(HouseStates.Clicks.INSTANCE, HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE));
 
-    /** What a toggle has instead of a count: it may be on - what its click flips. */
-    private static final List<StateType<?>> A_TOGGLE = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Pressed.INSTANCE,
-            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE, HouseStates.Down.INSTANCE);
+        private final List<StateType<?>> all;
 
-    /** A crumb's states: whether it is the step that is this page; how many times it was clicked. */
-    private static final List<StateType<?>> A_CRUMB = List.of(HouseStates.Current.INSTANCE, HouseStates.Clicks.INSTANCE,
-            HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
+        StatesOf(List<StateType<?>> all) { this.all = all; }
+    }
 
-    /** What the browser's own inputs have: they may be off; their focus shown. */
-    private static final List<StateType<?>> AN_INPUT = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Focused.INSTANCE);
 
-    /** What a box ticked, or a switch, has besides: it may be on. */
-    private static final List<StateType<?>> A_CHECK = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Checked.INSTANCE,
-            HouseStates.Focused.INSTANCE);
 
-    /** What the range has: it may be off; its degree; whether the hand holds it; its focus shown. */
-    private static final List<StateType<?>> A_RANGE = List.of(HouseStates.Enabled.INSTANCE, HouseStates.Degree.INSTANCE,
-            HouseStates.Dragging.INSTANCE, HouseStates.Focused.INSTANCE);
 
-    /** What a text box has besides: what is typed so far, and what the user is done typing. */
-    private static final List<StateType<?>> A_TEXT_BOX = List.of(HouseStates.Enabled.INSTANCE, HouseStates.DraftText.INSTANCE,
-            HouseStates.CommittedText.INSTANCE, HouseStates.Focused.INSTANCE);
 
-    /** What a select has besides: the option chosen. */
-    private static final List<StateType<?>> A_SELECT = List.of(HouseStates.Enabled.INSTANCE, HouseStates.ChosenOption.INSTANCE,
-            HouseStates.Focused.INSTANCE);
 
-    /** What a way somewhere has: how many times it was clicked; the browser's - the pointer over it, its focus shown. */
-    private static final List<StateType<?>> A_WAY = List.of(HouseStates.Clicks.INSTANCE, HouseStates.Hovered.INSTANCE, HouseStates.Focused.INSTANCE);
 
-    /** What the brand has: its focus shown. */
-    private static final List<StateType<?>> A_BRAND = List.of(HouseStates.Focused.INSTANCE);
+
+
 
     // ── buttons ──────────────────────────────────────────────────────────
 
     /** A button with no emphasis. */
     public record PlainButton() implements Leaf<Button>, WithRoles<HouseRoleSets.PlainButton> {
         public static final PlainButton INSTANCE = new PlainButton();
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BUTTON.all; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public HouseRoleSets.PlainButton roleSet() { return HouseRoleSets.PlainButton.INSTANCE; }
     }
@@ -77,7 +84,7 @@ public final class HouseControls {
     /** The one action a view leads with. */
     public record PrimaryButton() implements Leaf<Button>, WithRoles<HouseRoleSets.Committing> {
         public static final PrimaryButton INSTANCE = new PrimaryButton();
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BUTTON.all; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public HouseRoleSets.Committing roleSet() { return HouseRoleSets.Committing.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
@@ -86,7 +93,7 @@ public final class HouseControls {
     /** An action beside the primary one. */
     public record SecondaryButton() implements Leaf<Button> {
         public static final SecondaryButton INSTANCE = new SecondaryButton();
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BUTTON.all; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -94,7 +101,7 @@ public final class HouseControls {
     /** An action that destroys or cannot be undone. */
     public record DangerButton() implements Leaf<Button> {
         public static final DangerButton INSTANCE = new DangerButton();
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BUTTON.all; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -102,7 +109,7 @@ public final class HouseControls {
     /** An action that needs a second thought. */
     public record WarningButton() implements Leaf<Button> {
         public static final WarningButton INSTANCE = new WarningButton();
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BUTTON.all; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -110,7 +117,7 @@ public final class HouseControls {
     /** An action that confirms what went well. */
     public record SuccessButton() implements Leaf<Button> {
         public static final SuccessButton INSTANCE = new SuccessButton();
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BUTTON.all; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.COLOUR); }
     }
@@ -118,7 +125,7 @@ public final class HouseControls {
     /** A button that is on or off. */
     public record ToggleButton() implements Leaf<Button> {
         public static final ToggleButton INSTANCE = new ToggleButton();
-        @Override public List<StateType<?>> states() { return A_TOGGLE; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_TOGGLE.all; }
         @Override public Button parent() { return Button.INSTANCE; }
     }
 
@@ -129,7 +136,7 @@ public final class HouseControls {
      */
     public record IconButton() implements Composite<Button> {
         public static final IconButton INSTANCE = new IconButton();
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BUTTON.all; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public List<Slot<?>> parts() {
@@ -141,7 +148,7 @@ public final class HouseControls {
     public record CloseButton() implements Composite<Button>, WithRoles<HouseRoleSets.Managing> {
         public static final CloseButton INSTANCE = new CloseButton();
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
-        @Override public List<StateType<?>> states() { return A_BUTTON; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BUTTON.all; }
         @Override public Button parent() { return Button.INSTANCE; }
         @Override public HouseRoleSets.Managing roleSet() { return HouseRoleSets.Managing.INSTANCE; }
         /** Its face the close icon: the same cross wherever something closes, drawn once in each style. */
@@ -162,7 +169,7 @@ public final class HouseControls {
     public record Grip() implements Leaf<Handle> {
         public static final Grip INSTANCE = new Grip();
         @Override public Handle parent() { return Handle.INSTANCE; }
-        @Override public List<StateType<?>> states() { return AN_INPUT; }
+        @Override public List<StateType<?>> states() { return StatesOf.AN_INPUT.all; }
     }
 
 
@@ -174,7 +181,7 @@ public final class HouseControls {
         public static final Link INSTANCE = new Link();
         @Override public Way parent() { return Way.INSTANCE; }
         @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
-        @Override public List<StateType<?>> states() { return A_WAY; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_WAY.all; }
         /** At a size, as its owner gives it. */
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
     }
@@ -184,13 +191,13 @@ public final class HouseControls {
         public static final Crumb INSTANCE = new Crumb();
         @Override public Way parent() { return Way.INSTANCE; }
         @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
-        @Override public List<StateType<?>> states() { return A_CRUMB; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_CRUMB.all; }
     }
 
     /** A degree picked along the browser's own slider: what it is read as - a volume, a gain - is its caller's. */
     public record Range() implements Leaf<Input>, WithRoles<HouseRoleSets.Changing> {
         public static final Range INSTANCE = new Range();
-        @Override public List<StateType<?>> states() { return A_RANGE; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_RANGE.all; }
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }
     }
@@ -198,7 +205,7 @@ public final class HouseControls {
     /** A value picked from a list that drops down. */
     public record Select() implements Leaf<Input>, WithRoles<HouseRoleSets.Choosing> {
         public static final Select INSTANCE = new Select();
-        @Override public List<StateType<?>> states() { return A_SELECT; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_SELECT.all; }
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public HouseRoleSets.Choosing roleSet() { return HouseRoleSets.Choosing.INSTANCE; }
         /** At a size, as its owner gives it. */
@@ -208,7 +215,7 @@ public final class HouseControls {
     /** Words the user types: a line of them, or as many as they write - the browser's own editing. */
     public record TextBox() implements Leaf<Input> {
         public static final TextBox INSTANCE = new TextBox();
-        @Override public List<StateType<?>> states() { return A_TEXT_BOX; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_TEXT_BOX.all; }
         @Override public Input parent() { return Input.INSTANCE; }
         /** At a size, as its owner gives it. */
         @Override public List<ExtentAxis> extents() { return List.of(ExtentAxis.SIZE); }
@@ -217,7 +224,7 @@ public final class HouseControls {
     /** One thing on or off, by a mark in a box - the browser's own. */
     public record Checkbox() implements Leaf<Input> {
         public static final Checkbox INSTANCE = new Checkbox();
-        @Override public List<StateType<?>> states() { return A_CHECK; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_CHECK.all; }
         @Override public Input parent() { return Input.INSTANCE; }
     }
 
@@ -262,7 +269,7 @@ public final class HouseControls {
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Way parent() { return Way.INSTANCE; }
         @Override public HouseRoleSets.Going roleSet() { return HouseRoleSets.Going.INSTANCE; }
-        @Override public List<StateType<?>> states() { return A_BRAND; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_BRAND.all; }
         @Override public List<Slot<?>> parts() {
             return List.of(DSL.part(HouseMarks.BrandMark.INSTANCE).as(HouseSaying.Symbol.INSTANCE).one(),
                            DSL.part(HouseText.Wordmark.INSTANCE).as(HouseSaying.Name.INSTANCE).one());
@@ -272,7 +279,7 @@ public final class HouseControls {
     /** A setting that is on or off: a knob in a groove. Its word is its own. */
     public record Switch() implements Composite<Input>, WithRoles<HouseRoleSets.Changing> {
         public static final Switch INSTANCE = new Switch();
-        @Override public List<StateType<?>> states() { return A_CHECK; }
+        @Override public List<StateType<?>> states() { return StatesOf.A_CHECK.all; }
         private static final ComponentPartDSL DSL = ComponentPartDSL.INSTANCE;
         @Override public Input parent() { return Input.INSTANCE; }
         @Override public HouseRoleSets.Changing roleSet() { return HouseRoleSets.Changing.INSTANCE; }

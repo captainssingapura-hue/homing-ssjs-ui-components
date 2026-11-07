@@ -15,14 +15,14 @@ public record UiPanesComponents() implements C0_Components<UiPanesComponents> {
 
     @Override public List<ComponentEntry<UiPanesComponents>> leaves() {
         return List.of(
-                ComponentEntry.of(this, new MultiTabPaneModule.MultiTabPane()),
-                ComponentEntry.of(this, new SingleTabPaneModule.SingleTabPane()),
-                ComponentEntry.of(this, new TabModule.Tab()),
-                ComponentEntry.of(this, new TabStripModule.TabStrip()),
-                ComponentEntry.of(this, new FloatingPaneModule.FloatingPane()),
-                ComponentEntry.of(this, new TitleBarModule.TitleBar()),
-                ComponentEntry.of(this, new TabPaneModule.TabPane()),
-                ComponentEntry.of(this, new TabOpenerModule.TabOpener()),
-                ComponentEntry.of(this, new TabPickerModule.TabPicker()));
+                new ComponentEntry.OfComponent<>(this, new MultiTabPaneModule.MultiTabPane()),
+                new ComponentEntry.OfComponent<>(this, new SingleTabPaneModule.SingleTabPane()),
+                new ComponentEntry.OfComponent<>(this, new TabModule.Tab()),
+                new ComponentEntry.OfComponent<>(this, new TabStripModule.TabStrip()),
+                new ComponentEntry.OfComponent<>(this, new FloatingPaneModule.FloatingPane()),
+                new ComponentEntry.OfComponent<>(this, new TitleBarModule.TitleBar()),
+                new ComponentEntry.OfComponent<>(this, new TabPaneModule.TabPane()),
+                new ComponentEntry.OfComponent<>(this, new TabOpenerModule.TabOpener()),
+                new ComponentEntry.OfComponent<>(this, new TabPickerModule.TabPicker()));
     }
 }

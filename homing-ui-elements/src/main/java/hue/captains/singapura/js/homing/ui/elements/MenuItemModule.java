@@ -26,13 +26,13 @@ public record MenuItemModule() implements DomModule<MenuItemModule>, ImplForBran
 
     @Override
     public ImportsFor<MenuItemModule> imports() {
-        return ImportsFor.<MenuItemModule>builder()
+        return new ImportsFor._Builder<MenuItemModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ItemBehaviorModule.ItemBehavior()), ItemBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_menu_item(), new ElementStyles.el_menu_item_label(),
-                        new ElementStyles.el_menu_item_hint(), new ElementStyles.el_menu_item_lead()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ItemStyles.el_menu_item(), new ItemStyles.el_menu_item_label(),
+                        new ItemStyles.el_menu_item_hint(), new ItemStyles.el_menu_item_lead()), ItemStyles.INSTANCE))
                 .build();
     }
 

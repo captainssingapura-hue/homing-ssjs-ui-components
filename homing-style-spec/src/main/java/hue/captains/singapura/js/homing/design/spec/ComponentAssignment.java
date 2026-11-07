@@ -3,9 +3,11 @@ package hue.captains.singapura.js.homing.design.spec;
 import hue.captains.singapura.js.homing.component.taxonomy.Casting;
 import hue.captains.singapura.js.homing.component.taxonomy.Component;
 import hue.captains.singapura.js.homing.component.taxonomy.Role;
+import hue.captains.singapura.js.homing.component.taxonomy.WithRoles;
 import hue.captains.singapura.js.homing.design.color.ColorScheme;
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
+import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,9 +21,10 @@ import java.util.Optional;
  * its own, and in each role of its role set (D55) - each one of the component's own, of exactly this layer, by the
  * compiler. Whole: a layer that assigns a component assigns every casting of it; a layer that does not leaves the
  * component, whole, to the layer it is written over. Two castings meant alike name one implementation; no casting can
- * name another component's, and nothing delegates.
+ * name another component's, and nothing delegates. A component that looks alike in all its castings says so once.
  *
  * <pre>{@code
+ * new ComponentAssignment<>(HouseText.Readout.INSTANCE, new Readout())
  * new ComponentAssignment<>(HouseText.Label.INSTANCE, new Label(), List.of(
  *         new RoleAssignment<>(HouseSaying.Title.INSTANCE, new LabelTitle()),
  *         new RoleAssignment<>(HouseSaying.Name.INSTANCE, new Label())))
@@ -32,7 +35,7 @@ import java.util.Optional;
  * @param roles     each role with a look of its own it is cast in, each once, and the implementation it wears in it
  */
 public record ComponentAssignment<Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>>(
-        C component, CssImplementation<Sc, S, C> alone, List<RoleAssignment<Sc, S, C>> roles) implements ValueObject {
+        C component, CssImplementation<Sc, S, C> alone, List<RoleAssignment<Sc, S, C>> roles) implements Scalar {
 
     public ComponentAssignment {
         Objects.requireNonNull(component, "ComponentAssignment.component");
@@ -45,6 +48,22 @@ public record ComponentAssignment<Sc extends ColorScheme, S extends DesignStyle<
             if (new Casting(component, r.role()).functional())
                 throw new IllegalArgumentException(component.token() + " is assigned in " + r.role().name().value()
                         + ", a role that only places it: there it wears its look on its own");
+        }
+    }
+
+    /** A component that wears one implementation in every casting: on its own, and in each role of its set. */
+    public ComponentAssignment(C component, CssImplementation<Sc, S, C> every) {
+        this(component, every, EveryRole.INSTANCE.wearing(component, every));
+    }
+
+    /** Each role of a component's set, wearing one implementation; none for a component with no roles. */
+    private record EveryRole() implements StatelessFunctionalObject {
+        static final EveryRole INSTANCE = new EveryRole();
+
+        <Sc extends ColorScheme, S extends DesignStyle<Sc>, C extends Component<?>> List<RoleAssignment<Sc, S, C>> wearing(C component, CssImplementation<Sc, S, C> every) {
+            var out = new ArrayList<RoleAssignment<Sc, S, C>>();
+            if (component instanceof WithRoles<?> w) for (Role<?> role : w.roleSet().roles()) out.add(new RoleAssignment<>(role, every));
+            return out;
         }
     }
 

@@ -3,6 +3,7 @@ package hue.captains.singapura.js.homing.design.spec.house;
 import hue.captains.singapura.js.homing.component.taxonomy.ComponentModule;
 import hue.captains.singapura.js.homing.design.spec.BaseSpecModule;
 import hue.captains.singapura.js.homing.design.spec.ComponentAssignment;
+import hue.captains.singapura.js.homing.design.spec.styles.base.*;
 import hue.captains.singapura.js.homing.ui.styles.Base;
 import hue.captains.singapura.js.homing.ui.styles.BaseScheme;
 import hue.captains.singapura.js.homing.ui.taxonomy.HouseContainers;
@@ -26,9 +27,9 @@ public record UiMenuBaseSpec() implements BaseSpecModule<BaseScheme, Base> {
 
     @Override public List<ComponentAssignment<BaseScheme, Base, ?>> assignments() {
         return List.of(
-                new ComponentAssignment<>(HouseMenus.ContextMenuSteward.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenuSteward(), List.of()),
-                new ComponentAssignment<>(HouseContainers.ContextMenu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.ContextMenu(), List.of()),
-                new ComponentAssignment<>(HouseContainers.L1Menu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.L1Menu(), List.of()),
-                new ComponentAssignment<>(HouseContainers.L2Menu.INSTANCE, new hue.captains.singapura.js.homing.design.spec.styles.base.L2Menu(), List.of()));
+                new ComponentAssignment<>(HouseMenus.ContextMenuSteward.INSTANCE, new ContextMenuSteward()),
+                new ComponentAssignment<>(HouseContainers.ContextMenu.INSTANCE, new ContextMenu()),
+                new ComponentAssignment<>(HouseContainers.L1Menu.INSTANCE, new L1Menu()),
+                new ComponentAssignment<>(HouseContainers.L2Menu.INSTANCE, new L2Menu()));
     }
 }

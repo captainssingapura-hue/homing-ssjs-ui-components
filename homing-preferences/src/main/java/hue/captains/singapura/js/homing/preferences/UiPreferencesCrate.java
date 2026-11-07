@@ -33,14 +33,14 @@ public final class UiPreferencesCrate implements Crate, ComponentVehicle {
 
     @Override public List<CrateEntry> entries() {
         return List.of(
-                CrateEntry.of(PreferencesViewModule.INSTANCE),
-                CrateEntry.of(PreferenceFieldModule.INSTANCE),
-                CrateEntry.of(ChoiceWidgetModule.INSTANCE),
-                CrateEntry.of(ToggleWidgetModule.INSTANCE),
-                CrateEntry.of(ScaleWidgetModule.INSTANCE),
-                CrateEntry.of(SettingRowModule.INSTANCE),
-                CrateEntry.of(OverviewWidgetModule.INSTANCE),
-                CrateEntry.of(ListMasterWidgetModule.INSTANCE),
-                CrateEntry.of(PreferencesStyles.INSTANCE));
+                new CrateEntry(PreferencesViewModule.INSTANCE),
+                new CrateEntry(PreferenceFieldModule.INSTANCE),
+                new CrateEntry(ChoiceWidgetModule.INSTANCE),
+                new CrateEntry(ToggleWidgetModule.INSTANCE),
+                new CrateEntry(ScaleWidgetModule.INSTANCE),
+                new CrateEntry(SettingRowModule.INSTANCE),
+                new CrateEntry(OverviewWidgetModule.INSTANCE),
+                new CrateEntry(ListMasterWidgetModule.INSTANCE),
+                new CrateEntry(PreferencesStyles.INSTANCE));
     }
 }

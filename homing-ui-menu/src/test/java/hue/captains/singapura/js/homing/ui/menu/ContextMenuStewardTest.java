@@ -111,7 +111,7 @@ class ContextMenuStewardTest extends UiMenuJsTest {
         loadModule(P + "MenuEventsModule.js");
         loadModule(P + "MenuGeometryModule.js");
         loadModule(P + "MenuTreeModule.js");
-        TextsInJs.load(js, this::loadModule);   // the caption that is an item's hint, and the instance's icons a row leads with
+        TextsInJs.load(js, STYLING, this::loadModule);   // the caption that is an item's hint, and the instance's icons a row leads with
         for (String m : new String[] {"MarkBehaviorModule.js", "SeparatorModule.js", "ItemBehaviorModule.js", "MenuItemModule.js"})   // the separator between sections, and each row the house's menu item
             loadModule("/homing/js/hue/captains/singapura/js/homing/ui/elements/" + m);
         loadModule(P + "ContextMenuModule.js");

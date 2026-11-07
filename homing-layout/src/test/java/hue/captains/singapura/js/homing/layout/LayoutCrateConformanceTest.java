@@ -17,12 +17,12 @@ class LayoutCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(LayoutCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(LayoutCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(LayoutCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(LayoutCrate.INSTANCE));
     }
 
     @Test
@@ -30,8 +30,8 @@ class LayoutCrateConformanceTest {
         for (var entry : LayoutCrate.INSTANCE.entries()) {
             var type = (StandardJsModuleType) entry.declaredType();
             String m = entry.moduleClass();
-            String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src));
+            String src = String.join("\n", ResourceReader.CLASSPATH.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
+            var findings = DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(new ServedModule(m, type, src));
             assertEquals(List.of(), findings, () -> m + ": " + findings.stream().map(f -> f.rule().value() + "@" + f.line() + ": " + f.message()).toList());
         }
     }

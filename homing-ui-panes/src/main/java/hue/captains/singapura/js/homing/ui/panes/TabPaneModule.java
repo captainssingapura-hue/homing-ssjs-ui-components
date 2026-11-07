@@ -31,7 +31,7 @@ public record TabPaneModule() implements DomModule<TabPaneModule>, ImplFor<House
 
     @Override
     public ImportsFor<TabPaneModule> imports() {
-        return ImportsFor.<TabPaneModule>builder()
+        return new ImportsFor._Builder<TabPaneModule>()
                 .add(new ModuleImports<>(List.of(
                         new PaneStyles.mtp_tab_content(),
                         new PaneStyles.mtp_tab_content_hidden()

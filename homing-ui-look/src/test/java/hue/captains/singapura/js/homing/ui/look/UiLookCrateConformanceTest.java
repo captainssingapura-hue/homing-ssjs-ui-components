@@ -13,11 +13,11 @@ class UiLookCrateConformanceTest {
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiLookCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiLookCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiLookCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiLookCrate.INSTANCE));
     }
 }

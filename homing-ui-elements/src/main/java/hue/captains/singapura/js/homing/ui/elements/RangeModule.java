@@ -25,7 +25,7 @@ public record RangeModule() implements DomModule<RangeModule>, ImplFor<HouseCont
 
     @Override
     public ImportsFor<RangeModule> imports() {
-        return ImportsFor.<RangeModule>builder()
+        return new ImportsFor._Builder<RangeModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new InputBehaviorsModule.SlideBehavior()), InputBehaviorsModule.INSTANCE))
                 .build();

@@ -24,7 +24,7 @@ public record ChromeLayoutModule() implements DomModule<ChromeLayoutModule> {
 
     @Override
     public ImportsFor<ChromeLayoutModule> imports() {
-        return ImportsFor.<ChromeLayoutModule>builder()
+        return new ImportsFor._Builder<ChromeLayoutModule>()
                 .add(new ModuleImports<>(List.of(
                         new MpaStyles.mpa_page(),
                         new MpaStyles.mpa_root(),

@@ -1,6 +1,6 @@
 package hue.captains.singapura.js.homing.design.spec;
 
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +16,7 @@ import java.util.Optional;
  * @param rules each rule, in the order its implementation is first worn
  * @param css   the whole file: its head, then every rule
  */
-public record StyleSheet(String style, List<Rule> rules, String css) implements ValueObject {
+public record StyleSheet(String style, List<Rule> rules, String css) implements Scalar {
     public StyleSheet {
         Objects.requireNonNull(style, "StyleSheet.style");
         rules = List.copyOf(rules);
@@ -31,7 +31,7 @@ public record StyleSheet(String style, List<Rule> rules, String css) implements 
      * @param castings the classes of the castings that wear it, in the castings' order
      * @param css      its content, the marks filled in
      */
-    public record Rule(String name, SpecRegistry.Worn end, List<String> castings, String css) implements ValueObject {
+    public record Rule(String name, SpecRegistry.Worn end, List<String> castings, String css) implements Scalar {
         public Rule {
             Objects.requireNonNull(name, "Rule.name");
             Objects.requireNonNull(end, "Rule.end");

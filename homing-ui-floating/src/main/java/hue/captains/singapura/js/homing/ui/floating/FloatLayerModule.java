@@ -28,14 +28,14 @@ public record FloatLayerModule() implements DomModule<FloatLayerModule>, ImplFor
     public record FloatLayer() implements BranchComponent<FloatLayerModule>, NeedKeyboard {
         @Override public String summary() { return "The layer floating panes live on: its caller's floaters, stacked, the one in front in use."; }
         /** The desk holds the keys for its panes: the active pane's widget's first, whatever they are, then Escape - waiting, with the keys. */
-        @Override public List<KeyBinding> keys() { return List.of(KeyBinding.of(Key.ESCAPE, "the active pane closed, when it can be closed; after its widget")); }
+        @Override public List<KeyBinding> keys() { return List.of(new KeyBinding(Key.ESCAPE, "the active pane closed, when it can be closed; after its widget")); }
     }
 
     public static final FloatLayerModule INSTANCE = new FloatLayerModule();
 
     @Override
     public ImportsFor<FloatLayerModule> imports() {
-        return ImportsFor.<FloatLayerModule>builder()
+        return new ImportsFor._Builder<FloatLayerModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatLayerBehaviorModule.FloatLayerBehavior()), FloatLayerBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new FloatingPaneModule.FloatingPane()), FloatingPaneModule.INSTANCE))

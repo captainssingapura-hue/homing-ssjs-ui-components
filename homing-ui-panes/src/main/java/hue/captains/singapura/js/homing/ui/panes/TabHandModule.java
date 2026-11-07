@@ -25,7 +25,7 @@ public record TabHandModule() implements DomModule<TabHandModule> {
 
     @Override
     public ImportsFor<TabHandModule> imports() {
-        return ImportsFor.<TabHandModule>builder()
+        return new ImportsFor._Builder<TabHandModule>()
                 .add(new ModuleImports<>(List.of(new TabDragModule.TabDrag()), TabDragModule.INSTANCE))
                 .build();
     }

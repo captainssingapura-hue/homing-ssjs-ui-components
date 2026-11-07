@@ -29,16 +29,17 @@ public record SvgPanZoomModule() implements DomModule<SvgPanZoomModule>, ImplFor
         @Override public String summary() { return "An SVG in a viewport that zooms about the pointer and pans once zoomed in: the hand, the wheel and its own keys."; }
 
         /** Its keys, natively, while the viewport has the focus. */
-        public static final List<KeyBinding> KEYS = List.of(
-                KeyBinding.of(Key.PLUS, "zoom in"), KeyBinding.of(Key.MINUS, "zoom out"), KeyBinding.of(Key.DIGIT_0, "back to fit"),
-                KeyBinding.of(Key.ARROW_LEFT, "pan left"), KeyBinding.of(Key.ARROW_RIGHT, "pan right"),
-                KeyBinding.of(Key.ARROW_UP, "pan up"), KeyBinding.of(Key.ARROW_DOWN, "pan down"));
-        @Override public List<KeyBinding> keys() { return KEYS; }
+        @Override public List<KeyBinding> keys() {
+            return List.of(
+                new KeyBinding(Key.PLUS, "zoom in"), new KeyBinding(Key.MINUS, "zoom out"), new KeyBinding(Key.DIGIT_0, "back to fit"),
+                new KeyBinding(Key.ARROW_LEFT, "pan left"), new KeyBinding(Key.ARROW_RIGHT, "pan right"),
+                new KeyBinding(Key.ARROW_UP, "pan up"), new KeyBinding(Key.ARROW_DOWN, "pan down"));
+        }
     }
 
     @Override
     public ImportsFor<SvgPanZoomModule> imports() {
-        return ImportsFor.<SvgPanZoomModule>builder()
+        return new ImportsFor._Builder<SvgPanZoomModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new SvgPanZoomBehaviorModule.SvgPanZoomBehavior()), SvgPanZoomBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new PanZoomModule.PanZoom()), PanZoomModule.INSTANCE))

@@ -12,7 +12,7 @@ import hue.captains.singapura.js.homing.design.spec.dual.Roles;
 import hue.captains.singapura.js.homing.design.spec.dual.States;
 import hue.captains.singapura.js.homing.design.spec.dual.Styles;
 import hue.captains.singapura.tao.ontology.StatelessFunctionalObject;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 /**
  * Where a node is in the page's JS (RFC 0071): a pure function of the node alone - its Java type says which tree's dual
@@ -27,8 +27,9 @@ public record DualRef() implements StatelessFunctionalObject {
      * A node's place: the dual it is in, its name there, and the name a module imports it as - the tree's prefix first,
      * so two trees' nodes never share a name in one module.
      */
-    public record Ref(DualTree<?> tree, String name, String imported) implements ValueObject {}
+    public record Ref(DualTree<?> tree, String name, String imported) implements Scalar {}
 
+    /** Where {@code node} is in the page's JS; refuses what is no node of a tree the page names. */
     public Ref of(Object node) {
         return switch (node) {
             case Taxon t -> ref(Components.INSTANCE, t.token());
@@ -40,7 +41,7 @@ public record DualRef() implements StatelessFunctionalObject {
         };
     }
 
-    private static Ref ref(DualTree<?> tree, String token) {
+    private Ref ref(DualTree<?> tree, String token) {
         String name = JsLiterals.INSTANCE.name(token);
         return new Ref(tree, name, tree.prefix() + name);
     }

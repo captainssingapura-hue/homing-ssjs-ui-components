@@ -25,7 +25,7 @@ public record ToggleGrooveModule() implements DomModule<ToggleGrooveModule>, Imp
 
     @Override
     public ImportsFor<ToggleGrooveModule> imports() {
-        return ImportsFor.<ToggleGrooveModule>builder()
+        return new ImportsFor._Builder<ToggleGrooveModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

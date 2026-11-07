@@ -20,7 +20,7 @@ public record TabDragModule() implements EsModule<TabDragModule> {
 
     public static final TabDragModule INSTANCE = new TabDragModule();
 
-    @Override public ImportsFor<TabDragModule> imports() { return ImportsFor.noImports(); }
+    @Override public ImportsFor<TabDragModule> imports() { return new ImportsFor<>(); }
 
     @Override
     public ExportsOf<TabDragModule> exports() {

@@ -16,8 +16,8 @@ import hue.captains.singapura.js.homing.ui.taxonomy.UiElementsComponentModule;
 import hue.captains.singapura.js.homing.ui.taxonomy.UiIconsComponentModule;
 import hue.captains.singapura.js.homing.ui.elements.UiElementsStyleDeclaration;
 import hue.captains.singapura.js.homing.ui.icons.UiIconsStyleDeclaration;
+import hue.captains.singapura.js.homing.design.styling.Styling;
 import hue.captains.singapura.js.homing.ui.jarinstance.JarInstance;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -34,20 +34,17 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class UiControlPanelCrateConformanceTest {
 
     /** The jar's own instance (D51): the catalogue a page has is made from its taxonomy. */
-    @BeforeAll
-    static void theJarsInstance_installed() {
-        JarInstance.INSTANCE.install(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE),
-                List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE));
-    }
+    private static final Styling STYLING = JarInstance.INSTANCE.styling(List.of(UiElementsComponentModule.INSTANCE, UiIconsComponentModule.INSTANCE),
+            List.of(UiElementsStyleDeclaration.INSTANCE, UiIconsStyleDeclaration.INSTANCE, UiControlPanelStyleDeclaration.INSTANCE));
 
     @Test
     void everyServedModuleIsCrated() {
-        assertEquals(List.of(), OrphanCheck.check(UiControlPanelCrate.INSTANCE));
+        assertEquals(List.of(), OrphanCheck.INSTANCE.check(UiControlPanelCrate.INSTANCE));
     }
 
     @Test
     void importsRespectCrateBoundaries() {
-        assertEquals(List.of(), CrateDependencyRule.check(UiControlPanelCrate.INSTANCE));
+        assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiControlPanelCrate.INSTANCE));
     }
 
     /** The hand-written modules keep their lanes; the catalogue is generated, and has no file to read. */
@@ -60,8 +57,8 @@ class UiControlPanelCrateConformanceTest {
             if (!(declared instanceof StandardJsModuleType type) || type == StandardJsModuleType.GENERATED_CSS) continue;
             String m = entry.moduleClass();
             if (m.equals(ControlCatalogueModule.class.getName()) || m.equals(ControlLeavesModule.class.getName())) continue;
-            String src = String.join("\n", ResourceReader.INSTANCE.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
-            raw.addAll(DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(ServedModule.of(m, type, src)));
+            String src = String.join("\n", ResourceReader.CLASSPATH.getStringsFromResource("homing/js/" + m.replace('.', '/') + ".js"));
+            raw.addAll(DefaultJsRulePolicy.INSTANCE.rulesFor(type).checkAll(new ServedModule(m, type, src)));
             checked++;
         }
         assertEquals(2, checked, "the helper and the panel, a widget; the catalogue is generated, the styles a sheet");
@@ -80,7 +77,7 @@ class UiControlPanelCrateConformanceTest {
 
     @Test
     void theCatalogueAPageHas_isTheDeclarations() {
-        String js = String.join("\n", ControlCatalogueModule.INSTANCE.selfContent(null)) + "\n" + String.join("\n", ControlLeavesModule.INSTANCE.selfContent(null));
+        String js = String.join("\n", ControlCatalogueModule.INSTANCE.selfContent(null)) + "\n" + String.join("\n", ControlLeavesModule.INSTANCE.selfContent(STYLING));
         assertTrue(js.contains("\"size\": Object.freeze({ category: \"degrees\", means: \"extent\", rest: 0, method: \"size\", label: \"Size\" })"), js);
         assertTrue(js.contains("\"colour\": Object.freeze({ category: \"degrees\", means: \"extent\", rest: 1, method: \"extent\", label: \"Colour\" })"), js);
         assertTrue(js.contains("\"enabled\": Object.freeze({ category: \"states\", means: \"switch\", rest: true, method: \"setOn\", label: \"Enabled\" })"), js);

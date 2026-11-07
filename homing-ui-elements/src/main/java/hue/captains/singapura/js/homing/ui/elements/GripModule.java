@@ -25,7 +25,7 @@ public record GripModule() implements DomModule<GripModule>, ImplFor<HouseContro
 
     @Override
     public ImportsFor<GripModule> imports() {
-        return ImportsFor.<GripModule>builder()
+        return new ImportsFor._Builder<GripModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
                 .build();

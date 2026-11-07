@@ -2,7 +2,7 @@ package hue.captains.singapura.js.homing.design.spec.house;
 
 import hue.captains.singapura.js.homing.design.semantic.DesignStyle;
 import hue.captains.singapura.js.homing.ui.taxonomy.IconLeaf;
-import hue.captains.singapura.tao.ontology.ValueObject;
+import hue.captains.singapura.tao.ontology.Scalar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ import java.util.Objects;
  * @param base   base's palette
  * @param styles each style's palette that draws something of its own
  */
-public record IconPictures(List<IconLeaf> icons, IconPalette<?> base, List<IconPalette<?>> styles) implements ValueObject {
+public record IconPictures(List<IconLeaf> icons, IconPalette<?> base, List<IconPalette<?>> styles) implements Scalar {
 
     public IconPictures {
         Objects.requireNonNull(icons, "IconPictures.icons");
