@@ -32,11 +32,11 @@ public record SiteBarModule() implements DomModule<SiteBarModule>, ImplFor<House
                 .add(new ModuleImports<>(List.of(new BrandModule.Brand()), BrandModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TrailModule.Trail()), TrailModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_site_bar(),
-                        new ElementStyles.el_site_bar_start(),
-                        new ElementStyles.el_site_bar_way(),
-                        new ElementStyles.el_site_bar_end()
-                ), ElementStyles.INSTANCE))
+                        new SiteBarStyles.el_site_bar(),
+                        new SiteBarStyles.el_site_bar_start(),
+                        new SiteBarStyles.el_site_bar_way(),
+                        new SiteBarStyles.el_site_bar_end()
+                ), SiteBarStyles.INSTANCE))
                 .build();
     }
 

@@ -31,10 +31,10 @@ public record SwitchModule() implements DomModule<SwitchModule>, ImplFor<HouseCo
                 .add(new ModuleImports<>(List.of(new ToggleGrooveModule.ToggleGroove()), ToggleGrooveModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ToggleKnobModule.ToggleKnob()), ToggleKnobModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_switch(),
-                        new ElementStyles.el_switch_groove(),
-                        new ElementStyles.el_switch_knob()
-                ), ElementStyles.INSTANCE))
+                        new SwitchStyles.el_switch(),
+                        new SwitchStyles.el_switch_groove(),
+                        new SwitchStyles.el_switch_knob()
+                ), SwitchStyles.INSTANCE))
                 .build();
     }
 

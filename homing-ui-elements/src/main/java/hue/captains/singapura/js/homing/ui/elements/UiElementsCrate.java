@@ -115,6 +115,13 @@ public final class UiElementsCrate implements Crate, ComponentVehicle {
                 new CrateEntry(SiteBarModule.INSTANCE),
                 new CrateEntry(BrandModule.INSTANCE),
                 new CrateEntry(TrailModule.INSTANCE),
-                new CrateEntry(ElementStyles.INSTANCE));
+                new CrateEntry(ElementStyles.INSTANCE),
+                new CrateEntry(ButtonStyles.INSTANCE),
+                new CrateEntry(CardStyles.INSTANCE),
+                new CrateEntry(ItemStyles.INSTANCE),
+                new CrateEntry(SiteBarStyles.INSTANCE),
+                new CrateEntry(SliderStyles.INSTANCE),
+                new CrateEntry(StatusFooterStyles.INSTANCE),
+                new CrateEntry(SwitchStyles.INSTANCE));
     }
 }

@@ -30,7 +30,7 @@ public record ExpandableFooterAreaModule() implements DomModule<ExpandableFooter
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new ExpandableFooterAreaBehaviorModule.ExpandableFooterAreaBehavior()), ExpandableFooterAreaBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new StatusFooterModule.StatusFooter()), StatusFooterModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_footer_area(), new ElementStyles.el_footer_area_panel(), new ElementStyles.el_footer_area_closed()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new StatusFooterStyles.el_footer_area(), new StatusFooterStyles.el_footer_area_panel(), new StatusFooterStyles.el_footer_area_closed()), StatusFooterStyles.INSTANCE))
                 .build();
     }
 

@@ -31,7 +31,7 @@ public record PlainMenuItemModule() implements DomModule<PlainMenuItemModule>, I
                 .add(new ModuleImports<>(List.of(new MenuItemModule.MenuItem()), MenuItemModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))   // its hint, made by the base: imported where its leaf is
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_menu_item_disclose()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ItemStyles.el_menu_item_disclose()), ItemStyles.INSTANCE))
                 .build();
     }
 

@@ -36,7 +36,7 @@ public record TitleBarModule() implements DomModule<TitleBarModule>, ImplFor<Hou
                 .add(new ModuleImports<>(List.of(new LabelModule.Label()), LabelModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new TabModule.Tab()), TabModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CloseButtonModule.CloseButton()), CloseButtonModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new PaneStyles.fp_head(), new PaneStyles.fp_title()), PaneStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new FloatingPaneStyles.fp_head(), new FloatingPaneStyles.fp_title()), FloatingPaneStyles.INSTANCE))
                 .build();
     }
 

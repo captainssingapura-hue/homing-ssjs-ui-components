@@ -31,9 +31,9 @@ public record TrailModule() implements DomModule<TrailModule>, ImplFor<HouseCont
                 .add(new ModuleImports<>(List.of(new CrumbModule.Crumb()), CrumbModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new DelimiterModule.Delimiter()), DelimiterModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_trail(),
-                        new ElementStyles.el_trail_crumb()
-                ), ElementStyles.INSTANCE))
+                        new SiteBarStyles.el_trail(),
+                        new SiteBarStyles.el_trail_crumb()
+                ), SiteBarStyles.INSTANCE))
                 .build();
     }
 

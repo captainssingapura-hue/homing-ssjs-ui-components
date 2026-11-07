@@ -31,8 +31,8 @@ public record MenuItemModule() implements DomModule<MenuItemModule>, ImplForBran
                 .add(new ModuleImports<>(List.of(new ItemBehaviorModule.ItemBehavior()), ItemBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new IconModule.Icon()), IconModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CaptionModule.Caption()), CaptionModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_menu_item(), new ElementStyles.el_menu_item_label(),
-                        new ElementStyles.el_menu_item_hint(), new ElementStyles.el_menu_item_lead()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new ItemStyles.el_menu_item(), new ItemStyles.el_menu_item_label(),
+                        new ItemStyles.el_menu_item_hint(), new ItemStyles.el_menu_item_lead()), ItemStyles.INSTANCE))
                 .build();
     }
 

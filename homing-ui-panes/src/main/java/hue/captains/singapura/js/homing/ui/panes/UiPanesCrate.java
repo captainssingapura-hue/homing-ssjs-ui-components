@@ -63,6 +63,7 @@ public final class UiPanesCrate implements Crate, ComponentVehicle {
                 new CrateEntry(PaneMenusModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 new CrateEntry(PaneMergeModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
                 new CrateEntry(TabSourceModule.INSTANCE, StandardJsModuleType.PURE_LOGIC),
-                new CrateEntry(PaneStyles.INSTANCE));
+                new CrateEntry(PaneStyles.INSTANCE),
+                new CrateEntry(FloatingPaneStyles.INSTANCE));
     }
 }

@@ -34,9 +34,9 @@ public record BrandModule() implements DomModule<BrandModule>, ImplFor<HouseCont
                 .add(new ModuleImports<>(List.of(new WordmarkModule.Wordmark()), WordmarkModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new HrefManager.HrefManagerInstance()), HrefManager.INSTANCE))
                 .add(new ModuleImports<>(List.of(
-                        new ElementStyles.el_brand(),
-                        new ElementStyles.el_brand_mark()
-                ), ElementStyles.INSTANCE))
+                        new SiteBarStyles.el_brand(),
+                        new SiteBarStyles.el_brand_mark()
+                ), SiteBarStyles.INSTANCE))
                 .build();
     }
 

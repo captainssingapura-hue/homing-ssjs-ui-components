@@ -4,7 +4,10 @@ import hue.captains.singapura.js.homing.core.CssGroup;
 import hue.captains.singapura.js.homing.core.CssGroupDependencies;
 import hue.captains.singapura.js.homing.core.CssImportsFor;
 import hue.captains.singapura.js.homing.preferences.PreferencesStyles;
+import hue.captains.singapura.js.homing.ui.elements.CardStyles;
 import hue.captains.singapura.js.homing.ui.elements.ElementStyles;
+import hue.captains.singapura.js.homing.ui.elements.ItemStyles;
+import hue.captains.singapura.js.homing.ui.elements.SiteBarStyles;
 import hue.captains.singapura.js.homing.ui.icons.IconStyles;
 import hue.captains.singapura.js.homing.ui.menu.MenuStyles;
 import hue.captains.singapura.js.homing.ui.panes.PaneStyles;
@@ -24,14 +27,23 @@ class ProvidedSheetOrderTest {
     }
 
     @Test
-    void aHiddenMenuIcon_staysHidden() { follows(ElementStyles.INSTANCE, IconStyles.INSTANCE); }
+    void aHiddenMenuIcon_staysHidden() { follows(ItemStyles.INSTANCE, IconStyles.INSTANCE); }
 
     @Test
     void aHiddenTabMark_staysHidden() { follows(PaneStyles.INSTANCE, IconStyles.INSTANCE); }
 
     @Test
-    void aHiddenMenuRow_staysHidden() { follows(MenuStyles.INSTANCE, ElementStyles.INSTANCE); }
+    void aHiddenMenuRow_staysHidden() { follows(MenuStyles.INSTANCE, ItemStyles.INSTANCE); }
 
     @Test
     void thePreferencesMargins_holdOverTheTexts() { follows(PreferencesStyles.INSTANCE, ElementStyles.INSTANCE); }
+
+    @Test
+    void aChoicesNote_keepsItsMarginOverTheText() { follows(ItemStyles.INSTANCE, ElementStyles.INSTANCE); }
+
+    @Test
+    void aSummarysTag_keepsItsMarginOverTheText() { follows(CardStyles.INSTANCE, ElementStyles.INSTANCE); }
+
+    @Test
+    void whatEndsTheSiteBar_keepsItsMarginOverTheText() { follows(SiteBarStyles.INSTANCE, ElementStyles.INSTANCE); }
 }

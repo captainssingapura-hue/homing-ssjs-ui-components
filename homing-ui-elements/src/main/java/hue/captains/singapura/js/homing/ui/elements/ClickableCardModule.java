@@ -38,7 +38,7 @@ public record ClickableCardModule() implements DomModule<ClickableCardModule>, I
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new CardBehaviorModule.CardBehavior()), CardBehaviorModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new KeysModule.Keys()), KeysModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_card()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CardStyles.el_card()), CardStyles.INSTANCE))
                 .build();
     }
 

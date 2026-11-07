@@ -28,9 +28,16 @@ class UiPanesCrateConformanceTest {
         assertEquals(List.of(), CrateDependencyRule.INSTANCE.check(UiPanesCrate.INSTANCE));
     }
 
+    /** Every class the two groups declare. */
+    private static List<CssClass<?>> declared() {
+        var all = new java.util.ArrayList<CssClass<?>>(PaneStyles.INSTANCE.cssClasses());
+        all.addAll(FloatingPaneStyles.INSTANCE.cssClasses());
+        return all;
+    }
+
     @Test
     void thePanePaintsNothingOfItsOwn() {
-        for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses()) {
+        for (CssClass<?> c : declared()) {
             String body = c.body();
             assertFalse(body.contains("#") || body.contains("rgb") || body.contains("px solid") || body.contains("var(--color"),
                     c.getClass().getSimpleName() + " holds a value the substrate should bind: " + body);
@@ -67,7 +74,7 @@ class UiPanesCrateConformanceTest {
                 "mtp_chip_icon", "mtp_chip_icon_on",
                 "fp_icon", "fp_icon_on");   // the floating pane's icon, with its own step (23 Oct); its grip become its eight handles (23 Oct)
         var unimported = new java.util.TreeSet<String>();
-        for (CssClass<PaneStyles> c : PaneStyles.INSTANCE.cssClasses())
+        for (CssClass<?> c : declared())
             if (!imported.contains(c.getClass().getSimpleName())) unimported.add(c.getClass().getSimpleName());
         assertEquals(new java.util.TreeSet<>(waiting), unimported, "declared, and imported by none but those waiting for the bar's port");
     }

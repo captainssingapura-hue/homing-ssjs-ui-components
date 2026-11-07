@@ -32,7 +32,7 @@ public record PlainCardModule() implements DomModule<PlainCardModule>, ImplFor<H
         return new ImportsFor._Builder<PlainCardModule>()
                 .add(new ModuleImports<>(List.of(new SimpleComponentModule.SimpleComponent()), SimpleComponentModule.INSTANCE))
                 .add(new ModuleImports<>(List.of(new MarkBehaviorModule.MarkBehavior()), MarkBehaviorModule.INSTANCE))
-                .add(new ModuleImports<>(List.of(new ElementStyles.el_card()), ElementStyles.INSTANCE))
+                .add(new ModuleImports<>(List.of(new CardStyles.el_card()), CardStyles.INSTANCE))
                 .build();
     }
 
